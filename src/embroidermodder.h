@@ -207,11 +207,6 @@ void set_enabled_group(QObject *senderObj, EmbStringTable key, bool visibility);
 QIcon create_swatch(int32_t color);
 void preview_update(void);
 
-QString getCurrentLayer();
-QRgb getCurrentColor();
-QString getCurrentLineType();
-QString getCurrentLineWeight();
-
 void setHistory(QString txt);
 void add_command(std::string alias, std::string cmd);
 
@@ -264,26 +259,11 @@ void obj_set_color(Object *obj, const QColor& color);
 void obj_set_color_rgb(Object *obj, QRgb rgb);
 void obj_set_line_type(Object *obj, Qt::PenStyle lineType);
 
-void obj_set_text(Object *obj, QString str);
-void obj_set_text_font(Object *obj, QString font);
-void obj_set_text_justify(Object *obj, QString justify);
-void obj_set_text_size(Object *obj, double size);
-void obj_set_text_style(Object *obj, bool bold, bool italic, bool under, bool strike, bool over);
-void obj_set_text_bold(Object *obj, bool val);
-void obj_set_text_italic(Object *obj, bool val);
-void obj_set_text_underline(Object *obj, bool val);
-void obj_set_text_strikeout(Object *obj, bool val);
-void obj_set_text_overline(Object *obj, bool val);
-void obj_set_text_backward(Object *obj, bool val);
-void obj_set_text_upside_down(Object *obj, bool val);
-
 /* ---------------------- Document Functions --------------------------- */
 
 Document *create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent);
 
-void doc_set_grid_color(int32_t doc, QRgb color);
 void doc_create_grid(int32_t doc, EmbString gridType);
-void doc_set_ruler_color(int32_t doc, QRgb color);
 
 void doc_add_to_rubber_room(int32_t doc, QGraphicsItem* item);
 
@@ -387,10 +367,6 @@ public:
     ~Document();
 
     DocumentData data;
-    QColor gridColor;
-    QColor qsnapLocatorColor;
-    QColor crosshairColor;
-    QColor rulerColor;
 
     std::unordered_map<int64_t, QGraphicsItem*> hashDeletedObjects;
     QList<int64_t> spareRubberList;
@@ -692,21 +668,11 @@ public:
     QGraphicsScene* gscene;
     int32_t doc_index;
 
-    bool fileWasLoaded;
-
     QString promptHistory;
     QList<QString> promptInputList;
     int promptInputNum;
 
     QPrinter printer;
-
-    int myIndex;
-
-    QString curFile;
-    QString curLayer;
-    QRgb curColor;
-    QString curLineType;
-    QString curLineWeight;
 
     virtual QSize sizeHint() const;
     QString getShortCurrentFile();

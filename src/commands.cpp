@@ -574,102 +574,6 @@ setTextSize(double num)
 }
 
 /* . */
-QString
-getCurrentLayer()
-{
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        return mdiWin->curLayer;
-    }
-    return "0";
-}
-
-/* . */
-QRgb
-getCurrentColor()
-{
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        return mdiWin->curColor;
-    }
-    return 0; /* TODO: return color ByLayer */
-}
-
-/* . */
-QString
-getCurrentLineType()
-{
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        return mdiWin->curLineType;
-    }
-    return "ByLayer";
-}
-
-/* . */
-QString
-getCurrentLineWeight()
-{
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        return mdiWin->curLineWeight;
-    }
-    return "ByLayer";
-}
-
-/* . */
-void
-deletePressed(void)
-{
-    debug_message("deletePressed()");
-    wait_cursor();
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        /* TODO: change document based on selection */
-    }
-    restore_cursor();
-}
-
-/* . */
-void
-escapePressed(void)
-{
-    debug_message("escapePressed()");
-    wait_cursor();
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        /* TODO: change document based on selection */
-    }
-    restore_cursor();
-
-    end_command();
-}
-
-/* . */
-void
-toggleGrid(void)
-{
-    debug_message("toggleGrid()");
-    statusBarGridButton->toggle();
-}
-
-/* . */
-void
-toggleRuler(void)
-{
-    debug_message("toggleRuler()");
-    statusBarRulerButton->toggle();
-}
-
-/* . */
-void
-toggleLwt(void)
-{
-    debug_message("toggleLwt()");
-    statusBarLwtButton->toggle();
-}
-
-/* . */
 void
 promptHistoryAppended(QString txt)
 {
@@ -779,29 +683,11 @@ warning_box(const char *title, const char *text)
 }
 
 /* . */
-void
-nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
+uint32_t
+rgb(uint8_t r, uint8_t g, uint8_t b)
 {
-    set_int(DISPLAY_BG_COLOR, qRgb(r,g,b));
-    updateAllViewBackgroundColors(qRgb(r,g,b));
+    return qRgb(r, g, b);
 }
-
-/* . */
-void
-nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
-{
-    set_int(DISPLAY_CROSSHAIR_COLOR, qRgb(r,g,b));
-    updateAllViewCrossHairColors(qRgb(r,g,b));
-}
-
-/* . */
-void
-nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
-{
-    set_int(GRID_COLOR, qRgb(r,g,b));
-    updateAllViewGridColors(qRgb(r,g,b));
-}
-
 
 /* . */
 void
@@ -810,19 +696,26 @@ nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int ru
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
+    /*
+    char *str = STR(0);
+    EmbVector v = unpack_vector(context, 1);
+    double rot = REAL(3);
+    bool fill = BOOL(4);
+    int rubberMode = INT(5);
+     */
     if ((doc_index >= 0) && gscene && stack) {
         EmbVector v = emb_vector(x, -y);
         Object* obj = create_text_single(QString(str), v, getCurrentColor());
-        obj_set_text_font(obj, get_str(TEXT_FONT));
-        obj_set_text_size(obj, get_real(TEXT_SIZE));
-        obj_set_text_style(obj,
+        obj_set_text_font(obj->core, get_str(TEXT_FONT));
+        obj_set_text_size(obj->core, get_real(TEXT_SIZE));
+        obj_set_text_style(obj->core,
             get_bool(TEXT_STYLE_BOLD),
             get_bool(TEXT_STYLE_ITALIC),
             get_bool(TEXT_STYLE_UNDERLINE),
             get_bool(TEXT_STYLE_STRIKEOUT),
             get_bool(TEXT_STYLE_OVERLINE));
-        obj_set_text_backward(obj, false);
-        obj_set_text_upside_down(obj, false);
+        obj_set_text_backward(obj->core, false);
+        obj_set_text_upside_down(obj->core, false);
         obj->setRotation(-rot);
         /* TODO: single line text fill. */
         obj_set_rubber_mode(obj->core, rubberMode);
@@ -1130,17 +1023,6 @@ nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
         else if (!strcmp(shape, "draglink"))
             doc->setCursor(QCursor(Qt::DragLinkCursor));
     }
-}
-
-/* . */
-EmbVector
-scene_get_point(EmbString key)
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        return to_emb_vector(scene->property(key).toPointF());
-    }
-    return emb_vector(0.0, 0.0);
 }
 
 /* Compatibility layer for C files */
@@ -1472,13 +1354,12 @@ UndoableCommand::redo()
             doc_center_at(data.doc, data.toCenter);
             break;
         }
+        DocumentData *d = doc_data(data.doc);
         if (string_equal(data.navType, "ZoomInToPoint")) {
-            QPoint p = activeScene()->property("VIEW_MOUSE_POINT").toPoint();
-            doc_zoom_to_point(data.doc, to_emb_vector(p), +1);
+            doc_zoom_to_point(data.doc, d->viewMousePoint, +1);
         }
         else if (string_equal(data.navType, "ZoomOutToPoint")) {
-            QPoint p = activeScene()->property("VIEW_MOUSE_POINT").toPoint();
-            doc_zoom_to_point(data.doc, to_emb_vector(p), -1);
+            doc_zoom_to_point(data.doc, d->viewMousePoint, -1);
         }
         else if (string_equal(data.navType, "ZoomExtents")) {
             doc_zoom_extents(data.doc);

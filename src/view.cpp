@@ -65,7 +65,7 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->setCursor(Qt::BlankCursor);
     doc->horizontalScrollBar()->setCursor(Qt::ArrowCursor);
     doc->verticalScrollBar()->setCursor(Qt::ArrowCursor);
-    doc->qsnapLocatorColor = get_int(QSNAP_LOCATOR_COLOR);
+    doc->data.qsnapLocatorColor = get_int(QSNAP_LOCATOR_COLOR);
     doc->data.qsnapLocatorSize = get_int(QSNAP_LOCATOR_SIZE);
     doc->data.qsnapApertureSize = get_int(QSNAP_APERTURE_SIZE);
     doc->data.gripColorCool = get_int(SELECTION_COOLGRIP_COLOR);
@@ -103,6 +103,14 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->data.panningActive = false;
     doc->data.qSnapActive = false;
     doc->data.qSnapToggle = false;
+
+    /* TODO: set up config */
+    doc->data.enableRuler = true;
+    doc->data.enableGrid = true;
+    doc->data.enableOrtho = false;
+    doc->data.enablePolar = false;
+    doc->data.enableLwt = false;
+    doc->data.enableRuler = true;
 
     /* Randomize the hot grip location initially so it's not located at (0,0). */
     srand(QDateTime::currentMSecsSinceEpoch());
@@ -409,23 +417,6 @@ doc_set_rubber_text(int32_t doc, EmbString key, EmbString txt)
 
 /* . */
 void
-doc_set_grid_color(int32_t doc, uint32_t color)
-{
-    documents[doc]->gridColor = QColor(color);
-    doc_set_color(doc, "VIEW_COLOR_GRID", color);
-    doc_update(doc);
-}
-
-/* . */
-void
-doc_set_ruler_color(int32_t doc, QRgb color)
-{
-    documents[doc]->rulerColor = QColor(color);
-    doc_update(doc);
-}
-
-/* . */
-void
 doc_create_grid(int32_t doc, EmbString gridType)
 {
     if (string_equal(gridType, "Rectangular")) {
@@ -690,54 +681,20 @@ doc_toggle_ruler(int32_t doc, bool on)
     DocumentData *data = doc_data(doc);
     debug_message("View toggleRuler()");
     wait_cursor();
-    doc_set_bool(doc, "ENABLE_RULER", on);
+    data->enableRuler = on;
     data->rulerMetric = get_bool(RULER_METRIC);
-    documents[doc]->rulerColor = QColor(get_int(RULER_COLOR));
+    data->rulerColor = get_int(RULER_COLOR);
     data->rulerPixelSize = get_int(RULER_PIXEL_SIZE);
     doc_update(doc);
     restore_cursor();
 }
 
 /* . */
-void
-doc_set_bool(int32_t doc, const char *key, bool value)
-{
-    documents[doc]->gscene->setProperty(key, value);
-}
-
-/* . */
-bool
-doc_get_bool(int32_t doc, const char *key)
-{
-    return documents[doc]->gscene->property(key).toBool();
-}
-
-/* . */
-void
-doc_set_color(int32_t doc, const char *key, uint32_t value)
-{
-    documents[doc]->gscene->setProperty(key, value);
-}
-
-/* . */
-uint32_t
-doc_get_color(int32_t doc, const char *key)
-{
-    return documents[doc]->gscene->property(key).toUInt();
-}
-
 /* . */
 DocumentData *
 doc_data(int32_t doc)
 {
     return &(documents[doc]->data);
-}
-
-/* . */
-bool
-doc_get_property(int32_t doc, const char *key)
-{
-    return documents[doc]->gscene->property(key).toBool();
 }
 
 /* . */
@@ -821,14 +778,14 @@ Document::drawBackground(QPainter* painter, const QRectF& rect)
     DocumentData *data = doc_data(doc);
     painter->fillRect(rect, backgroundBrush());
 
-    if (documents[doc]->gscene->property("ENABLE_GRID").toBool() && rect.intersects(documents[doc]->gridPath.controlPointRect())) {
-        QPen gridPen(gridColor);
+    if (data->enableGrid && rect.intersects(documents[doc]->gridPath.controlPointRect())) {
+        QPen gridPen(QColor(data->gridColor));
         gridPen.setJoinStyle(Qt::MiterJoin);
         gridPen.setCosmetic(true);
         painter->setPen(gridPen);
         painter->drawPath(documents[doc]->gridPath);
         painter->drawPath(documents[doc]->originPath);
-        painter->fillPath(documents[doc]->originPath, gridColor);
+        painter->fillPath(documents[doc]->originPath, QColor(data->gridColor));
     }
 
     EmbPattern *pattern = activeMdiWindow()->pattern;
@@ -967,9 +924,9 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
     rulerPen.setCosmetic(true);
     painter->setPen(rulerPen);
     painter->fillRect(QRectF(origin.x, origin.y, ruler_h.w, ruler_h.h),
-        documents[doc]->rulerColor);
+        documents[doc]->data.rulerColor);
     painter->fillRect(QRectF(origin.x, origin.y, ruler_v.w, ruler_v.h),
-        documents[doc]->rulerColor);
+        documents[doc]->data.rulerColor);
 
     int xFlow, xStart, yFlow, yStart;
     if (willUnderflowInt32(origin.x, unit)) {
@@ -1100,7 +1057,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
 
     painter->drawLines(qlines);
     painter->fillRect(QRectF(origin.x, origin.y, ruler_v.w, ruler_h.h),
-        documents[doc]->rulerColor);
+        documents[doc]->data.rulerColor);
 }
 
 /* . */
@@ -1150,7 +1107,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 
     /* TODO: && findClosestSnapPoint == true */
     if (!data->selectingActive) {
-        QPen qsnapPen(qsnapLocatorColor);
+        QPen qsnapPen(data->qsnapLocatorColor);
         qsnapPen.setWidth(2);
         qsnapPen.setJoinStyle(Qt::MiterJoin);
         qsnapPen.setCosmetic(true);
@@ -1186,14 +1143,14 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 
     /* Draw horizontal and vertical rulers */
 
-    if (documents[doc]->gscene->property("ENABLE_RULER").toBool()) {
+    if (data->enableRuler) {
         draw_rulers(painter, rect);
     }
 
     /* Draw the crosshair */
     if (!data->selectingActive) {
         /* painter->setBrush(Qt::NoBrush); */
-        QPen crosshairPen(crosshairColor);
+        QPen crosshairPen(data->crosshairColor);
         crosshairPen.setCosmetic(true);
         painter->setPen(crosshairPen);
 
@@ -1352,10 +1309,8 @@ doc_update_mouse_coords(int32_t doc, int x, int y)
     DocumentData *data = doc_data(doc);
     data->viewMousePoint = emb_vector(x, y);
     data->sceneMousePoint = doc_map_to_scene(doc, data->viewMousePoint);
-    documents[doc]->gscene->setProperty("SCENE_QSNAP_POINT", to_qpointf(data->sceneMousePoint));
+    data->sceneQSnapPoint = data->sceneMousePoint;
     /* TODO: if qsnap functionality is enabled, use it rather than the mouse point */
-    documents[doc]->gscene->setProperty("SCENE_MOUSE_POINT", to_qpointf(data->sceneMousePoint));
-    documents[doc]->gscene->setProperty("VIEW_MOUSE_POINT", to_qpointf(data->viewMousePoint));
     setMouseCoord(data->sceneMousePoint.x, -data->sceneMousePoint.y);
 }
 
@@ -2495,20 +2450,20 @@ doc_show_scroll_bars(int32_t doc, bool val)
 
 /* . */
 void
-doc_set_cross_hair_color(int32_t doc, QRgb color)
+doc_set_cross_hair_color(int32_t doc, uint32_t color)
 {
-    documents[doc]->crosshairColor = color;
-    // TODO: doc_set_color(
-    documents[doc]->gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
+    DocumentData *data = doc_data(doc);
+    data->crosshairColor = color;
     doc_update(doc);
 }
 
 /* . */
 void
-doc_set_background_color(int32_t doc, QRgb color)
+doc_set_background_color(int32_t doc, uint32_t color)
 {
+    DocumentData *data = doc_data(doc);
     documents[doc]->setBackgroundBrush(QColor(color));
-    documents[doc]->gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
+    data->backgroundColor = color;
     doc_update(doc);
 }
 

@@ -811,14 +811,24 @@ nativeSetRubberText(const EmbString key, EmbString txt)
 double
 nativeQSnapX()
 {
-    return scene_get_point("SCENE_QSNAP_POINT").x;
+    int32_t doc = activeDocument();
+    if (doc < 0) {
+        return 0.0;
+    }
+    DocumentData *data = doc_data(doc);
+    return data->sceneQSnapPoint.x;
 }
 
 /* . */
 double
 nativeQSnapY()
 {
-    return scene_get_point("SCENE_QSNAP_POINT").y;
+    int32_t doc = activeDocument();
+    if (doc < 0) {
+        return 0.0;
+    }
+    DocumentData *data = doc_data(doc);
+    return data->sceneQSnapPoint.y;
 }
 
 void
@@ -827,9 +837,7 @@ enableLwt()
     debug_message("StatusBarButton enableLwt()");
     int32_t doc = activeDocument();
     if (doc >= 0) {
-        if (!doc_is_lwt_enabled(doc)) {
-            doc_toggle_lwt(doc, true);
-        }
+        doc_toggle_lwt(doc, true);
     }
 }
 
@@ -839,9 +847,7 @@ disableLwt()
     debug_message("StatusBarButton disableLwt()");
     int32_t doc = activeDocument();
     if (doc >= 0) {
-        if (doc_is_lwt_enabled(doc)) {
-            doc_toggle_lwt(doc, false);
-        }
+        doc_toggle_lwt(doc, false);
     }
 }
 
@@ -849,9 +855,9 @@ void
 enableReal()
 {
     debug_message("StatusBarButton enableReal()");
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_toggle_real(doc_index, true);
+    int32_t doc = activeDocument();
+    if (doc >= 0) {
+        doc_toggle_real(doc, true);
     }
 }
 
@@ -859,10 +865,127 @@ void
 disableReal()
 {
     debug_message("StatusBarButton disableReal()");
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_toggle_real(doc_index, false);
+    int32_t doc = activeDocument();
+    if (doc >= 0) {
+        doc_toggle_real(doc, false);
     }
+}
+
+/* . */
+void
+toggleGrid(void)
+{
+    debug_message("toggleGrid()");
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    data->enableGrid = !data->enableGrid;
+}
+
+/* . */
+void
+toggleRuler(void)
+{
+    debug_message("toggleRuler()");
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    data->enableRuler = !data->enableRuler;
+}
+
+/* . */
+void
+toggleLwt(void)
+{
+    debug_message("toggleLwt()");
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    data->enableLwt = !data->enableLwt;
+}
+
+/* . */
+void
+deletePressed(void)
+{
+    debug_message("deletePressed()");
+    wait_cursor();
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    /* TODO: change document based on selection */
+    restore_cursor();
+}
+
+/* . */
+void
+escapePressed(void)
+{
+    debug_message("escapePressed()");
+    wait_cursor();
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    /* TODO: change document based on selection */
+    restore_cursor();
+
+    end_command();
+}
+
+/* . */
+const char *
+getCurrentLayer(void)
+{
+    int doc = activeDocument();
+    if (doc < 0) {
+        return "0";
+    }
+    DocumentData *data = doc_data(doc);
+    return data->curLayer;
+}
+
+/* TODO: return color ByLayer */
+uint32_t
+getCurrentColor()
+{
+    int doc = activeDocument();
+    if (doc < 0) {
+        return 0;
+    }
+    DocumentData *data = doc_data(doc);
+    return data->curColor;
+}
+
+/* . */
+const char *
+getCurrentLineType()
+{
+    int doc = activeDocument();
+    if (doc < 0) {
+        return "ByLayer";
+    }
+    DocumentData *data = doc_data(doc);
+    return data->curLineType;
+}
+
+/* . */
+const char *
+getCurrentLineWeight(void)
+{
+    int doc = activeDocument();
+    if (doc < 0) {
+        return "ByLayer";
+    }
+    DocumentData *data = doc_data(doc);
+    return data->curLineWeight;
 }
 
 /* . */
@@ -2462,14 +2585,24 @@ get_command(ScriptEnv* context)
 
     if (string_equal(STR(0), "MOUSEX")) {
         /* TODO: detect error */
-        ScriptValue r = script_real(scene_get_point("SCENE_MOUSE_POINT").x);
+        int32_t doc = activeDocument();
+        if (doc < 0) {
+           return script_real(0.0);
+        }
+        DocumentData *data = doc_data(doc);
+        ScriptValue r = script_real(data->sceneMousePoint.x);
         sprintf(message, "mouseY: %.50f", r.r);
         debug_message(message);
         return r;
     }
     else if (string_equal(STR(0), "MOUSEY")) {
         /* TODO: detect error */
-        ScriptValue r = script_real(-scene_get_point("SCENE_MOUSE_POINT").y);
+        int32_t doc = activeDocument();
+        if (doc < 0) {
+           return script_real(0.0);
+        }
+        DocumentData *data = doc_data(doc);
+        ScriptValue r = script_real(data->sceneMousePoint.y);
         sprintf(message, "mouseY: %.50f", r.r);
         debug_message(message);
         return r;
@@ -2528,5 +2661,36 @@ nativeScaleSelected(double x, double y, double factor)
 void
 nativeAddTextMulti(char *str, double x, double y, double rot, bool fill, int rubberMode)
 {
+}
+
+/* . */
+void
+nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
+{
+    set_int(DISPLAY_BG_COLOR, rgb(r, g, b));
+    updateAllViewBackgroundColors(rgb(r, g, b));
+}
+
+/* . */
+void
+nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
+{
+    set_int(DISPLAY_CROSSHAIR_COLOR, rgb(r, g, b));
+    updateAllViewCrossHairColors(rgb(r, g, b));
+}
+
+/* . */
+void
+nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
+{
+    set_int(GRID_COLOR, rgb(r, g, b));
+    updateAllViewGridColors(rgb(r, g, b));
+}
+
+/* . */
+EmbVector
+unpack_vector(ScriptEnv *context, int offset)
+{
+    return emb_vector(REAL(offset), -REAL(offset+1));
 }
 

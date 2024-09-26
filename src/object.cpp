@@ -169,7 +169,7 @@ create_text_single(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent)
     string_copy(obj->core->textJustify, "Left");
     /* TODO: set the justification properly */
 
-    obj_set_text(obj, str);
+    obj_set_text(obj->core, qPrintable(str));
     obj_set_pos(obj->core, v);
     return obj;
 }
@@ -244,12 +244,12 @@ copy_object(Object* obj)
     case EMB_ARC:
         copy->core->geometry->object.arc = obj->core->geometry->object.arc;
         todo("getCurrentLineType");
-        copy->setRotation(obj->rotation());
+        copy->setRotation(obj->core->rotation);
         break;
     case EMB_CIRCLE:
         copy->core->geometry->object.circle = obj->core->geometry->object.circle;
         todo("getCurrentLineType");
-        copy->setRotation(obj->rotation());
+        copy->setRotation(obj->core->rotation);
         break;
     case EMB_DIM_LEADER:
         copy->core->geometry->object.line = obj->core->geometry->object.line;
@@ -260,14 +260,14 @@ copy_object(Object* obj)
         copy->core->geometry->object.ellipse = obj->core->geometry->object.ellipse;
         /* init(obj->obj_centerX(), obj->obj_centerY(), obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
         todo("getCurrentLineType");
-        copy->setRotation(obj->rotation());
+        copy->setRotation(obj->core->rotation);
         break;
     case EMB_IMAGE: {
         copy->core->geometry->object.ellipse = obj->core->geometry->object.ellipse;
         /* EmbVector ptl = obj_top_left(obj); */
         /* init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
         todo("getCurrentLineType");
-        copy->setRotation(obj->rotation());
+        copy->setRotation(obj->core->rotation);
         break;
     }
     case EMB_LINE: {
@@ -290,7 +290,7 @@ copy_object(Object* obj)
         /* init(obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
-        copy->setRotation(obj->rotation());
+        copy->setRotation(obj->core->rotation);
         break;
     }
     case EMB_POLYGON: {
@@ -307,8 +307,8 @@ copy_object(Object* obj)
         /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
-        copy->setRotation(obj->rotation());
-        copy->setScale(obj->scale());
+        copy->setRotation(obj->core->rotation);
+        copy->setScale(obj->core->scale);
         break;
     }
     case EMB_RECT: {
@@ -317,21 +317,21 @@ copy_object(Object* obj)
         /* init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
-        copy->setRotation(obj->rotation());
+        copy->setRotation(obj->core->rotation);
         break;
     }
     case EMB_TEXT_SINGLE: {
-        obj_set_text_font(copy, obj->core->textFont);
-        obj_set_text_size(copy, obj->core->textSize);
-        copy->setRotation(obj->rotation());
-        obj_set_text_backward(copy, obj->core->textBackward);
-        obj_set_text_upside_down(copy, obj->core->textUpsideDown);
-        obj_set_text_style(copy, obj->core->textBold, obj->core->textItalic,
+        obj_set_text_font(copy->core, obj->core->textFont);
+        obj_set_text_size(copy->core, obj->core->textSize);
+        copy->setRotation(obj->core->rotation);
+        obj_set_text_backward(copy->core, obj->core->textBackward);
+        obj_set_text_upside_down(copy->core, obj->core->textUpsideDown);
+        obj_set_text_style(copy->core, obj->core->textBold, obj->core->textItalic,
             obj->core->textUnderline, obj->core->textStrikeOut, obj->core->textOverline);
         /* init(obj->text, obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
-        copy->setScale(obj->scale());
+        copy->setScale(obj->core->scale);
         break;
     }
     default:
@@ -356,14 +356,6 @@ QPainterPath
 obj_path(Object* obj)
 {
     return obj->path();
-}
-
-/* . */
-ScriptValue
-arc_command(ScriptEnv *context)
-{
-
-    return script_null;
 }
 
 /* . */
@@ -454,46 +446,6 @@ obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath)
 
         painter->fillPath(realPath, QBrush(grad));
     }
-}
-
-/* . */
-ScriptValue
-circle_command(ScriptEnv *context)
-{
-    debug_message("ADDING CIRCLE");
-
-    switch (context->mode) {
-    case CONTEXT_CONTEXT:
-        todo("CIRCLE context()");
-        break;
-    default:
-        break;
-    }
-
-    /*
-    context->point1 = emb_vector(0.0, 0.0);
-    context->point2 = context->point1;
-    context->point3 = context->point1;
-    add_real_variable(context, "rad", 0.0f);
-    add_real_variable(context, "dia", 0.0f);
-    add_real_variable(context, "cx", 0.0f);
-    add_real_variable(context, "cy", 0.0f);
-    context->mode = MODE_1P_RAD;
-
-    _main->nativeAppendPromptHistory(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
-    */
-    EmbCircle c;
-    c.center.x = 0.0;
-    c.center.y = 0.0;
-    c.radius = 10.0;
-    MdiWindow *window = activeMdiWindow();
-    if (window) {
-        emb_array_add_circle(window->pattern->geometry, c);
-    }
-    /* _main->nativeAddCircle(0.0, 0.0, 10.0, true, RUBBER_CIRCLE_1P_DIA); */
-   
-    end_command();
-    return script_null;
 }
 
 void
@@ -717,7 +669,6 @@ Object::subPathList() const {
     return p;
 }
 
-
 /* TODO: << "Aligned" << "Fit" */
 QStringList objectTextJustifyList = {
     "Left",
@@ -737,76 +688,76 @@ QStringList objectTextJustifyList = {
 
 /* . */
 void
-obj_set_text(Object* obj, QString str)
+obj_set_text(ObjectCore* obj, const char *str)
 {
-    string_copy(obj->core->text, qPrintable(str));
+    string_copy(obj->text, str);
     QPainterPath textPath;
     QFont font;
-    font.setFamily(obj->core->textFont);
-    font.setPointSizeF(obj->core->textSize);
-    font.setBold(obj->core->textBold);
-    font.setItalic(obj->core->textItalic);
-    font.setUnderline(obj->core->textUnderline);
-    font.setStrikeOut(obj->core->textStrikeOut);
-    font.setOverline(obj->core->textOverline);
+    font.setFamily(obj->textFont);
+    font.setPointSizeF(obj->textSize);
+    font.setBold(obj->textBold);
+    font.setItalic(obj->textItalic);
+    font.setUnderline(obj->textUnderline);
+    font.setStrikeOut(obj->textStrikeOut);
+    font.setOverline(obj->textOverline);
     textPath.addText(0, 0, font, str);
 
     /* Translate the path based on the justification. */
     QRectF jRect = textPath.boundingRect();
-    if (string_equal(obj->core->textJustify, "Left")) {
+    if (string_equal(obj->textJustify, "Left")) {
         textPath.translate(-jRect.left(), 0);
     }
-    else if (string_equal(obj->core->textJustify, "Center")) {
+    else if (string_equal(obj->textJustify, "Center")) {
         textPath.translate(-jRect.center().x(), 0);
     }
-    else if (string_equal(obj->core->textJustify, "Right")) {
+    else if (string_equal(obj->textJustify, "Right")) {
         textPath.translate(-jRect.right(), 0);
     }
-    else if (string_equal(obj->core->textJustify, "Aligned")) {
+    else if (string_equal(obj->textJustify, "Aligned")) {
         todo("TextSingleObject Aligned Justification.");
     }
-    else if (string_equal(obj->core->textJustify, "Middle")) {
+    else if (string_equal(obj->textJustify, "Middle")) {
         textPath.translate(-jRect.center());
     }
-    else if (string_equal(obj->core->textJustify, "Fit")) {
+    else if (string_equal(obj->textJustify, "Fit")) {
         todo("TextSingleObject Fit Justification.");
     }
-    else if (string_equal(obj->core->textJustify, "Top Left")) {
+    else if (string_equal(obj->textJustify, "Top Left")) {
         textPath.translate(-jRect.topLeft());
     }
-    else if (string_equal(obj->core->textJustify, "Top Center")) {
+    else if (string_equal(obj->textJustify, "Top Center")) {
         textPath.translate(-jRect.center().x(), -jRect.top());
     }
-    else if (string_equal(obj->core->textJustify, "Top Right")) {
+    else if (string_equal(obj->textJustify, "Top Right")) {
         textPath.translate(-jRect.topRight());
     }
-    else if (string_equal(obj->core->textJustify, "Middle Left")) {
+    else if (string_equal(obj->textJustify, "Middle Left")) {
         textPath.translate(-jRect.left(), -jRect.top()/2.0);
     }
-    else if (string_equal(obj->core->textJustify, "Middle Center")) {
+    else if (string_equal(obj->textJustify, "Middle Center")) {
         textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
     }
-    else if (string_equal(obj->core->textJustify, "Middle Right")) {
+    else if (string_equal(obj->textJustify, "Middle Right")) {
         textPath.translate(-jRect.right(), -jRect.top()/2.0);
     }
-    else if (string_equal(obj->core->textJustify, "Bottom Left")) {
+    else if (string_equal(obj->textJustify, "Bottom Left")) {
         textPath.translate(-jRect.bottomLeft());
     }
-    else if (string_equal(obj->core->textJustify, "Bottom Center")) {
+    else if (string_equal(obj->textJustify, "Bottom Center")) {
         textPath.translate(-jRect.center().x(), -jRect.bottom());
     }
-    else if (string_equal(obj->core->textJustify, "Bottom Right")) {
+    else if (string_equal(obj->textJustify, "Bottom Right")) {
         textPath.translate(-jRect.bottomRight());
     }
 
     /* Backward or Upside Down. */
-    if (obj->core->textBackward || obj->core->textUpsideDown) {
+    if (obj->textBackward || obj->textUpsideDown) {
         double horiz = 1.0;
         double vert = 1.0;
-        if (obj->core->textBackward) {
+        if (obj->textBackward) {
             horiz = -1.0;
         }
-        if (obj->core->textUpsideDown) {
+        if (obj->textUpsideDown) {
             vert = -1.0;
         }
 
@@ -835,170 +786,18 @@ obj_set_text(Object* obj, QString str)
                                     horiz * P4.x, vert * P4.y);
             }
         }
-        obj->textPath = flippedPath;
+        // FIXME: obj->textPath = flippedPath;
     }
     else {
-        obj->textPath = textPath;
+        // FIXME: obj->textPath = textPath;
     }
 
     /* Add the grip point to the shape path. */
+    /* FIXME:
     QPainterPath gripPath = obj->textPath;
     gripPath.connectPath(obj->textPath);
     gripPath.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     obj_set_path(obj, gripPath);
-}
-
-/* . */
-void
-obj_set_text_font(Object* obj, QString font)
-{
-    string_copy(obj->core->textFont, qPrintable(font));
-    obj_set_text(obj, obj->core->text);
-}
-
-/* Verify the string is a valid option. */
-void
-obj_set_text_justify(Object* obj, QString justify)
-{
-    if (justify == "Left") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Center") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Right") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Aligned") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Middle") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Fit") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Top Left") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Top Center") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Top Right") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Middle Left") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Middle Center") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Middle Right") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Bottom Left") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Bottom Center") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else if (justify == "Bottom Right") {
-        string_copy(obj->core->textJustify, qPrintable(justify));
-    }
-    else {
-        /* Default */
-        string_copy(obj->core->textJustify, "Left");
-    }
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_size(Object* obj, double size)
-{
-    obj->core->textSize = size;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_style(Object* obj, bool bold, bool italic, bool under, bool strike, bool over)
-{
-    obj->core->textBold = bold;
-    obj->core->textItalic = italic;
-    obj->core->textUnderline = under;
-    obj->core->textStrikeOut = strike;
-    obj->core->textOverline = over;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_bold(Object* obj, bool val)
-{
-    obj->core->textBold = val;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_italic(Object* obj, bool val)
-{
-    obj->core->textItalic = val;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_underline(Object* obj, bool val)
-{
-    obj->core->textUnderline = val;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_strikeout(Object* obj, bool val)
-{
-    obj->core->textStrikeOut = val;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_overline(Object* obj, bool val)
-{
-    obj->core->textOverline = val;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_backward(Object* obj, bool val)
-{
-    obj->core->textBackward = val;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_text_upside_down(Object* obj, bool val)
-{
-    obj->core->textUpsideDown = val;
-    obj_set_text(obj, obj->core->text);
-}
-
-/* . */
-void
-obj_set_end_point_1(ObjectCore *obj, EmbVector endPt1)
-{
-    EmbVector endPt2 = obj_end_point_2(obj);
-    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
-    /*
-    obj->setRotation(0);
-    obj->setScale(1);
-    obj_set_line(obj, 0, 0, delta.x, delta.y);
-    obj->setPos(endPt1.x, endPt1.y);
     */
 }
 
@@ -1179,12 +978,10 @@ obj_rubber_point(Object *obj, QString key)
         }
     }
 
-    QGraphicsScene* gscene = obj->scene();
-    if (gscene) {
-        QPointF p = obj->scene()->property("SCENE_QSNAP_POINT").toPointF();
-        return to_emb_vector(p);
-    }
-    return emb_vector(0.0, 0.0);
+    /* TODO: object's scene rather than current. */
+    int doc = activeDocument();
+    DocumentData *data = doc_data(doc);
+    return data->sceneQSnapPoint;
 }
 
 /* . */
@@ -1625,13 +1422,13 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case RUBBER_TEXTSINGLE: {
-        obj_set_text_font(obj, obj_rubber_text(obj, "TEXT_FONT"));
-        obj_set_text_justify(obj, obj_rubber_text(obj, "TEXT_JUSTIFY"));
+        obj_set_text_font(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_FONT")));
+        obj_set_text_justify(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_JUSTIFY")));
         obj_set_pos(obj->core, obj_rubber_point(obj, "TEXT_POINT"));
         EmbVector hr = obj_rubber_point(obj, "TEXT_HEIGHT_ROTATION");
-        obj_set_text_size(obj, hr.x);
+        obj_set_text_size(obj->core, hr.x);
         obj->setRotation(hr.y);
-        obj_set_text(obj, obj_rubber_text(obj, "TEXT_RAPID"));
+        obj_set_text(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_RAPID")));
         break;
     }
     case RUBBER_GRIP: {

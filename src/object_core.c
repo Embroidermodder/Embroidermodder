@@ -266,6 +266,55 @@ obj_set_end_point_2(ObjectCore *obj, EmbVector endPt2)
     */
 }
 
+/* . */
+ScriptValue
+arc_command(ScriptEnv *context)
+{
+
+    return script_null;
+}
+
+/* . */
+ScriptValue
+circle_command(ScriptEnv *context)
+{
+    debug_message("ADDING CIRCLE");
+
+    switch (context->mode) {
+    case CONTEXT_CONTEXT:
+        todo("CIRCLE context()");
+        break;
+    default:
+        break;
+    }
+
+    /*
+    context->point1 = emb_vector(0.0, 0.0);
+    context->point2 = context->point1;
+    context->point3 = context->point1;
+    add_real_variable(context, "rad", 0.0f);
+    add_real_variable(context, "dia", 0.0f);
+    add_real_variable(context, "cx", 0.0f);
+    add_real_variable(context, "cy", 0.0f);
+    context->mode = MODE_1P_RAD;
+
+    _main->nativeAppendPromptHistory(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
+    */
+    EmbCircle c;
+    c.center.x = 0.0;
+    c.center.y = 0.0;
+    c.radius = 10.0;
+    /*
+    MdiWindow *window = activeMdiWindow();
+    if (window) {
+        emb_array_add_circle(window->pattern->geometry, c);
+    }
+    _main->nativeAddCircle(0.0, 0.0, 10.0, true, RUBBER_CIRCLE_1P_DIA); */
+   
+    end_command();
+    return script_null;
+}
+
 ScriptValue
 circle_click(ScriptEnv *context)
 {
@@ -1527,7 +1576,7 @@ SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 
     todo("This needs to work like a path, not a polyline. Improve this");
 
-    TextSingleObject* obj = static_cast<TextSingleObject*>(item);
+    TextSingleObjectCore* obj = static_cast<TextSingleObjectCore*>(item);
     if (obj) {
         if (formatType == EMBFORMAT_STITCHONLY) {
             QList<QPainterPath> pathList = obj->objectSavePathList();
@@ -1964,5 +2013,159 @@ obj_bottom_right(ObjectCore *obj)
     EmbVector p = emb_vector(rect.x + rect.w, rect.y + rect.h);
     p = scale_and_rotate(p, obj->scale, obj->rotation);
     return emb_vector_add(obj_pos(obj), p);
+}
+
+/* . */
+void
+obj_set_text_font(ObjectCore* obj, const char *font)
+{
+    string_copy(obj->textFont, font);
+    obj_set_text(obj, obj->text);
+}
+
+/* Verify the string is a valid option. */
+void
+obj_set_text_justify(ObjectCore* obj, const char *justify)
+{
+    if (string_equal(justify, "Left")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Center")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Right")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Aligned")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Middle")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Fit")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Top Left")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Top Center")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Top Right")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Middle Left")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Middle Center")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Middle Right")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Bottom Left")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Bottom Center")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else if (string_equal(justify, "Bottom Right")) {
+        string_copy(obj->textJustify, justify);
+    }
+    else {
+        /* Default */
+        string_copy(obj->textJustify, "Left");
+    }
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_size(ObjectCore* obj, double size)
+{
+    obj->textSize = size;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_style(ObjectCore* obj, bool bold, bool italic, bool under, bool strike, bool over)
+{
+    obj->textBold = bold;
+    obj->textItalic = italic;
+    obj->textUnderline = under;
+    obj->textStrikeOut = strike;
+    obj->textOverline = over;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_bold(ObjectCore* obj, bool val)
+{
+    obj->textBold = val;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_italic(ObjectCore* obj, bool val)
+{
+    obj->textItalic = val;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_underline(ObjectCore* obj, bool val)
+{
+    obj->textUnderline = val;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_strikeout(ObjectCore* obj, bool val)
+{
+    obj->textStrikeOut = val;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_overline(ObjectCore* obj, bool val)
+{
+    obj->textOverline = val;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_backward(ObjectCore* obj, bool val)
+{
+    obj->textBackward = val;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_text_upside_down(ObjectCore* obj, bool val)
+{
+    obj->textUpsideDown = val;
+    obj_set_text(obj, obj->text);
+}
+
+/* . */
+void
+obj_set_end_point_1(ObjectCore *obj, EmbVector endPt1)
+{
+    EmbVector endPt2 = obj_end_point_2(obj);
+    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
+    /*
+    obj->setRotation(0);
+    obj->setScale(1);
+    obj_set_line(obj, 0, 0, delta.x, delta.y);
+    obj->setPos(endPt1.x, endPt1.y);
+    */
 }
 

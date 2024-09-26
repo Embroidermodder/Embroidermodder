@@ -23,7 +23,8 @@ doc_toggle_snap(int32_t doc, bool on)
 {
     debug_message("View toggleSnap()");
     wait_cursor();
-    doc_set_bool(doc, "ENABLE_SNAP", on);
+    DocumentData *data = doc_data(doc);
+    data->enableSnap = on;
     doc_update(doc);
     restore_cursor();
 }
@@ -34,7 +35,8 @@ doc_toggle_polar(int32_t doc, bool on)
 {
     debug_message("View togglePolar()");
     wait_cursor();
-    doc_set_bool(doc, "ENABLE_POLAR", on);
+    DocumentData *data = doc_data(doc);
+    data->enablePolar = on;
     doc_update(doc);
     restore_cursor();
 }
@@ -45,7 +47,8 @@ doc_toggle_ortho(int32_t doc, bool on)
 {
     debug_message("View toggleOrtho()");
     wait_cursor();
-    doc_set_bool(doc, "ENABLE_ORTHO", on);
+    DocumentData *data = doc_data(doc);
+    data->enableOrtho = on;
     doc_update(doc);
     restore_cursor();
 }
@@ -56,7 +59,8 @@ doc_toggle_qtrack(int32_t doc, bool on)
 {
     debug_message("View toggleQTrack()");
     wait_cursor();
-    doc_set_bool(doc, "ENABLE_QTRACK", on);
+    DocumentData *data = doc_data(doc);
+    data->enableQTrack = on;
     doc_update(doc);
     restore_cursor();
 }
@@ -67,7 +71,8 @@ doc_toggle_lwt(int32_t doc, bool on)
 {
     debug_message("View toggleLwt()");
     wait_cursor();
-    doc_set_bool(doc, "ENABLE_LWT", on);
+    DocumentData *data = doc_data(doc);
+    data->enableLwt = on;
     doc_update(doc);
     restore_cursor();
 }
@@ -78,7 +83,8 @@ doc_toggle_real(int32_t doc, bool on)
 {
     debug_message("View toggleReal()");
     wait_cursor();
-    doc_set_bool(doc, "ENABLE_REAL", on);
+    DocumentData *data = doc_data(doc);
+    data->enableReal = on;
     doc_update(doc);
     restore_cursor();
 }
@@ -91,25 +97,10 @@ doc_toggle_qsnap(int32_t doc, bool on)
     wait_cursor();
     DocumentData *data = doc_data(doc);
     data->qSnapToggle = on;
-    doc_set_bool(doc, "ENABLE_QSNAP", on);
+    data->enableQSnap = on;
     doc_update(doc);
     restore_cursor();
 }
-
-/* . */
-bool
-doc_is_lwt_enabled(int32_t doc)
-{
-    return doc_get_bool(doc, "ENABLE_LWT");
-}
-
-/* . */
-bool
-doc_is_real_enabled(int32_t doc)
-{
-    return doc_get_bool(doc, "ENABLE_REAL");
-}
-
 
 /* . */
 void
@@ -232,5 +223,23 @@ doc_allow_rubber(int32_t doc)
     /* if (!data->rubberRoomList.size()) */ /* TODO: this check should be removed later */
         return true;
     return false;
+}
+
+/* . */
+void
+doc_set_grid_color(int32_t doc, uint32_t color)
+{
+    DocumentData *data = doc_data(doc);
+    data->gridColor = color;
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_set_ruler_color(int32_t doc, uint32_t color)
+{
+    DocumentData *data = doc_data(doc);
+    data->rulerColor = color;
+    doc_update(doc);
 }
 

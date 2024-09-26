@@ -1067,26 +1067,28 @@ fieldEdited(QObject* fieldObj)
         case OBJ_TEXTSINGLE: {
             /* TODO: field editing */
             if (objName == "lineEditTextSingleContents") {
-                obj_set_text(tempObj, line_edits["TextSingleContents"]->text());
+                obj_set_text(tempObj->core,
+                    qPrintable(line_edits["TextSingleContents"]->text()));
             }
             if (objName == "comboBoxTextSingleFont") {
                 if (comboBoxTextSingleFont->currentText() == fieldVariesText) {
                     break;
                 }
-                obj_set_text_font(tempObj, comboBoxTextSingleFont->currentFont().family());
+                obj_set_text_font(tempObj->core,
+                    qPrintable(comboBoxTextSingleFont->currentFont().family()));
             }
             if (objName == "comboBoxTextSingleJustify") {
                 if (combo_boxes["TextSingleJustify"]->currentText() == fieldVariesText) {
                     break;
                 }
                 int index = combo_boxes["TextSingleJustify"]->currentIndex();
-                obj_set_text_justify(tempObj,
-                    combo_boxes["TextSingleJustify"]->itemData(index).toString());
+                obj_set_text_justify(tempObj->core,
+                    qPrintable(combo_boxes["TextSingleJustify"]->itemData(index).toString()));
                 break;
             }
             if (objName == "lineEditTextSingleHeight") {
                 double height = line_edits["TextSingleHeight"]->text().toDouble();
-                obj_set_text_size(tempObj, height);
+                obj_set_text_size(tempObj->core, height);
                 break;
             }
             if (objName == "lineEditTextSingleRotation") {
@@ -1105,14 +1107,14 @@ fieldEdited(QObject* fieldObj)
                 if (combo_boxes["TextSingleBackward"]->currentText() == fieldVariesText) {
                     break;
                 }
-                obj_set_text_backward(tempObj, combo_boxes["TextSingleBackward"]->itemData(combo_boxes["TextSingleBackward"]->currentIndex()).toBool());
+                obj_set_text_backward(tempObj->core, combo_boxes["TextSingleBackward"]->itemData(combo_boxes["TextSingleBackward"]->currentIndex()).toBool());
                 break;
             }
             if (objName == "comboBoxTextSingleUpsideDown") {
                 if (combo_boxes["TextSingleUpsideDown"]->currentText() == fieldVariesText) {
                     break;
                 }
-                obj_set_text_upside_down(tempObj, combo_boxes["TextSingleUpsideDown"]->itemData(combo_boxes["TextSingleUpsideDown"]->currentIndex()).toBool());
+                obj_set_text_upside_down(tempObj->core, combo_boxes["TextSingleUpsideDown"]->itemData(combo_boxes["TextSingleUpsideDown"]->currentIndex()).toBool());
             }
             break;
         }

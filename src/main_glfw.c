@@ -146,12 +146,8 @@ void clear_selection(void) {}
 void end_command(void) {}
 void start_blinking(void) {}
 void doc_update(int32_t) {}
-void doc_set_property(int32_t, const char *, bool) {}
-bool doc_get_property(int32_t, const char *) { return false; }
 void nativeSetCursorShape(char *) {}
-void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b) {}
-void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b) {}
-void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b) {}
+uint32_t rgb(uint8_t r, uint8_t g, uint8_t b) {return 0;}
 void nativeAddTextSingle(char *, double x, double y, double, bool, int rubberMode) {}
 void nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode) {}
 void nativeAddSlot(double, double, double, double, double, bool, int rubberMode) {}
@@ -165,6 +161,10 @@ void nativeAddEllipse(double centerX, double centerY, double width, double heigh
 void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode) {}
 void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode) {}
 void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode) {}
+void obj_set_text(ObjectCore *obj, const char *text) {}
+void updateAllViewBackgroundColors(uint32_t ) {}
+void updateAllViewCrossHairColors(uint32_t ) {}
+void updateAllViewGridColors(uint32_t ) {}
 
 /* TODO: Clear up memory. */
 void

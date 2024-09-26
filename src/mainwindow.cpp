@@ -952,7 +952,7 @@ findMdiWindow(EmbString fileName)
     foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
         if (mdiWin) {
-            if (mdiWin->curFile == canonicalFilePath) {
+            if (documents[mdiWin->doc_index]->data.curFile == canonicalFilePath) {
                 return subWindow;
             }
         }

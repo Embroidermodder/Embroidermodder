@@ -193,12 +193,12 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         int32_t doc = activeDocument();
         if (doc >= 0) {
             QAction* enableRealAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
-            enableRealAction->setEnabled(!doc_is_real_enabled(doc));
+            enableRealAction->setEnabled(!documents[doc]->data.enableReal);
             QObject::connect(enableRealAction, &QAction::triggered, _main, enableReal);
             menu.addAction(enableRealAction);
 
             QAction* disableRealAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
-            disableRealAction->setEnabled(doc_is_real_enabled(doc));
+            disableRealAction->setEnabled(documents[doc]->data.enableReal);
             QObject::connect(disableRealAction, &QAction::triggered, _main, disableReal);
             menu.addAction(disableRealAction);
         }
@@ -805,15 +805,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 {
     mdiArea = parent;
 
-    myIndex = theIndex;
-
-    fileWasLoaded = false;
-
     setAttribute(Qt::WA_DeleteOnClose);
-
-    QString aName;
-    curFile = aName.asprintf("Untitled%d.dst", myIndex);
-    this->setWindowTitle(curFile);
 
     this->setWindowIcon(create_icon("app"));
 
@@ -821,6 +813,12 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     /* FIXME:. */
     doc_index = numOfDocs;
     documents[doc_index] = create_doc(_main, gscene, this);
+
+    documents[doc_index]->data.myIndex = theIndex;
+    documents[doc_index]->data.fileWasLoaded = false;
+    sprintf(documents[doc_index]->data.curFile,
+        "Untitled%d.dst", theIndex);
+    this->setWindowTitle(documents[doc_index]->data.curFile);
 
     setWidget(documents[doc_index]);
 
@@ -837,10 +835,10 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     promptInputList << "";
     promptInputNum = 0;
 
-    curLayer = "0";
-    curColor = 0; /* TODO: color ByLayer */
-    curLineType = "ByLayer";
-    curLineWeight = "ByLayer";
+    strcpy(documents[doc_index]->data.curLayer, "0");
+    documents[doc_index]->data.curColor = 0; /* TODO: color ByLayer */
+    strcpy(documents[doc_index]->data.curLineType, "ByLayer");
+    strcpy(documents[doc_index]->data.curLineWeight, "ByLayer");
 
     /* Due to strange Qt4.2.3 feature the child window icon is not drawn
      * in the main menu if showMaximized() is called for a non-visible child window
@@ -878,7 +876,7 @@ MdiWindow::loadFile(QString fileName)
 {
     debug_message("MdiWindow loadFile()");
 
-    QRgb tmpColor = curColor;
+    QRgb tmpColor = documents[doc_index]->data.curColor;
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -943,11 +941,11 @@ MdiWindow::loadFile(QString fileName)
     /* Clear the undo stack so it is not possible to undo past this point. */
     documents[doc_index]->undoStack->clear();
 
-    curColor = tmpColor;
+    documents[doc_index]->data.curColor = tmpColor;
 
-    fileWasLoaded = true;
-    setUndoCleanIcon(fileWasLoaded);
-    return fileWasLoaded;
+    documents[doc_index]->data.fileWasLoaded = true;
+    setUndoCleanIcon(documents[doc_index]->data.fileWasLoaded);
+    return documents[doc_index]->data.fileWasLoaded;
 }
 
 void
@@ -1007,7 +1005,8 @@ MdiWindow::saveBMC()
 void
 MdiWindow::setCurrentFile(QString fileName)
 {
-    curFile = QFileInfo(fileName).canonicalFilePath();
+    strcpy(documents[doc_index]->data.curFile,
+        qPrintable(QFileInfo(fileName).canonicalFilePath()));
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
 }
@@ -1015,7 +1014,7 @@ MdiWindow::setCurrentFile(QString fileName)
 QString
 MdiWindow::getShortCurrentFile()
 {
-    return QFileInfo(curFile).fileName();
+    return QFileInfo(documents[doc_index]->data.curFile).fileName();
 }
 
 QString MdiWindow::fileExtension(QString  fileName)
@@ -1034,15 +1033,16 @@ MdiWindow::onWindowActivated()
 {
     debug_message("MdiWindow onWindowActivated()");
     // FIXME: documents[doc]->undoStack->setActive(true);
-    setUndoCleanIcon(fileWasLoaded);
-    statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
-    statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
-    statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
-    statusBarOrthoButton->setChecked(gscene->property("ENABLE_ORTHO").toBool());
-    statusBarPolarButton->setChecked(gscene->property("ENABLE_POLAR").toBool());
-    statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
-    statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
-    statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
+    DocumentData *data = doc_data(doc_index);
+    setUndoCleanIcon(data->fileWasLoaded);
+    statusBarSnapButton->setChecked(data->enableSnap);
+    statusBarGridButton->setChecked(data->enableGrid);
+    statusBarRulerButton->setChecked(data->enableRuler);
+    statusBarOrthoButton->setChecked(data->enableOrtho);
+    statusBarPolarButton->setChecked(data->enablePolar);
+    statusBarQSnapButton->setChecked(data->enableQSnap);
+    statusBarQTrackButton->setChecked(data->enableQTrack);
+    statusBarLwtButton->setChecked(data->enableLwt);
     setHistory(promptHistory);
 }
 
@@ -1057,40 +1057,48 @@ MdiWindow::sizeHint() const
 void
 currentLayerChanged(MdiWindow *mdiWin, QString layer)
 {
-    MdiWindow *win = activeMdiWindow();
-    if (win) {
-        win->curLayer = layer;
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
     }
+    DocumentData *data = doc_data(doc);
+    strcpy(data->curLayer, qPrintable(layer));
 }
 
 /* . */
 void
 currentColorChanged(uint32_t color)
 {
-    MdiWindow *win = activeMdiWindow();
-    if (win) {
-        win->curColor = color;
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
     }
+    DocumentData *data = doc_data(doc);
+    data->curColor = color;
 }
 
 /* . */
 void
 currentLinetypeChanged(QString  type)
 {
-    MdiWindow *win = activeMdiWindow();
-    if (win) {
-        win->curLineType = type;
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
     }
+    DocumentData *data = doc_data(doc);
+    strcpy(data->curLineType, qPrintable(type));
 }
 
 /* . */
 void
 currentLineweightChanged(QString  weight)
 {
-    MdiWindow *win = activeMdiWindow();
-    if (win) {
-        win->curLineWeight = weight;
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
     }
+    DocumentData *data = doc_data(doc);
+    strcpy(data->curLineWeight, qPrintable(weight));
 }
 
 /* . */

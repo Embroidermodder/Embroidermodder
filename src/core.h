@@ -175,12 +175,19 @@ typedef struct DocumentData_ {
 
     EmbVector viewMousePoint;
     EmbVector sceneMousePoint;
+    EmbVector sceneQSnapPoint;
+
     uint8_t qsnapLocatorSize;
+    uint32_t qsnapLocatorColor;
     uint8_t qsnapApertureSize;
+
     uint32_t gripColorCool;
     uint32_t gripColorHot;
+    uint32_t gridColor;
     uint8_t gripSize;
     uint8_t pickBoxSize;
+
+    uint32_t crosshairColor;
     uint32_t crosshairSize;
 
     EmbVector scenePressPoint;
@@ -198,8 +205,30 @@ typedef struct DocumentData_ {
     int panStartX;
     int panStartY;
 
+    bool enableSnap;
+    bool enableGrid;
+    bool enableOrtho;
+    bool enablePolar;
+    bool enableQSnap;
+    bool enableQTrack;
+    bool enableLwt;
+    bool enableReal;
+
+    bool enableRuler;
+    uint32_t rulerColor;
     bool rulerMetric;
     uint8_t rulerPixelSize;
+
+    uint32_t backgroundColor;
+
+    bool fileWasLoaded;
+    int myIndex;
+
+    EmbString curFile;
+    EmbString curLayer;
+    uint32_t curColor;
+    EmbString curLineType;
+    EmbString curLineWeight;
 } DocumentData;
 
 typedef struct UndoData_ {
@@ -293,6 +322,11 @@ void question_box(const char *title, const char *text);
 char *get_svg_token(char *svg, char token[MAX_STRING_LENGTH]);
 char *get_svg_vector(char *svg, EmbVector *v);
 
+const char *getCurrentLayer();
+uint32_t getCurrentColor();
+const char *getCurrentLineType();
+const char *getCurrentLineWeight();
+
 /* ------------------------------ Prompt ------------------------------- */
 
 void setPromptTextColor(uint32_t color);
@@ -308,6 +342,8 @@ void runCommandClick(const char *cmd, double x, double y);
 void runCommandMove(const char *cmd, double x, double y);
 void runCommandContext(const char *cmd, const char *str);
 void runCommandPrompt(const char *cmd);
+
+uint32_t rgb(uint8_t r, uint8_t g, uint8_t b);
 
 void updateAllViewScrollBars(bool val);
 void updateAllViewCrossHairColors(uint32_t color);
@@ -533,6 +569,9 @@ void doc_rotate_selected(int32_t doc, double x, double y, double rot);
 void doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2);
 int doc_num_selected(int32_t doc);
 
+void doc_set_grid_color(int32_t doc, uint32_t color);
+void doc_set_ruler_color(int32_t doc, uint32_t color);
+
 void doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data);
 void doc_preview_off(int32_t doc);
 
@@ -557,8 +596,6 @@ void doc_toggle_qsnap(int32_t doc, bool on);
 void doc_toggle_qtrack(int32_t doc, bool on);
 void doc_toggle_lwt(int32_t doc, bool on);
 void doc_toggle_real(int32_t doc, bool on);
-bool doc_is_lwt_enabled(int32_t doc);
-bool doc_is_real_enabled(int32_t doc);
 
 void doc_enable_move_rapid_fire(int32_t doc);
 void doc_disable_move_rapid_fire(int32_t doc);
@@ -601,16 +638,10 @@ double doc_width(int doc_index);
 double doc_height(int doc_index);
 
 void doc_update(int doc_index);
-void doc_set_bool(int32_t doc, const char *key, bool value);
-bool doc_get_bool(int32_t doc, const char *key);
-void doc_set_color(int32_t doc, const char *key, uint32_t value);
-uint32_t doc_get_color(int32_t doc, const char *key);
 
 void doc_center_on(int32_t doc, EmbVector v);
 
 DocumentData *doc_data(int32_t doc);
-
-EmbVector scene_get_point(EmbString key);
 
 void move_action(void);
 void rotate_action(void);
@@ -688,6 +719,19 @@ EmbVector obj_bottom_left(ObjectCore *obj);
 EmbVector obj_bottom_right(ObjectCore *obj);
 
 EmbRect obj_rect(ObjectCore *obj);
+
+void obj_set_text(ObjectCore *obj, const char *str);
+void obj_set_text_font(ObjectCore *obj, const char *font);
+void obj_set_text_justify(ObjectCore *obj, const char *justify);
+void obj_set_text_size(ObjectCore *obj, double size);
+void obj_set_text_style(ObjectCore *obj, bool bold, bool italic, bool under, bool strike, bool over);
+void obj_set_text_bold(ObjectCore *obj, bool val);
+void obj_set_text_italic(ObjectCore *obj, bool val);
+void obj_set_text_underline(ObjectCore *obj, bool val);
+void obj_set_text_strikeout(ObjectCore *obj, bool val);
+void obj_set_text_overline(ObjectCore *obj, bool val);
+void obj_set_text_backward(ObjectCore *obj, bool val);
+void obj_set_text_upside_down(ObjectCore *obj, bool val);
 
 /* ---------------------------------- Geometry ----------------------------- */
 
