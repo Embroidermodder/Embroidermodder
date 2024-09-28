@@ -451,13 +451,13 @@ svg_to_painterpath(QPainterPath *path, const char *svg, EmbVector pos, EmbVector
 {
     char token[MAX_STRING_LENGTH];
     char *p = (char*)svg;
-    p = get_svg_token(p, token);
+    p = emb_get_svg_token(p, token);
     while (p) {
         switch (token[0]) {
         case 'M':
         case 'm': {
             EmbVector v;
-            p = get_svg_vector(p, &v);
+            p = emb_get_svg_vector(p, &v);
             if (!p) {
                 break;
             }
@@ -475,7 +475,7 @@ svg_to_painterpath(QPainterPath *path, const char *svg, EmbVector pos, EmbVector
         case 'L':
         case 'l': {
             EmbVector v;
-            p = get_svg_vector(p, &v);
+            p = emb_get_svg_vector(p, &v);
             if (!p) {
                 break;
             }
@@ -493,20 +493,20 @@ svg_to_painterpath(QPainterPath *path, const char *svg, EmbVector pos, EmbVector
         case 'A': {
             EmbVector v1, v2, v3;
             /* Start position */
-            p = get_svg_vector(p, &v1);
+            p = emb_get_svg_vector(p, &v1);
             if (!p) {
                 break;
             }
-            p = get_svg_vector(p, &v2);
+            p = emb_get_svg_vector(p, &v2);
             if (!p) {
                 break;
             }
             /* flag: ignored */
-            p = get_svg_token(p, token);
+            p = emb_get_svg_token(p, token);
             if (!p) {
                 break;
             }
-            p = get_svg_vector(p, &v3);
+            p = emb_get_svg_vector(p, &v3);
             if (!p) {
                 break;
             }
@@ -523,7 +523,7 @@ svg_to_painterpath(QPainterPath *path, const char *svg, EmbVector pos, EmbVector
         default:
             break;
         }
-        p = get_svg_token(p, token);
+        p = emb_get_svg_token(p, token);
     }
 }
 

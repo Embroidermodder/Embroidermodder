@@ -319,9 +319,6 @@ void warning_box(const char *title, const char *text);
 void critical_box(const char *title, const char *text);
 void question_box(const char *title, const char *text);
 
-char *get_svg_token(char *svg, char token[MAX_STRING_LENGTH]);
-char *get_svg_vector(char *svg, EmbVector *v);
-
 const char *getCurrentLayer();
 uint32_t getCurrentColor();
 const char *getCurrentLineType();
@@ -732,54 +729,6 @@ void obj_set_text_strikeout(ObjectCore *obj, bool val);
 void obj_set_text_overline(ObjectCore *obj, bool val);
 void obj_set_text_backward(ObjectCore *obj, bool val);
 void obj_set_text_upside_down(ObjectCore *obj, bool val);
-
-/* ---------------------------------- Geometry ----------------------------- */
-
-uint32_t emb_pattern_real_count(EmbPattern *pattern);
-uint32_t emb_pattern_count_type(EmbPattern *pattern, uint32_t flags);
-double emb_pattern_shortest_stitch(EmbPattern *pattern);
-double emb_pattern_longest_stitch(EmbPattern *pattern);
-void emb_color_histogram(EmbPattern *pattern, int **bins);
-void emb_length_histogram(EmbPattern *pattern, int *bins);
-double emb_total_thread_length(EmbPattern *pattern);
-double emb_total_thread_of_color(EmbPattern *pattern, int thread_index);
-
-int emb_approx(EmbVector point1, EmbVector point2);
-
-EmbVector scale_and_rotate(EmbVector v, double angle, double scale);
-
-double emb_width(EmbGeometry *geometry);
-double emb_height(EmbGeometry *geometry);
-double emb_radius(EmbGeometry *geometry);
-double emb_radius_major(EmbGeometry *geometry);
-double emb_radius_minor(EmbGeometry *geometry);
-double emb_diameter(EmbGeometry *geometry);
-double emb_diameter_major(EmbGeometry *geometry);
-double emb_diameter_minor(EmbGeometry *geometry);
-EmbVector emb_quadrant(EmbGeometry *geometry, int degrees);
-double emb_angle(EmbGeometry *geometry);
-double emb_start_angle(EmbGeometry *geometry);
-double emb_end_angle(EmbGeometry *geometry);
-double emb_arc_length(EmbGeometry *geometry);
-double emb_area(EmbGeometry *geometry);
-double emb_chord(EmbGeometry *geometry);
-double emb_included_angle(EmbGeometry *geometry);
-bool emb_clockwise(EmbGeometry *geometry);
-double emb_circumference(EmbGeometry *geometry);
-
-void emb_set_start_angle(EmbGeometry *geometry, double angle);
-void emb_set_end_angle(EmbGeometry *geometry, double angle);
-void emb_set_start_point(EmbGeometry *geometry, EmbVector point);
-void emb_set_mid_point(EmbGeometry *geometry, EmbVector point);
-void emb_set_end_point(EmbGeometry *geometry, EmbVector point);
-void emb_set_diameter(EmbGeometry *geometry, double diameter);
-void emb_set_area(EmbGeometry *geometry, double area);
-void emb_set_circumference(EmbGeometry *geometry, double circumference);
-void emb_set_radius(EmbGeometry *geometry, double radius);
-void emb_set_radius_major(EmbGeometry *geometry, double radius);
-void emb_set_radius_minor(EmbGeometry *geometry, double radius);
-void emb_set_diameter_major(EmbGeometry *geometry, double diameter);
-void emb_set_diameter_minor(EmbGeometry *geometry, double diameter);
 
 /* ---------------------------- Global Variables --------------------------- */
 
