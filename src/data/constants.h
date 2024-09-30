@@ -474,6 +474,17 @@
 
 #define RUBBER_TEXTSINGLE             21
 
+/* Statusbar Buttons */
+#define SB_SNAP                        0
+#define SB_GRID                        1
+#define SB_RULER                       2
+#define SB_ORTHO                       3
+#define SB_POLAR                       4
+#define SB_QSNAP                       5
+#define SB_QTRACK                      6
+#define SB_LWT                         7
+#define N_SB_BUTTONS                   8
+
 /* NOTE: Allow this enum to evaluate false */
 #define SPARE_RUBBER_OFF               0
 #define SPARE_RUBBER_PATH              1

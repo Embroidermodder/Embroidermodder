@@ -73,10 +73,7 @@ set(C_CORE
 
 qt_add_executable(embroidermodder2
 	${SRC}/commands.cpp
-	${SRC}/mainwindow.cpp
 	${SRC}/object.cpp
-	${SRC}/property-editor.cpp
-	${SRC}/settings-dialog.cpp
 	${SRC}/view.cpp
 	${SRC}/widgets.cpp
 

@@ -22,10 +22,20 @@
 
 #include "toml.h"
 
-bool shiftKeyPressedState;
+char formatFilterOpen[1000];
+char formatFilterSave[1000];
+EmbString openFilesPath;
+EmbString prompt_color_;
+EmbString prompt_selection_bg_color_;
+EmbString prompt_bg_color_;
+EmbString prompt_selection_color_;
+
+bool document_memory[MAX_OPEN_FILES];
+
+bool shiftKeyPressedState = false;
 bool cmdActive;
-bool rapidFireEnabled;
-bool isBlinking;
+bool rapidFireEnabled = false;
+bool isBlinking = false;
 int numOfDocs = 0;
 int docIndex = 0;
 
@@ -156,6 +166,19 @@ main(int argc, char* argv[])
         return 1;
     }
     return make_application(n_files, files_to_open);
+}
+
+/* . */
+void
+run_testing(void)
+{
+    int i;
+    nanosleep_(2000);
+    int n = string_array_length(coverage_test);
+    for (i=0; i<n; i++) {
+        runCommandMain(coverage_test[i]);
+        nanosleep_(1000);
+    }        
 }
 
 /* . */

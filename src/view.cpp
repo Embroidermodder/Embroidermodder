@@ -19,6 +19,8 @@ Document::Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : 
 /* . */
 Document::~Document()
 {
+    document_memory[data.id] = false;
+
     /* Prevent memory leaks by deleting any objects that were removed from the scene */
     for (const auto& [key, value] : hashDeletedObjects) {
         delete value;
@@ -38,6 +40,7 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->data.id = numOfDocs;
     documents[doc->data.id] = doc;
     doc->gscene = theScene;
+    document_memory[doc->data.id] = true;
 
     doc->setFrameShape(QFrame::NoFrame);
 
@@ -660,36 +663,6 @@ doc_create_grid_iso(int32_t doc)
     }
 }
 
-void
-doc_toggle_grid(int32_t doc, bool on)
-{
-    debug_message("View toggleGrid()");
-    wait_cursor();
-    if (on) {
-        doc_create_grid(doc, get_str(GRID_TYPE));
-    }
-    else {
-        doc_create_grid(doc, "");
-    }
-    restore_cursor();
-}
-
-/* . */
-void
-doc_toggle_ruler(int32_t doc, bool on)
-{
-    DocumentData *data = doc_data(doc);
-    debug_message("View toggleRuler()");
-    wait_cursor();
-    data->enableRuler = on;
-    data->rulerMetric = get_bool(RULER_METRIC);
-    data->rulerColor = get_int(RULER_COLOR);
-    data->rulerPixelSize = get_int(RULER_PIXEL_SIZE);
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
 /* . */
 DocumentData *
 doc_data(int32_t doc)
@@ -2446,15 +2419,6 @@ doc_show_scroll_bars(int32_t doc, bool val)
         documents[doc]->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         documents[doc]->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
-}
-
-/* . */
-void
-doc_set_cross_hair_color(int32_t doc, uint32_t color)
-{
-    DocumentData *data = doc_data(doc);
-    data->crosshairColor = color;
-    doc_update(doc);
 }
 
 /* . */

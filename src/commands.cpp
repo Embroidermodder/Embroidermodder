@@ -16,7 +16,6 @@
  * usage array?
  */
 Document *documents[MAX_OPEN_FILES];
-bool document_memory[MAX_OPEN_FILES];
 
 /* . */
 void
@@ -375,18 +374,6 @@ window_previous(void)
     mdiArea->activatePreviousSubWindow();
 }
 
-void
-disable_rapid_fire(void)
-{
-    prompt->disableRapidFire();
-}
-
-void
-enable_rapid_fire(void)
-{
-    prompt->enableRapidFire();
-}
-
 /* . */
 void
 setUndoCleanIcon(bool opened)
@@ -396,96 +383,10 @@ setUndoCleanIcon(bool opened)
 
 /* . */
 void
-updateAllViewScrollBars(bool val)
-{
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->showViewScrollBars(val);
-        }
-    }
-}
-
-/* . */
-void
-updateAllViewCrossHairColors(QRgb color)
-{
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewCrossHairColor(color);
-        }
-    }
-}
-
-/* . */
-void
-updateAllViewBackgroundColors(QRgb color)
-{
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewBackgroundColor(color);
-        }
-    }
-}
-
-/* . */
-void
-updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
-{
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
-        }
-    }
-}
-
-/* . */
-void
-updateAllViewGridColors(QRgb color)
-{
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewGridColor(color);
-        }
-    }
-}
-
-/* . */
-void
-updateAllViewRulerColors(QRgb color)
-{
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewRulerColor(color);
-        }
-    }
-}
-
-/* . */
-void
 updatePickAddMode(bool val)
 {
     set_bool(SELECTION_MODE_PICKADD, val);
     dockPropEdit->updatePickAddModeButton(val);
-}
-
-/* . */
-void
-pickAddModeToggled(void)
-{
-    bool val = !get_bool(SELECTION_MODE_PICKADD);
-    updatePickAddMode(val);
 }
 
 /* Layer ToolBar */
@@ -508,7 +409,7 @@ MainWindow::colorSelectorIndexChanged(int index)
     debug_message(message);
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
-    QRgb newColor;
+    uint32_t newColor;
     if (comboBox) {
         bool ok = 0;
         /* TODO: Handle ByLayer and ByBlock and Other... */
@@ -627,27 +528,6 @@ MainWindow::runCommand()
     }
 }
 
-/* FIXME: reconnect to new command system.
- * NOTE: Replace any special characters that will cause a syntax error
- */
-void
-runCommandPrompt(const char *cmd)
-{
-    EmbString message;
-    ScriptEnv *context = create_script_env();
-    sprintf(message, "runCommandPrompt(%s)", cmd);
-    debug_message(message);
-    context->context = CONTEXT_PROMPT;
-    if (prompt->isRapidFireEnabled()) {
-        run_command(cmd, context);
-    }
-    else {
-        /* Both branches run the same. */
-        run_command(cmd, context);
-    }
-    free_script_env(context);
-}
-
 /* NOTE: translation is the repsonisbility of the caller, because some reports
  * include parts that aren't translated. For example:
  *
@@ -722,7 +602,7 @@ nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int ru
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
-            gscene->update();
+            doc_update(doc_index);
         }
         else {
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
@@ -864,7 +744,7 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
-            gscene->update();
+            doc_update(doc_index);
         }
         else {
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);

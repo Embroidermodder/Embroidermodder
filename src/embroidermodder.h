@@ -113,18 +113,9 @@ class Document;
 class CmdPromptInput;
 
 extern MainWindow *_main;
-extern std::unordered_map<std::string, std::string> aliasHash;
 extern std::unordered_map<int, QAction*> actionHash;
-extern QToolBar* toolbar[N_TOOLBARS];
 extern QMenu* menu[N_MENUS];
-extern QToolButton* statusBarSnapButton;
-extern QToolButton* statusBarGridButton;
-extern QToolButton* statusBarRulerButton;
-extern QToolButton* statusBarOrthoButton;
-extern QToolButton* statusBarPolarButton;
-extern QToolButton* statusBarQSnapButton;
-extern QToolButton* statusBarQTrackButton;
-extern QToolButton* statusBarLwtButton;
+extern QToolButton* statusBarButtons[N_SB_BUTTONS];
 extern QLabel* statusBarMouseCoord;
 extern QStatusBar* statusbar;
 extern MdiArea* mdiArea;
@@ -154,25 +145,15 @@ extern QString curCmd;
 extern QTextBrowser* promptHistory;
 extern CmdPromptInput* promptInput;
 
-extern QString formatFilterOpen;
-extern QString formatFilterSave;
-extern QString openFilesPath;
 extern QByteArray layoutState;
 
 extern QStringList button_list;
 
-extern QString prompt_color_;
-extern QString prompt_selection_bg_color_;
-extern QString prompt_bg_color_;
-extern QString prompt_selection_color_;
-
 extern QTimer* blinkTimer;
-extern bool blinkState;
 
 extern std::unordered_map<int, int> key_map;
 
 extern Document *documents[MAX_OPEN_FILES];
-extern bool document_memory[MAX_OPEN_FILES];
 
 void create_statusbar(MainWindow* mw);
 
@@ -263,8 +244,6 @@ void obj_set_line_type(Object *obj, Qt::PenStyle lineType);
 
 Document *create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent);
 
-void doc_create_grid(int32_t doc, EmbString gridType);
-
 void doc_add_to_rubber_room(int32_t doc, QGraphicsItem* item);
 
 void draw_arc(QPainter* painter, EmbArc arc);
@@ -279,8 +258,6 @@ void draw_spline(QPainter* painter, EmbSpline spline);
 QPainterPath doc_create_ruler_text_path(EmbString str, float height);
 
 QList<QGraphicsItem*> doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list);
-
-void doc_copy_selected(int32_t doc);
 
 void doc_start_gripping(int32_t doc, Object* obj);
 void doc_stop_gripping(int32_t doc, bool accept = false);
@@ -594,8 +571,6 @@ private slots:
     void spinBoxPromptFontSizeValueChanged(int);
     void buttonCustomFilterSelectAllClicked();
     void buttonCustomFilterClearAllClicked();
-    void spinBoxRecentMaxFilesValueChanged(int);
-    void spinBoxTrimDstNumJumpsValueChanged(int);
     void comboBoxGridTypeCurrentIndexChanged(QString);
     void comboBoxRulerMetricCurrentIndexChanged(int);
     void spinBoxRulerPixelSizeValueChanged(double);
@@ -687,13 +662,6 @@ public slots:
 
     void updateColorLinetypeLineweight();
 
-    void showViewScrollBars(bool val);
-    void setViewCrossHairColor(QRgb color);
-    void setViewBackgroundColor(QRgb color);
-    void setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-    void setViewGridColor(QRgb color);
-    void setViewRulerColor(QRgb color);
-
     void print();
     void saveBMC();
 
@@ -779,14 +747,11 @@ public:
 
 public slots:
     void setCurrentText(QString txt)
-    {
+     {
         curText = prefix + txt;
         promptInput->setText(curText);
     }
     void setPrefix(QString txt);
-    void enableRapidFire() { rapidFireEnabled = true; }
-    void disableRapidFire() { rapidFireEnabled = false; }
-    bool isRapidFireEnabled() { return rapidFireEnabled; }
 
     void alert(QString txt);
 

@@ -91,6 +91,9 @@ BASIC_DOC_F(doc_pan_up)
 BASIC_DOC_F(doc_pan_down)
 BASIC_DOC_F(doc_clear_rubber_room)
 
+void doc_show_scroll_bars(int32_t doc, bool) {}
+void doc_set_select_box_colors(int32_t doc, uint32_t, uint32_t, uint32_t, uint32_t, int) {}
+
 DUMMY_COMMAND(previewon_command)
 
 NO_ARG_F(undo_command)
@@ -99,6 +102,8 @@ NO_ARG_F(new_file)
 NO_ARG_F(help)
 NO_ARG_F(about_dialog)
 NO_ARG_F(tipOfTheDay)
+
+void nanosleep_(int) {}
 
 DocumentData* doc_data(int32_t) {return NULL;}
 
@@ -116,7 +121,6 @@ void doc_move_selected(int32_t doc, double x, double y) {}
 void doc_delete_selected(int32_t doc) {}
 void doc_rotate_selected(int32_t doc, double, double, double) {}
 void doc_mirror_selected(int32_t doc, double, double, double, double) {}
-void doc_set_cross_hair_color(int32_t doc, uint32_t color) {}
 void doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point) {}
 void doc_set_rubber_text(int32_t doc, EmbString key, EmbString value) {}
 void doc_cut(int32_t doc) {}
@@ -138,11 +142,11 @@ void window_cascade(void) {}
 void window_tile(void) {}
 void window_next(void) {}
 void window_previous(void) {}
-void enable_rapid_fire(void) {}
-void disable_rapid_fire(void) {}
 void restore_cursor(void) {}
 void wait_cursor(void) {}
+void updatePickAddMode(bool val) {}
 void clear_selection(void) {}
+void doc_create_grid(int doc, char*) {}
 void end_command(void) {}
 void start_blinking(void) {}
 void doc_update(int32_t) {}
@@ -162,9 +166,6 @@ void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, 
 void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode) {}
 void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode) {}
 void obj_set_text(ObjectCore *obj, const char *text) {}
-void updateAllViewBackgroundColors(uint32_t ) {}
-void updateAllViewCrossHairColors(uint32_t ) {}
-void updateAllViewGridColors(uint32_t ) {}
 
 /* TODO: Clear up memory. */
 void

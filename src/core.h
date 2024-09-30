@@ -419,7 +419,12 @@ void cut(void);
 
 void about_dialog(void);
 
-/* ------------------------------------- Natives --------------------------- */
+/* --------------------------------- Editors -------------------------------- */
+
+void spinBoxRecentMaxFilesValueChanged(int value);
+void spinBoxTrimDstNumJumpsValueChanged(int value);
+
+/* -------------------------------- Commands -------------------------------- */
 
 void about_dialog(void);
 void todo(const char *txt);
@@ -441,6 +446,8 @@ void repeat_action(void);
 void move_action(void);
 
 ScriptValue run_command(const char *cmd, ScriptEnv *context);
+
+void nanosleep_(int);
 
 void nativeBlinkPrompt();
 
@@ -576,6 +583,8 @@ void doc_delete_pressed(int32_t doc);
 void doc_escape_pressed(int32_t doc);
 
 void doc_corner_button_clicked(int32_t doc);
+void doc_create_grid(int32_t doc, EmbString gridType);
+void doc_copy_selected(int32_t doc);
 
 void doc_show_scroll_bars(int32_t doc, bool val);
 void doc_set_corner_button(int32_t doc);
@@ -737,9 +746,21 @@ extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
 extern SettingsData settings_data[N_SETTINGS];
 
+extern bool document_memory[MAX_OPEN_FILES];
+
+extern char formatFilterOpen[1000];
+extern char formatFilterSave[1000];
+extern EmbString openFilesPath;
+extern EmbString prompt_color_;
+extern EmbString prompt_selection_bg_color_;
+extern EmbString prompt_bg_color_;
+extern EmbString prompt_selection_color_;
+
 extern ScriptValue script_null;
 extern ScriptValue script_true;
 extern ScriptValue script_false;
+
+extern bool blinkState;
 
 extern int testing_mode;
 

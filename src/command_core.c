@@ -92,6 +92,120 @@ lineweightSelectorIndexChanged(int index)
     debug_message(message);
 }
 
+/* . */
+void
+currentLayerChanged(EmbString layer)
+{
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    strcpy(data->curLayer, layer);
+}
+
+/* . */
+void
+currentColorChanged(uint32_t color)
+{
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    data->curColor = color;
+}
+
+/* . */
+void
+currentLinetypeChanged(EmbString type)
+{
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    strcpy(data->curLineType, type);
+}
+
+/* . */
+void
+currentLineweightChanged(EmbString weight)
+{
+    int doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    strcpy(data->curLineWeight, weight);
+}
+
+/* . */
+void
+updateAllViewScrollBars(bool val)
+{
+    for (int i=0; i<MAX_OPEN_FILES; i++) {
+        if (document_memory[i]) {
+            doc_show_scroll_bars(i, val);
+        }
+    }
+}
+
+/* . */
+void
+updateAllViewCrossHairColors(uint32_t color)
+{
+    for (int i=0; i<MAX_OPEN_FILES; i++) {
+        if (document_memory[i]) {
+            doc_set_cross_hair_color(i, color);
+        }
+    }
+}
+
+/* . */
+void
+updateAllViewBackgroundColors(uint32_t color)
+{
+    for (int i=0; i<MAX_OPEN_FILES; i++) {
+        if (document_memory[i]) {
+            doc_set_background_color(i, color);
+        }
+    }
+}
+
+/* . */
+void
+updateAllViewSelectBoxColors(uint32_t colorL, uint32_t fillL, uint32_t colorR, uint32_t fillR, int alpha)
+{
+    for (int i=0; i<MAX_OPEN_FILES; i++) {
+        if (document_memory[i]) {
+            doc_set_select_box_colors(i, colorL, fillL, colorR, fillR, alpha);
+        }
+    }
+}
+
+/* . */
+void
+updateAllViewGridColors(uint32_t color)
+{
+    for (int i=0; i<MAX_OPEN_FILES; i++) {
+        if (document_memory[i]) {
+            doc_set_grid_color(i, color);
+        }
+    }
+}
+
+/* . */
+void
+updateAllViewRulerColors(uint32_t color)
+{
+    for (int i=0; i<MAX_OPEN_FILES; i++) {
+        if (document_memory[i]) {
+            doc_set_ruler_color(i, color);
+        }
+    }
+}
+
 /*
  * BUG: pan commands broke
  */
@@ -724,6 +838,47 @@ runCommandContext(const char *cmd, const char *str)
     /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
     run_command(cmd, context);
     free_script_env(context);
+}
+
+/* FIXME: reconnect to new command system.
+ * NOTE: Replace any special characters that will cause a syntax error
+ */
+void
+runCommandPrompt(const char *cmd)
+{
+    EmbString message;
+    ScriptEnv *context = create_script_env();
+    sprintf(message, "runCommandPrompt(%s)", cmd);
+    debug_message(message);
+    context->context = CONTEXT_PROMPT;
+    if (rapidFireEnabled) {
+        run_command(cmd, context);
+    }
+    else {
+        /* Both branches run the same. */
+        run_command(cmd, context);
+    }
+    free_script_env(context);
+}
+
+void
+disable_rapid_fire(void)
+{
+    rapidFireEnabled = false;
+}
+
+void
+enable_rapid_fire(void)
+{
+    rapidFireEnabled = true;
+}
+
+/* . */
+void
+pickAddModeToggled(void)
+{
+    bool val = !get_bool(SELECTION_MODE_PICKADD);
+    updatePickAddMode(val);
 }
 
 /* . */
@@ -2692,5 +2847,19 @@ EmbVector
 unpack_vector(ScriptEnv *context, int offset)
 {
     return emb_vector(REAL(offset), -REAL(offset+1));
+}
+
+/* . */
+void
+spinBoxRecentMaxFilesValueChanged(int value)
+{
+    setting[OPENSAVE_RECENT_MAX_FILES].dialog.i = value;
+}
+
+/* . */
+void
+spinBoxTrimDstNumJumpsValueChanged(int value)
+{
+    setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i = value;
 }
 
