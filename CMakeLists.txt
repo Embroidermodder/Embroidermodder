@@ -63,8 +63,8 @@ set(C_CORE
 	${SRC}/data/constants.h
 
 	${SRC}/script.c
-	${SRC}/object_core.c
-	${SRC}/command_core.c
+	${SRC}/objects.c
+	${SRC}/commands.c
 	${SRC}/document.c
 	${SRC}/xpm.c
 
@@ -72,14 +72,9 @@ set(C_CORE
 )
 
 qt_add_executable(embroidermodder2
-	${SRC}/commands.cpp
-	${SRC}/object.cpp
-	${SRC}/view.cpp
 	${SRC}/widgets.cpp
 
 	${C_CORE}
-
-	${SRC}/embroidermodder.h
 )
 
 add_executable(emb2_glfw
@@ -88,7 +83,6 @@ add_executable(emb2_glfw
 	${EXTERN}/nanovg/src/nanovg.c
 	${EXTERN}/nanovg/src/nanovg.h
 
-	${SRC}/interface.h
 	${SRC}/main_glfw.c
 )
 

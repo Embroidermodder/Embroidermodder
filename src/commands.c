@@ -2863,3 +2863,94 @@ spinBoxTrimDstNumJumpsValueChanged(int value)
     setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i = value;
 }
 
+void
+spinBoxDisplaySelectBoxAlphaValueChanged(int value)
+{
+    setting[DISPLAY_SELECTBOX_ALPHA].preview.i = value;
+    updateAllViewSelectBoxColors(
+        setting[DISPLAY_SELECTBOX_LEFT_COLOR].accept.i,
+        setting[DISPLAY_SELECTBOX_LEFT_FILL].accept.i,
+        setting[DISPLAY_SELECTBOX_RIGHT_COLOR].accept.i,
+        setting[DISPLAY_SELECTBOX_RIGHT_FILL].accept.i,
+        setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
+}
+
+/* . */
+void
+comboBoxPromptFontFamilyCurrentIndexChanged(EmbString family)
+{
+    strcpy(setting[PROMPT_FONT_FAMILY].preview.s, family);
+    setPromptFontFamily(setting[PROMPT_FONT_FAMILY].preview.s);
+}
+
+/* . */
+void
+comboBoxPromptFontStyleCurrentIndexChanged(EmbString style)
+{
+    strcpy(setting[PROMPT_FONT_STYLE].preview.s, style);
+    setPromptFontStyle(setting[PROMPT_FONT_STYLE].preview.s);
+}
+
+/* . */
+void
+spinBoxPromptFontSizeValueChanged(int value)
+{
+    setting[PROMPT_FONT_SIZE].preview.i = value;
+    setPromptFontSize(setting[PROMPT_FONT_SIZE].preview.i);
+}
+
+/* . */
+void
+spinBoxRulerPixelSizeValueChanged(double value)
+{
+    setting[RULER_PIXEL_SIZE].dialog.r = value;
+}
+
+/* . */
+void
+sliderQSnapLocatorSizeValueChanged(int value)
+{
+    setting[QSNAP_LOCATOR_SIZE].dialog.i = value;
+}
+
+/* . */
+void
+sliderQSnapApertureSizeValueChanged(int value)
+{
+    setting[QSNAP_APERTURE_SIZE].dialog.i = value;
+}
+
+/* . */
+void
+checkBoxLwtRealRenderStateChanged(int checked)
+{
+    setting[LWT_REAL_RENDER].preview.b = checked;
+    if (setting[LWT_REAL_RENDER].preview.b) {
+        enableReal();
+    }
+    else {
+        disableReal();
+    }
+}
+
+/* . */
+void
+sliderSelectionGripSizeValueChanged(int value)
+{
+    setting[SELECTION_GRIP_SIZE].dialog.i = value;
+}
+
+/* . */
+void
+sliderSelectionPickBoxSizeValueChanged(int value)
+{
+    setting[SELECTION_PICKBOX_SIZE].dialog.i = value;
+}
+
+/* . */
+void
+comboBoxScrollBarWidgetCurrentIndexChanged(int index)
+{
+    setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i = index;
+}
+

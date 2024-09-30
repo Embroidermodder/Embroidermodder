@@ -7,12 +7,117 @@
  * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
  * for advice on altering this file.
  *
- * Undo
+ * MainWindow Commands
  */
 
-#include "embroidermodder.h"
+
+/* Qt Headers */
+#include <QAction>
+#include <QApplication>
+#include <QBrush>
+#include <QClipboard>
+#include <QCloseEvent>
+#include <QColor>
+#include <QComboBox>
+#include <QContextMenuEvent>
+#include <QDate>
+#include <QDateTime>
+#include <QDebug>
+#include <QDesktopServices>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QDir>
+#include <QDockWidget>
+#include <QFile>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QFontComboBox>
+#include <QFormLayout>
+#include <QFrame>
+#include <QGraphicsItem>
+#include <QGraphicsPathItem>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QImage>
+#include <QKeyEvent>
+#include <QLabel>
+#include <QLineEdit>
+#include <QList>
+#include <QLocale>
+#include <QMainWindow>
+#include <QMdiArea>
+#include <QMdiSubWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QMetaObject>
+#include <QObject>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPen>
+#include <QPixmap>
+#include <QPointF>
+#include <QProcess>
+#include <QPushButton>
+#include <QRubberBand>
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QSettings>
+#include <QSignalMapper>
+#include <QSplitter>
+#include <QStandardPaths>
+#include <QStatusBar>
+#include <QString>
+#include <QStyleOption>
+#include <QTextBrowser>
+#include <QTextLayout>
+#include <QTextStream>
+#include <QToolBar>
+#include <QToolButton>
+#include <QTransform>
+#include <QUndoCommand>
+#include <QUndoGroup>
+#include <QUndoStack>
+#include <QUndoView>
+#include <QUrl>
+#include <QVBoxLayout>
+#include <QWhatsThis>
+
+#include <QtPrintSupport>
+
+/* C++ Headers */
+#include <unordered_map>
+#include <string>
+#include <vector>
+
+/* C Headers */
+#include "core.h"
+
+class CmdPrompt;
+class ImageWidget;
+class MainWindow;
+class MdiArea;
+class MdiWindow;
+class Object;
+class PropertyEditor;
+class SelectBox;
+class UndoEditor;
+class Document;
+class CmdPromptInput;
+
+#include <chrono>
+#include <thread>
 
 #define NUMBINS 10
+
+/* Could initialise all documents to NULL rather than having a seperate memory
+ * usage array?
+ */
+Document *documents[MAX_OPEN_FILES];
+EmbVector obj_map_rubber(Object *obj, const char *key);
+EmbVector map_from_scene(Object *obj, EmbVector v);
 void to_string_table(QStringList src, EmbStringTable dest);
 
 std::unordered_map<int, QAction*> actionHash;
@@ -177,7 +282,7 @@ QList<QGraphicsItem*> selectedItemList;
 QToolButton* toolButtonQSelect;
 QToolButton* toolButtonPickAdd;
 
-/* Helper functions */
+/* File-scope Functions ----------------------------------------------------- */
 void mapSignal(QObject* fieldObj, QString name, QVariant value);
 QToolButton* createToolButton(QString iconName, QString txt);
 
@@ -196,6 +301,6157 @@ void clearAllFields();
 QComboBox* createComboBoxSelected();
 QToolButton* createToolButtonQSelect();
 QToolButton* createToolButtonPickAdd();
+
+void create_statusbar(MainWindow* mw);
+
+MdiWindow* activeMdiWindow();
+QGraphicsScene* activeScene();
+QUndoStack* activeUndoStack();
+QString platformString();
+
+QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
+QIcon create_icon(QString icon);
+QPixmap create_pixmap(QString icon);
+
+void nativeAlert(std::string txt);
+void nativeAppendPromptHistory(std::string txt);
+
+void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
+void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
+void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
+
+void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
+
+QAction *get_action_by_icon(EmbString icon);
+
+EmbVector to_emb_vector(QPointF p);
+QPointF to_qpointf(EmbVector v);
+EmbVector find_mouse_snap_point(QList<EmbVector> snap_points, EmbVector mouse_point);
+
+void set_visibility(QObject *senderObj, EmbString key, bool visibility);
+void set_enabled(QObject *senderObj, EmbString key, bool visibility);
+void set_visibility_group(QObject *senderObj, EmbStringTable key, bool visibility);
+void set_enabled_group(QObject *senderObj, EmbStringTable key, bool visibility);
+QIcon create_swatch(int32_t color);
+void preview_update(void);
+
+void setHistory(QString txt);
+void add_command(std::string alias, std::string cmd);
+
+/* ------------------------ Object Functions --------------------------- */
+
+Object *create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item=0);
+Object *create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item=0);
+Object *create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item=0);
+Object *create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_path(EmbVector v, const QPainterPath p, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_polygon(EmbVector v, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_text_single(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_dim_leader(EmbLine line, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_image(EmbRect rect, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_rect(EmbRect rect, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_line(EmbLine line, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent=0);
+
+Object *copy_object(Object* obj);
+
+Qt::PenStyle obj_line_type(Object* obj);
+double  obj_line_weight(Object* obj);
+QPainterPath obj_path(Object* obj);
+EmbVector obj_rubber_point(Object* obj, QString key);
+QString obj_rubber_text(Object* obj, QString key);
+
+void obj_update_rubber(Object *obj, QPainter* painter);
+void obj_update_rubber_grip(Object *obj, QPainter *painter);
+void obj_update_leader(Object *obj);
+void obj_update_path(Object *obj);
+void obj_update_path_r(Object *obj, QPainterPath p);
+void obj_update_arc_rect(Object *obj, double radius);
+
+void obj_set_line_weight(Object *obj, double lineWeight);
+
+void obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath);
+
+void obj_set_rect(Object *obj, QRectF r);
+void obj_set_rect(Object *obj, double x, double y, double w, double h);
+QLineF obj_line(Object *obj);
+void obj_set_line(Object *obj, QLineF li);
+void obj_set_line(Object *obj, double x1, double y1, double x2, double y2);
+
+void obj_set_path(Object *obj, QPainterPath p);
+void obj_calculate_data(Object *obj);
+
+int obj_find_index(Object *obj, EmbVector point);
+
+void obj_set_color(Object *obj, const QColor& color);
+void obj_set_color_rgb(Object *obj, QRgb rgb);
+void obj_set_line_type(Object *obj, Qt::PenStyle lineType);
+
+/* ---------------------- Document Functions --------------------------- */
+
+Document *create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent);
+
+void doc_add_to_rubber_room(int32_t doc, QGraphicsItem* item);
+
+void draw_arc(QPainter* painter, EmbArc arc);
+void draw_circle(QPainter* painter, EmbCircle circle);
+void draw_ellipse(QPainter* painter, EmbEllipse ellipse);
+void draw_line(QPainter* painter, EmbLine line);
+void draw_polygon(QPainter* painter, EmbPolygon polygon);
+void draw_polyline(QPainter* painter, EmbPolyline polyline);
+void draw_rect(QPainter* painter, EmbRect rect);
+void draw_spline(QPainter* painter, EmbSpline spline);
+
+QPainterPath doc_create_ruler_text_path(EmbString str, float height);
+
+QList<QGraphicsItem*> doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list);
+
+void doc_start_gripping(int32_t doc, Object* obj);
+void doc_stop_gripping(int32_t doc, bool accept = false);
+
+void doc_add_object(int32_t doc, Object* obj);
+void doc_delete_object(int32_t doc, Object* obj);
+void doc_vulcanize_object(int32_t doc, Object* obj);
+
+void textFontSelectorCurrentFontChanged(const QFont& font);
+
+void onWindowActivated(QMdiSubWindow* w);
+
+QAction* getFileSeparator();
+QAction* createAction(Command command);
+QMdiSubWindow* findMdiWindow(EmbString fileName);
+void onCloseMdiWin(MdiWindow*);
+
+/* ---------------------- Class Declarations --------------------------- */
+
+class LayerManager : public QDialog
+{
+    Q_OBJECT
+
+public:
+    LayerManager(MainWindow* mw, QWidget *parent = 0);
+    ~LayerManager();
+
+    void addLayer(QString name,
+        const bool visible,
+        const bool frozen,
+        const double zValue,
+        const QRgb color,
+        QString lineType,
+        QString lineWeight,
+        const bool print);
+
+    QStandardItemModel*    layerModel;
+    QSortFilterProxyModel* layerModelSorted;
+    QTreeView*             treeView;
+};
+
+class MdiArea : public QMdiArea
+{
+    Q_OBJECT
+
+public:
+    MdiArea(MainWindow* mw, QWidget* parent = 0);
+    ~MdiArea();
+
+    void useBackgroundLogo(bool use);
+    void useBackgroundTexture(bool use);
+    void useBackgroundColor(bool use);
+
+    void setBackgroundLogo(QString fileName);
+    void setBackgroundTexture(QString fileName);
+    void setBackgroundColor(const QColor& color);
+
+    bool useLogo;
+    bool useTexture;
+    bool useColor;
+
+    QPixmap bgLogo;
+    QPixmap bgTexture;
+    QColor  bgColor;
+
+    void zoomExtentsAllSubWindows();
+    void forceRepaint();
+
+public slots:
+    void cascade();
+    void tile();
+protected:
+    virtual void mouseDoubleClickEvent(QMouseEvent* e);
+    virtual void paintEvent(QPaintEvent* e);
+};
+
+/* . */
+class Document: public QGraphicsView
+{
+    Q_OBJECT
+
+public:
+    Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
+    ~Document();
+
+    DocumentData data;
+
+    std::unordered_map<int64_t, QGraphicsItem*> hashDeletedObjects;
+    QList<int64_t> spareRubberList;
+    QPainterPath gridPath;
+    QPainterPath originPath;
+    QGraphicsItemGroup* previewObjectItemGroup;
+
+    Object* gripBaseObj;
+    Object* tempBaseObj;
+
+    QGraphicsScene* gscene;
+    QUndoStack* undoStack;
+
+    SelectBox* selectBox;
+    QGraphicsItemGroup* pasteObjectItemGroup;
+    QList<QGraphicsItem*> rubberRoomList;
+    QList<QGraphicsItem*> previewObjectList;
+
+protected:
+    void mouseDoubleClickEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+    void wheelEvent(QWheelEvent* event);
+    void contextMenuEvent(QContextMenuEvent* event);
+    void drawBackground(QPainter* painter, const QRectF& rect);
+    void draw_rulers(QPainter* painter, const QRectF& rect);
+    void drawForeground(QPainter* painter, const QRectF& rect);
+    void enterEvent(QEvent* event);
+};
+class UndoableCommand : public QUndoCommand
+{
+public:
+    UndoableCommand(int type_, QString text, Object* obj, int32_t v,
+        QUndoCommand* parent = 0);
+    UndoableCommand(int type_, EmbVector delta, QString text, Object* obj,
+        int32_t v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, EmbVector pivot, double rotAngle, QString text,
+        Object* obj, int32_t v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, QString type, int32_t v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, EmbVector start, EmbVector end, QString text,
+        Object* obj, int32_t v, QUndoCommand* parent = 0);
+
+    void undo();
+    void redo();
+    void rotate(double x, double y, double rot);
+    int id() const { return 1234; }
+    bool mergeWith(const QUndoCommand* command);
+    void mirror();
+
+    UndoData data;
+    Object *object;
+    QTransform toTransform;
+    QTransform fromTransform;
+};
+
+class UndoEditor : public QDockWidget
+{
+    Q_OBJECT
+
+public:
+    UndoEditor(QString iconDirectory = "", QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
+    ~UndoEditor() {}
+
+    void addStack(QUndoStack* stack);
+
+    bool canUndo() const;
+    bool canRedo() const;
+
+    QString undoText() const;
+    QString redoText() const;
+protected:
+
+public slots:
+    void undo();
+    void redo();
+
+    void updateCleanIcon(bool opened);
+
+private:
+    QWidget* focusWidget;
+
+    QString iconDir;
+    int iconSize;
+
+    QUndoGroup* undoGroup;
+    QUndoView*  undoView;
+};
+
+class Object: public QGraphicsPathItem
+{
+public:
+    ObjectCore *core;
+
+    QGraphicsPathItem path_;
+    QPen objPen;
+    QPen lwtPen;
+    QLineF objLine;
+    std::vector<LabelledVector> rubber_points;
+    std::vector<StringMap> rubber_texts;
+
+    QPainterPath textPath;
+    QPainterPath lineStylePath;
+    QPainterPath arrowStylePath;
+    QPainterPath normalPath;
+
+    Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);
+    ~Object();
+
+    void vulcanize();
+    QList<EmbVector> allGripPoints();
+    EmbVector mouseSnapPoint(EmbVector mousePoint);
+    void gripEdit(EmbVector before, EmbVector after);
+    QPainterPath shape() const { return path(); }
+
+    void setObjectRubberPoint(char key[MAX_STRING_LENGTH], EmbVector value);
+    void setObjectRubberText(char key[MAX_STRING_LENGTH], char value[MAX_STRING_LENGTH]);
+
+    void drawRubberLine(QLineF rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
+
+    void setObjectSize(double width, double height);
+
+    QPainterPath objectCopyPath() const;
+    QPainterPath objectSavePath() const;
+    QList<QPainterPath> objectSavePathList() const { return subPathList(); }
+    QList<QPainterPath> subPathList() const;
+
+protected:
+    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
+};
+
+
+class PreviewDialog : public QFileDialog
+{
+    Q_OBJECT
+
+public:
+    PreviewDialog(QWidget* parent = 0, QString caption = "",
+        QString directory = "", QString filter = "");
+    ~PreviewDialog();
+
+private:
+    ImageWidget* imgWidget;
+};
+
+class PropertyEditor : public QDockWidget
+{
+    Q_OBJECT
+
+public:
+    PropertyEditor(QString iconDirectory = "", bool pickAddMode = true,
+        QWidget* widgetToFocus = 0, QWidget* parent = 0);
+        /*, Qt::WindowFlags flags = 0); */
+    ~PropertyEditor();
+
+    void togglePickAddMode();
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+
+signals:
+    void pickAddModeToggled();
+
+public slots:
+    void setSelectedItems(QList<QGraphicsItem*> itemList);
+    void updatePickAddModeButton(bool pickAddMode);
+};
+
+void currentColorChanged_(int key, uint32_t color);
+
+class Settings_Dialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    Settings_Dialog(MainWindow* mw, QString showTab = "", QWidget *parent = 0);
+    ~Settings_Dialog();
+
+    void color_dialog(QPushButton *button, int key);
+
+private:
+    QTabWidget* tabWidget;
+
+    QWidget* createTabGeneral();
+    QWidget* createTabFilesPaths();
+    QWidget* createTabDisplay();
+    QWidget* createTabPrompt();
+    QWidget* createTabOpenSave();
+    QWidget* createTabPrinting();
+    QWidget* createTabSnap();
+    QWidget* createTabGridRuler();
+    QWidget* createTabOrthoPolar();
+    QWidget* createTabQuickSnap();
+    QWidget* createTabQuickTrack();
+    QWidget* createTabLineWeight();
+    QWidget* createTabSelection();
+
+    QDialogButtonBox* buttonBox;
+
+    void addColorsToComboBox(QComboBox* comboBox);
+    void chooseColor(int key);
+    QGroupBox* create_group_box(QWidget* widget, EmbString label, int data[]);
+    QCheckBox* create_checkbox(QGroupBox* groupbox, int key);
+    QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, int key);
+    QSpinBox* create_int_spinbox(QGroupBox* groupbox, int key);
+    QPushButton *choose_color_button(QGroupBox* groupbox, int key);
+
+private slots:
+
+    void checkBoxCustomFilterStateChanged(int);
+    void checkBoxGridColorMatchCrossHairStateChanged(int);
+    void checkBoxGridLoadFromFileStateChanged(int);
+    void checkBoxGridCenterOnOriginStateChanged(int);
+    void checkBoxLwtShowLwtStateChanged(int);
+
+    void comboBoxLanguageCurrentIndexChanged(QString);
+    void comboBoxIconThemeCurrentIndexChanged(QString);
+    void comboBoxIconSizeCurrentIndexChanged(int);
+    void chooseGeneralMdiBackgroundLogo();
+    void chooseGeneralMdiBackgroundTexture();
+    void buttonCustomFilterSelectAllClicked();
+    void buttonCustomFilterClearAllClicked();
+    void comboBoxGridTypeCurrentIndexChanged(QString);
+    void comboBoxRulerMetricCurrentIndexChanged(int);
+    void buttonQSnapSelectAllClicked();
+    void buttonQSnapClearAllClicked();
+    void comboBoxQSnapLocatorColorCurrentIndexChanged(int);
+    void comboBoxSelectionCoolGripColorCurrentIndexChanged(int);
+    void comboBoxSelectionHotGripColorCurrentIndexChanged(int);
+
+    void acceptChanges();
+    void rejectChanges();
+
+signals:
+    void buttonCustomFilterSelectAll(bool);
+    void buttonCustomFilterClearAll(bool);
+    void buttonQSnapSelectAll(bool);
+    void buttonQSnapClearAll(bool);
+};
+
+class SelectBox: public QRubberBand
+{
+    Q_OBJECT
+
+public:
+    SelectBox(Shape s, QWidget* parent = 0);
+
+public slots:
+    void setDirection(int dir);
+    void setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha);
+
+protected:
+    void paintEvent(QPaintEvent*);
+
+private:
+    QColor leftBrushColor;
+    QColor rightBrushColor;
+    QColor leftPenColor;
+    QColor rightPenColor;
+    uint8_t alpha;
+
+    QBrush dirBrush;
+    QBrush leftBrush;
+    QBrush rightBrush;
+
+    QPen dirPen;
+    QPen leftPen;
+    QPen rightPen;
+
+    bool boxDir;
+
+    void forceRepaint();
+};
+
+
+class MdiWindow: public QMdiSubWindow
+{
+    Q_OBJECT
+
+public:
+    MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
+    ~MdiWindow();
+
+    EmbPattern* pattern;
+
+    QMdiArea* mdiArea;
+    QGraphicsScene* gscene;
+    int32_t doc_index;
+
+    QString promptHistory;
+    QList<QString> promptInputList;
+    int promptInputNum;
+
+    QPrinter printer;
+
+    virtual QSize sizeHint() const;
+    QString getShortCurrentFile();
+    bool loadFile(QString fileName);
+    bool saveFile(QString fileName);
+signals:
+    void sendCloseMdiWin(MdiWindow*);
+
+public slots:
+    void closeEvent(QCloseEvent* e);
+    void onWindowActivated();
+
+    void updateColorLinetypeLineweight();
+
+    void print();
+    void saveBMC();
+
+    void promptHistoryAppended(QString txt);
+    void logPromptInput(QString txt);
+    void promptInputPrevious();
+    void promptInputNext();
+
+private:
+    void setCurrentFile(QString fileName);
+    QString fileExtension(QString fileName);
+
+    void promptInputPrevNext(bool prev);
+};
+
+class ImageWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    ImageWidget(QString filename, QWidget* parent = 0);
+    ~ImageWidget();
+
+    bool load(QString fileName);
+    bool save(QString fileName);
+
+protected:
+    void paintEvent(QPaintEvent* event);
+
+private:
+    QImage img;
+};
+
+/* On Mac, if the user drops a file on the app's Dock icon, or uses Open As,
+ * then this is how the app actually opens the file.
+ */
+class Application : public QApplication
+{
+    Q_OBJECT
+public:
+    Application(int argc, char **argv);
+    void setMainWin(MainWindow* mainWin);
+protected:
+    virtual bool event(QEvent *e);
+private:
+    MainWindow* _mainWin;
+};
+
+class CmdPromptInput: public QLineEdit
+{
+    Q_OBJECT
+
+public:
+    CmdPromptInput(QWidget* parent = 0);
+    ~CmdPromptInput() {}
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
+
+public slots:
+    void endCommand();
+    void processInput(const QChar& rapidChar = QChar());
+    void checkSelection();
+    void updateCurrentText(QString txt);
+    void checkEditedText(QString txt);
+    void checkChangedText(QString txt);
+    void checkCursorPosition(int oldpos, int newpos);
+private slots:
+    void copyClip();
+    void pasteClip();
+};
+
+class CmdPrompt : public QWidget
+{
+    Q_OBJECT
+
+public:
+    CmdPrompt(QWidget* parent = 0);
+    ~CmdPrompt() {}
+
+    void updateStyle(void);
+
+public slots:
+    void setCurrentText(QString txt);
+    void setPrefix(QString txt);
+
+    void alert(QString txt);
+
+    void blink();
+
+    void saveHistory(QString fileName, bool html);
+
+signals:
+    /* For connecting outside of command prompt. */
+    void showSettings();
+
+    void historyAppended(QString txt);
+};
+
+class MainWindow: public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MainWindow();
+    ~MainWindow();
+
+    void add_toolbar_to_window(Qt::ToolBarArea area, int data[]);
+
+public slots:
+    void recentMenuAboutToShow();
+    void windowMenuActivated( bool checked/*int id*/ );
+
+    void closeToolBar(QAction*);
+    void floatingChangedToolBar(bool);
+
+    void runCommand();
+
+    void colorSelectorIndexChanged(int index);
+
+protected:
+    virtual void resizeEvent(QResizeEvent*);
+    void closeEvent(QCloseEvent *event);
+};
+
+/* . */
+void
+exit_program(void)
+{
+    debug_message("exit()");
+    if (get_bool(PROMPT_SAVE_HISTORY)) {
+        prompt->saveHistory("prompt.log", get_bool(PROMPT_SAVE_HISTORY_AS_HTML));
+        /* TODO: get filename from settings */
+    }
+    qApp->closeAllWindows();
+    /* Force the MainWindow destructor to run before exiting.
+     * Makes Valgrind "still reachable" happy :)
+     */
+    _main->deleteLater();
+}
+
+/* . */
+QString
+platformString(void)
+{
+    char message[MAX_STRING_LENGTH];
+    /* TODO: Append QSysInfo to string where applicable. */
+    QString os;
+    #if   defined(Q_OS_AIX)
+    os = "AIX";
+    #elif defined(Q_OS_BSD4)
+    os = "BSD 4.4";
+    #elif defined(Q_OS_BSDI)
+    os = "BSD/OS";
+    #elif defined(Q_OS_CYGWIN)
+    os = "Cygwin";
+    #elif defined(Q_OS_DARWIN)
+    os = "Mac OS";
+    #elif defined(Q_OS_DGUX)
+    os = "DG/UX";
+    #elif defined(Q_OS_DYNIX)
+    os = "DYNIX/ptx";
+    #elif defined(Q_OS_FREEBSD)
+    os = "FreeBSD";
+    #elif defined(Q_OS_HPUX)
+    os = "HP-UX";
+    #elif defined(Q_OS_HURD)
+    os = "GNU Hurd";
+    #elif defined(Q_OS_IRIX)
+    os = "SGI Irix";
+    #elif defined(Q_OS_LINUX)
+    os = "Linux";
+    #elif defined(Q_OS_LYNX)
+    os = "LynxOS";
+    #elif defined(Q_OS_MAC)
+    os = "Mac OS";
+    #elif defined(Q_OS_MSDOS)
+    os = "MS-DOS";
+    #elif defined(Q_OS_NETBSD)
+    os = "NetBSD";
+    #elif defined(Q_OS_OS2)
+    os = "OS/2";
+    #elif defined(Q_OS_OPENBSD)
+    os = "OpenBSD";
+    #elif defined(Q_OS_OS2EMX)
+    os = "XFree86 on OS/2";
+    #elif defined(Q_OS_OSF)
+    os = "HP Tru64 UNIX";
+    #elif defined(Q_OS_QNX)
+    os = "QNX Neutrino";
+    #elif defined(Q_OS_RELIANT)
+    os = "Reliant UNIX";
+    #elif defined(Q_OS_SCO)
+    os = "SCO OpenServer 5";
+    #elif defined(Q_OS_SOLARIS)
+    os = "Sun Solaris";
+    #elif defined(Q_OS_SYMBIAN)
+    os = "Symbian";
+    #elif defined(Q_OS_ULTRIX)
+    os = "DEC Ultrix";
+    #elif defined(Q_OS_UNIX)
+    os = "UNIX BSD/SYSV";
+    #elif defined(Q_OS_UNIXWARE)
+    os = "UnixWare";
+    #elif defined(Q_OS_WIN32)
+    os = "Windows";
+    #elif defined(Q_OS_WINCE)
+    os = "Windows CE";
+    #endif
+    sprintf(message, "Platform: %s", qPrintable(os));
+    debug_message(message);
+    return os;
+}
+
+/* . */
+void
+print_command(void)
+{
+    debug_message("print_command()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        mdiWin->print();
+    }
+}
+
+/* . */
+void
+tipOfTheDay(void)
+{
+    debug_message("tipOfTheDay()");
+
+    wizardTipOfTheDay = new QWizard(_main);
+    wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
+    wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
+    wizardTipOfTheDay->setMinimumSize(550, 400);
+
+    QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
+
+    ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
+    // create_pixmap("did_you_know")
+
+    if (get_int(GENERAL_CURRENT_TIP) >= string_array_length(tips)) {
+        set_int(GENERAL_CURRENT_TIP, 0);
+    }
+    labelTipOfTheDay = new QLabel(tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
+    labelTipOfTheDay->setWordWrap(true);
+
+    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
+    checkBoxTipOfTheDay->setChecked(get_bool(GENERAL_TIP_OF_THE_DAY));
+    QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main, SLOT(checkBoxTipOfTheDayStateChanged(int)));
+
+    QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
+    layout->addWidget(imgBanner);
+    layout->addStrut(1);
+    layout->addWidget(labelTipOfTheDay);
+    layout->addStretch(1);
+    layout->addWidget(checkBoxTipOfTheDay);
+    page->setLayout(layout);
+    wizardTipOfTheDay->addPage(page);
+
+    wizardTipOfTheDay->setWindowTitle("Tip of the Day");
+
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious) */
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext) */
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose) */
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, translate("&Previous"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, translate("&Next"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, translate("&Close"));
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton1, true);
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton2, true);
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
+    QObject::connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), _main, SLOT(buttonTipOfTheDayClicked(int)));
+
+    QList<QWizard::WizardButton> listTipOfTheDayButtons;
+    listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1
+        << QWizard::CustomButton2 << QWizard::CustomButton3;
+    wizardTipOfTheDay->setButtonLayout(listTipOfTheDayButtons);
+
+    wizardTipOfTheDay->exec();
+}
+
+/* . */
+void
+buttonTipOfTheDayClicked(int button)
+{
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "buttonTipOfTheDayClicked(%d)", button);
+    debug_message(message);
+    int current = get_int(GENERAL_CURRENT_TIP);
+    if (button == QWizard::CustomButton1) {
+        if (current > 0) {
+            current--;
+        }
+        else {
+            current = string_array_length(tips)-1;
+        }
+        labelTipOfTheDay->setText(tips[current]);
+        set_int(GENERAL_CURRENT_TIP, current);
+    }
+    else if (button == QWizard::CustomButton2) {
+        current++;
+        if (current >= string_array_length(tips)) {
+            current = 0;
+        }
+        labelTipOfTheDay->setText(tips[current]);
+        set_int(GENERAL_CURRENT_TIP, current);
+    }
+    else if (button == QWizard::CustomButton3) {
+        wizardTipOfTheDay->close();
+    }
+}
+
+/* . */
+void
+help(void)
+{
+    debug_message("help()");
+
+    /* Open the HTML Help in the default browser. */
+    QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
+    QDesktopServices::openUrl(helpURL);
+
+    /* TODO: This is how to start an external program. Use this elsewhere...
+     * QString program = "firefox";
+     * QStringList arguments;
+     * arguments << "help/commands.html";
+     * QProcess *myProcess = new QProcess(this);
+     * myProcess->start(program, arguments);
+     */
+}
+
+/* . */
+void
+changelog(void)
+{
+    debug_message("changelog()");
+
+    QUrl changelogURL("help/changelog.html");
+    QDesktopServices::openUrl(changelogURL);
+}
+
+/* Standard Slots */
+void
+undo_command(void)
+{
+    debug_message("undo_command()");
+    if (dockUndoEdit->canUndo()) {
+        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
+        appendHistory("");
+        dockUndoEdit->undo();
+        prompt->setPrefix(prefix);
+    }
+    else {
+        prompt->alert("Nothing to undo");
+        prompt->setPrefix(prefix);
+    }
+}
+
+/* . */
+void
+redo_command(void)
+{
+    debug_message("redo_command()");
+    if (dockUndoEdit->canRedo()) {
+        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
+        appendHistory("");
+        dockUndoEdit->redo();
+        prompt->setPrefix(prefix);
+    }
+    else {
+        prompt->alert("Nothing to redo");
+        prompt->setPrefix(prefix);
+    }
+}
+
+/* Icons */
+void
+iconResize(int iconSize)
+{
+    _main->setIconSize(QSize(iconSize, iconSize));
+    layerSelector->setIconSize(QSize(iconSize*4, iconSize));
+    colorSelector->setIconSize(QSize(iconSize, iconSize));
+    linetypeSelector->setIconSize(QSize(iconSize*4, iconSize));
+    lineweightSelector->setIconSize(QSize(iconSize*4, iconSize));
+    /* set the minimum combobox width so the text is always readable */
+    layerSelector->setMinimumWidth(iconSize*4);
+    colorSelector->setMinimumWidth(iconSize*2);
+    linetypeSelector->setMinimumWidth(iconSize*4);
+    lineweightSelector->setMinimumWidth(iconSize*4);
+
+    /* TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size. */
+
+    set_int(GENERAL_ICON_SIZE, iconSize);
+}
+
+/* . */
+MdiWindow*
+activeMdiWindow(void)
+{
+    debug_message("activeMdiWindow()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    return mdiWin;
+}
+
+/* . */
+int32_t
+activeDocument(void)
+{
+    debug_message("activeDocument()");
+    MdiWindow* mdiWin = activeMdiWindow();
+    if (mdiWin) {
+        return mdiWin->doc_index;
+    }
+    return -1;
+}
+
+/* . */
+QGraphicsScene*
+activeScene(void)
+{
+    debug_message("activeScene()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        QGraphicsScene* s = mdiWin->gscene;
+        return s;
+    }
+    return 0;
+}
+
+/* . */
+QUndoStack*
+activeUndoStack(void)
+{
+    debug_message("activeUndoStack()");
+    //FIXME
+    return NULL;
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        QUndoStack* u = documents[doc_index]->undoStack;
+        return u;
+    }
+    return 0;
+}
+
+/* . */
+void
+whats_this_mode(void)
+{
+    debug_message("whatsThisContextHelp()");
+    QWhatsThis::enterWhatsThisMode();
+}
+
+void
+window_close_all(void)
+{
+    mdiArea->closeAllSubWindows();
+}
+
+void
+window_cascade(void)
+{
+    mdiArea->cascade();
+}
+
+void
+window_tile(void)
+{
+    mdiArea->tile();
+}
+
+void
+window_next(void)
+{
+    mdiArea->activateNextSubWindow();
+}
+
+void
+window_previous(void)
+{
+    mdiArea->activatePreviousSubWindow();
+}
+
+/* . */
+void
+setUndoCleanIcon(bool opened)
+{
+    dockUndoEdit->updateCleanIcon(opened);
+}
+
+/* . */
+void
+updatePickAddMode(bool val)
+{
+    set_bool(SELECTION_MODE_PICKADD, val);
+    dockPropEdit->updatePickAddModeButton(val);
+}
+
+/* Layer ToolBar */
+
+/* . */
+void
+layerManager(void)
+{
+    debug_message("layerManager()");
+    todo("Implement layerManager.");
+    LayerManager layman(_main, _main);
+    layman.exec();
+}
+
+void
+MainWindow::colorSelectorIndexChanged(int index)
+{
+    EmbString message;
+    sprintf(message, "colorSelectorIndexChanged(%d)", index);
+    debug_message(message);
+
+    QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
+    uint32_t newColor;
+    if (comboBox) {
+        bool ok = 0;
+        /* TODO: Handle ByLayer and ByBlock and Other... */
+        newColor = comboBox->itemData(index).toUInt(&ok);
+        if (!ok) {
+            QMessageBox::warning(this, translate("Color Selector Conversion Error"),
+                translate("<b>An error has occured while changing colors.</b>"));
+        }
+    }
+    else {
+        QMessageBox::warning(this, translate("Color Selector Pointer Error"),
+            translate("<b>An error has occured while changing colors.</b>"));
+    }
+
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        currentColorChanged(newColor);
+    }
+}
+
+
+/* . */
+void
+textFontSelectorCurrentFontChanged(const QFont& font)
+{
+    debug_message("textFontSelectorCurrentFontChanged()");
+    setTextFont((char*)qPrintable(font.family()));
+}
+
+/* . */
+void
+textSizeSelectorIndexChanged(int index)
+{
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "textSizeSelectorIndexChanged(%d)", index);
+    debug_message(message);
+    /* TODO: check that the toReal() conversion is ok. */
+    set_real(TEXT_SIZE, fabs(textSizeSelector->itemData(index).toReal()));
+}
+
+/* . */
+void
+setTextFont(EmbString str)
+{
+    textFontSelector->setCurrentFont(QFont(str));
+    set_str(TEXT_FONT, (char*)qPrintable(str));
+}
+
+/* . */
+void
+setTextSize(double num)
+{
+    set_real(TEXT_SIZE, fabs(num));
+    int index = textSizeSelector->findText("Custom", Qt::MatchContains);
+    if (index != -1) {
+        textSizeSelector->removeItem(index);
+    }
+    textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
+    index = textSizeSelector->findText("Custom", Qt::MatchContains);
+    if (index != -1) {
+        textSizeSelector->setCurrentIndex(index);
+    }
+}
+
+/* . */
+void
+promptHistoryAppended(QString txt)
+{
+    MdiWindow* mdiWin = activeMdiWindow();
+    if (mdiWin) {
+        mdiWin->promptHistoryAppended(txt);
+    }
+}
+
+/* . */
+void
+logPromptInput(QString txt)
+{
+    MdiWindow* mdiWin = activeMdiWindow();
+    if (mdiWin) {
+        mdiWin->logPromptInput(txt);
+    }
+}
+
+/* . */
+void
+promptInputPrevious(void)
+{
+    MdiWindow* mdiWin = activeMdiWindow();
+    if (mdiWin) {
+        mdiWin->promptInputPrevious();
+    }
+}
+
+/* . */
+void
+promptInputNext(void)
+{
+    MdiWindow* mdiWin = activeMdiWindow();
+    if (mdiWin) {
+        mdiWin->promptInputNext();
+    }
+}
+
+void
+MainWindow::runCommand()
+{
+    QAction* act = qobject_cast<QAction*>(sender());
+    if (act) {
+        EmbString message;
+        sprintf(message, "runCommand(%s)", qPrintable(act->objectName()));
+        debug_message(message);
+        promptInput->endCommand();
+        prompt->setCurrentText(act->objectName());
+        promptInput->processInput();
+    }
+}
+
+/* NOTE: translation is the repsonisbility of the caller, because some reports
+ * include parts that aren't translated. For example:
+ *
+ *     char message[MAX_STRING_LENGTH];
+ *     sprintf(message, "%s: x > %f", translate("Value of X is too small"), x);
+ *     critical_box(translate("Out of Bounds"), message);
+ */
+void
+critical_box(const char *title, const char *text)
+{
+    QMessageBox::critical(_main, title, text);
+}
+
+/* See critical_box comment. */
+void
+information_box(const char *title, const char *text)
+{
+    QMessageBox::information(_main, title, text);
+}
+
+/* See critical_box comment. */
+void
+question_box(const char *title, const char *text)
+{
+    QMessageBox::question(_main, title, text);
+}
+
+/* See critical_box comment. */
+void
+warning_box(const char *title, const char *text)
+{
+    QMessageBox::warning(_main, title, text);
+}
+
+/* . */
+uint32_t
+rgb(uint8_t r, uint8_t g, uint8_t b)
+{
+    return qRgb(r, g, b);
+}
+
+/* . */
+void
+nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    /*
+    char *str = STR(0);
+    EmbVector v = unpack_vector(context, 1);
+    double rot = REAL(3);
+    bool fill = BOOL(4);
+    int rubberMode = INT(5);
+     */
+    if ((doc_index >= 0) && gscene && stack) {
+        EmbVector v = emb_vector(x, -y);
+        Object* obj = create_text_single(QString(str), v, getCurrentColor());
+        obj_set_text_font(obj->core, get_str(TEXT_FONT));
+        obj_set_text_size(obj->core, get_real(TEXT_SIZE));
+        obj_set_text_style(obj->core,
+            get_bool(TEXT_STYLE_BOLD),
+            get_bool(TEXT_STYLE_ITALIC),
+            get_bool(TEXT_STYLE_UNDERLINE),
+            get_bool(TEXT_STYLE_STRIKEOUT),
+            get_bool(TEXT_STYLE_OVERLINE));
+        obj_set_text_backward(obj->core, false);
+        obj_set_text_upside_down(obj->core, false);
+        obj->setRotation(-rot);
+        /* TODO: single line text fill. */
+        obj_set_rubber_mode(obj->core, rubberMode);
+        if (rubberMode) {
+            doc_add_to_rubber_room(doc_index, obj);
+            gscene->addItem(obj);
+            doc_update(doc_index);
+        }
+        else {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+/* . */
+void
+nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    if ((doc_index >= 0) && gscene && stack) {
+        EmbLine line;
+        line.start = emb_vector(x1, -y1);
+        line.end = emb_vector(x2, -y2);
+        Object* obj = create_line(line, getCurrentColor());
+        obj->setRotation(-rot);
+        obj_set_rubber_mode(obj->core, rubberMode);
+        if (rubberMode) {
+            doc_add_to_rubber_room(doc_index, obj);
+            gscene->addItem(obj);
+            doc_update(doc_index);
+        }
+        else {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+/* . */
+void
+nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    if ((doc_index < 0) && !(gscene && stack)) {
+        return;
+    }
+    EmbRect rect = emb_rect(x, -y, w, -h);
+    Object* obj = create_rect(rect, getCurrentColor());
+    obj->setRotation(-rot);
+    obj_set_rubber_mode(obj->core, rubberMode);
+    /* TODO: rect fill */
+    if (rubberMode) {
+        doc_add_to_rubber_room(doc_index, obj);
+        gscene->addItem(obj);
+        doc_update(doc_index);
+    }
+    else {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
+        stack->push(cmd);
+    }
+}
+
+
+void
+nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* scene = activeScene();
+    if ((doc_index >= 0) && scene) {
+        EmbArc arc;
+        arc.start = emb_vector(x1, -y1);
+        arc.mid = emb_vector(x2, -y2);
+        arc.end = emb_vector(x3, -y3);
+        Object* arcObj = create_arc(arc, getCurrentColor());
+        obj_set_rubber_mode(arcObj->core, rubberMode);
+        if (rubberMode) {
+            doc_add_to_rubber_room(doc_index, arcObj);
+        }
+        scene->addItem(arcObj);
+        doc_update(doc_index);
+    }
+}
+
+void
+nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    if ((doc_index >= 0) && gscene && stack) {
+        EmbCircle circle;
+        circle.center = emb_vector(centerX, -centerY);
+        circle.radius = radius;
+        Object* obj = create_circle(circle, getCurrentColor());
+        obj_set_rubber_mode(obj->core, rubberMode);
+        /* TODO: circle fill. */
+        if (rubberMode) {
+            doc_add_to_rubber_room(doc_index, obj);
+            gscene->addItem(obj);
+            doc_update(doc_index);
+        }
+        else {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void
+nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
+{
+    /* TODO: Use UndoableCommand for slots */
+    int32_t doc_index = activeDocument();
+    /*
+    Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
+    slotObj->setRotation(-rot);
+    obj_set_rubber_mode(slotObj->core, rubberMode);
+    if (rubberMode) doc_add_to_rubber_room(doc_index, slotObj);
+    scene->addItem(slotObj);
+    */
+    /* TODO: slot fill */
+    doc_update(doc_index);
+}
+
+void
+nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    if ((doc_index >= 0) && gscene && stack) {
+        EmbEllipse ellipse;
+        ellipse.center.x = centerX;
+        ellipse.center.y = -centerY;
+        ellipse.radius.x = width/2.0;
+        ellipse.radius.y = height/2.0;
+        Object* obj = create_ellipse(ellipse, getCurrentColor());
+        obj->setRotation(-rot);
+        obj_set_rubber_mode(obj->core, rubberMode);
+        /* TODO: ellipse fill */
+        if (rubberMode) {
+            doc_add_to_rubber_room(doc_index, obj);
+            gscene->addItem(obj);
+            doc_update(doc_index);
+        }
+        else {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void
+nativeAddPoint(double x, double y)
+{
+    int32_t doc_index = activeDocument();
+    QUndoStack* stack = activeUndoStack();
+    if ((doc_index >= 0) && stack) {
+        EmbPoint point;
+        point.position.x = x;
+        point.position.y = -y;
+        Object* obj = create_point(point, getCurrentColor());
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
+        stack->push(cmd);
+    }
+}
+
+/* NOTE: This native is different than the rest in that the Y+ is down
+ * (scripters need not worry about this)
+ */
+void
+nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    if ((doc_index >= 0) && gscene && stack) {
+        EmbPolygon polygon;
+        EmbVector start = emb_vector(startX, startY);
+        Object* obj = create_polygon(start, p, getCurrentColor());
+        obj_set_rubber_mode(obj->core, rubberMode);
+        if (rubberMode) {
+            doc_add_to_rubber_room(doc_index, obj);
+            gscene->addItem(obj);
+            doc_update(doc_index);
+        }
+        else {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+/* NOTE: This native is different than the rest in that the Y+ is down
+ * (scripters need not worry about this)
+ */
+void
+nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    if ((doc_index >= 0) && gscene && stack) {
+        EmbPath path;
+        EmbVector start = emb_vector(startX, startY);
+        Object* obj = create_polygon(start, p, getCurrentColor());
+        obj_set_rubber_mode(obj->core, rubberMode);
+        if (rubberMode) {
+            doc_add_to_rubber_room(doc_index, obj);
+            gscene->addItem(obj);
+            doc_update(doc_index);
+        }
+        else {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
+                obj->core->OBJ_NAME, obj, doc_index, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void
+nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+{
+    int32_t doc_index = activeDocument();
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    if ((doc_index >= 0) && gscene && stack) {
+        EmbLine line;
+        line.start = emb_vector(x1, -y1);
+        line.end = emb_vector(x2, -y2);
+        Object* obj = create_dim_leader(line, getCurrentColor());
+        obj->setRotation(-rot);
+        obj_set_rubber_mode(obj->core, rubberMode);
+        if (rubberMode) {
+            doc_add_to_rubber_room(doc_index, obj);
+            gscene->addItem(obj);
+            doc_update(doc_index);
+        }
+        else {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
+                obj->core->OBJ_NAME, obj, doc_index, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+/* . */
+void
+nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
+{
+    int32_t doc_index = activeDocument();
+    Document *doc = documents[doc_index];
+    if (doc) {
+        if (!strcmp(shape, "arrow")) {
+            doc->setCursor(QCursor(Qt::ArrowCursor));
+        }
+        else if (!strcmp(shape, "uparrow")) {
+            doc->setCursor(QCursor(Qt::UpArrowCursor));
+        }
+        else if (!strcmp(shape, "cross")) {
+            doc->setCursor(QCursor(Qt::CrossCursor));
+        }
+        else if (!strcmp(shape, "wait")) {
+            doc->setCursor(QCursor(Qt::WaitCursor));
+        }
+        else if (!strcmp(shape, "ibeam"))
+            doc->setCursor(QCursor(Qt::IBeamCursor));
+        else if (!strcmp(shape, "resizevert"))
+            doc->setCursor(QCursor(Qt::SizeVerCursor));
+        else if (!strcmp(shape, "resizehoriz"))
+            doc->setCursor(QCursor(Qt::SizeHorCursor));
+        else if (!strcmp(shape, "resizediagleft"))
+            doc->setCursor(QCursor(Qt::SizeBDiagCursor));
+        else if (!strcmp(shape, "resizediagright"))
+            doc->setCursor(QCursor(Qt::SizeFDiagCursor));
+        else if (!strcmp(shape, "move"))
+            doc->setCursor(QCursor(Qt::SizeAllCursor));
+        else if (!strcmp(shape, "blank"))
+            doc->setCursor(QCursor(Qt::BlankCursor));
+        else if (!strcmp(shape, "splitvert"))
+            doc->setCursor(QCursor(Qt::SplitVCursor));
+        else if (!strcmp(shape, "splithoriz"))
+            doc->setCursor(QCursor(Qt::SplitHCursor));
+        else if (!strcmp(shape, "handpointing"))
+            doc->setCursor(QCursor(Qt::PointingHandCursor));
+        else if (!strcmp(shape, "forbidden"))
+            doc->setCursor(QCursor(Qt::ForbiddenCursor));
+        else if (!strcmp(shape, "handopen"))
+            doc->setCursor(QCursor(Qt::OpenHandCursor));
+        else if (!strcmp(shape, "handclosed"))
+            doc->setCursor(QCursor(Qt::ClosedHandCursor));
+        else if (!strcmp(shape, "whatsthis"))
+            doc->setCursor(QCursor(Qt::WhatsThisCursor));
+        else if (!strcmp(shape, "busy"))
+            doc->setCursor(QCursor(Qt::BusyCursor));
+        else if (!strcmp(shape, "dragmove"))
+            doc->setCursor(QCursor(Qt::DragMoveCursor));
+        else if (!strcmp(shape, "dragcopy"))
+            doc->setCursor(QCursor(Qt::DragCopyCursor));
+        else if (!strcmp(shape, "draglink"))
+            doc->setCursor(QCursor(Qt::DragLinkCursor));
+    }
+}
+
+/* Compatibility layer for C files */
+void
+prompt_output(const EmbString txt)
+{
+    appendHistory((char*)txt);
+}
+
+/* . */
+void
+end_command(void)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_clear_rubber_room(doc_index);
+        doc_preview_off(doc_index);
+        doc_disable_move_rapid_fire(doc_index);
+    }
+    promptInput->endCommand();
+}
+
+/* Simple Commands (other commands, like circle_command are housed in their
+ * own file with their associated functions)
+ * ------------------------------------------------------------------------
+ */
+
+/* TODO: QTabWidget for about dialog
+ */
+void
+about_dialog(void)
+{
+    arrow_cursor();
+    debug_message("about()");
+
+    QString title = "About Embroidermodder 2";
+
+    QDialog dialog(_main);
+    QLabel image_label;
+    QPixmap img = create_pixmap("logo_small");
+    image_label.setPixmap(img);
+    QString body_text = "Embroidermodder 2\n\n";
+    /* add version here */
+    body_text += translate("http://www.libembroidery.org");
+    body_text += "\n\n";
+    body_text += translate("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi");
+    body_text += "\n\n";
+    body_text += translate("Embroidery formats by Josh Varga.");
+    body_text += "\n\n";
+    body_text += translate("User Interface by Jonathan Greig.");
+    body_text += "\n\n";
+    body_text += translate("Free under the zlib/libpng license.");
+#if defined(BUILD_GIT_HASH)
+    body_text += "\n\n";
+    body_text += translate("Build Hash: ");
+    body_text += qPrintable(BUILD_GIT_HASH);
+#endif
+    QLabel text(body_text);
+    text.setWordWrap(true);
+
+    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
+    QPushButton button(&dialog);
+    button.setText("Oh, Yeah!");
+    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
+    buttonbox.setCenterButtons(true);
+    _main->connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+
+    QVBoxLayout layout;
+    layout.setAlignment(Qt::AlignCenter);
+    layout.addWidget(&image_label);
+    layout.addWidget(&text);
+    layout.addWidget(&buttonbox);
+
+    dialog.setWindowTitle(title);
+    dialog.setMinimumWidth(image_label.minimumWidth()+30);
+    dialog.setMinimumHeight(image_label.minimumHeight()+50);
+    dialog.setLayout(&layout);
+    dialog.exec();
+
+    restore_cursor();
+}
+
+
+/* PREVIEWON . */
+ScriptValue
+previewon_command(ScriptEnv *context)
+{
+    QString cloneStr = QString(STR(0)).toUpper();
+    int clone = PREVIEW_CLONE_NULL;
+    if (cloneStr == "SELECTED") {
+        clone = PREVIEW_CLONE_SELECTED;
+    }
+    else if (cloneStr == "RUBBER") {
+        clone = PREVIEW_CLONE_RUBBER;
+    }
+    else {
+        prompt_output("UNKNOWN_ERROR previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
+        return script_false;
+    }
+
+    QString modeStr  = QString(STR(1)).toUpper();
+    int mode = PREVIEW_NULL;
+    if (modeStr == "MOVE") {
+        mode = PREVIEW_MOVE;
+    }
+    else if (modeStr == "ROTATE") {
+        mode = PREVIEW_ROTATE;
+    }
+    else if (modeStr == "SCALE") {
+        mode = PREVIEW_SCALE;
+    }
+    else {
+        prompt_output("UNKNOWN_ERROR previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\".");
+        return script_false;
+    }
+
+    int32_t doc_index = activeDocument();
+    if (doc_index) {
+        doc_preview_on(doc_index, clone, mode, REAL(2), -REAL(3), REAL(4));
+    }
+    else {
+        prompt_output("Preview on requires an active view.");
+    }
+    return script_null;
+}
+
+/* . */
+ScriptValue
+set_prompt_prefix_command(ScriptEnv* context)
+{
+    prompt->setPrefix(QString(STR(0)));
+    return script_null;
+}
+
+/* . */
+ScriptValue
+print_area_command(ScriptEnv* context)
+{
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
+    debug_message(message);
+    /* TODO: Print Setup Stuff
+     * nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
+     */
+    print_command();
+    return script_null;
+}
+
+/* . */
+ScriptValue
+perpendicular_distance_command(ScriptEnv* context)
+{
+    QLineF line(REAL(0), REAL(1), REAL(2), REAL(3));
+    QLineF norm = line.normalVector();
+    double dx = REAL(4) - REAL(0);
+    double dy = REAL(5) - REAL(1);
+    norm.translate(dx, dy);
+    QPointF iPoint;
+    norm.intersects(line, &iPoint);
+    double r = QLineF(REAL(4), REAL(5), iPoint.x(), iPoint.y()).length();
+    return script_real(r);
+}
+
+/*
+ * Undo
+ */
+UndoableCommand::UndoableCommand(int type_, QString text, Object* obj, int32_t doc,
+    QUndoCommand* parent) : QUndoCommand(parent)
+{
+    data.type = type_;
+    data.doc = doc;
+    object = obj;
+    setText(text);
+}
+
+/* Move */
+UndoableCommand::UndoableCommand(int type_, EmbVector delta, QString text,
+    Object* obj, int32_t doc, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    data.type = type_;
+    data.doc = doc;
+    object = obj;
+    setText(text);
+    data.delta = delta;
+}
+
+/* Rotate or scale */
+UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor,
+    QString text, Object* obj, int32_t doc, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    data.type = type_;
+    data.doc = doc;
+    object = obj;
+    setText(text);
+    if (data.type == ACTION_SCALE) {
+        /* Prevent division by zero and other wacky behavior. */
+        if (scaleFactor <= 0.0) {
+            data.delta.x = 0.0;
+            data.delta.y = 0.0;
+            data.factor = 1.0;
+            QMessageBox::critical(0,
+                QObject::tr("ScaleFactor Error"),
+                QObject::tr("Hi there. If you are not a developer, report this as a bug. "
+               "If you are a developer, your code needs examined, and possibly your head too."));
+        }
+        else {
+            /* Calculate the offset */
+            EmbVector old, new_;
+            old.x = object->x();
+            old.y = object->y();
+            QLineF scaleLine(pos.x, pos.y, old.x, old.y);
+            scaleLine.setLength(scaleLine.length() * scaleFactor);
+            new_.x = scaleLine.x2();
+            new_.y = scaleLine.y2();
+
+            data.delta = emb_vector_subtract(new_, old);
+            data.factor = scaleFactor;
+        }
+    }
+    else {
+        data.pivot = pos;
+        data.angle = scaleFactor;
+    }
+}
+
+/* Navigation */
+UndoableCommand::UndoableCommand(int type_, QString type_name, int32_t doc,
+    QUndoCommand* parent) : QUndoCommand(parent)
+{
+    data.type = type_;
+    data.doc = doc;
+    string_copy(data.navType, qPrintable(type_name));
+    setText(QObject::tr("Navigation"));
+    data.done = false;
+    // fromTransform = doc_transform(data.doc);
+    data.fromCenter = doc_center(data.doc);
+}
+
+/* Grip Edit/Mirror */
+UndoableCommand::UndoableCommand(int type_, EmbVector beforePoint,
+    EmbVector afterPoint, QString text, Object* obj, int32_t doc,
+    QUndoCommand* parent) : QUndoCommand(parent)
+{
+    data.type = type_;
+    data.doc = doc;
+    object = obj;
+    setText(text);
+    if (type_ == ACTION_GRIP_EDIT) {
+        setText(text);
+        data.before = beforePoint;
+        data.after = afterPoint;
+    }
+    if (type_ == ACTION_MIRROR) {
+        data.mirrorLine.start = beforePoint;
+        data.mirrorLine.end = afterPoint;
+    }
+}
+
+/* . */
+void
+UndoableCommand::undo()
+{
+    switch (data.type) {
+    case ACTION_ADD:
+        doc_delete_object(data.doc, object);
+        break;
+    case ACTION_DELETE:
+        doc_add_object(data.doc, object);
+        break;
+    case ACTION_MOVE:
+        object->moveBy(-data.delta.x, -data.delta.y);
+        break;
+    case ACTION_ROTATE:
+        rotate(data.pivot.x, data.pivot.y, -data.angle);
+        break;
+    case ACTION_GRIP_EDIT:
+        // FIXME: object->gripEdit(data.after, data.before);
+        break;
+    case ACTION_SCALE:
+        object->setScale(object->scale()*(1/data.factor));
+        object->moveBy(-data.delta.x, -data.delta.y);
+        break;
+    case ACTION_NAV: {
+        if (!data.done) {
+            toTransform = documents[data.doc]->transform();
+            data.toCenter = doc_center(data.doc);
+            data.done = true;
+        }
+
+        documents[data.doc]->setTransform(fromTransform);
+        doc_center_at(data.doc, data.fromCenter);
+        break;
+    }
+    case ACTION_MIRROR:
+        mirror();
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+UndoableCommand::redo()
+{
+    switch (data.type) {
+    case ACTION_ADD:
+        doc_add_object(data.doc, object);
+        break;
+    case ACTION_DELETE:
+        doc_delete_object(data.doc, object);
+        break;
+    case ACTION_MOVE:
+        object->moveBy(data.delta.x, data.delta.y);
+        break;
+    case ACTION_ROTATE:
+        rotate(data.pivot.x, data.pivot.y, data.angle);
+        break;
+    case ACTION_GRIP_EDIT:
+        // FIXME: object->gripEdit(data.before, data.after);
+        break;
+    case ACTION_SCALE:
+        object->setScale(object->scale() * data.factor);
+        object->moveBy(data.delta.x, data.delta.y);
+        break;
+    case ACTION_NAV: {
+        if (data.done) {
+            documents[data.doc]->setTransform(toTransform);
+            doc_center_at(data.doc, data.toCenter);
+            break;
+        }
+        DocumentData *d = doc_data(data.doc);
+        if (string_equal(data.navType, "ZoomInToPoint")) {
+            doc_zoom_to_point(data.doc, d->viewMousePoint, +1);
+        }
+        else if (string_equal(data.navType, "ZoomOutToPoint")) {
+            doc_zoom_to_point(data.doc, d->viewMousePoint, -1);
+        }
+        else if (string_equal(data.navType, "ZoomExtents")) {
+            doc_zoom_extents(data.doc);
+        }
+        else if (string_equal(data.navType, "ZoomSelected")) {
+            doc_zoom_selected(data.doc);
+        }
+        else if (string_equal(data.navType, "PanStart")) {
+            /* Do Nothing. We are just recording the spot where the pan started. */
+        }
+        else if (string_equal(data.navType, "PanStop")) {
+            /* Do Nothing. We are just recording the spot where the pan stopped. */
+        }
+        else if (string_equal(data.navType, "PanLeft")) {
+            doc_pan_left(data.doc);
+        }
+        else if (string_equal(data.navType, "PanRight")) {
+            doc_pan_right(data.doc);
+        }
+        else if (string_equal(data.navType, "PanUp")) {
+            doc_pan_up(data.doc);
+        }
+        else if (string_equal(data.navType, "PanDown")) {
+            doc_pan_down(data.doc);
+        }
+        toTransform = documents[data.doc]->transform();
+        data.toCenter = doc_center(data.doc);
+        break;
+    }
+    case ACTION_MIRROR:
+        mirror();
+        break;
+    default:
+        break;
+    }
+}
+
+/* Rotate */
+void
+UndoableCommand::rotate(double x, double y, double rot)
+{
+    double rad = radians(rot);
+    double cosRot = cos(rad);
+    double sinRot = sin(rad);
+    EmbVector rotv;
+    EmbVector p = to_emb_vector(object->scenePos());
+    p.x -= x;
+    p.y -= y;
+    rotv.x = p.x*cosRot - p.y*sinRot;
+    rotv.y = p.x*sinRot + p.y*cosRot;
+    rotv.x += x;
+    rotv.y += y;
+
+    object->setPos(rotv.x, rotv.y);
+    object->setRotation(object->rotation() + rot);
+}
+
+/* . */
+bool
+UndoableCommand::mergeWith(const QUndoCommand* newest)
+{
+    if (newest->id() != id()) {
+         /* make sure other is also an UndoableNavCommand */
+         return false;
+    }
+
+    const UndoableCommand* cmd = static_cast<const UndoableCommand*>(newest);
+    toTransform = cmd->toTransform;
+    data.toCenter = cmd->data.toCenter;
+
+    return true;
+}
+
+/* TODO: finish undoable mirror */
+void
+UndoableCommand::mirror()
+{
+}
+
+/*
+ * Object: attempting to combine the geometry objects into one that changes
+ * behaviour depending on its mode.
+ */
+
+QRectF
+to_qrectf(EmbRect rect)
+{
+    return QRectF(rect.x, rect.y, rect.w, rect.h);
+}
+
+EmbVector
+map_from_scene(Object *obj, EmbVector v)
+{
+    return to_emb_vector(obj->mapFromScene(to_qpointf(v)));
+}
+
+/* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+ * WARNING: All movement has to be handled explicitly by us, not by the scene.
+ */
+Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)// : QGraphicsItem(item)
+{
+    debug_message("BaseObject Constructor()");
+
+    core = (ObjectCore*)malloc(sizeof(ObjectCore));
+
+    if (type_ < 30) {
+        string_copy(core->OBJ_NAME, object_names[type_]);
+    }
+    else {
+        string_copy(core->OBJ_NAME, "Unknown");
+    }
+
+    objPen.setCapStyle(Qt::RoundCap);
+    objPen.setJoinStyle(Qt::RoundJoin);
+    lwtPen.setCapStyle(Qt::RoundCap);
+    lwtPen.setJoinStyle(Qt::RoundJoin);
+
+    core->objID = QDateTime::currentMSecsSinceEpoch();
+
+    core->gripIndex = -1;
+    core->curved = 0;
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    obj_set_color(this, rgb);
+    obj_set_line_type(this, lineType);
+    obj_set_line_weight(this, 0.35);
+    todo("pass in proper lineweight");
+    setPen(objPen);
+
+    core->geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
+    core->geometry->type = type_;
+    core->geometry->object.color.r = qRed(rgb);
+    core->geometry->object.color.g = qGreen(rgb);
+    core->geometry->object.color.b = qBlue(rgb);
+    core->geometry->lineType = lineType;
+}
+
+/* . */
+Object::~Object()
+{
+    debug_message("ArcObject Destructor()");
+    free(core->geometry);
+    free(core);
+}
+
+/* . */
+Object *
+create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item)
+{
+    debug_message("ArcObject Constructor()");
+    Object *obj = new Object(EMB_ARC, rgb, Qt::SolidLine, item);
+    obj->core->geometry->object.arc = arc;
+    todo("getCurrentLineType");
+    obj_calculate_data(obj);
+    obj_set_pos(obj->core, arc.start);
+    return obj;
+}
+
+/* . */
+Object *
+create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
+{
+    debug_message("CircleObject Constructor()");
+    Object *obj = new Object(EMB_CIRCLE, rgb, Qt::SolidLine, item);
+    todo("getCurrentLineType");
+    obj->core->geometry->object.circle = circle;
+
+    /*
+    update_path();
+    */
+    return obj;
+}
+
+/* . */
+Object *
+create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
+{
+    debug_message("EllipseObject Constructor()");
+    todo("getCurrentLineType");
+    Object *obj = new Object(EMB_ELLIPSE, rgb, Qt::SolidLine, item);
+    obj->core->geometry->object.ellipse = ellipse;
+
+    /*
+    setObjectSize(width, height);
+    obj_update_path(obj);
+    */
+    return obj;
+}
+
+/* . */
+Object *
+create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("PolylineObject Constructor()");
+    todo("getCurrentLineType");
+    Object *obj = new Object(EMB_POLYLINE, rgb, Qt::SolidLine);
+    obj_update_path_r(obj, p);
+    /* EmbVector v; obj_set_pos(obj->core, v); */
+    return obj;
+}
+
+/* . */
+Object *
+create_path(EmbVector v, const QPainterPath p, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("PathObject Constructor()");
+    Object *obj = new Object(EMB_PATH, rgb, Qt::SolidLine);
+    todo("getCurrentLineType");
+    obj_update_path_r(obj, p);
+    obj_set_pos(obj->core, v);
+    return obj;
+}
+
+/* . */
+Object *
+create_polygon(EmbVector v, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("PolygonObject Constructor()");
+    Object *obj = new Object(EMB_POLYGON, rgb, Qt::SolidLine);
+    todo("getCurrentLineType");
+    obj_update_path_r(obj, p);
+    obj_set_pos(obj->core, v);
+    return obj;
+}
+
+/* . */
+Object *
+create_text_single(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("TextSingleObject Constructor()");
+    todo("getCurrentLineType");
+    Object *obj = new Object(EMB_TEXT_SINGLE, rgb, Qt::SolidLine);
+    string_copy(obj->core->textJustify, "Left");
+    /* TODO: set the justification properly */
+
+    obj_set_text(obj->core, qPrintable(str));
+    obj_set_pos(obj->core, v);
+    return obj;
+}
+
+/* . */
+Object *
+create_dim_leader(EmbLine line, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("DimLeaderObject Constructor()");
+    todo("getCurrentLineType");
+    Object *obj = new Object(EMB_DIM_LEADER, rgb, Qt::SolidLine);
+
+    obj->core->curved = false;
+    obj->core->filled = true;
+    obj_set_end_point_1(obj->core, line.start);
+    obj_set_end_point_2(obj->core, line.end);
+    return obj;
+}
+
+/* . */
+Object *
+create_image(EmbRect rect, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("ImageObject Constructor()");
+    todo("getCurrentLineType");
+    Object *obj = new Object(EMB_IMAGE, rgb, Qt::SolidLine);
+    obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
+    return obj;
+}
+
+/* . */
+Object *
+create_rect(EmbRect rect, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("RectObject Constructor()");
+    todo("getCurrentLineType");
+    Object *obj = new Object(EMB_RECT, rgb, Qt::SolidLine);
+    obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
+    return obj;
+}
+
+/* . */
+Object *
+create_line(EmbLine line, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("LineObject Constructor()");
+    Object *obj = new Object(EMB_LINE, rgb, Qt::SolidLine);
+    todo("getCurrentLineType");
+    obj_set_end_point_1(obj->core, line.start);
+    obj_set_end_point_2(obj->core, line.end);
+    return obj;
+}
+
+/* . */
+Object *
+create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent)
+{
+    Object *obj = new Object(EMB_POINT, rgb, Qt::SolidLine);
+    return obj;
+}
+
+/* . */
+Object *
+copy_object(Object* obj)
+{
+    debug_message("ArcObject Constructor()");
+    if (!obj) {
+        return NULL;
+    }
+    Object *copy = new Object(obj->core->geometry->type, obj->core->rgb, Qt::SolidLine);
+    switch (obj->core->geometry->type) {
+    case EMB_ARC:
+        copy->core->geometry->object.arc = obj->core->geometry->object.arc;
+        todo("getCurrentLineType");
+        copy->setRotation(obj->core->rotation);
+        break;
+    case EMB_CIRCLE:
+        copy->core->geometry->object.circle = obj->core->geometry->object.circle;
+        todo("getCurrentLineType");
+        copy->setRotation(obj->core->rotation);
+        break;
+    case EMB_DIM_LEADER:
+        copy->core->geometry->object.line = obj->core->geometry->object.line;
+        /* init(obj_x1(obj), obj_y1(obj), obj_x2(obj), obj_y2(obj), obj_color_rgb(obj->core), Qt::SolidLine); */
+        todo("getCurrentLineType");
+        break;
+    case EMB_ELLIPSE:
+        copy->core->geometry->object.ellipse = obj->core->geometry->object.ellipse;
+        /* init(obj->obj_centerX(), obj->obj_centerY(), obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
+        todo("getCurrentLineType");
+        copy->setRotation(obj->core->rotation);
+        break;
+    case EMB_IMAGE: {
+        copy->core->geometry->object.ellipse = obj->core->geometry->object.ellipse;
+        /* EmbVector ptl = obj_top_left(obj); */
+        /* init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
+        todo("getCurrentLineType");
+        copy->setRotation(obj->core->rotation);
+        break;
+    }
+    case EMB_LINE: {
+        copy->core->geometry->object.line = obj->core->geometry->object.line;
+        /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj_color_rgb(obj), Qt::SolidLine); */
+        todo("getCurrentLineType");
+        break;
+    }
+    case EMB_PATH: {
+        copy->core->geometry->object.path = obj->core->geometry->object.path;
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
+         * obj->setRotation(obj->rotation());
+         * obj->setScale(obj->scale());
+         */
+        todo("getCurrentLineType");
+        break;
+    }
+    case EMB_POINT: {
+        copy->core->geometry->object.point = obj->core->geometry->object.point;
+        /* init(obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
+         */
+        todo("getCurrentLineType");
+        copy->setRotation(obj->core->rotation);
+        break;
+    }
+    case EMB_POLYGON: {
+        copy->core->geometry->object.polygon = obj->core->geometry->object.polygon;
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
+         * obj->setRotation(obj->rotation());
+         * obj->setScale(obj->scale());
+         */
+        todo("getCurrentLineType");
+        break;
+    }
+    case EMB_POLYLINE: {
+        copy->core->geometry->object.polyline = obj->core->geometry->object.polyline;
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
+         */
+        todo("getCurrentLineType");
+        copy->setRotation(obj->core->rotation);
+        copy->setScale(obj->core->scale);
+        break;
+    }
+    case EMB_RECT: {
+        obj->core->geometry->object.rect = obj->core->geometry->object.rect;
+        EmbVector ptl = obj_top_left(obj->core);
+        /* init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine);
+         */
+        todo("getCurrentLineType");
+        copy->setRotation(obj->core->rotation);
+        break;
+    }
+    case EMB_TEXT_SINGLE: {
+        obj_set_text_font(copy->core, obj->core->textFont);
+        obj_set_text_size(copy->core, obj->core->textSize);
+        copy->setRotation(obj->core->rotation);
+        obj_set_text_backward(copy->core, obj->core->textBackward);
+        obj_set_text_upside_down(copy->core, obj->core->textUpsideDown);
+        obj_set_text_style(copy->core, obj->core->textBold, obj->core->textItalic,
+            obj->core->textUnderline, obj->core->textStrikeOut, obj->core->textOverline);
+        /* init(obj->text, obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
+         */
+        todo("getCurrentLineType");
+        copy->setScale(obj->core->scale);
+        break;
+    }
+    default:
+        break;
+    }
+    return copy;
+}
+
+Qt::PenStyle
+obj_line_type(Object* obj)
+{
+    return obj->objPen.style();
+}
+
+double
+obj_line_weight(Object* obj)
+{
+    return obj->lwtPen.widthF();
+}
+
+QPainterPath
+obj_path(Object* obj)
+{
+    return obj->path();
+}
+
+/* . */
+void
+obj_draw_rubber_line(Object *obj, const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
+{
+    if (painter) {
+        QGraphicsScene* objScene = obj->scene();
+        if (!objScene) {
+            return;
+        }
+        QPen colorPen = obj->objPen;
+        colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
+        painter->setPen(colorPen);
+        painter->drawLine(rubLine);
+        painter->setPen(obj->objPen);
+    }
+}
+
+/* . */
+void
+Object::setObjectRubberPoint(char key[MAX_STRING_LENGTH], EmbVector value)
+{
+    LabelledVector s;
+    string_copy(s.key, key);
+    s.vector = value;
+    rubber_points.push_back(s);
+}
+
+/* . */
+void
+Object::setObjectRubberText(char key[MAX_STRING_LENGTH], char value[MAX_STRING_LENGTH])
+{
+    StringMap s;
+    string_copy(s.key, key);
+    string_copy(s.value, value);
+    rubber_texts.push_back(s);
+}
+
+/* . */
+void
+obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath)
+{
+    QColor color1 = obj->objPen.color(); /* lighter color */
+    QColor color2 = color1.darker(150); /* darker color */
+
+    /* If we have a dark color, lighten it. */
+    int darkness = color1.lightness();
+    int threshold = 32;
+    todo("This number may need adjusted or maybe just add it to settings.");
+    if (darkness < threshold) {
+        color2 = color1;
+        if (!darkness) {
+            color1 = QColor(threshold, threshold, threshold);
+        } /* lighter() does not affect pure black */
+        else {
+            color1 = color2.lighter(100 + threshold);
+        }
+    }
+
+    int count = renderPath.elementCount();
+    for (int i = 0; i < count-1; ++i) {
+        QPainterPath::Element elem = renderPath.elementAt(i);
+        QPainterPath::Element next = renderPath.elementAt(i+1);
+
+        if (next.isMoveTo()) {
+            continue;
+        }
+
+        QPainterPath elemPath;
+        elemPath.moveTo(elem.x, elem.y);
+        elemPath.lineTo(next.x, next.y);
+
+        QPen renderPen(QColor(0,0,0,0));
+        renderPen.setWidthF(0);
+        painter->setPen(renderPen);
+        QPainterPathStroker stroker;
+        stroker.setWidth(0.35);
+        stroker.setCapStyle(Qt::RoundCap);
+        stroker.setJoinStyle(Qt::RoundJoin);
+        QPainterPath realPath = stroker.createStroke(elemPath);
+        painter->drawPath(realPath);
+
+        QLinearGradient grad(elemPath.pointAtPercent(0.5), elemPath.pointAtPercent(0.0));
+        grad.setColorAt(0, color1);
+        grad.setColorAt(1, color2);
+        grad.setSpread(QGradient::ReflectSpread);
+
+        painter->fillPath(realPath, QBrush(grad));
+    }
+}
+
+void
+Object::setObjectSize(double width, double height)
+{
+    QRectF elRect = to_qrectf(obj_rect(core));
+    elRect.setWidth(width);
+    elRect.setHeight(height);
+    elRect.moveCenter(QPointF(0, 0));
+    // FIXME: obj->setRect(elRect);
+}
+
+
+void
+obj_draw_rubber_grip(Object *obj, QPainter *painter)
+{
+    QPointF point = to_qpointf(obj_map_rubber(obj, ""))
+        - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
+    painter->drawLine(obj_line(obj).translated(point));
+}
+
+/* . */
+void
+obj_update_rubber_grip(Object *obj, QPainter *painter)
+{
+    if (!painter) {
+        return;
+    }
+    EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
+    switch (obj->core->geometry->type) {
+    case EMB_ARC: {
+        todo("rubber grip arc");
+        break;
+    }
+    case EMB_ELLIPSE: {
+        todo("rubber grip ellipse");
+        break;
+    }
+    case EMB_IMAGE: {
+        todo("rubber grip image");
+        break;
+    }
+    case EMB_PATH: {
+        todo("rubber grip path");
+        break;
+    }
+    case EMB_LINE: {
+        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
+            painter->drawLine(obj_line(obj).p2(), p);
+        }
+        else if (emb_approx(gripPoint, obj_end_point_2(obj->core))) {
+            painter->drawLine(obj_line(obj).p1(), p);
+        }
+        else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
+            QPointF point = p - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
+            QLineF line = obj_line(obj).translated(point);
+            painter->drawLine(line);
+        }
+
+        obj_draw_rubber_grip(obj, painter);
+        break;
+    }
+    case EMB_CIRCLE: {
+        if (emb_approx(gripPoint, obj_center(obj->core))) {
+            QPointF point = to_qpointf(obj_map_rubber(obj, ""))
+                - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
+            QRectF r = to_qrectf(obj_rect(obj->core));
+            painter->drawEllipse(r.translated(point));
+        }
+        else {
+            double gripRadius = emb_vector_distance(obj_center(obj->core), obj_rubber_point(obj, ""));
+            painter->drawEllipse(QPointF(), gripRadius, gripRadius);
+        }
+
+        obj_draw_rubber_grip(obj, painter);
+        break;
+    }
+    case EMB_DIM_LEADER: {
+        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
+            painter->drawLine(obj_line(obj).p2(), p);
+        }
+        else if (emb_approx(gripPoint, obj_end_point_2(obj->core))) {
+            painter->drawLine(obj_line(obj).p1(), p);
+        }
+        else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
+            obj_draw_rubber_grip(obj, painter);
+        }
+        break;
+    }
+    case EMB_POINT: {
+        if (emb_approx(gripPoint, obj_pos(obj->core))) {
+            obj_draw_rubber_grip(obj, painter);
+        }
+        break;
+    }
+    case EMB_POLYGON: {
+        int elemCount = obj->normalPath.elementCount();
+        EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
+        if (obj->core->gripIndex == -1) {
+            obj->core->gripIndex = obj_find_index(obj, gripPoint);
+                if (obj->core->gripIndex == -1) {
+                    return;
+                }
+            }
+
+            int m = 0;
+            int n = 0;
+
+            if (!obj->core->gripIndex) {
+                m = elemCount - 1;
+                n = 1;
+            }
+            else if (obj->core->gripIndex == elemCount-1) {
+                m = elemCount - 2;
+                n = 0;
+            }
+            else {
+                m = obj->core->gripIndex - 1;
+                n = obj->core->gripIndex + 1;
+            }
+
+            QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+            QPainterPath::Element em = obj->normalPath.elementAt(m);
+            QPainterPath::Element en = obj->normalPath.elementAt(n);
+            painter->drawLine(QPointF(em.x, em.y), p);
+            painter->drawLine(QPointF(en.x, en.y), p);
+
+            obj_draw_rubber_grip(obj, painter);
+            break;
+        }
+        case EMB_POLYLINE: {
+            int elemCount = obj->normalPath.elementCount();
+            EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
+            if (obj->core->gripIndex == -1) {
+                obj->core->gripIndex = obj_find_index(obj, gripPoint);
+            }
+            if (obj->core->gripIndex == -1) {
+                return;
+            }
+
+            QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+            if (!obj->core->gripIndex) {
+                /* First */
+                QPainterPath::Element ef = obj->normalPath.elementAt(1);
+                painter->drawLine(QPointF(ef.x, ef.y), p);
+            }
+            else if (obj->core->gripIndex == elemCount-1) {
+                /* Last */
+                QPainterPath::Element el = obj->normalPath.elementAt(obj->core->gripIndex-1);
+                painter->drawLine(QPointF(el.x, el.y), p);
+            }
+            else {
+                /* Middle */
+                QPainterPath::Element em = obj->normalPath.elementAt(obj->core->gripIndex-1);
+                QPainterPath::Element en = obj->normalPath.elementAt(obj->core->gripIndex+1);
+                painter->drawLine(QPointF(em.x, em.y), p);
+                painter->drawLine(QPointF(en.x, en.y), p);
+            }
+
+        obj_draw_rubber_grip(obj, painter);
+        break;
+    }
+    case EMB_RECT: {
+        todo("Make this work with rotation & scaling.");
+        EmbVector after = obj_rubber_point(obj, "");
+        EmbVector delta = emb_vector_subtract(after, gripPoint);
+        EmbVector tl = obj_top_left(obj->core);
+        double w = emb_width(obj->core->geometry);
+        double h = emb_height(obj->core->geometry);
+        if (emb_approx(gripPoint, obj_top_left(obj->core))) {
+            painter->drawPolygon(obj->mapFromScene(QRectF(
+                after.x,
+                after.y,
+                w - delta.x,
+                h - delta.y)));
+        }
+        else if (emb_approx(gripPoint, obj_top_right(obj->core))) {
+            painter->drawPolygon(obj->mapFromScene(QRectF(
+                tl.x,
+                tl.y + delta.y,
+                w + delta.x,
+                h - delta.y)));
+        }
+        else if (emb_approx(gripPoint, obj_bottom_left(obj->core))) {
+            painter->drawPolygon(obj->mapFromScene(QRectF(
+                tl.x + delta.x,
+                tl.y,
+                w - delta.x,
+                h + delta.y)));
+        }
+        else if (emb_approx(gripPoint, obj_bottom_right(obj->core))) {
+            painter->drawPolygon(obj->mapFromScene(QRectF(
+                tl.x,
+                tl.y,
+                w + delta.x,
+                h + delta.y)));
+        }
+
+        obj_draw_rubber_grip(obj, painter);
+        break;
+    }
+    case EMB_TEXT_SINGLE: {
+        if (emb_approx(gripPoint, obj_pos(obj->core))) {
+           // painter->drawPath(obj_path(obj).translated(obj->mapFromScene(obj_rubber_point(obj, ""))- obj_map_rubber(obj, "GRIP_POINT"));
+        }
+
+        obj_draw_rubber_grip(obj, painter);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* FIXME: */
+QList<QPainterPath>
+Object::subPathList() const {
+    QList<QPainterPath> p;
+    return p;
+}
+
+/* TODO: << "Aligned" << "Fit" */
+QStringList objectTextJustifyList = {
+    "Left",
+    "Center",
+    "Right",
+    "Middle",
+    "Top Left",
+    "Top Center",
+    "Top Right",
+    "Middle Left",
+    "Middle Center",
+    "Middle Right",
+    "Bottom Left",
+    "Bottom Center",
+    "Bottom Right"
+};
+
+/* . */
+void
+obj_set_text(ObjectCore* obj, const char *str)
+{
+    string_copy(obj->text, str);
+    QPainterPath textPath;
+    QFont font;
+    font.setFamily(obj->textFont);
+    font.setPointSizeF(obj->textSize);
+    font.setBold(obj->textBold);
+    font.setItalic(obj->textItalic);
+    font.setUnderline(obj->textUnderline);
+    font.setStrikeOut(obj->textStrikeOut);
+    font.setOverline(obj->textOverline);
+    textPath.addText(0, 0, font, str);
+
+    /* Translate the path based on the justification. */
+    QRectF jRect = textPath.boundingRect();
+    if (string_equal(obj->textJustify, "Left")) {
+        textPath.translate(-jRect.left(), 0);
+    }
+    else if (string_equal(obj->textJustify, "Center")) {
+        textPath.translate(-jRect.center().x(), 0);
+    }
+    else if (string_equal(obj->textJustify, "Right")) {
+        textPath.translate(-jRect.right(), 0);
+    }
+    else if (string_equal(obj->textJustify, "Aligned")) {
+        todo("TextSingleObject Aligned Justification.");
+    }
+    else if (string_equal(obj->textJustify, "Middle")) {
+        textPath.translate(-jRect.center());
+    }
+    else if (string_equal(obj->textJustify, "Fit")) {
+        todo("TextSingleObject Fit Justification.");
+    }
+    else if (string_equal(obj->textJustify, "Top Left")) {
+        textPath.translate(-jRect.topLeft());
+    }
+    else if (string_equal(obj->textJustify, "Top Center")) {
+        textPath.translate(-jRect.center().x(), -jRect.top());
+    }
+    else if (string_equal(obj->textJustify, "Top Right")) {
+        textPath.translate(-jRect.topRight());
+    }
+    else if (string_equal(obj->textJustify, "Middle Left")) {
+        textPath.translate(-jRect.left(), -jRect.top()/2.0);
+    }
+    else if (string_equal(obj->textJustify, "Middle Center")) {
+        textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
+    }
+    else if (string_equal(obj->textJustify, "Middle Right")) {
+        textPath.translate(-jRect.right(), -jRect.top()/2.0);
+    }
+    else if (string_equal(obj->textJustify, "Bottom Left")) {
+        textPath.translate(-jRect.bottomLeft());
+    }
+    else if (string_equal(obj->textJustify, "Bottom Center")) {
+        textPath.translate(-jRect.center().x(), -jRect.bottom());
+    }
+    else if (string_equal(obj->textJustify, "Bottom Right")) {
+        textPath.translate(-jRect.bottomRight());
+    }
+
+    /* Backward or Upside Down. */
+    if (obj->textBackward || obj->textUpsideDown) {
+        double horiz = 1.0;
+        double vert = 1.0;
+        if (obj->textBackward) {
+            horiz = -1.0;
+        }
+        if (obj->textUpsideDown) {
+            vert = -1.0;
+        }
+
+        QPainterPath flippedPath;
+
+        QPainterPath::Element element;
+        QPainterPath::Element P2;
+        QPainterPath::Element P3;
+        QPainterPath::Element P4;
+        for (int i = 0; i < textPath.elementCount(); ++i) {
+            element = textPath.elementAt(i);
+            if (element.isMoveTo()) {
+                flippedPath.moveTo(horiz * element.x, vert * element.y);
+            }
+            else if (element.isLineTo()) {
+                flippedPath.lineTo(horiz * element.x, vert * element.y);
+            }
+            else if (element.isCurveTo()) {
+                                              /* start point P1 is not needed. */
+                P2 = textPath.elementAt(i);   /* control point. */
+                P3 = textPath.elementAt(i+1); /* control point. */
+                P4 = textPath.elementAt(i+2); /* end point. */
+
+                flippedPath.cubicTo(horiz * P2.x, vert * P2.y,
+                                    horiz * P3.x, vert * P3.y,
+                                    horiz * P4.x, vert * P4.y);
+            }
+        }
+        // FIXME: obj->textPath = flippedPath;
+    }
+    else {
+        // FIXME: obj->textPath = textPath;
+    }
+
+    /* Add the grip point to the shape path. */
+    /* FIXME:
+    QPainterPath gripPath = obj->textPath;
+    gripPath.connectPath(obj->textPath);
+    gripPath.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+    obj_set_path(obj, gripPath);
+    */
+}
+
+/* . */
+void
+obj_update_path(Object *obj)
+{
+    QRectF r = to_qrectf(obj_rect(obj->core));
+    switch (obj->core->geometry->type) {
+    case EMB_ARC: {
+        double startAngle = emb_start_angle(obj->core->geometry) + obj->rotation();
+        double spanAngle = emb_included_angle(obj->core->geometry);
+
+        if (emb_clockwise(obj->core->geometry)) {
+            spanAngle = -spanAngle;
+        }
+
+        QPainterPath path;
+        path.arcMoveTo(r, startAngle);
+        path.arcTo(r, startAngle, spanAngle);
+        /* Reverse the path so that the inside area isn't considered part of the arc. */
+        path.arcTo(r, startAngle+spanAngle, -spanAngle);
+        obj_set_path(obj, path);
+        break;
+    }
+    case EMB_CIRCLE: {
+        QPainterPath path;
+        /* Add the center point. */
+        path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+        /* Add the circle */
+        path.arcMoveTo(r, 0);
+        path.arcTo(r, 0, 360);
+        /* Reverse the path so that the inside area isn't considered part of the circle. */
+        path.arcTo(r, 0, -360);
+        obj_set_path(obj, path);
+        break;
+    }
+    case EMB_ELLIPSE: {
+        QPainterPath path;
+        path.arcMoveTo(r, 0);
+        path.arcTo(r, 0, 360);
+        /* Reverse the path so that the inside area isn't considered part of the ellipse. */
+        path.arcTo(r, 0, -360);
+        obj_set_path(obj, path);
+        break;
+    }
+    case EMB_RECT:
+    case EMB_IMAGE: {
+        QPainterPath path;
+        path.moveTo(r.bottomLeft());
+        path.lineTo(r.bottomRight());
+        path.lineTo(r.topRight());
+        path.lineTo(r.topLeft());
+        path.lineTo(r.bottomLeft());
+        /* NOTE: Reverse the path so that the inside area isn't considered part of the rectangle. */
+        path.lineTo(r.topLeft());
+        path.lineTo(r.topRight());
+        path.lineTo(r.bottomRight());
+        path.moveTo(r.bottomLeft());
+        obj_set_path(obj, path);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+obj_calculate_data(Object *obj)
+{
+    EmbVector center = emb_arc_center(*(obj->core->geometry));
+
+    double radius = emb_vector_distance(center, obj->core->geometry->object.arc.mid);
+    obj_update_arc_rect(obj, radius);
+    obj_update_path(obj);
+    obj->setRotation(0);
+    obj->setScale(1);
+}
+
+/* . */
+void
+obj_update_arc_rect(Object *obj, double radius)
+{
+    QRectF arcRect;
+    arcRect.setWidth(radius*2.0);
+    arcRect.setHeight(radius*2.0);
+    arcRect.moveCenter(QPointF(0, 0));
+    obj_set_rect(obj, arcRect);
+}
+
+/* . */
+void
+obj_set_line_weight(Object *obj, double lineWeight)
+{
+    obj->objPen.setWidthF(0); /* NOTE: The objPen will always be cosmetic. */
+
+    if (lineWeight < 0) {
+        if (lineWeight == OBJ_LWT_BYLAYER) {
+            obj->lwtPen.setWidthF(0.35);
+            todo("getLayerLineWeight");
+        }
+        else if (lineWeight == OBJ_LWT_BYBLOCK) {
+            obj->lwtPen.setWidthF(0.35);
+            todo("getBlockLineWeight");
+        }
+        else {
+            char msg[MAX_STRING_LENGTH];
+            sprintf(msg, "Lineweight: %f", lineWeight);
+            warning_box(translate("Error - Negative Lineweight"), msg);
+            debug_message("Lineweight cannot be negative! Inverting sign.");
+            obj->lwtPen.setWidthF(-lineWeight);
+        }
+    }
+    else {
+        obj->lwtPen.setWidthF(lineWeight);
+    }
+}
+
+/* . */
+void
+obj_update_path_r(Object *obj, QPainterPath p)
+{
+    switch (obj->core->geometry->type) {
+    case EMB_POLYGON: {
+        obj->normalPath = p;
+        QPainterPath closedPath = obj->normalPath;
+        closedPath.closeSubpath();
+        QPainterPath reversePath = closedPath.toReversed();
+        reversePath.connectPath(closedPath);
+        obj_set_path(obj, reversePath);
+        break;
+    }
+    case EMB_PATH:
+    case EMB_POLYLINE: {
+        obj->normalPath = p;
+        QPainterPath reversePath = obj->normalPath.toReversed();
+        reversePath.connectPath(obj->normalPath);
+        obj_set_path(obj, reversePath);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+obj_set_color(Object *obj, const QColor& color)
+{
+    obj->objPen.setColor(color);
+    obj->lwtPen.setColor(color);
+}
+
+/* . */
+void
+obj_set_color_rgb(Object *obj, QRgb rgb)
+{
+    obj->objPen.setColor(QColor(rgb));
+    obj->lwtPen.setColor(QColor(rgb));
+}
+
+/* . */
+void
+obj_set_line_type(Object *obj, Qt::PenStyle lineType)
+{
+    obj->objPen.setStyle(lineType);
+    obj->lwtPen.setStyle(lineType);
+}
+
+/* . */
+EmbVector
+obj_rubber_point(Object *obj, QString key)
+{
+    for (int i=0; i<(int)obj->rubber_points.size(); i++) {
+        if (string_equal(obj->rubber_points[i].key, qPrintable(key))) {
+            return obj->rubber_points[i].vector;
+        }
+    }
+
+    /* TODO: object's scene rather than current. */
+    int doc = activeDocument();
+    DocumentData *data = doc_data(doc);
+    return data->sceneQSnapPoint;
+}
+
+/* . */
+QString
+obj_rubber_text(Object *obj, QString key)
+{
+    for (int i=0; i<(int)obj->rubber_texts.size(); i++) {
+        if (string_equal(obj->rubber_texts[i].key, qPrintable(key))) {
+            return obj->rubber_texts[i].value;
+        }
+    }
+    return "";
+}
+
+/* . */
+QRectF
+obj_bounding_rect(ObjectCore *obj)
+{
+    /* If gripped, force this object to be drawn even if it is offscreen. */
+    if (obj->rubber_mode == RUBBER_GRIP) {
+        return documents[obj->doc]->scene()->sceneRect();
+    }
+    //return documents[obj->doc]->normalPath.boundingRect();
+    return QRectF(0.0, 0.0, 1.0, 1.0);
+}
+
+
+/* . */
+EmbRect
+obj_rect(ObjectCore *obj)
+{
+    QRectF r = obj_bounding_rect(obj);
+    EmbRect rect;
+    rect.x = r.x();
+    rect.y = r.y();
+    rect.w = r.width();
+    rect.h = r.height();
+    return rect;
+}
+
+/* . */
+void
+obj_set_rect(Object *obj, QRectF r)
+{
+    QPainterPath p;
+    p.addRect(r);
+    obj->setPath(p);
+}
+
+/* . */
+void
+obj_set_rect(Object *obj, double x, double y, double w, double h)
+{
+    // obj->setPos(x, y); ?
+    QPainterPath p;
+    p.addRect(x,y,w,h);
+    obj->setPath(p);
+}
+
+/* . */
+QLineF
+obj_line(Object *obj)
+{
+    return obj->objLine;
+}
+
+/* . */
+void
+obj_set_line(Object *obj, QLineF li)
+{
+    QPainterPath p;
+    p.moveTo(li.p1());
+    p.lineTo(li.p2());
+    obj->setPath(p);
+    obj->objLine = li;
+}
+
+/* . */
+void
+obj_set_line(Object *obj, double x1, double y1, double x2, double y2)
+{
+    QPainterPath p;
+    p.moveTo(x1, y1);
+    p.lineTo(x2, y2);
+    obj->setPath(p);
+    obj->objLine.setLine(x1, y1, x2, y2);
+}
+
+/* . */
+QPainterPath
+obj_shape(Object *obj)
+{
+    return obj->path();
+}
+
+/* . */
+void
+obj_set_path(Object *obj, QPainterPath p)
+{
+    obj->setPath(p);
+}
+
+/* . */
+void
+obj_set_rubber_point(Object *obj, std::string key, const EmbVector& point)
+{
+    LabelledVector s;
+    string_copy(s.key, key.c_str());
+    s.vector = point;
+    obj->rubber_points.push_back(s);
+}
+
+/* . */
+void
+obj_set_rubber_text(Object *obj, std::string key, std::string txt)
+{
+    StringMap s;
+    string_copy(s.key, key.c_str());
+    string_copy(s.value, txt.c_str());
+    obj->rubber_texts.push_back(s);
+}
+
+/* . */
+QList<QPainterPath>
+obj_save_path_list(Object *obj)
+{
+    return obj->subPathList();
+}
+
+/* . */
+int
+obj_find_index(Object *obj, EmbVector point)
+{
+    int elemCount = obj->normalPath.elementCount();
+    /* NOTE: Points here are in item coordinates */
+    EmbVector itemPoint = map_from_scene(obj, point);
+    for (int i = 0; i < elemCount; i++) {
+        QPainterPath::Element e = obj->normalPath.elementAt(i);
+        EmbVector elemPoint;
+        elemPoint.x = e.x;
+        elemPoint.y = e.y;
+        if (emb_approx(itemPoint, elemPoint)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/* Map rubber point from scene. */
+EmbVector
+obj_map_rubber(Object *obj, const char *key)
+{
+    EmbVector point = obj_rubber_point(obj, key);
+    return map_from_scene(obj, point);
+}
+
+/* . */
+void
+obj_update_rubber(Object *obj, QPainter* painter)
+{
+    todo("Arc,Path Rubber Modes");
+    switch (obj->core->rubber_mode) {
+    case RUBBER_CIRCLE_1P_RAD: {
+        EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_RADIUS");
+        EmbVector itemCenterPoint = obj_map_rubber(obj, "CIRCLE_CENTER");
+        EmbVector itemQSnapPoint = obj_map_rubber(obj, "CIRCLE_RADIUS");
+        QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
+        obj_set_center(obj->core, sceneCenterPoint);
+        QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
+        double radius = sceneLine.length();
+        emb_set_radius(obj->core->geometry, radius);
+        if (painter) {
+            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_CIRCLE_1P_DIA: {
+        EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_DIAMETER");
+        EmbVector itemCenterPoint = obj_map_rubber(obj, "CIRCLE_CENTER");
+        EmbVector itemQSnapPoint = obj_map_rubber(obj, "CIRCLE_DIAMETER");
+        QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
+        obj_set_center(obj->core, sceneCenterPoint);
+        QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
+        double diameter = sceneLine.length();
+        emb_set_diameter(obj->core->geometry, diameter);
+        if (painter) {
+            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_CIRCLE_2P: {
+        EmbVector sceneTan1Point = obj_rubber_point(obj, "CIRCLE_TAN1");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_TAN2");
+        QLineF sceneLine(to_qpointf(sceneTan1Point), to_qpointf(sceneQSnapPoint));
+        obj_set_center(obj->core, to_emb_vector(sceneLine.pointAt(0.5)));
+        double diameter = sceneLine.length();
+        emb_set_diameter(obj->core->geometry, diameter);
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_CIRCLE_3P: {
+        EmbGeometry g;
+        g.object.arc.start = obj_rubber_point(obj, "CIRCLE_TAN1");
+        g.object.arc.mid = obj_rubber_point(obj, "CIRCLE_TAN2");
+        g.object.arc.end = obj_rubber_point(obj, "CIRCLE_TAN3");
+        g.type = EMB_ARC;
+        EmbVector center = emb_arc_center(g);
+        obj_set_center(obj->core, center);
+        double radius = emb_vector_distance(center, g.object.arc.end);
+        emb_set_radius(obj->core->geometry, radius);
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_DIMLEADER_LINE: {
+        EmbVector sceneStartPoint = obj_rubber_point(obj, "DIMLEADER_LINE_START");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "DIMLEADER_LINE_END");
+
+        obj_set_end_point_1(obj->core, sceneStartPoint);
+        obj_set_end_point_2(obj->core, sceneQSnapPoint);
+        break;
+    }
+    case RUBBER_ELLIPSE_LINE: {
+        EmbVector itemLinePoint1  = obj_map_rubber(obj, "ELLIPSE_LINE_POINT1");
+        EmbVector itemLinePoint2  = obj_map_rubber(obj, "ELLIPSE_LINE_POINT2");
+        QLineF itemLine(to_qpointf(itemLinePoint1), to_qpointf(itemLinePoint2));
+        if (painter) {
+            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_ELLIPSE_MAJDIA_MINRAD: {
+        EmbVector sceneAxis1Point1 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT1");
+        EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
+        EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
+        EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
+        double ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
+        double ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
+
+        todo("incorporate perpendicularDistance() into libembroidery.");
+        QLineF line(to_qpointf(sceneAxis1Point1), to_qpointf(sceneAxis1Point2));
+        QLineF norm = line.normalVector();
+        EmbVector delta = emb_vector_subtract(sceneAxis2Point2, sceneAxis1Point1);
+        norm.translate(delta.x, delta.y);
+        QPointF iPoint;
+        norm.intersects(line, &iPoint);
+        double ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint))*2.0;
+
+        obj_set_center(obj->core, sceneCenterPoint);
+        // FIXME: obj->setSize(ellipseWidth, ellipseHeight);
+        obj->setRotation(-ellipseRot);
+
+        EmbVector itemCenterPoint = obj_map_rubber(obj, "ELLIPSE_CENTER");
+        EmbVector itemAxis2Point2 = obj_map_rubber(obj, "ELLIPSE_AXIS2_POINT2");
+        QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemAxis2Point2));
+        if (painter) {
+            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_ELLIPSE_MAJRAD_MINRAD: {
+        EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
+        EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
+        EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
+        double ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
+        double ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
+
+        todo("incorporate perpendicularDistance() into libcgeometry.");
+        QLineF line(to_qpointf(sceneCenterPoint), to_qpointf(sceneAxis1Point2));
+        QLineF norm = line.normalVector();
+        EmbVector delta = emb_vector_subtract(sceneAxis2Point2, sceneCenterPoint);
+        norm.translate(delta.x, delta.y);
+        QPointF iPoint;
+        norm.intersects(line, &iPoint);
+        double ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint)) * 2.0;
+
+        obj_set_center(obj->core, sceneCenterPoint);
+        obj->setObjectSize(ellipseWidth, ellipseHeight);
+        obj->setRotation(-ellipseRot);
+
+        EmbVector itemCenterPoint = obj_map_rubber(obj, "ELLISPE_CENTER");
+        EmbVector itemAxis2Point2 = obj_map_rubber(obj, "ELLIPSE_AXIS2_POINT2");
+        QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemAxis2Point2));
+        if (painter) {
+            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_IMAGE: {
+        EmbVector start = obj_rubber_point(obj, "IMAGE_START");
+        EmbVector end = obj_rubber_point(obj, "IMAGE_END");
+        EmbVector delta = emb_vector_subtract(end, start);
+        obj_set_rect(obj, start.x, start.y, delta.x, delta.y);
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_LINE: {
+        EmbVector sceneStartPoint = obj_rubber_point(obj, "LINE_START");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "LINE_END");
+
+        obj_set_end_point_1(obj->core, sceneStartPoint);
+        obj_set_end_point_2(obj->core, sceneQSnapPoint);
+
+        obj_draw_rubber_line(obj, obj_line(obj), painter, "VIEW_COLOR_CROSSHAIR");
+        break;
+    }
+    case RUBBER_POLYGON: {
+        obj_set_pos(obj->core, obj_rubber_point(obj, "POLYGON_POINT_0"));
+
+        bool ok = false;
+        QString numStr = obj_rubber_text(obj, "POLYGON_NUM_POINTS");
+        if (numStr.isNull()) {
+            return;
+        }
+        int num = numStr.toInt(&ok);
+        if (!ok) {
+            return;
+        }
+
+        QPainterPath rubberPath;
+        rubberPath.moveTo(to_qpointf(obj_map_rubber(obj, "POLYGON_POINT_0")));
+        for (int i = 1; i <= num; i++) {
+            char key[MAX_STRING_LENGTH];
+            sprintf(key, "POLYGON_POINT_%d", i);
+            EmbVector appendPoint = obj_map_rubber(obj, key);
+            rubberPath.lineTo(to_qpointf(appendPoint));
+        }
+        /* rubberPath.lineTo(0,0); */
+        obj_update_path_r(obj, rubberPath);
+
+        /* Ensure the path isn't updated until the number of points is changed again. */
+        obj_set_rubber_text(obj, "POLYGON_NUM_POINTS", "");
+        break;
+    }
+    case RUBBER_POLYGON_INSCRIBE: {
+        obj_set_pos(obj->core, obj_rubber_point(obj, "POLYGON_CENTER"));
+
+        quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x;
+
+        EmbVector inscribePoint = obj_map_rubber(obj, "POLYGON_INSCRIBE_POINT");
+        QLineF inscribeLine = QLineF(QPointF(0, 0), to_qpointf(inscribePoint));
+        double inscribeAngle = inscribeLine.angle();
+        double inscribeInc = 360.0/numSides;
+
+        if (painter) {
+            obj_draw_rubber_line(obj, inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+
+        QPainterPath inscribePath;
+        /* First Point */
+        inscribePath.moveTo(to_qpointf(inscribePoint));
+        /* Remaining Points */
+        for (int i = 1; i < numSides; i++) {
+            inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
+            inscribePath.lineTo(inscribeLine.p2());
+        }
+        obj_update_path_r(obj, inscribePath);
+        break;
+    }
+    case RUBBER_POLYGON_CIRCUMSCRIBE: {
+        obj_set_pos(obj->core, obj_rubber_point(obj, "POLYGON_CENTER"));
+
+        quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x;
+
+        EmbVector circumscribePoint = obj_map_rubber(obj, "POLYGON_CIRCUMSCRIBE_POINT");
+        QLineF circumscribeLine = QLineF(QPointF(0, 0), to_qpointf(circumscribePoint));
+        double circumscribeAngle = circumscribeLine.angle();
+        double circumscribeInc = 360.0/numSides;
+
+        if (painter) {
+            obj_draw_rubber_line(obj, circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+
+        QPainterPath circumscribePath;
+        /* First Point */
+        QLineF prev(circumscribeLine.p2(), QPointF(0,0));
+        prev = prev.normalVector();
+        circumscribeLine.setAngle(circumscribeAngle + circumscribeInc);
+        QLineF perp(circumscribeLine.p2(), QPointF(0,0));
+        perp = perp.normalVector();
+        QPointF iPoint;
+        perp.intersects(prev, &iPoint);
+        circumscribePath.moveTo(iPoint);
+        /* Remaining Points */
+        for (int i = 2; i <= numSides; i++) {
+            prev = perp;
+            circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
+            perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
+            perp = perp.normalVector();
+            perp.intersects(prev, &iPoint);
+            circumscribePath.lineTo(iPoint);
+        }
+        obj_update_path_r(obj, circumscribePath);
+        break;
+    }
+    case RUBBER_POLYLINE: {
+        obj_set_pos(obj->core, obj_rubber_point(obj, "POLYLINE_POINT_0"));
+
+        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        QLineF rubberLine(obj->normalPath.currentPosition(), p);
+        if (painter) {
+            obj_draw_rubber_line(obj, rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+
+        bool ok = false;
+        QString numStr = obj_rubber_text(obj, "POLYLINE_NUM_POINTS");
+        if (numStr.isNull()) return;
+        int num = numStr.toInt(&ok);
+        if (!ok) {
+            return;
+        }
+
+        QPainterPath rubberPath;
+        for (int i = 1; i <= num; i++) {
+            char msg[MAX_STRING_LENGTH];
+            sprintf(msg, "POLYLINE_POINT_%d", i);
+            EmbVector appendPoint = obj_map_rubber(obj, msg);
+            rubberPath.lineTo(to_qpointf(appendPoint));
+        }
+        obj_update_path_r(obj, rubberPath);
+
+        /* Ensure the path isn't updated until the number of points is changed again. */
+        obj_set_rubber_text(obj, "POLYLINE_NUM_POINTS", "");
+        break;
+    }
+    case RUBBER_RECTANGLE: {
+        EmbVector start = obj_rubber_point(obj, "RECTANGLE_START");
+        EmbVector end = obj_rubber_point(obj, "RECTANGLE_END");
+        EmbVector delta = emb_vector_subtract(end, start);
+        obj_set_rect(obj, start.x, start.y, delta.x, delta.y);
+        obj_update_path(obj);
+        break;
+    }
+    case RUBBER_TEXTSINGLE: {
+        obj_set_text_font(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_FONT")));
+        obj_set_text_justify(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_JUSTIFY")));
+        obj_set_pos(obj->core, obj_rubber_point(obj, "TEXT_POINT"));
+        EmbVector hr = obj_rubber_point(obj, "TEXT_HEIGHT_ROTATION");
+        obj_set_text_size(obj->core, hr.x);
+        obj->setRotation(hr.y);
+        obj_set_text(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_RAPID")));
+        break;
+    }
+    case RUBBER_GRIP: {
+        obj_update_rubber_grip(obj, painter);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+Object::vulcanize()
+{
+    debug_message("vulcanize()");
+    /* FIXME: obj_update_rubber(painter); */
+
+    core->rubber_mode = RUBBER_OFF;
+
+    switch (core->geometry->type) {
+    case EMB_POLYLINE:
+        if (!normalPath.elementCount()) {
+            critical_box(
+                translate("Empty Polyline Error"),
+                translate("The polyline added contains no points. The command that created this object has flawed logic."));
+        }
+        break;
+    case EMB_POLYGON:
+        if (!normalPath.elementCount()) {
+            critical_box(
+                translate("Empty Polygon Error"),
+                translate("The polygon added contains no points. The command that created this object has flawed logic."));
+        }
+        break;
+    case EMB_PATH:
+        if (!normalPath.elementCount()) {
+            critical_box(
+                translate("Empty Path Error"),
+                translate("The path added contains no points. The command that created this object has flawed logic."));
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+QList<EmbVector>
+Object::allGripPoints()
+{
+    QList<EmbVector> gripPoints;
+    switch (core->geometry->type) {
+    case EMB_ARC: {
+        gripPoints.append(obj_center(core));
+        gripPoints.append(obj_start_point(core));
+        gripPoints.append(obj_mid_point(core));
+        gripPoints.append(obj_end_point(core));
+        break;
+    }
+    case EMB_CIRCLE:
+    case EMB_ELLIPSE: {
+        gripPoints.append(obj_center(core));
+        gripPoints.append(emb_quadrant(core->geometry, 0));
+        gripPoints.append(emb_quadrant(core->geometry, 90));
+        gripPoints.append(emb_quadrant(core->geometry, 180));
+        gripPoints.append(emb_quadrant(core->geometry, 270));
+        break;
+    }
+    case EMB_DIM_LEADER: {
+        gripPoints.append(obj_end_point_1(core));
+        gripPoints.append(obj_end_point_2(core));
+        if (core->curved) {
+            gripPoints.append(obj_mid_point(core));
+        }
+        break;
+    }
+    case EMB_IMAGE: {
+        gripPoints.append(obj_top_left(core));
+        gripPoints.append(obj_top_right(core));
+        gripPoints.append(obj_bottom_left(core));
+        gripPoints.append(obj_bottom_right(core));
+        break;
+    }
+    case EMB_LINE: {
+        gripPoints.append(obj_end_point_1(core));
+        gripPoints.append(obj_end_point_2(core));
+        gripPoints.append(obj_mid_point(core));
+        break;
+    }
+    case EMB_PATH: {
+        gripPoints.append(obj_pos(core));
+        todo("loop thru all path Elements and return their points.");
+        break;
+    }
+    case EMB_POLYGON:
+    case EMB_POLYLINE: {
+        QPainterPath::Element element;
+        for (int i = 0; i < normalPath.elementCount(); ++i) {
+            element = normalPath.elementAt(i);
+            gripPoints.append(to_emb_vector(mapToScene(element.x, element.y)));
+        }
+        break;
+    }
+    case EMB_TEXT_SINGLE:
+    case EMB_POINT:
+    default:
+        gripPoints.append(obj_pos(this->core));
+        break;
+    }
+    return gripPoints;
+}
+
+/* Returns the closest snap point to the mouse point */
+EmbVector
+Object::mouseSnapPoint(EmbVector mousePoint)
+{
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
+}
+
+/* . */
+void
+obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
+{
+    EmbVector delta = emb_vector_subtract(after, before);
+    switch (obj->core->geometry->type) {
+    case EMB_ARC: {
+        todo("gripEdit() for ArcObject.");
+        break;
+    }
+    case EMB_CIRCLE: {
+        if (emb_approx(before, obj_center(obj->core))) {
+            obj->moveBy(delta.x, delta.y);
+        }
+        else {
+            double length = emb_vector_distance(obj_center(obj->core), after);
+            emb_set_radius(obj->core->geometry, length);
+        }
+        break;
+    }
+    case EMB_DIM_LEADER:
+    case EMB_LINE: {
+        if (emb_approx(before, obj_end_point_1(obj->core))) {
+            obj_set_end_point_1(obj->core, after);
+        }
+        else if (emb_approx(before, obj_end_point_2(obj->core))) {
+            obj_set_end_point_2(obj->core, after);
+        }
+        else if (emb_approx(before, obj_mid_point(obj->core))) {
+            obj->moveBy(delta.x, delta.y);
+        }
+        break;
+    }
+    case EMB_ELLIPSE: {
+        todo("gripEdit() for EllipseObject");
+        break;
+    }
+    case EMB_IMAGE:
+    case EMB_RECT: {
+        double height = emb_height(obj->core->geometry);
+        double width = emb_width(obj->core->geometry);
+        EmbVector tl = obj_top_left(obj->core);
+        if (emb_approx(before, tl)) {
+            obj_set_rect(obj, after.x, after.y,
+                width - delta.x, height - delta.y);
+        }
+        else if (emb_approx(before, obj_top_right(obj->core))) {
+            obj_set_rect(obj, tl.x, tl.y+delta.y,
+                width + delta.x, height - delta.y);
+        }
+        else if (emb_approx(before, obj_bottom_left(obj->core))) {
+            obj_set_rect(obj, tl.x+delta.x, tl.y,
+                width - delta.x, height + delta.y);
+        }
+        else if (emb_approx(before, obj_bottom_right(obj->core))) {
+            obj_set_rect(obj, tl.x, tl.y,
+                width + delta.x, height + delta.y);
+        }
+        break;
+    }
+    case EMB_PATH: {
+        todo("gripEdit() for PathObject");
+        break;
+    }
+    case EMB_POLYGON:
+    case EMB_POLYLINE: {
+        obj->core->gripIndex = obj_find_index(obj, before);
+        if (obj->core->gripIndex == -1) {
+            return;
+        }
+        EmbVector a = map_from_scene(obj, after);
+        obj->normalPath.setElementPositionAt(obj->core->gripIndex, a.x, a.y);
+        obj_update_path_r(obj, obj->normalPath);
+        obj->core->gripIndex = -1;
+        break;
+    }
+    case EMB_TEXT_SINGLE:
+    case EMB_POINT:
+    default: {
+        if (emb_approx(before, obj_pos(obj->core))) {
+            obj->moveBy(delta.x, delta.y);
+        }
+        break;
+    }
+    }
+}
+
+void
+Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget *)
+{
+    QGraphicsScene* objScene = scene();
+    if (!objScene) {
+        return;
+    }
+
+    QPen paintPen = pen();
+    painter->setPen(paintPen);
+    obj_update_rubber(this, painter);
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lwtPen;
+    }
+    painter->setPen(paintPen);
+
+    switch (core->geometry->type) {
+    case EMB_ARC: {
+        double startAngle = (emb_start_angle(core->geometry) + rotation())*16;
+        double spanAngle = emb_included_angle(core->geometry) * 16;
+
+        if (emb_clockwise(core->geometry)) {
+            spanAngle = -spanAngle;
+        }
+
+        double rad = obj_radius(this->core);
+        QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
+        painter->drawArc(paintRect, startAngle, spanAngle);
+        break;
+    }
+    case EMB_CIRCLE:
+    case EMB_ELLIPSE: {
+        painter->drawEllipse(to_qrectf(obj_rect(core)));
+        break;
+    }
+    case EMB_DIM_LEADER: {
+        painter->drawPath(lineStylePath);
+        painter->drawPath(arrowStylePath);
+
+        if (core->filled) {
+            painter->fillPath(arrowStylePath, objPen.color());
+        }
+        break;
+    }
+    case EMB_LINE: {
+        if (core->rubber_mode != RUBBER_LINE) {
+            painter->drawLine(obj_line(this));
+        }
+
+        if (objScene->property("ENABLE_LWT").toBool()
+            && objScene->property("ENABLE_REAL").toBool()) {
+            obj_real_render(this, painter, path());
+        }
+        break;
+    }
+    case EMB_IMAGE:
+    case EMB_RECT: {
+        painter->drawRect(to_qrectf(obj_rect(core)));
+        break;
+    }
+    case EMB_PATH: {
+        painter->drawPath(obj_path(this));
+        break;
+    }
+    case EMB_POLYGON: {
+        if (normalPath.elementCount()) {
+            painter->drawPath(normalPath);
+            QPainterPath::Element zero = normalPath.elementAt(0);
+            QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
+            painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
+        }
+        break;
+    }
+    case EMB_POLYLINE: {
+        painter->drawPath(normalPath);
+
+        if (objScene->property("ENABLE_LWT").toBool()
+            && objScene->property("ENABLE_REAL").toBool()) {
+            obj_real_render(this, painter, normalPath);
+        }
+        break;
+    }
+    case EMB_TEXT_SINGLE: {
+        painter->drawPath(textPath);
+        break;
+    }
+    default:
+    case EMB_POINT: {
+        painter->drawPoint(0,0);
+        break;
+    }
+    }
+}
+
+QPainterPath
+Object::objectCopyPath() const
+{
+    return normalPath;
+}
+
+QPainterPath
+Object::objectSavePath() const
+{
+    QPainterPath path;
+    QRectF r = to_qrectf(obj_rect(core));
+    switch (core->geometry->type) {
+    case EMB_CIRCLE:
+    case EMB_ELLIPSE: {
+        path.arcMoveTo(r, 0);
+        path.arcTo(r, 0, 360);
+
+        double s = scale();
+        QTransform trans;
+        trans.rotate(rotation());
+        trans.scale(s,s);
+        return trans.map(path);
+    }
+    case EMB_DIM_LEADER:
+    case EMB_LINE: {
+        QPainterPath path;
+        EmbVector delta = obj_delta(this->core);
+        path.lineTo(delta.x, delta.y);
+        return path;
+    }
+    case EMB_POINT: {
+        path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+        return path;
+    }
+    case EMB_RECT: {
+        path.moveTo(r.bottomLeft());
+        path.lineTo(r.bottomRight());
+        path.lineTo(r.topRight());
+        path.lineTo(r.topLeft());
+        path.lineTo(r.bottomLeft());
+
+        double s = scale();
+        QTransform trans;
+        trans.rotate(rotation());
+        trans.scale(s,s);
+        return trans.map(path);
+    }
+    case EMB_PATH:
+    case EMB_POLYLINE: {
+        double s = scale();
+        QTransform trans;
+        trans.rotate(rotation());
+        trans.scale(s,s);
+        return trans.map(normalPath);
+    }
+    case EMB_POLYGON: {
+        QPainterPath closedPath = normalPath;
+        closedPath.closeSubpath();
+        double s = scale();
+        QTransform trans;
+        trans.rotate(rotation());
+        trans.scale(s,s);
+        return trans.map(closedPath);
+    }
+    default:
+        break;
+    }
+    return normalPath;
+}
+
+/*
+ * View
+ */
+
+Document::Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
+{
+}
+
+/* . */
+Document::~Document()
+{
+    document_memory[data.id] = false;
+
+    /* Prevent memory leaks by deleting any objects that were removed from the scene */
+    for (const auto& [key, value] : hashDeletedObjects) {
+        delete value;
+    }
+    hashDeletedObjects.clear();
+
+    /* Prevent memory leaks by deleting any unused instances. */
+    qDeleteAll(previewObjectList.begin(), previewObjectList.end());
+    previewObjectList.clear();
+}
+
+/* FIXME */
+Document*
+create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
+{
+    Document* doc = new Document(mw, theScene, parent);
+    doc->data.id = numOfDocs;
+    documents[doc->data.id] = doc;
+    doc->gscene = theScene;
+    document_memory[doc->data.id] = true;
+
+    doc->setFrameShape(QFrame::NoFrame);
+
+    /* NOTE: This has to be done before setting mouse tracking.
+     * TODO: Review OpenGL for Qt5 later
+     * if (get_bool(DISPLAY_USE_OPENGL)) {
+     *     debug_message("Using OpenGL...");
+     *     setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
+     * }
+
+     * TODO: Review RenderHints later
+     * setRenderHint(QPainter::Antialiasing, get_bool(DISPLAY_RENDERHINT_AA));
+     * setRenderHint(QPainter::TextAntialiasing, get_bool(DISPLAY_RENDERHINT_TEXT_AA));
+     * setRenderHint(QPainter::SmoothPixmapTransform, get_bool(DISPLAY_RENDERHINT_SMOOTHPIX));
+     * setRenderHint(QPainter::HighQualityAntialiasing, get_bool(DISPLAY_RENDERHINT_HIGH_AA));
+     * setRenderHint(QPainter::NonCosmeticDefaultPen, get_bool(DISPLAY_RENDERHINT_NONCOSMETIC));
+
+     * NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
+     * NOTE: Qt renderer will not draw the foreground properly if it isnt set.
+     */
+    doc->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+    doc->data.panDistance = 10; /* TODO: should there be a setting for this??? */
+
+    doc->setCursor(Qt::BlankCursor);
+    doc->horizontalScrollBar()->setCursor(Qt::ArrowCursor);
+    doc->verticalScrollBar()->setCursor(Qt::ArrowCursor);
+    doc->data.qsnapLocatorColor = get_int(QSNAP_LOCATOR_COLOR);
+    doc->data.qsnapLocatorSize = get_int(QSNAP_LOCATOR_SIZE);
+    doc->data.qsnapApertureSize = get_int(QSNAP_APERTURE_SIZE);
+    doc->data.gripColorCool = get_int(SELECTION_COOLGRIP_COLOR);
+    doc->data.gripColorHot = get_int(SELECTION_HOTGRIP_COLOR);
+    doc->data.gripSize = get_int(SELECTION_GRIP_SIZE);
+    doc->data.pickBoxSize = get_int(SELECTION_PICKBOX_SIZE);
+    doc_set_cross_hair_color(doc->data.id, get_int(DISPLAY_CROSSHAIR_COLOR));
+    doc_set_cross_hair_size(doc->data.id, get_int(DISPLAY_CROSSHAIR_PERCENT));
+    doc_set_grid_color(doc->data.id, get_int(GRID_COLOR));
+
+    if (get_bool(GRID_SHOW_ON_LOAD)) {
+        doc_create_grid(doc->data.id, get_str(GRID_TYPE));
+    }
+    else {
+        doc_create_grid(doc->data.id, "");
+    }
+
+    doc_toggle_ruler(doc->data.id, get_bool(RULER_SHOW_ON_LOAD));
+    doc_toggle_real(doc->data.id, true);
+    /* TODO: load this from file, else settings with default being true. */
+
+    doc->data.grippingActive = false;
+    doc->data.rapidMoveActive = false;
+    doc->data.previewMode = PREVIEW_NULL;
+    doc->data.previewData = 0;
+    doc->previewObjectItemGroup = 0;
+    doc->pasteObjectItemGroup = 0;
+    doc->data.previewActive = false;
+    doc->data.pastingActive = false;
+    doc->data.movingActive = false;
+    doc->data.selectingActive = false;
+    doc->data.zoomWindowActive = false;
+    doc->data.panningRealTimeActive = false;
+    doc->data.panningPointActive = false;
+    doc->data.panningActive = false;
+    doc->data.qSnapActive = false;
+    doc->data.qSnapToggle = false;
+
+    /* TODO: set up config */
+    doc->data.enableRuler = true;
+    doc->data.enableGrid = true;
+    doc->data.enableOrtho = false;
+    doc->data.enablePolar = false;
+    doc->data.enableLwt = false;
+    doc->data.enableRuler = true;
+
+    /* Randomize the hot grip location initially so it's not located at (0,0). */
+    srand(QDateTime::currentMSecsSinceEpoch());
+    doc->data.sceneGripPoint = to_emb_vector(QPointF(rand()*1000, rand()*1000));
+
+    doc->gripBaseObj = 0;
+    doc->tempBaseObj = 0;
+
+    doc->selectBox = new SelectBox(QRubberBand::Rectangle, doc);
+    doc->selectBox->setColors(
+        QColor(get_int(DISPLAY_SELECTBOX_LEFT_COLOR)),
+        QColor(get_int(DISPLAY_SELECTBOX_LEFT_FILL)),
+        QColor(get_int(DISPLAY_SELECTBOX_RIGHT_COLOR)),
+        QColor(get_int(DISPLAY_SELECTBOX_RIGHT_FILL)),
+        get_int(DISPLAY_SELECTBOX_ALPHA));
+
+    doc_show_scroll_bars(doc->data.id, get_bool(DISPLAY_SHOW_SCROLLBARS));
+    doc_set_corner_button(doc->data.id);
+
+    doc->undoStack = new QUndoStack(doc);
+    dockUndoEdit->addStack(doc->undoStack);
+
+    doc->installEventFilter(doc);
+
+    doc->setMouseTracking(true);
+    doc_set_background_color(doc->data.id, get_int(DISPLAY_BG_COLOR));
+    /* TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png")); */
+
+    // FIXME: QObject::connect(doc->gscene, SIGNAL(selectionChanged()), doc_index,
+    //    [=]() { doc_selection_changed(doc); });
+    return doc;
+}
+
+/* Wrapper */
+void
+doc_update(int doc_index)
+{
+    documents[doc_index]->gscene->update();
+}
+
+double
+doc_width(int doc_index)
+{
+    return documents[doc_index]->width();
+}
+
+double
+doc_height(int doc_index)
+{
+    return documents[doc_index]->height();
+}
+
+/* . */
+EmbVector
+doc_map_from_scene(int32_t doc, EmbVector v)
+{
+    QPointF p = documents[doc]->mapFromScene(to_qpointf(v).toPoint());
+    return to_emb_vector(p);
+}
+
+/* . */
+EmbVector
+doc_map_to_scene(int32_t doc, EmbVector v)
+{
+    QPointF p = documents[doc]->mapToScene(to_qpointf(v).toPoint());
+    return to_emb_vector(p);
+}
+
+/* . */
+EmbVector
+doc_center(int32_t doc)
+{
+    EmbVector a = emb_vector(0.0, 0.0);
+    // FIXME: return documents[doc]->center();
+    return a;
+}
+
+/* FIXME */
+void
+doc_center_on(int32_t doc, EmbVector p)
+{
+    documents[doc]->centerOn(to_qpointf(p));
+}
+
+/* . */
+void
+Document::enterEvent(QEvent* /*event*/)
+{
+    QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
+    if (mdiWin) {
+        if (mdiArea) {
+            mdiArea->setActiveSubWindow(mdiWin);
+        }
+    }
+}
+
+/* . */
+void
+doc_add_object(int32_t doc, Object* obj)
+{
+    documents[doc]->gscene->addItem(obj);
+    doc_update(doc);
+    documents[doc]->hashDeletedObjects.erase(obj->core->objID);
+}
+
+/* NOTE: We really just remove the objects from the scene. Deletion actually
+ * occurs in the destructor.
+ */
+void
+doc_delete_object(int32_t doc, Object* obj)
+{
+    obj->setSelected(false);
+    documents[doc]->gscene->removeItem(obj);
+    doc_update(doc);
+    documents[doc]->hashDeletedObjects[obj->core->objID] = obj;
+}
+
+/* . */
+void
+doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data_)
+{
+    debug_message("View previewOn()");
+    DocumentData *data = doc_data(doc);
+    doc_preview_off(doc); /* Free the old objects before creating new ones */
+
+    data->previewMode = mode;
+
+    /* Create new objects and add them to the scene in an item group. */
+    if (clone == PREVIEW_CLONE_SELECTED) {
+        documents[doc]->previewObjectList = doc_create_object_list(doc, documents[doc]->gscene->selectedItems());
+    }
+    else if (clone == PREVIEW_CLONE_RUBBER) {
+        documents[doc]->previewObjectList = doc_create_object_list(doc,
+            documents[doc]->rubberRoomList);
+    }
+    else {
+        return;
+    }
+    documents[doc]->previewObjectItemGroup = documents[doc]->gscene->createItemGroup(documents[doc]->previewObjectList);
+
+    if (data->previewMode == PREVIEW_MOVE ||
+       data->previewMode == PREVIEW_ROTATE ||
+       data->previewMode == PREVIEW_SCALE) {
+        data->previewPoint.x = x;
+        data->previewPoint.y = y; /* NOTE: Move: basePt; Rotate: basePt; Scale: basePt; */
+        data->previewData = data_;           /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
+        data->previewActive = true;
+    }
+    else {
+        data->previewMode = PREVIEW_NULL;
+        data->previewPoint = emb_vector(0.0, 0.0);
+        data->previewData = 0;
+        data->previewActive = false;
+    }
+
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_preview_off(int32_t doc)
+{
+    /* Prevent memory leaks by deleting any unused instances */
+    DocumentData *data = doc_data(doc);
+    qDeleteAll(documents[doc]->previewObjectList.begin(), documents[doc]->previewObjectList.end());
+    documents[doc]->previewObjectList.clear();
+
+    if (documents[doc]->previewObjectItemGroup) {
+        documents[doc]->gscene->removeItem(documents[doc]->previewObjectItemGroup);
+        delete documents[doc]->previewObjectItemGroup;
+        documents[doc]->previewObjectItemGroup = 0;
+    }
+
+    data->previewActive = false;
+
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_add_to_rubber_room(int32_t doc, QGraphicsItem* item)
+{
+    documents[doc]->rubberRoomList.append(item);
+    item->show();
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_vulcanize_rubber_room(int32_t doc)
+{
+    foreach(QGraphicsItem* item, documents[doc]->rubberRoomList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            doc_vulcanize_object(doc, base);
+        }
+    }
+    documents[doc]->rubberRoomList.clear();
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_vulcanize_object(int32_t doc, Object* obj)
+{
+    if (!obj) {
+        return;
+    }
+    /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
+    documents[doc]->gscene->removeItem(obj);
+    obj->vulcanize();
+
+    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME,
+        obj, doc, 0);
+    if (cmd) {
+        documents[doc]->undoStack->push(cmd);
+    }
+}
+
+/* . */
+void
+doc_clear_rubber_room(int32_t doc)
+{
+    // FIXME:
+    return;
+    DocumentData *data = doc_data(doc);
+    foreach(QGraphicsItem* item, documents[doc]->rubberRoomList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            int type = base->type();
+            if ((type == OBJ_PATH && documents[doc]->spareRubberList.contains(SPARE_RUBBER_PATH))
+            || (type == OBJ_POLYGON  && documents[doc]->spareRubberList.contains(SPARE_RUBBER_POLYGON))
+            || (type == OBJ_POLYLINE && documents[doc]->spareRubberList.contains(SPARE_RUBBER_POLYLINE))
+            || (documents[doc]->spareRubberList.contains(base->core->objID))) {
+                if (!obj_path(base).elementCount()) {
+                    critical_box(translate("Empty Rubber Object Error"),
+                        translate("The rubber object added contains no points. "
+                            "The command that created this object has flawed logic. "
+                            "The object will be deleted."));
+                    documents[doc]->gscene->removeItem(item);
+                    delete item;
+                }
+                else {
+                    doc_vulcanize_object(doc, base);
+                }
+            }
+            else {
+                documents[doc]->gscene->removeItem(item);
+                delete item;
+            }
+        }
+    }
+
+    documents[doc]->rubberRoomList.clear();
+    documents[doc]->spareRubberList.clear();
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_spare_rubber(int32_t doc, int64_t id)
+{
+    documents[doc]->spareRubberList.append(id);
+}
+
+/* . */
+void
+doc_set_rubber_mode(int32_t doc, int mode)
+{
+    foreach (QGraphicsItem* item, documents[doc]->rubberRoomList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            obj_set_rubber_mode(base->core, mode);
+        }
+    }
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point)
+{
+    foreach (QGraphicsItem* item, documents[doc]->rubberRoomList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            base->setObjectRubberPoint((char*)qPrintable(key), point);
+        }
+    }
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_set_rubber_text(int32_t doc, EmbString key, EmbString txt)
+{
+    foreach (QGraphicsItem* item, documents[doc]->rubberRoomList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            base->setObjectRubberText((char*)qPrintable(key), (char*)qPrintable(txt));
+        }
+    }
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_create_grid(int32_t doc, EmbString gridType)
+{
+    if (string_equal(gridType, "Rectangular")) {
+        doc_create_grid_rect(doc);
+        documents[doc]->gscene->setProperty("ENABLE_GRID", true);
+    }
+    else if (string_equal(gridType, "Circular")) {
+        doc_create_grid_polar(doc);
+        documents[doc]->gscene->setProperty("ENABLE_GRID", true);
+    }
+    else if (string_equal(gridType, "Isometric")) {
+        doc_create_grid_iso(doc);
+        documents[doc]->gscene->setProperty("ENABLE_GRID", true);
+    }
+    else {
+        documents[doc]->gridPath = QPainterPath();
+        documents[doc]->gscene->setProperty("ENABLE_GRID", false);
+    }
+
+    doc_create_origin(doc);
+
+    doc_update(doc);
+}
+
+/* https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
+ * M x y, m dx dy -- move to
+ *
+ * TODO: error reporting for parsing.
+ */
+void
+svg_to_painterpath(QPainterPath *path, const char *svg, EmbVector pos, EmbVector scale)
+{
+    char token[MAX_STRING_LENGTH];
+    char *p = (char*)svg;
+    p = emb_get_svg_token(p, token);
+    while (p) {
+        switch (token[0]) {
+        case 'M':
+        case 'm': {
+            EmbVector v;
+            p = emb_get_svg_vector(p, &v);
+            if (!p) {
+                break;
+            }
+            if (token[0] == 'M') {
+                pos.x = v.x * scale.x;
+                pos.y = v.y * scale.y;
+            }
+            else {
+                pos.x += v.x * scale.x;
+                pos.y += v.y * scale.y;
+            }
+            path->moveTo(pos.x, pos.y);
+            break;
+        }
+        case 'L':
+        case 'l': {
+            EmbVector v;
+            p = emb_get_svg_vector(p, &v);
+            if (!p) {
+                break;
+            }
+            if (token[0] == 'L') {
+                pos.x = v.x * scale.x;
+                pos.y = v.y * scale.y;
+            }
+            else {
+                pos.x += v.x * scale.x;
+                pos.y += v.y * scale.y;
+            }
+            path->lineTo(pos.x, pos.y);
+            break;
+        }
+        case 'A': {
+            EmbVector v1, v2, v3;
+            /* Start position */
+            p = emb_get_svg_vector(p, &v1);
+            if (!p) {
+                break;
+            }
+            p = emb_get_svg_vector(p, &v2);
+            if (!p) {
+                break;
+            }
+            /* flag: ignored */
+            p = emb_get_svg_token(p, token);
+            if (!p) {
+                break;
+            }
+            p = emb_get_svg_vector(p, &v3);
+            if (!p) {
+                break;
+            }
+            path->arcTo(
+                v1.x * scale.x, v1.y * scale.y,
+                v2.x * scale.x, v2.y * scale.y,
+                v3.x, v3.y);
+            break;
+        }
+        case 'Z': {
+            path->closeSubpath();
+            break;
+        }
+        default:
+            break;
+        }
+        p = emb_get_svg_token(p, token);
+    }
+}
+
+/* TODO: Make Origin Customizable */
+void
+doc_create_origin(int32_t doc)
+{
+    documents[doc]->originPath = QPainterPath();
+
+    if (get_bool(GRID_SHOW_ORIGIN)) {
+        /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */
+        svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path, emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
+    }
+}
+
+/* . */
+void
+doc_create_grid_rect(int32_t doc)
+{
+    double xSpacing = get_real(GRID_SPACING_X);
+    double ySpacing = get_real(GRID_SPACING_Y);
+
+    QRectF gr(0, 0, get_real(GRID_SIZE_X), -get_real(GRID_SIZE_Y));
+    /* Ensure the loop will work correctly with negative numbers */
+    double x1 = EMB_MIN(gr.left(), gr.right());
+    double y1 = EMB_MIN(gr.top(), gr.bottom());
+    double x2 = EMB_MAX(gr.left(), gr.right());
+    double y2 = EMB_MAX(gr.top(), gr.bottom());
+
+    documents[doc]->gridPath = QPainterPath();
+    documents[doc]->gridPath.addRect(gr);
+    for (double gx = x1; gx < x2; gx += xSpacing) {
+        for (double gy = y1; gy < y2; gy += ySpacing) {
+            documents[doc]->gridPath.moveTo(x1, gy);
+            documents[doc]->gridPath.lineTo(x2, gy);
+            documents[doc]->gridPath.moveTo(gx, y1);
+            documents[doc]->gridPath.lineTo(gx, y2);
+        }
+    }
+
+    /* Center the Grid */
+    QRectF gridRect = documents[doc]->gridPath.boundingRect();
+    EmbVector b;
+    b.x = gridRect.width()/2.0;
+    b.y = -gridRect.height()/2.0;
+
+    if (get_bool(GRID_CENTER_ON_ORIGIN)) {
+        documents[doc]->gridPath.translate(-b.x, -b.y);
+    }
+    else {
+        EmbVector c;
+        c.x = get_real(GRID_CENTER_X);
+        c.y = -get_real(GRID_CENTER_Y);
+        EmbVector d = emb_vector_subtract(c, b);
+        documents[doc]->gridPath.translate(d.x, d.y);
+    }
+}
+
+/* . */
+void
+doc_create_grid_polar(int32_t doc)
+{
+    double radSpacing = get_real(GRID_SPACING_RADIUS);
+    double angSpacing = get_real(GRID_SPACING_ANGLE);
+
+    double rad = get_real(GRID_SIZE_RADIUS);
+
+    documents[doc]->gridPath = QPainterPath();
+    documents[doc]->gridPath.addEllipse(QPointF(0,0), rad, rad);
+    for (double r = 0; r < rad; r += radSpacing) {
+        documents[doc]->gridPath.addEllipse(QPointF(0,0), r, r);
+    }
+    for (double ang = 0; ang < 360; ang += angSpacing) {
+        documents[doc]->gridPath.moveTo(0,0);
+        documents[doc]->gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
+    }
+
+    if (!get_bool(GRID_CENTER_ON_ORIGIN)) {
+        double cx = get_real(GRID_CENTER_X);
+        double cy = get_real(GRID_CENTER_Y);
+        documents[doc]->gridPath.translate(cx, -cy);
+    }
+}
+
+/* . */
+void
+doc_create_grid_iso(int32_t doc)
+{
+    double xSpacing = get_real(GRID_SPACING_X);
+    double ySpacing = get_real(GRID_SPACING_Y);
+
+    /* Ensure the loop will work correctly with negative numbers. */
+    double isoW = fabs(get_real(GRID_SIZE_X));
+    double isoH = fabs(get_real(GRID_SIZE_Y));
+
+    QPointF p1 = QPointF(0,0);
+    QPointF p2 = QLineF::fromPolar(isoW, 30).p2();
+    QPointF p3 = QLineF::fromPolar(isoH, 150).p2();
+    QPointF p4 = p2 + p3;
+
+    documents[doc]->gridPath = QPainterPath();
+    documents[doc]->gridPath.moveTo(p1);
+    documents[doc]->gridPath.lineTo(p2);
+    documents[doc]->gridPath.lineTo(p4);
+    documents[doc]->gridPath.lineTo(p3);
+    documents[doc]->gridPath.lineTo(p1);
+
+    for (double x = 0; x < isoW; x += xSpacing) {
+        for (double y = 0; y < isoH; y += ySpacing) {
+            QPointF px = QLineF::fromPolar(x, 30).p2();
+            QPointF py = QLineF::fromPolar(y, 150).p2();
+
+            documents[doc]->gridPath.moveTo(px);
+            documents[doc]->gridPath.lineTo(px+p3);
+            documents[doc]->gridPath.moveTo(py);
+            documents[doc]->gridPath.lineTo(py+p2);
+        }
+    }
+
+    /* Center the Grid */
+
+    QRectF gridRect = documents[doc]->gridPath.boundingRect();
+    /* bx is unused */
+    double by = -gridRect.height()/2.0;
+    double cx = get_real(GRID_CENTER_X);
+    double cy = -get_real(GRID_CENTER_Y);
+
+    if (get_real(GRID_CENTER_ON_ORIGIN)) {
+        documents[doc]->gridPath.translate(0, -by);
+    }
+    else {
+        documents[doc]->gridPath.translate(0, -by);
+        documents[doc]->gridPath.translate(cx, cy);
+    }
+}
+
+/* . */
+DocumentData *
+doc_data(int32_t doc)
+{
+    return &(documents[doc]->data);
+}
+
+/* . */
+void
+draw_arc(QPainter* painter, EmbArc arc)
+{
+    QPainterPath path;
+}
+
+/* . */
+void
+draw_circle(QPainter* painter, EmbCircle circle)
+{
+    QPainterPath path;
+    EmbVector p = circle.center;
+    double rad = circle.radius;
+    path.moveTo(p.x, p.y + rad);
+    path.arcTo(p.x-rad, p.y-rad, rad*2.0, rad*2.0, 90.0, 360.0);
+    path.arcTo(p.x-rad, p.y-rad, rad*2.0, rad*2.0, 90.0, -360.0);
+    path.closeSubpath();
+    painter->drawPath(path);
+}
+
+/* . */
+void
+draw_ellipse(QPainter* painter, EmbEllipse ellipse)
+{
+    QPainterPath path;
+}
+
+/* . */
+void
+draw_line(QPainter* painter, EmbLine line)
+{
+    QPainterPath path;
+}
+
+/* . */
+void
+draw_polygon(QPainter* painter, EmbPolygon polygon)
+{
+    QPainterPath path;
+}
+
+/* . */
+void
+draw_polyline(QPainter* painter, EmbPolyline polyline)
+{
+    QPainterPath path;
+    EmbGeometry *geometry = polyline.pointList->geometry;
+    path.moveTo(geometry[0].object.vector.x, geometry[0].object.vector.y);
+    for (int i=0; i<polyline.pointList->count; i++) {
+        path.lineTo(geometry[i].object.vector.x, geometry[i].object.vector.y);
+    }
+    painter->drawPath(path);
+}
+
+void
+draw_rect(QPainter* painter, EmbRect rect)
+{
+    QPainterPath path;
+    path.moveTo(rect.x, rect.y);
+    path.lineTo(rect.x + rect.w, rect.y + rect.h);
+    path.lineTo(rect.x + rect.w, rect.y);
+    path.lineTo(rect.x, rect.y);
+    painter->drawPath(path);
+}
+
+/* . */
+void
+draw_spline(QPainter* painter, EmbSpline spline)
+{
+
+}
+
+/* . */
+void
+Document::drawBackground(QPainter* painter, const QRectF& rect)
+{
+    int32_t doc = data.id;
+    DocumentData *data = doc_data(doc);
+    painter->fillRect(rect, backgroundBrush());
+
+    if (data->enableGrid && rect.intersects(documents[doc]->gridPath.controlPointRect())) {
+        QPen gridPen(QColor(data->gridColor));
+        gridPen.setJoinStyle(Qt::MiterJoin);
+        gridPen.setCosmetic(true);
+        painter->setPen(gridPen);
+        painter->drawPath(documents[doc]->gridPath);
+        painter->drawPath(documents[doc]->originPath);
+        painter->fillPath(documents[doc]->originPath, QColor(data->gridColor));
+    }
+
+    EmbPattern *pattern = activeMdiWindow()->pattern;
+    for (int i = 0; i < pattern->geometry->count; i++) {
+        EmbGeometry g = pattern->geometry->geometry[i];
+        switch (g.type) {
+        case EMB_ARC: {
+            draw_arc(painter, g.object.arc);
+            break;
+        }
+        case EMB_CIRCLE: {
+            draw_circle(painter, g.object.circle);
+            break;
+        }
+        case EMB_ELLIPSE: {
+            draw_ellipse(painter, g.object.ellipse);
+            break;
+        }
+        case EMB_LINE: {
+            draw_line(painter, g.object.line);
+            break;
+        }
+        case EMB_POLYGON: {
+            draw_polygon(painter, g.object.polygon);
+            break;
+        }
+        case EMB_POLYLINE: {
+            draw_polyline(painter, g.object.polyline);
+            break;
+        }
+        case EMB_RECT: {
+            draw_rect(painter, g.object.rect);
+            break;
+        }
+        case EMB_SPLINE: {
+            draw_spline(painter, g.object.spline);
+            break;
+        }
+        default:
+            break;
+        }
+    }
+}
+
+/* . */
+void
+Document::draw_rulers(QPainter* painter, const QRectF& rect)
+{
+    int32_t doc = data.id;
+    DocumentData *data = doc_data(doc);
+
+    int vw = width(); /* View Width */
+    int vh = height(); /* View Height */
+    EmbVector origin = doc_map_to_scene(doc, emb_vector(0.0, 0.0));
+    EmbVector rulerHoriz = doc_map_to_scene(doc, emb_vector(vw, data->rulerPixelSize));
+    EmbVector rulerVert = doc_map_to_scene(doc, emb_vector(data->rulerPixelSize, vh));
+
+    EmbRect ruler_h, ruler_v;
+
+    ruler_h.x = rulerHoriz.x;
+    ruler_h.y = rulerHoriz.y;
+    ruler_h.w = rulerHoriz.x - origin.x;
+    ruler_h.h = rulerHoriz.y - origin.y;
+
+    ruler_v.x = rulerVert.x;
+    ruler_v.y = rulerVert.y;
+    ruler_v.w = ruler_v.x - origin.x;
+    ruler_v.h = ruler_v.y - origin.y;
+
+    /* NOTE: Drawing ruler if zoomed out too far will cause an assertion failure. */
+    /* We will limit the maximum size the ruler can be shown at. */
+    uint16_t maxSize = -1; /* Intentional underflow */
+    if (ruler_h.w >= maxSize || ruler_v.h >= maxSize) {
+        return;
+    }
+
+    int distance = documents[doc]->mapToScene(data->rulerPixelSize*3, 0).x() - origin.x;
+    QString distStr = QString().setNum(distance);
+    int distStrSize = distStr.size();
+    int msd = distStr.at(0).digitValue(); /* Most Significant Digit */
+
+    if (msd == -1) {
+        return;
+    }
+
+    msd++;
+    if (msd == 10) {
+        msd = 1;
+        distStr.resize(distStrSize+1);
+        distStrSize++;
+    }
+
+    distStr.replace(0, 1, QString().setNum(msd));
+    for (int i = 1; i < distStrSize; ++i) {
+        distStr.replace(i, 1, '0');
+    }
+    int unit = distStr.toInt();
+    double fraction;
+    bool feet = true;
+    if (data->rulerMetric) {
+        if (unit < 10) {
+            unit = 10;
+        }
+        fraction = unit/10;
+    }
+    else {
+        if (unit <= 1) {
+            unit = 1;
+            feet = false;
+            fraction = (double)(unit/16);
+        }
+        else {
+            unit = roundToMultiple(true, unit, 12);
+            fraction = unit/12;
+        }
+    }
+
+    double little  = 0.20;
+    double medium = 0.40;
+    double rhTextOffset = documents[doc]->mapToScene(3, 0).x() - origin.x;
+    double rvTextOffset = documents[doc]->mapToScene(0, 3).y() - origin.y;
+    double textHeight = ruler_h.h*medium;
+
+    std::vector<QLineF> lines;
+    lines.push_back(QLineF(origin.x, ruler_h.y, ruler_h.x, ruler_h.y));
+    lines.push_back(QLineF(ruler_v.x, origin.y, ruler_v.x, ruler_v.y));
+
+    lines.push_back(QLineF(data->sceneMousePoint.x, ruler_h.y,
+        data->sceneMousePoint.x, origin.y));
+    lines.push_back(QLineF(ruler_v.x, data->sceneMousePoint.y,
+        origin.x, data->sceneMousePoint.y));
+
+    QTransform transform;
+
+    QPen rulerPen(QColor(0, 0, 0));
+    rulerPen.setCosmetic(true);
+    painter->setPen(rulerPen);
+    painter->fillRect(QRectF(origin.x, origin.y, ruler_h.w, ruler_h.h),
+        documents[doc]->data.rulerColor);
+    painter->fillRect(QRectF(origin.x, origin.y, ruler_v.w, ruler_v.h),
+        documents[doc]->data.rulerColor);
+
+    int xFlow, xStart, yFlow, yStart;
+    if (willUnderflowInt32(origin.x, unit)) {
+        return;
+    }
+    xFlow = roundToMultiple(false, origin.x, unit);
+    if (willUnderflowInt32(xFlow, unit)) {
+        return;
+    }
+    xStart = xFlow - unit;
+    if (willUnderflowInt32(origin.y, unit)) {
+        return;
+    }
+    yFlow = roundToMultiple(false, origin.y, unit);
+    if (willUnderflowInt32(yFlow, unit)) {
+        return;
+    }
+    yStart = yFlow - unit;
+
+    for (int x = xStart; x < ruler_h.x; x += unit) {
+        char label[MAX_STRING_LENGTH];
+        transform.translate(x+rhTextOffset, ruler_h.y-ruler_h.h/2);
+        QPainterPath rulerTextPath;
+        if (data->rulerMetric) {
+            sprintf(label, "%d", x);
+            rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
+        }
+        else {
+            if (feet) {
+                sprintf(label, "%d'", x/12);
+                rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
+            }
+            else {
+                sprintf(label, "%d\"", x);
+                rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
+            }
+        }
+        transform.reset();
+        painter->drawPath(rulerTextPath);
+
+        lines.push_back(QLineF(x, ruler_h.y, x, origin.y));
+        if (data->rulerMetric) {
+            for (int i=1; i<10; i++) {
+                double xf = x + fraction*i;
+                double tick = ruler_h.y - ruler_h.h * little;
+                if (i == 5) {
+                    tick = ruler_h.y - ruler_h.h * medium;
+                }
+                lines.push_back(QLineF(xf, ruler_h.y, xf, tick));
+            }
+        }
+        else {
+            if (feet) {
+                for (int i = 0; i < 12; ++i) {
+                    double xf = x + fraction*i;
+                    double tick = ruler_h.y - ruler_h.h * medium;
+                    lines.push_back(QLineF(xf, ruler_h.y, xf, tick));
+                }
+            }
+            else {
+                for (int i=1; i<16; i++) {
+                    double xf = x + fraction*i;
+                    double tick = ruler_h.y - ruler_h.h * little;
+                    if (i % 4 == 0) {
+                        tick = ruler_h.y - ruler_h.h * medium;
+                    }
+                    lines.push_back(QLineF(xf, ruler_h.y, xf, tick));
+                }
+            }
+        }
+    }
+    for (int y = yStart; y < ruler_v.y; y += unit) {
+        char label[MAX_STRING_LENGTH];
+        transform.translate(ruler_v.x-ruler_v.w/2, y-rvTextOffset);
+        transform.rotate(-90);
+        QPainterPath rulerTextPath;
+        if (data->rulerMetric) {
+            sprintf(label, "%d", -y);
+            rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
+        }
+        else {
+            if (feet) {
+                sprintf(label, "%d'", -y/12);
+                rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
+            }
+            else {
+                sprintf(label, "%d", -y);
+                rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
+            }
+        }
+        transform.reset();
+        painter->drawPath(rulerTextPath);
+
+        lines.push_back(QLineF(ruler_v.x, y, origin.x, y));
+        if (data->rulerMetric) {
+            for (int i=1; i<10; i++) {
+                double yf = y + fraction*i;
+                double tick = ruler_v.x - ruler_v.w * little;
+                if (i == 5) {
+                    tick = ruler_v.x - ruler_v.w * medium;
+                }
+                lines.push_back(QLineF(ruler_v.x, yf, tick, yf));
+            }
+        }
+        else {
+            if (feet) {
+                for (int i = 0; i < 12; ++i) {
+                    lines.push_back(QLineF(ruler_v.x, y+fraction*i, ruler_v.x-ruler_v.w*medium, y+fraction*i));
+                }
+            }
+            else {
+                for (int i=1; i<16; i++) {
+                    double yf = y + fraction*i;
+                    double tick = ruler_v.x - ruler_v.w * little;
+                    if (i % 4 == 0) {
+                        tick = ruler_v.x - ruler_v.w * medium;
+                    }
+                    lines.push_back(QLineF(ruler_v.x, yf, tick, yf));
+                }
+            }
+        }
+    }
+
+    QVector<QLineF> qlines;
+    for (int i=0; i<lines.size(); i++) {
+        qlines.append(lines[i]);
+    }
+
+    painter->drawLines(qlines);
+    painter->fillRect(QRectF(origin.x, origin.y, ruler_v.w, ruler_h.h),
+        documents[doc]->data.rulerColor);
+}
+
+/* . */
+void
+Document::drawForeground(QPainter* painter, const QRectF& rect)
+{
+    int32_t doc = data.id;
+    DocumentData *data = doc_data(doc);
+    /* Draw grip points for all selected objects */
+
+    QPen gripPen(QColor::fromRgb(data->gripColorCool));
+    gripPen.setWidth(2);
+    gripPen.setJoinStyle(Qt::MiterJoin);
+    gripPen.setCosmetic(true);
+    painter->setPen(gripPen);
+    QPointF gripOffset(data->gripSize, data->gripSize);
+
+    QList<EmbVector> selectedGripPoints;
+    QList<QGraphicsItem*> selectedItemList = documents[doc]->gscene->selectedItems();
+    if (selectedItemList.size() <= 100) {
+        foreach(QGraphicsItem* item, selectedItemList) {
+            if (item->type() >= OBJ_BASE) {
+                documents[doc]->tempBaseObj = static_cast<Object*>(item);
+                if (documents[doc]->tempBaseObj) {
+                    selectedGripPoints = documents[doc]->tempBaseObj->allGripPoints();
+                }
+
+                EmbVector offset = to_emb_vector(gripOffset);
+                foreach(EmbVector ssp, selectedGripPoints) {
+                    EmbVector p1 = emb_vector_subtract(doc_map_from_scene(doc, ssp), offset);
+                    EmbVector q1 = emb_vector_add(doc_map_from_scene(doc, ssp), offset);
+                    QPointF p2 = to_qpointf(doc_map_to_scene(doc, p1));
+                    QPointF q2 = to_qpointf(doc_map_to_scene(doc, q1));
+
+                    if (emb_approx(ssp, data->sceneGripPoint)) {
+                        painter->fillRect(QRectF(p2, q2), QColor::fromRgb(data->gripColorHot));
+                    }
+                    else {
+                        painter->drawRect(QRectF(p2, q2));
+                    }
+                }
+            }
+        }
+    }
+
+    /* Draw the closest qsnap point */
+
+    /* TODO: && findClosestSnapPoint == true */
+    if (!data->selectingActive) {
+        QPen qsnapPen(data->qsnapLocatorColor);
+        qsnapPen.setWidth(2);
+        qsnapPen.setJoinStyle(Qt::MiterJoin);
+        qsnapPen.setCosmetic(true);
+        painter->setPen(qsnapPen);
+        EmbVector qsnapOffset = emb_vector(data->qsnapLocatorSize,
+            data->qsnapLocatorSize);
+
+        double x = data->viewMousePoint.x - data->qsnapApertureSize;
+        double y = data->viewMousePoint.y - data->qsnapApertureSize;
+        QList<EmbVector> apertureSnapPoints;
+        QList<QGraphicsItem *> apertureItemList = items(x, y,
+            data->qsnapApertureSize*2,
+            data->qsnapApertureSize*2);
+        foreach(QGraphicsItem* item, apertureItemList) {
+            if (item->type() >= OBJ_BASE) {
+                documents[doc]->tempBaseObj = static_cast<Object*>(item);
+                if (documents[doc]->tempBaseObj) {
+                    EmbVector p = data->sceneMousePoint;
+                    EmbVector q = documents[doc]->tempBaseObj->mouseSnapPoint(p);
+                    apertureSnapPoints << q;
+                }
+            }
+        }
+        /* TODO: Check for intersection snap points and add them to the list. */
+        foreach(EmbVector asp, apertureSnapPoints) {
+            EmbVector p1 = emb_vector_subtract(doc_map_from_scene(doc, asp), qsnapOffset);
+            EmbVector q1 = emb_vector_add(doc_map_from_scene(doc, asp), qsnapOffset);
+            painter->drawRect(QRectF(
+                to_qpointf(doc_map_to_scene(doc, p1)),
+                to_qpointf(doc_map_to_scene(doc, q1))));
+        }
+    }
+
+    /* Draw horizontal and vertical rulers */
+
+    if (data->enableRuler) {
+        draw_rulers(painter, rect);
+    }
+
+    /* Draw the crosshair */
+    if (!data->selectingActive) {
+        /* painter->setBrush(Qt::NoBrush); */
+        QPen crosshairPen(data->crosshairColor);
+        crosshairPen.setCosmetic(true);
+        painter->setPen(crosshairPen);
+
+        QPointF p1 = documents[doc]->mapToScene(data->viewMousePoint.x, data->viewMousePoint.y - data->crosshairSize);
+        QPointF p2 = documents[doc]->mapToScene(data->viewMousePoint.x, data->viewMousePoint.y + data->crosshairSize);
+        painter->drawLine(QLineF(p1, p2));
+
+        QPointF p3 = documents[doc]->mapToScene(data->viewMousePoint.x - data->crosshairSize, data->viewMousePoint.y);
+        QPointF p4 = documents[doc]->mapToScene(data->viewMousePoint.x + data->crosshairSize, data->viewMousePoint.y);
+        painter->drawLine(QLineF(p3, p4));
+
+        QPointF p5 = documents[doc]->mapToScene(data->viewMousePoint.x - data->pickBoxSize,
+            data->viewMousePoint.y - data->pickBoxSize);
+        QPointF p6 = documents[doc]->mapToScene(data->viewMousePoint.x + data->pickBoxSize,
+            data->viewMousePoint.y + data->pickBoxSize);
+        painter->drawRect(QRectF(p5, p6));
+    }
+}
+
+/* Converting the the path descriptions isn't working here because it is
+ * scaled before it is placed, we could reverse the scaling in x and y
+ * then rescale?
+ */
+QPainterPath
+doc_create_ruler_text_path(EmbString str, float height)
+{
+    QPainterPath path = QPainterPath();
+    EmbVector position = emb_vector(0.0, 0.0);
+    EmbVector scale = emb_vector(height, height);
+
+    for (int i = 0; str[i]; ++i) {
+        switch (str[i]) {
+        case '1': {
+            path.moveTo(position.x+0.05*scale.x, position.y-0.00*scale.y);
+            path.lineTo(position.x+0.45*scale.x, position.y-0.00*scale.y);
+            path.moveTo(position.x+0.00*scale.x, position.y-0.75*scale.y);
+            path.lineTo(position.x+0.25*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.25*scale.x, position.y-0.00*scale.y);
+            break;
+        }
+
+        case '2': {
+            path.moveTo(position.x + 0.00 * scale.x, position.y - 0.75*scale.y);
+            path.arcTo(position.x + 0.00 * scale.x, position.y - 1.00*scale.y,
+                0.50 * scale.x, 0.50 * scale.y, 180.00, -216.87);
+            path.lineTo(position.x + 0.00*scale.x, position.y - 0.00*scale.y);
+            path.lineTo(position.x + 0.50*scale.x, position.y - 0.00*scale.y);
+            break;
+        }
+
+        case '3': {
+            path.arcMoveTo(position.x + 0.00 * scale.x, -0.50 * scale.y,
+                0.50 * scale.x, 0.50 * scale.y, 195.00);
+            path.arcTo(position.x + 0.00 * scale.x, -0.50 * scale.y,
+                0.50 * scale.x, 0.50 * scale.y, 195.00, 255.00);
+            path.arcTo(position.x+0.00*scale.x, -1.00 * scale.y,
+                0.50 * scale.x, 0.50 * scale.y, 270.00, 255.00);
+            break;
+        }
+
+        case '4': {
+            path.moveTo(position.x + 0.50 * scale.x, -0.00 * scale.y);
+            path.lineTo(position.x + 0.50 * scale.x, -1.00 * scale.y);
+            path.lineTo(position.x + 0.00 * scale.x, -0.50 * scale.y);
+            path.lineTo(position.x + 0.50 * scale.x, -0.50 * scale.y);
+            break;
+        }
+
+        case '5': {
+            path.moveTo(position.x + 0.50 * scale.x, -1.00 * scale.y);
+            path.lineTo(position.x + 0.00 * scale.x, -1.00 * scale.y);
+            path.lineTo(position.x + 0.00 * scale.x, -0.50 * scale.y);
+            path.lineTo(position.x + 0.25 * scale.x, -0.50 * scale.y);
+            path.arcTo(position.x + 0.00 * scale.x, -0.50 * scale.y,
+                0.50 * scale.x, 0.50 * scale.y, 90.00, -180.00);
+            path.lineTo(position.x + 0.00 * scale.x, -0.00 * scale.y);
+            break;
+        }
+
+        case '6': {
+            path.addEllipse(QPointF(position.x+0.25*scale.x, -0.25*scale.y),
+                0.25*scale.x, 0.25*scale.y);
+            path.moveTo(position.x+0.00*scale.x, -0.25*scale.y);
+            path.lineTo(position.x+0.00*scale.x, -0.75*scale.y);
+            path.arcTo(position.x+0.00*scale.x, -1.00*scale.y, 0.50*scale.x, 0.50*scale.y, 180.00, -140.00);
+            break;
+        }
+
+        case '7': {
+            path.moveTo(position.x+0.00*scale.x, -1.00*scale.y);
+            path.lineTo(position.x+0.50*scale.x, -1.00*scale.y);
+            path.lineTo(position.x+0.25*scale.x, -0.25*scale.y);
+            path.lineTo(position.x+0.25*scale.x, -0.00*scale.y);
+            break;
+        }
+
+        case '8': {
+            path.addEllipse(QPointF(position.x+0.25*scale.x, -0.25*scale.y), 0.25*scale.x, 0.25*scale.y);
+            path.addEllipse(QPointF(position.x+0.25*scale.x, -0.75*scale.y), 0.25*scale.x, 0.25*scale.y);
+            break;
+        }
+
+        case '9': {
+            path.addEllipse(QPointF(position.x+0.25*scale.x, -0.75*scale.y), 0.25*scale.x, 0.25*scale.y);
+            path.moveTo(position.x+0.50*scale.x, -0.75*scale.y);
+            path.lineTo(position.x+0.50*scale.x, -0.25*scale.y);
+            path.arcTo(position.x+0.00*scale.x, -0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 0.00, -140.00);
+            break;
+        }
+
+        case '0': {
+            /* path.addEllipse(QPointF(position.x+0.25*scale.x, -0.50*scale.y), 0.25*scale.x, 0.50*scale.y); */
+
+            path.moveTo(position.x+0.00*scale.x, -0.75*scale.y);
+            path.lineTo(position.x+0.00*scale.x, -0.25*scale.y);
+            path.arcTo(position.x+0.00*scale.x, -0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 180.00, 180.00);
+            path.lineTo(position.x+0.50*scale.x, -0.75*scale.y);
+            path.arcTo(position.x+0.00*scale.x, -1.00*scale.y, 0.50*scale.x, 0.50*scale.y, 0.00, 180.00);
+            break;
+        }
+
+        case '-': {
+            path.moveTo(position.x+0.00*scale.x, -0.50*scale.y);
+            path.lineTo(position.x+0.50*scale.x, -0.50*scale.y);
+            break;
+        }
+
+        case '\'': {
+            path.moveTo(position.x+0.25*scale.x, -1.00*scale.y);
+            path.lineTo(position.x+0.25*scale.x, -0.75*scale.y);
+            break;
+        }
+
+        case '"': {
+            path.moveTo(position.x+0.10*scale.x, -1.00*scale.y);
+            path.lineTo(position.x+0.10*scale.x, -0.75*scale.y);
+            path.moveTo(position.x+0.40*scale.x, -1.00*scale.y);
+            path.lineTo(position.x+0.40*scale.x, -0.75*scale.y);
+            break;
+        }
+
+        default:
+            break;
+        }
+
+        position.x += 0.75 * scale.x;
+    }
+
+    return path;
+}
+
+/* . */
+void
+doc_update_mouse_coords(int32_t doc, int x, int y)
+{
+    DocumentData *data = doc_data(doc);
+    data->viewMousePoint = emb_vector(x, y);
+    data->sceneMousePoint = doc_map_to_scene(doc, data->viewMousePoint);
+    data->sceneQSnapPoint = data->sceneMousePoint;
+    /* TODO: if qsnap functionality is enabled, use it rather than the mouse point */
+    setMouseCoord(data->sceneMousePoint.x, -data->sceneMousePoint.y);
+}
+
+/*
+ * NOTE: crosshairSize is in pixels and is a percentage of your screen width
+ * NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
+ */
+void
+doc_set_cross_hair_size(int32_t doc, uint8_t percent)
+{
+    DocumentData *data = doc_data(doc);
+    uint32_t screenWidth = QGuiApplication::primaryScreen()->geometry().width();
+    if (percent > 0 && percent < 100) {
+        data->crosshairSize = (screenWidth*(percent/100.0))/2;
+    }
+    else {
+        data->crosshairSize = screenWidth;
+    }
+}
+
+/* . */
+void
+doc_set_corner_button(int32_t doc)
+{
+    int num = get_int(DISPLAY_SCROLLBAR_WIDGET_NUM);
+    if (num) {
+        QPushButton* cornerButton = new QPushButton(documents[doc]);
+        cornerButton->setFlat(true);
+        QAction* act = actionHash[num];
+        /* NOTE: Prevent crashing if the action is NULL. */
+        if (!act) {
+            information_box(translate("Corner Widget Error"),
+                translate("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
+            documents[doc]->setCornerWidget(0);
+        }
+        else {
+            cornerButton->setIcon(act->icon());
+            QObject::connect(cornerButton, SIGNAL(clicked()), documents[doc],
+                SLOT(cornerButtonClicked()));
+            documents[doc]->setCornerWidget(cornerButton);
+            cornerButton->setCursor(Qt::ArrowCursor);
+        }
+    }
+    else {
+        documents[doc]->setCornerWidget(0);
+    }
+}
+
+void
+doc_cornerButtonClicked()
+{
+    debug_message("Corner Button Clicked.");
+    actionHash[get_int(DISPLAY_SCROLLBAR_WIDGET_NUM)]->trigger();
+}
+
+/* . */
+void
+doc_zoom_in(Document *doc)
+{
+    debug_message("View zoomIn()");
+    if (!doc_allow_zoom_in(doc->data.id)) {
+        return;
+    }
+    wait_cursor();
+    QPointF cntr = doc->mapToScene(QPoint(doc->width()/2, doc->height()/2));
+    double s = get_real(DISPLAY_ZOOMSCALE_IN);
+    doc->scale(s, s);
+
+    doc_center_on(doc->data.id, to_emb_vector(cntr));
+    restore_cursor();
+}
+
+/* . */
+void
+doc_zoom_out(Document *doc)
+{
+    debug_message("View zoomOut()");
+    if (!doc_allow_zoom_out(doc->data.id)) {
+        return;
+    }
+    wait_cursor();
+    QPointF cntr = doc->mapToScene(QPoint(doc->width()/2, doc->height()/2));
+    double s = get_real(DISPLAY_ZOOMSCALE_OUT);
+    doc->scale(s, s);
+
+    doc_center_on(doc->data.id, to_emb_vector(cntr));
+    restore_cursor();
+}
+
+/* . */
+void
+doc_zoom_window(Document *doc)
+{
+    doc->data.zoomWindowActive = true;
+    doc->data.selectingActive = false;
+    doc_clear_selection(doc->data.id);
+}
+
+/* . */
+void
+doc_zoom_selected(Document *doc)
+{
+    QUndoStack* stack = activeUndoStack();
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected",
+            doc->data.id, 0);
+        stack->push(cmd);
+    }
+
+    wait_cursor();
+    QList<QGraphicsItem*> itemList = doc->gscene->selectedItems();
+    QPainterPath selectedRectPath;
+    foreach(QGraphicsItem* item, itemList) {
+        selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
+    }
+    QRectF selectedRect = selectedRectPath.boundingRect();
+    if (selectedRect.isNull()) {
+        information_box(translate("ZoomSelected Preselect"),
+            translate("Preselect objects before invoking the zoomSelected command."));
+        /* TODO: Support Post selection of objects */
+    }
+    doc->fitInView(selectedRect, Qt::KeepAspectRatio);
+    restore_cursor();
+}
+
+/* . */
+void
+doc_zoom_extents(int32_t doc)
+{
+    QUndoStack* stack = activeUndoStack();
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", doc, 0);
+        stack->push(cmd);
+    }
+
+    wait_cursor();
+    QRectF extents = documents[doc]->gscene->itemsBoundingRect();
+    if (extents.isNull()) {
+        extents.setWidth(get_real(GRID_SIZE_X));
+        extents.setHeight(get_real(GRID_SIZE_Y));
+        extents.moveCenter(QPointF(0,0));
+    }
+    documents[doc]->fitInView(extents, Qt::KeepAspectRatio);
+    restore_cursor();
+}
+
+/* . */
+void
+doc_pan_left(int32_t doc)
+{
+    QUndoStack* stack = activeUndoStack();
+    DocumentData *data = doc_data(doc);
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", doc, 0);
+        stack->push(cmd);
+    }
+
+    documents[doc]->horizontalScrollBar()->setValue(documents[doc]->horizontalScrollBar()->value() + data->panDistance);
+    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_pan_right(int32_t doc)
+{
+    QUndoStack* stack = activeUndoStack();
+    DocumentData *data = doc_data(doc);
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", doc, 0);
+        stack->push(cmd);
+    }
+
+    documents[doc]->horizontalScrollBar()->setValue(documents[doc]->horizontalScrollBar()->value() - data->panDistance);
+    doc_update_mouse_coords(doc, data->viewMousePoint.x,
+        data->viewMousePoint.y);
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_pan_up(int32_t doc)
+{
+    QUndoStack* stack = activeUndoStack();
+    DocumentData *data = doc_data(doc);
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", doc, 0);
+        stack->push(cmd);
+    }
+
+    documents[doc]->verticalScrollBar()->setValue(documents[doc]->verticalScrollBar()->value() + data->panDistance);
+    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_pan_down(int32_t doc)
+{
+    QUndoStack* stack = activeUndoStack();
+    DocumentData *data = doc_data(doc);
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", doc, 0);
+        stack->push(cmd);
+    }
+
+    documents[doc]->verticalScrollBar()->setValue(documents[doc]->verticalScrollBar()->value() - data->panDistance);
+    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_select_all(int32_t doc)
+{
+    QPainterPath allPath;
+    allPath.addRect(documents[doc]->gscene->sceneRect());
+    /*  documents[doc]->gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform()); */
+}
+
+/* . */
+void
+doc_selection_changed(int32_t doc)
+{
+    if (dockPropEdit->isVisible()) {
+        dockPropEdit->setSelectedItems(documents[doc]->gscene->selectedItems());
+    }
+}
+
+/* . */
+void
+Document::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        QGraphicsItem* item = gscene->itemAt(mapToScene(event->pos()), QTransform());
+        if (item) {
+            dockPropEdit->show();
+        }
+    }
+}
+
+/* . */
+void
+Document::mousePressEvent(QMouseEvent* event)
+{
+    int32_t doc = data.id;
+    DocumentData *data = doc_data(doc);
+    doc_update_mouse_coords(doc, event->position().x(), event->position().y());
+    if (event->button() == Qt::LeftButton) {
+        if (cmdActive) {
+            QPointF cmdPoint = documents[doc]->mapToScene(event->pos());
+            runCommandClick((char*)qPrintable(curCmd), cmdPoint.x(), cmdPoint.y());
+            return;
+        }
+        QPainterPath path;
+        QList<QGraphicsItem*> pickList = documents[doc]->gscene->items(QRectF(documents[doc]->mapToScene(data->viewMousePoint.x-data->pickBoxSize, data->viewMousePoint.y-data->pickBoxSize),
+                                                              documents[doc]->mapToScene(data->viewMousePoint.x+data->pickBoxSize, data->viewMousePoint.y+data->pickBoxSize)));
+
+        bool itemsInPickBox = pickList.size();
+        if (itemsInPickBox && !data->selectingActive && !data->grippingActive) {
+            bool itemsAlreadySelected = pickList.at(0)->isSelected();
+            if (!itemsAlreadySelected) {
+                pickList.at(0)->setSelected(true);
+            }
+            else {
+                bool foundGrip = false;
+                Object* base = static_cast<Object*>(pickList.at(0)); /* TODO: Allow multiple objects to be gripped at once */
+                if (!base) {
+                    return;
+                }
+
+                QPoint qsnapOffset(data->qsnapLocatorSize, data->qsnapLocatorSize);
+                QPointF gripPoint = to_qpointf(base->mouseSnapPoint(data->sceneMousePoint));
+                QPoint p1 = mapFromScene(gripPoint) - qsnapOffset;
+                QPoint q1 = mapFromScene(gripPoint) + qsnapOffset;
+                QRectF gripRect = QRectF(documents[doc]->mapToScene(p1), documents[doc]->mapToScene(q1));
+                QRectF pickRect = QRectF(documents[doc]->mapToScene(data->viewMousePoint.x -data->pickBoxSize, data->viewMousePoint.y - data->pickBoxSize),
+                                        documents[doc]->mapToScene(data->viewMousePoint.x + data->pickBoxSize, data->viewMousePoint.y+data->pickBoxSize));
+                if (gripRect.intersects(pickRect)) {
+                    foundGrip = true;
+                }
+
+                /* If the pick point is within the item's grip box, start gripping */
+                if (foundGrip) {
+                    doc_start_gripping(doc, base);
+                }
+                else {
+                    /* start moving */
+                    data->movingActive = true;
+                    data->pressPoint = to_emb_vector(event->pos());
+                    data->scenePressPoint = doc_map_to_scene(doc, data->pressPoint);
+                }
+            }
+        }
+        else if (data->grippingActive) {
+            doc_stop_gripping(doc, true);
+        }
+        else if (!data->selectingActive) {
+            data->selectingActive = true;
+            data->pressPoint = to_emb_vector(event->pos());
+            data->scenePressPoint = doc_map_to_scene(doc, data->pressPoint);
+
+            if (!documents[doc]->selectBox) {
+                documents[doc]->selectBox = new SelectBox(QRubberBand::Rectangle, documents[doc]);
+            }
+            QPointF p1 = to_qpointf(data->pressPoint);
+            documents[doc]->selectBox->setGeometry(QRect(p1.toPoint(), p1.toPoint()));
+            documents[doc]->selectBox->show();
+        }
+        else {
+            data->selectingActive = false;
+            documents[doc]->selectBox->hide();
+            data->releasePoint = to_emb_vector(event->pos());
+            data->sceneReleasePoint = doc_map_to_scene(doc, data->releasePoint);
+
+            /* Start SelectBox Code */
+            path.addPolygon(documents[doc]->mapToScene(documents[doc]->selectBox->geometry()));
+            if (data->sceneReleasePoint.x > data->scenePressPoint.x) {
+                if (get_bool(SELECTION_MODE_PICKADD)) {
+                    if (isShiftPressed()) {
+                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(false);
+                    }
+                    else {
+                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(true);
+                    }
+                }
+                else {
+                    if (isShiftPressed()) {
+                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
+                        if (!itemList.size())
+                            doc_clear_selection(doc);
+                        else {
+                            foreach(QGraphicsItem* item, itemList)
+                                item->setSelected(!item->isSelected()); /* Toggle selected */
+                        }
+                    }
+                    else {
+                        doc_clear_selection(doc);
+                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(true);
+                    }
+                }
+            }
+            else {
+                if (get_bool(SELECTION_MODE_PICKADD)) {
+                    if (isShiftPressed()) {
+                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(false);
+                    }
+                    else {
+                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(true);
+                    }
+                }
+                else {
+                    if (isShiftPressed()) {
+                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
+                        if (!itemList.size())
+                            doc_clear_selection(doc);
+                        else {
+                            foreach (QGraphicsItem* item, itemList)
+                                item->setSelected(!item->isSelected()); /* Toggle selected */
+                        }
+                    }
+                    else {
+                        doc_clear_selection(doc);
+                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(true);
+                    }
+                }
+            }
+            /* End SelectBox Code */
+        }
+
+        if (data->pastingActive) {
+            QList<QGraphicsItem*> itemList = documents[doc]->pasteObjectItemGroup->childItems();
+            documents[doc]->gscene->destroyItemGroup(documents[doc]->pasteObjectItemGroup);
+            foreach(QGraphicsItem* item, itemList) {
+                /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
+                documents[doc]->gscene->removeItem(item);
+            }
+
+            documents[doc]->undoStack->beginMacro("Paste");
+            foreach(QGraphicsItem* item, itemList) {
+                Object* base = static_cast<Object*>(item);
+                if (base) {
+                    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, base->core->OBJ_NAME, base, doc, 0);
+                    if (cmd) {
+                        documents[doc]->undoStack->push(cmd);
+                    }
+                }
+            }
+            documents[doc]->undoStack->endMacro();
+
+            data->pastingActive = false;
+            data->selectingActive = false;
+        }
+        if (data->zoomWindowActive) {
+            fitInView(path.boundingRect(), Qt::KeepAspectRatio);
+            doc_clear_selection(doc);
+        }
+    }
+    if (event->button() == Qt::MiddleButton) {
+        //FIXME: doc_pan_start(doc, event->pos());
+        /* The Undo command will record the spot where the pan started. */
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStart", doc, 0);
+        documents[doc]->undoStack->push(cmd);
+        event->accept();
+    }
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_pan_start(int32_t doc, const QPoint& point)
+{
+    DocumentData *data = doc_data(doc);
+    doc_recalculate_limits(doc);
+
+    doc_align_scene_point_with_view_point(doc, doc_map_to_scene(doc, to_emb_vector(point)), to_emb_vector(point));
+
+    data->panningActive = true;
+    data->panStartX = point.x();
+    data->panStartY = point.y();
+}
+
+/* NOTE: Increase the sceneRect limits if the point we want to go to lies
+ * outside of sceneRect's limits.
+ * If the sceneRect limits aren't increased, you cannot pan past its limits.
+ */
+void
+doc_recalculate_limits(int32_t doc)
+{
+    DocumentData *data = doc_data(doc);
+    EmbVector tl = to_emb_vector(documents[doc]->mapToScene(documents[doc]->rect().topLeft()));
+    EmbVector br = to_emb_vector(documents[doc]->mapToScene(documents[doc]->rect().bottomRight()));
+    QRectF viewRect(to_qpointf(tl), to_qpointf(br));
+    QRectF sceneRect(documents[doc]->sceneRect());
+    QRectF newRect = viewRect.adjusted(-viewRect.width(), -viewRect.height(), viewRect.width(), viewRect.height());
+    if (!sceneRect.contains(newRect.topLeft()) || !sceneRect.contains(newRect.bottomRight())) {
+        documents[doc]->gscene->setSceneRect(sceneRect.adjusted(-viewRect.width(),
+                                                -viewRect.height(),
+                                                viewRect.width(),
+                                                viewRect.height()));
+    }
+}
+
+/* . */
+void
+doc_align_scene_point_with_view_point(int32_t doc, EmbVector scenePoint, EmbVector viewPoint)
+{
+    EmbVector viewCenter = doc_center(doc);
+    EmbVector pointBefore = scenePoint;
+    /* centerOn also updates the scrollbars, which shifts things out of wack o_O */
+    doc_center_on(doc, viewCenter);
+    /* Reshift to the new center so the scene and view points align */
+    EmbVector pointAfter = doc_map_to_scene(doc, viewPoint);
+    EmbVector offset = emb_vector_subtract(pointBefore, pointAfter);
+    EmbVector newCenter = emb_vector_add(viewCenter, offset);
+    doc_center_on(doc, newCenter);
+}
+
+/* . */
+void
+Document::mouseMoveEvent(QMouseEvent* event)
+{
+    int32_t doc = data.id;
+    DocumentData *data = doc_data(doc);
+    doc_update_mouse_coords(doc, event->position().x(), event->position().y());
+    data->movePoint = to_emb_vector(event->pos());
+    data->sceneMovePoint = doc_map_to_scene(doc, data->movePoint);
+
+    if (cmdActive) {
+        if (data->rapidMoveActive) {
+            runCommandMove((char*)qPrintable(curCmd), data->sceneMovePoint.x,
+                data->sceneMovePoint.y);
+        }
+    }
+    if (data->previewActive) {
+        if (data->previewMode == PREVIEW_MOVE) {
+            QPointF p = to_qpointf(emb_vector_subtract(data->sceneMousePoint,
+                data->previewPoint));
+            documents[doc]->previewObjectItemGroup->setPos(p);
+        }
+        else if (data->previewMode == PREVIEW_ROTATE) {
+            double x = data->previewPoint.x;
+            double y = data->previewPoint.y;
+            double rot = data->previewData;
+
+            double mouseAngle = QLineF(x, y, data->sceneMousePoint.x, data->sceneMousePoint.y).angle();
+
+            double rad = radians(rot-mouseAngle);
+            double cosRot = cos(rad);
+            double sinRot = sin(rad);
+            EmbVector p, rotv;
+            p.x = -x;
+            p.y = -y;
+            rotv.x = p.x*cosRot - p.y*sinRot;
+            rotv.y = p.x*sinRot + p.y*cosRot;
+            rotv.x += x;
+            rotv.y += y;
+
+            documents[doc]->previewObjectItemGroup->setPos(rotv.x, rotv.y);
+            documents[doc]->previewObjectItemGroup->setRotation(rot-mouseAngle);
+        }
+        else if (data->previewMode == PREVIEW_SCALE) {
+            double x = data->previewPoint.x;
+            double y = data->previewPoint.y;
+            double scaleFactor = data->previewData;
+
+            double factor = QLineF(x, y, data->sceneMousePoint.x, data->sceneMousePoint.y).length() / scaleFactor;
+
+            documents[doc]->previewObjectItemGroup->setScale(1);
+            documents[doc]->previewObjectItemGroup->setPos(0,0);
+
+            if (scaleFactor <= 0.0) {
+                /* FIXME: messagebox("critical",
+                    tr("ScaleFactor Error"),
+                    tr("Hi there. If you are not a developer, report this as a bug. "
+                        "If you are a developer, your code needs examined, and possibly your head too."));
+                        */
+            }
+            else {
+                /* Calculate the offset */
+                double oldX = 0;
+                double oldY = 0;
+                QLineF scaleLine(x, y, oldX, oldY);
+                scaleLine.setLength(scaleLine.length()*factor);
+                double newX = scaleLine.x2();
+                double newY = scaleLine.y2();
+
+                double dx = newX - oldX;
+                double dy = newY - oldY;
+
+                documents[doc]->previewObjectItemGroup->setScale(documents[doc]->previewObjectItemGroup->scale()*factor);
+                documents[doc]->previewObjectItemGroup->moveBy(dx, dy);
+            }
+        }
+    }
+    if (data->pastingActive) {
+        EmbVector p = emb_vector_subtract(data->sceneMousePoint,
+            data->pasteDelta);
+        documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
+    }
+    if (data->movingActive) {
+        /* Ensure that the preview is only shown if the mouse has moved. */
+        if (!data->previewActive)
+            doc_preview_on(doc, PREVIEW_CLONE_SELECTED, PREVIEW_MOVE,
+                data->scenePressPoint.x, data->scenePressPoint.y, 0);
+    }
+    if (data->selectingActive) {
+        /* FIXME:
+        if (data->sceneMovePoint >= data->scenePressPoint) {
+            documents[doc]->selectBox->setDirection(1);
+        }
+        else {
+            documents[doc]->selectBox->setDirection(0);
+        }
+        QPointF p = documents[doc]->mapFromScene(to_qpointf(data->scenePressPoint));
+        QRect rect = QRect(p, event->pos());
+        documents[doc]->selectBox->setGeometry(rect).normalized();
+        event->accept();
+        */
+    }
+    if (data->panningActive) {
+        documents[doc]->horizontalScrollBar()->setValue(
+            documents[doc]->horizontalScrollBar()->value() - (event->position().x() - data->panStartX));
+        documents[doc]->verticalScrollBar()->setValue(
+            documents[doc]->verticalScrollBar()->value() - (event->position().y() - data->panStartY));
+        data->panStartX = event->position().x();
+        data->panStartY = event->position().y();
+        event->accept();
+    }
+    doc_update(doc);
+}
+
+void
+Document::mouseReleaseEvent(QMouseEvent* event)
+{
+    doc_update_mouse_coords(data.id, event->position().x(), event->position().y());
+    if (event->button() == Qt::LeftButton) {
+        if (data.movingActive) {
+            doc_preview_off(data.id);
+            EmbVector delta = emb_vector_subtract(data.sceneMousePoint,
+                data.scenePressPoint);
+            /* Ensure that moving only happens if the mouse has moved. */
+            if (delta.x || delta.y) {
+                doc_move_selected(data.id, delta.x, delta.y);
+            }
+            data.movingActive = false;
+        }
+        event->accept();
+    }
+    if (event->button() == Qt::MiddleButton) {
+        data.panningActive = false;
+        /* The Undo command will record the spot where the pan completed. */
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop",
+            data.id, 0);
+        undoStack->push(cmd);
+        event->accept();
+    }
+    if (event->button() == Qt::XButton1) {
+        debug_message("XButton1");
+        undo_command(); /* TODO: Make this customizable */
+        event->accept();
+    }
+    if (event->button() == Qt::XButton2) {
+        debug_message("XButton2");
+        redo_command(); /* TODO: Make this customizable */
+        event->accept();
+    }
+    doc_update(data.id);
+}
+
+/* . */
+void
+Document::wheelEvent(QWheelEvent* event)
+{
+    // FIXME: int zoomDir = event->delta();
+    QPoint mousePoint = event->position().toPoint();
+
+    doc_update_mouse_coords(data.id, mousePoint.x(), mousePoint.y());
+    /* FIXME:
+    if (zoomDir > 0) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", data.id, 0);
+        documents[doc]->undoStack->push(cmd);
+    }
+    else {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", data.id, 0);
+        documents[doc]->undoStack->push(cmd);
+    }
+    */
+}
+
+/* . */
+void
+doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
+{
+    QPointF pointBeforeScale = to_qpointf(doc_map_to_scene(doc, mousePoint));
+    DocumentData *data = doc_data(doc);
+
+    /* Do The zoom */
+    double s;
+    if (zoomDir > 0) {
+        if (!doc_allow_zoom_in(doc)) {
+            return;
+        }
+        s = get_real(DISPLAY_ZOOMSCALE_IN);
+    }
+    else {
+        if (!doc_allow_zoom_out(doc)) {
+            return;
+        }
+        s = get_real(DISPLAY_ZOOMSCALE_OUT);
+    }
+
+    documents[doc]->scale(s, s);
+    doc_align_scene_point_with_view_point(doc, to_emb_vector(pointBeforeScale), mousePoint);
+    doc_recalculate_limits(doc);
+    doc_align_scene_point_with_view_point(doc, to_emb_vector(pointBeforeScale), mousePoint);
+
+    doc_update_mouse_coords(doc, mousePoint.x, mousePoint.y);
+    if (data->pastingActive) {
+        EmbVector p = emb_vector_subtract(data->sceneMousePoint,
+            data->pasteDelta);
+        documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
+    }
+    if (data->selectingActive) {
+        QPointF v1 = documents[doc]->mapFromScene(to_qpointf(data->scenePressPoint));
+        QPointF v2 = to_qpointf(mousePoint);
+        QRectF r(v1, v2);
+        /* FIXME: documents[doc]->selectBox->setGeometry(r.normalized()); */
+    }
+    doc_update(doc);
+}
+
+void
+Document::contextMenuEvent(QContextMenuEvent* event)
+{
+    QMenu menu;
+    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    bool selectionEmpty = itemList.isEmpty();
+
+    for (int i = 0; i < itemList.size(); i++) {
+        Object *obj = static_cast<Object *>(itemList.at(i));
+        if (obj->core->geometry->type != OBJ_NULL) {
+            selectionEmpty = false;
+            break;
+        }
+    }
+
+    if (data.pastingActive) {
+        return;
+    }
+    if (!cmdActive) {
+        QAction* repeatAction = new QAction(create_icon(lastCmd), "Repeat " + lastCmd, this);
+        repeatAction->setStatusTip("Repeats the previously issued command.");
+        connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
+        menu.addAction(repeatAction);
+    }
+    if (data.zoomWindowActive) {
+        QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
+        cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
+        connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
+        menu.addAction(cancelZoomWinAction);
+    }
+
+    menu.addSeparator();
+    menu.addAction(actionHash[ACTION_CUT]);
+    menu.addAction(actionHash[ACTION_COPY]);
+    menu.addAction(actionHash[ACTION_PASTE]);
+    menu.addSeparator();
+
+    if (!selectionEmpty) {
+        /* FIXME:
+        QAction* deleteAction = new QAction(create_icon("erase"), "D&elete", this);
+        deleteAction->setStatusTip("Removes objects from a drawing.");
+        connect(deleteAction, SIGNAL(triggered()), this,
+            [=]() { doc_delete_selected(doc); });
+        menu.addAction(deleteAction);
+
+        QAction* moveAction = new QAction(create_icon("move"), "&Move", this);
+        moveAction->setStatusTip("Displaces objects a specified distance in a specified direction.");
+        connect(moveAction, SIGNAL(triggered()), this, SLOT(move_action()));
+        menu.addAction(moveAction);
+
+        QAction* scaleAction = new QAction(create_icon("scale"), "Sca&le", this);
+        scaleAction->setStatusTip("Enlarges or reduces objects proportionally in the X, Y, and Z directions.");
+        connect(scaleAction, SIGNAL(triggered()), this, SLOT(scale_action()));
+        menu.addAction(scaleAction);
+
+        QAction* rotateAction = new QAction(create_icon("rotate"), "R&otate", this);
+        rotateAction->setStatusTip("Rotates objects about a base point.");
+        connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotate_action()));
+        menu.addAction(rotateAction);
+
+        menu.addSeparator();
+
+        QAction* clearAction = new QAction("Cle&ar Selection", this);
+        clearAction->setStatusTip("Removes all objects from the selection set.");
+        connect(clearAction, SIGNAL(triggered()), this, [=]() { doc_clear_selection(this); });
+        menu.addAction(clearAction);
+        */
+    }
+
+    menu.exec(event->globalPos());
+}
+
+/* . */
+void
+doc_deletePressed(int32_t doc)
+{
+    debug_message("View deletePressed()");
+    DocumentData *data = doc_data(doc);
+    if (data->pastingActive) {
+        documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
+        delete documents[doc]->pasteObjectItemGroup;
+    }
+    data->pastingActive = false;
+    data->zoomWindowActive = false;
+    data->selectingActive = false;
+    documents[doc]->selectBox->hide();
+    doc_stop_gripping(doc, false);
+    doc_delete_selected(doc);
+}
+
+/* . */
+void
+doc_escapePressed(int32_t doc)
+{
+    debug_message("View escapePressed()");
+    DocumentData *data = doc_data(doc);
+    if (data->pastingActive) {
+        documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
+        delete documents[doc]->pasteObjectItemGroup;
+    }
+    data->pastingActive = false;
+    data->zoomWindowActive = false;
+    data->selectingActive = false;
+    documents[doc]->selectBox->hide();
+    if (data->grippingActive) {
+        doc_stop_gripping(doc, false);
+    }
+    else {
+        doc_clear_selection(doc);
+    }
+}
+
+/* . */
+void
+doc_start_gripping(int32_t doc, Object* obj)
+{
+    if (!obj) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    data->grippingActive = true;
+    documents[doc]->gripBaseObj = obj;
+    data->sceneGripPoint = documents[doc]->gripBaseObj->mouseSnapPoint(data->sceneMousePoint);
+    documents[doc]->gripBaseObj->setObjectRubberPoint("GRIP_POINT", data->sceneGripPoint);
+    obj_set_rubber_mode(documents[doc]->gripBaseObj->core, RUBBER_GRIP);
+}
+
+/* . */
+void
+doc_stop_gripping(int32_t doc, bool accept)
+{
+    DocumentData *data = doc_data(doc);
+    data->grippingActive = false;
+    if (documents[doc]->gripBaseObj) {
+        documents[doc]->gripBaseObj->vulcanize();
+        if (accept) {
+            QString s = translate("Grip Edit ");
+            s += documents[doc]->gripBaseObj->core->OBJ_NAME;
+            UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, data->sceneGripPoint, data->sceneMousePoint, s, documents[doc]->gripBaseObj, doc, 0);
+            if (cmd) {
+                documents[doc]->undoStack->push(cmd);
+            }
+            /* Update the Property Editor */
+            doc_selection_changed(doc);
+        }
+        documents[doc]->gripBaseObj = 0;
+    }
+    /* Move the data->sceneGripPoint to a place where it will never be hot. */
+    data->sceneGripPoint = to_emb_vector(documents[doc]->sceneRect().topLeft());
+}
+
+/* . */
+void
+doc_clear_selection(int32_t doc)
+{
+    // FIXME: documents[doc]->gscene->clearSelection();
+}
+
+/* . */
+void
+doc_delete_selected(int32_t doc)
+{
+    DocumentData *data = doc_data(doc);
+    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
+    int numSelected = itemList.size();
+    if (numSelected > 1) {
+        documents[doc]->undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
+    }
+    for (int i = 0; i < itemList.size(); i++) {
+        Object* base = static_cast<Object*>(itemList.at(i));
+        if (base) {
+            if (base->core->geometry->type != OBJ_NULL) {
+                char label[MAX_STRING_LENGTH];
+                sprintf(label, "%s%s", translate("Delete 1 "), base->core->OBJ_NAME);
+                UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, label,
+                    base, doc, 0);
+                if (cmd) {
+                    documents[doc]->undoStack->push(cmd);
+                }
+            }
+        }
+    }
+    if (numSelected > 1) {
+        documents[doc]->undoStack->endMacro();
+    }
+}
+
+/* . */
+void
+doc_cut(int32_t doc)
+{
+    if (documents[doc]->gscene->selectedItems().isEmpty()) {
+        information_box(translate("Cut Preselect"),
+            translate("Preselect objects before invoking the cut command."));
+        return; /* TODO: Prompt to select objects if nothing is preselected */
+    }
+
+    documents[doc]->undoStack->beginMacro("Cut");
+    doc_copy_selected(doc);
+    doc_delete_selected(doc);
+    documents[doc]->undoStack->endMacro();
+}
+
+/* . */
+void
+doc_copy(int32_t doc)
+{
+    if (documents[doc]->gscene->selectedItems().isEmpty()) {
+        information_box(translate("Copy Preselect"),
+            translate("Preselect objects before invoking the copy command."));
+        return; /* TODO: Prompt to select objects if nothing is preselected */
+    }
+
+    doc_copy_selected(doc);
+    doc_clear_selection(doc);
+}
+
+/* . */
+void
+doc_copy_selected(int32_t doc)
+{
+    QList<QGraphicsItem*> selectedList = documents[doc]->gscene->selectedItems();
+
+    /* Prevent memory leaks by deleting any unpasted instances */
+    qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
+    cutCopyObjectList.clear();
+
+    /* Create new objects but do not add them to the scene just yet.
+     * By creating them now, ensures that pasting will still work
+     * if the original objects are deleted before the paste occurs.
+     */
+    cutCopyObjectList = doc_create_object_list(doc, selectedList);
+}
+
+/* . */
+void
+doc_paste(int32_t doc)
+{
+    DocumentData *data = doc_data(doc);
+    if (data->pastingActive) {
+        documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
+        delete documents[doc]->pasteObjectItemGroup;
+    }
+
+    documents[doc]->pasteObjectItemGroup = documents[doc]->gscene->createItemGroup(cutCopyObjectList);
+    data->pasteDelta = to_emb_vector(documents[doc]->pasteObjectItemGroup->boundingRect().bottomLeft());
+    EmbVector p = emb_vector_subtract(data->sceneMousePoint, data->pasteDelta);
+    documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
+    data->pastingActive = true;
+
+    /* Re-create the list in case of multiple pastes. */
+    cutCopyObjectList = doc_create_object_list(doc, cutCopyObjectList);
+}
+
+/* . */
+QList<QGraphicsItem*>
+doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list)
+{
+    QList<QGraphicsItem*> copyList;
+
+    for (int i = 0; i < list.size(); i++) {
+        QGraphicsItem* item = list.at(i);
+        if (!item) {
+            continue;
+        }
+
+        Object* obj = static_cast<Object*>(item);
+        if (obj) {
+            Object* copyObj = copy_object(obj);
+            copyList.append(copyObj);
+        }
+    }
+
+    return copyList;
+}
+
+/* . */
+void
+repeat_action(void)
+{
+    promptInput->endCommand();
+    prompt->setCurrentText(lastCmd);
+    promptInput->processInput();
+}
+
+/* . */
+void
+move_action(void)
+{
+    promptInput->endCommand();
+    prompt->setCurrentText("move");
+    promptInput->processInput();
+}
+
+/* . */
+void
+doc_move_selected(int32_t doc, double dx, double dy)
+{
+    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
+    int numSelected = itemList.size();
+    if (numSelected > 1) {
+        documents[doc]->undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
+    }
+    foreach(QGraphicsItem* item, itemList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            char msg[MAX_STRING_LENGTH];
+            EmbVector delta = emb_vector(dx, dy);
+            sprintf(msg, "%s%s", translate("Move 1 "), base->core->OBJ_NAME);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, delta, msg,
+                base, doc, 0);
+            if (cmd) {
+                documents[doc]->undoStack->push(cmd);
+            }
+        }
+    }
+    if (numSelected > 1) {
+        documents[doc]->undoStack->endMacro();
+    }
+
+    /* Always clear the selection after a move. */
+    documents[doc]->gscene->clearSelection();
+}
+
+/* . */
+void
+rotate_action(void)
+{
+    promptInput->endCommand();
+    prompt->setCurrentText("rotate");
+    promptInput->processInput();
+}
+
+/* . */
+void
+doc_rotate_selected(int32_t doc, double x, double y, double rot)
+{
+    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
+    int numSelected = itemList.size();
+    if (numSelected > 1) {
+        documents[doc]->undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
+    }
+    foreach(QGraphicsItem* item, itemList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            QString s = translate("Rotate 1 ");
+            s += base->core->OBJ_NAME;
+            EmbVector v = emb_vector(x, y);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, rot, s,
+                base, doc, 0);
+            if (cmd) {
+                documents[doc]->undoStack->push(cmd);
+            }
+        }
+    }
+    if (numSelected > 1) {
+        documents[doc]->undoStack->endMacro();
+    }
+
+    /* Always clear the selection after a rotate. */
+    documents[doc]->gscene->clearSelection();
+}
+
+/* . */
+void
+doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2)
+{
+    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
+    int numSelected = itemList.size();
+    if (numSelected > 1)
+        documents[doc]->undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
+    foreach(QGraphicsItem* item, itemList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            EmbVector start, end;
+            start = emb_vector(x1, y1);
+            end = emb_vector(x2, y2);
+            QString s = translate("Mirror 1 ");
+            s += base->core->OBJ_NAME;
+            UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, start, end,
+                s, base, doc, 0);
+            if (cmd) {
+                documents[doc]->undoStack->push(cmd);
+            }
+        }
+    }
+    if (numSelected > 1) {
+        documents[doc]->undoStack->endMacro();
+    }
+
+    /* Always clear the selection after a mirror. */
+    documents[doc]->gscene->clearSelection();
+}
+
+/* . */
+void
+doc_scaleAction()
+{
+    promptInput->endCommand();
+    prompt->setCurrentText("scale");
+    promptInput->processInput();
+}
+
+/* . */
+void
+doc_scale_selected(int32_t doc, double x, double y, double factor)
+{
+    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
+    int numSelected = itemList.size();
+    if (numSelected > 1)
+        documents[doc]->undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
+    foreach(QGraphicsItem* item, itemList) {
+        Object* base = static_cast<Object*>(item);
+        if (base) {
+            EmbVector v = emb_vector(x, y);
+            char msg[MAX_STRING_LENGTH];
+            sprintf(msg, "%s%s", translate("Scale 1 "), base->core->OBJ_NAME);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, factor, msg,
+                base, doc, 0);
+            if (cmd) {
+                documents[doc]->undoStack->push(cmd);
+            }
+        }
+    }
+    if (numSelected > 1) {
+        documents[doc]->undoStack->endMacro();
+    }
+
+    /* Always clear the selection after a scale. */
+    documents[doc]->gscene->clearSelection();
+}
+
+/* . */
+int
+doc_num_selected(int32_t doc)
+{
+    return documents[doc]->gscene->selectedItems().size();
+}
+
+/* . */
+void
+doc_show_scroll_bars(int32_t doc, bool val)
+{
+    if (val) {
+        documents[doc]->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        documents[doc]->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
+    else {
+        documents[doc]->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        documents[doc]->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
+}
+
+/* . */
+void
+doc_set_background_color(int32_t doc, uint32_t color)
+{
+    DocumentData *data = doc_data(doc);
+    documents[doc]->setBackgroundBrush(QColor(color));
+    data->backgroundColor = color;
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_set_select_box_colors(int32_t doc, QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+{
+    documents[doc]->selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
+}
+
+/*
+ * Undo
+ */
 
 /* . */
 UndoEditor::UndoEditor(QString iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
@@ -1278,6 +7534,19 @@ setHistory(QString  txt)
 {
     promptHistory->setHtml(txt);
     promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+}
+
+void
+Application::setMainWin(MainWindow* mainWin)
+{
+    _main = mainWin;
+}
+
+void
+CmdPrompt::setCurrentText(QString txt)
+{
+    curText = prefix + txt;
+    promptInput->setText(curText);
 }
 
 /* . */
@@ -5538,13 +11807,6 @@ Settings_Dialog::chooseGeneralMdiBackgroundTexture()
 
 /* . */
 void
-Settings_Dialog::comboBoxScrollBarWidgetCurrentIndexChanged(int index)
-{
-    setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i = index;
-}
-
-/* . */
-void
 Settings_Dialog::chooseColor(int key)
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
@@ -5553,7 +11815,7 @@ Settings_Dialog::chooseColor(int key)
     }
     QColorDialog* colorDialog = new QColorDialog(QColor(setting[key].accept.i), this);
     connect(colorDialog, &QColorDialog::currentColorChanged, this,
-        [=](const QColor& color) { currentColorChanged_(key, color); });
+        [=](const QColor& color) { currentColorChanged_(key, color.rgb()); });
     colorDialog->exec();
 
     if (colorDialog->result() == QDialog::Accepted) {
@@ -5638,9 +11900,9 @@ Settings_Dialog::chooseColor(int key)
 
 /* . */
 void
-Settings_Dialog::currentColorChanged_(int key, const QColor& color)
+currentColorChanged_(int key, uint32_t color)
 {
-    setting[key].preview.i = color.rgb();
+    setting[key].preview.i = color;
     switch (key) {
     case DISPLAY_CROSSHAIR_COLOR:
         updateAllViewCrossHairColors(setting[key].preview.i);
@@ -5677,42 +11939,6 @@ Settings_Dialog::currentColorChanged_(int key, const QColor& color)
     default:
         break;
     }
-}
-
-void
-Settings_Dialog::spinBoxDisplaySelectBoxAlphaValueChanged(int value)
-{
-    setting[DISPLAY_SELECTBOX_ALPHA].preview.i = value;
-    updateAllViewSelectBoxColors(
-        setting[DISPLAY_SELECTBOX_LEFT_COLOR].accept.i,
-        setting[DISPLAY_SELECTBOX_LEFT_FILL].accept.i,
-        setting[DISPLAY_SELECTBOX_RIGHT_COLOR].accept.i,
-        setting[DISPLAY_SELECTBOX_RIGHT_FILL].accept.i,
-        setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
-}
-
-/* . */
-void
-Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(EmbString family)
-{
-    strcpy(setting[PROMPT_FONT_FAMILY].preview.s, family);
-    setPromptFontFamily(setting[PROMPT_FONT_FAMILY].preview.s);
-}
-
-/* . */
-void
-Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(EmbString style)
-{
-    strcpy(setting[PROMPT_FONT_STYLE].preview.s, style);
-    setPromptFontStyle(setting[PROMPT_FONT_STYLE].preview.s);
-}
-
-/* . */
-void
-Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
-{
-    setting[PROMPT_FONT_SIZE].preview.i = value;
-    setPromptFontSize(setting[PROMPT_FONT_SIZE].preview.i);
 }
 
 /* . */
@@ -5838,13 +12064,6 @@ Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
 
 /* . */
 void
-Settings_Dialog::spinBoxRulerPixelSizeValueChanged(double value)
-{
-    setting[RULER_PIXEL_SIZE].dialog.r = value;
-}
-
-/* . */
-void
 Settings_Dialog::buttonQSnapSelectAllClicked()
 {
     emit buttonQSnapSelectAll(true);
@@ -5884,20 +12103,6 @@ Settings_Dialog::comboBoxQSnapLocatorColorCurrentIndexChanged(int index)
 
 /* . */
 void
-Settings_Dialog::sliderQSnapLocatorSizeValueChanged(int value)
-{
-    setting[QSNAP_LOCATOR_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-Settings_Dialog::sliderQSnapApertureSizeValueChanged(int value)
-{
-    setting[QSNAP_APERTURE_SIZE].dialog.i = value;
-}
-
-/* . */
-void
 Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 {
     setting[LWT_SHOW_LWT].preview.b = checked;
@@ -5917,33 +12122,6 @@ Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
                 checkBoxRealRender->setEnabled(setting[LWT_SHOW_LWT].preview.b);
         }
     }
-}
-
-/* . */
-void
-Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
-{
-    setting[LWT_REAL_RENDER].preview.b = checked;
-    if (setting[LWT_REAL_RENDER].preview.b) {
-        enableReal();
-    }
-    else {
-        disableReal();
-    }
-}
-
-/* . */
-void
-Settings_Dialog::sliderSelectionGripSizeValueChanged(int value)
-{
-    setting[SELECTION_GRIP_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-Settings_Dialog::sliderSelectionPickBoxSizeValueChanged(int value)
-{
-    setting[SELECTION_PICKBOX_SIZE].dialog.i = value;
 }
 
 /* . */
@@ -6066,4 +12244,6 @@ Settings_Dialog::rejectChanges()
 
     reject();
 }
+
+#include "widgets.moc"
 

@@ -21,7 +21,31 @@
 #define NANOVG_GL2_IMPLEMENTATION
 #include "nanovg_gl.h"
 
-#include "interface.h"
+#include "core.h"
+
+typedef struct Button_ {
+    EmbRect rect;
+    EmbColor color;
+    EmbColor highlight_color;
+    EmbString text;
+    EmbString font;
+    EmbColor text_color;
+    int state;
+} Button;
+
+typedef struct Tab_ {
+    int state;
+} Tab;
+
+void draw_rect(NVGcontext *vg, EmbRect rect, EmbColor color);
+void draw_button(NVGcontext *vg, Button button, float *bounds);
+void draw_text(NVGcontext *vg, int x, int y, char *font, char *txt, EmbColor color, float *bounds);
+void draw_view(NVGcontext *vg, EmbRect container);
+void draw_mdiarea(NVGcontext *vg, EmbRect container);
+void draw_dockarea(NVGcontext *vg, EmbRect container);
+void draw_nvg_toolbar(NVGcontext *vg, EmbRect container);
+void draw_prompt(NVGcontext *vg, EmbRect container);
+void draw_statusbar(NVGcontext *vg, EmbRect container);
 
 int icon_size = 16;
 
@@ -90,6 +114,9 @@ BASIC_DOC_F(doc_pan_right)
 BASIC_DOC_F(doc_pan_up)
 BASIC_DOC_F(doc_pan_down)
 BASIC_DOC_F(doc_clear_rubber_room)
+BASIC_DOC_F(doc_cut)
+BASIC_DOC_F(doc_copy)
+BASIC_DOC_F(doc_paste)
 
 void doc_show_scroll_bars(int32_t doc, bool) {}
 void doc_set_select_box_colors(int32_t doc, uint32_t, uint32_t, uint32_t, uint32_t, int) {}
@@ -102,6 +129,14 @@ NO_ARG_F(new_file)
 NO_ARG_F(help)
 NO_ARG_F(about_dialog)
 NO_ARG_F(tipOfTheDay)
+NO_ARG_F(whats_this_mode)
+NO_ARG_F(window_close_all)
+NO_ARG_F(window_cascade)
+NO_ARG_F(window_tile)
+NO_ARG_F(window_next)
+NO_ARG_F(window_previous)
+NO_ARG_F(restore_cursor)
+NO_ARG_F(wait_cursor)
 
 void nanosleep_(int) {}
 
@@ -123,9 +158,9 @@ void doc_rotate_selected(int32_t doc, double, double, double) {}
 void doc_mirror_selected(int32_t doc, double, double, double, double) {}
 void doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point) {}
 void doc_set_rubber_text(int32_t doc, EmbString key, EmbString value) {}
-void doc_cut(int32_t doc) {}
-void doc_copy(int32_t doc) {}
-void doc_paste(int32_t doc) {}
+void setPromptFontFamily(char *) {}
+void setPromptFontStyle(char *) {}
+void setPromptFontSize(int) {}
 void doc_spare_rubber(int32_t doc, int64_t mode) {}
 void doc_set_rubber_mode(int32_t doc, int32_t mode) {}
 void doc_scale_selected(int32_t doc, double, double, double) {}
@@ -136,14 +171,6 @@ void onCloseWindow(void) {}
 void doc_center_on(int32_t doc, EmbVector v) {}
 EmbVector scene_get_point(EmbString key) { return emb_vector(0.0, 0.0); }
 void doc_zoom_extents(int doc_index) {}
-void whats_this_mode(void) {}
-void window_close_all(void) {}
-void window_cascade(void) {}
-void window_tile(void) {}
-void window_next(void) {}
-void window_previous(void) {}
-void restore_cursor(void) {}
-void wait_cursor(void) {}
 void updatePickAddMode(bool val) {}
 void clear_selection(void) {}
 void doc_create_grid(int doc, char*) {}

@@ -421,8 +421,19 @@ void about_dialog(void);
 
 /* --------------------------------- Editors -------------------------------- */
 
+void comboBoxScrollBarWidgetCurrentIndexChanged(int);
+void spinBoxDisplaySelectBoxAlphaValueChanged(int);
+void comboBoxPromptFontFamilyCurrentIndexChanged(EmbString);
+void comboBoxPromptFontStyleCurrentIndexChanged(EmbString);
+void spinBoxPromptFontSizeValueChanged(int);
 void spinBoxRecentMaxFilesValueChanged(int value);
 void spinBoxTrimDstNumJumpsValueChanged(int value);
+void spinBoxRulerPixelSizeValueChanged(double);
+void sliderQSnapLocatorSizeValueChanged(int);
+void sliderQSnapApertureSizeValueChanged(int);
+void checkBoxLwtRealRenderStateChanged(int);
+void sliderSelectionGripSizeValueChanged(int);
+void sliderSelectionPickBoxSizeValueChanged(int);
 
 /* -------------------------------- Commands -------------------------------- */
 
