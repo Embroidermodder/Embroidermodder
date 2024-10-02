@@ -643,6 +643,8 @@ void doc_pan_start(int32_t doc, EmbVector point);
 
 void doc_align_scene_point_with_view_point(int32_t doc, EmbVector scenePoint, EmbVector viewPoint);
 
+void doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode);
+
 void doc_pan_left(int doc_index);
 void doc_pan_right(int doc_index);
 void doc_pan_up(int doc_index);
@@ -693,6 +695,10 @@ int string_list_contains(EmbStringTable list, EmbString entry);
 
 /* ----------------------------- Object Core ------------------------------- */
 
+ObjectCore *get_obj_core(uint32_t id);
+
+uint32_t create_arc(EmbArc arc, uint32_t);
+
 EmbVector obj_pos(ObjectCore *obj);
 double obj_x(ObjectCore *obj);
 double obj_y(ObjectCore *obj);
@@ -728,7 +734,7 @@ void obj_set_y1(ObjectCore *obj, double y);
 void obj_set_x2(ObjectCore *obj, double x);
 void obj_set_y2(ObjectCore *obj, double y);
 
-void obj_set_rubber_mode(ObjectCore *core, int mode);
+void obj_set_rubber_mode(uint32_t id, int mode);
 
 EmbVector obj_top_left(ObjectCore *obj);
 EmbVector obj_top_right(ObjectCore *obj);

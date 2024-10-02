@@ -120,6 +120,7 @@ EmbVector obj_map_rubber(Object *obj, const char *key);
 EmbVector map_from_scene(Object *obj, EmbVector v);
 void to_string_table(QStringList src, EmbStringTable dest);
 
+std::unordered_map<uint32_t, Object*> object_list;
 std::unordered_map<int, QAction*> actionHash;
 QToolBar* toolbar[N_TOOLBARS];
 QMenu* menu[N_MENUS];
@@ -316,9 +317,9 @@ QPixmap create_pixmap(QString icon);
 void nativeAlert(std::string txt);
 void nativeAppendPromptHistory(std::string txt);
 
-void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
-void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
-void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
+ScriptValue add_polygon_command(double startX, double startY, const QPainterPath& p, int rubberMode);
+ScriptValue add_polyline_command(double startX, double startY, const QPainterPath& p, int rubberMode);
+ScriptValue add_path_command(double startX, double startY, const QPainterPath& p, int rubberMode);
 
 void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
 
@@ -338,9 +339,8 @@ void preview_update(void);
 void setHistory(QString txt);
 void add_command(std::string alias, std::string cmd);
 
-/* ------------------------ Object Functions --------------------------- */
+/* ------------------------- Object Functions ------------------------------- */
 
-Object *create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item=0);
 Object *create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item=0);
 Object *create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item=0);
 Object *create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
@@ -401,6 +401,8 @@ void draw_polygon(QPainter* painter, EmbPolygon polygon);
 void draw_polyline(QPainter* painter, EmbPolyline polyline);
 void draw_rect(QPainter* painter, EmbRect rect);
 void draw_spline(QPainter* painter, EmbSpline spline);
+
+void doc_add_item(int32_t doc, uint32_t id);
 
 QPainterPath doc_create_ruler_text_path(EmbString str, float height);
 
@@ -1477,45 +1479,64 @@ rgb(uint8_t r, uint8_t g, uint8_t b)
     return qRgb(r, g, b);
 }
 
+/* . */
+ObjectCore *
+get_obj_core(uint32_t id)
+{
+    return object_list[id]->core;
+}
+
+/* . */
+void
+doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode)
+{
+    Object *obj = object_list[id];
+    QGraphicsScene* gscene = activeScene();
+    QUndoStack* stack = activeUndoStack();
+    if (!gscene || !stack) {
+        return;
+    }
+    if (rubberMode) {
+        doc_add_to_rubber_room(doc_index, obj);
+        doc_add_item(doc_index, obj->core->objID);
+        doc_update(doc_index);
+    }
+    else {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
+            obj->core->OBJ_NAME, obj, doc_index, 0);
+        stack->push(cmd);
+    }
+}
+
 /* (char *str, double x, double y, double rot, bool fill, int rubberMode). */
 ScriptValue
 add_textsingle_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
+    if (doc_index < 0) {
+        return script_false;
+    }
     char *str = STR(0);
     EmbVector v = unpack_vector(context, 1);
     double rot = REAL(3);
     bool fill = BOOL(4);
     int rubberMode = INT(5);
-    if ((doc_index >= 0) && gscene && stack) {
-        Object* obj = create_text_single(QString(str), v, getCurrentColor());
-        obj_set_text_font(obj->core, get_str(TEXT_FONT));
-        obj_set_text_size(obj->core, get_real(TEXT_SIZE));
-        obj_set_text_style(obj->core,
-            get_bool(TEXT_STYLE_BOLD),
-            get_bool(TEXT_STYLE_ITALIC),
-            get_bool(TEXT_STYLE_UNDERLINE),
-            get_bool(TEXT_STYLE_STRIKEOUT),
-            get_bool(TEXT_STYLE_OVERLINE));
-        obj_set_text_backward(obj->core, false);
-        obj_set_text_upside_down(obj->core, false);
-        obj->setRotation(-rot);
-        /* TODO: single line text fill. */
-        obj_set_rubber_mode(obj->core, rubberMode);
-        if (rubberMode) {
-            doc_add_to_rubber_room(doc_index, obj);
-            gscene->addItem(obj);
-            doc_update(doc_index);
-        }
-        else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
-            stack->push(cmd);
-        }
-        return script_true;
-    }
-    return script_false;
+    Object* obj = create_text_single(QString(str), v, getCurrentColor());
+    obj_set_text_font(obj->core, get_str(TEXT_FONT));
+    obj_set_text_size(obj->core, get_real(TEXT_SIZE));
+    obj_set_text_style(obj->core,
+        get_bool(TEXT_STYLE_BOLD),
+        get_bool(TEXT_STYLE_ITALIC),
+        get_bool(TEXT_STYLE_UNDERLINE),
+        get_bool(TEXT_STYLE_STRIKEOUT),
+        get_bool(TEXT_STYLE_OVERLINE));
+    obj_set_text_backward(obj->core, false);
+    obj_set_text_upside_down(obj->core, false);
+    obj->setRotation(-rot);
+    /* TODO: single line text fill. */
+    obj_set_rubber_mode(obj->core->objID, rubberMode);
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
+    return script_true;
 }
 
 /* (double x1, double y1, double x2, double y2, double rot, int rubberMode). */
@@ -1523,29 +1544,19 @@ ScriptValue
 add_line_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
-    if ((doc_index >= 0) && gscene && stack) {
-        EmbLine line;
-        line.start = unpack_vector(context, 0);
-        line.end = unpack_vector(context, 2);
-        double rot = REAL(4);
-        int rubberMode = INT(5);
-        Object* obj = create_line(line, getCurrentColor());
-        obj->setRotation(-rot);
-        obj_set_rubber_mode(obj->core, rubberMode);
-        if (rubberMode) {
-            doc_add_to_rubber_room(doc_index, obj);
-            gscene->addItem(obj);
-            doc_update(doc_index);
-        }
-        else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
-            stack->push(cmd);
-        }
-        return script_true;
+    if (doc_index < 0) {
+        return script_false;
     }
-    return script_false;
+    EmbLine line;
+    line.start = unpack_vector(context, 0);
+    line.end = unpack_vector(context, 2);
+    double rot = REAL(4);
+    int rubberMode = INT(5);
+    Object* obj = create_line(line, getCurrentColor());
+    obj->setRotation(-rot);
+    obj_set_rubber_mode(obj->core->objID, rubberMode);
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
+    return script_true;
 }
 
 /* (double x, double y, double w, double h, double rot, bool fill, int rubberMode). */
@@ -1553,9 +1564,7 @@ ScriptValue
 add_rectangle_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
-    if ((doc_index < 0) && !(gscene && stack)) {
+    if (doc_index < 0) {
         return script_false;
     }
     EmbRect rect = emb_rect(REAL(0), -REAL(1), REAL(2), -REAL(3));
@@ -1564,41 +1573,9 @@ add_rectangle_command(ScriptEnv *context)
     int rubberMode = INT(6);
     Object* obj = create_rect(rect, getCurrentColor());
     obj->setRotation(-rot);
-    obj_set_rubber_mode(obj->core, rubberMode);
+    obj_set_rubber_mode(obj->core->objID, rubberMode);
     /* TODO: rect fill */
-    if (rubberMode) {
-        doc_add_to_rubber_room(doc_index, obj);
-        gscene->addItem(obj);
-        doc_update(doc_index);
-    }
-    else {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
-        stack->push(cmd);
-    }
-    return script_false;
-}
-
-/* (double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode). */
-ScriptValue
-add_arc_command(ScriptEnv *context)
-{
-    int32_t doc_index = activeDocument();
-    QGraphicsScene* scene = activeScene();
-    if ((doc_index >= 0) && scene) {
-        EmbArc arc;
-        arc.start = unpack_vector(context, 0);
-        arc.mid = unpack_vector(context, 2);
-        arc.end = unpack_vector(context, 4);
-        int rubberMode = INT(5);
-        Object* arcObj = create_arc(arc, getCurrentColor());
-        obj_set_rubber_mode(arcObj->core, rubberMode);
-        if (rubberMode) {
-            doc_add_to_rubber_room(doc_index, arcObj);
-        }
-        scene->addItem(arcObj);
-        doc_update(doc_index);
-        return script_true;
-    }
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
     return script_false;
 }
 
@@ -1607,28 +1584,18 @@ ScriptValue
 add_circle_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
-    if ((doc_index >= 0) && gscene && stack) {
-        EmbCircle circle;
-        circle.center = unpack_vector(context, 0);
-        circle.radius = REAL(2);
-        int rubberMode = INT(3);
-        Object* obj = create_circle(circle, getCurrentColor());
-        obj_set_rubber_mode(obj->core, rubberMode);
-        /* TODO: circle fill. */
-        if (rubberMode) {
-            doc_add_to_rubber_room(doc_index, obj);
-            gscene->addItem(obj);
-            doc_update(doc_index);
-        }
-        else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
-            stack->push(cmd);
-        }
-        return script_true;
+    if (doc_index < 0) {
+        return script_false;
     }
-    return script_false;
+    EmbCircle circle;
+    circle.center = unpack_vector(context, 0);
+    circle.radius = REAL(2);
+    int rubberMode = INT(3);
+    Object* obj = create_circle(circle, getCurrentColor());
+    obj_set_rubber_mode(obj->core->objID, rubberMode);
+    /* TODO: circle fill. */
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
+    return script_true;
 }
 
 /* (double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode). */
@@ -1637,9 +1604,12 @@ add_slot_command(ScriptEnv *context)
 {
     /* TODO: Use UndoableCommand for slots */
     int32_t doc_index = activeDocument();
+    if (doc_index < 0) {
+        return script_false;
+    }
     /*
-    Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
-    slotObj->setRotation(-rot);
+    Object* obj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
+    obj->setRotation(-rot);
     obj_set_rubber_mode(slotObj->core, rubberMode);
     if (rubberMode) doc_add_to_rubber_room(doc_index, slotObj);
     scene->addItem(slotObj);
@@ -1654,37 +1624,27 @@ ScriptValue
 add_ellipse_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
-    if ((doc_index >= 0) && gscene && stack) {
-        double centerX = REAL(0);
-        double centerY = REAL(1);
-        double width = REAL(2);
-        double height = REAL(3);
-        double rot = REAL(4);
-        bool fill = BOOL(5);
-        int rubberMode = INT(6);
-        EmbEllipse ellipse;
-        ellipse.center.x = centerX;
-        ellipse.center.y = -centerY;
-        ellipse.radius.x = width/2.0;
-        ellipse.radius.y = height/2.0;
-        Object* obj = create_ellipse(ellipse, getCurrentColor());
-        obj->setRotation(-rot);
-        obj_set_rubber_mode(obj->core, rubberMode);
-        /* TODO: ellipse fill */
-        if (rubberMode) {
-            doc_add_to_rubber_room(doc_index, obj);
-            gscene->addItem(obj);
-            doc_update(doc_index);
-        }
-        else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
-            stack->push(cmd);
-        }
-        return script_true;
+    if (doc_index < 0) {
+        return script_false;
     }
-    return script_false;
+    double centerX = REAL(0);
+    double centerY = REAL(1);
+    double width = REAL(2);
+    double height = REAL(3);
+    double rot = REAL(4);
+    bool fill = BOOL(5);
+    int rubberMode = INT(6);
+    EmbEllipse ellipse;
+    ellipse.center.x = centerX;
+    ellipse.center.y = -centerY;
+    ellipse.radius.x = width/2.0;
+    ellipse.radius.y = height/2.0;
+    Object* obj = create_ellipse(ellipse, getCurrentColor());
+    obj->setRotation(-rot);
+    obj_set_rubber_mode(obj->core->objID, rubberMode);
+    /* TODO: ellipse fill */
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
+    return script_true;
 }
 
 /* double x, double y. */
@@ -1692,72 +1652,51 @@ ScriptValue
 add_point_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
-    QUndoStack* stack = activeUndoStack();
-    if ((doc_index >= 0) && stack) {
-        double x = REAL(0);
-        double y = REAL(1);
-        EmbPoint point;
-        point.position.x = x;
-        point.position.y = -y;
-        Object* obj = create_point(point, getCurrentColor());
-        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
-        stack->push(cmd);
-        return script_true;
+    if (doc_index < 0) {
+        return script_false;
     }
-    return script_false;
+    EmbPoint point;
+    point.position = unpack_vector(context, 0);
+    int rubberMode = INT(2);
+    Object* obj = create_point(point, getCurrentColor());
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
+    return script_true;
 }
 
 /* NOTE: This native is different than the rest in that the Y+ is down
  * (scripters need not worry about this)
  */
-void
+ScriptValue
 add_polygon_command(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     int32_t doc_index = activeDocument();
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
-    if ((doc_index >= 0) && gscene && stack) {
-        EmbPolygon polygon;
-        EmbVector start = emb_vector(startX, startY);
-        Object* obj = create_polygon(start, p, getCurrentColor());
-        obj_set_rubber_mode(obj->core, rubberMode);
-        if (rubberMode) {
-            doc_add_to_rubber_room(doc_index, obj);
-            gscene->addItem(obj);
-            doc_update(doc_index);
-        }
-        else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
-            stack->push(cmd);
-        }
+    if (doc_index < 0) {
+        return script_false;
     }
+    EmbPolygon polygon;
+    EmbVector start = emb_vector(startX, startY);
+    Object* obj = create_polygon(start, p, getCurrentColor());
+    obj_set_rubber_mode(obj->core->objID, rubberMode);
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
+    return script_true;
 }
 
 /* NOTE: This native is different than the rest in that the Y+ is down
  * (scripters need not worry about this)
  */
-void
+ScriptValue
 add_polyline_command(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     int32_t doc_index = activeDocument();
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
-    if ((doc_index >= 0) && gscene && stack) {
-        EmbPath path;
-        EmbVector start = emb_vector(startX, startY);
-        Object* obj = create_polygon(start, p, getCurrentColor());
-        obj_set_rubber_mode(obj->core, rubberMode);
-        if (rubberMode) {
-            doc_add_to_rubber_room(doc_index, obj);
-            gscene->addItem(obj);
-            doc_update(doc_index);
-        }
-        else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
-                obj->core->OBJ_NAME, obj, doc_index, 0);
-            stack->push(cmd);
-        }
+    if (doc_index < 0) {
+        return script_false;
     }
+    EmbPath path;
+    EmbVector start = emb_vector(startX, startY);
+    Object* obj = create_polygon(start, p, getCurrentColor());
+    obj_set_rubber_mode(obj->core->objID, rubberMode);
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
+    return script_true;
 }
 
 /* double x1, double y1, double x2, double y2, double rot, int rubberMode */
@@ -1765,34 +1704,19 @@ ScriptValue
 add_dimleader_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
-    if ((doc_index >= 0) && gscene && stack) {
-        EmbLine line;
-        double x1 = REAL(0);
-        double y1 = REAL(1);
-        double x2 = REAL(2);
-        double y2 = REAL(3);
-        double rot = REAL(4);
-        int rubberMode = INT(5);
-        line.start = emb_vector(x1, -y1);
-        line.end = emb_vector(x2, -y2);
-        Object* obj = create_dim_leader(line, getCurrentColor());
-        obj->setRotation(-rot);
-        obj_set_rubber_mode(obj->core, rubberMode);
-        if (rubberMode) {
-            doc_add_to_rubber_room(doc_index, obj);
-            gscene->addItem(obj);
-            doc_update(doc_index);
-        }
-        else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
-                obj->core->OBJ_NAME, obj, doc_index, 0);
-            stack->push(cmd);
-        }
-        return script_true;
+    if (doc_index < 0) {
+        return script_false;
     }
-    return script_false;
+    EmbLine line;
+    line.start = unpack_vector(context, 0);
+    line.end = unpack_vector(context, 2);
+    double rot = REAL(4);
+    int rubberMode = INT(5);
+    Object* obj = create_dim_leader(line, getCurrentColor());
+    obj->setRotation(-rot);
+    obj_set_rubber_mode(obj->core->objID, rubberMode);
+    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
+    return script_true;
 }
 
 /* . */
@@ -1801,55 +1725,60 @@ set_CursorShape(char shape[MAX_STRING_LENGTH])
 {
     int32_t doc_index = activeDocument();
     Document *doc = documents[doc_index];
-    if (doc) {
-        if (!strcmp(shape, "arrow")) {
-            doc->setCursor(QCursor(Qt::ArrowCursor));
-        }
-        else if (!strcmp(shape, "uparrow")) {
-            doc->setCursor(QCursor(Qt::UpArrowCursor));
-        }
-        else if (!strcmp(shape, "cross")) {
-            doc->setCursor(QCursor(Qt::CrossCursor));
-        }
-        else if (!strcmp(shape, "wait")) {
-            doc->setCursor(QCursor(Qt::WaitCursor));
-        }
-        else if (!strcmp(shape, "ibeam"))
-            doc->setCursor(QCursor(Qt::IBeamCursor));
-        else if (!strcmp(shape, "resizevert"))
-            doc->setCursor(QCursor(Qt::SizeVerCursor));
-        else if (!strcmp(shape, "resizehoriz"))
-            doc->setCursor(QCursor(Qt::SizeHorCursor));
-        else if (!strcmp(shape, "resizediagleft"))
-            doc->setCursor(QCursor(Qt::SizeBDiagCursor));
-        else if (!strcmp(shape, "resizediagright"))
-            doc->setCursor(QCursor(Qt::SizeFDiagCursor));
-        else if (!strcmp(shape, "move"))
-            doc->setCursor(QCursor(Qt::SizeAllCursor));
-        else if (!strcmp(shape, "blank"))
-            doc->setCursor(QCursor(Qt::BlankCursor));
-        else if (!strcmp(shape, "splitvert"))
-            doc->setCursor(QCursor(Qt::SplitVCursor));
-        else if (!strcmp(shape, "splithoriz"))
-            doc->setCursor(QCursor(Qt::SplitHCursor));
-        else if (!strcmp(shape, "handpointing"))
-            doc->setCursor(QCursor(Qt::PointingHandCursor));
-        else if (!strcmp(shape, "forbidden"))
-            doc->setCursor(QCursor(Qt::ForbiddenCursor));
-        else if (!strcmp(shape, "handopen"))
-            doc->setCursor(QCursor(Qt::OpenHandCursor));
-        else if (!strcmp(shape, "handclosed"))
-            doc->setCursor(QCursor(Qt::ClosedHandCursor));
-        else if (!strcmp(shape, "whatsthis"))
-            doc->setCursor(QCursor(Qt::WhatsThisCursor));
-        else if (!strcmp(shape, "busy"))
-            doc->setCursor(QCursor(Qt::BusyCursor));
-        else if (!strcmp(shape, "dragmove"))
-            doc->setCursor(QCursor(Qt::DragMoveCursor));
-        else if (!strcmp(shape, "dragcopy"))
-            doc->setCursor(QCursor(Qt::DragCopyCursor));
-        else if (!strcmp(shape, "draglink"))
-            doc->setCursor(QCursor(Qt::DragLinkCursor));
+    if (!doc) {
+        return;
+    }
+    if (!strcmp(shape, "arrow")) {
+        doc->setCursor(QCursor(Qt::ArrowCursor));
+    }
+    else if (!strcmp(shape, "uparrow")) {
+        doc->setCursor(QCursor(Qt::UpArrowCursor));
+    }
+    else if (!strcmp(shape, "cross")) {
+        doc->setCursor(QCursor(Qt::CrossCursor));
+    }
+    else if (!strcmp(shape, "wait")) {
+        doc->setCursor(QCursor(Qt::WaitCursor));
+    }
+    else if (!strcmp(shape, "ibeam")) {
+        doc->setCursor(QCursor(Qt::IBeamCursor));
+    }
+    else if (!strcmp(shape, "resizevert")) {
+        doc->setCursor(QCursor(Qt::SizeVerCursor));
+    }
+    else if (!strcmp(shape, "resizehoriz")) {
+        doc->setCursor(QCursor(Qt::SizeHorCursor));
+    }
+    else if (!strcmp(shape, "resizediagleft"))
+        doc->setCursor(QCursor(Qt::SizeBDiagCursor));
+    else if (!strcmp(shape, "resizediagright"))
+        doc->setCursor(QCursor(Qt::SizeFDiagCursor));
+    else if (!strcmp(shape, "move"))
+        doc->setCursor(QCursor(Qt::SizeAllCursor));
+    else if (!strcmp(shape, "blank"))
+        doc->setCursor(QCursor(Qt::BlankCursor));
+    else if (!strcmp(shape, "splitvert"))
+        doc->setCursor(QCursor(Qt::SplitVCursor));
+    else if (!strcmp(shape, "splithoriz"))
+        doc->setCursor(QCursor(Qt::SplitHCursor));
+    else if (!strcmp(shape, "handpointing"))
+        doc->setCursor(QCursor(Qt::PointingHandCursor));
+    else if (!strcmp(shape, "forbidden"))
+        doc->setCursor(QCursor(Qt::ForbiddenCursor));
+    else if (!strcmp(shape, "handopen"))
+        doc->setCursor(QCursor(Qt::OpenHandCursor));
+    else if (!strcmp(shape, "handclosed"))
+        doc->setCursor(QCursor(Qt::ClosedHandCursor));
+    else if (!strcmp(shape, "whatsthis"))
+        doc->setCursor(QCursor(Qt::WhatsThisCursor));
+    else if (!strcmp(shape, "busy"))
+        doc->setCursor(QCursor(Qt::BusyCursor));
+    else if (!strcmp(shape, "dragmove"))
+        doc->setCursor(QCursor(Qt::DragMoveCursor));
+    else if (!strcmp(shape, "dragcopy"))
+        doc->setCursor(QCursor(Qt::DragCopyCursor));
+    else if (!strcmp(shape, "draglink")) {
+        doc->setCursor(QCursor(Qt::DragLinkCursor));
     }
 }
 
@@ -2325,6 +2254,8 @@ Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)/
     core->geometry->object.color.g = qGreen(rgb);
     core->geometry->object.color.b = qBlue(rgb);
     core->geometry->lineType = lineType;
+
+    object_list[core->objID] = this;
 }
 
 /* . */
@@ -2336,16 +2267,16 @@ Object::~Object()
 }
 
 /* . */
-Object *
-create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item)
+uint32_t
+create_arc(EmbArc arc, uint32_t rgb)
 {
     debug_message("ArcObject Constructor()");
-    Object *obj = new Object(EMB_ARC, rgb, Qt::SolidLine, item);
+    Object *obj = new Object(EMB_ARC, rgb, Qt::SolidLine);
     obj->core->geometry->object.arc = arc;
     todo("getCurrentLineType");
     obj_calculate_data(obj);
     obj_set_pos(obj->core, arc.start);
-    return obj;
+    return obj->core->objID;
 }
 
 /* . */
@@ -4263,9 +4194,23 @@ Document::enterEvent(QEvent* /*event*/)
 
 /* . */
 void
+doc_add_item(int32_t doc, uint32_t id)
+{
+    documents[doc]->gscene->addItem(object_list[id]);
+}
+
+/* . */
+void
+doc_remove_item(int32_t doc, uint32_t id)
+{
+    documents[doc]->gscene->removeItem(object_list[id]);
+}
+
+/* . */
+void
 doc_add_object(int32_t doc, Object* obj)
 {
-    documents[doc]->gscene->addItem(obj);
+    doc_add_item(doc, obj->core->objID);
     doc_update(doc);
     documents[doc]->hashDeletedObjects.erase(obj->core->objID);
 }
@@ -4277,7 +4222,7 @@ void
 doc_delete_object(int32_t doc, Object* obj)
 {
     obj->setSelected(false);
-    documents[doc]->gscene->removeItem(obj);
+    doc_remove_item(doc, obj->core->objID);
     doc_update(doc);
     documents[doc]->hashDeletedObjects[obj->core->objID] = obj;
 }
@@ -4437,7 +4382,7 @@ doc_set_rubber_mode(int32_t doc, int mode)
     foreach (QGraphicsItem* item, documents[doc]->rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            obj_set_rubber_mode(base->core, mode);
+            obj_set_rubber_mode(base->core->objID, mode);
         }
     }
     doc_update(doc);
@@ -6143,7 +6088,7 @@ doc_start_gripping(int32_t doc, Object* obj)
     documents[doc]->gripBaseObj = obj;
     data->sceneGripPoint = documents[doc]->gripBaseObj->mouseSnapPoint(data->sceneMousePoint);
     documents[doc]->gripBaseObj->setObjectRubberPoint("GRIP_POINT", data->sceneGripPoint);
-    obj_set_rubber_mode(documents[doc]->gripBaseObj->core, RUBBER_GRIP);
+    obj_set_rubber_mode(documents[doc]->gripBaseObj->core->objID, RUBBER_GRIP);
 }
 
 /* . */

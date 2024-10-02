@@ -121,7 +121,6 @@ BASIC_DOC_F(doc_paste)
 void doc_show_scroll_bars(int32_t doc, bool) {}
 void doc_set_select_box_colors(int32_t doc, uint32_t, uint32_t, uint32_t, uint32_t, int) {}
 
-DUMMY_COMMAND(add_arc_command)
 DUMMY_COMMAND(add_circle_command)
 DUMMY_COMMAND(add_dimleader_command)
 DUMMY_COMMAND(add_ellipse_command)
@@ -131,6 +130,9 @@ DUMMY_COMMAND(add_rectangle_command)
 DUMMY_COMMAND(add_slot_command)
 DUMMY_COMMAND(add_textsingle_command)
 DUMMY_COMMAND(previewon_command)
+
+uint32_t create_arc(EmbArc arc, uint32_t) {return 0;}
+void doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode) {}
 
 NO_ARG_F(undo_command)
 NO_ARG_F(redo_command)
@@ -152,6 +154,8 @@ void nanosleep_(int) {}
 DocumentData* doc_data(int32_t) {return NULL;}
 
 EmbRect obj_rect(ObjectCore *) {return emb_rect(0.0,0.0,1.0,1.0);}
+
+ObjectCore *get_obj_core(uint32_t) {return NULL;}
 
 void doc_set_bool(int32_t doc, const char *key, bool) {}
 bool doc_get_bool(int32_t doc, const char *key) { return true; }

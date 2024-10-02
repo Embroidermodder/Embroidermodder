@@ -65,6 +65,7 @@ set(C_CORE
 	${SRC}/script.c
 	${SRC}/objects.c
 	${SRC}/commands.c
+	${SRC}/geometry.c
 	${SRC}/document.c
 	${SRC}/xpm.c
 

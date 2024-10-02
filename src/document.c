@@ -242,6 +242,7 @@ doc_set_ruler_color(int32_t doc, uint32_t color)
     data->rulerColor = color;
     doc_update(doc);
 }
+
 /* . */
 void
 doc_set_cross_hair_color(int32_t doc, uint32_t color)
@@ -251,6 +252,7 @@ doc_set_cross_hair_color(int32_t doc, uint32_t color)
     doc_update(doc);
 }
 
+/* . */
 void
 doc_toggle_grid(int32_t doc, bool on)
 {

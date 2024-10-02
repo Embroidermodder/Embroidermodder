@@ -164,8 +164,9 @@ obj_set_pos(ObjectCore *obj, EmbVector point)
 
 /* . */
 void
-obj_set_rubber_mode(ObjectCore *core, int mode)
+obj_set_rubber_mode(uint32_t id, int mode)
 {
+    ObjectCore *core = get_obj_core(id);
     core->rubber_mode = mode;
 }
 

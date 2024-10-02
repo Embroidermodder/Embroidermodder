@@ -2752,13 +2752,6 @@ nativeScaleSelected(double x, double y, double factor)
     }
 }
 
-/* add_TextMulti(char *str, double x, double y, double rot, bool fill, int rubberMode). */
-ScriptValue
-add_textmulti_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
 /* . */
 void
 set_BackgroundColor(uint8_t r, uint8_t g, uint8_t b)
