@@ -11,6 +11,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "core.h"
 
@@ -210,7 +211,7 @@ updateAllViewRulerColors(uint32_t color)
  * BUG: pan commands broke
  */
 ScriptValue
-run_command(const char *cmd, ScriptEnv *context)
+run_command(ScriptEnv *context, const char *cmd)
 {
     char message[MAX_STRING_LENGTH];
     int id = get_command_id((char*)cmd);
@@ -304,7 +305,7 @@ run_command(const char *cmd, ScriptEnv *context)
         break;
 
     case ACTION_DIM_LEADER: {
-        nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), RUBBER_OFF);
+        value = add_dimleader_command(context);
         break;
     }
 
@@ -529,7 +530,7 @@ run_command(const char *cmd, ScriptEnv *context)
     }
 
     case ACTION_CIRCLE: {
-        nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), RUBBER_OFF);
+        value = add_circle_command(context);
         break;
     }
 
@@ -540,7 +541,7 @@ run_command(const char *cmd, ScriptEnv *context)
         break;
 
     case ACTION_ELLIPSE: {
-        nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
+        value = add_ellipse_command(context);
         break;
     }
 
@@ -569,7 +570,7 @@ run_command(const char *cmd, ScriptEnv *context)
         break;
 
     case ACTION_LINE: {
-        nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), RUBBER_OFF);
+        value = add_line_command(context);
         break;
     }
 
@@ -604,11 +605,12 @@ run_command(const char *cmd, ScriptEnv *context)
         break;
     }
 
-    case ACTION_QUICKLEADER:
+    case ACTION_QUICKLEADER: {
         break;
+    }
 
     case ACTION_RECTANGLE: {
-        nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
+        value = add_rectangle_command(context);
         break;
     }
 
@@ -791,7 +793,7 @@ runCommandMain(const char *cmd)
         clear_selection();
     }
     */
-    run_command(cmd, context);
+    run_command(context, cmd);
     free_script_env(context);
 }
 
@@ -806,7 +808,7 @@ runCommandClick(const char *cmd, double x, double y)
     sprintf(message, "runCommandClick(%s, %.2f, %.2f)", cmd, x, y);
     debug_message(message);
     /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
-    run_command(cmd, context);
+    run_command(context, cmd);
     free_script_env(context);
 }
 
@@ -821,7 +823,7 @@ runCommandMove(const char *cmd, double x, double y)
     sprintf(message, "runCommandMove(%s, %.2f, %.2f)", cmd, x, y);
     debug_message(message);
     /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
-    run_command(cmd, context);
+    run_command(context, cmd);
     free_script_env(context);
 }
 
@@ -836,7 +838,7 @@ runCommandContext(const char *cmd, const char *str)
     sprintf(message, "runCommandContext(%s, %s)", cmd, str);
     debug_message(message);
     /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
-    run_command(cmd, context);
+    run_command(context, cmd);
     free_script_env(context);
 }
 
@@ -852,11 +854,11 @@ runCommandPrompt(const char *cmd)
     debug_message(message);
     context->context = CONTEXT_PROMPT;
     if (rapidFireEnabled) {
-        run_command(cmd, context);
+        run_command(context, cmd);
     }
     else {
         /* Both branches run the same. */
-        run_command(cmd, context);
+        run_command(context, cmd);
     }
     free_script_env(context);
 }
@@ -933,7 +935,7 @@ nativeSpareRubber(int64_t id)
 
 /* . */
 void
-nativeSetRubberMode(int mode)
+set_RubberMode(int mode)
 {
     int32_t doc_index = activeDocument();
     if (doc_index >= 0) {
@@ -943,7 +945,7 @@ nativeSetRubberMode(int mode)
 
 /* . */
 void
-nativeSetRubberPoint(const EmbString key, double x, double y)
+set_RubberPoint(const EmbString key, double x, double y)
 {
     int32_t doc_index = activeDocument();
     if (doc_index >= 0) {
@@ -954,7 +956,7 @@ nativeSetRubberPoint(const EmbString key, double x, double y)
 
 /* . */
 void
-nativeSetRubberText(const EmbString key, EmbString txt)
+set_RubberText(const EmbString key, EmbString txt)
 {
     int32_t doc_index = activeDocument();
     if (doc_index >= 0) {
@@ -1143,62 +1145,75 @@ getCurrentLineWeight(void)
     return data->curLineWeight;
 }
 
-/* . */
-void
-nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
+/* (double x1, double y1, double x2, double y2, double rot). */
+ScriptValue
+add_infinite_line_command(ScriptEnv *context)
 {
+    return script_false;
 }
 
-/* . */
-void
-nativeAddRay(double x1, double y1, double x2, double y2, double rot)
+/* (double x1, double y1, double x2, double y2, double rot). */
+ScriptValue
+add_ray_command(ScriptEnv *context)
 {
+    return script_false;
 }
 
-/* . */
-void
-nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
+/* add_triangle_command(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill). */
+ScriptValue
+add_triangle_command(ScriptEnv *context)
 {
+    return script_false;
 }
 
-/* . */
-void
-nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
+/* add_rounded_rectangle_command(double x, double y, double w, double h, double rad, double rot, bool fill)
+. */
+ScriptValue
+add_rounded_rectangle_command(ScriptEnv *context)
 {
+    return script_false;
 }
 
-/* . */
-void
-nativeAddRegularPolygon(double centerX, double centerY, uint16_t sides, uint8_t mode, double rad, double rot, bool fill)
+/* add_regular_polygon_command(double centerX, double centerY, uint16_t sides, uint8_t mode, double rad, double rot, bool fill). */
+ScriptValue
+add_regular_polygon_command(ScriptEnv *context)
 {
+    return script_false;
 }
 
 /* NOTE: This native is different than the rest in that the Y+ is down
  * (scripters need not worry about this)
-void
-nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
+ScriptValue
+add_Path(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
+    return script_false;
 }
  */
 
-void
-nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight)
+/* add_horizontal_dimension_command(double x1, double y1, double x2, double y2, double legHeight). */
+ScriptValue
+add_horizontal_dimension_command(ScriptEnv *context)
 {
+    return script_false;
+}
+
+/* add_vertical_dimension_command(double x1, double y1, double x2, double y2, double legHeight)
+ */
+ScriptValue
+add_vertical_dimension_command(ScriptEnv *context)
+{
+    return script_false;
+}
+
+/* (QString img, double x, double y, double w, double h, double rot)
+ScriptValue
+add_image_command(ScriptEnv *context)
+{
+    return script_false;
 }
 
 void
-nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight)
-{
-}
-
-/*
-void
-nativeAddImage(QString img, double x, double y, double w, double h, double rot)
-{
-}
-
-void
-nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
+add_ToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
 {
 }
 */
@@ -2098,7 +2113,7 @@ add_to_selection_command(ScriptEnv* context)
 ScriptValue
 set_cursor_shape_command(ScriptEnv* context)
 {
-    nativeSetCursorShape(STR(0));
+    set_CursorShape(STR(0));
     return script_null;
 }
 
@@ -2111,7 +2126,6 @@ calculate_distance_command(ScriptEnv* context)
     double r = emb_vector_distance(p1, p2);
     return script_real(r);
 }
-
 
 /* . */
 ScriptValue
@@ -2130,7 +2144,7 @@ set_background_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    nativeSetBackgroundColor(REAL(0), REAL(1), REAL(2));
+    set_BackgroundColor(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -2150,7 +2164,7 @@ set_crosshair_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    nativeSetCrossHairColor(REAL(0), REAL(1), REAL(2));
+    set_CrossHairColor(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -2170,85 +2184,11 @@ set_grid_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    nativeSetGridColor(REAL(0), REAL(1), REAL(2));
+    set_GridColor(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
-ScriptValue
-add_text_multi_command(ScriptEnv* context)
-{
-    nativeAddTextMulti(STR(0), REAL(1), REAL(2), REAL(3),
-        BOOL(4), RUBBER_OFF);
-    return script_null;
-}
-
-ScriptValue
-add_text_single_command(ScriptEnv* context)
-{
-    nativeAddTextSingle(STR(0), REAL(1), REAL(2), REAL(3),
-        BOOL(4), RUBBER_OFF);
-    return script_null;
-}
-
-ScriptValue
-add_infinite_line(ScriptEnv* context)
-{
-    /* TODO: parameter error checking */
-    prompt_output("TODO: finish addInfiniteLine command");
-    return script_null;
-}
-
-ScriptValue
-add_ray_command(ScriptEnv* context)
-{
-    /* TODO: parameter error checking */
-    prompt_output("TODO: finish addRay command");
-    return script_null;
-}
-
-ScriptValue
-add_triangle_command(ScriptEnv* context)
-{
-    nativeAddTriangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), REAL(6), BOOL(7));
-    return script_null;
-}
-
-ScriptValue
-add_rounded_rectangle_command(ScriptEnv* context)
-{
-    nativeAddRoundedRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), BOOL(6));
-    return script_null;
-}
-
-ScriptValue
-add_arc_command(ScriptEnv* context)
-{
-    nativeAddArc(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), RUBBER_OFF);
-    return script_null;
-}
-
-ScriptValue
-add_slot_command(ScriptEnv* context)
-{
-    nativeAddSlot(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
-    return script_null;
-}
-
-ScriptValue
-add_point_command(ScriptEnv* context)
-{
-    nativeAddPoint(REAL(0), REAL(1));
-    return script_null;
-}
-
-ScriptValue
-add_regular_polygon_command(ScriptEnv* context)
-{
-    /* TODO: parameter error checking */
-    prompt_output("TODO: finish addRegularPolygon command");
-    return script_null;
-}
-
+/* . */
 ScriptValue
 add_polygon_command(ScriptEnv* context)
 {
@@ -2309,7 +2249,7 @@ add_polygon_command(ScriptEnv* context)
 
     path.translate(-start.x, -start.y);
 
-    nativeAddPolygon(start.x, start.y, path, RUBBER_OFF);
+    add_Polygon(start.x, start.y, path, RUBBER_OFF);
     #endif
     return script_null;
 }
@@ -2374,7 +2314,7 @@ add_polyline_command(ScriptEnv* context)
 
     path.translate(-startX, -startY);
 
-    nativeAddPolyline(startX, startY, path, RUBBER_OFF);
+    add_Polyline(startX, startY, path, RUBBER_OFF);
     #endif
     return script_null;
 }
@@ -2436,7 +2376,7 @@ scale_selected_command(ScriptEnv* context)
 ScriptValue
 set_rubber_point_command(ScriptEnv* context)
 {
-    // FIXME: nativeSetRubberPoint(STR(0), REAL(1), REAL(2));
+    // FIXME: set_RubberPoint(STR(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -2444,7 +2384,7 @@ set_rubber_point_command(ScriptEnv* context)
 ScriptValue
 set_rubber_text_command(ScriptEnv* context)
 {
-    // FIXME: nativeSetRubberText(STR(0), STR(1));
+    // FIXME: set_RubberText(STR(0), STR(1));
     return script_null;
 }
 
@@ -2458,8 +2398,8 @@ add_rubber_command(ScriptEnv* context)
     }
 
     /* FIXME: ERROR CHECKING */
-    double mx = run_command("get mousex", context).r;
-    double my = run_command("get mousey", context).r;
+    double mx = run_command(context, "get mousex").r;
+    double my = run_command(context, "get mousey").r;
 
     if (string_equal(STR(0), "ARC")) {
         /* TODO: handle this type */
@@ -2468,7 +2408,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (string_equal(STR(0), "CIRCLE")) {
-        nativeAddCircle(mx, my, 0, false, RUBBER_ON);
+        add_circle_command(pack(global, "rriii", mx, my, 0, false, RUBBER_ON));
     }
     else if (string_equal(STR(0), "DIMALIGNED")) {
         /* TODO: handle this type */
@@ -2483,7 +2423,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (string_equal(STR(0), "DIMLEADER")) {
-        nativeAddDimLeader(mx, my, mx, my, 0, RUBBER_ON);
+        add_dimleader_command(pack(global, "rrrrii", mx, my, mx, my, 0, RUBBER_ON));
     }
     else if (string_equal(STR(0), "DIMLINEAR")) {
         /* TODO: handle this type */
@@ -2495,7 +2435,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (string_equal(STR(0), "ELLIPSE")) {
-        nativeAddEllipse(mx, my, 0, 0, 0, 0, RUBBER_ON);
+        add_ellipse_command(pack(global, "rriiiii",mx, my, 0, 0, 0, 0, RUBBER_ON));
     }
     else if (string_equal(STR(0), "ELLIPSEARC")) {
         /* TODO: handle this type */
@@ -2510,7 +2450,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (string_equal(STR(0), "LINE")) {
-        nativeAddLine(mx, my, mx, my, 0, RUBBER_ON);
+        add_line_command(pack(global, "rrrrii", mx, my, mx, my, 0, RUBBER_ON));
     }
     else if (string_equal(STR(0), "PATH")) {
         /* TODO: handle this type */
@@ -2520,17 +2460,17 @@ add_rubber_command(ScriptEnv* context)
     }
     else if (string_equal(STR(0), "POLYGON")) {
         /* FIXME: */
-        //nativeAddPolygon(mx, my, NULL, RUBBER_ON);
+        //add_polygon(mx, my, NULL, RUBBER_ON);
     }
     else if (string_equal(STR(0), "POLYLINE")) {
         /* FIXME: */
-        //nativeAddPolyline(mx, my, NULL, RUBBER_ON);
+        //add_polyline(mx, my, NULL, RUBBER_ON);
     }
     else if (string_equal(STR(0), "RAY")) {
         /* TODO: handle this type */
     }
     else if (string_equal(STR(0), "RECTANGLE")) {
-        nativeAddRectangle(mx, my, mx, my, 0, 0, RUBBER_ON);
+        add_rectangle_command(pack(global, "rrrriii", mx, my, mx, my, 0, 0, RUBBER_ON));
     }
     else if (string_equal(STR(0), "SPLINE")) {
         /* TODO: handle this type */
@@ -2539,7 +2479,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (string_equal(STR(0), "TEXTSINGLE")) {
-        nativeAddTextSingle("", mx, my, 0, false, RUBBER_ON);
+        add_textsingle_command(pack(global, "srriii", "", mx, my, 0, false, RUBBER_ON));
     }
 
     return script_null;
@@ -2550,58 +2490,58 @@ ScriptValue
 set_rubber_mode_command(ScriptEnv* context)
 {
     if (string_equal(STR(0),"CIRCLE_1P_RAD")) {
-        nativeSetRubberMode(RUBBER_CIRCLE_1P_RAD);
+        set_RubberMode(RUBBER_CIRCLE_1P_RAD);
     }
     else if (string_equal(STR(0),"CIRCLE_1P_DIA")) {
-        nativeSetRubberMode(RUBBER_CIRCLE_1P_DIA);
+        set_RubberMode(RUBBER_CIRCLE_1P_DIA);
     }
     else if (string_equal(STR(0),"CIRCLE_2P")) {
-        nativeSetRubberMode(RUBBER_CIRCLE_2P);
+        set_RubberMode(RUBBER_CIRCLE_2P);
     }
     else if (string_equal(STR(0),"CIRCLE_3P")) {
-        nativeSetRubberMode(RUBBER_CIRCLE_3P);
+        set_RubberMode(RUBBER_CIRCLE_3P);
     }
     else if (string_equal(STR(0),"CIRCLE_TTR")) {
-        nativeSetRubberMode(RUBBER_CIRCLE_TTR);
+        set_RubberMode(RUBBER_CIRCLE_TTR);
     }
     else if (string_equal(STR(0),"CIRCLE_TTT")) {
-        nativeSetRubberMode(RUBBER_CIRCLE_TTT);
+        set_RubberMode(RUBBER_CIRCLE_TTT);
     }
     else if (string_equal(STR(0),"DIMLEADER_LINE")) {
-        nativeSetRubberMode(RUBBER_DIMLEADER_LINE);
+        set_RubberMode(RUBBER_DIMLEADER_LINE);
     }
     else if (string_equal(STR(0),"ELLIPSE_LINE")) {
-        nativeSetRubberMode(RUBBER_ELLIPSE_LINE);
+        set_RubberMode(RUBBER_ELLIPSE_LINE);
     }
     else if (string_equal(STR(0),"ELLIPSE_MAJDIA_MINRAD")) {
-        nativeSetRubberMode(RUBBER_ELLIPSE_MAJDIA_MINRAD);
+        set_RubberMode(RUBBER_ELLIPSE_MAJDIA_MINRAD);
     }
     else if (string_equal(STR(0),"ELLIPSE_MAJRAD_MINRAD")) {
-        nativeSetRubberMode(RUBBER_ELLIPSE_MAJRAD_MINRAD);
+        set_RubberMode(RUBBER_ELLIPSE_MAJRAD_MINRAD);
     }
     else if (string_equal(STR(0),"ELLIPSE_ROTATION")) {
-        nativeSetRubberMode(RUBBER_ELLIPSE_ROTATION);
+        set_RubberMode(RUBBER_ELLIPSE_ROTATION);
     }
     else if (string_equal(STR(0),"LINE")) {
-        nativeSetRubberMode(RUBBER_LINE);
+        set_RubberMode(RUBBER_LINE);
     }
     else if (string_equal(STR(0),"POLYGON")) {
-        nativeSetRubberMode(RUBBER_POLYGON);
+        set_RubberMode(RUBBER_POLYGON);
     }
     else if (string_equal(STR(0),"POLYGON_INSCRIBE")) {
-        nativeSetRubberMode(RUBBER_POLYGON_INSCRIBE);
+        set_RubberMode(RUBBER_POLYGON_INSCRIBE);
     }
     else if (string_equal(STR(0),"POLYGON_CIRCUMSCRIBE")) {
-        nativeSetRubberMode(RUBBER_POLYGON_CIRCUMSCRIBE);
+        set_RubberMode(RUBBER_POLYGON_CIRCUMSCRIBE);
     }
     else if (string_equal(STR(0),"POLYLINE")) {
-        nativeSetRubberMode(RUBBER_POLYLINE);
+        set_RubberMode(RUBBER_POLYLINE);
     }
     else if (string_equal(STR(0),"RECTANGLE")) {
-        nativeSetRubberMode(RUBBER_RECTANGLE);
+        set_RubberMode(RUBBER_RECTANGLE);
     }
     else if (string_equal(STR(0),"TEXTSINGLE")) {
-        nativeSetRubberMode(RUBBER_TEXTSINGLE);
+        set_RubberMode(RUBBER_TEXTSINGLE);
     }
     else {
         prompt_output("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
@@ -2668,7 +2608,7 @@ locatepoint_command(ScriptEnv *context)
         break;
     }
     case CONTEXT_CONTEXT:
-        run_command("todo LOCATEPOINT context()", context);
+        run_command(context, "todo LOCATEPOINT context()");
         break;
     case CONTEXT_PROMPT:
         EmbVector v;
@@ -2812,15 +2752,16 @@ nativeScaleSelected(double x, double y, double factor)
     }
 }
 
-/* . */
-void
-nativeAddTextMulti(char *str, double x, double y, double rot, bool fill, int rubberMode)
+/* add_TextMulti(char *str, double x, double y, double rot, bool fill, int rubberMode). */
+ScriptValue
+add_textmulti_command(ScriptEnv *context)
 {
+    return script_false;
 }
 
 /* . */
 void
-nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
+set_BackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
     set_int(DISPLAY_BG_COLOR, rgb(r, g, b));
     updateAllViewBackgroundColors(rgb(r, g, b));
@@ -2828,7 +2769,7 @@ nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 
 /* . */
 void
-nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
+set_CrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 {
     set_int(DISPLAY_CROSSHAIR_COLOR, rgb(r, g, b));
     updateAllViewCrossHairColors(rgb(r, g, b));
@@ -2836,7 +2777,7 @@ nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 
 /* . */
 void
-nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
+set_GridColor(uint8_t r, uint8_t g, uint8_t b)
 {
     set_int(GRID_COLOR, rgb(r, g, b));
     updateAllViewGridColors(rgb(r, g, b));

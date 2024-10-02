@@ -1477,22 +1477,19 @@ rgb(uint8_t r, uint8_t g, uint8_t b)
     return qRgb(r, g, b);
 }
 
-/* . */
-void
-nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int rubberMode)
+/* (char *str, double x, double y, double rot, bool fill, int rubberMode). */
+ScriptValue
+add_textsingle_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    /*
     char *str = STR(0);
     EmbVector v = unpack_vector(context, 1);
     double rot = REAL(3);
     bool fill = BOOL(4);
     int rubberMode = INT(5);
-     */
     if ((doc_index >= 0) && gscene && stack) {
-        EmbVector v = emb_vector(x, -y);
         Object* obj = create_text_single(QString(str), v, getCurrentColor());
         obj_set_text_font(obj->core, get_str(TEXT_FONT));
         obj_set_text_size(obj->core, get_real(TEXT_SIZE));
@@ -1516,20 +1513,24 @@ nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int ru
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
+        return script_true;
     }
+    return script_false;
 }
 
-/* . */
-void
-nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+/* (double x1, double y1, double x2, double y2, double rot, int rubberMode). */
+ScriptValue
+add_line_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
         EmbLine line;
-        line.start = emb_vector(x1, -y1);
-        line.end = emb_vector(x2, -y2);
+        line.start = unpack_vector(context, 0);
+        line.end = unpack_vector(context, 2);
+        double rot = REAL(4);
+        int rubberMode = INT(5);
         Object* obj = create_line(line, getCurrentColor());
         obj->setRotation(-rot);
         obj_set_rubber_mode(obj->core, rubberMode);
@@ -1542,20 +1543,25 @@ nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubber
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
+        return script_true;
     }
+    return script_false;
 }
 
-/* . */
-void
-nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
+/* (double x, double y, double w, double h, double rot, bool fill, int rubberMode). */
+ScriptValue
+add_rectangle_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index < 0) && !(gscene && stack)) {
-        return;
+        return script_false;
     }
-    EmbRect rect = emb_rect(x, -y, w, -h);
+    EmbRect rect = emb_rect(REAL(0), -REAL(1), REAL(2), -REAL(3));
+    double rot = REAL(4);
+    bool fill = BOOL(5);
+    int rubberMode = INT(6);
     Object* obj = create_rect(rect, getCurrentColor());
     obj->setRotation(-rot);
     obj_set_rubber_mode(obj->core, rubberMode);
@@ -1569,19 +1575,21 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
         UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
         stack->push(cmd);
     }
+    return script_false;
 }
 
-
-void
-nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode)
+/* (double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode). */
+ScriptValue
+add_arc_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* scene = activeScene();
     if ((doc_index >= 0) && scene) {
         EmbArc arc;
-        arc.start = emb_vector(x1, -y1);
-        arc.mid = emb_vector(x2, -y2);
-        arc.end = emb_vector(x3, -y3);
+        arc.start = unpack_vector(context, 0);
+        arc.mid = unpack_vector(context, 2);
+        arc.end = unpack_vector(context, 4);
+        int rubberMode = INT(5);
         Object* arcObj = create_arc(arc, getCurrentColor());
         obj_set_rubber_mode(arcObj->core, rubberMode);
         if (rubberMode) {
@@ -1589,19 +1597,23 @@ nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, i
         }
         scene->addItem(arcObj);
         doc_update(doc_index);
+        return script_true;
     }
+    return script_false;
 }
 
-void
-nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
+/* (double centerX, double centerY, double radius, bool fill, int rubberMode). */
+ScriptValue
+add_circle_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
         EmbCircle circle;
-        circle.center = emb_vector(centerX, -centerY);
-        circle.radius = radius;
+        circle.center = unpack_vector(context, 0);
+        circle.radius = REAL(2);
+        int rubberMode = INT(3);
         Object* obj = create_circle(circle, getCurrentColor());
         obj_set_rubber_mode(obj->core, rubberMode);
         /* TODO: circle fill. */
@@ -1614,11 +1626,14 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
+        return script_true;
     }
+    return script_false;
 }
 
-void
-nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
+/* (double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode). */
+ScriptValue
+add_slot_command(ScriptEnv *context)
 {
     /* TODO: Use UndoableCommand for slots */
     int32_t doc_index = activeDocument();
@@ -1631,15 +1646,24 @@ nativeAddSlot(double centerX, double centerY, double diameter, double length, do
     */
     /* TODO: slot fill */
     doc_update(doc_index);
+    return script_false;
 }
 
-void
-nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
+/* (double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode). */
+ScriptValue
+add_ellipse_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
+        double centerX = REAL(0);
+        double centerY = REAL(1);
+        double width = REAL(2);
+        double height = REAL(3);
+        double rot = REAL(4);
+        bool fill = BOOL(5);
+        int rubberMode = INT(6);
         EmbEllipse ellipse;
         ellipse.center.x = centerX;
         ellipse.center.y = -centerY;
@@ -1658,29 +1682,36 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
+        return script_true;
     }
+    return script_false;
 }
 
-void
-nativeAddPoint(double x, double y)
+/* double x, double y. */
+ScriptValue
+add_point_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && stack) {
+        double x = REAL(0);
+        double y = REAL(1);
         EmbPoint point;
         point.position.x = x;
         point.position.y = -y;
         Object* obj = create_point(point, getCurrentColor());
         UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
         stack->push(cmd);
+        return script_true;
     }
+    return script_false;
 }
 
 /* NOTE: This native is different than the rest in that the Y+ is down
  * (scripters need not worry about this)
  */
 void
-nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
+add_polygon_command(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
@@ -1706,7 +1737,7 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
  * (scripters need not worry about this)
  */
 void
-nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
+add_polyline_command(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
@@ -1729,14 +1760,21 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
     }
 }
 
-void
-nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+/* double x1, double y1, double x2, double y2, double rot, int rubberMode */
+ScriptValue
+add_dimleader_command(ScriptEnv *context)
 {
     int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
         EmbLine line;
+        double x1 = REAL(0);
+        double y1 = REAL(1);
+        double x2 = REAL(2);
+        double y2 = REAL(3);
+        double rot = REAL(4);
+        int rubberMode = INT(5);
         line.start = emb_vector(x1, -y1);
         line.end = emb_vector(x2, -y2);
         Object* obj = create_dim_leader(line, getCurrentColor());
@@ -1752,12 +1790,14 @@ nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int r
                 obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
+        return script_true;
     }
+    return script_false;
 }
 
 /* . */
 void
-nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
+set_CursorShape(char shape[MAX_STRING_LENGTH])
 {
     int32_t doc_index = activeDocument();
     Document *doc = documents[doc_index];

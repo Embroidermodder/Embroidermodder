@@ -121,6 +121,15 @@ BASIC_DOC_F(doc_paste)
 void doc_show_scroll_bars(int32_t doc, bool) {}
 void doc_set_select_box_colors(int32_t doc, uint32_t, uint32_t, uint32_t, uint32_t, int) {}
 
+DUMMY_COMMAND(add_arc_command)
+DUMMY_COMMAND(add_circle_command)
+DUMMY_COMMAND(add_dimleader_command)
+DUMMY_COMMAND(add_ellipse_command)
+DUMMY_COMMAND(add_line_command)
+DUMMY_COMMAND(add_point_command)
+DUMMY_COMMAND(add_rectangle_command)
+DUMMY_COMMAND(add_slot_command)
+DUMMY_COMMAND(add_textsingle_command)
 DUMMY_COMMAND(previewon_command)
 
 NO_ARG_F(undo_command)
@@ -177,21 +186,12 @@ void doc_create_grid(int doc, char*) {}
 void end_command(void) {}
 void start_blinking(void) {}
 void doc_update(int32_t) {}
-void nativeSetCursorShape(char *) {}
+void set_CursorShape(char *) {}
 uint32_t rgb(uint8_t r, uint8_t g, uint8_t b) {return 0;}
-void nativeAddTextSingle(char *, double x, double y, double, bool, int rubberMode) {}
-void nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode) {}
-void nativeAddSlot(double, double, double, double, double, bool, int rubberMode) {}
-void nativeAddPoint(double, double) {}
 void question_box(const char *, const char *) {}
 void warning_box(const char *, const char *) {}
 void critical_box(const char *, const char *) {}
 void information_box(const char *, const char *) {}
-void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode) {}
-void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode) {}
-void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode) {}
-void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode) {}
-void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode) {}
 void obj_set_text(ObjectCore *obj, const char *text) {}
 
 /* TODO: Clear up memory. */

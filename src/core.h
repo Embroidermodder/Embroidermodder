@@ -19,6 +19,7 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdarg.h>
 #include <inttypes.h>
 #include <math.h>
 
@@ -26,10 +27,10 @@ extern "C" {
 
 #include "data/constants.h"
 
-#define REAL(i)   context->argument[i].r
-#define INT(i)    context->argument[i].i
-#define STR(i)    context->argument[i].s
-#define BOOL(i)   context->argument[i].b
+#define REAL(arg) context->argument[arg].r
+#define INT(arg)  context->argument[arg].i
+#define STR(arg)  context->argument[arg].s
+#define BOOL(arg) context->argument[arg].b
 
 #define MAX_TABLE_LENGTH             500
 #define MAX_OPEN_FILES               100
@@ -250,6 +251,8 @@ typedef struct UndoData_ {
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
+ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
+ScriptValue run_command(ScriptEnv *context, const char *cmd);
 
 ScriptValue script_bool(bool b);
 ScriptValue script_int(int i);
@@ -456,8 +459,6 @@ void stop_blinking(void);
 void repeat_action(void);
 void move_action(void);
 
-ScriptValue run_command(const char *cmd, ScriptEnv *context);
-
 void nanosleep_(int);
 
 void nativeBlinkPrompt();
@@ -465,42 +466,39 @@ void nativeBlinkPrompt();
 void checkBoxTipOfTheDayStateChanged(int checked);
 void buttonTipOfTheDayClicked(int button);
 
-ScriptValue previewon_command(ScriptEnv *context);
+ScriptValue add_arc_command(ScriptEnv *context);
+ScriptValue add_circle_command(ScriptEnv *context);
+ScriptValue add_dimleader_command(ScriptEnv *context);
+ScriptValue add_ellipse_command(ScriptEnv *context);
+ScriptValue add_horizontal_dimension_command(ScriptEnv *context);
+ScriptValue add_image_command(ScriptEnv *context);
+ScriptValue add_infinite_line_command(ScriptEnv *context);
+ScriptValue add_line_command(ScriptEnv *context);
+ScriptValue add_ray_command(ScriptEnv *context);
+ScriptValue add_triangle_command(ScriptEnv *context);
+ScriptValue add_rectangle_command(ScriptEnv *context);
+ScriptValue add_rounded_rectangle_command(ScriptEnv *context);
+ScriptValue add_slot_command(ScriptEnv *context);
+ScriptValue add_point_command(ScriptEnv *context);
+ScriptValue add_regular_polygon_command(ScriptEnv *context);
+ScriptValue add_vertical_dimension_command(ScriptEnv *context);
+ScriptValue add_textmulti_command(ScriptEnv *context);
+ScriptValue add_textsingle_command(ScriptEnv *context);
 ScriptValue get_command(ScriptEnv *context);
-ScriptValue set_command(ScriptEnv *context);
 ScriptValue move_command(ScriptEnv *context);
+ScriptValue previewon_command(ScriptEnv *context);
 ScriptValue sandbox_command(ScriptEnv *context);
+ScriptValue set_command(ScriptEnv *context);
 
-void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
-void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
-void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode);
-void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
-void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode);
-void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill);
-void nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode);
-void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode);
-void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
-void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
-void nativeAddPoint(double x, double y);
-void nativeAddRegularPolygon(double centerX, double centerY, uint16_t sides, uint8_t mode, double rad, double rot, bool fill);
-void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight);
-void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
-void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
-
-void nativeAddTextMulti(char *str, double x, double y, double rot, bool fill, int rubberMode);
-void nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int rubberMode);
-
-void nativeAddImage(char *img, double x, double y, double w, double h, double rot);
-
-void nativeRedo();
+ScriptValue nativeRedo();
 
 void setMouseCoord(double x, double y);
 
 void nativePrintArea(double x, double y, double w, double h);
 
-void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
-void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
-void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
+void set_BackgroundColor(uint8_t r, uint8_t g, uint8_t b);
+void set_CrossHairColor(uint8_t r, uint8_t g, uint8_t b);
+void set_GridColor(uint8_t r, uint8_t g, uint8_t b);
 
 void nativeClearRubber();
 bool nativeAllowRubber();
@@ -515,7 +513,7 @@ void nativeScaleSelected(double x, double y, double factor);
 void nativeRotateSelected(double x, double y, double rot);
 void nativeMirrorSelected(double x1, double y1, double x2, double y2);
 
-void nativeSetCursorShape(EmbString str);
+void set_CursorShape(EmbString str);
 double nativeCalculateDistance(double x1, double y1, double x2, double y2);
 double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
 
@@ -529,12 +527,12 @@ void disableReal();
 
 void create_details_dialog(void);
 
-void nativeSetPromptPrefix(EmbString txt);
-/* TODO: void nativeSetRubberFilter(int64_t id); */
+void set_PromptPrefix(EmbString txt);
+/* TODO: void set_RubberFilter(int64_t id); */
 /* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
-void nativeSetRubberMode(int mode);
-void nativeSetRubberPoint(const EmbString key, double x, double y);
-void nativeSetRubberText(const EmbString key, EmbString txt);
+void set_RubberMode(int mode);
+void set_RubberPoint(const EmbString key, double x, double y);
+void set_RubberText(const EmbString key, EmbString txt);
 
 void toggleGrid(void);
 void toggleRuler(void);
@@ -551,6 +549,8 @@ void whatsThisContextHelp();
 int make_application(int argc, char* argv[]);
 
 void setObjectRubberMode(ObjectCore *core, int mode);
+
+EmbVector unpack_vector(ScriptEnv *context, int offset);
 
 /* ------------------------------- Document -------------------------------- */
 
@@ -766,6 +766,8 @@ extern EmbString prompt_color_;
 extern EmbString prompt_selection_bg_color_;
 extern EmbString prompt_bg_color_;
 extern EmbString prompt_selection_color_;
+
+extern ScriptEnv *global;
 
 extern ScriptValue script_null;
 extern ScriptValue script_true;

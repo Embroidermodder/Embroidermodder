@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <limits.h>
-#include <stdarg.h>
 #include <errno.h>
 #include <time.h>
 
@@ -29,6 +28,8 @@ EmbString prompt_color_;
 EmbString prompt_selection_bg_color_;
 EmbString prompt_bg_color_;
 EmbString prompt_selection_color_;
+
+ScriptEnv *global;
 
 bool document_memory[MAX_OPEN_FILES];
 
@@ -165,7 +166,11 @@ main(int argc, char* argv[])
     if (exitApp) {
         return 1;
     }
-    return make_application(n_files, files_to_open);
+
+    global = create_script_env();
+    int result = make_application(n_files, files_to_open);
+    free_script_env(global);
+    return result;
 }
 
 /* . */
@@ -538,6 +543,39 @@ add_int_argument(ScriptEnv *context, int i)
     context->argument[context->argumentCount].i = i;
     context->argument[context->argumentCount].type = SCRIPT_INT;
     context->argumentCount++;
+    return context;
+}
+
+/* Using stdarg we can pack arguments into the context using the above functions.
+ *
+ * https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdarg.h.html
+ */
+ScriptEnv *
+pack(ScriptEnv *context, const char *fmt, ...)
+{
+    va_list a;
+    int argno;
+    context->argumentCount = 0;
+    va_start(a, fmt);
+    for (argno = 0; fmt[argno]; argno++) {
+        switch (fmt[argno]) {
+        case 's':
+            const char *s = va_arg(a, const char *);
+            add_string_argument(context, s);
+            break;
+        case 'i':
+            int i = va_arg(a, int);
+            add_int_argument(context, i);
+            break;
+        case 'r':
+            double r = va_arg(a, double);
+            add_real_argument(context, r);
+            break;
+        default:
+            break;
+        }
+    }
+    va_end(a);
     return context;
 }
 
