@@ -341,17 +341,9 @@ void add_command(std::string alias, std::string cmd);
 
 /* ------------------------- Object Functions ------------------------------- */
 
-Object *create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item=0);
-Object *create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item=0);
 Object *create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
 Object *create_path(EmbVector v, const QPainterPath p, QRgb rgb, QGraphicsItem* parent=0);
 Object *create_polygon(EmbVector v, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_text_single(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_dim_leader(EmbLine line, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_image(EmbRect rect, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_rect(EmbRect rect, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_line(EmbLine line, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent=0);
 
 Object *copy_object(Object* obj);
 
@@ -361,8 +353,8 @@ QPainterPath obj_path(Object* obj);
 EmbVector obj_rubber_point(Object* obj, QString key);
 QString obj_rubber_text(Object* obj, QString key);
 
-void obj_update_rubber(Object *obj, QPainter* painter);
-void obj_update_rubber_grip(Object *obj, QPainter *painter);
+void obj_update_rubber(uint32_t obj, QPainter* painter);
+void obj_update_rubber_grip(uint32_t obj, QPainter *painter);
 void obj_update_leader(Object *obj);
 void obj_update_path(Object *obj);
 void obj_update_path_r(Object *obj, QPainterPath p);
@@ -372,14 +364,12 @@ void obj_set_line_weight(Object *obj, double lineWeight);
 
 void obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath);
 
-void obj_set_rect(Object *obj, QRectF r);
-void obj_set_rect(Object *obj, double x, double y, double w, double h);
+void obj_set_rect(uint32_t obj, QRectF r);
 QLineF obj_line(Object *obj);
 void obj_set_line(Object *obj, QLineF li);
 void obj_set_line(Object *obj, double x1, double y1, double x2, double y2);
 
 void obj_set_path(Object *obj, QPainterPath p);
-void obj_calculate_data(Object *obj);
 
 int obj_find_index(Object *obj, EmbVector point);
 
@@ -1481,7 +1471,7 @@ rgb(uint8_t r, uint8_t g, uint8_t b)
 
 /* . */
 ObjectCore *
-get_obj_core(uint32_t id)
+obj_get_core(uint32_t id)
 {
     return object_list[id]->core;
 }
@@ -1508,159 +1498,11 @@ doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode)
     }
 }
 
-/* (char *str, double x, double y, double rot, bool fill, int rubberMode). */
-ScriptValue
-add_textsingle_command(ScriptEnv *context)
+/* . */
+void
+obj_set_rotation(uint32_t id, double rotation)
 {
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    char *str = STR(0);
-    EmbVector v = unpack_vector(context, 1);
-    double rot = REAL(3);
-    bool fill = BOOL(4);
-    int rubberMode = INT(5);
-    Object* obj = create_text_single(QString(str), v, getCurrentColor());
-    obj_set_text_font(obj->core, get_str(TEXT_FONT));
-    obj_set_text_size(obj->core, get_real(TEXT_SIZE));
-    obj_set_text_style(obj->core,
-        get_bool(TEXT_STYLE_BOLD),
-        get_bool(TEXT_STYLE_ITALIC),
-        get_bool(TEXT_STYLE_UNDERLINE),
-        get_bool(TEXT_STYLE_STRIKEOUT),
-        get_bool(TEXT_STYLE_OVERLINE));
-    obj_set_text_backward(obj->core, false);
-    obj_set_text_upside_down(obj->core, false);
-    obj->setRotation(-rot);
-    /* TODO: single line text fill. */
-    obj_set_rubber_mode(obj->core->objID, rubberMode);
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_true;
-}
-
-/* (double x1, double y1, double x2, double y2, double rot, int rubberMode). */
-ScriptValue
-add_line_command(ScriptEnv *context)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    EmbLine line;
-    line.start = unpack_vector(context, 0);
-    line.end = unpack_vector(context, 2);
-    double rot = REAL(4);
-    int rubberMode = INT(5);
-    Object* obj = create_line(line, getCurrentColor());
-    obj->setRotation(-rot);
-    obj_set_rubber_mode(obj->core->objID, rubberMode);
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_true;
-}
-
-/* (double x, double y, double w, double h, double rot, bool fill, int rubberMode). */
-ScriptValue
-add_rectangle_command(ScriptEnv *context)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    EmbRect rect = emb_rect(REAL(0), -REAL(1), REAL(2), -REAL(3));
-    double rot = REAL(4);
-    bool fill = BOOL(5);
-    int rubberMode = INT(6);
-    Object* obj = create_rect(rect, getCurrentColor());
-    obj->setRotation(-rot);
-    obj_set_rubber_mode(obj->core->objID, rubberMode);
-    /* TODO: rect fill */
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_false;
-}
-
-/* (double centerX, double centerY, double radius, bool fill, int rubberMode). */
-ScriptValue
-add_circle_command(ScriptEnv *context)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    EmbCircle circle;
-    circle.center = unpack_vector(context, 0);
-    circle.radius = REAL(2);
-    int rubberMode = INT(3);
-    Object* obj = create_circle(circle, getCurrentColor());
-    obj_set_rubber_mode(obj->core->objID, rubberMode);
-    /* TODO: circle fill. */
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_true;
-}
-
-/* (double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode). */
-ScriptValue
-add_slot_command(ScriptEnv *context)
-{
-    /* TODO: Use UndoableCommand for slots */
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    /*
-    Object* obj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
-    obj->setRotation(-rot);
-    obj_set_rubber_mode(slotObj->core, rubberMode);
-    if (rubberMode) doc_add_to_rubber_room(doc_index, slotObj);
-    scene->addItem(slotObj);
-    */
-    /* TODO: slot fill */
-    doc_update(doc_index);
-    return script_false;
-}
-
-/* (double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode). */
-ScriptValue
-add_ellipse_command(ScriptEnv *context)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    double centerX = REAL(0);
-    double centerY = REAL(1);
-    double width = REAL(2);
-    double height = REAL(3);
-    double rot = REAL(4);
-    bool fill = BOOL(5);
-    int rubberMode = INT(6);
-    EmbEllipse ellipse;
-    ellipse.center.x = centerX;
-    ellipse.center.y = -centerY;
-    ellipse.radius.x = width/2.0;
-    ellipse.radius.y = height/2.0;
-    Object* obj = create_ellipse(ellipse, getCurrentColor());
-    obj->setRotation(-rot);
-    obj_set_rubber_mode(obj->core->objID, rubberMode);
-    /* TODO: ellipse fill */
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_true;
-}
-
-/* double x, double y. */
-ScriptValue
-add_point_command(ScriptEnv *context)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    EmbPoint point;
-    point.position = unpack_vector(context, 0);
-    int rubberMode = INT(2);
-    Object* obj = create_point(point, getCurrentColor());
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_true;
+    object_list[id]->setRotation(rotation);
 }
 
 /* NOTE: This native is different than the rest in that the Y+ is down
@@ -1694,26 +1536,6 @@ add_polyline_command(double startX, double startY, const QPainterPath& p, int ru
     EmbPath path;
     EmbVector start = emb_vector(startX, startY);
     Object* obj = create_polygon(start, p, getCurrentColor());
-    obj_set_rubber_mode(obj->core->objID, rubberMode);
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_true;
-}
-
-/* double x1, double y1, double x2, double y2, double rot, int rubberMode */
-ScriptValue
-add_dimleader_command(ScriptEnv *context)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    EmbLine line;
-    line.start = unpack_vector(context, 0);
-    line.end = unpack_vector(context, 2);
-    double rot = REAL(4);
-    int rubberMode = INT(5);
-    Object* obj = create_dim_leader(line, getCurrentColor());
-    obj->setRotation(-rot);
     obj_set_rubber_mode(obj->core->objID, rubberMode);
     doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
     return script_true;
@@ -2217,45 +2039,55 @@ map_from_scene(Object *obj, EmbVector v)
  * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
  * WARNING: All movement has to be handled explicitly by us, not by the scene.
  */
-Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)// : QGraphicsItem(item)
+Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)
+{
+}
+
+/* . */
+uint32_t
+create_object(int type_, uint32_t rgb)
 {
     debug_message("BaseObject Constructor()");
 
-    core = (ObjectCore*)malloc(sizeof(ObjectCore));
+    Qt::PenStyle lineType = Qt::SolidLine;
+    Object *obj = new Object(type_, rgb, lineType);
+
+    obj->core = (ObjectCore*)malloc(sizeof(ObjectCore));
 
     if (type_ < 30) {
-        string_copy(core->OBJ_NAME, object_names[type_]);
+        string_copy(obj->core->OBJ_NAME, object_names[type_]);
     }
     else {
-        string_copy(core->OBJ_NAME, "Unknown");
+        string_copy(obj->core->OBJ_NAME, "Unknown");
     }
 
-    objPen.setCapStyle(Qt::RoundCap);
-    objPen.setJoinStyle(Qt::RoundJoin);
-    lwtPen.setCapStyle(Qt::RoundCap);
-    lwtPen.setJoinStyle(Qt::RoundJoin);
+    obj->objPen.setCapStyle(Qt::RoundCap);
+    obj->objPen.setJoinStyle(Qt::RoundJoin);
+    obj->lwtPen.setCapStyle(Qt::RoundCap);
+    obj->lwtPen.setJoinStyle(Qt::RoundJoin);
 
-    core->objID = QDateTime::currentMSecsSinceEpoch();
+    obj->core->objID = QDateTime::currentMSecsSinceEpoch();
 
-    core->gripIndex = -1;
-    core->curved = 0;
+    obj->core->gripIndex = -1;
+    obj->core->curved = 0;
 
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    obj->setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    obj_set_color(this, rgb);
-    obj_set_line_type(this, lineType);
-    obj_set_line_weight(this, 0.35);
+    obj_set_color(obj, rgb);
+    obj_set_line_type(obj, lineType);
+    obj_set_line_weight(obj, 0.35);
     todo("pass in proper lineweight");
-    setPen(objPen);
+    obj->setPen(obj->objPen);
 
-    core->geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
-    core->geometry->type = type_;
-    core->geometry->object.color.r = qRed(rgb);
-    core->geometry->object.color.g = qGreen(rgb);
-    core->geometry->object.color.b = qBlue(rgb);
-    core->geometry->lineType = lineType;
+    obj->core->geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
+    obj->core->geometry->type = type_;
+    obj->core->geometry->object.color.r = qRed(rgb);
+    obj->core->geometry->object.color.g = qGreen(rgb);
+    obj->core->geometry->object.color.b = qBlue(rgb);
+    obj->core->geometry->lineType = lineType;
 
-    object_list[core->objID] = this;
+    object_list[obj->core->objID] = obj;
+    return obj->core->objID;
 }
 
 /* . */
@@ -2264,50 +2096,6 @@ Object::~Object()
     debug_message("ArcObject Destructor()");
     free(core->geometry);
     free(core);
-}
-
-/* . */
-uint32_t
-create_arc(EmbArc arc, uint32_t rgb)
-{
-    debug_message("ArcObject Constructor()");
-    Object *obj = new Object(EMB_ARC, rgb, Qt::SolidLine);
-    obj->core->geometry->object.arc = arc;
-    todo("getCurrentLineType");
-    obj_calculate_data(obj);
-    obj_set_pos(obj->core, arc.start);
-    return obj->core->objID;
-}
-
-/* . */
-Object *
-create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
-{
-    debug_message("CircleObject Constructor()");
-    Object *obj = new Object(EMB_CIRCLE, rgb, Qt::SolidLine, item);
-    todo("getCurrentLineType");
-    obj->core->geometry->object.circle = circle;
-
-    /*
-    update_path();
-    */
-    return obj;
-}
-
-/* . */
-Object *
-create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
-{
-    debug_message("EllipseObject Constructor()");
-    todo("getCurrentLineType");
-    Object *obj = new Object(EMB_ELLIPSE, rgb, Qt::SolidLine, item);
-    obj->core->geometry->object.ellipse = ellipse;
-
-    /*
-    setObjectSize(width, height);
-    obj_update_path(obj);
-    */
-    return obj;
 }
 
 /* . */
@@ -2343,78 +2131,6 @@ create_polygon(EmbVector v, const QPainterPath& p, QRgb rgb, QGraphicsItem* pare
     todo("getCurrentLineType");
     obj_update_path_r(obj, p);
     obj_set_pos(obj->core, v);
-    return obj;
-}
-
-/* . */
-Object *
-create_text_single(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("TextSingleObject Constructor()");
-    todo("getCurrentLineType");
-    Object *obj = new Object(EMB_TEXT_SINGLE, rgb, Qt::SolidLine);
-    string_copy(obj->core->textJustify, "Left");
-    /* TODO: set the justification properly */
-
-    obj_set_text(obj->core, qPrintable(str));
-    obj_set_pos(obj->core, v);
-    return obj;
-}
-
-/* . */
-Object *
-create_dim_leader(EmbLine line, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    todo("getCurrentLineType");
-    Object *obj = new Object(EMB_DIM_LEADER, rgb, Qt::SolidLine);
-
-    obj->core->curved = false;
-    obj->core->filled = true;
-    obj_set_end_point_1(obj->core, line.start);
-    obj_set_end_point_2(obj->core, line.end);
-    return obj;
-}
-
-/* . */
-Object *
-create_image(EmbRect rect, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("ImageObject Constructor()");
-    todo("getCurrentLineType");
-    Object *obj = new Object(EMB_IMAGE, rgb, Qt::SolidLine);
-    obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
-    return obj;
-}
-
-/* . */
-Object *
-create_rect(EmbRect rect, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("RectObject Constructor()");
-    todo("getCurrentLineType");
-    Object *obj = new Object(EMB_RECT, rgb, Qt::SolidLine);
-    obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
-    return obj;
-}
-
-/* . */
-Object *
-create_line(EmbLine line, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("LineObject Constructor()");
-    Object *obj = new Object(EMB_LINE, rgb, Qt::SolidLine);
-    todo("getCurrentLineType");
-    obj_set_end_point_1(obj->core, line.start);
-    obj_set_end_point_2(obj->core, line.end);
-    return obj;
-}
-
-/* . */
-Object *
-create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent)
-{
-    Object *obj = new Object(EMB_POINT, rgb, Qt::SolidLine);
     return obj;
 }
 
@@ -2656,11 +2372,12 @@ obj_draw_rubber_grip(Object *obj, QPainter *painter)
 
 /* . */
 void
-obj_update_rubber_grip(Object *obj, QPainter *painter)
+obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
 {
     if (!painter) {
         return;
     }
+    Object *obj = object_list[obj_id];
     EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
     switch (obj->core->geometry->type) {
     case EMB_ARC: {
@@ -3054,8 +2771,9 @@ obj_update_path(Object *obj)
 
 /* . */
 void
-obj_calculate_data(Object *obj)
+obj_calculate_data(uint32_t obj_id)
 {
+    Object *obj = object_list[obj_id];
     EmbVector center = emb_arc_center(*(obj->core->geometry));
 
     double radius = emb_vector_distance(center, obj->core->geometry->object.arc.mid);
@@ -3073,7 +2791,7 @@ obj_update_arc_rect(Object *obj, double radius)
     arcRect.setWidth(radius*2.0);
     arcRect.setHeight(radius*2.0);
     arcRect.moveCenter(QPointF(0, 0));
-    obj_set_rect(obj, arcRect);
+    obj_set_rect(obj->core->objID, arcRect);
 }
 
 /* . */
@@ -3211,21 +2929,21 @@ obj_rect(ObjectCore *obj)
 
 /* . */
 void
-obj_set_rect(Object *obj, QRectF r)
+obj_set_rect(uint32_t obj, QRectF r)
 {
     QPainterPath p;
     p.addRect(r);
-    obj->setPath(p);
+    object_list[obj]->setPath(p);
 }
 
 /* . */
 void
-obj_set_rect(Object *obj, double x, double y, double w, double h)
+obj_set_rect(uint32_t obj, double x, double y, double w, double h)
 {
     // obj->setPos(x, y); ?
     QPainterPath p;
     p.addRect(x,y,w,h);
-    obj->setPath(p);
+    object_list[obj]->setPath(p);
 }
 
 /* . */
@@ -3327,8 +3045,9 @@ obj_map_rubber(Object *obj, const char *key)
 
 /* . */
 void
-obj_update_rubber(Object *obj, QPainter* painter)
+obj_update_rubber(uint32_t obj_id, QPainter* painter)
 {
+    Object *obj = object_list[obj_id];
     todo("Arc,Path Rubber Modes");
     switch (obj->core->rubber_mode) {
     case RUBBER_CIRCLE_1P_RAD: {
@@ -3467,7 +3186,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         EmbVector start = obj_rubber_point(obj, "IMAGE_START");
         EmbVector end = obj_rubber_point(obj, "IMAGE_END");
         EmbVector delta = emb_vector_subtract(end, start);
-        obj_set_rect(obj, start.x, start.y, delta.x, delta.y);
+        obj_set_rect(obj_id, start.x, start.y, delta.x, delta.y);
         obj_update_path(obj);
         break;
     }
@@ -3604,7 +3323,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         EmbVector start = obj_rubber_point(obj, "RECTANGLE_START");
         EmbVector end = obj_rubber_point(obj, "RECTANGLE_END");
         EmbVector delta = emb_vector_subtract(end, start);
-        obj_set_rect(obj, start.x, start.y, delta.x, delta.y);
+        obj_set_rect(obj_id, start.x, start.y, delta.x, delta.y);
         obj_update_path(obj);
         break;
     }
@@ -3619,7 +3338,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case RUBBER_GRIP: {
-        obj_update_rubber_grip(obj, painter);
+        obj_update_rubber_grip(obj_id, painter);
         break;
     }
     default:
@@ -3778,20 +3497,21 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
         double height = emb_height(obj->core->geometry);
         double width = emb_width(obj->core->geometry);
         EmbVector tl = obj_top_left(obj->core);
+        int obj_id = obj->core->objID;
         if (emb_approx(before, tl)) {
-            obj_set_rect(obj, after.x, after.y,
+            obj_set_rect(obj_id, after.x, after.y,
                 width - delta.x, height - delta.y);
         }
         else if (emb_approx(before, obj_top_right(obj->core))) {
-            obj_set_rect(obj, tl.x, tl.y+delta.y,
+            obj_set_rect(obj_id, tl.x, tl.y+delta.y,
                 width + delta.x, height - delta.y);
         }
         else if (emb_approx(before, obj_bottom_left(obj->core))) {
-            obj_set_rect(obj, tl.x+delta.x, tl.y,
+            obj_set_rect(obj_id, tl.x+delta.x, tl.y,
                 width - delta.x, height + delta.y);
         }
         else if (emb_approx(before, obj_bottom_right(obj->core))) {
-            obj_set_rect(obj, tl.x, tl.y,
+            obj_set_rect(obj_id, tl.x, tl.y,
                 width + delta.x, height + delta.y);
         }
         break;
@@ -3833,7 +3553,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
-    obj_update_rubber(this, painter);
+    obj_update_rubber(core->objID, painter);
     if (option->state & QStyle::State_Selected) {
         paintPen.setStyle(Qt::DashLine);
     }

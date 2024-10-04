@@ -14,10 +14,130 @@
 #include "core.h"
 
 /* . */
+uint32_t
+create_arc(EmbArc arc, uint32_t rgb)
+{
+    debug_message("ArcObject Constructor()");
+    uint32_t obj = create_object(EMB_ARC, rgb);
+    ObjectCore *core = obj_get_core(obj);
+    core->geometry->object.arc = arc;
+    todo("getCurrentLineType");
+    obj_calculate_data(obj);
+    obj_set_pos(core, arc.start);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_circle(EmbCircle circle, uint32_t rgb)
+{
+    debug_message("CircleObject Constructor()");
+    uint32_t obj = create_object(EMB_CIRCLE, rgb);
+    todo("getCurrentLineType");
+    ObjectCore *core = obj_get_core(obj);
+    core->geometry->object.circle = circle;
+    /* update_path(); */
+    return obj;
+}
+
+/* . */
+uint32_t
+create_dimleader(EmbLine line, uint32_t rgb)
+{
+    debug_message("DimLeaderObject Constructor()");
+    todo("getCurrentLineType");
+    uint32_t obj = create_object(EMB_DIM_LEADER, rgb);
+    ObjectCore *core = obj_get_core(obj);
+
+    core->curved = false;
+    core->filled = true;
+    obj_set_end_point_1(core, line.start);
+    obj_set_end_point_2(core, line.end);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_ellipse(EmbEllipse ellipse, uint32_t rgb)
+{
+    debug_message("EllipseObject Constructor()");
+    todo("getCurrentLineType");
+    uint32_t obj = create_object(EMB_ELLIPSE, rgb);
+    ObjectCore *core = obj_get_core(obj);
+    core->geometry->object.ellipse = ellipse;
+
+    /*
+    setObjectSize(width, height);
+    obj_update_path(obj);
+    */
+    return obj;
+}
+
+/* . */
+uint32_t
+create_image(EmbRect rect, uint32_t rgb)
+{
+    debug_message("ImageObject Constructor()");
+    todo("getCurrentLineType");
+    uint32_t obj = create_object(EMB_IMAGE, rgb);
+    obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_line(EmbLine line, uint32_t rgb)
+{
+    debug_message("LineObject Constructor()");
+    uint32_t obj = create_object(EMB_LINE, rgb);
+    ObjectCore *core = obj_get_core(obj);
+    todo("getCurrentLineType");
+    obj_set_end_point_1(core, line.start);
+    obj_set_end_point_2(core, line.end);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_point(EmbPoint point, uint32_t rgb)
+{
+    uint32_t obj = create_object(EMB_POINT, rgb);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_rect(EmbRect rect, uint32_t rgb)
+{
+    debug_message("RectObject Constructor()");
+    todo("getCurrentLineType");
+    uint32_t obj = create_object(EMB_RECT, rgb);
+    obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_text_single(EmbString str, EmbVector v, uint32_t rgb)
+{
+    debug_message("TextSingleObject Constructor()");
+    todo("getCurrentLineType");
+    uint32_t obj = create_object(EMB_TEXT_SINGLE, rgb);
+    ObjectCore *core = obj_get_core(obj);
+
+    string_copy(core->textJustify, "Left");
+    /* TODO: set the justification properly */
+
+    obj_set_text(core, str);
+    obj_set_pos(core, v);
+    return obj;
+}
+
+/* . */
 EmbVector
 obj_pos(ObjectCore *obj)
 {
-    return obj_pos(obj);
+    return obj->position;
 }
 
 /* . */
@@ -166,7 +286,7 @@ obj_set_pos(ObjectCore *obj, EmbVector point)
 void
 obj_set_rubber_mode(uint32_t id, int mode)
 {
-    ObjectCore *core = get_obj_core(id);
+    ObjectCore *core = obj_get_core(id);
     core->rubber_mode = mode;
 }
 

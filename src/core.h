@@ -695,9 +695,17 @@ int string_list_contains(EmbStringTable list, EmbString entry);
 
 /* ----------------------------- Object Core ------------------------------- */
 
-ObjectCore *get_obj_core(uint32_t id);
+ObjectCore *obj_get_core(uint32_t id);
 
-uint32_t create_arc(EmbArc arc, uint32_t);
+uint32_t create_object(int type_, uint32_t rgb);
+
+uint32_t create_arc(EmbArc arc, uint32_t rgb);
+uint32_t create_circle(EmbCircle circle, uint32_t rgb);
+uint32_t create_dimleader(EmbLine leader, uint32_t rgb);
+uint32_t create_ellipse(EmbEllipse ellipse, uint32_t rgb);
+uint32_t create_line(EmbLine line, uint32_t rgb);
+uint32_t create_rectangle(EmbRect rect, uint32_t rgb);
+uint32_t create_text_single(EmbString str, EmbVector v, uint32_t rgb);
 
 EmbVector obj_pos(ObjectCore *obj);
 double obj_x(ObjectCore *obj);
@@ -734,7 +742,11 @@ void obj_set_y1(ObjectCore *obj, double y);
 void obj_set_x2(ObjectCore *obj, double x);
 void obj_set_y2(ObjectCore *obj, double y);
 
+void obj_set_rect(uint32_t obj, double x, double y, double w, double h);
+void obj_set_rotation(uint32_t id, double rotation);
 void obj_set_rubber_mode(uint32_t id, int mode);
+
+void obj_calculate_data(uint32_t obj);
 
 EmbVector obj_top_left(ObjectCore *obj);
 EmbVector obj_top_right(ObjectCore *obj);
