@@ -155,6 +155,8 @@ typedef struct ObjectCore_ {
 
 /* . */
 typedef struct DocumentData_ {
+    EmbPattern *pattern;
+
     int32_t id;
 
     bool grippingActive;
@@ -327,6 +329,10 @@ uint32_t getCurrentColor();
 const char *getCurrentLineType();
 const char *getCurrentLineWeight();
 
+void statusbar_toggle(EmbString key, bool on);
+void zoomExtentsAllSubWindows(void);
+bool loadFile(const char *fileName);
+
 /* ------------------------------ Prompt ------------------------------- */
 
 void setPromptTextColor(uint32_t color);
@@ -334,6 +340,12 @@ void setPromptBackgroundColor(uint32_t color);
 void setPromptFontFamily(EmbString family);
 void setPromptFontStyle(EmbString style);
 void setPromptFontSize(int size);
+
+void promptHistoryAppended(EmbString txt);
+void logPromptInput(EmbString txt);
+void promptInputPrevious(void);
+void promptInputNext(void);
+void prompt_update_style(void);
 
 /* -------------------------- Main Functions --------------------------- */
 
@@ -438,6 +450,11 @@ void checkBoxLwtRealRenderStateChanged(int);
 void sliderSelectionGripSizeValueChanged(int);
 void sliderSelectionPickBoxSizeValueChanged(int);
 
+/* -------------------------------- Properties ------------------------------ */
+
+void showGroups(int);
+void show_group_box(const char *key);
+
 /* -------------------------------- Commands -------------------------------- */
 
 void about_dialog(void);
@@ -450,7 +467,7 @@ void check_for_updates(void);
 void new_file(void);
 void open_recent_file(void);
 void save_file(void);
-void save_as_file(void);
+int save_as_file(void);
 void update_interface(void);
 void windowMenuAboutToShow();
 void hide_unimplemented(void);
@@ -571,7 +588,7 @@ void doc_select_all(int32_t doc);
 void doc_selection_changed(int32_t doc);
 void doc_clear_selection(int32_t doc);
 void doc_delete_selected(int32_t doc);
-void doc_move_selected(int32_t doc, double dx, double dy);
+void doc_move_selected(int32_t doc, EmbVector delta);
 void doc_cut(int32_t doc);
 void doc_copy(int32_t doc);
 void doc_paste(int32_t doc);
@@ -584,6 +601,7 @@ void doc_rotate_selected(int32_t doc, double x, double y, double rot);
 void doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2);
 int doc_num_selected(int32_t doc);
 
+void doc_empty_grid(int32_t doc);
 void doc_set_grid_color(int32_t doc, uint32_t color);
 void doc_set_ruler_color(int32_t doc, uint32_t color);
 
@@ -661,6 +679,12 @@ void doc_update(int doc_index);
 void doc_center_on(int32_t doc, EmbVector v);
 
 DocumentData *doc_data(int32_t doc);
+EmbVector doc_center(int32_t doc_id);
+void doc_scale(int32_t doc_id, double s);
+void doc_begin_macro(int32_t doc, EmbString s);
+void doc_end_macro(int32_t doc);
+
+void updateColorLinetypeLineweight();
 
 void move_action(void);
 void rotate_action(void);
@@ -695,17 +719,27 @@ int string_list_contains(EmbStringTable list, EmbString entry);
 
 /* ----------------------------- Object Core ------------------------------- */
 
+void free_object(ObjectCore *core);
+
 ObjectCore *obj_get_core(uint32_t id);
 
 uint32_t create_object(int type_, uint32_t rgb);
+uint32_t copy_object(uint32_t);
 
 uint32_t create_arc(EmbArc arc, uint32_t rgb);
 uint32_t create_circle(EmbCircle circle, uint32_t rgb);
 uint32_t create_dimleader(EmbLine leader, uint32_t rgb);
 uint32_t create_ellipse(EmbEllipse ellipse, uint32_t rgb);
 uint32_t create_line(EmbLine line, uint32_t rgb);
-uint32_t create_rectangle(EmbRect rect, uint32_t rgb);
+uint32_t create_path(EmbPath *p, uint32_t rgb);
+uint32_t create_point(EmbPoint p, uint32_t rgb);
+uint32_t create_polygon(EmbPath *p, uint32_t rgb);
+uint32_t create_polyline(EmbPath *path, uint32_t rgb);
+uint32_t create_rect(EmbRect rect, uint32_t rgb);
 uint32_t create_text_single(EmbString str, EmbVector v, uint32_t rgb);
+
+void setObjectRubberPoint(uint32_t id, EmbString key, EmbVector value);
+void setObjectRubberText(uint32_t id, EmbString key, EmbString value);
 
 EmbVector obj_pos(ObjectCore *obj);
 double obj_x(ObjectCore *obj);

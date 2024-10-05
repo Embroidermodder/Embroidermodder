@@ -67,6 +67,7 @@ set(C_CORE
 	${SRC}/commands.c
 	${SRC}/geometry.c
 	${SRC}/document.c
+	${SRC}/properties.c
 	${SRC}/xpm.c
 
 	${SRC}/core.h

@@ -15,6 +15,88 @@
 
 /* . */
 uint32_t
+copy_object(uint32_t obj)
+{
+    debug_message("Object Copy()");
+    ObjectCore *core = obj_get_core(obj);
+    uint32_t copy = 0xFFFFFFFF; /* error symbol */
+    todo("getCurrentLineType");
+    switch (core->geometry->type) {
+    case EMB_ARC: {
+        copy = create_arc(core->geometry->object.arc, core->rgb);
+        break;
+    }
+    case EMB_CIRCLE: {
+        copy = create_circle(core->geometry->object.circle, core->rgb);
+        break;
+    }
+    case EMB_DIM_LEADER: {
+        // FIXME: copy = create_dimleader(core->geometry->object.dimleader, core->rgb);
+        break;
+    }
+    case EMB_ELLIPSE: {
+        copy = create_ellipse(core->geometry->object.ellipse, core->rgb);
+        break;
+    }
+    case EMB_IMAGE: {
+        // FIXME: copy = create_image(core->geometry->object.image, core->rgb);
+        break;
+    }
+    case EMB_LINE: {
+        copy = create_line(core->geometry->object.line, core->rgb);
+        break;
+    }
+    case EMB_PATH: {
+        copy = create_path(&(core->geometry->object.path), core->rgb);
+        break;
+    }
+    case EMB_POINT: {
+        copy = create_point(core->geometry->object.point, core->rgb);
+        break;
+    }
+    case EMB_POLYGON: {
+        copy = create_polygon(&(core->geometry->object.polygon), core->rgb);
+        break;
+    }
+    case EMB_POLYLINE: {
+        copy = create_polyline(&(core->geometry->object.polyline), core->rgb);
+        break;
+    }
+    case EMB_RECT: {
+        copy = create_rect(core->geometry->object.rect, core->rgb);
+        break;
+    }
+    case EMB_TEXT_SINGLE: {
+        copy = create_text_single(core->text, core->position, core->rgb);
+        ObjectCore *copy_core = obj_get_core(copy);
+        obj_set_text_font(copy_core, core->textFont);
+        obj_set_text_size(copy_core, core->textSize);
+        obj_set_rotation(copy_core, core->rotation);
+        obj_set_text_backward(copy_core, core->textBackward);
+        obj_set_text_upside_down(copy_core, core->textUpsideDown);
+        obj_set_text_style(copy_core, core->textBold, core->textItalic,
+            core->textUnderline, core->textStrikeOut, core->textOverline);
+//        object_list[copy]->setScale(core->scale);
+        break;
+    }
+    default:
+        /* TODO: error report */
+        break;
+    }
+    return copy;
+}
+
+/* . */
+void
+free_object(ObjectCore *core)
+{
+    debug_message("Object Destructor()");
+    free(core->geometry);
+    free(core);
+}
+
+/* . */
+uint32_t
 create_arc(EmbArc arc, uint32_t rgb)
 {
     debug_message("ArcObject Constructor()");
@@ -94,6 +176,42 @@ create_line(EmbLine line, uint32_t rgb)
     todo("getCurrentLineType");
     obj_set_end_point_1(core, line.start);
     obj_set_end_point_2(core, line.end);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_path(EmbPath *p, uint32_t rgb)
+{
+    debug_message("PathObject Constructor()");
+    uint32_t obj = create_object(EMB_PATH, rgb);
+    todo("getCurrentLineType");
+    // FIXME: obj_update_path_r(obj, p);
+    //obj_set_pos(obj->core, v);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_polygon(EmbPath *p, uint32_t rgb)
+{
+    debug_message("PolygonObject Constructor()");
+    uint32_t obj = create_object(EMB_POLYGON, rgb);
+    todo("getCurrentLineType");
+    // FIXME: obj_update_path_r(obj, p);
+    //obj_set_pos(obj->core, v);
+    return obj;
+}
+
+/* . */
+uint32_t
+create_polyline(EmbPath *path, uint32_t rgb)
+{
+    debug_message("PolylineObject Constructor()");
+    todo("getCurrentLineType");
+    uint32_t obj = create_object(EMB_POLYLINE, rgb);
+    // FIXME: obj_update_path_r(obj, p);
+    /* EmbVector v; obj_set_pos(obj->core, v); */
     return obj;
 }
 

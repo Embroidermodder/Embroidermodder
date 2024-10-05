@@ -263,8 +263,8 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_ANGLE: {
-        EmbVector start = emb_vector(REAL(0), -REAL(1));
-        EmbVector end = emb_vector(REAL(2), -REAL(3));
+        EmbVector start = unpack_vector(context, 0);
+        EmbVector end = unpack_vector(context, 2);
         EmbVector delta = emb_vector_subtract(end, start);
         value = script_real(emb_vector_angle(delta));
         break;
@@ -582,7 +582,7 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_MOVE_SELECTED: {
-        doc_move_selected(doc_index, REAL(0), -REAL(1));
+        doc_move_selected(doc_index, unpack_vector(context, 0));
         break;
     }
 
@@ -2188,137 +2188,6 @@ set_grid_color_command(ScriptEnv* context)
     return script_null;
 }
 
-/* . */
-ScriptValue
-add_polygon_command(ScriptEnv* context)
-{
-    #if 0
-    if (context->argumentCount != 1) {
-        prompt_output("addPolygon() requires one argument");
-        return script_false;
-    }
-    if (!context->argument[0].isArray()) {
-        prompt_output("TYPE_ERROR, addPolygon(): first argument is not an array");
-        return script_false;
-    }
-
-    QVariantList varList = context->argument[0].toVariant().toList();
-    int varSize = varList.size();
-    if (varSize < 2) {
-        prompt_output("TYPE_ERROR, addPolygon(): array must contain at least two elements");
-        return script_false;
-    }
-    if (varSize % 2) {
-        prompt_output("TYPE_ERROR, addPolygon(): array cannot contain an odd number of elements");
-        return script_false;
-    }
-
-    bool lineTo = false;
-    bool xCoord = true;
-    EmbVector v = zero_vector;
-    EmbVector start = zero_vector;
-    QPainterPath path;
-    foreach (QVariant var, varList) {
-        if (var.canConvert(QVariant::Double)) {
-            if (xCoord) {
-                xCoord = false;
-                v.x = var.toReal();
-            }
-            else {
-                xCoord = true;
-                v.y = -var.toReal();
-
-                if (lineTo) {
-                    path.lineTo(v.x, v.y);
-                }
-                else {
-                    path.moveTo(v.x, v.y);
-                    lineTo = true;
-                    start = v;
-                }
-            }
-        }
-        else {
-            prompt_output("TYPE_ERROR, addPolygon(): array contains one or more invalid elements");
-            return script_false;
-        }
-    }
-
-    /* Close the polygon. */
-    path.closeSubpath();
-
-    path.translate(-start.x, -start.y);
-
-    add_Polygon(start.x, start.y, path, RUBBER_OFF);
-    #endif
-    return script_null;
-}
-
-ScriptValue
-add_polyline_command(ScriptEnv* context)
-{
-    #if 0
-    if (context->argumentCount != 1) {
-        prompt_output("addPolyline() requires one argument");
-        return script_false;
-    }
-    if (!context->argument[0].isArray()) {
-        prompt_output("TYPE_ERROR, addPolyline(): first argument is not an array");
-        return script_false;
-    }
-
-    QVariantList varList = context->argument[0].toVariant().toList();
-    int varSize = varList.size();
-    if (varSize < 2) {
-        prompt_output("TYPE_ERROR, addPolyline(): array must contain at least two elements");
-        return script_false;
-    }
-    if (varSize % 2) {
-        prompt_output("TYPE_ERROR, addPolyline(): array cannot contain an odd number of elements");
-        return script_false;
-    }
-
-    bool lineTo = false;
-    bool xCoord = true;
-    double x = 0;
-    double y = 0;
-    double startX = 0;
-    double startY = 0;
-    QPainterPath path;
-    foreach(QVariant var, varList) {
-        if (var.canConvert(QVariant::Double)) {
-            if (xCoord) {
-                xCoord = false;
-                x = var.toReal();
-            }
-            else {
-                xCoord = true;
-                y = -var.toReal();
-
-                if (lineTo) {
-                    path.lineTo(x,y);
-                }
-                else {
-                    path.moveTo(x,y);
-                    lineTo = true;
-                    startX = x;
-                    startY = y;
-                }
-            }
-        }
-        else {
-            prompt_output("TYPE_ERROR, addPolyline(): array contains one or more invalid elements");
-            return script_false;
-        }
-    }
-
-    path.translate(-startX, -startY);
-
-    add_Polyline(startX, startY, path, RUBBER_OFF);
-    #endif
-    return script_null;
-}
-
 /* SYSWINDOWS
  * Do nothing for click, context.
  */
@@ -2783,108 +2652,71 @@ unpack_vector(ScriptEnv *context, int offset)
     return emb_vector(REAL(offset), -REAL(offset+1));
 }
 
-/* . */
-void
-spinBoxRecentMaxFilesValueChanged(int value)
+/* PREVIEWON . */
+ScriptValue
+previewon_command(ScriptEnv *context)
 {
-    setting[OPENSAVE_RECENT_MAX_FILES].dialog.i = value;
-}
-
-/* . */
-void
-spinBoxTrimDstNumJumpsValueChanged(int value)
-{
-    setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i = value;
-}
-
-void
-spinBoxDisplaySelectBoxAlphaValueChanged(int value)
-{
-    setting[DISPLAY_SELECTBOX_ALPHA].preview.i = value;
-    updateAllViewSelectBoxColors(
-        setting[DISPLAY_SELECTBOX_LEFT_COLOR].accept.i,
-        setting[DISPLAY_SELECTBOX_LEFT_FILL].accept.i,
-        setting[DISPLAY_SELECTBOX_RIGHT_COLOR].accept.i,
-        setting[DISPLAY_SELECTBOX_RIGHT_FILL].accept.i,
-        setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
-}
-
-/* . */
-void
-comboBoxPromptFontFamilyCurrentIndexChanged(EmbString family)
-{
-    strcpy(setting[PROMPT_FONT_FAMILY].preview.s, family);
-    setPromptFontFamily(setting[PROMPT_FONT_FAMILY].preview.s);
-}
-
-/* . */
-void
-comboBoxPromptFontStyleCurrentIndexChanged(EmbString style)
-{
-    strcpy(setting[PROMPT_FONT_STYLE].preview.s, style);
-    setPromptFontStyle(setting[PROMPT_FONT_STYLE].preview.s);
-}
-
-/* . */
-void
-spinBoxPromptFontSizeValueChanged(int value)
-{
-    setting[PROMPT_FONT_SIZE].preview.i = value;
-    setPromptFontSize(setting[PROMPT_FONT_SIZE].preview.i);
-}
-
-/* . */
-void
-spinBoxRulerPixelSizeValueChanged(double value)
-{
-    setting[RULER_PIXEL_SIZE].dialog.r = value;
-}
-
-/* . */
-void
-sliderQSnapLocatorSizeValueChanged(int value)
-{
-    setting[QSNAP_LOCATOR_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-sliderQSnapApertureSizeValueChanged(int value)
-{
-    setting[QSNAP_APERTURE_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-checkBoxLwtRealRenderStateChanged(int checked)
-{
-    setting[LWT_REAL_RENDER].preview.b = checked;
-    if (setting[LWT_REAL_RENDER].preview.b) {
-        enableReal();
+    int clone = PREVIEW_CLONE_NULL;
+    if (string_equal(STR(0), "SELECTED")) {
+        clone = PREVIEW_CLONE_SELECTED;
+    }
+    else if (string_equal(STR(0), "RUBBER")) {
+        clone = PREVIEW_CLONE_RUBBER;
     }
     else {
-        disableReal();
+        prompt_output("UNKNOWN_ERROR previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
+        return script_false;
+    }
+
+    int mode = PREVIEW_NULL;
+    if (string_equal(STR(1), "MOVE")) {
+        mode = PREVIEW_MOVE;
+    }
+    else if (string_equal(STR(1), "ROTATE")) {
+        mode = PREVIEW_ROTATE;
+    }
+    else if (string_equal(STR(1), "SCALE")) {
+        mode = PREVIEW_SCALE;
+    }
+    else {
+        prompt_output("UNKNOWN_ERROR previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\".");
+        return script_false;
+    }
+
+    int32_t doc_index = activeDocument();
+    if (doc_index) {
+        doc_preview_on(doc_index, clone, mode, REAL(2), -REAL(3), REAL(4));
+    }
+    else {
+        prompt_output("Preview on requires an active view.");
+    }
+    return script_null;
+}
+
+/* . */
+ScriptValue
+print_area_command(ScriptEnv* context)
+{
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
+    debug_message(message);
+    /* TODO: Print Setup Stuff
+     * nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
+     */
+    print_command();
+    return script_null;
+}
+
+/* . */
+void
+zoomExtentsAllSubWindows(void)
+{
+    for (int i=0; i<MAX_OPEN_FILES; i++) {
+        if (document_memory[i]) {
+            doc_recalculate_limits(i);
+            doc_zoom_extents(i);
+        }
     }
 }
 
-/* . */
-void
-sliderSelectionGripSizeValueChanged(int value)
-{
-    setting[SELECTION_GRIP_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-sliderSelectionPickBoxSizeValueChanged(int value)
-{
-    setting[SELECTION_PICKBOX_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-comboBoxScrollBarWidgetCurrentIndexChanged(int index)
-{
-    setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i = index;
-}
 

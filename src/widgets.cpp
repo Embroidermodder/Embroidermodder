@@ -261,6 +261,9 @@ bool pickAdd;
 
 Object* tempObj;
 
+QList<QString> promptInputList = {""};
+int promptInputNum = 0;
+
 int precisionAngle;
 int precisionLength;
 
@@ -296,19 +299,19 @@ void update_lineedit_bool(QComboBox* comboBox, bool val, bool yesOrNoText);
 void showGroups(int objType);
 void fieldEdited(QObject* fieldObj);
 void showOneType(int index);
-void hideAllGroups();
-void clearAllFields();
+void hideAllGroups(void);
+void clearAllFields(void);
+void prompt_set_current_text(QString);
 
-QComboBox* createComboBoxSelected();
-QToolButton* createToolButtonQSelect();
-QToolButton* createToolButtonPickAdd();
+QComboBox* createComboBoxSelected(void);
+QToolButton* createToolButtonQSelect(void);
+QToolButton* createToolButtonPickAdd(void);
 
 void create_statusbar(MainWindow* mw);
 
-MdiWindow* activeMdiWindow();
-QGraphicsScene* activeScene();
-QUndoStack* activeUndoStack();
-QString platformString();
+MdiWindow* activeMdiWindow(void);
+QUndoStack* activeUndoStack(void);
+QString platformString(void);
 
 QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
 QIcon create_icon(QString icon);
@@ -340,12 +343,6 @@ void setHistory(QString txt);
 void add_command(std::string alias, std::string cmd);
 
 /* ------------------------- Object Functions ------------------------------- */
-
-Object *create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_path(EmbVector v, const QPainterPath p, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_polygon(EmbVector v, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
-
-Object *copy_object(Object* obj);
 
 Qt::PenStyle obj_line_type(Object* obj);
 double  obj_line_weight(Object* obj);
@@ -462,7 +459,6 @@ public:
     QPixmap bgTexture;
     QColor  bgColor;
 
-    void zoomExtentsAllSubWindows();
     void forceRepaint();
 
 public slots:
@@ -597,9 +593,6 @@ public:
     EmbVector mouseSnapPoint(EmbVector mousePoint);
     void gripEdit(EmbVector before, EmbVector after);
     QPainterPath shape() const { return path(); }
-
-    void setObjectRubberPoint(char key[MAX_STRING_LENGTH], EmbVector value);
-    void setObjectRubberText(char key[MAX_STRING_LENGTH], char value[MAX_STRING_LENGTH]);
 
     void drawRubberLine(QLineF rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
 
@@ -766,22 +759,15 @@ public:
     MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
     ~MdiWindow();
 
-    EmbPattern* pattern;
-
     QMdiArea* mdiArea;
     QGraphicsScene* gscene;
     int32_t doc_index;
-
-    QString promptHistory;
-    QList<QString> promptInputList;
-    int promptInputNum;
 
     QPrinter printer;
 
     virtual QSize sizeHint() const;
     QString getShortCurrentFile();
-    bool loadFile(QString fileName);
-    bool saveFile(QString fileName);
+    bool loadFile(const char *fileName);
 signals:
     void sendCloseMdiWin(MdiWindow*);
 
@@ -789,21 +775,12 @@ public slots:
     void closeEvent(QCloseEvent* e);
     void onWindowActivated();
 
-    void updateColorLinetypeLineweight();
-
     void print();
     void saveBMC();
-
-    void promptHistoryAppended(QString txt);
-    void logPromptInput(QString txt);
-    void promptInputPrevious();
-    void promptInputNext();
 
 private:
     void setCurrentFile(QString fileName);
     QString fileExtension(QString fileName);
-
-    void promptInputPrevNext(bool prev);
 };
 
 class ImageWidget : public QWidget
@@ -871,8 +848,6 @@ class CmdPrompt : public QWidget
 public:
     CmdPrompt(QWidget* parent = 0);
     ~CmdPrompt() {}
-
-    void updateStyle(void);
 
 public slots:
     void setCurrentText(QString txt);
@@ -1005,6 +980,8 @@ platformString(void)
     debug_message(message);
     return os;
 }
+
+QString promptHistoryData;
 
 /* . */
 void
@@ -1209,19 +1186,6 @@ activeDocument(void)
 }
 
 /* . */
-QGraphicsScene*
-activeScene(void)
-{
-    debug_message("activeScene()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        QGraphicsScene* s = mdiWin->gscene;
-        return s;
-    }
-    return 0;
-}
-
-/* . */
 QUndoStack*
 activeUndoStack(void)
 {
@@ -1315,12 +1279,12 @@ MainWindow::colorSelectorIndexChanged(int index)
         /* TODO: Handle ByLayer and ByBlock and Other... */
         newColor = comboBox->itemData(index).toUInt(&ok);
         if (!ok) {
-            QMessageBox::warning(this, translate("Color Selector Conversion Error"),
+            warning_box(translate("Color Selector Conversion Error"),
                 translate("<b>An error has occured while changing colors.</b>"));
         }
     }
     else {
-        QMessageBox::warning(this, translate("Color Selector Pointer Error"),
+        warning_box(translate("Color Selector Pointer Error"),
             translate("<b>An error has occured while changing colors.</b>"));
     }
 
@@ -1376,31 +1340,42 @@ setTextSize(double num)
 
 /* . */
 void
-promptHistoryAppended(QString txt)
+promptHistoryAppended(EmbString txt)
 {
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        mdiWin->promptHistoryAppended(txt);
-    }
+    promptHistoryData.append(QString("<br/>") + txt);
 }
 
 /* . */
 void
-logPromptInput(QString txt)
+logPromptInput(EmbString txt)
 {
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        mdiWin->logPromptInput(txt);
-    }
+    promptInputList << QString(txt);
+    promptInputNum = promptInputList.size();
 }
 
 /* . */
 void
 promptInputPrevious(void)
 {
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        mdiWin->promptInputPrevious();
+    if (promptInputList.isEmpty()) {
+        critical_box(translate("Prompt Previous Error"),
+            translate("The prompt input is empty! Please report this as a bug!"));
+        debug_message("The prompt input is empty! Please report this as a bug!");
+    }
+    else {
+        promptInputNum--;
+        int maxNum = promptInputList.size();
+        if (promptInputNum < 0) {
+            promptInputNum = 0;
+            prompt->setCurrentText("");
+        }
+        else if (promptInputNum >= maxNum) {
+            promptInputNum = maxNum;
+            prompt->setCurrentText("");
+        }
+        else {
+            prompt->setCurrentText(promptInputList.at(promptInputNum));
+        }
     }
 }
 
@@ -1408,9 +1383,25 @@ promptInputPrevious(void)
 void
 promptInputNext(void)
 {
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        mdiWin->promptInputNext();
+    if (promptInputList.isEmpty()) {
+        critical_box(translate("Prompt Next Error"),
+            translate("The prompt input is empty! Please report this as a bug!"));
+        debug_message("The prompt input is empty! Please report this as a bug!");
+    }
+    else {
+        promptInputNum++;
+        int maxNum = promptInputList.size();
+        if (promptInputNum < 0) {
+            promptInputNum = 0;
+            prompt->setCurrentText("");
+        }
+        else if (promptInputNum >= maxNum) {
+            promptInputNum = maxNum;
+            prompt->setCurrentText("");
+        }
+        else {
+            prompt->setCurrentText(promptInputList.at(promptInputNum));
+        }
     }
 }
 
@@ -1481,17 +1472,13 @@ void
 doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode)
 {
     Object *obj = object_list[id];
-    QGraphicsScene* gscene = activeScene();
-    QUndoStack* stack = activeUndoStack();
-    if (!gscene || !stack) {
-        return;
-    }
     if (rubberMode) {
         doc_add_to_rubber_room(doc_index, obj);
-        doc_add_item(doc_index, obj->core->objID);
+        doc_add_item(doc_index, id);
         doc_update(doc_index);
     }
     else {
+        QUndoStack* stack = activeUndoStack();
         UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
             obj->core->OBJ_NAME, obj, doc_index, 0);
         stack->push(cmd);
@@ -1503,42 +1490,6 @@ void
 obj_set_rotation(uint32_t id, double rotation)
 {
     object_list[id]->setRotation(rotation);
-}
-
-/* NOTE: This native is different than the rest in that the Y+ is down
- * (scripters need not worry about this)
- */
-ScriptValue
-add_polygon_command(double startX, double startY, const QPainterPath& p, int rubberMode)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    EmbPolygon polygon;
-    EmbVector start = emb_vector(startX, startY);
-    Object* obj = create_polygon(start, p, getCurrentColor());
-    obj_set_rubber_mode(obj->core->objID, rubberMode);
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_true;
-}
-
-/* NOTE: This native is different than the rest in that the Y+ is down
- * (scripters need not worry about this)
- */
-ScriptValue
-add_polyline_command(double startX, double startY, const QPainterPath& p, int rubberMode)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index < 0) {
-        return script_false;
-    }
-    EmbPath path;
-    EmbVector start = emb_vector(startX, startY);
-    Object* obj = create_polygon(start, p, getCurrentColor());
-    obj_set_rubber_mode(obj->core->objID, rubberMode);
-    doc_undoable_add_obj(doc_index, obj->core->objID, rubberMode);
-    return script_true;
 }
 
 /* . */
@@ -1571,34 +1522,48 @@ set_CursorShape(char shape[MAX_STRING_LENGTH])
     else if (!strcmp(shape, "resizehoriz")) {
         doc->setCursor(QCursor(Qt::SizeHorCursor));
     }
-    else if (!strcmp(shape, "resizediagleft"))
+    else if (!strcmp(shape, "resizediagleft")) {
         doc->setCursor(QCursor(Qt::SizeBDiagCursor));
-    else if (!strcmp(shape, "resizediagright"))
+    }
+    else if (!strcmp(shape, "resizediagright")) {
         doc->setCursor(QCursor(Qt::SizeFDiagCursor));
-    else if (!strcmp(shape, "move"))
+    }
+    else if (!strcmp(shape, "move")) {
         doc->setCursor(QCursor(Qt::SizeAllCursor));
-    else if (!strcmp(shape, "blank"))
+    }
+    else if (!strcmp(shape, "blank")) {
         doc->setCursor(QCursor(Qt::BlankCursor));
-    else if (!strcmp(shape, "splitvert"))
+    }
+    else if (!strcmp(shape, "splitvert")) {
         doc->setCursor(QCursor(Qt::SplitVCursor));
-    else if (!strcmp(shape, "splithoriz"))
+    }
+    else if (!strcmp(shape, "splithoriz")) {
         doc->setCursor(QCursor(Qt::SplitHCursor));
-    else if (!strcmp(shape, "handpointing"))
+    }
+    else if (!strcmp(shape, "handpointing")) {
         doc->setCursor(QCursor(Qt::PointingHandCursor));
-    else if (!strcmp(shape, "forbidden"))
+    }
+    else if (!strcmp(shape, "forbidden")) {
         doc->setCursor(QCursor(Qt::ForbiddenCursor));
-    else if (!strcmp(shape, "handopen"))
+    }
+    else if (!strcmp(shape, "handopen")) {
         doc->setCursor(QCursor(Qt::OpenHandCursor));
-    else if (!strcmp(shape, "handclosed"))
+    }
+    else if (!strcmp(shape, "handclosed")) {
         doc->setCursor(QCursor(Qt::ClosedHandCursor));
-    else if (!strcmp(shape, "whatsthis"))
+    }
+    else if (!strcmp(shape, "whatsthis")) {
         doc->setCursor(QCursor(Qt::WhatsThisCursor));
-    else if (!strcmp(shape, "busy"))
+    }
+    else if (!strcmp(shape, "busy")) {
         doc->setCursor(QCursor(Qt::BusyCursor));
-    else if (!strcmp(shape, "dragmove"))
+    }
+    else if (!strcmp(shape, "dragmove")) {
         doc->setCursor(QCursor(Qt::DragMoveCursor));
-    else if (!strcmp(shape, "dragcopy"))
+    }
+    else if (!strcmp(shape, "dragcopy")) {
         doc->setCursor(QCursor(Qt::DragCopyCursor));
+    }
     else if (!strcmp(shape, "draglink")) {
         doc->setCursor(QCursor(Qt::DragLinkCursor));
     }
@@ -1684,69 +1649,11 @@ about_dialog(void)
     restore_cursor();
 }
 
-
-/* PREVIEWON . */
-ScriptValue
-previewon_command(ScriptEnv *context)
-{
-    QString cloneStr = QString(STR(0)).toUpper();
-    int clone = PREVIEW_CLONE_NULL;
-    if (cloneStr == "SELECTED") {
-        clone = PREVIEW_CLONE_SELECTED;
-    }
-    else if (cloneStr == "RUBBER") {
-        clone = PREVIEW_CLONE_RUBBER;
-    }
-    else {
-        prompt_output("UNKNOWN_ERROR previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
-        return script_false;
-    }
-
-    QString modeStr  = QString(STR(1)).toUpper();
-    int mode = PREVIEW_NULL;
-    if (modeStr == "MOVE") {
-        mode = PREVIEW_MOVE;
-    }
-    else if (modeStr == "ROTATE") {
-        mode = PREVIEW_ROTATE;
-    }
-    else if (modeStr == "SCALE") {
-        mode = PREVIEW_SCALE;
-    }
-    else {
-        prompt_output("UNKNOWN_ERROR previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\".");
-        return script_false;
-    }
-
-    int32_t doc_index = activeDocument();
-    if (doc_index) {
-        doc_preview_on(doc_index, clone, mode, REAL(2), -REAL(3), REAL(4));
-    }
-    else {
-        prompt_output("Preview on requires an active view.");
-    }
-    return script_null;
-}
-
 /* . */
 ScriptValue
 set_prompt_prefix_command(ScriptEnv* context)
 {
     prompt->setPrefix(QString(STR(0)));
-    return script_null;
-}
-
-/* . */
-ScriptValue
-print_area_command(ScriptEnv* context)
-{
-    char message[MAX_STRING_LENGTH];
-    sprintf(message, "nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
-    debug_message(message);
-    /* TODO: Print Setup Stuff
-     * nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
-     */
-    print_command();
     return script_null;
 }
 
@@ -1799,8 +1706,7 @@ UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor,
     if (data.type == ACTION_SCALE) {
         /* Prevent division by zero and other wacky behavior. */
         if (scaleFactor <= 0.0) {
-            data.delta.x = 0.0;
-            data.delta.y = 0.0;
+            data.delta = emb_vector(0.0, 0.0);
             data.factor = 1.0;
             QMessageBox::critical(0,
                 QObject::tr("ScaleFactor Error"),
@@ -2035,15 +1941,14 @@ map_from_scene(Object *obj, EmbVector v)
     return to_emb_vector(obj->mapFromScene(to_qpointf(v)));
 }
 
-/* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
- * WARNING: All movement has to be handled explicitly by us, not by the scene.
- */
 Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)
 {
 }
 
-/* . */
+/* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+ * WARNING: All movement has to be handled explicitly by us, not by the scene.
+ */
 uint32_t
 create_object(int type_, uint32_t rgb)
 {
@@ -2093,154 +1998,7 @@ create_object(int type_, uint32_t rgb)
 /* . */
 Object::~Object()
 {
-    debug_message("ArcObject Destructor()");
-    free(core->geometry);
-    free(core);
-}
-
-/* . */
-Object *
-create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("PolylineObject Constructor()");
-    todo("getCurrentLineType");
-    Object *obj = new Object(EMB_POLYLINE, rgb, Qt::SolidLine);
-    obj_update_path_r(obj, p);
-    /* EmbVector v; obj_set_pos(obj->core, v); */
-    return obj;
-}
-
-/* . */
-Object *
-create_path(EmbVector v, const QPainterPath p, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("PathObject Constructor()");
-    Object *obj = new Object(EMB_PATH, rgb, Qt::SolidLine);
-    todo("getCurrentLineType");
-    obj_update_path_r(obj, p);
-    obj_set_pos(obj->core, v);
-    return obj;
-}
-
-/* . */
-Object *
-create_polygon(EmbVector v, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("PolygonObject Constructor()");
-    Object *obj = new Object(EMB_POLYGON, rgb, Qt::SolidLine);
-    todo("getCurrentLineType");
-    obj_update_path_r(obj, p);
-    obj_set_pos(obj->core, v);
-    return obj;
-}
-
-/* . */
-Object *
-copy_object(Object* obj)
-{
-    debug_message("ArcObject Constructor()");
-    if (!obj) {
-        return NULL;
-    }
-    Object *copy = new Object(obj->core->geometry->type, obj->core->rgb, Qt::SolidLine);
-    switch (obj->core->geometry->type) {
-    case EMB_ARC:
-        copy->core->geometry->object.arc = obj->core->geometry->object.arc;
-        todo("getCurrentLineType");
-        copy->setRotation(obj->core->rotation);
-        break;
-    case EMB_CIRCLE:
-        copy->core->geometry->object.circle = obj->core->geometry->object.circle;
-        todo("getCurrentLineType");
-        copy->setRotation(obj->core->rotation);
-        break;
-    case EMB_DIM_LEADER:
-        copy->core->geometry->object.line = obj->core->geometry->object.line;
-        /* init(obj_x1(obj), obj_y1(obj), obj_x2(obj), obj_y2(obj), obj_color_rgb(obj->core), Qt::SolidLine); */
-        todo("getCurrentLineType");
-        break;
-    case EMB_ELLIPSE:
-        copy->core->geometry->object.ellipse = obj->core->geometry->object.ellipse;
-        /* init(obj->obj_centerX(), obj->obj_centerY(), obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
-        todo("getCurrentLineType");
-        copy->setRotation(obj->core->rotation);
-        break;
-    case EMB_IMAGE: {
-        copy->core->geometry->object.ellipse = obj->core->geometry->object.ellipse;
-        /* EmbVector ptl = obj_top_left(obj); */
-        /* init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
-        todo("getCurrentLineType");
-        copy->setRotation(obj->core->rotation);
-        break;
-    }
-    case EMB_LINE: {
-        copy->core->geometry->object.line = obj->core->geometry->object.line;
-        /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj_color_rgb(obj), Qt::SolidLine); */
-        todo("getCurrentLineType");
-        break;
-    }
-    case EMB_PATH: {
-        copy->core->geometry->object.path = obj->core->geometry->object.path;
-        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
-         * obj->setRotation(obj->rotation());
-         * obj->setScale(obj->scale());
-         */
-        todo("getCurrentLineType");
-        break;
-    }
-    case EMB_POINT: {
-        copy->core->geometry->object.point = obj->core->geometry->object.point;
-        /* init(obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
-         */
-        todo("getCurrentLineType");
-        copy->setRotation(obj->core->rotation);
-        break;
-    }
-    case EMB_POLYGON: {
-        copy->core->geometry->object.polygon = obj->core->geometry->object.polygon;
-        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
-         * obj->setRotation(obj->rotation());
-         * obj->setScale(obj->scale());
-         */
-        todo("getCurrentLineType");
-        break;
-    }
-    case EMB_POLYLINE: {
-        copy->core->geometry->object.polyline = obj->core->geometry->object.polyline;
-        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
-         */
-        todo("getCurrentLineType");
-        copy->setRotation(obj->core->rotation);
-        copy->setScale(obj->core->scale);
-        break;
-    }
-    case EMB_RECT: {
-        obj->core->geometry->object.rect = obj->core->geometry->object.rect;
-        EmbVector ptl = obj_top_left(obj->core);
-        /* init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine);
-         */
-        todo("getCurrentLineType");
-        copy->setRotation(obj->core->rotation);
-        break;
-    }
-    case EMB_TEXT_SINGLE: {
-        obj_set_text_font(copy->core, obj->core->textFont);
-        obj_set_text_size(copy->core, obj->core->textSize);
-        copy->setRotation(obj->core->rotation);
-        obj_set_text_backward(copy->core, obj->core->textBackward);
-        obj_set_text_upside_down(copy->core, obj->core->textUpsideDown);
-        obj_set_text_style(copy->core, obj->core->textBold, obj->core->textItalic,
-            obj->core->textUnderline, obj->core->textStrikeOut, obj->core->textOverline);
-        /* init(obj->text, obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
-         */
-        todo("getCurrentLineType");
-        copy->setScale(obj->core->scale);
-        break;
-    }
-    default:
-        break;
-    }
-    return copy;
+    free_object(core);
 }
 
 Qt::PenStyle
@@ -2280,22 +2038,22 @@ obj_draw_rubber_line(Object *obj, const QLineF& rubLine, QPainter* painter, cons
 
 /* . */
 void
-Object::setObjectRubberPoint(char key[MAX_STRING_LENGTH], EmbVector value)
+setObjectRubberPoint(uint32_t obj, EmbString key, EmbVector value)
 {
     LabelledVector s;
     string_copy(s.key, key);
     s.vector = value;
-    rubber_points.push_back(s);
+    object_list[obj]->rubber_points.push_back(s);
 }
 
 /* . */
 void
-Object::setObjectRubberText(char key[MAX_STRING_LENGTH], char value[MAX_STRING_LENGTH])
+setObjectRubberText(uint32_t obj, EmbString key, EmbString value)
 {
     StringMap s;
     string_copy(s.key, key);
     string_copy(s.value, value);
-    rubber_texts.push_back(s);
+    object_list[obj]->rubber_texts.push_back(s);
 }
 
 /* . */
@@ -2779,7 +2537,7 @@ obj_calculate_data(uint32_t obj_id)
     double radius = emb_vector_distance(center, obj->core->geometry->object.arc.mid);
     obj_update_arc_rect(obj, radius);
     obj_update_path(obj);
-    obj->setRotation(0);
+    obj_set_rotation(obj_id, 0);
     obj->setScale(1);
 }
 
@@ -3886,11 +3644,10 @@ doc_map_to_scene(int32_t doc, EmbVector v)
 
 /* . */
 EmbVector
-doc_center(int32_t doc)
+doc_center(int32_t doc_id)
 {
-    EmbVector a = emb_vector(0.0, 0.0);
-    // FIXME: return documents[doc]->center();
-    return a;
+    Document *doc = documents[doc_id];
+    return emb_vector(doc->width()/2, doc->height()/2);
 }
 
 /* FIXME */
@@ -4115,7 +3872,7 @@ doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point)
     foreach (QGraphicsItem* item, documents[doc]->rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            base->setObjectRubberPoint((char*)qPrintable(key), point);
+            setObjectRubberPoint(base->core->objID, (char*)qPrintable(key), point);
         }
     }
     doc_update(doc);
@@ -4128,36 +3885,16 @@ doc_set_rubber_text(int32_t doc, EmbString key, EmbString txt)
     foreach (QGraphicsItem* item, documents[doc]->rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            base->setObjectRubberText((char*)qPrintable(key), (char*)qPrintable(txt));
+            setObjectRubberText(base->core->objID, (char*)qPrintable(key), (char*)qPrintable(txt));
         }
     }
     doc_update(doc);
 }
 
-/* . */
 void
-doc_create_grid(int32_t doc, EmbString gridType)
+doc_empty_grid(int32_t doc)
 {
-    if (string_equal(gridType, "Rectangular")) {
-        doc_create_grid_rect(doc);
-        documents[doc]->gscene->setProperty("ENABLE_GRID", true);
-    }
-    else if (string_equal(gridType, "Circular")) {
-        doc_create_grid_polar(doc);
-        documents[doc]->gscene->setProperty("ENABLE_GRID", true);
-    }
-    else if (string_equal(gridType, "Isometric")) {
-        doc_create_grid_iso(doc);
-        documents[doc]->gscene->setProperty("ENABLE_GRID", true);
-    }
-    else {
-        documents[doc]->gridPath = QPainterPath();
-        documents[doc]->gscene->setProperty("ENABLE_GRID", false);
-    }
-
-    doc_create_origin(doc);
-
-    doc_update(doc);
+    documents[doc]->gridPath = QPainterPath();
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
@@ -4477,7 +4214,7 @@ Document::drawBackground(QPainter* painter, const QRectF& rect)
         painter->fillPath(documents[doc]->originPath, QColor(data->gridColor));
     }
 
-    EmbPattern *pattern = activeMdiWindow()->pattern;
+    EmbPattern *pattern = data->pattern;
     for (int i = 0; i < pattern->geometry->count; i++) {
         EmbGeometry g = pattern->geometry->geometry[i];
         switch (g.type) {
@@ -4778,14 +4515,14 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                 foreach(EmbVector ssp, selectedGripPoints) {
                     EmbVector p1 = emb_vector_subtract(doc_map_from_scene(doc, ssp), offset);
                     EmbVector q1 = emb_vector_add(doc_map_from_scene(doc, ssp), offset);
-                    QPointF p2 = to_qpointf(doc_map_to_scene(doc, p1));
-                    QPointF q2 = to_qpointf(doc_map_to_scene(doc, q1));
+                    EmbVector p2 = doc_map_to_scene(doc, p1);
+                    EmbVector q2 = doc_map_to_scene(doc, q1);
 
                     if (emb_approx(ssp, data->sceneGripPoint)) {
-                        painter->fillRect(QRectF(p2, q2), QColor::fromRgb(data->gripColorHot));
+                        painter->fillRect(QRectF(p2.x, p2.y, q2.x, q2.y), QColor::fromRgb(data->gripColorHot));
                     }
                     else {
-                        painter->drawRect(QRectF(p2, q2));
+                        painter->drawRect(QRectF(p2.x, p2.y, q2.x, q2.y));
                     }
                 }
             }
@@ -5057,51 +4794,17 @@ doc_cornerButtonClicked()
 
 /* . */
 void
-doc_zoom_in(Document *doc)
+doc_scale(int32_t doc_id, double s)
 {
-    debug_message("View zoomIn()");
-    if (!doc_allow_zoom_in(doc->data.id)) {
-        return;
-    }
-    wait_cursor();
-    QPointF cntr = doc->mapToScene(QPoint(doc->width()/2, doc->height()/2));
-    double s = get_real(DISPLAY_ZOOMSCALE_IN);
+    Document *doc = documents[doc_id];
     doc->scale(s, s);
-
-    doc_center_on(doc->data.id, to_emb_vector(cntr));
-    restore_cursor();
 }
 
 /* . */
 void
-doc_zoom_out(Document *doc)
+doc_zoom_selected(int32_t doc_id)
 {
-    debug_message("View zoomOut()");
-    if (!doc_allow_zoom_out(doc->data.id)) {
-        return;
-    }
-    wait_cursor();
-    QPointF cntr = doc->mapToScene(QPoint(doc->width()/2, doc->height()/2));
-    double s = get_real(DISPLAY_ZOOMSCALE_OUT);
-    doc->scale(s, s);
-
-    doc_center_on(doc->data.id, to_emb_vector(cntr));
-    restore_cursor();
-}
-
-/* . */
-void
-doc_zoom_window(Document *doc)
-{
-    doc->data.zoomWindowActive = true;
-    doc->data.selectingActive = false;
-    doc_clear_selection(doc->data.id);
-}
-
-/* . */
-void
-doc_zoom_selected(Document *doc)
-{
+    Document *doc = documents[doc_id];
     QUndoStack* stack = activeUndoStack();
     if (stack) {
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected",
@@ -5442,8 +5145,10 @@ void
 doc_recalculate_limits(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    EmbVector tl = to_emb_vector(documents[doc]->mapToScene(documents[doc]->rect().topLeft()));
-    EmbVector br = to_emb_vector(documents[doc]->mapToScene(documents[doc]->rect().bottomRight()));
+    QPoint tlf = documents[doc]->rect().topLeft();
+    QPoint brf = documents[doc]->rect().bottomRight();
+    EmbVector tl = doc_map_to_scene(doc, emb_vector(tlf.x(), tlf.y()));
+    EmbVector br = doc_map_to_scene(doc, emb_vector(brf.x(), brf.y()));
     QRectF viewRect(to_qpointf(tl), to_qpointf(br));
     QRectF sceneRect(documents[doc]->sceneRect());
     QRectF newRect = viewRect.adjusted(-viewRect.width(), -viewRect.height(), viewRect.width(), viewRect.height());
@@ -5521,7 +5226,7 @@ Document::mouseMoveEvent(QMouseEvent* event)
             double factor = QLineF(x, y, data->sceneMousePoint.x, data->sceneMousePoint.y).length() / scaleFactor;
 
             documents[doc]->previewObjectItemGroup->setScale(1);
-            documents[doc]->previewObjectItemGroup->setPos(0,0);
+            documents[doc]->previewObjectItemGroup->setPos(0, 0);
 
             if (scaleFactor <= 0.0) {
                 /* FIXME: messagebox("critical",
@@ -5532,18 +5237,19 @@ Document::mouseMoveEvent(QMouseEvent* event)
             }
             else {
                 /* Calculate the offset */
-                double oldX = 0;
-                double oldY = 0;
-                QLineF scaleLine(x, y, oldX, oldY);
+                EmbVector delta;
+                EmbVector old = emb_vector(0.0, 0.0);
+                QLineF scaleLine(x, y, old.x, old.y);
                 scaleLine.setLength(scaleLine.length()*factor);
                 double newX = scaleLine.x2();
                 double newY = scaleLine.y2();
 
-                double dx = newX - oldX;
-                double dy = newY - oldY;
+                delta.x = newX - old.x;
+                delta.y = newY - old.y;
 
-                documents[doc]->previewObjectItemGroup->setScale(documents[doc]->previewObjectItemGroup->scale()*factor);
-                documents[doc]->previewObjectItemGroup->moveBy(dx, dy);
+                documents[doc]->previewObjectItemGroup->setScale(
+                    documents[doc]->previewObjectItemGroup->scale()*factor);
+                documents[doc]->previewObjectItemGroup->moveBy(delta.x, delta.y);
             }
         }
     }
@@ -5559,18 +5265,19 @@ Document::mouseMoveEvent(QMouseEvent* event)
                 data->scenePressPoint.x, data->scenePressPoint.y, 0);
     }
     if (data->selectingActive) {
-        /* FIXME:
-        if (data->sceneMovePoint >= data->scenePressPoint) {
+        if ((data->sceneMovePoint.x >= data->scenePressPoint.x)
+            && (data->sceneMovePoint.y >= data->scenePressPoint.y)) {
             documents[doc]->selectBox->setDirection(1);
         }
         else {
             documents[doc]->selectBox->setDirection(0);
         }
         QPointF p = documents[doc]->mapFromScene(to_qpointf(data->scenePressPoint));
+        /* FIXME:
         QRect rect = QRect(p, event->pos());
         documents[doc]->selectBox->setGeometry(rect).normalized();
-        event->accept();
         */
+        event->accept();
     }
     if (data->panningActive) {
         documents[doc]->horizontalScrollBar()->setValue(
@@ -5594,8 +5301,8 @@ Document::mouseReleaseEvent(QMouseEvent* event)
             EmbVector delta = emb_vector_subtract(data.sceneMousePoint,
                 data.scenePressPoint);
             /* Ensure that moving only happens if the mouse has moved. */
-            if (delta.x || delta.y) {
-                doc_move_selected(data.id, delta.x, delta.y);
+            if (emb_vector_distance(delta, emb_vector(0.0, 0.0)) >= 1) {
+                doc_move_selected(data.id, delta);
             }
             data.movingActive = false;
         }
@@ -5646,7 +5353,7 @@ Document::wheelEvent(QWheelEvent* event)
 void
 doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
 {
-    QPointF pointBeforeScale = to_qpointf(doc_map_to_scene(doc, mousePoint));
+    EmbVector pointBeforeScale = doc_map_to_scene(doc, mousePoint);
     DocumentData *data = doc_data(doc);
 
     /* Do The zoom */
@@ -5665,9 +5372,9 @@ doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
     }
 
     documents[doc]->scale(s, s);
-    doc_align_scene_point_with_view_point(doc, to_emb_vector(pointBeforeScale), mousePoint);
+    doc_align_scene_point_with_view_point(doc, pointBeforeScale, mousePoint);
     doc_recalculate_limits(doc);
-    doc_align_scene_point_with_view_point(doc, to_emb_vector(pointBeforeScale), mousePoint);
+    doc_align_scene_point_with_view_point(doc, pointBeforeScale, mousePoint);
 
     doc_update_mouse_coords(doc, mousePoint.x, mousePoint.y);
     if (data->pastingActive) {
@@ -5807,8 +5514,8 @@ doc_start_gripping(int32_t doc, Object* obj)
     data->grippingActive = true;
     documents[doc]->gripBaseObj = obj;
     data->sceneGripPoint = documents[doc]->gripBaseObj->mouseSnapPoint(data->sceneMousePoint);
-    documents[doc]->gripBaseObj->setObjectRubberPoint("GRIP_POINT", data->sceneGripPoint);
-    obj_set_rubber_mode(documents[doc]->gripBaseObj->core->objID, RUBBER_GRIP);
+    setObjectRubberPoint(doc, "GRIP_POINT", data->sceneGripPoint);
+    obj_set_rubber_mode(doc, RUBBER_GRIP);
 }
 
 /* . */
@@ -5873,32 +5580,16 @@ doc_delete_selected(int32_t doc)
 
 /* . */
 void
-doc_cut(int32_t doc)
+doc_begin_macro(int32_t doc, EmbString s)
 {
-    if (documents[doc]->gscene->selectedItems().isEmpty()) {
-        information_box(translate("Cut Preselect"),
-            translate("Preselect objects before invoking the cut command."));
-        return; /* TODO: Prompt to select objects if nothing is preselected */
-    }
-
-    documents[doc]->undoStack->beginMacro("Cut");
-    doc_copy_selected(doc);
-    doc_delete_selected(doc);
-    documents[doc]->undoStack->endMacro();
+    documents[doc]->undoStack->beginMacro(s);
 }
 
 /* . */
 void
-doc_copy(int32_t doc)
+doc_end_macro(int32_t doc)
 {
-    if (documents[doc]->gscene->selectedItems().isEmpty()) {
-        information_box(translate("Copy Preselect"),
-            translate("Preselect objects before invoking the copy command."));
-        return; /* TODO: Prompt to select objects if nothing is preselected */
-    }
-
-    doc_copy_selected(doc);
-    doc_clear_selection(doc);
+    documents[doc]->undoStack->endMacro();
 }
 
 /* . */
@@ -5952,8 +5643,8 @@ doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list)
 
         Object* obj = static_cast<Object*>(item);
         if (obj) {
-            Object* copyObj = copy_object(obj);
-            copyList.append(copyObj);
+            uint32_t copyObj = copy_object(obj->core->objID);
+            copyList.append(object_list[copyObj]);
         }
     }
 
@@ -5965,7 +5656,7 @@ void
 repeat_action(void)
 {
     promptInput->endCommand();
-    prompt->setCurrentText(lastCmd);
+    prompt_set_current_text(lastCmd);
     promptInput->processInput();
 }
 
@@ -5974,13 +5665,13 @@ void
 move_action(void)
 {
     promptInput->endCommand();
-    prompt->setCurrentText("move");
+    prompt_set_current_text("move");
     promptInput->processInput();
 }
 
 /* . */
 void
-doc_move_selected(int32_t doc, double dx, double dy)
+doc_move_selected(int32_t doc, EmbVector delta)
 {
     QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
     int numSelected = itemList.size();
@@ -5991,7 +5682,6 @@ doc_move_selected(int32_t doc, double dx, double dy)
         Object* base = static_cast<Object*>(item);
         if (base) {
             char msg[MAX_STRING_LENGTH];
-            EmbVector delta = emb_vector(dx, dy);
             sprintf(msg, "%s%s", translate("Move 1 "), base->core->OBJ_NAME);
             UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, delta, msg,
                 base, doc, 0);
@@ -6083,7 +5773,7 @@ void
 doc_scaleAction()
 {
     promptInput->endCommand();
-    prompt->setCurrentText("scale");
+    prompt_set_current_text("scale");
     promptInput->processInput();
 }
 
@@ -6092,9 +5782,12 @@ void
 doc_scale_selected(int32_t doc, double x, double y, double factor)
 {
     QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
-    int numSelected = itemList.size();
-    if (numSelected > 1)
-        documents[doc]->undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
+    int numSelected = doc_num_selected(doc);
+    if (numSelected > 1) {
+        EmbString macro_name;
+        sprintf(macro_name, "%s %d", translate("Scale"), numSelected);
+        doc_begin_macro(doc, macro_name);
+    }
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
@@ -6109,7 +5802,7 @@ doc_scale_selected(int32_t doc, double x, double y, double factor)
         }
     }
     if (numSelected > 1) {
-        documents[doc]->undoStack->endMacro();
+        doc_end_macro(doc);
     }
 
     /* Always clear the selection after a scale. */
@@ -6358,36 +6051,6 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
 }
 
 void
-statusbar_toggle(QString key, bool on)
-{
-    debug_message("StatusBarButton toggleSnap()");
-    int32_t doc = activeDocument();
-    if (doc >= 0) {
-        if (key == "SNAP") {
-            doc_toggle_snap(doc, on);
-        }
-        else if (key == "GRID") {
-            doc_toggle_grid(doc, on);
-        }
-        else if (key == "RULER") {
-            doc_toggle_ruler(doc, on);
-        }
-        else if (key == "ORTHO") {
-            doc_toggle_ortho(doc, on);
-        }
-        else if (key == "POLAR") {
-            doc_toggle_polar(doc, on);
-        }
-        else if (key == "QSNAP") {
-            doc_toggle_qsnap(doc, on);
-        }
-        else if (key == "LWT") {
-            doc_toggle_lwt(doc, on);
-        }
-    }
-}
-
-void
 create_statusbar(MainWindow* mw)
 {
     statusbar = new QStatusBar(mw);
@@ -6407,7 +6070,7 @@ create_statusbar(MainWindow* mw)
         statusBarButtons[i]->setAutoRaise(true);
         statusBarButtons[i]->setCheckable(true);
         QObject::connect(statusBarButtons[i], &QAbstractButton::toggled,
-            statusBarButtons[i], [name] (bool b) { statusbar_toggle(name, b); });
+            statusBarButtons[i], [name] (bool b) { statusbar_toggle((char*)qPrintable(name), b); });
         statusbar->addWidget(statusBarButtons[i]);
     }
 }
@@ -6605,7 +6268,12 @@ create_details_dialog(void)
     debug_message("EmbDetailsDialog()");
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
-    EmbPattern* pattern = activeMdiWindow()->pattern;
+    int32_t doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    EmbPattern* pattern = data->pattern;
     if (!pattern) {
         printf("Pattern data is missing or failed to initialize.");
         return;
@@ -6893,22 +6561,6 @@ MdiArea::tile()
     zoomExtentsAllSubWindows();
 }
 
-/* . */
-void
-MdiArea::zoomExtentsAllSubWindows()
-{
-    foreach(QMdiSubWindow* window, subWindowList()) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
-        if (mdiWin) {
-            int32_t doc_index = mdiWin->doc_index;
-            if (doc_index) {
-                doc_recalculate_limits(doc_index);
-                doc_zoom_extents(doc_index);
-            }
-        }
-    }
-}
-
 /* HACK: Take that QMdiArea! */
 void
 MdiArea::forceRepaint()
@@ -6948,10 +6600,8 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
     resize(sizeHint());
 
-    promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
-    setHistory(promptHistory);
-    promptInputList << "";
-    promptInputNum = 0;
+    promptHistoryData = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
+    setHistory(promptHistoryData);
 
     strcpy(documents[doc_index]->data.curLayer, "0");
     documents[doc_index]->data.curColor = 0; /* TODO: color ByLayer */
@@ -6970,8 +6620,8 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
     onWindowActivated();
 
-    pattern = emb_pattern_create();
-    if (!pattern) {
+    documents[doc_index]->data.pattern = emb_pattern_create();
+    if (!documents[doc_index]->data.pattern) {
         printf("Could not allocate memory for embroidery pattern\n");
         exit(1);
     }
@@ -6980,17 +6630,11 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 MdiWindow::~MdiWindow()
 {
     debug_message("MdiWindow Destructor()");
-    emb_pattern_free(pattern);
+    emb_pattern_free(documents[doc_index]->data.pattern);
 }
 
 bool
-MdiWindow::saveFile(QString fileName)
-{
-    return pattern_save(pattern, (char*)qPrintable(fileName));
-}
-
-bool
-MdiWindow::loadFile(QString fileName)
+MdiWindow::loadFile(const char *fileName)
 {
     debug_message("MdiWindow loadFile()");
 
@@ -6998,8 +6642,8 @@ MdiWindow::loadFile(QString fileName)
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Error reading file"),
-            tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
+        const char *msg = qPrintable(tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
+        warning_box(translate("Error reading file"), msg);
         return false;
     }
 
@@ -7009,24 +6653,26 @@ MdiWindow::loadFile(QString fileName)
     debug_message("ext: ");
     debug_message((char*)qPrintable(ext));
 
+    EmbPattern *pattern = documents[doc_index]->data.pattern;
+
     /* Read */
     int format = EMB_FORMAT_CSV; /* emb_identify_format(qPrintable(fileName)); */
     if (format <= 0) {
         debug_message("Unsupported read file type: ");
         debug_message((char*)qPrintable(fileName));
         restore_cursor();
-        QMessageBox::warning(this, tr("Error reading pattern"),
-            tr("Unsupported read file type: ") + qPrintable(fileName));
+        warning_box(translate("Error reading pattern"),
+            qPrintable(tr("Unsupported read file type: ") + qPrintable(fileName)));
         return false;
     }
 
-    int readSuccessful = emb_pattern_read(pattern, qPrintable(fileName), format);
+    int readSuccessful = emb_pattern_read(documents[doc_index]->data.pattern, qPrintable(fileName), format);
     if (!readSuccessful) {
         debug_message("Reading file was unsuccessful:");
         debug_message((char*)qPrintable(fileName));
         restore_cursor();
-        QMessageBox::warning(this, tr("Error reading pattern"),
-            tr("Reading file was unsuccessful: ") + qPrintable(fileName));
+        warning_box(translate("Error reading pattern"),
+            qPrintable(tr("Reading file was unsuccessful: ") + qPrintable(fileName)));
         return false;
     }
 
@@ -7161,7 +6807,7 @@ MdiWindow::onWindowActivated()
     statusBarButtons[SB_QSNAP]->setChecked(data->enableQSnap);
     statusBarButtons[SB_QTRACK]->setChecked(data->enableQTrack);
     statusBarButtons[SB_LWT]->setChecked(data->enableLwt);
-    setHistory(promptHistory);
+    setHistory(promptHistoryData);
 }
 
 QSize
@@ -7171,71 +6817,8 @@ MdiWindow::sizeHint() const
     return QSize(450, 300);
 }
 
-/* . */
 void
-MdiWindow::updateColorLinetypeLineweight()
-{
-}
-
-void
-MdiWindow::promptHistoryAppended(QString  txt)
-{
-    promptHistory.append("<br/>" + txt);
-}
-
-void MdiWindow::logPromptInput(QString  txt)
-{
-    promptInputList << txt;
-    promptInputNum = promptInputList.size();
-}
-
-void MdiWindow::promptInputPrevious()
-{
-    promptInputPrevNext(true);
-}
-
-void MdiWindow::promptInputNext()
-{
-    promptInputPrevNext(false);
-}
-
-void MdiWindow::promptInputPrevNext(bool prev)
-{
-    if (promptInputList.isEmpty()) {
-        if (prev) {
-            critical_box(translate("Prompt Previous Error"),
-                translate("The prompt input is empty! Please report this as a bug!"));
-        }
-        else {
-            critical_box(translate("Prompt Next Error"),
-                translate("The prompt input is empty! Please report this as a bug!"));
-        }
-        debug_message("The prompt input is empty! Please report this as a bug!");
-    }
-    else {
-        if (prev) {
-            promptInputNum--;
-        }
-        else {
-            promptInputNum++;
-        }
-        int maxNum = promptInputList.size();
-        if (promptInputNum < 0) {
-            promptInputNum = 0;
-            prompt->setCurrentText("");
-        }
-        else if (promptInputNum >= maxNum) {
-            promptInputNum = maxNum;
-            prompt->setCurrentText("");
-        }
-        else {
-            prompt->setCurrentText(promptInputList.at(promptInputNum));
-        }
-    }
-}
-
-void
-setHistory(QString  txt)
+setHistory(QString txt)
 {
     promptHistory->setHtml(txt);
     promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
@@ -7249,6 +6832,13 @@ Application::setMainWin(MainWindow* mainWin)
 
 void
 CmdPrompt::setCurrentText(QString txt)
+{
+    curText = prefix + txt;
+    promptInput->setText(curText);
+}
+
+void
+prompt_set_current_text(QString txt)
 {
     curText = prefix + txt;
     promptInput->setText(curText);
@@ -7303,8 +6893,6 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     set_str(PROMPT_FONT_FAMILY, "Monospace");
     set_str(PROMPT_FONT_STYLE, "normal");
     set_int(PROMPT_FONT_SIZE, 12);
-
-    updateStyle();
 
     blinkState = false;
     blinkTimer = new QTimer(this);
@@ -7369,7 +6957,7 @@ setPromptTextColor(uint32_t color)
 {
     strcpy(prompt_color_, (char*)qPrintable(QColor(color).name()));
     strcpy(prompt_selection_bg_color_, (char*)qPrintable(QColor(color).name()));
-    prompt->updateStyle();
+    prompt_update_style();
 }
 
 /* . */
@@ -7378,7 +6966,7 @@ setPromptBackgroundColor(uint32_t color)
 {
     strcpy(prompt_bg_color_, (char*)qPrintable(QColor(color).name()));
     strcpy(prompt_selection_color_, (char*)qPrintable(QColor(color).name()));
-    prompt->updateStyle();
+    prompt_update_style();
 }
 
 /* . */
@@ -7386,7 +6974,7 @@ void
 setPromptFontFamily(EmbString family)
 {
     set_str(PROMPT_FONT_FAMILY, (char*)qPrintable(family));
-    prompt->updateStyle();
+    prompt_update_style();
 }
 
 /* . */
@@ -7394,7 +6982,7 @@ void
 setPromptFontStyle(EmbString style)
 {
     set_str(PROMPT_FONT_STYLE, (char*)qPrintable(style));
-    prompt->updateStyle();
+    prompt_update_style();
 }
 
 /* . */
@@ -7402,12 +6990,12 @@ void
 setPromptFontSize(int size)
 {
     set_int(PROMPT_FONT_SIZE, size);
-    prompt->updateStyle();
+    prompt_update_style();
 }
 
 /* . */
 void
-CmdPrompt::updateStyle()
+prompt_update_style(void)
 {
     char style_string[2200];
     sprintf(style_string,
@@ -7428,7 +7016,7 @@ CmdPrompt::updateStyle()
         get_str(PROMPT_FONT_STYLE),
         get_int(PROMPT_FONT_SIZE));
 
-    this->setStyleSheet(QString(style_string));
+    prompt->setStyleSheet(QString(style_string));
 }
 
 /* . */
@@ -8065,6 +7653,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     /* create the Command Prompt */
     prompt = new CmdPrompt(this);
+    prompt_update_style();
     prompt->setFocus(Qt::OtherFocusReason);
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
@@ -8528,35 +8117,22 @@ openFilesSelected(EmbStringTable filesToOpen)
 }
 
 /* . */
-void
-open_recent_file(void)
-{
-    debug_message("open_recent_file()");
-
-    /* Check to see if this from the recent files list. */
-    /* FIXME: QAction* recentSender = qobject_cast<QAction*>(sender());
-    if (recentSender) {
-        openFile(true, recentSender->data().toString());
-    }
-    */
-}
-
-/* . */
-void
+int
 save_as_file(void)
 {
     debug_message("save_as_file()");
     /* need to find the activeSubWindow before it loses focus to the FileDialog. */
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (!mdiWin) {
-        return;
+    int32_t doc = activeDocument();
+    if (doc < 0) {
+        return 0;
     }
 
+    DocumentData *data = doc_data(doc);
     strcpy(openFilesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
-    QString file = QFileDialog::getSaveFileName(_main,
+    QString fileName = QFileDialog::getSaveFileName(_main,
         translate("Save As"), QString(openFilesPath), formatFilterSave);
-
-    mdiWin->saveFile(file);
+    
+    return pattern_save(data->pattern, (char*)qPrintable(fileName));
 }
 
 /* . */
@@ -9632,83 +9208,9 @@ update_lineedit_bool(QComboBox* comboBox, bool val, bool yesOrNoText)
 
 /* . */
 void
-showGroups(int objType)
+show_group_box(const char *key)
 {
-    if (objType == OBJ_ARC) {
-        group_boxes["GeometryArc"]->show();
-        group_boxes["MiscArc"]->show();
-    }
-    else if (objType == OBJ_BLOCK) {
-        group_boxes["GeometryBlock"]->show();
-    }
-    else if (objType == OBJ_CIRCLE) {
-        group_boxes["GeometryCircle"]->show();
-    }
-    else if (objType == OBJ_DIMALIGNED) {
-        group_boxes["GeometryDimAligned"]->show();
-    }
-    else if (objType == OBJ_DIMANGULAR) {
-        group_boxes["GeometryDimAngular"]->show();
-    }
-    else if (objType == OBJ_DIMARCLENGTH) {
-        group_boxes["GeometryDimArcLength"]->show();
-    }
-    else if (objType == OBJ_DIMDIAMETER) {
-        group_boxes["GeometryDimDiameter"]->show();
-    }
-    else if (objType == OBJ_DIMLEADER) {
-        group_boxes["GeometryDimLeader"]->show();
-    }
-    else if (objType == OBJ_DIMLINEAR) {
-        group_boxes["GeometryDimLinear"]->show();
-    }
-    else if (objType == OBJ_DIMORDINATE) {
-        group_boxes["GeometryDimOrdinate"]->show();
-    }
-    else if (objType == OBJ_DIMRADIUS) {
-        group_boxes["GeometryDimRadius"]->show();
-    }
-    else if (objType == OBJ_ELLIPSE) {
-        group_boxes["GeometryEllipse"]->show();
-    }
-    else if (objType == OBJ_IMAGE) {
-        group_boxes["GeometryImage"]->show();
-        group_boxes["MiscImage"]->show();
-    }
-    else if (objType == OBJ_INFINITELINE) {
-        group_boxes["GeometryInfiniteLine"]->show();
-    }
-    else if (objType == OBJ_LINE) {
-        group_boxes["GeometryLine"]->show();
-    }
-    else if (objType == OBJ_PATH) {
-        group_boxes["GeometryPath"]->show();
-        group_boxes["MiscPath"]->show();
-    }
-    else if (objType == OBJ_POINT) {
-        group_boxes["GeometryPoint"]->show();
-    }
-    else if (objType == OBJ_POLYGON) {
-        group_boxes["GeometryPolygon"]->show();
-    }
-    else if (objType == OBJ_POLYLINE) {
-        group_boxes["GeometryPolyline"]->show();
-        group_boxes["MiscPolyline"]->show();
-    }
-    else if (objType == OBJ_RAY) {
-        group_boxes["GeometryRay"]->show();
-    }
-    else if (objType == OBJ_RECTANGLE) {
-        group_boxes["GeometryRectangle"]->show();
-    }
-    else if (objType == OBJ_TEXTMULTI) {
-        group_boxes["GeometryTextMulti"]->show();
-    }
-    else if (objType == OBJ_TEXTSINGLE) {
-        group_boxes["TextTextSingle"]->show();
-        group_boxes["GeometryTextSingle"]->show();
-        group_boxes["MiscTextSingle"]->show();
-    }
+    group_boxes[key]->show();
 }
 
 /* . */
@@ -10320,15 +9822,29 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* paren
         tabWidget->setCurrentIndex(4);
     }
     else if (showTab == "Printing") {
-        tabWidget->setCurrentIndex( 5);
+        tabWidget->setCurrentIndex(5);
     }
-    else if (showTab == "Snap")        tabWidget->setCurrentIndex( 6);
-    else if (showTab == "Grid/Ruler")  tabWidget->setCurrentIndex( 7);
-    else if (showTab == "Ortho/Polar") tabWidget->setCurrentIndex( 8);
-    else if (showTab == "QuickSnap")   tabWidget->setCurrentIndex( 9);
-    else if (showTab == "QuickTrack")  tabWidget->setCurrentIndex(10);
-    else if (showTab == "LineWeight")  tabWidget->setCurrentIndex(11);
-    else if (showTab == "Selection")   tabWidget->setCurrentIndex(12);
+    else if (showTab == "Snap") {
+        tabWidget->setCurrentIndex(6);
+    }
+    else if (showTab == "Grid/Ruler") {
+        tabWidget->setCurrentIndex(7);
+    }
+    else if (showTab == "Ortho/Polar") {
+        tabWidget->setCurrentIndex(8);
+    }
+    else if (showTab == "QuickSnap") {
+        tabWidget->setCurrentIndex(9);
+    }
+    else if (showTab == "QuickTrack") {
+        tabWidget->setCurrentIndex(10);
+    }
+    else if (showTab == "LineWeight") {
+        tabWidget->setCurrentIndex(11);
+    }
+    else if (showTab == "Selection") {
+        tabWidget->setCurrentIndex(12);
+    }
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -11287,7 +10803,8 @@ Settings_Dialog::createTabLineWeight()
     /* Misc */
     QGroupBox* groupBoxLwtMisc = new QGroupBox(translate("LineWeight Misc"), widget);
 
-    QGraphicsScene* s = activeScene();
+    int32_t doc = activeDocument();
+    QGraphicsScene* s = documents[doc]->gscene;
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(translate("Show LineWeight"), groupBoxLwtMisc);
     if (s) {

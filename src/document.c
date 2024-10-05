@@ -104,32 +104,161 @@ doc_toggle_qsnap(int32_t doc, bool on)
 
 /* . */
 void
-doc_zoom_window(int32_t doc)
-{
-}
-
-/* . */
-void
 doc_zoom_in(int32_t doc)
 {
+    debug_message("View zoomIn()");
+    if (!doc_allow_zoom_in(doc)) {
+        return;
+    }
+    wait_cursor();
+    EmbVector cntr = doc_map_to_scene(doc, doc_center(doc));
+    double s = get_real(DISPLAY_ZOOMSCALE_IN);
+    doc_scale(s, s);
+
+    doc_center_on(doc, cntr);
+    restore_cursor();
 }
 
 /* . */
 void
 doc_zoom_out(int32_t doc)
 {
+    debug_message("View zoomOut()");
+    if (!doc_allow_zoom_out(doc)) {
+        return;
+    }
+    wait_cursor();
+    EmbVector cntr = doc_map_to_scene(doc, doc_center(doc));
+    double s = get_real(DISPLAY_ZOOMSCALE_OUT);
+    doc_scale(doc, s);
+
+    doc_center_on(doc, cntr);
+    restore_cursor();
 }
 
 /* . */
 void
-doc_zoom_selected(int32_t doc)
+doc_zoom_window(int32_t doc)
 {
+    DocumentData *data = doc_data(doc);
+    data->zoomWindowActive = true;
+    data->selectingActive = false;
+    doc_clear_selection(doc);
 }
 
 /* . */
 void
 appendHistory(EmbString s)
 {
+}
+
+/* . */
+void
+updateColorLinetypeLineweight(void)
+{
+}
+
+/* . */
+void
+doc_cut(int32_t doc)
+{
+    if (doc_num_selected(doc) == 0) {
+        information_box(translate("Cut Preselect"),
+            translate("Preselect objects before invoking the cut command."));
+        return; /* TODO: Prompt to select objects if nothing is preselected */
+    }
+
+    doc_begin_macro(doc, "Cut");
+    doc_copy_selected(doc);
+    doc_delete_selected(doc);
+    doc_end_macro(doc);
+}
+
+/* . */
+void
+doc_create_grid(int32_t doc, EmbString gridType)
+{
+    DocumentData *data = doc_data(doc);
+    if (string_equal(gridType, "Rectangular")) {
+        doc_create_grid_rect(doc);
+        data->enableGrid = true;
+    }
+    else if (string_equal(gridType, "Circular")) {
+        doc_create_grid_polar(doc);
+        data->enableGrid = true;
+    }
+    else if (string_equal(gridType, "Isometric")) {
+        doc_create_grid_iso(doc);
+        data->enableGrid = true;
+    }
+    else {
+        doc_empty_grid(doc);
+        data->enableGrid = false;
+    }
+
+    doc_create_origin(doc);
+
+    doc_update(doc);
+}
+
+/* . */
+void
+open_recent_file(void)
+{
+    debug_message("open_recent_file()");
+
+    /* Check to see if this from the recent files list. */
+    /* FIXME: QAction* recentSender = qobject_cast<QAction*>(sender());
+    if (recentSender) {
+        openFile(true, recentSender->data().toString());
+    }
+    */
+}
+
+/* . */
+void
+statusbar_toggle(EmbString key, bool on)
+{
+    debug_message("StatusBarButton toggleSnap()");
+    int32_t doc = activeDocument();
+    if (doc < 0) {
+        return;
+    }
+    if (string_equal(key, "SNAP")) {
+        doc_toggle_snap(doc, on);
+    }
+    else if (string_equal(key, "GRID")) {
+        doc_toggle_grid(doc, on);
+    }
+    else if (string_equal(key, "RULER")) {
+        doc_toggle_ruler(doc, on);
+    }
+    else if (string_equal(key, "ORTHO")) {
+        doc_toggle_ortho(doc, on);
+    }
+    else if (string_equal(key, "POLAR")) {
+        doc_toggle_polar(doc, on);
+    }
+    else if (string_equal(key, "QSNAP")) {
+        doc_toggle_qsnap(doc, on);
+    }
+    else if (string_equal(key, "LWT")) {
+        doc_toggle_lwt(doc, on);
+    }
+}
+
+/* . */
+void
+doc_copy(int32_t doc)
+{
+    if (doc_num_selected(doc) == 0) {
+        information_box(translate("Copy Preselect"),
+            translate("Preselect objects before invoking the copy command."));
+        return; /* TODO: Prompt to select objects if nothing is preselected */
+    }
+
+    doc_copy_selected(doc);
+    doc_clear_selection(doc);
 }
 
 /* . */

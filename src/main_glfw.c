@@ -114,20 +114,18 @@ BASIC_DOC_F(doc_pan_right)
 BASIC_DOC_F(doc_pan_up)
 BASIC_DOC_F(doc_pan_down)
 BASIC_DOC_F(doc_clear_rubber_room)
-BASIC_DOC_F(doc_cut)
-BASIC_DOC_F(doc_copy)
 BASIC_DOC_F(doc_paste)
 
 void doc_show_scroll_bars(int32_t doc, bool) {}
 void doc_set_select_box_colors(int32_t doc, uint32_t, uint32_t, uint32_t, uint32_t, int) {}
 
-DUMMY_COMMAND(previewon_command)
-
 uint32_t create_object(int, uint32_t) {return 0;}
 void doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode) {}
+void doc_zoom_selected(int32_t doc_id) {}
 
 NO_ARG_F(undo_command)
 NO_ARG_F(redo_command)
+NO_ARG_F(print_command)
 NO_ARG_F(new_file)
 NO_ARG_F(help)
 NO_ARG_F(about_dialog)
@@ -141,8 +139,19 @@ NO_ARG_F(window_previous)
 NO_ARG_F(restore_cursor)
 NO_ARG_F(wait_cursor)
 
+void doc_begin_macro(int32_t, EmbString) {}
+void doc_end_macro(int32_t) {}
+void doc_copy_selected(int32_t) {}
+void doc_recalculate_limits(int32_t) {}
+
 void obj_set_rotation(uint32_t, double) {}
 void obj_calculate_data(uint32_t) {}
+void show_group_box(const char *) {}
+void doc_create_origin(int32_t) {}
+void doc_create_grid_polar(int32_t) {}
+void doc_create_grid_iso(int32_t) {}
+void doc_create_grid_rect(int32_t) {}
+void doc_empty_grid(int32_t) {}
 
 void nanosleep_(int) {}
 
@@ -162,7 +171,7 @@ EmbVector doc_map_to_scene(int32_t doc, EmbVector v) {return v;}
 EmbVector doc_map_from_scene(int32_t doc, EmbVector v) {return v;}
 void doc_set_background_color(int doc_index, uint32_t color) {}
 void settingsDialog(EmbString s) {}
-void doc_move_selected(int32_t doc, double x, double y) {}
+void doc_move_selected(int32_t doc, EmbVector) {}
 void doc_delete_selected(int32_t doc) {}
 void doc_rotate_selected(int32_t doc, double, double, double) {}
 void doc_mirror_selected(int32_t doc, double, double, double, double) {}
@@ -183,7 +192,6 @@ EmbVector scene_get_point(EmbString key) { return emb_vector(0.0, 0.0); }
 void doc_zoom_extents(int doc_index) {}
 void updatePickAddMode(bool val) {}
 void clear_selection(void) {}
-void doc_create_grid(int doc, char*) {}
 void end_command(void) {}
 void start_blinking(void) {}
 void doc_update(int32_t) {}
@@ -194,6 +202,7 @@ void warning_box(const char *, const char *) {}
 void critical_box(const char *, const char *) {}
 void information_box(const char *, const char *) {}
 void obj_set_text(ObjectCore *obj, const char *text) {}
+void doc_scale(int32_t, double) {}
 
 /* TODO: Clear up memory. */
 void

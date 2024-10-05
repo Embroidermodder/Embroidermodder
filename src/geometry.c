@@ -117,6 +117,167 @@ add_line_command(ScriptEnv *context)
     return script_true;
 }
 
+/* NOTE: This native is different than the rest in that the Y+ is down
+ * (scripters need not worry about this)
+ */
+ScriptValue
+add_polygon_command(ScriptEnv *context)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index < 0) {
+        return script_false;
+    }
+    EmbPolygon polygon;
+    EmbVector start = unpack_vector(context, 0);
+    int rubberMode = INT(2);
+    /* FIXME: pass path */
+    uint32_t obj = create_polygon(NULL, getCurrentColor());
+    obj_set_rubber_mode(obj, rubberMode);
+    doc_undoable_add_obj(doc_index, obj, rubberMode);
+ 
+    #if 0
+    if (context->argumentCount != 1) {
+        prompt_output("addPolygon() requires one argument");
+        return script_false;
+    }
+    if (!context->argument[0].isArray()) {
+        prompt_output("TYPE_ERROR, addPolygon(): first argument is not an array");
+        return script_false;
+    }
+
+    QVariantList varList = context->argument[0].toVariant().toList();
+    int varSize = varList.size();
+    if (varSize < 2) {
+        prompt_output("TYPE_ERROR, addPolygon(): array must contain at least two elements");
+        return script_false;
+    }
+    if (varSize % 2) {
+        prompt_output("TYPE_ERROR, addPolygon(): array cannot contain an odd number of elements");
+        return script_false;
+    }
+
+    bool lineTo = false;
+    bool xCoord = true;
+    EmbVector v = zero_vector;
+    EmbVector start = zero_vector;
+    QPainterPath path;
+    foreach (QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
+                xCoord = false;
+                v.x = var.toReal();
+            }
+            else {
+                xCoord = true;
+                v.y = -var.toReal();
+
+                if (lineTo) {
+                    path.lineTo(v.x, v.y);
+                }
+                else {
+                    path.moveTo(v.x, v.y);
+                    lineTo = true;
+                    start = v;
+                }
+            }
+        }
+        else {
+            prompt_output("TYPE_ERROR, addPolygon(): array contains one or more invalid elements");
+            return script_false;
+        }
+    }
+
+    /* Close the polygon. */
+    path.closeSubpath();
+
+    path.translate(-start.x, -start.y);
+
+    add_Polygon(start.x, start.y, path, RUBBER_OFF);
+    #endif
+
+    return script_true;
+}
+
+/* NOTE: This native is different than the rest in that the Y+ is down
+ * (scripters need not worry about this)
+ */
+ScriptValue
+add_polyline_command(ScriptEnv *context)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index < 0) {
+        return script_false;
+    }
+    EmbPath path;
+    EmbVector start = unpack_vector(context, 0);
+    int rubberMode = INT(2);
+    /* FIXME: pass path */
+    uint32_t obj = create_polygon(NULL, getCurrentColor());
+    obj_set_rubber_mode(obj, rubberMode);
+    doc_undoable_add_obj(doc_index, obj, rubberMode);
+    
+    #if 0
+    if (context->argumentCount != 1) {
+        prompt_output("addPolyline() requires one argument");
+        return script_false;
+    }
+    if (!context->argument[0].isArray()) {
+        prompt_output("TYPE_ERROR, addPolyline(): first argument is not an array");
+        return script_false;
+    }
+
+    QVariantList varList = context->argument[0].toVariant().toList();
+    int varSize = varList.size();
+    if (varSize < 2) {
+        prompt_output("TYPE_ERROR, addPolyline(): array must contain at least two elements");
+        return script_false;
+    }
+    if (varSize % 2) {
+        prompt_output("TYPE_ERROR, addPolyline(): array cannot contain an odd number of elements");
+        return script_false;
+    }
+
+    bool lineTo = false;
+    bool xCoord = true;
+    double x = 0;
+    double y = 0;
+    double startX = 0;
+    double startY = 0;
+    QPainterPath path;
+    foreach(QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
+                xCoord = false;
+                x = var.toReal();
+            }
+            else {
+                xCoord = true;
+                y = -var.toReal();
+
+                if (lineTo) {
+                    path.lineTo(x,y);
+                }
+                else {
+                    path.moveTo(x,y);
+                    lineTo = true;
+                    startX = x;
+                    startY = y;
+                }
+            }
+        }
+        else {
+            prompt_output("TYPE_ERROR, addPolyline(): array contains one or more invalid elements");
+            return script_false;
+        }
+    }
+
+    path.translate(-startX, -startY);
+
+    add_Polyline(startX, startY, path, RUBBER_OFF);
+    #endif
+    return script_true;
+}
+
 /* double x, double y. */
 ScriptValue
 add_point_command(ScriptEnv *context)
@@ -163,7 +324,7 @@ add_slot_command(ScriptEnv *context)
         return script_false;
     }
     /*
-    uint32_t obj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
+    uint32_t obj = create_object(EMB_SLOT, centerX, -centerY, diameter, length, getCurrentColor());
     obj_set_rotation(obj, -rot);
     obj_set_rubber_mode(obj, rubberMode);
     if (rubberMode) {
