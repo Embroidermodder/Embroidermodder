@@ -24,6 +24,7 @@
 #define MAX_STATE_VARIABLES          500
 #define MAX_STATE_STRING_LENGTH      200
 #define MAX_LABEL_LENGTH              50
+#define MAX_UNDO                     100
 
 #define SCRIPT_NULL                    0
 #define SCRIPT_INT                     1

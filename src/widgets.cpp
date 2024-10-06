@@ -161,7 +161,6 @@ QString curText;
 QString defaultPrefix;
 QString prefix;
 
-QString lastCmd;
 QString curCmd;
 
 QTextBrowser* promptHistory;
@@ -301,7 +300,6 @@ void fieldEdited(QObject* fieldObj);
 void showOneType(int index);
 void hideAllGroups(void);
 void clearAllFields(void);
-void prompt_set_current_text(QString);
 
 QComboBox* createComboBoxSelected(void);
 QToolButton* createToolButtonQSelect(void);
@@ -410,6 +408,8 @@ QAction* getFileSeparator();
 QAction* createAction(Command command);
 QMdiSubWindow* findMdiWindow(EmbString fileName);
 void onCloseMdiWin(MdiWindow*);
+
+void processInput(char rapidChar);
 
 /* ---------------------- Class Declarations --------------------------- */
 
@@ -829,8 +829,6 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 public slots:
-    void endCommand();
-    void processInput(const QChar& rapidChar = QChar());
     void checkSelection();
     void updateCurrentText(QString txt);
     void checkEditedText(QString txt);
@@ -1413,9 +1411,9 @@ MainWindow::runCommand()
         EmbString message;
         sprintf(message, "runCommand(%s)", qPrintable(act->objectName()));
         debug_message(message);
-        promptInput->endCommand();
+        prompt_end_command();
         prompt->setCurrentText(act->objectName());
-        promptInput->processInput();
+        processInput(' ');
     }
 }
 
@@ -1501,92 +1499,72 @@ set_CursorShape(char shape[MAX_STRING_LENGTH])
     if (!doc) {
         return;
     }
-    if (!strcmp(shape, "arrow")) {
+    if (string_equal(shape, "arrow")) {
         doc->setCursor(QCursor(Qt::ArrowCursor));
     }
-    else if (!strcmp(shape, "uparrow")) {
+    else if (string_equal(shape, "uparrow")) {
         doc->setCursor(QCursor(Qt::UpArrowCursor));
     }
-    else if (!strcmp(shape, "cross")) {
+    else if (string_equal(shape, "cross")) {
         doc->setCursor(QCursor(Qt::CrossCursor));
     }
-    else if (!strcmp(shape, "wait")) {
+    else if (string_equal(shape, "wait")) {
         doc->setCursor(QCursor(Qt::WaitCursor));
     }
-    else if (!strcmp(shape, "ibeam")) {
+    else if (string_equal(shape, "ibeam")) {
         doc->setCursor(QCursor(Qt::IBeamCursor));
     }
-    else if (!strcmp(shape, "resizevert")) {
+    else if (string_equal(shape, "resizevert")) {
         doc->setCursor(QCursor(Qt::SizeVerCursor));
     }
-    else if (!strcmp(shape, "resizehoriz")) {
+    else if (string_equal(shape, "resizehoriz")) {
         doc->setCursor(QCursor(Qt::SizeHorCursor));
     }
-    else if (!strcmp(shape, "resizediagleft")) {
+    else if (string_equal(shape, "resizediagleft")) {
         doc->setCursor(QCursor(Qt::SizeBDiagCursor));
     }
-    else if (!strcmp(shape, "resizediagright")) {
+    else if (string_equal(shape, "resizediagright")) {
         doc->setCursor(QCursor(Qt::SizeFDiagCursor));
     }
-    else if (!strcmp(shape, "move")) {
+    else if (string_equal(shape, "move")) {
         doc->setCursor(QCursor(Qt::SizeAllCursor));
     }
-    else if (!strcmp(shape, "blank")) {
+    else if (string_equal(shape, "blank")) {
         doc->setCursor(QCursor(Qt::BlankCursor));
     }
-    else if (!strcmp(shape, "splitvert")) {
+    else if (string_equal(shape, "splitvert")) {
         doc->setCursor(QCursor(Qt::SplitVCursor));
     }
-    else if (!strcmp(shape, "splithoriz")) {
+    else if (string_equal(shape, "splithoriz")) {
         doc->setCursor(QCursor(Qt::SplitHCursor));
     }
-    else if (!strcmp(shape, "handpointing")) {
+    else if (string_equal(shape, "handpointing")) {
         doc->setCursor(QCursor(Qt::PointingHandCursor));
     }
-    else if (!strcmp(shape, "forbidden")) {
+    else if (string_equal(shape, "forbidden")) {
         doc->setCursor(QCursor(Qt::ForbiddenCursor));
     }
-    else if (!strcmp(shape, "handopen")) {
+    else if (string_equal(shape, "handopen")) {
         doc->setCursor(QCursor(Qt::OpenHandCursor));
     }
-    else if (!strcmp(shape, "handclosed")) {
+    else if (string_equal(shape, "handclosed")) {
         doc->setCursor(QCursor(Qt::ClosedHandCursor));
     }
-    else if (!strcmp(shape, "whatsthis")) {
+    else if (string_equal(shape, "whatsthis")) {
         doc->setCursor(QCursor(Qt::WhatsThisCursor));
     }
-    else if (!strcmp(shape, "busy")) {
+    else if (string_equal(shape, "busy")) {
         doc->setCursor(QCursor(Qt::BusyCursor));
     }
-    else if (!strcmp(shape, "dragmove")) {
+    else if (string_equal(shape, "dragmove")) {
         doc->setCursor(QCursor(Qt::DragMoveCursor));
     }
-    else if (!strcmp(shape, "dragcopy")) {
+    else if (string_equal(shape, "dragcopy")) {
         doc->setCursor(QCursor(Qt::DragCopyCursor));
     }
-    else if (!strcmp(shape, "draglink")) {
+    else if (string_equal(shape, "draglink")) {
         doc->setCursor(QCursor(Qt::DragLinkCursor));
     }
-}
-
-/* Compatibility layer for C files */
-void
-prompt_output(const EmbString txt)
-{
-    appendHistory((char*)txt);
-}
-
-/* . */
-void
-end_command(void)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_clear_rubber_room(doc_index);
-        doc_preview_off(doc_index);
-        doc_disable_move_rapid_fire(doc_index);
-    }
-    promptInput->endCommand();
 }
 
 /* Simple Commands (other commands, like circle_command are housed in their
@@ -1748,7 +1726,7 @@ UndoableCommand::UndoableCommand(int type_, QString type_name, int32_t doc,
 
 /* Grip Edit/Mirror */
 UndoableCommand::UndoableCommand(int type_, EmbVector beforePoint,
-    EmbVector afterPoint, QString text, Object* obj, int32_t doc,
+    EmbVector afterPoint, QString text, Object *obj, int32_t doc,
     QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
@@ -3499,45 +3477,17 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     Document* doc = new Document(mw, theScene, parent);
     doc->data.id = numOfDocs;
     documents[doc->data.id] = doc;
+    doc_init(doc->data.id);
     doc->gscene = theScene;
     document_memory[doc->data.id] = true;
 
-    doc->setFrameShape(QFrame::NoFrame);
-
-    /* NOTE: This has to be done before setting mouse tracking.
-     * TODO: Review OpenGL for Qt5 later
-     * if (get_bool(DISPLAY_USE_OPENGL)) {
-     *     debug_message("Using OpenGL...");
-     *     setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
-     * }
-
-     * TODO: Review RenderHints later
-     * setRenderHint(QPainter::Antialiasing, get_bool(DISPLAY_RENDERHINT_AA));
-     * setRenderHint(QPainter::TextAntialiasing, get_bool(DISPLAY_RENDERHINT_TEXT_AA));
-     * setRenderHint(QPainter::SmoothPixmapTransform, get_bool(DISPLAY_RENDERHINT_SMOOTHPIX));
-     * setRenderHint(QPainter::HighQualityAntialiasing, get_bool(DISPLAY_RENDERHINT_HIGH_AA));
-     * setRenderHint(QPainter::NonCosmeticDefaultPen, get_bool(DISPLAY_RENDERHINT_NONCOSMETIC));
-
-     * NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
-     * NOTE: Qt renderer will not draw the foreground properly if it isnt set.
-     */
-    doc->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-
-    doc->data.panDistance = 10; /* TODO: should there be a setting for this??? */
-
-    doc->setCursor(Qt::BlankCursor);
-    doc->horizontalScrollBar()->setCursor(Qt::ArrowCursor);
-    doc->verticalScrollBar()->setCursor(Qt::ArrowCursor);
-    doc->data.qsnapLocatorColor = get_int(QSNAP_LOCATOR_COLOR);
-    doc->data.qsnapLocatorSize = get_int(QSNAP_LOCATOR_SIZE);
-    doc->data.qsnapApertureSize = get_int(QSNAP_APERTURE_SIZE);
-    doc->data.gripColorCool = get_int(SELECTION_COOLGRIP_COLOR);
-    doc->data.gripColorHot = get_int(SELECTION_HOTGRIP_COLOR);
-    doc->data.gripSize = get_int(SELECTION_GRIP_SIZE);
-    doc->data.pickBoxSize = get_int(SELECTION_PICKBOX_SIZE);
     doc_set_cross_hair_color(doc->data.id, get_int(DISPLAY_CROSSHAIR_COLOR));
     doc_set_cross_hair_size(doc->data.id, get_int(DISPLAY_CROSSHAIR_PERCENT));
     doc_set_grid_color(doc->data.id, get_int(GRID_COLOR));
+
+    doc_toggle_ruler(doc->data.id, get_bool(RULER_SHOW_ON_LOAD));
+    doc_toggle_real(doc->data.id, true);
+    /* TODO: load this from file, else settings with default being true. */
 
     if (get_bool(GRID_SHOW_ON_LOAD)) {
         doc_create_grid(doc->data.id, get_str(GRID_TYPE));
@@ -3546,38 +3496,19 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
         doc_create_grid(doc->data.id, "");
     }
 
-    doc_toggle_ruler(doc->data.id, get_bool(RULER_SHOW_ON_LOAD));
-    doc_toggle_real(doc->data.id, true);
-    /* TODO: load this from file, else settings with default being true. */
+    doc_show_scroll_bars(doc->data.id, get_bool(DISPLAY_SHOW_SCROLLBARS));
+    doc_set_corner_button(doc->data.id);
 
-    doc->data.grippingActive = false;
-    doc->data.rapidMoveActive = false;
-    doc->data.previewMode = PREVIEW_NULL;
-    doc->data.previewData = 0;
+    doc->setFrameShape(QFrame::NoFrame);
+
+    doc->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
     doc->previewObjectItemGroup = 0;
     doc->pasteObjectItemGroup = 0;
-    doc->data.previewActive = false;
-    doc->data.pastingActive = false;
-    doc->data.movingActive = false;
-    doc->data.selectingActive = false;
-    doc->data.zoomWindowActive = false;
-    doc->data.panningRealTimeActive = false;
-    doc->data.panningPointActive = false;
-    doc->data.panningActive = false;
-    doc->data.qSnapActive = false;
-    doc->data.qSnapToggle = false;
 
-    /* TODO: set up config */
-    doc->data.enableRuler = true;
-    doc->data.enableGrid = true;
-    doc->data.enableOrtho = false;
-    doc->data.enablePolar = false;
-    doc->data.enableLwt = false;
-    doc->data.enableRuler = true;
-
-    /* Randomize the hot grip location initially so it's not located at (0,0). */
-    srand(QDateTime::currentMSecsSinceEpoch());
-    doc->data.sceneGripPoint = to_emb_vector(QPointF(rand()*1000, rand()*1000));
+    doc->setCursor(Qt::BlankCursor);
+    doc->horizontalScrollBar()->setCursor(Qt::ArrowCursor);
+    doc->verticalScrollBar()->setCursor(Qt::ArrowCursor);
 
     doc->gripBaseObj = 0;
     doc->tempBaseObj = 0;
@@ -3589,9 +3520,6 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
         QColor(get_int(DISPLAY_SELECTBOX_RIGHT_COLOR)),
         QColor(get_int(DISPLAY_SELECTBOX_RIGHT_FILL)),
         get_int(DISPLAY_SELECTBOX_ALPHA));
-
-    doc_show_scroll_bars(doc->data.id, get_bool(DISPLAY_SHOW_SCROLLBARS));
-    doc_set_corner_button(doc->data.id);
 
     doc->undoStack = new QUndoStack(doc);
     dockUndoEdit->addStack(doc->undoStack);
@@ -5311,9 +5239,8 @@ Document::mouseReleaseEvent(QMouseEvent* event)
     if (event->button() == Qt::MiddleButton) {
         data.panningActive = false;
         /* The Undo command will record the spot where the pan completed. */
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop",
-            data.id, 0);
-        undoStack->push(cmd);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", data.id, 0);
+        documents[data.id]->undoStack->push(cmd);
         event->accept();
     }
     if (event->button() == Qt::XButton1) {
@@ -5410,7 +5337,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         return;
     }
     if (!cmdActive) {
-        QAction* repeatAction = new QAction(create_icon(lastCmd), "Repeat " + lastCmd, this);
+        QAction* repeatAction = new QAction(create_icon(lastCmd), "Repeat " + QString(lastCmd), this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
@@ -5465,42 +5392,16 @@ Document::contextMenuEvent(QContextMenuEvent* event)
 
 /* . */
 void
-doc_deletePressed(int32_t doc)
+hide_selectbox(int32_t doc)
 {
-    debug_message("View deletePressed()");
-    DocumentData *data = doc_data(doc);
-    if (data->pastingActive) {
-        documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
-        delete documents[doc]->pasteObjectItemGroup;
-    }
-    data->pastingActive = false;
-    data->zoomWindowActive = false;
-    data->selectingActive = false;
     documents[doc]->selectBox->hide();
-    doc_stop_gripping(doc, false);
-    doc_delete_selected(doc);
 }
 
-/* . */
 void
-doc_escapePressed(int32_t doc)
+remove_paste_object_item_group(int32_t doc)
 {
-    debug_message("View escapePressed()");
-    DocumentData *data = doc_data(doc);
-    if (data->pastingActive) {
-        documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
-        delete documents[doc]->pasteObjectItemGroup;
-    }
-    data->pastingActive = false;
-    data->zoomWindowActive = false;
-    data->selectingActive = false;
-    documents[doc]->selectBox->hide();
-    if (data->grippingActive) {
-        doc_stop_gripping(doc, false);
-    }
-    else {
-        doc_clear_selection(doc);
-    }
+    documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
+    delete documents[doc]->pasteObjectItemGroup;
 }
 
 /* . */
@@ -5653,24 +5554,6 @@ doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list)
 
 /* . */
 void
-repeat_action(void)
-{
-    promptInput->endCommand();
-    prompt_set_current_text(lastCmd);
-    promptInput->processInput();
-}
-
-/* . */
-void
-move_action(void)
-{
-    promptInput->endCommand();
-    prompt_set_current_text("move");
-    promptInput->processInput();
-}
-
-/* . */
-void
 doc_move_selected(int32_t doc, EmbVector delta)
 {
     QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
@@ -5700,15 +5583,6 @@ doc_move_selected(int32_t doc, EmbVector delta)
 
 /* . */
 void
-rotate_action(void)
-{
-    promptInput->endCommand();
-    prompt->setCurrentText("rotate");
-    promptInput->processInput();
-}
-
-/* . */
-void
 doc_rotate_selected(int32_t doc, double x, double y, double rot)
 {
     QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
@@ -5722,7 +5596,7 @@ doc_rotate_selected(int32_t doc, double x, double y, double rot)
             QString s = translate("Rotate 1 ");
             s += base->core->OBJ_NAME;
             EmbVector v = emb_vector(x, y);
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, rot, s,
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, s,
                 base, doc, 0);
             if (cmd) {
                 documents[doc]->undoStack->push(cmd);
@@ -5753,8 +5627,8 @@ doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2)
             end = emb_vector(x2, y2);
             QString s = translate("Mirror 1 ");
             s += base->core->OBJ_NAME;
-            UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, start, end,
-                s, base, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, start, end, s,
+                base, doc, 0);
             if (cmd) {
                 documents[doc]->undoStack->push(cmd);
             }
@@ -5766,15 +5640,6 @@ doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2)
 
     /* Always clear the selection after a mirror. */
     documents[doc]->gscene->clearSelection();
-}
-
-/* . */
-void
-doc_scaleAction()
-{
-    promptInput->endCommand();
-    prompt_set_current_text("scale");
-    promptInput->processInput();
 }
 
 /* . */
@@ -5794,7 +5659,7 @@ doc_scale_selected(int32_t doc, double x, double y, double factor)
             EmbVector v = emb_vector(x, y);
             char msg[MAX_STRING_LENGTH];
             sprintf(msg, "%s%s", translate("Scale 1 "), base->core->OBJ_NAME);
-            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, factor, msg,
+            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, msg,
                 base, doc, 0);
             if (cmd) {
                 documents[doc]->undoStack->push(cmd);
@@ -6838,7 +6703,7 @@ CmdPrompt::setCurrentText(QString txt)
 }
 
 void
-prompt_set_current_text(QString txt)
+prompt_set_current_text(const char *txt)
 {
     curText = prefix + txt;
     promptInput->setText(curText);
@@ -7051,7 +6916,7 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     prefix = defaultPrefix;
     curText = prefix;
 
-    lastCmd = "help";
+    strcpy(lastCmd, "help");
     curCmd = "help";
     cmdActive = false;
 
@@ -7076,26 +6941,26 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
 
 /* . */
 void
-CmdPromptInput::endCommand()
+prompt_end_command(void)
 {
-    debug_message("CmdPromptInput endCommand");
-    lastCmd = curCmd;
+    debug_message("prompt_end_command");
+    strcpy(lastCmd, qPrintable(curCmd));
     cmdActive = false;
     rapidFireEnabled = false;
     stop_blinking();
 
     prefix = defaultPrefix;
-    clear();
+    promptInput->clear();
 }
 
 /*
  */
 void
-CmdPromptInput::processInput(const QChar& rapidChar)
+processInput(char rapidChar)
 {
     debug_message("processInput");
 
-    updateCurrentText(curText);
+    promptInput->updateCurrentText(curText);
 
     QString cmdtxt(curText);
     cmdtxt.replace(0, prefix.length(), "");
@@ -7132,7 +6997,7 @@ CmdPromptInput::processInput(const QChar& rapidChar)
         auto found = aliasHash.find(cmdtxt.toStdString());
         if (found != aliasHash.end()) {
             cmdActive = true;
-            lastCmd = curCmd;
+            strcpy(lastCmd, qPrintable(curCmd));
             std::string cmd = aliasHash[cmdtxt.toStdString()];
             curCmd = QString(cmd.c_str());
             appendHistory(curText);
@@ -7150,7 +7015,7 @@ CmdPromptInput::processInput(const QChar& rapidChar)
     }
 
     if (!rapidFireEnabled) {
-        clear();
+        promptInput->clear();
     }
 }
 
@@ -7210,7 +7075,7 @@ CmdPromptInput::checkEditedText(QString  txt)
     updateCurrentText(txt);
 
     if (rapidFireEnabled) {
-        processInput();
+        processInput(' ');
     }
 }
 
@@ -7285,11 +7150,11 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         switch (key) {
         case Qt::Key_Enter:
         case Qt::Key_Return: {
-            processInput(QChar('\n'));
+            processInput('\n');
             return true;
         }
         case Qt::Key_Space: {
-            processInput(QChar(' '));
+            processInput(' ');
             return true;
         }
         case Qt::Key_Delete: {
@@ -7366,30 +7231,6 @@ find_mouse_snap_point(QList<EmbVector> snap_points, EmbVector mouse_point)
         }
     }
     return result;
-}
-
-/* . */
-EmbArc
-emb_arc_set_radius(EmbArc arc, EmbReal radius)
-{
-    EmbGeometry geometry;
-    geometry.object.arc = arc;
-    radius = EMB_MAX(radius, 0.0000001);
-    EmbVector center = emb_arc_center(geometry);
-
-    EmbVector start = emb_vector_subtract(center, arc.start);
-    start = emb_vector_scale(start, radius/emb_vector_length(start));
-    arc.start = emb_vector_add(center, start);
-
-    EmbVector mid = emb_vector_subtract(center, arc.mid);
-    mid = emb_vector_scale(mid, radius/emb_vector_length(mid));
-    arc.mid = emb_vector_add(center, mid);
-
-    EmbVector end = emb_vector_subtract(center, arc.end);
-    end = emb_vector_scale(start, radius/emb_vector_length(end));
-    arc.end = emb_vector_add(center, end);
-
-    return arc;
 }
 
 /* TODO: choose a default icon. */
@@ -7538,20 +7379,20 @@ add_to_selector(QComboBox* box, EmbStringTable list, EmbString type, int use_ico
     int n = string_array_length(list) / 3;
     for (int i=0; i<n; i++) {
         if (!use_icon) {
-            if (!strcmp(type, "real")) {
+            if (string_equal(type, "real")) {
                 box->addItem(list[3*i+0], atof(list[3*i+1]));
                 continue;
             }
-            if (!strcmp(type, "int")) {
+            if (string_equal(type, "int")) {
                 box->addItem(list[3*i+0], atoi(list[3*i+1]));
             }
             continue;
         }
-        if (!strcmp(type, "string")) {
+        if (string_equal(type, "string")) {
             box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
             continue;
         }
-        if (!strcmp(type, "int")) {
+        if (string_equal(type, "int")) {
             if (strlen(list[3*i+2]) > 0) {
                 box->addItem(create_icon(list[3*i+0]), list[3*i+1],
                     atoi(list[3*i+2]));
@@ -7561,7 +7402,7 @@ add_to_selector(QComboBox* box, EmbStringTable list, EmbString type, int use_ico
             }
             continue;
         }
-        if (!strcmp(type, "real")) {
+        if (string_equal(type, "real")) {
             if (strlen(list[3*i+2]) > 0) {
                 box->addItem(create_icon(list[3*i+0]), list[3*i+1],
                     atof(list[3*i+2]));
@@ -9262,7 +9103,7 @@ create_editor(
     EmbString signal;
     QToolButton *toolButton = createToolButton(icon, translate((char*)label));
     QString s(signal_name);
-    if (!strcmp(signal_name, "combobox")) {
+    if (string_equal(signal_name, "combobox")) {
         sprintf(signal, "comboBox%s", signal_name);
         combo_boxes[s] = new QComboBox(dockPropEdit);
         if (signal_name[0] == 0) {
@@ -9275,7 +9116,7 @@ create_editor(
         layout->addRow(toolButton, combo_boxes[s]);
         return;
     }
-    if (!strcmp(signal_name, "fontcombobox")) {
+    if (string_equal(signal_name, "fontcombobox")) {
         comboBoxTextSingleFont = new QFontComboBox(dockPropEdit);
         comboBoxTextSingleFont->setDisabled(false);
 
@@ -9286,13 +9127,13 @@ create_editor(
     sprintf(signal, "lineEdit%s", signal_name);
 
     line_edits[s] = new QLineEdit(dockPropEdit);
-    if (!strcmp(type_label, "int")) {
+    if (string_equal(type_label, "int")) {
         line_edits[s]->setValidator(new QIntValidator(line_edits[s]));
     }
-    else if (!strcmp(type_label, "double")) {
+    else if (string_equal(type_label, "double")) {
         line_edits[s]->setValidator(new QDoubleValidator(line_edits[s]));
     }
-    else if (!strcmp(type_label, "string")) {
+    else if (string_equal(type_label, "string")) {
     }
 
     if (signal_name[0] != 0) {

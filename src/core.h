@@ -141,7 +141,7 @@ typedef struct ObjectCore_ {
     bool textUpsideDown;
 
     int rubber_mode;
-    int64_t objID;
+    uint32_t objID;
 
     bool curved;
     bool filled;
@@ -153,9 +153,29 @@ typedef struct ObjectCore_ {
     int gripIndex;
 } ObjectCore;
 
+typedef struct UndoData_ {
+    EmbString label;
+    int type;
+    int32_t doc;
+    EmbVector delta;
+    EmbVector pivot;
+    double angle;
+    double factor;
+    EmbString navType;
+    EmbVector fromCenter;
+    EmbVector toCenter;
+    bool done;
+    EmbVector before;
+    EmbVector after;
+    EmbLine mirrorLine;
+    uint32_t obj;
+} UndoData;
+
 /* . */
 typedef struct DocumentData_ {
     EmbPattern *pattern;
+
+    UndoData undo_stack[MAX_UNDO];
 
     int32_t id;
 
@@ -233,22 +253,6 @@ typedef struct DocumentData_ {
     EmbString curLineType;
     EmbString curLineWeight;
 } DocumentData;
-
-typedef struct UndoData_ {
-    int type;
-    int32_t doc;
-    EmbVector delta;
-    EmbVector pivot;
-    double angle;
-    double factor;
-    EmbString navType;
-    EmbVector fromCenter;
-    EmbVector toCenter;
-    bool done;
-    EmbVector before;
-    EmbVector after;
-    EmbLine mirrorLine;
-} UndoData;
 
 /* Scripting functions */
 ScriptEnv *create_script_env();
@@ -346,6 +350,9 @@ void logPromptInput(EmbString txt);
 void promptInputPrevious(void);
 void promptInputNext(void);
 void prompt_update_style(void);
+void prompt_end_command(void);
+void prompt_set_current_text(const char *);
+void processInput(char);
 
 /* -------------------------- Main Functions --------------------------- */
 
@@ -571,6 +578,8 @@ EmbVector unpack_vector(ScriptEnv *context, int offset);
 
 /* ------------------------------- Document -------------------------------- */
 
+void doc_init(int32_t doc);
+
 bool doc_allow_zoom_in(int32_t doc);
 bool doc_allow_zoom_out(int32_t doc);
 void doc_zoom_in(int32_t doc);
@@ -601,6 +610,10 @@ void doc_rotate_selected(int32_t doc, double x, double y, double rot);
 void doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2);
 int doc_num_selected(int32_t doc);
 
+void doc_stop_gripping(int32_t, bool);
+void hide_selectbox(int32_t);
+
+void remove_paste_object_item_group(int32_t doc);
 void doc_empty_grid(int32_t doc);
 void doc_set_grid_color(int32_t doc, uint32_t color);
 void doc_set_ruler_color(int32_t doc, uint32_t color);
@@ -818,6 +831,8 @@ extern EmbString prompt_color_;
 extern EmbString prompt_selection_bg_color_;
 extern EmbString prompt_bg_color_;
 extern EmbString prompt_selection_color_;
+
+extern EmbString lastCmd;
 
 extern ScriptEnv *global;
 

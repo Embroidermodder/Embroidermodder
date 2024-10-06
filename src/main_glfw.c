@@ -192,10 +192,12 @@ EmbVector scene_get_point(EmbString key) { return emb_vector(0.0, 0.0); }
 void doc_zoom_extents(int doc_index) {}
 void updatePickAddMode(bool val) {}
 void clear_selection(void) {}
-void end_command(void) {}
 void start_blinking(void) {}
 void doc_update(int32_t) {}
 void set_CursorShape(char *) {}
+void processInput(char) {}
+void prompt_end_command(void) {}
+void prompt_set_current_text(const char *) {}
 uint32_t rgb(uint8_t r, uint8_t g, uint8_t b) {return 0;}
 void question_box(const char *, const char *) {}
 void warning_box(const char *, const char *) {}
@@ -203,6 +205,11 @@ void critical_box(const char *, const char *) {}
 void information_box(const char *, const char *) {}
 void obj_set_text(ObjectCore *obj, const char *text) {}
 void doc_scale(int32_t, double) {}
+void doc_stop_gripping(int32_t, bool) {}
+void hide_selectbox(int32_t) {}
+void remove_paste_object_item_group(int32_t) {}
+void doc_set_corner_button(int32_t) {}
+void doc_set_cross_hair_size(int32_t, uint8_t) {}
 
 /* TODO: Clear up memory. */
 void
@@ -231,13 +238,6 @@ qRgb(uint8_t r, uint8_t g, uint8_t b)
     result += 0x100 * g;
     result += b;
     return result;
-}
-
-/* . */
-void
-prompt_output(const char *line)
-{
-    printf("%s\n", line);
 }
 
 /* . */

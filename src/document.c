@@ -11,11 +11,75 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "core.h"
 
 double zoomInLimit = 1.0e-10;
 double zoomOutLimit = 1.0e10;
+
+/* . */
+void
+doc_init(int32_t doc)
+{
+    DocumentData *data = doc_data(doc);
+
+    /* NOTE: This has to be done before setting mouse tracking.
+     * TODO: Review OpenGL for Qt5 later
+     * if (get_bool(DISPLAY_USE_OPENGL)) {
+     *     debug_message("Using OpenGL...");
+     *     setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
+     * }
+
+     * TODO: Review RenderHints later
+     * setRenderHint(QPainter::Antialiasing, get_bool(DISPLAY_RENDERHINT_AA));
+     * setRenderHint(QPainter::TextAntialiasing, get_bool(DISPLAY_RENDERHINT_TEXT_AA));
+     * setRenderHint(QPainter::SmoothPixmapTransform, get_bool(DISPLAY_RENDERHINT_SMOOTHPIX));
+     * setRenderHint(QPainter::HighQualityAntialiasing, get_bool(DISPLAY_RENDERHINT_HIGH_AA));
+     * setRenderHint(QPainter::NonCosmeticDefaultPen, get_bool(DISPLAY_RENDERHINT_NONCOSMETIC));
+
+     * NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
+     * NOTE: Qt renderer will not draw the foreground properly if it isnt set.
+     */
+
+    data->panDistance = 10; /* TODO: should there be a setting for this??? */
+
+    data->grippingActive = false;
+    data->rapidMoveActive = false;
+    data->previewMode = PREVIEW_NULL;
+    data->previewData = 0;
+    data->previewActive = false;
+    data->pastingActive = false;
+    data->movingActive = false;
+    data->selectingActive = false;
+    data->zoomWindowActive = false;
+    data->panningRealTimeActive = false;
+    data->panningPointActive = false;
+    data->panningActive = false;
+    data->qSnapActive = false;
+    data->qSnapToggle = false;
+
+    data->qsnapLocatorColor = get_int(QSNAP_LOCATOR_COLOR);
+    data->qsnapLocatorSize = get_int(QSNAP_LOCATOR_SIZE);
+    data->qsnapApertureSize = get_int(QSNAP_APERTURE_SIZE);
+    data->gripColorCool = get_int(SELECTION_COOLGRIP_COLOR);
+    data->gripColorHot = get_int(SELECTION_HOTGRIP_COLOR);
+    data->gripSize = get_int(SELECTION_GRIP_SIZE);
+    data->pickBoxSize = get_int(SELECTION_PICKBOX_SIZE);
+
+    /* TODO: set up config */
+    data->enableRuler = true;
+    data->enableGrid = true;
+    data->enableOrtho = false;
+    data->enablePolar = false;
+    data->enableLwt = false;
+    data->enableRuler = true;
+
+    /* Randomize the hot grip location initially so it's not located at (0,0). */
+    srand(time(NULL));
+    data->sceneGripPoint = emb_vector(rand()*1000, rand()*1000);
+}
 
 /* TODO: finish this */
 void
@@ -409,5 +473,43 @@ doc_toggle_ruler(int32_t doc, bool on)
     data->rulerPixelSize = get_int(RULER_PIXEL_SIZE);
     doc_update(doc);
     restore_cursor();
+}
+
+/* . */
+void
+doc_deletePressed(int32_t doc)
+{
+    debug_message("View deletePressed()");
+    DocumentData *data = doc_data(doc);
+    if (data->pastingActive) {
+        remove_paste_object_item_group(doc);
+    }
+    data->pastingActive = false;
+    data->zoomWindowActive = false;
+    data->selectingActive = false;
+    hide_selectbox(doc);
+    doc_stop_gripping(doc, false);
+    doc_delete_selected(doc);
+}
+
+/* . */
+void
+doc_escapePressed(int32_t doc)
+{
+    debug_message("View escapePressed()");
+    DocumentData *data = doc_data(doc);
+    if (data->pastingActive) {
+        remove_paste_object_item_group(doc);
+    }
+    data->pastingActive = false;
+    data->zoomWindowActive = false;
+    data->selectingActive = false;
+    hide_selectbox(doc);
+    if (data->grippingActive) {
+        doc_stop_gripping(doc, false);
+    }
+    else {
+        doc_clear_selection(doc);
+    }
 }
 

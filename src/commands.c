@@ -15,6 +15,8 @@
 
 #include "core.h"
 
+EmbString lastCmd = "help";
+
 /* . */
 void
 check_for_updates(void)
@@ -2719,4 +2721,59 @@ zoomExtentsAllSubWindows(void)
     }
 }
 
+/* . */
+void
+repeat_action(void)
+{
+    prompt_end_command();
+    prompt_set_current_text(lastCmd);
+    processInput(' ');
+}
+
+/* . */
+void
+move_action(void)
+{
+    prompt_end_command();
+    prompt_set_current_text("move");
+    processInput(' ');
+}
+
+/* . */
+void
+rotate_action(void)
+{
+    prompt_end_command();
+    prompt_set_current_text("rotate");
+    processInput(' ');
+}
+
+/* . */
+void
+doc_scaleAction()
+{
+    prompt_end_command();
+    prompt_set_current_text("scale");
+    processInput(' ');
+}
+
+/* . */
+void
+prompt_output(const EmbString txt)
+{
+    appendHistory((char*)txt);
+}
+
+/* . */
+void
+end_command(void)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_clear_rubber_room(doc_index);
+        doc_preview_off(doc_index);
+        doc_disable_move_rapid_fire(doc_index);
+    }
+    prompt_end_command();
+}
 

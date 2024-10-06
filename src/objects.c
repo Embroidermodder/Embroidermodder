@@ -2408,3 +2408,27 @@ obj_set_end_point_1(ObjectCore *obj, EmbVector endPt1)
     */
 }
 
+/* . */
+EmbArc
+emb_arc_set_radius(EmbArc arc, EmbReal radius)
+{
+    EmbGeometry geometry;
+    geometry.object.arc = arc;
+    radius = EMB_MAX(radius, 0.0000001);
+    EmbVector center = emb_arc_center(geometry);
+
+    EmbVector start = emb_vector_subtract(center, arc.start);
+    start = emb_vector_scale(start, radius/emb_vector_length(start));
+    arc.start = emb_vector_add(center, start);
+
+    EmbVector mid = emb_vector_subtract(center, arc.mid);
+    mid = emb_vector_scale(mid, radius/emb_vector_length(mid));
+    arc.mid = emb_vector_add(center, mid);
+
+    EmbVector end = emb_vector_subtract(center, arc.end);
+    end = emb_vector_scale(start, radius/emb_vector_length(end));
+    arc.end = emb_vector_add(center, end);
+
+    return arc;
+}
+
