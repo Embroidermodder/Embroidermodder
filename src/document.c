@@ -25,6 +25,10 @@ doc_init(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
 
+    data->selected_memory = 1000;
+    data->selected_items = (int*)malloc(data->selected_memory*sizeof(int));
+    data->n_selected = 0;
+
     /* NOTE: This has to be done before setting mouse tracking.
      * TODO: Review OpenGL for Qt5 later
      * if (get_bool(DISPLAY_USE_OPENGL)) {
@@ -79,6 +83,28 @@ doc_init(int32_t doc)
     /* Randomize the hot grip location initially so it's not located at (0,0). */
     srand(time(NULL));
     data->sceneGripPoint = emb_vector(rand()*1000, rand()*1000);
+
+    strcpy(data->curLayer, "0");
+    data->curColor = 0; /* TODO: color ByLayer */
+    strcpy(data->curLineType, "ByLayer");
+    strcpy(data->curLineWeight, "ByLayer");
+
+    data->pattern = emb_pattern_create();
+    if (!data->pattern) {
+        printf("Could not allocate memory for embroidery pattern\n");
+        exit(1);
+    }
+}
+
+/* . */
+void
+doc_clear_selection(int32_t doc)
+{
+    if (doc >= numOfDocs) {
+        return;
+    }
+    DocumentData *data = doc_data(doc);
+    data->n_selected = 0;
 }
 
 /* TODO: finish this */
@@ -226,7 +252,8 @@ updateColorLinetypeLineweight(void)
 void
 doc_cut(int32_t doc)
 {
-    if (doc_num_selected(doc) == 0) {
+    DocumentData *data = doc_data(doc);
+    if (data->n_selected <= 0) {
         information_box(translate("Cut Preselect"),
             translate("Preselect objects before invoking the cut command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
@@ -315,7 +342,8 @@ statusbar_toggle(EmbString key, bool on)
 void
 doc_copy(int32_t doc)
 {
-    if (doc_num_selected(doc) == 0) {
+    DocumentData *data = doc_data(doc);
+    if (data->n_selected <= 0) {
         information_box(translate("Copy Preselect"),
             translate("Preselect objects before invoking the copy command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
@@ -511,5 +539,129 @@ doc_escapePressed(int32_t doc)
     else {
         doc_clear_selection(doc);
     }
+}
+
+/* . */
+void
+doc_delete_selected(int32_t doc)
+{
+    DocumentData *data = doc_data(doc);
+    if (data->n_selected > 1) {
+        EmbString macro_name;
+        sprintf(macro_name, "%s %d", translate("Delete"), data->n_selected);
+        doc_begin_macro(doc, macro_name);
+    }
+    for (int i = 0; i < data->n_selected; i++) {
+        ObjectCore* core = obj_get_core(data->selected_items[i]);
+        if (core->geometry->type != OBJ_NULL) {
+            EmbString label;
+            sprintf(label, "%s%s", translate("Delete 1 "), core->OBJ_NAME);
+            undoable_delete(doc, data->selected_items[i], label);
+        }
+    }
+    if (data->n_selected > 1) {
+        doc_end_macro(doc);
+    }
+}
+
+/* . */
+void
+doc_move_selected(int32_t doc, EmbVector delta)
+{
+    DocumentData *data = doc_data(doc);
+    if (data->n_selected > 1) {
+        EmbString macro_name;
+        sprintf(macro_name, "%s %d", translate("Move"), data->n_selected);
+        doc_begin_macro(doc, macro_name);
+    }
+    for (int i = 0; i < data->n_selected; i++) {
+        ObjectCore* core = obj_get_core(data->selected_items[i]);
+        EmbString msg;
+        sprintf(msg, "%s 1 %s", translate("Move"), core->OBJ_NAME);
+        undoable_move(doc, data->selected_items[i], delta, msg);
+    }
+    if (data->n_selected > 1) {
+        doc_end_macro(doc);
+    }
+
+    /* Always clear the selection after a move. */
+    doc_clear_selection(doc);
+}
+
+/* . */
+void
+doc_rotate_selected(int32_t doc, double x, double y, double rot)
+{
+    DocumentData *data = doc_data(doc);
+    if (data->n_selected > 1) {
+        EmbString macro_name;
+        sprintf(macro_name, "%s %d", translate("Rotate"), data->n_selected);
+        doc_begin_macro(doc, macro_name);
+    }
+    for (int i = 0; i < data->n_selected; i++) {
+        ObjectCore* core = obj_get_core(data->selected_items[i]);
+        EmbString msg;
+        sprintf(msg, "%s 1 %s", translate("Rotate"), core->OBJ_NAME);
+        EmbVector v = emb_vector(x, y);
+        undoable_rotate(doc, data->selected_items[i], v, msg);
+    }
+    if (data->n_selected > 1) {
+        doc_end_macro(doc);
+    }
+
+    /* Always clear the selection after a rotate. */
+    doc_clear_selection(doc);
+}
+
+/* . */
+void
+doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2)
+{
+    DocumentData *data = doc_data(doc);
+    if (data->n_selected > 1) {
+        EmbString macro_name;
+        sprintf(macro_name, "%s %d", translate("Mirror"), data->n_selected);
+        doc_begin_macro(doc, macro_name);
+    }
+    for (int i = 0; i < data->n_selected; i++) {
+        ObjectCore* core = obj_get_core(data->selected_items[i]);
+        EmbString msg;
+        sprintf(msg, "%s 1 %s", translate("Mirror"), core->OBJ_NAME);
+        EmbVector start, end;
+        start = emb_vector(x1, y1);
+        end = emb_vector(x2, y2);
+        undoable_mirror(doc, data->selected_items[i], start, end, msg);
+    }
+    if (data->n_selected > 1) {
+        doc_end_macro(doc);
+    }
+
+    /* Always clear the selection after a mirror. */
+    doc_clear_selection(doc);
+}
+
+/* . */
+void
+doc_scale_selected(int32_t doc, double x, double y, double factor)
+{
+    DocumentData *data = doc_data(doc);
+    if (data->n_selected > 1) {
+        EmbString macro_name;
+        sprintf(macro_name, "%s %d", translate("Scale"), data->n_selected);
+        doc_begin_macro(doc, macro_name);
+    }
+    for (int i = 0; i < data->n_selected; i++) {
+        ObjectCore* core = obj_get_core(data->selected_items[i]);
+        EmbVector v = emb_vector(x, y);
+        EmbString msg;
+        sprintf(msg, "%s%s", translate("Scale 1 "), core->OBJ_NAME);
+        undoable_scale(doc, data->selected_items[i], v, factor, msg);
+    }
+    if (data->n_selected > 1) {
+        doc_end_macro(doc);
+    }
+
+    /* Always clear the selection after a scale. */
+    doc_clear_selection(doc);
 }
 

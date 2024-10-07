@@ -236,20 +236,16 @@ run_command(ScriptEnv *context, const char *cmd)
     if (command_data[id].flags & REQUIRED_VIEW) {
         doc_index = activeDocument();
         if (doc_index < 0) {
-            return value;
+            return script_false;
         }
     }
+    /* If initialization is needed, a view is required implicitly. */
     if (!(command_data[id].flags & DONT_INITIALIZE)) {
-        doc_index = activeDocument();
-        if (doc_index < 0) {
-            doc_clear_rubber_room(doc_index);
-        }
+        doc_clear_rubber_room(doc_index);
     }
+    /* Selection only exists when the view exists. */
     if (command_data[id].flags & CLEAR_SELECTION) {
-        doc_index = activeDocument();
-        if (doc_index < 0) {
-            doc_clear_selection(doc_index);
-        }
+        //doc_clear_selection(doc_index);
     }
 
     switch (command_data[id].id) {
@@ -548,7 +544,8 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_ERASE: {
-        if (doc_num_selected(doc_index) <= 0) {
+        DocumentData *data = doc_data(doc_index);
+        if (data->n_selected <= 0) {
             /* TODO: Prompt to select objects if nothing is preselected. */
             prompt_output(
             translate("Preselect objects before invoking the delete command."));
@@ -968,7 +965,7 @@ set_RubberText(const EmbString key, EmbString txt)
 
 /* . */
 double
-nativeQSnapX()
+nativeQSnapX(void)
 {
     int32_t doc = activeDocument();
     if (doc < 0) {
@@ -980,7 +977,7 @@ nativeQSnapX()
 
 /* . */
 double
-nativeQSnapY()
+nativeQSnapY(void)
 {
     int32_t doc = activeDocument();
     if (doc < 0) {
@@ -991,7 +988,7 @@ nativeQSnapY()
 }
 
 void
-enableLwt()
+enableLwt(void)
 {
     debug_message("StatusBarButton enableLwt()");
     int32_t doc = activeDocument();
@@ -1001,7 +998,7 @@ enableLwt()
 }
 
 void
-disableLwt()
+disableLwt(void)
 {
     debug_message("StatusBarButton disableLwt()");
     int32_t doc = activeDocument();
@@ -1011,7 +1008,7 @@ disableLwt()
 }
 
 void
-enableReal()
+enableReal(void)
 {
     debug_message("StatusBarButton enableReal()");
     int32_t doc = activeDocument();
@@ -1021,7 +1018,7 @@ enableReal()
 }
 
 void
-disableReal()
+disableReal(void)
 {
     debug_message("StatusBarButton disableReal()");
     int32_t doc = activeDocument();
@@ -1113,7 +1110,7 @@ getCurrentLayer(void)
 
 /* TODO: return color ByLayer */
 uint32_t
-getCurrentColor()
+getCurrentColor(void)
 {
     int doc = activeDocument();
     if (doc < 0) {
@@ -1125,7 +1122,7 @@ getCurrentColor()
 
 /* . */
 const char *
-getCurrentLineType()
+getCurrentLineType(void)
 {
     int doc = activeDocument();
     if (doc < 0) {
@@ -1147,84 +1144,11 @@ getCurrentLineWeight(void)
     return data->curLineWeight;
 }
 
-/* (double x1, double y1, double x2, double y2, double rot). */
-ScriptValue
-add_infinite_line_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
-/* (double x1, double y1, double x2, double y2, double rot). */
-ScriptValue
-add_ray_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
-/* add_triangle_command(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill). */
-ScriptValue
-add_triangle_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
-/* add_rounded_rectangle_command(double x, double y, double w, double h, double rad, double rot, bool fill)
-. */
-ScriptValue
-add_rounded_rectangle_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
-/* add_regular_polygon_command(double centerX, double centerY, uint16_t sides, uint8_t mode, double rad, double rot, bool fill). */
-ScriptValue
-add_regular_polygon_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
-/* NOTE: This native is different than the rest in that the Y+ is down
- * (scripters need not worry about this)
-ScriptValue
-add_Path(double startX, double startY, const QPainterPath& p, int rubberMode)
-{
-    return script_false;
-}
- */
-
-/* add_horizontal_dimension_command(double x1, double y1, double x2, double y2, double legHeight). */
-ScriptValue
-add_horizontal_dimension_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
-/* add_vertical_dimension_command(double x1, double y1, double x2, double y2, double legHeight)
- */
-ScriptValue
-add_vertical_dimension_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
-/* (QString img, double x, double y, double w, double h, double rot)
-ScriptValue
-add_image_command(ScriptEnv *context)
-{
-    return script_false;
-}
-
-void
-add_ToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
-{
-}
-*/
-
+/* . */
 void
 nativeCutSelected(double x, double y)
 {
 }
-
 
 /* SET is a prompt-only Command.
  *
@@ -1290,12 +1214,11 @@ set_command(ScriptEnv* context)
     return script_null;
 }
 
-
 /* Cartesian Coordinate System reported: anticlockwise angle from x-axis. */
 void
 reportDistance(EmbVector a, EmbVector b)
 {
-    char output[200];
+    EmbString output;
     EmbVector delta = emb_vector_subtract(b, a);
 
     EmbReal distance = emb_vector_length(delta);
@@ -1327,7 +1250,7 @@ distance_command(ScriptEnv *context)
             context->point1 = v;
             addRubber("LINE");
             set_rubber_mode(doc_index, "LINE");
-            set_rubber_point(doc_index, "LINE_START", context->point1.x, context->point1.y);
+            set_rubber_point(doc_index, "LINE_START", context->point1);
             prompt_output(translate("Specify second point: "));
         }
         else {
@@ -1342,18 +1265,18 @@ distance_command(ScriptEnv *context)
         break;
     case CONTEXT_PROMPT:
         /*
-        var strList = str.split(",");
-        if (isNaN(context->x1)) {
+        EmbVector v;
+        EmbString str;
+        if (!parse_vector(str, &v)) {
             if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(translate("Requires numeric distance or two points."));
                 prompt_output(translate("Specify first point: "));
             }
             else {
-                context->x1 = Number(strList[0]);
-                context->y1 = Number(strList[1]);
+                context->point1 = v;
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", context->x1, context->y1);
+                setRubberPoint("LINE_START", v);
                 prompt_output(translate("Specify second point: "));
             }
         }
@@ -1363,8 +1286,7 @@ distance_command(ScriptEnv *context)
                 prompt_output(translate("Specify second point: "));
             }
             else {
-                context->x2 = Number(strList[0]);
-                context->y2 = Number(strList[1]);
+                context->point2 = v;
                 reportDistance();
                 end_command();
             }
@@ -1405,7 +1327,8 @@ main(void)
     context->dest = zero_vector;
     context->delta = zero_vector;
 
-    if (doc_num_selected(doc_index) <= 0) {
+    DocumentData *data = doc_data(doc_index);
+    if (data->n_selected <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
@@ -1482,14 +1405,22 @@ ScriptValue
 scale_command(ScriptEnv * context)
 {
     switch (context->context) {
-    case CONTEXT_MAIN:
+    case CONTEXT_MAIN: {
+        todo("SCALE main()");
         break;
-    case CONTEXT_CLICK:
+    }
+    case CONTEXT_CLICK: {
+        todo("SCALE click()");
         break;
-    case CONTEXT_CONTEXT:
+    }
+    case CONTEXT_CONTEXT: {
+        todo("SCALE context()");
         break;
-    case CONTEXT_PROMPT:
+    }
+    case CONTEXT_PROMPT: {
+        todo("SCALE prompt()");
         break;
+    }
     default:
         break;
     }
@@ -1574,17 +1505,13 @@ click(EmbVector position)
                 prompt_output(translate("Specify new length: "));
             }
             else {
-                doc_scale_selected(doc_index, context->base, context->factorNew/context->factorRef);
+                doc_scale_selected(doc_index, context->base,
+                    context->factorNew / context->factorRef);
                 previewOff();
                 end_command();
             }
         }
     }
-}
-
-void context(str)
-{
-    todo("SCALE", "context()");
 }
 
 void prompt(str)
@@ -1751,22 +1678,20 @@ void prompt(str)
 ScriptValue
 sandbox_command(ScriptEnv * context)
 {
+    int32_t doc = activeDocument();
+    EmbString msg;
     switch (context->context) {
-    case CONTEXT_MAIN:
+    case CONTEXT_MAIN: {
         /* Report number of pre-selected objects. */
-        char msg[200];
-        /* sprintf(msg, "Number of Objects Selected: %d", doc->numSelected()); */
-        /* prompt_output(msg); */
-        /* mirrorSelected(0,0,0,1); */
-    
-        /* doc_select_all(doc_index); */
-        /* rotateSelected(0,0,90); */
+        sprintf(msg, "Number of Objects Selected: %d", doc);
+        prompt_output(msg);
+        doc_mirror_selected(doc, 0, 0, 0, 1);
+
+        doc_select_all(doc);
+        doc_rotate_selected(doc, 0, 0, 90);
 
         /* Polyline & Polygon Testing */
-    
-        EmbVector offset;
-        offset.x = 0.0;
-        offset.y = 0.0;
+        EmbVector offset = emb_vector(0.0, 0.0);
 
         /*    
         var polylineArray = [];
@@ -1787,10 +1712,11 @@ sandbox_command(ScriptEnv * context)
         polylineArray.push(4.0 + offsetX);
         polylineArray.push(1.0 + offsetY);
         addPolyline(polylineArray);
+        */
     
-        offsetX = 5.0;
-        offsetY = 0.0;
+        offset = emb_vector(5.0, 0.0);
     
+        /*
         var polygonArray = [];
         polygonArray.push(1.0 + offsetX);
         polygonArray.push(1.0 + offsetY);
@@ -1811,6 +1737,7 @@ sandbox_command(ScriptEnv * context)
         addPolygon(polygonArray);
         */
         break;
+    }
     case CONTEXT_CLICK:
         break;
     case CONTEXT_CONTEXT:
@@ -1827,6 +1754,21 @@ sandbox_command(ScriptEnv * context)
 ScriptValue
 rotate_command(ScriptEnv * context)
 {
+    switch (context->context) {
+    case CONTEXT_MAIN: {
+        break;
+    }
+    case CONTEXT_CLICK:
+        break;
+    case CONTEXT_CONTEXT: {
+        todo("ROTATE context()");
+        break;
+    }
+    case CONTEXT_PROMPT:
+        break;
+    default:
+        break;
+    }
     return script_null;
 }
 
@@ -1900,11 +1842,6 @@ click(EmbVector v)
             end_command();
         }
     }
-}
-
-void context(str)
-{
-    todo("ROTATE", "context()");
 }
 
 void prompt(str)
@@ -2115,7 +2052,7 @@ add_to_selection_command(ScriptEnv* context)
 ScriptValue
 set_cursor_shape_command(ScriptEnv* context)
 {
-    set_CursorShape(STR(0));
+    set_cursor_shape(STR(0));
     return script_null;
 }
 
@@ -2259,6 +2196,37 @@ set_rubber_text_command(ScriptEnv* context)
     return script_null;
 }
 
+/* BUG: combine with other labels in libembroidery */
+const char *geometry_type_keys[] = {
+    "ARC",
+    "BLOCK",
+    "CIRCLE",
+    "DIMALIGNED",
+    "DIMANGULAR",
+    "DIMARCLENGTH",
+    "DIMDIAMETER",
+    "DIMLEADER",
+    "DIMLINEAR",
+    "DIMORDINATE",
+    "DIMRADIUS",
+    "ELLIPSE",
+    "ELLIPSEARC",
+    "HATCH",
+    "IMAGE",
+    "INFINITELINE",
+    "LINE",
+    "PATH",
+    "POINT",
+    "POLYGON",
+    "POLYLINE",
+    "RAY",
+    "RECTANGLE",
+    "SPLINE",
+    "TEXTMULTI",
+    "TEXTSINGLE",
+    "END"
+};
+
 /* . */
 ScriptValue
 add_rubber_command(ScriptEnv* context)
@@ -2272,85 +2240,47 @@ add_rubber_command(ScriptEnv* context)
     double mx = run_command(context, "get mousex").r;
     double my = run_command(context, "get mousey").r;
 
-    if (string_equal(STR(0), "ARC")) {
-        /* TODO: handle this type */
+    int type = -1;
+    for (int i=0; !string_equal(geometry_type_keys[i], "END"); i++) {
+        if (string_equal(STR(0), geometry_type_keys[i])) {
+            type = i;
+            break;
+        }
     }
-    else if (string_equal(STR(0), "BLOCK")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "CIRCLE")) {
+
+    switch (type) {
+    case EMB_CIRCLE: {
         add_circle_command(pack(global, "rriii", mx, my, 0, false, RUBBER_ON));
+        break;
     }
-    else if (string_equal(STR(0), "DIMALIGNED")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "DIMANGULAR")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "DIMARCLENGTH")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "DIMDIAMETER")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "DIMLEADER")) {
+    case EMB_DIM_LEADER: {
         add_dimleader_command(pack(global, "rrrrii", mx, my, mx, my, 0, RUBBER_ON));
+        break;
     }
-    else if (string_equal(STR(0), "DIMLINEAR")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "DIMORDINATE")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "DIMRADIUS")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "ELLIPSE")) {
+    case EMB_ELLIPSE: {
         add_ellipse_command(pack(global, "rriiiii",mx, my, 0, 0, 0, 0, RUBBER_ON));
+        break;
     }
-    else if (string_equal(STR(0), "ELLIPSEARC")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "HATCH")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "IMAGE")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "INFINITELINE")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "LINE")) {
+    case EMB_LINE: {
         add_line_command(pack(global, "rrrrii", mx, my, mx, my, 0, RUBBER_ON));
+        break;
     }
-    else if (string_equal(STR(0), "PATH")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "POINT")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "POLYGON")) {
-        /* FIXME: */
-        //add_polygon(mx, my, NULL, RUBBER_ON);
-    }
-    else if (string_equal(STR(0), "POLYLINE")) {
-        /* FIXME: */
-        //add_polyline(mx, my, NULL, RUBBER_ON);
-    }
-    else if (string_equal(STR(0), "RAY")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "RECTANGLE")) {
+    case EMB_RECT: {
         add_rectangle_command(pack(global, "rrrriii", mx, my, mx, my, 0, 0, RUBBER_ON));
+        break;
     }
-    else if (string_equal(STR(0), "SPLINE")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "TEXTMULTI")) {
-        /* TODO: handle this type */
-    }
-    else if (string_equal(STR(0), "TEXTSINGLE")) {
+    case EMB_TEXT_SINGLE: {
         add_textsingle_command(pack(global, "srriii", "", mx, my, 0, false, RUBBER_ON));
+        break;
+    }
+    default: {
+        todo("handle this type");
+        break;
+    }
+    case -1: {
+        /* ERROR */
+        break;
+    }
     }
 
     return script_null;
@@ -2471,9 +2401,8 @@ locatepoint_command(ScriptEnv *context)
     }
     case CONTEXT_CLICK: {
         char output[200];
-        float x = 0.0f;
-        float y = 0.0f;
-        sprintf(output, "X = %f, Y = %f", x, y);
+        EmbVector v = emb_vector(0.0f, 0.0f);
+        sprintf(output, "X = %f, Y = %f", v.x, v.y);
         prompt_output(output);
         end_command();
         break;
@@ -2483,13 +2412,13 @@ locatepoint_command(ScriptEnv *context)
         break;
     case CONTEXT_PROMPT:
         EmbVector v;
-        char str[200];
+        EmbString str;
         if (!parse_vector(str, &v)) {
             // FIXME: alert(translate("Invalid point."));
             prompt_output(translate("Specify point: "));
         }
         else {
-            char output[200];
+            EmbString output;
             sprintf(output, "X = %f, Y = %f", v.x, v.y);
             prompt_output(output);
             end_command();
@@ -2775,5 +2704,44 @@ end_command(void)
         doc_disable_move_rapid_fire(doc_index);
     }
     prompt_end_command();
+}
+
+/* . */
+void
+create_all_menus(void)
+{
+    /* Do not allow the menus to be torn off.
+     * It's a pain in the ass to maintain.
+     */
+    debug_message("create all menus");
+
+    add_to_menu(MENU_FILE, file_menu);
+    add_to_menu(MENU_EDIT, edit_menu);
+    add_to_menu(MENU_VIEW, view_menu);
+    add_to_menu(MENU_DRAW, draw_menu);
+    add_to_menu(MENU_TOOLS, tools_menu);
+    add_to_menu(MENU_MODIFY, modify_menu);
+    add_to_menu(MENU_DIMENSION, dimension_menu);
+    add_to_menu(MENU_SANDBOX, sandbox_menu);
+//    add_to_menu(MENU_WINDOW, window_menu);
+    add_to_menu(MENU_HELP, help_menu);
+//    add_to_menu(MENU_RECENT, recent_menu);
+    add_to_menu(MENU_ZOOM, zoom_menu);
+    add_to_menu(MENU_PAN, pan_menu);
+}
+
+/* . */
+void
+create_all_toolbars(void)
+{
+    debug_message("create all toolbars");
+
+    add_to_toolbar(TOOLBAR_FILE, file_toolbar);
+    add_to_toolbar(TOOLBAR_EDIT, edit_toolbar);
+    add_to_toolbar(TOOLBAR_ZOOM, zoom_toolbar);
+    add_to_toolbar(TOOLBAR_PAN, pan_toolbar);
+    add_to_toolbar(TOOLBAR_VIEW, view_toolbar);
+    add_to_toolbar(TOOLBAR_ICON, icon_toolbar);
+    add_to_toolbar(TOOLBAR_HELP, help_toolbar);
 }
 

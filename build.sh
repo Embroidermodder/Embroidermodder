@@ -103,6 +103,12 @@ function build_debug () {
 
 }
 
+# This is not intended to be portable and the requirements are whatever is
+# necessary since the program builds and ships without this function.
+#
+# Current requirements: GNU time, clang-tidy, git, gnuplot, bash,
+# standard UNIX tools, python3 and the module: clang_html
+#
 # https://www.gnu.org/software/complexity/manual/complexity.html
 # https://coccinelle.gitlabpages.inria.fr/website/documentation.html
 # https://clang.llvm.org/extra/clang-tidy/
@@ -111,15 +117,22 @@ function analysis () {
 	BUILD_DIR="debug"
 	BUILD_TYPE="Debug"
 
-	git submodule init
-	git submodule update
+    run_cmake
 
-	run_cmake
+    echo "Producing clang-tidy report."
+    mkdir -p analysis
+    FNAME_TIME="`date -Iseconds`"
+    REPORT="analysis/clang-tidy-report-$FNAME_TIME.txt"
+    clang-tidy --config-file=clang-tidy.txt -p debug src/* &> $REPORT
 
-	clang-tidy --format-style='mozilla' -p debug src/* --checks=* \
-		--export-fixes=fixes.yaml --store-check-profile=check \
-		&> clang-tidy-report.txt
+    echo "Recording output size"
+    SEC=`date +%s`
+    LEN=`cat $REPORT | wc -l`
+    echo "$SEC, $LEN" >> analysis/history.csv
 
+    echo "Plotting"
+    gnuplot -e "set terminal png size 400,300; set output 'analysis/progress.png'; set datafile separator \",\"; plot 'analysis/history.csv' using 1:2 with lines"
+    python3 -m clang_html $REPORT -o analysis/clang-report.html
 }
 
 function convert_to_xpm () {

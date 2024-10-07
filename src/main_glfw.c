@@ -92,20 +92,11 @@ activeDocument(void)
 }
 
 /* Dummy Functions so GLFW version compiles. */
-#define DUMMY_COMMAND(name) \
-    ScriptValue \
-    name(ScriptEnv *context) \
-    { \
-        return script_false; \
+#define BASIC_DOC_F(name) \
+    void name(int32_t doc) { \
+        printf("dummy command call on function of the form void f(doc=%d)\n", doc); \
     }
 
-#define BASIC_DOC_F(name) \
-    void name(int32_t doc) {}
-
-#define NO_ARG_F(name) \
-    void name(void) {}
-
-BASIC_DOC_F(doc_clear_selection)
 BASIC_DOC_F(doc_select_all)
 BASIC_DOC_F(doc_preview_off)
 BASIC_DOC_F(doc_vulcanize_rubber_room)
@@ -115,13 +106,24 @@ BASIC_DOC_F(doc_pan_up)
 BASIC_DOC_F(doc_pan_down)
 BASIC_DOC_F(doc_clear_rubber_room)
 BASIC_DOC_F(doc_paste)
+BASIC_DOC_F(doc_end_macro)
+BASIC_DOC_F(doc_copy_selected)
+BASIC_DOC_F(doc_recalculate_limits)
+BASIC_DOC_F(doc_create_origin)
+BASIC_DOC_F(doc_create_grid_polar)
+BASIC_DOC_F(doc_create_grid_iso)
+BASIC_DOC_F(doc_create_grid_rect)
+BASIC_DOC_F(doc_empty_grid)
+BASIC_DOC_F(remove_paste_object_item_group)
+BASIC_DOC_F(doc_set_corner_button)
+BASIC_DOC_F(doc_update)
+BASIC_DOC_F(doc_zoom_selected)
+BASIC_DOC_F(hide_selectbox)
 
-void doc_show_scroll_bars(int32_t doc, bool) {}
-void doc_set_select_box_colors(int32_t doc, uint32_t, uint32_t, uint32_t, uint32_t, int) {}
-
-uint32_t create_object(int, uint32_t) {return 0;}
-void doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode) {}
-void doc_zoom_selected(int32_t doc_id) {}
+#define NO_ARG_F(name) \
+    void name(void) { \
+         printf("dummy command call to void f(void) function"); \
+    }
 
 NO_ARG_F(undo_command)
 NO_ARG_F(redo_command)
@@ -138,20 +140,40 @@ NO_ARG_F(window_next)
 NO_ARG_F(window_previous)
 NO_ARG_F(restore_cursor)
 NO_ARG_F(wait_cursor)
+NO_ARG_F(clear_selection)
+NO_ARG_F(start_blinking)
+NO_ARG_F(prompt_end_command)
+NO_ARG_F(create_details_dialog)
+NO_ARG_F(onCloseWindow)
+
+void set_cursor_shape(EmbString shape) {}
+void doc_show_scroll_bars(int32_t doc, bool) {}
+void doc_set_select_box_colors(int32_t doc, uint32_t, uint32_t, uint32_t, uint32_t, int) {}
+
+void add_to_menu(int, EmbStringTable) {}
+void add_to_toolbar(int, EmbStringTable) {}
+
+void undoable_delete(int32_t doc, uint32_t obj, EmbString label) {}
+void undoable_scale(int32_t doc, uint32_t obj, EmbVector delta, double a, EmbString label) {}
+void undoable_move(int32_t doc, uint32_t obj, EmbVector delta, EmbString msg) {}
+void undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString msg) {}
+void undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
+    EmbString msg) {}
+
+void line_edit_clear(const char *key) {}
+void combo_box_clear(const char *key) {}
+void combo_boxes_clear(const char *key) {}
+void clear_font_combobox(void) {}
+void hide_group_box(const char *key) {}
+
+uint32_t create_object(int, uint32_t) {return 0;}
+void doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode) {}
 
 void doc_begin_macro(int32_t, EmbString) {}
-void doc_end_macro(int32_t) {}
-void doc_copy_selected(int32_t) {}
-void doc_recalculate_limits(int32_t) {}
 
 void obj_set_rotation(uint32_t, double) {}
 void obj_calculate_data(uint32_t) {}
 void show_group_box(const char *) {}
-void doc_create_origin(int32_t) {}
-void doc_create_grid_polar(int32_t) {}
-void doc_create_grid_iso(int32_t) {}
-void doc_create_grid_rect(int32_t) {}
-void doc_empty_grid(int32_t) {}
 
 void nanosleep_(int) {}
 
@@ -171,10 +193,6 @@ EmbVector doc_map_to_scene(int32_t doc, EmbVector v) {return v;}
 EmbVector doc_map_from_scene(int32_t doc, EmbVector v) {return v;}
 void doc_set_background_color(int doc_index, uint32_t color) {}
 void settingsDialog(EmbString s) {}
-void doc_move_selected(int32_t doc, EmbVector) {}
-void doc_delete_selected(int32_t doc) {}
-void doc_rotate_selected(int32_t doc, double, double, double) {}
-void doc_mirror_selected(int32_t doc, double, double, double, double) {}
 void doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point) {}
 void doc_set_rubber_text(int32_t doc, EmbString key, EmbString value) {}
 void setPromptFontFamily(char *) {}
@@ -182,21 +200,13 @@ void setPromptFontStyle(char *) {}
 void setPromptFontSize(int) {}
 void doc_spare_rubber(int32_t doc, int64_t mode) {}
 void doc_set_rubber_mode(int32_t doc, int32_t mode) {}
-void doc_scale_selected(int32_t doc, double, double, double) {}
-int doc_num_selected(int32_t doc) { return 0; }
 void doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data) {}
-void create_details_dialog(void) {}
-void onCloseWindow(void) {}
 void doc_center_on(int32_t doc, EmbVector v) {}
 EmbVector scene_get_point(EmbString key) { return emb_vector(0.0, 0.0); }
 void doc_zoom_extents(int doc_index) {}
 void updatePickAddMode(bool val) {}
-void clear_selection(void) {}
-void start_blinking(void) {}
-void doc_update(int32_t) {}
 void set_CursorShape(char *) {}
 void processInput(char) {}
-void prompt_end_command(void) {}
 void prompt_set_current_text(const char *) {}
 uint32_t rgb(uint8_t r, uint8_t g, uint8_t b) {return 0;}
 void question_box(const char *, const char *) {}
@@ -206,9 +216,6 @@ void information_box(const char *, const char *) {}
 void obj_set_text(ObjectCore *obj, const char *text) {}
 void doc_scale(int32_t, double) {}
 void doc_stop_gripping(int32_t, bool) {}
-void hide_selectbox(int32_t) {}
-void remove_paste_object_item_group(int32_t) {}
-void doc_set_corner_button(int32_t) {}
 void doc_set_cross_hair_size(int32_t, uint8_t) {}
 
 /* TODO: Clear up memory. */

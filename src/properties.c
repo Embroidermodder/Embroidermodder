@@ -10,6 +10,8 @@
  * Script
  */
 
+#include <string.h>
+
 #include "core.h"
 
 /* . */
@@ -123,7 +125,7 @@ spinBoxDisplaySelectBoxAlphaValueChanged(int value)
 void
 comboBoxPromptFontFamilyCurrentIndexChanged(EmbString family)
 {
-    strcpy(setting[PROMPT_FONT_FAMILY].preview.s, family);
+    string_copy(setting[PROMPT_FONT_FAMILY].preview.s, family);
     setPromptFontFamily(setting[PROMPT_FONT_FAMILY].preview.s);
 }
 
@@ -131,7 +133,7 @@ comboBoxPromptFontFamilyCurrentIndexChanged(EmbString family)
 void
 comboBoxPromptFontStyleCurrentIndexChanged(EmbString style)
 {
-    strcpy(setting[PROMPT_FONT_STYLE].preview.s, style);
+    string_copy(setting[PROMPT_FONT_STYLE].preview.s, style);
     setPromptFontStyle(setting[PROMPT_FONT_STYLE].preview.s);
 }
 
@@ -196,5 +198,32 @@ void
 comboBoxScrollBarWidgetCurrentIndexChanged(int index)
 {
     setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i = index;
+}
+
+/* NOTE: General group will never be hidden. */
+void
+hideAllGroups(void)
+{
+    int n_group_boxes = string_array_length(group_box_list);
+    for (int i=0; i<n_group_boxes; i++) {
+        if (!string_equal(group_box_list[i], "General")) {
+            hide_group_box(group_box_list[i]);
+        }
+    }
+}
+
+/* . */
+void
+clearAllFields(void)
+{
+    int n = string_array_length(editor_list);
+    for (int i=0; i<n; i++) {
+        line_edit_clear(editor_list[i]);
+    }
+    n = string_array_length(combobox_list);
+    for (int i=0; i<n; i++) {
+        combo_box_clear(combobox_list[i]);
+    }
+    clear_font_combobox();
 }
 

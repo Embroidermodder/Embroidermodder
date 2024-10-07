@@ -1856,11 +1856,10 @@ click(EmbVector v)
 {
     if (context->mode == TEXTSINGLE_MODE_SETGEOM) {
         if (isnan(context->textX)) {
-            context->textX = x;
-            context->textY = y;
+            context->text_position = v;
             obj_add_rubber(obj, "LINE");
             obj_set_rubber_mode(obj, "LINE");
-            obj_set_rubber_point(obj, "LINE_START", context->textX, context->textY);
+            obj_set_rubber_point(obj, "LINE_START", context->text_position);
             prompt_output(translate("Specify text height") + " {" + textSize() + "}: ");
         }
         else if (isnan(context->textHeight)) {
@@ -2262,58 +2261,38 @@ obj_set_text_font(ObjectCore* obj, const char *font)
     obj_set_text(obj, obj->text);
 }
 
+EmbStringTable justify_options = {
+    "Left",
+    "Center",
+    "Right",
+    "Aligned",
+    "Middle",
+    "Fit",
+    "Top Left",
+    "Top Center",
+    "Top Right",
+    "Middle Left",
+    "Middle Center",
+    "Middle Right",
+    "Bottom Left",
+    "Bottom Center",
+    "Bottom Right",
+    "END"
+};
+
 /* Verify the string is a valid option. */
 void
 obj_set_text_justify(ObjectCore* obj, const char *justify)
 {
-    if (string_equal(justify, "Left")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Center")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Right")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Aligned")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Middle")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Fit")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Top Left")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Top Center")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Top Right")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Middle Left")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Middle Center")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Middle Right")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Bottom Left")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Bottom Center")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else if (string_equal(justify, "Bottom Right")) {
-        string_copy(obj->textJustify, justify);
-    }
-    else {
-        /* Default */
-        string_copy(obj->textJustify, "Left");
+    /* Default */
+    string_copy(obj->textJustify, "Left");
+    /* See if a valid justify option has been passed in, then set it if it is. */
+    int n = string_array_length(justify_options);
+    for (int i=0; i<n; i++) {
+        if (string_equal(justify, justify_options[i])) {
+            string_copy(obj->textJustify, "Left");
+            break;
+        }
     }
     obj_set_text(obj, obj->text);
 }

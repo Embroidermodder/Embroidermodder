@@ -17,10 +17,10 @@
 extern "C" {
 #endif
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <inttypes.h>
 #include <math.h>
 
 #include "../extern/libembroidery/embroidery.h"
@@ -32,10 +32,10 @@ extern "C" {
 #define STR(arg)  context->argument[arg].s
 #define BOOL(arg) context->argument[arg].b
 
+#define MAX_LONG_STRING             1000
 #define MAX_TABLE_LENGTH             500
 #define MAX_OPEN_FILES               100
 
-typedef char EmbString[MAX_STRING_LENGTH];
 typedef char EmbStringTable[MAX_TABLE_LENGTH][MAX_STRING_LENGTH];
 
 typedef struct ScriptValue_ {
@@ -179,6 +179,12 @@ typedef struct DocumentData_ {
 
     int32_t id;
 
+    /* Selection */
+    uint32_t *selected_items;
+    uint32_t n_selected;
+    uint32_t selected_memory;
+
+    /* UI State */
     bool grippingActive;
     bool rapidMoveActive;
     bool previewActive;
@@ -537,7 +543,7 @@ void nativeScaleSelected(double x, double y, double factor);
 void nativeRotateSelected(double x, double y, double rot);
 void nativeMirrorSelected(double x1, double y1, double x2, double y2);
 
-void set_CursorShape(EmbString str);
+void set_cursor_shape(EmbString shape);
 double nativeCalculateDistance(double x1, double y1, double x2, double y2);
 double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
 
@@ -576,6 +582,28 @@ void setObjectRubberMode(ObjectCore *core, int mode);
 
 EmbVector unpack_vector(ScriptEnv *context, int offset);
 
+void undoable_add(int32_t doc, uint32_t obj, EmbString label);
+void undoable_delete(int32_t doc, uint32_t obj, EmbString label);
+void undoable_scale(int32_t doc, uint32_t obj, EmbVector center, double factor, EmbString label);
+void undoable_move(int32_t doc, uint32_t obj, EmbVector delta, EmbString msg);
+void undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString msg);
+void undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
+    EmbString msg);
+
+void updateAllBackgroundColor(uint32_t color);
+
+void create_all_menus(void);
+void create_all_toolbars(void);
+void hide_group_box(const char *key);
+void hideAllGroups(void);
+
+void clearAllFields(void);
+void line_edit_clear(const char *key);
+void combo_box_clear(const char *key);
+void clear_font_combobox();
+
+int get_id(EmbStringTable, EmbString);
+
 /* ------------------------------- Document -------------------------------- */
 
 void doc_init(int32_t doc);
@@ -587,6 +615,8 @@ void doc_zoom_out(int32_t doc);
 void doc_zoom_window(int32_t doc);
 void doc_zoom_selected(int32_t doc);
 void doc_zoom_extents(int32_t doc);
+void doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir);
+
 void doc_pan_real_time(int32_t doc);
 void doc_pan_point(int32_t doc);
 void doc_pan_left(int32_t doc);
@@ -657,7 +687,6 @@ void doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point);
 void doc_set_rubber_text(int32_t doc, EmbString key, EmbString txt);
 
 void doc_recalculate_limits(int32_t doc);
-void doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir);
 void doc_center_at(int32_t doc, EmbVector centerPoint);
 EmbVector doc_center(int32_t doc);
 
@@ -676,14 +705,6 @@ void doc_align_scene_point_with_view_point(int32_t doc, EmbVector scenePoint, Em
 
 void doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode);
 
-void doc_pan_left(int doc_index);
-void doc_pan_right(int doc_index);
-void doc_pan_up(int doc_index);
-void doc_pan_down(int doc_index);
-
-void doc_zoom_selected(int doc_index);
-void doc_zoom_extents(int doc_index);
-
 double doc_width(int doc_index);
 double doc_height(int doc_index);
 
@@ -699,7 +720,6 @@ void doc_end_macro(int32_t doc);
 
 void updateColorLinetypeLineweight();
 
-void move_action(void);
 void rotate_action(void);
 void scale_action(void);
 
@@ -824,8 +844,8 @@ extern SettingsData settings_data[N_SETTINGS];
 
 extern bool document_memory[MAX_OPEN_FILES];
 
-extern char formatFilterOpen[1000];
-extern char formatFilterSave[1000];
+extern char formatFilterOpen[MAX_LONG_STRING];
+extern char formatFilterSave[MAX_LONG_STRING];
 extern EmbString openFilesPath;
 extern EmbString prompt_color_;
 extern EmbString prompt_selection_bg_color_;
@@ -843,39 +863,10 @@ extern ScriptValue script_false;
 extern bool blinkState;
 
 extern int testing_mode;
+extern EmbStringTable group_box_list;
+extern EmbStringTable button_list;
 
 extern EmbString end_symbol;
-
-extern Editor general_editor_data[];
-extern Editor geometry_arc_editor_data[];
-extern Editor misc_arc_editor_data[];
-extern Editor geometry_block_editor_data[];
-extern Editor geometry_circle_editor_data[];
-extern Editor geometry_dim_aligned_editor_data[];
-extern Editor geometry_dim_angular_editor_data[];
-extern Editor geometry_dim_arc_length_editor_data[];
-extern Editor geometry_dim_diameter_editor_data[];
-extern Editor geometry_dim_leader_editor_data[];
-extern Editor geometry_dim_linear_editor_data[];
-extern Editor geometry_dim_ordinate_editor_data[];
-extern Editor geometry_dim_radius_editor_data[];
-extern Editor geometry_ellipse_editor_data[];
-extern Editor geometry_image_editor_data[];
-extern Editor misc_image_editor_data[];
-extern Editor geometry_infinite_line_editor_data[];
-extern Editor geometry_line_editor_data[];
-extern Editor geometry_path_editor_data[];
-extern Editor misc_path_editor_data[];
-extern Editor geometry_point_editor_data[];
-extern Editor geometry_polygon_editor_data[];
-extern Editor geometry_polyline_editor_data[];
-extern Editor misc_polyline_editor_data[];
-extern Editor geometry_ray_editor_data[];
-extern Editor geometry_rectangle_editor_data[];
-extern Editor geometry_text_multi_editor_data[];
-extern Editor text_text_single_editor_data[];
-extern Editor geometry_text_single_editor_data[];
-extern Editor misc_text_single_editor_data[];
 
 extern const char *_appName_;
 extern const char *_appVer_;
@@ -894,6 +885,8 @@ extern const char *apostrophe_path;
 extern const char *quote_path;
 extern const char *circle_origin_path;
 extern EmbString settings_file;
+
+extern const char *os;
 
 extern int render_hints[];
 

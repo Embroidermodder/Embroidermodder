@@ -13,6 +13,18 @@
 
 #include "core.h"
 
+EmbStringTable button_list = {
+    "SNAP",
+    "GRID",
+    "RULER",
+    "ORTHO",
+    "POLAR",
+    "QSNAP",
+    "QTRACK",
+    "LWT",
+    "END"
+};
+
 Editor general_editor_data[] = {
     {
         .icon = "blank",

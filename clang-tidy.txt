@@ -1,0 +1,13 @@
+---
+Checks: >
+    -*,
+    clang-diagnostic-*,
+    clang-analyzer-*,
+    clang-analyzer-cplusplus*,
+    cppcoreguidelines-*,
+    bugprone-*,
+    performance-*,
+    portability-*,
+    readability-*,
+    linuxkernel-*
+...

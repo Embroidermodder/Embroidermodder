@@ -11,6 +11,8 @@
  * "objects.c")
  */
 
+#include <stdio.h>
+
 #include "core.h"
 
 /* (double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode).
@@ -116,6 +118,158 @@ add_line_command(ScriptEnv *context)
     doc_undoable_add_obj(doc_index, obj, rubberMode);
     return script_true;
 }
+
+/* Argument format: (double x1, double y1, double x2, double y2, double rot).
+ */
+ScriptValue
+add_infinite_line_command(ScriptEnv *context)
+{
+    EmbVector start = unpack_vector(context, 0);
+    EmbVector end = unpack_vector(context, 2);
+    double rot = REAL(4);
+    printf("add_infinite_line_command (%f, %f) (%f, %f) %f\n",
+        start.x, start.y, end.x, end.y, rot);
+    return script_false;
+}
+
+/* Argument format: (double x1, double y1, double x2, double y2, double rot).
+ */
+ScriptValue
+add_ray_command(ScriptEnv *context)
+{
+    EmbVector start = unpack_vector(context, 0);
+    EmbVector end = unpack_vector(context, 2);
+    double rot = REAL(4);
+    printf("add_ray_command (%f, %f) (%f, %f) %f\n",
+        start.x, start.y, end.x, end.y, rot);
+    return script_false;
+}
+
+/* Argument format: (double x1, double y1, double x2, double y2, double x3,
+ * double y3, double rot, bool fill).
+ */
+ScriptValue
+add_triangle_command(ScriptEnv *context)
+{
+    EmbVector point1 = unpack_vector(context, 0);
+    EmbVector point2 = unpack_vector(context, 2);
+    EmbVector point3 = unpack_vector(context, 4);
+    double rot = REAL(6);
+    bool fill = BOOL(7);
+    printf("add_triangle_command (%f, %f) (%f, %f) (%f, %f) %f %d\n",
+        point1.x, point1.y,
+        point2.x, point2.y,
+        point3.x, point3.y,
+        rot,
+        fill);
+    return script_false;
+}
+
+/* Argument format: (double x, double y, double w, double h, double rad,
+ * double rot, bool fill).
+ */
+ScriptValue
+add_rounded_rectangle_command(ScriptEnv *context)
+{
+    double x = REAL(0);
+    double y = REAL(1);
+    double w = REAL(2);
+    double h = REAL(3);
+    double rad = REAL(4);
+    double rot = REAL(5);
+    bool fill = BOOL(6);
+    printf("add_triangle_command %f, %f, %f, %f, %f, %f, %d\n",
+        x, y, w, h,
+        rad, rot,
+        fill);
+    return script_false;
+}
+
+/* Argument format: (double centerX, double centerY, uint16_t sides,
+ * uint8_t mode, double rad, double rot, bool fill).
+ */
+ScriptValue
+add_regular_polygon_command(ScriptEnv *context)
+{
+    EmbVector point1 = unpack_vector(context, 0);
+    EmbVector point2 = unpack_vector(context, 2);
+    EmbVector point3 = unpack_vector(context, 4);
+    double rot = REAL(6);
+    bool fill = BOOL(7);
+    printf("add_triangle_command (%f, %f) (%f, %f) (%f, %f) %f %d",
+        point1.x, point1.y,
+        point2.x, point2.y,
+        point3.x, point3.y,
+        rot,
+        fill);
+    return script_false;
+}
+
+/* NOTE: This native is different than the rest in that the Y+ is down
+ * (scripters need not worry about this). */
+/*
+ScriptValue
+add_Path(double startX, double startY, const QPainterPath& p, int rubberMode)
+{
+    EmbVector point1 = unpack_vector(context, 0);
+    EmbVector point2 = unpack_vector(context, 2);
+    EmbVector point3 = unpack_vector(context, 4);
+    double rot = REAL(6);
+    bool fill = BOOL(7);
+    printf("add_triangle_command (%f, %f) (%f, %f) (%f, %f) %f %d",
+        point1.x, point1.y,
+        point2.x, point2.y,
+        point3.x, point3.y,
+        rot,
+        fill);
+    return script_false;
+}
+ */
+
+/* Argument format: (double x1, double y1, double x2, double y2,
+ * double legHeight).
+ */
+ScriptValue
+add_horizontal_dimension_command(ScriptEnv *context)
+{
+    EmbVector start = unpack_vector(context, 0);
+    EmbVector end = unpack_vector(context, 2);
+    double legHeight = REAL(4);
+    printf("add_horizontal_dimension_command (%f, %f) (%f, %f) %f",
+        start.x, start.y,
+        end.x, end.y,
+        legHeight);
+    return script_false;
+}
+
+/* Argument format: (double x1, double y1, double x2, double y2,
+ * double legHeight)
+ */
+ScriptValue
+add_vertical_dimension_command(ScriptEnv *context)
+{
+    EmbVector start = unpack_vector(context, 0);
+    EmbVector end = unpack_vector(context, 2);
+    double legHeight = REAL(4);
+    printf("add_vertical_dimension_command (%f, %f) (%f, %f) %f",
+        start.x, start.y,
+        end.x, end.y,
+        legHeight);
+    return script_false;
+}
+
+/* (QString img, double x, double y, double w, double h, double rot)
+ScriptValue
+add_image_command(ScriptEnv *context)
+{
+    return script_false;
+}
+
+void
+add_To_selection(const QPainterPath path, Qt::ItemSelectionMode mode)
+{
+}
+*/
 
 /* NOTE: This native is different than the rest in that the Y+ is down
  * (scripters need not worry about this)

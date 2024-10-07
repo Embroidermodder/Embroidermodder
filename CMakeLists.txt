@@ -60,6 +60,7 @@ set(C_CORE
 	${SRC}/data/tips.c
 	${SRC}/data/toolbars.c
 	${SRC}/data/paths.c
+	${SRC}/data/versions.c
 	${SRC}/data/constants.h
 
 	${SRC}/script.c

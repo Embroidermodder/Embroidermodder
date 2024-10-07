@@ -10,9 +10,9 @@
  * Script
  */
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <limits.h>
 #include <errno.h>
 #include <time.h>
@@ -21,8 +21,8 @@
 
 #include "toml.h"
 
-char formatFilterOpen[1000];
-char formatFilterSave[1000];
+char formatFilterOpen[MAX_LONG_STRING];
+char formatFilterSave[MAX_LONG_STRING];
 EmbString openFilesPath;
 EmbString prompt_color_;
 EmbString prompt_selection_bg_color_;
@@ -77,7 +77,7 @@ const char *index_th_name[] = {
 };
 
 ScriptValue script_null = {
-    .r = 0.0f,
+    .r = 0.0F,
     .i = 0,
     .b = false,
     .s = "",
@@ -86,7 +86,7 @@ ScriptValue script_null = {
 };
 
 ScriptValue script_true = {
-    .r = 0.0f,
+    .r = 0.0F,
     .i = 1,
     .b = true,
     .s = "",
@@ -95,7 +95,7 @@ ScriptValue script_true = {
 };
 
 ScriptValue script_false = {
-    .r = 0.0f,
+    .r = 0.0F,
     .i = 0,
     .b = false,
     .s = "",
@@ -1087,24 +1087,28 @@ emb_string(EmbString s, const char *str)
     s[MAX_STRING_LENGTH-1] = 0;
 }
 
-/* . */
+/* Tests if EmbString matches a fixed string, often from compiled-in program
+ * data.
+ */
 int
 string_equal(EmbString a, const char *b)
 {
     return !string_compare(a, b);
 }
 
-/* . */
+/* Compares two strings in a similar way to strcmp, however it is capped at
+ * the MAX_STRING_LENGTH.
+ */
 int
 string_compare(EmbString a, const char *b)
 {
     for (int i=0; i<MAX_STRING_LENGTH; i++) {
         char c = a[i] - b[i];
-        if (!a[i]) {
-            return 0;
-        }
         if (c) {
             return c;            
+        }
+        if (!a[i]) {
+            return 0;
         }
     }
     /* Reached end of string so we should ensure that the variable string is
@@ -1114,16 +1118,22 @@ string_compare(EmbString a, const char *b)
     return 1;
 }
 
-#if 0
-/* . */
+/* . 
 void
-string_copy(EmbString dst, EmbString src)
+string_copy(EmbString dst, const char *src)
 {
     for (int i=0; i<MAX_STRING_LENGTH; i++) {
         dst[i] = src[i];
+        if (!src[i]) {
+            return;
+        }
     }
+*/
+    /* Ensure there's a null terminaton regardless of string content. */
+/*
+    dst[MAX_STRING_LENGTH-1] = 0;
 }
-#endif
+*/
 
 /* . */
 int
@@ -1138,5 +1148,36 @@ string_list_contains(EmbStringTable list, EmbString entry)
         }
     }
     return 0;
+}
+
+/* . */
+void
+hide_unimplemented(void)
+{
+    debug_message("hide_unimplemented()");
+}
+
+/* . */
+bool
+validFileFormat(EmbString fileName)
+{
+    if (emb_identify_format(fileName) >= 0) {
+        return true;
+    }
+    return false;
+}
+
+/* . */
+int
+get_id(EmbStringTable data, EmbString label)
+{
+    int id;
+    int n = string_array_length(data);
+    for (id=0; id<n; id++) {
+        if (string_equal(data[id], label)) {
+            return id;
+        }
+    }
+    return -1;
 }
 

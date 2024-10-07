@@ -107,10 +107,45 @@ class UndoEditor;
 class Document;
 class CmdPromptInput;
 
+extern "C" {
+extern Editor general_editor_data[];
+extern Editor geometry_arc_editor_data[];
+extern Editor misc_arc_editor_data[];
+extern Editor geometry_block_editor_data[];
+extern Editor geometry_circle_editor_data[];
+extern Editor geometry_dim_aligned_editor_data[];
+extern Editor geometry_dim_angular_editor_data[];
+extern Editor geometry_dim_arc_length_editor_data[];
+extern Editor geometry_dim_diameter_editor_data[];
+extern Editor geometry_dim_leader_editor_data[];
+extern Editor geometry_dim_linear_editor_data[];
+extern Editor geometry_dim_ordinate_editor_data[];
+extern Editor geometry_dim_radius_editor_data[];
+extern Editor geometry_ellipse_editor_data[];
+extern Editor geometry_image_editor_data[];
+extern Editor misc_image_editor_data[];
+extern Editor geometry_infinite_line_editor_data[];
+extern Editor geometry_line_editor_data[];
+extern Editor geometry_path_editor_data[];
+extern Editor misc_path_editor_data[];
+extern Editor geometry_point_editor_data[];
+extern Editor geometry_polygon_editor_data[];
+extern Editor geometry_polyline_editor_data[];
+extern Editor misc_polyline_editor_data[];
+extern Editor geometry_ray_editor_data[];
+extern Editor geometry_rectangle_editor_data[];
+extern Editor geometry_text_multi_editor_data[];
+extern Editor text_text_single_editor_data[];
+extern Editor geometry_text_single_editor_data[];
+extern Editor misc_text_single_editor_data[];
+}
+
 #include <chrono>
 #include <thread>
 
 #define NUMBINS 10
+
+QString promptHistoryData;
 
 /* Could initialise all documents to NULL rather than having a seperate memory
  * usage array?
@@ -200,56 +235,13 @@ std::unordered_map<int, int> key_map = {
 QToolButton* statusBarButtons[N_SB_BUTTONS];
 QLabel* statusBarMouseCoord;
 
-QStringList button_list = {
-    "SNAP",
-    "GRID",
-    "RULER",
-    "ORTHO",
-    "POLAR",
-    "QSNAP",
-    "QTRACK",
-    "LWT"
-};
-QGroupBox* createGroupBox__(const char *label, const char *name, Editor editor_data[]);
+QGroupBox* create_group_box(const char *label, const char *name, Editor editor_data[]);
 
 std::unordered_map<QString, QGroupBox*> group_boxes;
 std::unordered_map<QString, QToolButton*> tool_buttons;
 std::unordered_map<QString, QLineEdit*> line_edits;
 std::unordered_map<QString, QComboBox*> combo_boxes;
 QComboBox* comboBoxSelected;
-
-QStringList group_box_list = {
-    "General",
-    "GeometryArc",
-    "MiscArc",
-    "GeometryBlock",
-    "GeometryCircle",
-    "GeometryDimAligned",
-    "GeometryDimAngular",
-    "GeometryDimArcLength",
-    "GeometryDimDiameter",
-    "GeometryDimLeader",
-    "GeometryDimLinear",
-    "GeometryDimOrdinate",
-    "GeometryDimRadius",
-    "GeometryEllipse",
-    "GeometryImage",
-    "MiscImage",
-    "GeometryInfiniteLine",
-    "GeometryLine",
-    "GeometryPath",
-    "MiscPath",
-    "GeometryPoint",
-    "GeometryPolygon",
-    "GeometryPolyline",
-    "MiscPolyline",
-    "GeometryRay",
-    "GeometryRectangle",
-    "GeometryTextMulti",
-    "TextTextSingle",
-    "GeometryTextSingle",
-    "MiscTextSingle"
-};
 
 QWidget* focusWidget_;
 
@@ -396,9 +388,9 @@ QList<QGraphicsItem*> doc_create_object_list(int32_t doc, QList<QGraphicsItem*> 
 void doc_start_gripping(int32_t doc, Object* obj);
 void doc_stop_gripping(int32_t doc, bool accept = false);
 
-void doc_add_object(int32_t doc, Object* obj);
-void doc_delete_object(int32_t doc, Object* obj);
-void doc_vulcanize_object(int32_t doc, Object* obj);
+void doc_add_object(int32_t doc, uint32_t obj);
+void doc_delete_object(int32_t doc, uint32_t obj);
+void doc_vulcanize_object(int32_t doc, uint32_t obj);
 
 void textFontSelectorCurrentFontChanged(const QFont& font);
 
@@ -478,7 +470,7 @@ public:
     Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
     ~Document();
 
-    DocumentData data;
+    DocumentData *data;
 
     std::unordered_map<int64_t, QGraphicsItem*> hashDeletedObjects;
     QList<int64_t> spareRubberList;
@@ -912,74 +904,10 @@ platformString(void)
 {
     char message[MAX_STRING_LENGTH];
     /* TODO: Append QSysInfo to string where applicable. */
-    QString os;
-    #if   defined(Q_OS_AIX)
-    os = "AIX";
-    #elif defined(Q_OS_BSD4)
-    os = "BSD 4.4";
-    #elif defined(Q_OS_BSDI)
-    os = "BSD/OS";
-    #elif defined(Q_OS_CYGWIN)
-    os = "Cygwin";
-    #elif defined(Q_OS_DARWIN)
-    os = "Mac OS";
-    #elif defined(Q_OS_DGUX)
-    os = "DG/UX";
-    #elif defined(Q_OS_DYNIX)
-    os = "DYNIX/ptx";
-    #elif defined(Q_OS_FREEBSD)
-    os = "FreeBSD";
-    #elif defined(Q_OS_HPUX)
-    os = "HP-UX";
-    #elif defined(Q_OS_HURD)
-    os = "GNU Hurd";
-    #elif defined(Q_OS_IRIX)
-    os = "SGI Irix";
-    #elif defined(Q_OS_LINUX)
-    os = "Linux";
-    #elif defined(Q_OS_LYNX)
-    os = "LynxOS";
-    #elif defined(Q_OS_MAC)
-    os = "Mac OS";
-    #elif defined(Q_OS_MSDOS)
-    os = "MS-DOS";
-    #elif defined(Q_OS_NETBSD)
-    os = "NetBSD";
-    #elif defined(Q_OS_OS2)
-    os = "OS/2";
-    #elif defined(Q_OS_OPENBSD)
-    os = "OpenBSD";
-    #elif defined(Q_OS_OS2EMX)
-    os = "XFree86 on OS/2";
-    #elif defined(Q_OS_OSF)
-    os = "HP Tru64 UNIX";
-    #elif defined(Q_OS_QNX)
-    os = "QNX Neutrino";
-    #elif defined(Q_OS_RELIANT)
-    os = "Reliant UNIX";
-    #elif defined(Q_OS_SCO)
-    os = "SCO OpenServer 5";
-    #elif defined(Q_OS_SOLARIS)
-    os = "Sun Solaris";
-    #elif defined(Q_OS_SYMBIAN)
-    os = "Symbian";
-    #elif defined(Q_OS_ULTRIX)
-    os = "DEC Ultrix";
-    #elif defined(Q_OS_UNIX)
-    os = "UNIX BSD/SYSV";
-    #elif defined(Q_OS_UNIXWARE)
-    os = "UnixWare";
-    #elif defined(Q_OS_WIN32)
-    os = "Windows";
-    #elif defined(Q_OS_WINCE)
-    os = "Windows CE";
-    #endif
-    sprintf(message, "Platform: %s", qPrintable(os));
+    sprintf(message, "Platform: %s", os);
     debug_message(message);
-    return os;
+    return QString(os);
 }
-
-QString promptHistoryData;
 
 /* . */
 void
@@ -1492,7 +1420,7 @@ obj_set_rotation(uint32_t id, double rotation)
 
 /* . */
 void
-set_CursorShape(char shape[MAX_STRING_LENGTH])
+set_cursor_shape(EmbString shape)
 {
     int32_t doc_index = activeDocument();
     Document *doc = documents[doc_index];
@@ -1750,10 +1678,10 @@ UndoableCommand::undo()
 {
     switch (data.type) {
     case ACTION_ADD:
-        doc_delete_object(data.doc, object);
+        doc_delete_object(data.doc, object->core->objID);
         break;
     case ACTION_DELETE:
-        doc_add_object(data.doc, object);
+        doc_add_object(data.doc, object->core->objID);
         break;
     case ACTION_MOVE:
         object->moveBy(-data.delta.x, -data.delta.y);
@@ -1793,10 +1721,10 @@ UndoableCommand::redo()
 {
     switch (data.type) {
     case ACTION_ADD:
-        doc_add_object(data.doc, object);
+        doc_add_object(data.doc, object->core->objID);
         break;
     case ACTION_DELETE:
-        doc_delete_object(data.doc, object);
+        doc_delete_object(data.doc, object->core->objID);
         break;
     case ACTION_MOVE:
         object->moveBy(data.delta.x, data.delta.y);
@@ -3196,30 +3124,31 @@ void
 obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
 {
     EmbVector delta = emb_vector_subtract(after, before);
-    switch (obj->core->geometry->type) {
+    ObjectCore *core = obj->core;
+    switch (core->geometry->type) {
     case EMB_ARC: {
         todo("gripEdit() for ArcObject.");
         break;
     }
     case EMB_CIRCLE: {
-        if (emb_approx(before, obj_center(obj->core))) {
+        if (emb_approx(before, obj_center(core))) {
             obj->moveBy(delta.x, delta.y);
         }
         else {
-            double length = emb_vector_distance(obj_center(obj->core), after);
-            emb_set_radius(obj->core->geometry, length);
+            double length = emb_vector_distance(obj_center(core), after);
+            emb_set_radius(core->geometry, length);
         }
         break;
     }
     case EMB_DIM_LEADER:
     case EMB_LINE: {
-        if (emb_approx(before, obj_end_point_1(obj->core))) {
-            obj_set_end_point_1(obj->core, after);
+        if (emb_approx(before, obj_end_point_1(core))) {
+            obj_set_end_point_1(core, after);
         }
-        else if (emb_approx(before, obj_end_point_2(obj->core))) {
-            obj_set_end_point_2(obj->core, after);
+        else if (emb_approx(before, obj_end_point_2(core))) {
+            obj_set_end_point_2(core, after);
         }
-        else if (emb_approx(before, obj_mid_point(obj->core))) {
+        else if (emb_approx(before, obj_mid_point(core))) {
             obj->moveBy(delta.x, delta.y);
         }
         break;
@@ -3230,23 +3159,23 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
     }
     case EMB_IMAGE:
     case EMB_RECT: {
-        double height = emb_height(obj->core->geometry);
-        double width = emb_width(obj->core->geometry);
-        EmbVector tl = obj_top_left(obj->core);
-        int obj_id = obj->core->objID;
+        double height = emb_height(core->geometry);
+        double width = emb_width(core->geometry);
+        EmbVector tl = obj_top_left(core);
+        int obj_id = core->objID;
         if (emb_approx(before, tl)) {
             obj_set_rect(obj_id, after.x, after.y,
                 width - delta.x, height - delta.y);
         }
-        else if (emb_approx(before, obj_top_right(obj->core))) {
+        else if (emb_approx(before, obj_top_right(core))) {
             obj_set_rect(obj_id, tl.x, tl.y+delta.y,
                 width + delta.x, height - delta.y);
         }
-        else if (emb_approx(before, obj_bottom_left(obj->core))) {
+        else if (emb_approx(before, obj_bottom_left(core))) {
             obj_set_rect(obj_id, tl.x+delta.x, tl.y,
                 width - delta.x, height + delta.y);
         }
-        else if (emb_approx(before, obj_bottom_right(obj->core))) {
+        else if (emb_approx(before, obj_bottom_right(core))) {
             obj_set_rect(obj_id, tl.x, tl.y,
                 width + delta.x, height + delta.y);
         }
@@ -3258,12 +3187,12 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
     }
     case EMB_POLYGON:
     case EMB_POLYLINE: {
-        obj->core->gripIndex = obj_find_index(obj, before);
-        if (obj->core->gripIndex == -1) {
+        core->gripIndex = obj_find_index(obj, before);
+        if (core->gripIndex == -1) {
             return;
         }
         EmbVector a = map_from_scene(obj, after);
-        obj->normalPath.setElementPositionAt(obj->core->gripIndex, a.x, a.y);
+        obj->normalPath.setElementPositionAt(core->gripIndex, a.x, a.y);
         obj_update_path_r(obj, obj->normalPath);
         obj->core->gripIndex = -1;
         break;
@@ -3271,7 +3200,7 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
     case EMB_TEXT_SINGLE:
     case EMB_POINT:
     default: {
-        if (emb_approx(before, obj_pos(obj->core))) {
+        if (emb_approx(before, obj_pos(core))) {
             obj->moveBy(delta.x, delta.y);
         }
         break;
@@ -3457,7 +3386,7 @@ Document::Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : 
 /* . */
 Document::~Document()
 {
-    document_memory[data.id] = false;
+    document_memory[data->id] = false;
 
     /* Prevent memory leaks by deleting any objects that were removed from the scene */
     for (const auto& [key, value] : hashDeletedObjects) {
@@ -3475,29 +3404,30 @@ Document*
 create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
 {
     Document* doc = new Document(mw, theScene, parent);
-    doc->data.id = numOfDocs;
-    documents[doc->data.id] = doc;
-    doc_init(doc->data.id);
+    documents[numOfDocs] = doc;
+    doc->data = (DocumentData*)malloc(sizeof(DocumentData));
+    doc_init(numOfDocs);
+    doc->data->id = numOfDocs;
     doc->gscene = theScene;
-    document_memory[doc->data.id] = true;
+    document_memory[doc->data->id] = true;
 
-    doc_set_cross_hair_color(doc->data.id, get_int(DISPLAY_CROSSHAIR_COLOR));
-    doc_set_cross_hair_size(doc->data.id, get_int(DISPLAY_CROSSHAIR_PERCENT));
-    doc_set_grid_color(doc->data.id, get_int(GRID_COLOR));
+    doc_set_cross_hair_color(doc->data->id, get_int(DISPLAY_CROSSHAIR_COLOR));
+    doc_set_cross_hair_size(doc->data->id, get_int(DISPLAY_CROSSHAIR_PERCENT));
+    doc_set_grid_color(doc->data->id, get_int(GRID_COLOR));
 
-    doc_toggle_ruler(doc->data.id, get_bool(RULER_SHOW_ON_LOAD));
-    doc_toggle_real(doc->data.id, true);
+    doc_toggle_ruler(doc->data->id, get_bool(RULER_SHOW_ON_LOAD));
+    doc_toggle_real(doc->data->id, true);
     /* TODO: load this from file, else settings with default being true. */
 
     if (get_bool(GRID_SHOW_ON_LOAD)) {
-        doc_create_grid(doc->data.id, get_str(GRID_TYPE));
+        doc_create_grid(doc->data->id, get_str(GRID_TYPE));
     }
     else {
-        doc_create_grid(doc->data.id, "");
+        doc_create_grid(doc->data->id, "");
     }
 
-    doc_show_scroll_bars(doc->data.id, get_bool(DISPLAY_SHOW_SCROLLBARS));
-    doc_set_corner_button(doc->data.id);
+    doc_show_scroll_bars(doc->data->id, get_bool(DISPLAY_SHOW_SCROLLBARS));
+    doc_set_corner_button(doc->data->id);
 
     doc->setFrameShape(QFrame::NoFrame);
 
@@ -3527,7 +3457,7 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->installEventFilter(doc);
 
     doc->setMouseTracking(true);
-    doc_set_background_color(doc->data.id, get_int(DISPLAY_BG_COLOR));
+    doc_set_background_color(doc->data->id, get_int(DISPLAY_BG_COLOR));
     /* TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png")); */
 
     // FIXME: QObject::connect(doc->gscene, SIGNAL(selectionChanged()), doc_index,
@@ -3613,23 +3543,23 @@ doc_remove_item(int32_t doc, uint32_t id)
 
 /* . */
 void
-doc_add_object(int32_t doc, Object* obj)
+doc_add_object(int32_t doc, uint32_t obj)
 {
-    doc_add_item(doc, obj->core->objID);
+    doc_add_item(doc, obj);
     doc_update(doc);
-    documents[doc]->hashDeletedObjects.erase(obj->core->objID);
+    documents[doc]->hashDeletedObjects.erase(obj);
 }
 
 /* NOTE: We really just remove the objects from the scene. Deletion actually
  * occurs in the destructor.
  */
 void
-doc_delete_object(int32_t doc, Object* obj)
+doc_delete_object(int32_t doc, uint32_t obj)
 {
-    obj->setSelected(false);
-    doc_remove_item(doc, obj->core->objID);
+    object_list[obj]->setSelected(false);
+    doc_remove_item(doc, obj);
     doc_update(doc);
-    documents[doc]->hashDeletedObjects[obj->core->objID] = obj;
+    documents[doc]->hashDeletedObjects[obj] = object_list[obj];
 }
 
 /* . */
@@ -3709,7 +3639,7 @@ doc_vulcanize_rubber_room(int32_t doc)
     foreach(QGraphicsItem* item, documents[doc]->rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            doc_vulcanize_object(doc, base);
+            doc_vulcanize_object(doc, base->core->objID);
         }
     }
     documents[doc]->rubberRoomList.clear();
@@ -3718,20 +3648,13 @@ doc_vulcanize_rubber_room(int32_t doc)
 
 /* . */
 void
-doc_vulcanize_object(int32_t doc, Object* obj)
+doc_vulcanize_object(int32_t doc, uint32_t obj)
 {
-    if (!obj) {
-        return;
-    }
     /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
-    documents[doc]->gscene->removeItem(obj);
-    obj->vulcanize();
+    documents[doc]->gscene->removeItem(object_list[obj]);
+    object_list[obj]->vulcanize();
 
-    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME,
-        obj, doc, 0);
-    if (cmd) {
-        documents[doc]->undoStack->push(cmd);
-    }
+    undoable_add(doc, obj, object_list[obj]->core->OBJ_NAME);
 }
 
 /* . */
@@ -3758,7 +3681,7 @@ doc_clear_rubber_room(int32_t doc)
                     delete item;
                 }
                 else {
-                    doc_vulcanize_object(doc, base);
+                    doc_vulcanize_object(doc, base->core->objID);
                 }
             }
             else {
@@ -4044,11 +3967,11 @@ doc_create_grid_iso(int32_t doc)
     }
 }
 
-/* . */
+/* For C access to data. */
 DocumentData *
 doc_data(int32_t doc)
 {
-    return &(documents[doc]->data);
+    return documents[doc]->data;
 }
 
 /* . */
@@ -4128,7 +4051,7 @@ draw_spline(QPainter* painter, EmbSpline spline)
 void
 Document::drawBackground(QPainter* painter, const QRectF& rect)
 {
-    int32_t doc = data.id;
+    int32_t doc = data->id;
     DocumentData *data = doc_data(doc);
     painter->fillRect(rect, backgroundBrush());
 
@@ -4188,7 +4111,7 @@ Document::drawBackground(QPainter* painter, const QRectF& rect)
 void
 Document::draw_rulers(QPainter* painter, const QRectF& rect)
 {
-    int32_t doc = data.id;
+    int32_t doc = data->id;
     DocumentData *data = doc_data(doc);
 
     int vw = width(); /* View Width */
@@ -4278,9 +4201,9 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
     rulerPen.setCosmetic(true);
     painter->setPen(rulerPen);
     painter->fillRect(QRectF(origin.x, origin.y, ruler_h.w, ruler_h.h),
-        documents[doc]->data.rulerColor);
+        documents[doc]->data->rulerColor);
     painter->fillRect(QRectF(origin.x, origin.y, ruler_v.w, ruler_v.h),
-        documents[doc]->data.rulerColor);
+        documents[doc]->data->rulerColor);
 
     int xFlow, xStart, yFlow, yStart;
     if (willUnderflowInt32(origin.x, unit)) {
@@ -4411,14 +4334,14 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
 
     painter->drawLines(qlines);
     painter->fillRect(QRectF(origin.x, origin.y, ruler_v.w, ruler_h.h),
-        documents[doc]->data.rulerColor);
+        documents[doc]->data->rulerColor);
 }
 
 /* . */
 void
 Document::drawForeground(QPainter* painter, const QRectF& rect)
 {
-    int32_t doc = data.id;
+    int32_t doc = data->id;
     DocumentData *data = doc_data(doc);
     /* Draw grip points for all selected objects */
 
@@ -4736,7 +4659,7 @@ doc_zoom_selected(int32_t doc_id)
     QUndoStack* stack = activeUndoStack();
     if (stack) {
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected",
-            doc->data.id, 0);
+            doc->data->id, 0);
         stack->push(cmd);
     }
 
@@ -4876,7 +4799,7 @@ Document::mouseDoubleClickEvent(QMouseEvent* event)
 void
 Document::mousePressEvent(QMouseEvent* event)
 {
-    int32_t doc = data.id;
+    int32_t doc = data->id;
     DocumentData *data = doc_data(doc);
     doc_update_mouse_coords(doc, event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
@@ -5107,7 +5030,7 @@ doc_align_scene_point_with_view_point(int32_t doc, EmbVector scenePoint, EmbVect
 void
 Document::mouseMoveEvent(QMouseEvent* event)
 {
-    int32_t doc = data.id;
+    int32_t doc = data->id;
     DocumentData *data = doc_data(doc);
     doc_update_mouse_coords(doc, event->position().x(), event->position().y());
     data->movePoint = to_emb_vector(event->pos());
@@ -5222,25 +5145,25 @@ Document::mouseMoveEvent(QMouseEvent* event)
 void
 Document::mouseReleaseEvent(QMouseEvent* event)
 {
-    doc_update_mouse_coords(data.id, event->position().x(), event->position().y());
+    doc_update_mouse_coords(data->id, event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
-        if (data.movingActive) {
-            doc_preview_off(data.id);
-            EmbVector delta = emb_vector_subtract(data.sceneMousePoint,
-                data.scenePressPoint);
+        if (data->movingActive) {
+            doc_preview_off(data->id);
+            EmbVector delta = emb_vector_subtract(data->sceneMousePoint,
+                data->scenePressPoint);
             /* Ensure that moving only happens if the mouse has moved. */
             if (emb_vector_distance(delta, emb_vector(0.0, 0.0)) >= 1) {
-                doc_move_selected(data.id, delta);
+                doc_move_selected(data->id, delta);
             }
-            data.movingActive = false;
+            data->movingActive = false;
         }
         event->accept();
     }
     if (event->button() == Qt::MiddleButton) {
-        data.panningActive = false;
+        data->panningActive = false;
         /* The Undo command will record the spot where the pan completed. */
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", data.id, 0);
-        documents[data.id]->undoStack->push(cmd);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", data->id, 0);
+        documents[data->id]->undoStack->push(cmd);
         event->accept();
     }
     if (event->button() == Qt::XButton1) {
@@ -5253,7 +5176,7 @@ Document::mouseReleaseEvent(QMouseEvent* event)
         redo_command(); /* TODO: Make this customizable */
         event->accept();
     }
-    doc_update(data.id);
+    doc_update(data->id);
 }
 
 /* . */
@@ -5263,14 +5186,14 @@ Document::wheelEvent(QWheelEvent* event)
     // FIXME: int zoomDir = event->delta();
     QPoint mousePoint = event->position().toPoint();
 
-    doc_update_mouse_coords(data.id, mousePoint.x(), mousePoint.y());
+    doc_update_mouse_coords(data->id, mousePoint.x(), mousePoint.y());
     /* FIXME:
     if (zoomDir > 0) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", data.id, 0);
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", data->id, 0);
         documents[doc]->undoStack->push(cmd);
     }
     else {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", data.id, 0);
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", data->id, 0);
         documents[doc]->undoStack->push(cmd);
     }
     */
@@ -5322,18 +5245,17 @@ void
 Document::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu;
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
-    bool selectionEmpty = itemList.isEmpty();
+    bool selectionEmpty = (data->n_selected == 0);
 
-    for (int i = 0; i < itemList.size(); i++) {
-        Object *obj = static_cast<Object *>(itemList.at(i));
+    for (int i = 0; i < data->n_selected; i++) {
+        Object *obj = object_list[data->selected_items[i]];
         if (obj->core->geometry->type != OBJ_NULL) {
             selectionEmpty = false;
             break;
         }
     }
 
-    if (data.pastingActive) {
+    if (data->pastingActive) {
         return;
     }
     if (!cmdActive) {
@@ -5342,7 +5264,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if (data.zoomWindowActive) {
+    if (data->zoomWindowActive) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
@@ -5445,38 +5367,58 @@ doc_stop_gripping(int32_t doc, bool accept)
 
 /* . */
 void
-doc_clear_selection(int32_t doc)
+undoable_add(int32_t doc, uint32_t obj, EmbString label)
 {
-    // FIXME: documents[doc]->gscene->clearSelection();
+    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, label,
+        object_list[obj], doc, 0);
+    if (cmd) {
+        documents[doc]->undoStack->push(cmd);
+    }
 }
 
 /* . */
 void
-doc_delete_selected(int32_t doc)
+undoable_delete(int32_t doc, uint32_t obj, EmbString label)
 {
-    DocumentData *data = doc_data(doc);
-    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
-    int numSelected = itemList.size();
-    if (numSelected > 1) {
-        documents[doc]->undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
+    UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, label,
+        object_list[obj], doc, 0);
+    if (cmd) {
+        documents[doc]->undoStack->push(cmd);
     }
-    for (int i = 0; i < itemList.size(); i++) {
-        Object* base = static_cast<Object*>(itemList.at(i));
-        if (base) {
-            if (base->core->geometry->type != OBJ_NULL) {
-                char label[MAX_STRING_LENGTH];
-                sprintf(label, "%s%s", translate("Delete 1 "), base->core->OBJ_NAME);
-                UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, label,
-                    base, doc, 0);
-                if (cmd) {
-                    documents[doc]->undoStack->push(cmd);
-                }
-            }
-        }
+}
+
+/* . */
+void
+undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString s)
+{
+    UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, s,
+        object_list[obj], doc, 0);
+    if (cmd) {
+        documents[doc]->undoStack->push(cmd);
     }
-    if (numSelected > 1) {
-        documents[doc]->undoStack->endMacro();
+}
+
+/* . */
+void
+undoable_scale(int doc, uint32_t obj, EmbVector v, double factor, EmbString msg)
+{
+    UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, msg,
+        object_list[obj], doc, 0);
+    if (cmd) {
+        documents[doc]->undoStack->push(cmd);
     }
+}
+
+void
+line_edit_clear(const char *key)
+{
+    line_edits[key]->clear();
+}
+
+void
+combo_box_clear(const char *key)
+{
+    combo_boxes[key]->clear();
 }
 
 /* . */
@@ -5554,131 +5496,25 @@ doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list)
 
 /* . */
 void
-doc_move_selected(int32_t doc, EmbVector delta)
+undoable_move(int32_t doc, uint32_t obj, EmbVector delta, EmbString msg)
 {
-    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
-    int numSelected = itemList.size();
-    if (numSelected > 1) {
-        documents[doc]->undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
+    UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, delta, msg,
+        object_list[obj], doc, 0);
+    if (cmd) {
+        documents[doc]->undoStack->push(cmd);
     }
-    foreach(QGraphicsItem* item, itemList) {
-        Object* base = static_cast<Object*>(item);
-        if (base) {
-            char msg[MAX_STRING_LENGTH];
-            sprintf(msg, "%s%s", translate("Move 1 "), base->core->OBJ_NAME);
-            UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, delta, msg,
-                base, doc, 0);
-            if (cmd) {
-                documents[doc]->undoStack->push(cmd);
-            }
-        }
-    }
-    if (numSelected > 1) {
-        documents[doc]->undoStack->endMacro();
-    }
-
-    /* Always clear the selection after a move. */
-    documents[doc]->gscene->clearSelection();
 }
 
 /* . */
 void
-doc_rotate_selected(int32_t doc, double x, double y, double rot)
+undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
+    EmbString msg)
 {
-    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
-    int numSelected = itemList.size();
-    if (numSelected > 1) {
-        documents[doc]->undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
+    UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, start, end, msg,
+        object_list[obj], doc, 0);
+    if (cmd) {
+        documents[doc]->undoStack->push(cmd);
     }
-    foreach(QGraphicsItem* item, itemList) {
-        Object* base = static_cast<Object*>(item);
-        if (base) {
-            QString s = translate("Rotate 1 ");
-            s += base->core->OBJ_NAME;
-            EmbVector v = emb_vector(x, y);
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, s,
-                base, doc, 0);
-            if (cmd) {
-                documents[doc]->undoStack->push(cmd);
-            }
-        }
-    }
-    if (numSelected > 1) {
-        documents[doc]->undoStack->endMacro();
-    }
-
-    /* Always clear the selection after a rotate. */
-    documents[doc]->gscene->clearSelection();
-}
-
-/* . */
-void
-doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2)
-{
-    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
-    int numSelected = itemList.size();
-    if (numSelected > 1)
-        documents[doc]->undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
-    foreach(QGraphicsItem* item, itemList) {
-        Object* base = static_cast<Object*>(item);
-        if (base) {
-            EmbVector start, end;
-            start = emb_vector(x1, y1);
-            end = emb_vector(x2, y2);
-            QString s = translate("Mirror 1 ");
-            s += base->core->OBJ_NAME;
-            UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, start, end, s,
-                base, doc, 0);
-            if (cmd) {
-                documents[doc]->undoStack->push(cmd);
-            }
-        }
-    }
-    if (numSelected > 1) {
-        documents[doc]->undoStack->endMacro();
-    }
-
-    /* Always clear the selection after a mirror. */
-    documents[doc]->gscene->clearSelection();
-}
-
-/* . */
-void
-doc_scale_selected(int32_t doc, double x, double y, double factor)
-{
-    QList<QGraphicsItem*> itemList = documents[doc]->gscene->selectedItems();
-    int numSelected = doc_num_selected(doc);
-    if (numSelected > 1) {
-        EmbString macro_name;
-        sprintf(macro_name, "%s %d", translate("Scale"), numSelected);
-        doc_begin_macro(doc, macro_name);
-    }
-    foreach(QGraphicsItem* item, itemList) {
-        Object* base = static_cast<Object*>(item);
-        if (base) {
-            EmbVector v = emb_vector(x, y);
-            char msg[MAX_STRING_LENGTH];
-            sprintf(msg, "%s%s", translate("Scale 1 "), base->core->OBJ_NAME);
-            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, msg,
-                base, doc, 0);
-            if (cmd) {
-                documents[doc]->undoStack->push(cmd);
-            }
-        }
-    }
-    if (numSelected > 1) {
-        doc_end_macro(doc);
-    }
-
-    /* Always clear the selection after a scale. */
-    documents[doc]->gscene->clearSelection();
-}
-
-/* . */
-int
-doc_num_selected(int32_t doc)
-{
-    return documents[doc]->gscene->selectedItems().size();
 }
 
 /* . */
@@ -5895,12 +5731,12 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         int32_t doc = activeDocument();
         if (doc >= 0) {
             QAction* enableRealAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
-            enableRealAction->setEnabled(!documents[doc]->data.enableReal);
+            enableRealAction->setEnabled(!documents[doc]->data->enableReal);
             QObject::connect(enableRealAction, &QAction::triggered, _main, enableReal);
             menu.addAction(enableRealAction);
 
             QAction* disableRealAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
-            disableRealAction->setEnabled(documents[doc]->data.enableReal);
+            disableRealAction->setEnabled(documents[doc]->data->enableReal);
             QObject::connect(disableRealAction, &QAction::triggered, _main, disableReal);
             menu.addAction(disableRealAction);
         }
@@ -6448,12 +6284,12 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     /* FIXME:. */
     doc_index = numOfDocs;
     documents[doc_index] = create_doc(_main, gscene, this);
+    DocumentData *data = documents[doc_index]->data;
 
-    documents[doc_index]->data.myIndex = theIndex;
-    documents[doc_index]->data.fileWasLoaded = false;
-    sprintf(documents[doc_index]->data.curFile,
-        "Untitled%d.dst", theIndex);
-    this->setWindowTitle(documents[doc_index]->data.curFile);
+    data->myIndex = theIndex;
+    data->fileWasLoaded = false;
+    sprintf(data->curFile, "Untitled%d.dst", theIndex);
+    this->setWindowTitle(data->curFile);
 
     setWidget(documents[doc_index]);
 
@@ -6468,11 +6304,6 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     promptHistoryData = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
     setHistory(promptHistoryData);
 
-    strcpy(documents[doc_index]->data.curLayer, "0");
-    documents[doc_index]->data.curColor = 0; /* TODO: color ByLayer */
-    strcpy(documents[doc_index]->data.curLineType, "ByLayer");
-    strcpy(documents[doc_index]->data.curLineWeight, "ByLayer");
-
     /* Due to strange Qt4.2.3 feature the child window icon is not drawn
      * in the main menu if showMaximized() is called for a non-visible child window
      * Therefore calling show() first...
@@ -6484,26 +6315,21 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     setFocus();
 
     onWindowActivated();
-
-    documents[doc_index]->data.pattern = emb_pattern_create();
-    if (!documents[doc_index]->data.pattern) {
-        printf("Could not allocate memory for embroidery pattern\n");
-        exit(1);
-    }
 }
 
 MdiWindow::~MdiWindow()
 {
     debug_message("MdiWindow Destructor()");
-    emb_pattern_free(documents[doc_index]->data.pattern);
+    emb_pattern_free(documents[doc_index]->data->pattern);
 }
 
 bool
 MdiWindow::loadFile(const char *fileName)
 {
     debug_message("MdiWindow loadFile()");
+    DocumentData *data = documents[doc_index]->data;
 
-    QRgb tmpColor = documents[doc_index]->data.curColor;
+    QRgb tmpColor = data->curColor;
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -6518,7 +6344,7 @@ MdiWindow::loadFile(const char *fileName)
     debug_message("ext: ");
     debug_message((char*)qPrintable(ext));
 
-    EmbPattern *pattern = documents[doc_index]->data.pattern;
+    EmbPattern *pattern = data->pattern;
 
     /* Read */
     int format = EMB_FORMAT_CSV; /* emb_identify_format(qPrintable(fileName)); */
@@ -6527,17 +6353,17 @@ MdiWindow::loadFile(const char *fileName)
         debug_message((char*)qPrintable(fileName));
         restore_cursor();
         warning_box(translate("Error reading pattern"),
-            qPrintable(tr("Unsupported read file type: ") + qPrintable(fileName)));
+            qPrintable(tr("Unsupported read file type: ") + fileName));
         return false;
     }
 
-    int readSuccessful = emb_pattern_read(documents[doc_index]->data.pattern, qPrintable(fileName), format);
+    int readSuccessful = emb_pattern_read(data->pattern, fileName, format);
     if (!readSuccessful) {
         debug_message("Reading file was unsuccessful:");
-        debug_message((char*)qPrintable(fileName));
+        debug_message(fileName);
         restore_cursor();
         warning_box(translate("Error reading pattern"),
-            qPrintable(tr("Reading file was unsuccessful: ") + qPrintable(fileName)));
+            qPrintable(tr("Reading file was unsuccessful: ") + fileName));
         return false;
     }
 
@@ -6570,11 +6396,11 @@ MdiWindow::loadFile(const char *fileName)
     /* Clear the undo stack so it is not possible to undo past this point. */
     documents[doc_index]->undoStack->clear();
 
-    documents[doc_index]->data.curColor = tmpColor;
+    documents[doc_index]->data->curColor = tmpColor;
 
-    documents[doc_index]->data.fileWasLoaded = true;
-    setUndoCleanIcon(documents[doc_index]->data.fileWasLoaded);
-    return documents[doc_index]->data.fileWasLoaded;
+    documents[doc_index]->data->fileWasLoaded = true;
+    setUndoCleanIcon(documents[doc_index]->data->fileWasLoaded);
+    return documents[doc_index]->data->fileWasLoaded;
 }
 
 void
@@ -6634,7 +6460,7 @@ MdiWindow::saveBMC()
 void
 MdiWindow::setCurrentFile(QString fileName)
 {
-    strcpy(documents[doc_index]->data.curFile,
+    strcpy(documents[doc_index]->data->curFile,
         qPrintable(QFileInfo(fileName).canonicalFilePath()));
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
@@ -6643,7 +6469,7 @@ MdiWindow::setCurrentFile(QString fileName)
 QString
 MdiWindow::getShortCurrentFile()
 {
-    return QFileInfo(documents[doc_index]->data.curFile).fileName();
+    return QFileInfo(documents[doc_index]->data->curFile).fileName();
 }
 
 QString MdiWindow::fileExtension(QString  fileName)
@@ -7300,7 +7126,7 @@ QMenuBar *menuBar()
 {
     return _main->menuBar();
 }
-
+ 
 Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
 {
 }
@@ -7558,25 +7384,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setStatusBar(statusbar);
 
     createAllActions();
-
-    /* Do not allow the menus to be torn off.
-     * It's a pain in the ass to maintain.
-     */
-    debug_message("create all menus");
-
-    add_to_menu(MENU_FILE, file_menu);
-    add_to_menu(MENU_EDIT, edit_menu);
-    add_to_menu(MENU_VIEW, view_menu);
-    add_to_menu(MENU_DRAW, draw_menu);
-    add_to_menu(MENU_TOOLS, tools_menu);
-    add_to_menu(MENU_MODIFY, modify_menu);
-    add_to_menu(MENU_DIMENSION, dimension_menu);
-    add_to_menu(MENU_SANDBOX, sandbox_menu);
-//    add_to_menu(MENU_WINDOW, window_menu);
-    add_to_menu(MENU_HELP, help_menu);
-//    add_to_menu(MENU_RECENT, recent_menu);
-    add_to_menu(MENU_ZOOM, zoom_menu);
-    add_to_menu(MENU_PAN, pan_menu);
+    create_all_menus();
 
     for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
         menuBar()->addMenu(menu[i]);
@@ -7590,15 +7398,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     menu[MENU_RECENT]->setTearOffEnabled(false);
     menu[MENU_WINDOW]->setTearOffEnabled(false);
 
-    debug_message("create all toolbars");
-
-    add_to_toolbar(TOOLBAR_FILE, file_toolbar);
-    add_to_toolbar(TOOLBAR_EDIT, edit_toolbar);
-    add_to_toolbar(TOOLBAR_ZOOM, zoom_toolbar);
-    add_to_toolbar(TOOLBAR_PAN, pan_toolbar);
-    add_to_toolbar(TOOLBAR_VIEW, view_toolbar);
-    add_to_toolbar(TOOLBAR_ICON, icon_toolbar);
-    add_to_toolbar(TOOLBAR_HELP, help_toolbar);
+    create_all_toolbars();
 
     debug_message("createLayerToolbar()");
 
@@ -7988,7 +7788,7 @@ findMdiWindow(EmbString fileName)
     foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
         if (mdiWin) {
-            if (documents[mdiWin->doc_index]->data.curFile == canonicalFilePath) {
+            if (documents[mdiWin->doc_index]->data->curFile == canonicalFilePath) {
                 return subWindow;
             }
         }
@@ -8133,23 +7933,6 @@ update_interface()
 
 /* . */
 void
-hide_unimplemented(void)
-{
-    debug_message("hide_unimplemented()");
-}
-
-/* . */
-bool
-validFileFormat(EmbString fileName)
-{
-    if (emb_identify_format(fileName) >= 0) {
-        return true;
-    }
-    return false;
-}
-
-/* . */
-void
 loadFormats()
 {
     char stable, unstable;
@@ -8271,20 +8054,6 @@ get_action_by_icon(EmbString icon)
         }
     }
     return actionHash[ACTION_DO_NOTHING];
-}
-
-/* . */
-int
-get_id(EmbStringTable data, EmbString label)
-{
-    int id;
-    int n = string_array_length(data);
-    for (id=0; id<n; id++) {
-        if (string_equal(data[id], label)) {
-            return id;
-        }
-    }
-    return -1;
 }
 
 /* . */
@@ -8527,42 +8296,43 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
     hboxLayoutSelection->addWidget(createToolButtonPickAdd());
     widgetSelection->setLayout(hboxLayoutSelection);
 
-    createGroupBox__("General", "General", general_editor_data);
-    createGroupBox__("GeometryArc", "Geometry", geometry_arc_editor_data);
-    createGroupBox__("MiscArc", "Misc", misc_arc_editor_data);
-    createGroupBox__("GeometryBlock", "Geometry", geometry_block_editor_data);
-    createGroupBox__("GeometryCircle", "Geometry", geometry_circle_editor_data);
-    createGroupBox__("GeometryDimAligned", "Geometry", geometry_dim_aligned_editor_data);
-    createGroupBox__("GeometryDimAngular", "Geometry", geometry_dim_angular_editor_data);
-    createGroupBox__("GeometryDimArcLength", "Geometry", geometry_dim_arc_length_editor_data);
-    createGroupBox__("GeometryDimDiameter", "Geometry", geometry_dim_diameter_editor_data);
-    createGroupBox__("GeometryDimLeader", "Geometry", geometry_dim_leader_editor_data);
-    createGroupBox__("GeometryDimLinear", "Geometry", geometry_dim_linear_editor_data);
-    createGroupBox__("GeometryDimOrdinate", "Geometry", geometry_dim_ordinate_editor_data);
-    createGroupBox__("GeometryDimRadius", "Geometry", geometry_dim_radius_editor_data);
-    createGroupBox__("GeometryEllipse", "Geometry", geometry_ellipse_editor_data);
-    createGroupBox__("GeometryImage", "Geometry", geometry_image_editor_data);
-    createGroupBox__("MiscImage", "Misc", misc_image_editor_data);
-    createGroupBox__("GeometryInfiniteLine", "Geometry", geometry_infinite_line_editor_data);
-    createGroupBox__("GeometryLine", "Geometry", geometry_line_editor_data);
-    createGroupBox__("GeometryPath", "Geometry", geometry_path_editor_data);
-    createGroupBox__("MiscPath", "Misc", misc_path_editor_data);
-    createGroupBox__("GeometryPoint", "Geometry", geometry_point_editor_data);
-    createGroupBox__("GeometryPolygon", "Geometry", geometry_polygon_editor_data);
-    createGroupBox__("GeometryPolyline", "Geometry", geometry_polyline_editor_data);
-    createGroupBox__("MiscPolyline", "Misc", misc_polyline_editor_data);
-    createGroupBox__("GeometryRay", "Geometry", geometry_ray_editor_data);
-    createGroupBox__("GeometryRectangle", "Geometry", geometry_rectangle_editor_data);
-    createGroupBox__("GeometryTextMulti", "Geometry", geometry_text_multi_editor_data);
-    createGroupBox__("TextTextSingle", "Text", text_text_single_editor_data);
-    createGroupBox__("GeometryTextSingle", "Geometry", geometry_text_single_editor_data);
-    createGroupBox__("MiscTextSingle", "Misc", misc_text_single_editor_data);
+    create_group_box("General", "General", general_editor_data);
+    create_group_box("GeometryArc", "Geometry", geometry_arc_editor_data);
+    create_group_box("MiscArc", "Misc", misc_arc_editor_data);
+    create_group_box("GeometryBlock", "Geometry", geometry_block_editor_data);
+    create_group_box("GeometryCircle", "Geometry", geometry_circle_editor_data);
+    create_group_box("GeometryDimAligned", "Geometry", geometry_dim_aligned_editor_data);
+    create_group_box("GeometryDimAngular", "Geometry", geometry_dim_angular_editor_data);
+    create_group_box("GeometryDimArcLength", "Geometry", geometry_dim_arc_length_editor_data);
+    create_group_box("GeometryDimDiameter", "Geometry", geometry_dim_diameter_editor_data);
+    create_group_box("GeometryDimLeader", "Geometry", geometry_dim_leader_editor_data);
+    create_group_box("GeometryDimLinear", "Geometry", geometry_dim_linear_editor_data);
+    create_group_box("GeometryDimOrdinate", "Geometry", geometry_dim_ordinate_editor_data);
+    create_group_box("GeometryDimRadius", "Geometry", geometry_dim_radius_editor_data);
+    create_group_box("GeometryEllipse", "Geometry", geometry_ellipse_editor_data);
+    create_group_box("GeometryImage", "Geometry", geometry_image_editor_data);
+    create_group_box("MiscImage", "Misc", misc_image_editor_data);
+    create_group_box("GeometryInfiniteLine", "Geometry", geometry_infinite_line_editor_data);
+    create_group_box("GeometryLine", "Geometry", geometry_line_editor_data);
+    create_group_box("GeometryPath", "Geometry", geometry_path_editor_data);
+    create_group_box("MiscPath", "Misc", misc_path_editor_data);
+    create_group_box("GeometryPoint", "Geometry", geometry_point_editor_data);
+    create_group_box("GeometryPolygon", "Geometry", geometry_polygon_editor_data);
+    create_group_box("GeometryPolyline", "Geometry", geometry_polyline_editor_data);
+    create_group_box("MiscPolyline", "Misc", misc_polyline_editor_data);
+    create_group_box("GeometryRay", "Geometry", geometry_ray_editor_data);
+    create_group_box("GeometryRectangle", "Geometry", geometry_rectangle_editor_data);
+    create_group_box("GeometryTextMulti", "Geometry", geometry_text_multi_editor_data);
+    create_group_box("TextTextSingle", "Text", text_text_single_editor_data);
+    create_group_box("GeometryTextSingle", "Geometry", geometry_text_single_editor_data);
+    create_group_box("MiscTextSingle", "Misc", misc_text_single_editor_data);
 
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
-    foreach (QString label, group_box_list) {
-        vboxLayoutProperties->addWidget(group_boxes[label]);
+    int n_group_boxes = string_array_length(group_box_list);
+    for (int i=0; i<n_group_boxes; i++) {
+        vboxLayoutProperties->addWidget(group_boxes[group_box_list[i]]);
     }
     vboxLayoutProperties->addStretch(1);
     widgetProperties->setLayout(vboxLayoutProperties);
@@ -9056,36 +8826,23 @@ show_group_box(const char *key)
 
 /* . */
 void
+hide_group_box(const char *key)
+{
+    group_boxes[key]->hide();
+}
+
+/* . */
+void
 showOneType(int index)
 {
     hideAllGroups();
     showGroups(comboBoxSelected->itemData(index).toInt());
 }
 
-/* NOTE: General group will never be hidden. */
-void
-hideAllGroups(void)
-{
-    foreach (QString label, group_box_list) {
-        if (label != "General") {
-            group_boxes[label]->hide();
-        }
-    }
-}
-
 /* . */
 void
-clearAllFields(void)
+clear_font_combobox(void)
 {
-    int n = string_array_length(editor_list);
-    for (int i=0; i<n; i++) {
-        line_edits[editor_list[i]]->clear();
-    }
-    n = string_array_length(combobox_list);
-    for (int i=0; i<n; i++) {
-        combo_boxes[combobox_list[i]]->clear();
-    }
-
     comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); /* NOTE: Do not clear comboBoxTextSingleFont. */
     comboBoxTextSingleFont->setProperty("FontFamily", "");
 }
@@ -9149,7 +8906,7 @@ create_editor(
 
 /* . */
 QGroupBox*
-createGroupBox__(const char *label, const char *name, Editor editor_data[])
+create_group_box(const char *label, const char *name, Editor editor_data[])
 {
     todo("Use proper icons for tool buttons.");
     group_boxes[QString(label)] = new QGroupBox(translate((char*)name), dockPropEdit);
@@ -9508,7 +9265,6 @@ Settings_Dialog::create_int_spinbox(QGroupBox* groupbox, int key)
     return spinbox;
 }
 
-
 /* . */
 void
 set_visibility(QObject *senderObj, EmbString key, bool visibility)
@@ -9620,6 +9376,31 @@ set_enabled_group(QObject *senderObj, EmbStringTable keylist, bool enabled)
 }
 
 /* . */
+void
+updateAllBackgroundColor(uint32_t color)
+{
+    mdiArea->setBackgroundColor(QColor(color));
+}
+
+/* . */
+EmbStringTable settings_tab_labels = {
+    "General",
+    "Files/Path",
+    "Display",
+    "Prompt",
+    "Open/Save",
+    "Printing",
+    "Snap",
+    "Grid/Ruler",
+    "Ortho/Polar",
+    "QuickSnap",
+    "QuickTrack",
+    "LineWeight",
+    "Selection",
+    "END"
+};
+
+/* . */
 Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
@@ -9647,44 +9428,11 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* paren
     tabWidget->addTab(createTabLineWeight(), translate("LineWeight"));
     tabWidget->addTab(createTabSelection(), translate("Selection"));
 
-    if (showTab == "General") {
-        tabWidget->setCurrentIndex(0);
-    }
-    else if (showTab == "Files/Path") {
-        tabWidget->setCurrentIndex(1);
-    }
-    else if (showTab == "Display") {
-        tabWidget->setCurrentIndex(2);
-    }
-    else if (showTab == "Prompt") {
-        tabWidget->setCurrentIndex(3);
-    }
-    else if (showTab == "Open/Save") {
-        tabWidget->setCurrentIndex(4);
-    }
-    else if (showTab == "Printing") {
-        tabWidget->setCurrentIndex(5);
-    }
-    else if (showTab == "Snap") {
-        tabWidget->setCurrentIndex(6);
-    }
-    else if (showTab == "Grid/Ruler") {
-        tabWidget->setCurrentIndex(7);
-    }
-    else if (showTab == "Ortho/Polar") {
-        tabWidget->setCurrentIndex(8);
-    }
-    else if (showTab == "QuickSnap") {
-        tabWidget->setCurrentIndex(9);
-    }
-    else if (showTab == "QuickTrack") {
-        tabWidget->setCurrentIndex(10);
-    }
-    else if (showTab == "LineWeight") {
-        tabWidget->setCurrentIndex(11);
-    }
-    else if (showTab == "Selection") {
-        tabWidget->setCurrentIndex(12);
+    int n_tabs = string_array_length(settings_tab_labels);
+    for (int i=0; i<n_tabs; i++) {
+        if (showTab == settings_tab_labels[i]) {
+            tabWidget->setCurrentIndex(i);
+        }
     }
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -9973,7 +9721,7 @@ Settings_Dialog::createTabDisplay()
     groupBoxZoom->setLayout(gridLayoutZoom);
 
     /* Widget Layout */
-    QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
+       QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
     /* TODO: Review OpenGL and Rendering settings for future inclusion. */
     vboxLayoutMain->addWidget(groupBoxRender);
     vboxLayoutMain->addWidget(groupBoxScrollBars);
@@ -9989,7 +9737,8 @@ Settings_Dialog::createTabDisplay()
 }
 
 /* TODO: finish prompt options */
-QWidget* Settings_Dialog::createTabPrompt()
+QWidget*
+Settings_Dialog::createTabPrompt()
 {
     QWidget* widget = new QWidget(this);
 
@@ -10195,7 +9944,9 @@ QWidget* Settings_Dialog::createTabOpenSave()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabPrinting()
+/* . */
+QWidget*
+Settings_Dialog::createTabPrinting()
 {
     QWidget* widget = new QWidget(this);
 
@@ -10239,7 +9990,9 @@ QWidget* Settings_Dialog::createTabPrinting()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabSnap()
+/* . */
+QWidget*
+Settings_Dialog::createTabSnap()
 {
     QWidget* widget = new QWidget(this);
 
