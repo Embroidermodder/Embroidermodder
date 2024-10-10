@@ -91,6 +91,8 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 /* C Headers */
 #include "core.h"
@@ -106,42 +108,6 @@ class SelectBox;
 class UndoEditor;
 class Document;
 class CmdPromptInput;
-
-extern "C" {
-extern Editor general_editor_data[];
-extern Editor geometry_arc_editor_data[];
-extern Editor misc_arc_editor_data[];
-extern Editor geometry_block_editor_data[];
-extern Editor geometry_circle_editor_data[];
-extern Editor geometry_dim_aligned_editor_data[];
-extern Editor geometry_dim_angular_editor_data[];
-extern Editor geometry_dim_arc_length_editor_data[];
-extern Editor geometry_dim_diameter_editor_data[];
-extern Editor geometry_dim_leader_editor_data[];
-extern Editor geometry_dim_linear_editor_data[];
-extern Editor geometry_dim_ordinate_editor_data[];
-extern Editor geometry_dim_radius_editor_data[];
-extern Editor geometry_ellipse_editor_data[];
-extern Editor geometry_image_editor_data[];
-extern Editor misc_image_editor_data[];
-extern Editor geometry_infinite_line_editor_data[];
-extern Editor geometry_line_editor_data[];
-extern Editor geometry_path_editor_data[];
-extern Editor misc_path_editor_data[];
-extern Editor geometry_point_editor_data[];
-extern Editor geometry_polygon_editor_data[];
-extern Editor geometry_polyline_editor_data[];
-extern Editor misc_polyline_editor_data[];
-extern Editor geometry_ray_editor_data[];
-extern Editor geometry_rectangle_editor_data[];
-extern Editor geometry_text_multi_editor_data[];
-extern Editor text_text_single_editor_data[];
-extern Editor geometry_text_single_editor_data[];
-extern Editor misc_text_single_editor_data[];
-}
-
-#include <chrono>
-#include <thread>
 
 #define NUMBINS 10
 
@@ -235,13 +201,17 @@ std::unordered_map<int, int> key_map = {
 QToolButton* statusBarButtons[N_SB_BUTTONS];
 QLabel* statusBarMouseCoord;
 
-QGroupBox* create_group_box(const char *label, const char *name, Editor editor_data[]);
+QGroupBox* create_group_box(int32_t label);
 
-std::unordered_map<QString, QGroupBox*> group_boxes;
 std::unordered_map<QString, QToolButton*> tool_buttons;
 std::unordered_map<QString, QLineEdit*> line_edits;
 std::unordered_map<QString, QComboBox*> combo_boxes;
 QComboBox* comboBoxSelected;
+
+QGroupBox* group_boxes[NUM_GROUPBOXES];
+QToolButton* tool_buttons_[NUM_EDITORS];
+QLineEdit* line_edits_[NUM_EDITORS];
+QComboBox* combo_boxes_[NUM_EDITORS];
 
 QWidget* focusWidget_;
 
@@ -388,10 +358,6 @@ QList<QGraphicsItem*> doc_create_object_list(int32_t doc, QList<QGraphicsItem*> 
 void doc_start_gripping(int32_t doc, Object* obj);
 void doc_stop_gripping(int32_t doc, bool accept = false);
 
-void doc_add_object(int32_t doc, uint32_t obj);
-void doc_delete_object(int32_t doc, uint32_t obj);
-void doc_vulcanize_object(int32_t doc, uint32_t obj);
-
 void textFontSelectorCurrentFontChanged(const QFont& font);
 
 void onWindowActivated(QMdiSubWindow* w);
@@ -402,6 +368,8 @@ QMdiSubWindow* findMdiWindow(EmbString fileName);
 void onCloseMdiWin(MdiWindow*);
 
 void processInput(char rapidChar);
+
+QCheckBox* create_checkbox(QGroupBox* groupbox, int key);
 
 /* ---------------------- Class Declarations --------------------------- */
 
@@ -647,6 +615,8 @@ public:
     ~Settings_Dialog();
 
     void color_dialog(QPushButton *button, int key);
+    void labelled_button(QGroupBox* groupbox, QGridLayout *layout,
+        int row, const char *name, int key);
 
 private:
     QTabWidget* tabWidget;
@@ -669,11 +639,8 @@ private:
 
     void addColorsToComboBox(QComboBox* comboBox);
     void chooseColor(int key);
-    QGroupBox* create_group_box(QWidget* widget, EmbString label, int data[]);
-    QCheckBox* create_checkbox(QGroupBox* groupbox, int key);
     QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, int key);
     QSpinBox* create_int_spinbox(QGroupBox* groupbox, int key);
-    QPushButton *choose_color_button(QGroupBox* groupbox, int key);
 
 private slots:
 
@@ -682,9 +649,6 @@ private slots:
     void checkBoxGridLoadFromFileStateChanged(int);
     void checkBoxGridCenterOnOriginStateChanged(int);
     void checkBoxLwtShowLwtStateChanged(int);
-
-    void comboBoxLanguageCurrentIndexChanged(QString);
-    void comboBoxIconThemeCurrentIndexChanged(QString);
     void comboBoxIconSizeCurrentIndexChanged(int);
     void chooseGeneralMdiBackgroundLogo();
     void chooseGeneralMdiBackgroundTexture();
@@ -8296,43 +8260,16 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
     hboxLayoutSelection->addWidget(createToolButtonPickAdd());
     widgetSelection->setLayout(hboxLayoutSelection);
 
-    create_group_box("General", "General", general_editor_data);
-    create_group_box("GeometryArc", "Geometry", geometry_arc_editor_data);
-    create_group_box("MiscArc", "Misc", misc_arc_editor_data);
-    create_group_box("GeometryBlock", "Geometry", geometry_block_editor_data);
-    create_group_box("GeometryCircle", "Geometry", geometry_circle_editor_data);
-    create_group_box("GeometryDimAligned", "Geometry", geometry_dim_aligned_editor_data);
-    create_group_box("GeometryDimAngular", "Geometry", geometry_dim_angular_editor_data);
-    create_group_box("GeometryDimArcLength", "Geometry", geometry_dim_arc_length_editor_data);
-    create_group_box("GeometryDimDiameter", "Geometry", geometry_dim_diameter_editor_data);
-    create_group_box("GeometryDimLeader", "Geometry", geometry_dim_leader_editor_data);
-    create_group_box("GeometryDimLinear", "Geometry", geometry_dim_linear_editor_data);
-    create_group_box("GeometryDimOrdinate", "Geometry", geometry_dim_ordinate_editor_data);
-    create_group_box("GeometryDimRadius", "Geometry", geometry_dim_radius_editor_data);
-    create_group_box("GeometryEllipse", "Geometry", geometry_ellipse_editor_data);
-    create_group_box("GeometryImage", "Geometry", geometry_image_editor_data);
-    create_group_box("MiscImage", "Misc", misc_image_editor_data);
-    create_group_box("GeometryInfiniteLine", "Geometry", geometry_infinite_line_editor_data);
-    create_group_box("GeometryLine", "Geometry", geometry_line_editor_data);
-    create_group_box("GeometryPath", "Geometry", geometry_path_editor_data);
-    create_group_box("MiscPath", "Misc", misc_path_editor_data);
-    create_group_box("GeometryPoint", "Geometry", geometry_point_editor_data);
-    create_group_box("GeometryPolygon", "Geometry", geometry_polygon_editor_data);
-    create_group_box("GeometryPolyline", "Geometry", geometry_polyline_editor_data);
-    create_group_box("MiscPolyline", "Misc", misc_polyline_editor_data);
-    create_group_box("GeometryRay", "Geometry", geometry_ray_editor_data);
-    create_group_box("GeometryRectangle", "Geometry", geometry_rectangle_editor_data);
-    create_group_box("GeometryTextMulti", "Geometry", geometry_text_multi_editor_data);
-    create_group_box("TextTextSingle", "Text", text_text_single_editor_data);
-    create_group_box("GeometryTextSingle", "Geometry", geometry_text_single_editor_data);
-    create_group_box("MiscTextSingle", "Misc", misc_text_single_editor_data);
+    for (int i=0; group_box_list[i].id >= 0; i++) {
+        create_group_box(i);
+    }
 
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
-    int n_group_boxes = string_array_length(group_box_list);
-    for (int i=0; i<n_group_boxes; i++) {
-        vboxLayoutProperties->addWidget(group_boxes[group_box_list[i]]);
+    for (int i=0; group_box_list[i].id >= 0; i++) {
+        int id = group_box_list[i].id;
+        vboxLayoutProperties->addWidget(group_boxes[id]);
     }
     vboxLayoutProperties->addStretch(1);
     widgetProperties->setLayout(vboxLayoutProperties);
@@ -8819,14 +8756,14 @@ update_lineedit_bool(QComboBox* comboBox, bool val, bool yesOrNoText)
 
 /* . */
 void
-show_group_box(const char *key)
+show_group_box(int32_t key)
 {
     group_boxes[key]->show();
 }
 
 /* . */
 void
-hide_group_box(const char *key)
+hide_group_box(int32_t key)
 {
     group_boxes[key]->hide();
 }
@@ -8906,20 +8843,22 @@ create_editor(
 
 /* . */
 QGroupBox*
-create_group_box(const char *label, const char *name, Editor editor_data[])
+create_group_box(int32_t label)
 {
     todo("Use proper icons for tool buttons.");
-    group_boxes[QString(label)] = new QGroupBox(translate((char*)name), dockPropEdit);
+    group_boxes[label] = new QGroupBox(
+        translate((char*)group_box_list[label].label), dockPropEdit);
 
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
+    Editor *editor_data = group_box_list[label].data;
     for (int i=0; strcmp(editor_data[i].icon, "END"); i++) {
         Editor editor = editor_data[i];
         create_editor(formLayout, editor.icon, editor.label, editor.data_type,
             editor.signal, editor.object);
     }
-    group_boxes[QString(label)]->setLayout(formLayout);
+    group_boxes[label]->setLayout(formLayout);
 
-    return group_boxes[QString(label)];
+    return group_boxes[label];
 }
 
 /* . */
@@ -9212,22 +9151,12 @@ fieldEdited(QObject* fieldObj)
 }
 
 /* . */
-QPushButton *
-Settings_Dialog::choose_color_button(QGroupBox* groupbox, int i)
-{
-    QPushButton* button = new QPushButton(_main->tr("Choose"), groupbox);
-    button->setIcon(create_swatch(setting[i].preview.i));
-    connect(button, &QPushButton::clicked, this, [=] () { chooseColor(i); });
-    return button;
-}
-
-/* . */
 QCheckBox*
-Settings_Dialog::create_checkbox(QGroupBox* groupbox, int key)
+create_checkbox(QDialog *dialog, QGroupBox* groupbox, int key)
 {
     QCheckBox* checkBox = new QCheckBox(translate(settings_data[key].label), groupbox);
     checkBox->setChecked(setting[key].dialog.b);
-    QObject::connect(checkBox, &QCheckBox::stateChanged, this,
+    QObject::connect(checkBox, &QCheckBox::stateChanged, dialog,
         [=](int checked) { setting[key].dialog.b = checked; preview_update(); });
     if (QString(settings_data[key].icon) != "") {
         checkBox->setIcon(create_icon(settings_data[key].icon));
@@ -9456,6 +9385,32 @@ Settings_Dialog::~Settings_Dialog()
     QApplication::restoreOverrideCursor();
 }
 
+QWidget *
+make_scrollable(QDialog *dialog, QVBoxLayout *layout, QWidget* widget)
+{
+    layout->addStretch(1);
+    widget->setLayout(layout);
+
+    QScrollArea* scrollArea = new QScrollArea(dialog);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(widget);
+    return scrollArea;
+}
+
+/* . */
+void
+Settings_Dialog::labelled_button(QGroupBox* groupbox, QGridLayout *layout,
+    int row, const char *name, int key)
+{
+    QLabel* label = new QLabel(translate(name), groupbox);
+    layout->addWidget(label, row, 0, Qt::AlignLeft);
+
+    QPushButton* button = new QPushButton(translate("Choose"), groupbox);
+    button->setIcon(create_swatch(setting[key].preview.i));
+    connect(button, &QPushButton::clicked, this, [=] () { chooseColor(key); });
+    layout->addWidget(button, row, 1, Qt::AlignRight);
+}
+
 /* . */
 QWidget*
 Settings_Dialog::createTabGeneral()
@@ -9527,9 +9482,9 @@ Settings_Dialog::createTabGeneral()
     /* Mdi Background */
     QGroupBox* groupBoxMdiBG = new QGroupBox(translate("Background"), widget);
 
-    QCheckBox* checkBoxMdiBGUseLogo = create_checkbox(groupBoxMdiBG, GENERAL_MDI_BG_USE_LOGO);
-    QCheckBox* checkBoxMdiBGUseTexture = create_checkbox(groupBoxMdiBG, GENERAL_MDI_BG_USE_TEXTURE);
-    QCheckBox* checkBoxMdiBGUseColor = create_checkbox(groupBoxMdiBG, GENERAL_MDI_BG_USE_COLOR);
+    QCheckBox* checkBoxMdiBGUseLogo = create_checkbox(this, groupBoxMdiBG, GENERAL_MDI_BG_USE_LOGO);
+    QCheckBox* checkBoxMdiBGUseTexture = create_checkbox(this, groupBoxMdiBG, GENERAL_MDI_BG_USE_TEXTURE);
+    QCheckBox* checkBoxMdiBGUseColor = create_checkbox(this, groupBoxMdiBG, GENERAL_MDI_BG_USE_COLOR);
 
     QPushButton* buttonMdiBGLogo = new QPushButton(translate("Choose"), groupBoxMdiBG);
     buttonMdiBGLogo->setEnabled(setting[GENERAL_MDI_BG_USE_LOGO].dialog.b);
@@ -9541,8 +9496,10 @@ Settings_Dialog::createTabGeneral()
     connect(buttonMdiBGTexture, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundTexture()));
     connect(checkBoxMdiBGUseTexture, SIGNAL(toggled(bool)), buttonMdiBGTexture, SLOT(setEnabled(bool)));
 
-    QPushButton* buttonMdiBGColor = choose_color_button(groupBoxMdiBG,
-        GENERAL_MDI_BG_COLOR);
+    QPushButton* buttonMdiBGColor = new QPushButton(translate("Choose"), groupBoxMdiBG);
+    buttonMdiBGColor->setIcon(create_swatch(setting[GENERAL_MDI_BG_COLOR].preview.i));
+    connect(buttonMdiBGColor, &QPushButton::clicked, this,
+        [=] () { chooseColor(GENERAL_MDI_BG_COLOR); });
     buttonMdiBGColor->setEnabled(setting[GENERAL_MDI_BG_USE_COLOR].dialog.b);
     connect(checkBoxMdiBGUseColor, SIGNAL(toggled(bool)), buttonMdiBGColor, SLOT(setEnabled(bool)));
 
@@ -9558,7 +9515,7 @@ Settings_Dialog::createTabGeneral()
     /* Tips */
     QGroupBox* groupBoxTips = new QGroupBox(translate("Tips"), widget);
 
-    QCheckBox* checkBoxTipOfTheDay = create_checkbox(groupBoxTips, GENERAL_TIP_OF_THE_DAY);
+    QCheckBox* checkBoxTipOfTheDay = create_checkbox(this, groupBoxTips, GENERAL_TIP_OF_THE_DAY);
 
     QVBoxLayout* vboxLayoutTips = new QVBoxLayout(groupBoxTips);
     vboxLayoutTips->addWidget(checkBoxTipOfTheDay);
@@ -9585,13 +9542,8 @@ Settings_Dialog::createTabGeneral()
     vboxLayoutMain->addWidget(groupBoxMdiBG);
     vboxLayoutMain->addWidget(groupBoxTips);
     vboxLayoutMain->addWidget(groupBoxHelpBrowser);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 /* . */
@@ -9600,24 +9552,8 @@ Settings_Dialog::createTabFilesPaths()
 {
     QWidget* widget = new QWidget(this);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
-}
-
-/* . */
-QGroupBox*
-Settings_Dialog::create_group_box(QWidget* widget, EmbString label, int data[])
-{
-    QGroupBox* groupbox = new QGroupBox(translate(label), widget);
-    QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupbox);
-    for (int i=0; data[i] != TERMINATOR_SYMBOL; i++) {
-        QCheckBox* checkBox = create_checkbox(groupbox, settings_data[data[i]].id);
-        vboxLayoutRender->addWidget(checkBox);
-    }
-    groupbox->setLayout(vboxLayoutRender);
-    return groupbox;
+    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 /* . */
@@ -9628,12 +9564,18 @@ Settings_Dialog::createTabDisplay()
 
     /* Rendering */
     /* TODO: Review OpenGL and Rendering settings for future inclusion */
-    QGroupBox* groupBoxRender = create_group_box(widget, "Rendering", render_hints);
+    QGroupBox* groupBoxRender = new QGroupBox(translate("Rendering"), widget);
+    QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
+    for (int i=0; render_hints[i] != TERMINATOR_SYMBOL; i++) {
+        QCheckBox* checkBox = create_checkbox(this, groupBoxRender, settings_data[render_hints[i]].id);
+        vboxLayoutRender->addWidget(checkBox);
+    }
+    groupBoxRender->setLayout(vboxLayoutRender);
 
     /* ScrollBars */
     QGroupBox* groupBoxScrollBars = new QGroupBox(translate("ScrollBars"), widget);
 
-    QCheckBox* checkBoxShowScrollBars = create_checkbox(groupBoxScrollBars,
+    QCheckBox* checkBoxShowScrollBars = create_checkbox(this, groupBoxScrollBars,
         DISPLAY_SHOW_SCROLLBARS);
 
     QLabel* labelScrollBarWidget = new QLabel(translate("Perform action when clicking corner widget"), groupBoxScrollBars);
@@ -9657,29 +9599,19 @@ Settings_Dialog::createTabDisplay()
     /* Colors */
     QGroupBox* groupBoxColor = new QGroupBox(translate("Colors"), widget);
 
-    QLabel* labelCrossHairColor = new QLabel(translate("Crosshair Color"), groupBoxColor);
-    QPushButton* buttonCrossHairColor = choose_color_button(groupBoxColor,
-        DISPLAY_CROSSHAIR_COLOR);
-
-    QLabel* labelBGColor = new QLabel(translate("Background Color"), groupBoxColor);
-    QPushButton* buttonBGColor = choose_color_button(groupBoxColor,
-        DISPLAY_BG_COLOR);
-
-    QLabel* labelSelectBoxLeftColor = new QLabel(translate("Selection Box Color (Crossing)"), groupBoxColor);
-    QPushButton* buttonSelectBoxLeftColor = choose_color_button(groupBoxColor,
-        DISPLAY_SELECTBOX_LEFT_COLOR);
-
-    QLabel* labelSelectBoxLeftFill = new QLabel(translate("Selection Box Fill (Crossing)"), groupBoxColor);
-    QPushButton* buttonSelectBoxLeftFill = choose_color_button(groupBoxColor,
-        DISPLAY_SELECTBOX_LEFT_FILL);
-
-    QLabel* labelSelectBoxRightColor = new QLabel(translate("Selection Box Color (Window)"), groupBoxColor);
-    QPushButton* buttonSelectBoxRightColor = choose_color_button(groupBoxColor,
-        DISPLAY_SELECTBOX_RIGHT_COLOR);
-
-    QLabel* labelSelectBoxRightFill = new QLabel(translate("Selection Box Fill (Window)"), groupBoxColor);
-    QPushButton* buttonSelectBoxRightFill = choose_color_button(groupBoxColor,
-        DISPLAY_SELECTBOX_RIGHT_FILL);
+    QGridLayout* gridLayoutColor = new QGridLayout(widget);
+    labelled_button(groupBoxColor, gridLayoutColor, 0,
+        "Crosshair Color", DISPLAY_CROSSHAIR_COLOR);
+    labelled_button(groupBoxColor, gridLayoutColor, 1,
+        "Background Color", DISPLAY_BG_COLOR);
+    labelled_button(groupBoxColor, gridLayoutColor, 2,
+        "Selection Box Color (Crossing)", DISPLAY_SELECTBOX_LEFT_COLOR);
+    labelled_button(groupBoxColor, gridLayoutColor, 3,
+        "Selection Box Fill (Crossing)", DISPLAY_SELECTBOX_LEFT_FILL);
+    labelled_button(groupBoxColor, gridLayoutColor, 4,
+        "Selection Box Color (Window)", DISPLAY_SELECTBOX_RIGHT_COLOR);
+    labelled_button(groupBoxColor, gridLayoutColor, 5,
+        "Selection Box Fill (Window)", DISPLAY_SELECTBOX_RIGHT_FILL);
 
     QLabel* labelSelectBoxAlpha = new QLabel(translate("Selection Box Fill Alpha"), groupBoxColor);
     QSpinBox* spinBoxSelectBoxAlpha = new QSpinBox(groupBoxColor);
@@ -9687,19 +9619,6 @@ Settings_Dialog::createTabDisplay()
     spinBoxSelectBoxAlpha->setValue(setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
     connect(spinBoxSelectBoxAlpha, SIGNAL(valueChanged(int)), this, SLOT(spinBoxDisplaySelectBoxAlphaValueChanged(int)));
 
-    QGridLayout* gridLayoutColor = new QGridLayout(widget);
-    gridLayoutColor->addWidget(labelCrossHairColor, 0, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonCrossHairColor, 0, 1, Qt::AlignRight);
-    gridLayoutColor->addWidget(labelBGColor, 1, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonBGColor, 1, 1, Qt::AlignRight);
-    gridLayoutColor->addWidget(labelSelectBoxLeftColor, 2, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonSelectBoxLeftColor, 2, 1, Qt::AlignRight);
-    gridLayoutColor->addWidget(labelSelectBoxLeftFill, 3, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonSelectBoxLeftFill, 3, 1, Qt::AlignRight);
-    gridLayoutColor->addWidget(labelSelectBoxRightColor, 4, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonSelectBoxRightColor, 4, 1, Qt::AlignRight);
-    gridLayoutColor->addWidget(labelSelectBoxRightFill, 5, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonSelectBoxRightFill, 5, 1, Qt::AlignRight);
     gridLayoutColor->addWidget(labelSelectBoxAlpha, 6, 0, Qt::AlignLeft);
     gridLayoutColor->addWidget(spinBoxSelectBoxAlpha, 6, 1, Qt::AlignRight);
     groupBoxColor->setLayout(gridLayoutColor);
@@ -9727,13 +9646,8 @@ Settings_Dialog::createTabDisplay()
     vboxLayoutMain->addWidget(groupBoxScrollBars);
     vboxLayoutMain->addWidget(groupBoxColor);
     vboxLayoutMain->addWidget(groupBoxZoom);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 /* TODO: finish prompt options */
@@ -9744,17 +9658,10 @@ Settings_Dialog::createTabPrompt()
 
     /* Colors */
     QGroupBox* groupBoxColor = new QGroupBox(translate("Colors"), widget);
-    QLabel* labelTextColor = new QLabel(translate("Text Color"), groupBoxColor);
-    QPushButton* buttonTextColor = choose_color_button(groupBoxColor, PROMPT_TEXT_COLOR);
 
-    QLabel* labelBGColor = new QLabel(translate("Background Color"), groupBoxColor);
-    QPushButton* buttonBGColor = choose_color_button(groupBoxColor, PROMPT_BG_COLOR);
-
-     QGridLayout* gridLayoutColor = new QGridLayout(widget);
-    gridLayoutColor->addWidget(labelTextColor, 0, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonTextColor, 0, 1, Qt::AlignRight);
-    gridLayoutColor->addWidget(labelBGColor, 1, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonBGColor, 1, 1, Qt::AlignRight);
+    QGridLayout* gridLayoutColor = new QGridLayout(widget);
+    labelled_button(groupBoxColor, gridLayoutColor, 0, "Text Color", PROMPT_TEXT_COLOR);
+    labelled_button(groupBoxColor, gridLayoutColor, 1, "Background Color", PROMPT_BG_COLOR);
     groupBoxColor->setLayout(gridLayoutColor);
 
     /* TODO: Tweak the Prompt Font ComboBoxes so they work properly */
@@ -9792,8 +9699,8 @@ Settings_Dialog::createTabPrompt()
     QGroupBox* groupBoxHistory = new QGroupBox(translate("History"), widget);
 
     QVBoxLayout* vboxLayoutHistory = new QVBoxLayout(groupBoxHistory);
-    vboxLayoutHistory->addWidget(create_checkbox(groupBoxHistory, PROMPT_SAVE_HISTORY));
-    vboxLayoutHistory->addWidget(create_checkbox(groupBoxHistory, PROMPT_SAVE_HISTORY_AS_HTML));
+    vboxLayoutHistory->addWidget(create_checkbox(this, groupBoxHistory, PROMPT_SAVE_HISTORY));
+    vboxLayoutHistory->addWidget(create_checkbox(this, groupBoxHistory, PROMPT_SAVE_HISTORY_AS_HTML));
     groupBoxHistory->setLayout(vboxLayoutHistory);
 
     /* Widget Layout */
@@ -9801,13 +9708,8 @@ Settings_Dialog::createTabPrompt()
     vboxLayoutMain->addWidget(groupBoxColor);
     vboxLayoutMain->addWidget(groupBoxFont);
     vboxLayoutMain->addWidget(groupBoxHistory);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 /* TODO: finish open/save options */
@@ -9935,13 +9837,8 @@ QWidget* Settings_Dialog::createTabOpenSave()
     vboxLayoutMain->addWidget(groupBoxOpening);
     vboxLayoutMain->addWidget(groupBoxSaving);
     vboxLayoutMain->addWidget(groupBoxTrim);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 /* . */
@@ -9974,20 +9871,15 @@ Settings_Dialog::createTabPrinting()
     QGroupBox* groupBoxSaveInk = new QGroupBox(translate("Save Ink"), widget);
 
     QVBoxLayout* vboxLayoutSaveInk = new QVBoxLayout(groupBoxSaveInk);
-    vboxLayoutSaveInk->addWidget(create_checkbox(groupBoxSaveInk, PRINTING_DISABLE_BG));
+    vboxLayoutSaveInk->addWidget(create_checkbox(this, groupBoxSaveInk, PRINTING_DISABLE_BG));
     groupBoxSaveInk->setLayout(vboxLayoutSaveInk);
 
     /* Widget Layout */
     QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
     vboxLayoutMain->addWidget(groupBoxDefaultPrinter);
     vboxLayoutMain->addWidget(groupBoxSaveInk);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 /* . */
@@ -9998,10 +9890,8 @@ Settings_Dialog::createTabSnap()
 
     /* TODO: finish this */
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 QWidget*
@@ -10012,8 +9902,8 @@ Settings_Dialog::createTabGridRuler()
     /* Grid Misc */
     QGroupBox* groupBoxGridMisc = new QGroupBox(translate("Grid Misc"), widget);
 
-    QCheckBox* checkBoxGridShowOnLoad = create_checkbox(groupBoxGridMisc, GRID_SHOW_ON_LOAD);
-    QCheckBox* checkBoxGridShowOrigin = create_checkbox(groupBoxGridMisc, GRID_SHOW_ORIGIN);
+    QCheckBox* checkBoxGridShowOnLoad = create_checkbox(this, groupBoxGridMisc, GRID_SHOW_ON_LOAD);
+    QCheckBox* checkBoxGridShowOrigin = create_checkbox(this, groupBoxGridMisc, GRID_SHOW_ORIGIN);
 
     QGridLayout* gridLayoutGridMisc = new QGridLayout(widget);
     gridLayoutGridMisc->addWidget(checkBoxGridShowOnLoad, 0, 0, Qt::AlignLeft);
@@ -10178,7 +10068,7 @@ Settings_Dialog::createTabGridRuler()
     /* Ruler Misc */
     QGroupBox* groupBoxRulerMisc = new QGroupBox(translate("Ruler Misc"), widget);
 
-    QCheckBox* checkBoxRulerShowOnLoad = create_checkbox(groupBoxRulerMisc,
+    QCheckBox* checkBoxRulerShowOnLoad = create_checkbox(this, groupBoxRulerMisc,
         RULER_SHOW_ON_LOAD);
 
     QLabel* labelRulerMetric = new QLabel(translate("Ruler Units"), groupBoxRulerMisc);
@@ -10230,13 +10120,8 @@ Settings_Dialog::createTabGridRuler()
     vboxLayoutMain->addWidget(groupBoxRulerMisc);
     vboxLayoutMain->addWidget(groupBoxRulerColor);
     vboxLayoutMain->addWidget(groupBoxRulerGeom);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 QWidget* Settings_Dialog::createTabOrthoPolar()
@@ -10245,10 +10130,8 @@ QWidget* Settings_Dialog::createTabOrthoPolar()
 
     /* TODO: finish this */
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 QWidget*
@@ -10259,19 +10142,19 @@ Settings_Dialog::createTabQuickSnap()
     /* QSnap Locators */
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(translate("Locators Used"), widget);
 
-    QCheckBox* checkBoxQSnapEndPoint = create_checkbox(groupBoxQSnapLoc, QSNAP_ENDPOINT);
-    QCheckBox* checkBoxQSnapMidPoint = create_checkbox(groupBoxQSnapLoc, QSNAP_MIDPOINT);
-    QCheckBox* checkBoxQSnapCenter = create_checkbox(groupBoxQSnapLoc, QSNAP_CENTER);
-    QCheckBox* checkBoxQSnapNode = create_checkbox(groupBoxQSnapLoc, QSNAP_NODE);
-    QCheckBox* checkBoxQSnapQuadrant = create_checkbox(groupBoxQSnapLoc, QSNAP_QUADRANT);
-    QCheckBox* checkBoxQSnapIntersection = create_checkbox(groupBoxQSnapLoc, QSNAP_INTERSECTION);
-    QCheckBox* checkBoxQSnapExtension = create_checkbox(groupBoxQSnapLoc, QSNAP_EXTENSION);
-    QCheckBox* checkBoxQSnapInsertion = create_checkbox(groupBoxQSnapLoc, QSNAP_INSERTION);
-    QCheckBox* checkBoxQSnapPerpendicular = create_checkbox(groupBoxQSnapLoc, QSNAP_PERPENDICULAR);
-    QCheckBox* checkBoxQSnapTangent = create_checkbox(groupBoxQSnapLoc, QSNAP_TANGENT);
-    QCheckBox* checkBoxQSnapNearest = create_checkbox(groupBoxQSnapLoc, QSNAP_NEAREST);
-    QCheckBox* checkBoxQSnapApparent = create_checkbox(groupBoxQSnapLoc, QSNAP_APPARENT);
-    QCheckBox* checkBoxQSnapParallel = create_checkbox(groupBoxQSnapLoc, QSNAP_PARALLEL);
+    QCheckBox* checkBoxQSnapEndPoint = create_checkbox(this, groupBoxQSnapLoc, QSNAP_ENDPOINT);
+    QCheckBox* checkBoxQSnapMidPoint = create_checkbox(this, groupBoxQSnapLoc, QSNAP_MIDPOINT);
+    QCheckBox* checkBoxQSnapCenter = create_checkbox(this, groupBoxQSnapLoc, QSNAP_CENTER);
+    QCheckBox* checkBoxQSnapNode = create_checkbox(this, groupBoxQSnapLoc, QSNAP_NODE);
+    QCheckBox* checkBoxQSnapQuadrant = create_checkbox(this, groupBoxQSnapLoc, QSNAP_QUADRANT);
+    QCheckBox* checkBoxQSnapIntersection = create_checkbox(this, groupBoxQSnapLoc, QSNAP_INTERSECTION);
+    QCheckBox* checkBoxQSnapExtension = create_checkbox(this, groupBoxQSnapLoc, QSNAP_EXTENSION);
+    QCheckBox* checkBoxQSnapInsertion = create_checkbox(this, groupBoxQSnapLoc, QSNAP_INSERTION);
+    QCheckBox* checkBoxQSnapPerpendicular = create_checkbox(this, groupBoxQSnapLoc, QSNAP_PERPENDICULAR);
+    QCheckBox* checkBoxQSnapTangent = create_checkbox(this, groupBoxQSnapLoc, QSNAP_TANGENT);
+    QCheckBox* checkBoxQSnapNearest = create_checkbox(this, groupBoxQSnapLoc, QSNAP_NEAREST);
+    QCheckBox* checkBoxQSnapApparent = create_checkbox(this, groupBoxQSnapLoc, QSNAP_APPARENT);
+    QCheckBox* checkBoxQSnapParallel = create_checkbox(this, groupBoxQSnapLoc, QSNAP_PARALLEL);
 
     QPushButton* buttonQSnapSelectAll = new QPushButton(translate("Select All"), groupBoxQSnapLoc);
     connect(buttonQSnapSelectAll, SIGNAL(clicked()), this, SLOT(buttonQSnapSelectAllClicked()));
@@ -10365,13 +10248,8 @@ Settings_Dialog::createTabQuickSnap()
     vboxLayoutMain->addWidget(groupBoxQSnapLoc);
     vboxLayoutMain->addWidget(groupBoxQSnapVisual);
     vboxLayoutMain->addWidget(groupBoxQSnapSensitivity);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 QWidget*
@@ -10380,11 +10258,8 @@ Settings_Dialog::createTabQuickTrack()
     QWidget* widget = new QWidget(this);
 
     /* TODO: finish this */
-
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 QWidget*
@@ -10441,13 +10316,8 @@ Settings_Dialog::createTabLineWeight()
     /* Widget Layout. */
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
     vboxLayoutMain->addWidget(groupBoxLwtMisc);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 QWidget* Settings_Dialog::createTabSelection()
@@ -10457,14 +10327,14 @@ QWidget* Settings_Dialog::createTabSelection()
     /* Selection Modes */
     QGroupBox* groupBoxSelectionModes = new QGroupBox(translate("Modes"), widget);
 
-    QCheckBox* checkBoxSelectionModePickFirst = create_checkbox(groupBoxSelectionModes, SELECTION_MODE_PICKFIRST);
+    QCheckBox* checkBoxSelectionModePickFirst = create_checkbox(this, groupBoxSelectionModes, SELECTION_MODE_PICKFIRST);
     checkBoxSelectionModePickFirst->setEnabled(false);
     /* TODO: Remove this line when Post-selection is available. */
 
-    QCheckBox* checkBoxSelectionModePickAdd = create_checkbox(groupBoxSelectionModes,
+    QCheckBox* checkBoxSelectionModePickAdd = create_checkbox(this, groupBoxSelectionModes,
         SELECTION_MODE_PICKADD);
 
-    QCheckBox* checkBoxSelectionModePickDrag = create_checkbox(groupBoxSelectionModes,
+    QCheckBox* checkBoxSelectionModePickDrag = create_checkbox(this, groupBoxSelectionModes,
         SELECTION_MODE_PICKDRAG);
     checkBoxSelectionModePickDrag->setEnabled(false);
     /* TODO: Remove this line when this functionality is available. */
@@ -10524,13 +10394,8 @@ QWidget* Settings_Dialog::createTabSelection()
     vboxLayoutMain->addWidget(groupBoxSelectionModes);
     vboxLayoutMain->addWidget(groupBoxSelectionColors);
     vboxLayoutMain->addWidget(groupBoxSelectionSizes);
-    vboxLayoutMain->addStretch(1);
-    widget->setLayout(vboxLayoutMain);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 void
@@ -10544,18 +10409,6 @@ Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
     comboBox->addItem(create_icon("colormagenta"), translate("Magenta"), qRgb(255, 0, 255));
     comboBox->addItem(create_icon("colorwhite"), translate("White"), qRgb(255, 255, 255));
     /* TODO: Add Other... so the user can select custom colors */
-}
-
-void
-Settings_Dialog::comboBoxLanguageCurrentIndexChanged(QString lang)
-{
-    strcpy(setting[GENERAL_LANGUAGE].dialog.s, qPrintable(lang.toLower()));
-}
-
-void
-Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(QString theme)
-{
-    strcpy(setting[GENERAL_ICON_THEME].dialog.s, qPrintable(theme));
 }
 
 void

@@ -11,40 +11,6 @@
 
 #include "../core.h"
 
-EmbStringTable group_box_list = {
-    "General",
-    "GeometryArc",
-    "MiscArc",
-    "GeometryBlock",
-    "GeometryCircle",
-    "GeometryDimAligned",
-    "GeometryDimAngular",
-    "GeometryDimArcLength",
-    "GeometryDimDiameter",
-    "GeometryDimLeader",
-    "GeometryDimLinear",
-    "GeometryDimOrdinate",
-    "GeometryDimRadius",
-    "GeometryEllipse",
-    "GeometryImage",
-    "MiscImage",
-    "GeometryInfiniteLine",
-    "GeometryLine",
-    "GeometryPath",
-    "MiscPath",
-    "GeometryPoint",
-    "GeometryPolygon",
-    "GeometryPolyline",
-    "MiscPolyline",
-    "GeometryRay",
-    "GeometryRectangle",
-    "GeometryTextMulti",
-    "TextTextSingle",
-    "GeometryTextSingle",
-    "MiscTextSingle",
-    "END"
-};
-
 EmbStringTable editor_list = {
     "ArcCenterX",
     "ArcCenterY",

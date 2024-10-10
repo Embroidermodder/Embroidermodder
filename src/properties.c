@@ -14,85 +14,103 @@
 
 #include "core.h"
 
-/* . */
+/* This needs a int to int table. */
 void
 showGroups(int objType)
 {
-    if (objType == OBJ_ARC) {
-        show_group_box("GeometryArc");
-        show_group_box("MiscArc");
+    switch (objType) {
+    case EMB_ARC:
+        show_group_box(GB_GEOM_ARC);
+        show_group_box(GB_MISC_ARC);
+        break;
+    case OBJ_BLOCK:
+        show_group_box(GB_GEOM_BLOCK);
+        break;
+    case OBJ_CIRCLE:
+        show_group_box(GB_GEOM_CIRCLE);
+        break;
+    case OBJ_DIMALIGNED:
+        show_group_box(GB_GEOM_DIMALIGNED);
+        break;
+    case OBJ_DIMANGULAR:
+        show_group_box(GB_GEOM_DIMANGULAR);
+        break;
+    case OBJ_DIMARCLENGTH:
+        show_group_box(GB_GEOM_DIMARCLENGTH);
+        break;
+    case OBJ_DIMDIAMETER:
+        show_group_box(GB_GEOM_DIMDIAMETER);
+        break;
+    case OBJ_DIMLEADER:
+        show_group_box(GB_GEOM_DIMLEADER);
+        break;
+    case OBJ_DIMLINEAR:
+        show_group_box(GB_GEOM_DIMLINEAR);
+        break;
+    case OBJ_DIMORDINATE:
+        show_group_box(GB_GEOM_DIMORDINATE);
+        break;
+    case OBJ_DIMRADIUS:
+        show_group_box(GB_GEOM_DIMRADIUS);
+        break;
+    case EMB_ELLIPSE:
+        show_group_box(GB_GEOM_ELLIPSE);
+        break;
+    case EMB_IMAGE:
+        show_group_box(GB_GEOM_IMAGE);
+        show_group_box(GB_MISC_IMAGE);
+        break;
+    case OBJ_INFINITELINE:
+        show_group_box(GB_GEOM_INFINITE_LINE);
+        break;
+    case EMB_LINE:
+        show_group_box(GB_GEOM_LINE);
+        break;
+    case OBJ_PATH:
+        show_group_box(GB_GEOM_PATH);
+        show_group_box(GB_MISC_PATH);
+        break;
+    case OBJ_POINT:
+        show_group_box(GB_GEOM_POINT);
+        break;
+    case OBJ_POLYGON:
+        show_group_box(GB_GEOM_POLYGON);
+        break;
+    case OBJ_POLYLINE:
+        show_group_box(GB_GEOM_POLYLINE);
+        show_group_box(GB_MISC_POLYLINE);
+        break;
+    case OBJ_RAY:
+        show_group_box(GB_GEOM_RAY);
+        break;
+    case OBJ_RECTANGLE:
+        show_group_box(GB_GEOM_RECT);
+        break;
+    case OBJ_TEXTMULTI:
+        show_group_box(GB_GEOM_TEXT_MULTI);
+        break;
+    case OBJ_TEXTSINGLE:
+        show_group_box(GB_TEXT_TEXT_SINGLE);
+        show_group_box(GB_GEOM_TEXT_SINGLE);
+        show_group_box(GB_MISC_TEXT_SINGLE);
+        break;
+    default:
+        break;
     }
-    else if (objType == OBJ_BLOCK) {
-        show_group_box("GeometryBlock");
-    }
-    else if (objType == OBJ_CIRCLE) {
-        show_group_box("GeometryCircle");
-    }
-    else if (objType == OBJ_DIMALIGNED) {
-        show_group_box("GeometryDimAligned");
-    }
-    else if (objType == OBJ_DIMANGULAR) {
-        show_group_box("GeometryDimAngular");
-    }
-    else if (objType == OBJ_DIMARCLENGTH) {
-        show_group_box("GeometryDimArcLength");
-    }
-    else if (objType == OBJ_DIMDIAMETER) {
-        show_group_box("GeometryDimDiameter");
-    }
-    else if (objType == OBJ_DIMLEADER) {
-        show_group_box("GeometryDimLeader");
-    }
-    else if (objType == OBJ_DIMLINEAR) {
-        show_group_box("GeometryDimLinear");
-    }
-    else if (objType == OBJ_DIMORDINATE) {
-        show_group_box("GeometryDimOrdinate");
-    }
-    else if (objType == OBJ_DIMRADIUS) {
-        show_group_box("GeometryDimRadius");
-    }
-    else if (objType == OBJ_ELLIPSE) {
-        show_group_box("GeometryEllipse");
-    }
-    else if (objType == OBJ_IMAGE) {
-        show_group_box("GeometryImage");
-        show_group_box("MiscImage");
-    }
-    else if (objType == OBJ_INFINITELINE) {
-        show_group_box("GeometryInfiniteLine");
-    }
-    else if (objType == OBJ_LINE) {
-        show_group_box("GeometryLine");
-    }
-    else if (objType == OBJ_PATH) {
-        show_group_box("GeometryPath");
-        show_group_box("MiscPath");
-    }
-    else if (objType == OBJ_POINT) {
-        show_group_box("GeometryPoint");
-    }
-    else if (objType == OBJ_POLYGON) {
-        show_group_box("GeometryPolygon");
-    }
-    else if (objType == OBJ_POLYLINE) {
-        show_group_box("GeometryPolyline");
-        show_group_box("MiscPolyline");
-    }
-    else if (objType == OBJ_RAY) {
-        show_group_box("GeometryRay");
-    }
-    else if (objType == OBJ_RECTANGLE) {
-        show_group_box("GeometryRectangle");
-    }
-    else if (objType == OBJ_TEXTMULTI) {
-        show_group_box("GeometryTextMulti");
-    }
-    else if (objType == OBJ_TEXTSINGLE) {
-        show_group_box("TextTextSingle");
-        show_group_box("GeometryTextSingle");
-        show_group_box("MiscTextSingle");
-    }
+}
+
+/* . */
+void
+comboBoxLanguageCurrentIndexChanged(EmbString lang)
+{
+    string_copy(setting[GENERAL_LANGUAGE].dialog.s, lang);
+}
+
+/* . */
+void
+comboBoxIconThemeCurrentIndexChanged(EmbString theme)
+{
+    string_copy(setting[GENERAL_ICON_THEME].dialog.s, theme);
 }
 
 /* . */
@@ -204,10 +222,9 @@ comboBoxScrollBarWidgetCurrentIndexChanged(int index)
 void
 hideAllGroups(void)
 {
-    int n_group_boxes = string_array_length(group_box_list);
-    for (int i=0; i<n_group_boxes; i++) {
-        if (!string_equal(group_box_list[i], "General")) {
-            hide_group_box(group_box_list[i]);
+    for (int i=0; group_box_list[i].id >= 0; i++) {
+        if (group_box_list[i].id != GB_GENERAL) {
+            hide_group_box(group_box_list[i].id);
         }
     }
 }

@@ -104,6 +104,13 @@ typedef struct Editor_ {
     int object;
 } Editor;
 
+typedef struct GroupBoxData_ {
+    int32_t id;
+    const char *key;
+    const char *label;
+    Editor *data;
+} GroupBoxData;
+
 typedef struct SettingsData_ {
     int id;
     EmbString label;
@@ -465,8 +472,10 @@ void sliderSelectionPickBoxSizeValueChanged(int);
 
 /* -------------------------------- Properties ------------------------------ */
 
+void hideAllGroups(void);
 void showGroups(int);
-void show_group_box(const char *key);
+void hide_group_box(int32_t key);
+void show_group_box(int32_t key);
 
 /* -------------------------------- Commands -------------------------------- */
 
@@ -594,8 +603,6 @@ void updateAllBackgroundColor(uint32_t color);
 
 void create_all_menus(void);
 void create_all_toolbars(void);
-void hide_group_box(const char *key);
-void hideAllGroups(void);
 
 void clearAllFields(void);
 void line_edit_clear(const char *key);
@@ -725,6 +732,10 @@ void scale_action(void);
 
 EmbVector doc_map_from_scene(int32_t doc, EmbVector v);
 EmbVector doc_map_to_scene(int32_t doc, EmbVector v);
+
+void doc_add_object(int32_t doc, uint32_t obj);
+void doc_delete_object(int32_t doc, uint32_t obj);
+void doc_vulcanize_object(int32_t doc, uint32_t obj);
 
 int32_t activeDocument(void);
 
@@ -863,7 +874,7 @@ extern ScriptValue script_false;
 extern bool blinkState;
 
 extern int testing_mode;
-extern EmbStringTable group_box_list;
+extern GroupBoxData group_box_list[];
 extern EmbStringTable button_list;
 
 extern EmbString end_symbol;

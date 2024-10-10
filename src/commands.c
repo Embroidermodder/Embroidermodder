@@ -2400,7 +2400,7 @@ locatepoint_command(ScriptEnv *context)
         break;
     }
     case CONTEXT_CLICK: {
-        char output[200];
+        EmbString output;
         EmbVector v = emb_vector(0.0f, 0.0f);
         sprintf(output, "X = %f, Y = %f", v.x, v.y);
         prompt_output(output);
@@ -2410,7 +2410,7 @@ locatepoint_command(ScriptEnv *context)
     case CONTEXT_CONTEXT:
         run_command(context, "todo LOCATEPOINT context()");
         break;
-    case CONTEXT_PROMPT:
+    case CONTEXT_PROMPT: {
         EmbVector v;
         EmbString str;
         if (!parse_vector(str, &v)) {
@@ -2424,6 +2424,7 @@ locatepoint_command(ScriptEnv *context)
             end_command();
         }
         break;
+    }
     default:
         break;
     }

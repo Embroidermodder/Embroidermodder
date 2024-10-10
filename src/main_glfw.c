@@ -160,20 +160,20 @@ void undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString msg) {}
 void undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
     EmbString msg) {}
 
-void line_edit_clear(const char *key) {}
-void combo_box_clear(const char *key) {}
-void combo_boxes_clear(const char *key) {}
+void line_edit_clear(const char *) {}
+void combo_box_clear(const char *) {}
+void combo_boxes_clear(const char *) {}
 void clear_font_combobox(void) {}
-void hide_group_box(const char *key) {}
+void hide_group_box(int32_t) {}
+void show_group_box(int32_t) {}
 
 uint32_t create_object(int, uint32_t) {return 0;}
-void doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode) {}
+void doc_undoable_add_obj(int32_t, uint32_t, int) {}
 
 void doc_begin_macro(int32_t, EmbString) {}
 
 void obj_set_rotation(uint32_t, double) {}
 void obj_calculate_data(uint32_t) {}
-void show_group_box(const char *) {}
 
 void nanosleep_(int) {}
 
@@ -185,30 +185,30 @@ ObjectCore *obj_get_core(uint32_t) {return NULL;}
 
 void obj_set_rect(uint32_t, double, double, double, double) {}
 
-void doc_set_bool(int32_t doc, const char *key, bool) {}
-bool doc_get_bool(int32_t doc, const char *key) { return true; }
-double doc_width(int32_t doc) {return 0.0;}
-double doc_height(int32_t doc) {return 0.0;}
-EmbVector doc_map_to_scene(int32_t doc, EmbVector v) {return v;}
-EmbVector doc_map_from_scene(int32_t doc, EmbVector v) {return v;}
+void doc_set_bool(int32_t, const char *key, bool) {}
+bool doc_get_bool(int32_t, const char *key) { return true; }
+double doc_width(int32_t) {return 0.0;}
+double doc_height(int32_t) {return 0.0;}
+EmbVector doc_map_to_scene(int32_t, EmbVector v) {return v;}
+EmbVector doc_map_from_scene(int32_t, EmbVector v) {return v;}
 void doc_set_background_color(int doc_index, uint32_t color) {}
 void settingsDialog(EmbString s) {}
-void doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point) {}
-void doc_set_rubber_text(int32_t doc, EmbString key, EmbString value) {}
+void doc_set_rubber_point(int32_t, EmbString, EmbVector) {}
+void doc_set_rubber_text(int32_t, EmbString, EmbString) {}
 void setPromptFontFamily(char *) {}
 void setPromptFontStyle(char *) {}
 void setPromptFontSize(int) {}
-void doc_spare_rubber(int32_t doc, int64_t mode) {}
-void doc_set_rubber_mode(int32_t doc, int32_t mode) {}
-void doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data) {}
-void doc_center_on(int32_t doc, EmbVector v) {}
-EmbVector scene_get_point(EmbString key) { return emb_vector(0.0, 0.0); }
-void doc_zoom_extents(int doc_index) {}
-void updatePickAddMode(bool val) {}
+void doc_spare_rubber(int32_t, int64_t) {}
+void doc_set_rubber_mode(int32_t, int32_t) {}
+void doc_preview_on(int32_t, int, int, double, double, double) {}
+void doc_center_on(int32_t, EmbVector) {}
+EmbVector scene_get_point(EmbString) { return emb_vector(0.0, 0.0); }
+void doc_zoom_extents(int) {}
+void updatePickAddMode(bool) {}
 void set_CursorShape(char *) {}
 void processInput(char) {}
 void prompt_set_current_text(const char *) {}
-uint32_t rgb(uint8_t r, uint8_t g, uint8_t b) {return 0;}
+uint32_t rgb(uint8_t, uint8_t, uint8_t) {return 0;}
 void question_box(const char *, const char *) {}
 void warning_box(const char *, const char *) {}
 void critical_box(const char *, const char *) {}

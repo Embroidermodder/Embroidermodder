@@ -9,5 +9,6 @@ Checks: >
     performance-*,
     portability-*,
     readability-*,
-    linuxkernel-*
+    linuxkernel-*,
+    -readability-identifier-length
 ...
