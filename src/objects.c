@@ -410,14 +410,14 @@ obj_set_rubber_mode(uint32_t id, int mode)
 
 /* . */
 void
-obj_set_x(ObjectCore *obj, double x)
+obj_set_x(ObjectCore *obj, EmbReal x)
 {
     obj->position.x = x;
 }
 
 /* . */
 void
-obj_set_y(ObjectCore *obj, double y)
+obj_set_y(ObjectCore *obj, EmbReal y)
 {
     obj->position.y = y;
 }
@@ -431,7 +431,7 @@ obj_set_center(ObjectCore *obj, EmbVector center)
 
 /* . */
 void
-obj_set_center_x(ObjectCore *obj, double centerX)
+obj_set_center_x(ObjectCore *obj, EmbReal centerX)
 {
     EmbVector center = obj_center(obj);
     center.x = centerX;
@@ -440,7 +440,7 @@ obj_set_center_x(ObjectCore *obj, double centerX)
 
 /* . */
 void
-obj_set_center_y(ObjectCore *obj, double centerY)
+obj_set_center_y(ObjectCore *obj, EmbReal centerY)
 {
     EmbVector center = obj_center(obj);
     center.y = centerY;
@@ -457,7 +457,7 @@ obj_length(ObjectCore *obj)
 
 /* . */
 void
-obj_set_x1(ObjectCore *obj, double x)
+obj_set_x1(ObjectCore *obj, EmbReal x)
 {
     EmbVector v = obj_end_point_1(obj);
     v.x = x;
@@ -466,7 +466,7 @@ obj_set_x1(ObjectCore *obj, double x)
 
 /* . */
 void
-obj_set_y1(ObjectCore *obj, double y)
+obj_set_y1(ObjectCore *obj, EmbReal y)
 {
     EmbVector v = obj_end_point_1(obj);
     v.y = y;
@@ -475,7 +475,7 @@ obj_set_y1(ObjectCore *obj, double y)
 
 /* . */
 void
-obj_set_x2(ObjectCore *obj, double x)
+obj_set_x2(ObjectCore *obj, EmbReal x)
 {
     EmbVector v = obj_end_point_2(obj);
     v.x = x;
@@ -484,7 +484,7 @@ obj_set_x2(ObjectCore *obj, double x)
 
 /* . */
 void
-obj_set_y2(ObjectCore *obj, double y)
+obj_set_y2(ObjectCore *obj, EmbReal y)
 {
     EmbVector v = obj_end_point_2(obj);
     v.y = y;
@@ -853,13 +853,13 @@ DimLeaderobj_updateLeader()
 {
     todo("Make arrowStyle, arrowStyleAngle, arrowStyleLength, lineStyleAngle, lineStyleLength customizable");
     int arrowStyle = Closed;
-    double arrowStyleAngle = 15.0;
-    double arrowStyleLength = 1.0;
-    double lineStyleAngle = 45.0;
-    double lineStyleLength = 1.0;
+    EmbReal arrowStyleAngle = 15.0;
+    EmbReal arrowStyleLength = 1.0;
+    EmbReal lineStyleAngle = 45.0;
+    EmbReal lineStyleLength = 1.0;
 
     QLineF lyne = obj_line(obj);
-    double angle = lyne.angle();
+    EmbReal angle = lyne.angle();
     EmbVector ap0 = lyne.p1();
     EmbVector lp0 = lyne.p2();
 
@@ -896,7 +896,7 @@ DimLeaderobj_updateLeader()
     }
     else if (arrowStyle == Box) {
         arrowStylePath = QPainterPath();
-        double side = QLineF(ap1, ap2).length();
+        EmbReal side = QLineF(ap1, ap2).length();
         QRectF ar0(0, 0, side, side);
         ar0.moveCenter(ap0);
         arrowStylePath.addRect(ar0);
@@ -1401,7 +1401,7 @@ function prompt(str)
 }
 
 /* . */
-Object::Object(double x, double y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+Object::Object(double x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("PointObject Constructor()");
     init(x, y, rgb, Qt::SolidLine);
@@ -2092,7 +2092,7 @@ function prompt(str)
 QList<QPainterPath>
 TextSingleObject::subPathList() const
 {
-    double s = obj->scale();
+    EmbReal s = obj->scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -2299,7 +2299,7 @@ obj_set_text_justify(ObjectCore* obj, const char *justify)
 
 /* . */
 void
-obj_set_text_size(ObjectCore* obj, double size)
+obj_set_text_size(ObjectCore* obj, EmbReal size)
 {
     obj->textSize = size;
     obj_set_text(obj, obj->text);

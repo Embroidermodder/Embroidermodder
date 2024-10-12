@@ -202,7 +202,7 @@ doc_zoom_in(int32_t doc)
     }
     wait_cursor();
     EmbVector cntr = doc_map_to_scene(doc, doc_center(doc));
-    double s = get_real(DISPLAY_ZOOMSCALE_IN);
+    EmbReal s = get_real(DISPLAY_ZOOMSCALE_IN);
     doc_scale(s, s);
 
     doc_center_on(doc, cntr);
@@ -219,7 +219,7 @@ doc_zoom_out(int32_t doc)
     }
     wait_cursor();
     EmbVector cntr = doc_map_to_scene(doc, doc_center(doc));
-    double s = get_real(DISPLAY_ZOOMSCALE_OUT);
+    EmbReal s = get_real(DISPLAY_ZOOMSCALE_OUT);
     doc_scale(doc, s);
 
     doc_center_on(doc, cntr);
@@ -388,8 +388,8 @@ doc_allow_zoom_in(int32_t doc)
     EmbVector origin = doc_map_to_scene(doc, emb_vector(0.0, 0.0));
     EmbVector corner = doc_map_to_scene(doc,
         emb_vector(doc_width(doc), doc_height(doc)));
-    double maxWidth = corner.x - origin.x;
-    double maxHeight = corner.y - origin.y;
+    EmbReal maxWidth = corner.x - origin.x;
+    EmbReal maxHeight = corner.y - origin.y;
 
     if (EMB_MIN(maxWidth, maxHeight) < zoomInLimit) {
         char message[MAX_STRING_LENGTH];
@@ -408,8 +408,8 @@ doc_allow_zoom_out(int32_t doc)
     EmbVector origin = doc_map_to_scene(doc, emb_vector(0.0, 0.0));
     EmbVector corner = doc_map_to_scene(doc,
         emb_vector(doc_width(doc), doc_height(doc)));
-    double maxWidth = corner.x - origin.x;
-    double maxHeight = corner.y - origin.y;
+    EmbReal maxWidth = corner.x - origin.x;
+    EmbReal maxHeight = corner.y - origin.y;
 
     if (EMB_MAX(maxWidth, maxHeight) > zoomOutLimit) {
         char message[MAX_STRING_LENGTH];
@@ -590,7 +590,7 @@ doc_move_selected(int32_t doc, EmbVector delta)
 
 /* . */
 void
-doc_rotate_selected(int32_t doc, double x, double y, double rot)
+doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot)
 {
     DocumentData *data = doc_data(doc);
     if (data->n_selected > 1) {
@@ -615,7 +615,7 @@ doc_rotate_selected(int32_t doc, double x, double y, double rot)
 
 /* . */
 void
-doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2)
+doc_mirror_selected(int32_t doc, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     DocumentData *data = doc_data(doc);
     if (data->n_selected > 1) {
@@ -642,7 +642,7 @@ doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2)
 
 /* . */
 void
-doc_scale_selected(int32_t doc, double x, double y, double factor)
+doc_scale_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal factor)
 {
     DocumentData *data = doc_data(doc);
     if (data->n_selected > 1) {

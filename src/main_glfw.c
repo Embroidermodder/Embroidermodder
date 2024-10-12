@@ -53,9 +53,9 @@ Button menu_buttons[10];
 Button tool_buttons[100];
 
 /* FIXME: this is very system-dependant. Could compile in somehow? */
-char *sans_font = "/usr/share/fonts/truetype/open-sans/OpenSans-Regular.ttf";
-char *mono_font = "/usr/share/fonts/truetype/freefont/FreeMono.ttf";
-char *icon_font = "/usr/share/fonts/truetype/open-sans/OpenSans-Regular.ttf";
+const char *sans_font = "/usr/share/fonts/truetype/open-sans/OpenSans-Regular.ttf";
+const char *mono_font = "/usr/share/fonts/truetype/freefont/FreeMono.ttf";
+const char *icon_font = "/usr/share/fonts/truetype/open-sans/OpenSans-Regular.ttf";
 
 EmbColor toolbar_bg_color = {.r=128, .g=128, .b=128};
 EmbColor toolbar_button_color = {.r=208, .g=208, .b=208};
@@ -67,8 +67,8 @@ int window_width = 640;
 int window_height = 480;
 int toolbar_height = 40;
 float button_padding = 5.0;
-float prompt_divider = 405.0;
-float statusbar_depth = 40.0;
+float prompt_divider = 405.0F;
+float statusbar_depth = 40.0F;
 
 char prompt_text[50][MAX_STRING_LENGTH] = {
     "prompt> ",
@@ -154,7 +154,7 @@ void add_to_menu(int, EmbStringTable) {}
 void add_to_toolbar(int, EmbStringTable) {}
 
 void undoable_delete(int32_t doc, uint32_t obj, EmbString label) {}
-void undoable_scale(int32_t doc, uint32_t obj, EmbVector delta, double a, EmbString label) {}
+void undoable_scale(int32_t doc, uint32_t obj, EmbVector delta, EmbReal a, EmbString label) {}
 void undoable_move(int32_t doc, uint32_t obj, EmbVector delta, EmbString msg) {}
 void undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString msg) {}
 void undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
@@ -172,7 +172,7 @@ void doc_undoable_add_obj(int32_t, uint32_t, int) {}
 
 void doc_begin_macro(int32_t, EmbString) {}
 
-void obj_set_rotation(uint32_t, double) {}
+void obj_set_rotation(uint32_t, EmbReal) {}
 void obj_calculate_data(uint32_t) {}
 
 void nanosleep_(int) {}
@@ -183,7 +183,7 @@ EmbRect obj_rect(ObjectCore *) {return emb_rect(0.0,0.0,1.0,1.0);}
 
 ObjectCore *obj_get_core(uint32_t) {return NULL;}
 
-void obj_set_rect(uint32_t, double, double, double, double) {}
+void obj_set_rect(uint32_t, EmbReal, EmbReal, EmbReal, EmbReal) {}
 
 void doc_set_bool(int32_t, const char *key, bool) {}
 bool doc_get_bool(int32_t, const char *key) { return true; }
@@ -200,9 +200,9 @@ void setPromptFontStyle(char *) {}
 void setPromptFontSize(int) {}
 void doc_spare_rubber(int32_t, int64_t) {}
 void doc_set_rubber_mode(int32_t, int32_t) {}
-void doc_preview_on(int32_t, int, int, double, double, double) {}
+void doc_preview_on(int32_t, int, int, EmbReal, EmbReal, EmbReal) {}
 void doc_center_on(int32_t, EmbVector) {}
-EmbVector scene_get_point(EmbString) { return emb_vector(0.0, 0.0); }
+EmbVector scene_get_point(EmbString) { return emb_vector(0.0F, 0.0F); }
 void doc_zoom_extents(int) {}
 void updatePickAddMode(bool) {}
 void set_CursorShape(char *) {}
@@ -214,7 +214,7 @@ void warning_box(const char *, const char *) {}
 void critical_box(const char *, const char *) {}
 void information_box(const char *, const char *) {}
 void obj_set_text(ObjectCore *obj, const char *text) {}
-void doc_scale(int32_t, double) {}
+void doc_scale(int32_t, EmbReal) {}
 void doc_stop_gripping(int32_t, bool) {}
 void doc_set_cross_hair_size(int32_t, uint8_t) {}
 
@@ -228,7 +228,7 @@ exit_program(void)
 EmbVector
 doc_center(int32_t doc)
 {
-    return emb_vector(0.0, 0.0);
+    return emb_vector(0.0F, 0.0F);
 }
 
 void
@@ -264,8 +264,8 @@ draw_button(NVGcontext *vg, Button button, float *bounds)
 {
     draw_rect(vg, button.rect, button.color);
     draw_text(vg,
-        button.rect.x + 3.0,
-        button.rect.y + button.rect.h * 0.5,
+        button.rect.x + 3.0F,
+        button.rect.y + button.rect.h * 0.5F,
         button.font,
         button.text,
         button.text_color,
@@ -277,7 +277,7 @@ void
 draw_text(NVGcontext *vg, int x, int y, char *font, char *txt, EmbColor text_color, float *bounds)
 {
     nvgBeginPath(vg);
-    nvgFontSize(vg, 14.0f);
+    nvgFontSize(vg, 14.0F);
     nvgFontFace(vg, font);
     nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgFillColor(vg, nvgRGBA(text_color.r, text_color.g, text_color.b, 255));
@@ -293,7 +293,7 @@ make_menubar_button(NVGcontext *vg, int x, int y, char *text, float *bounds)
 {
     Button button;
     nvgTextBounds(vg, x, y, text, NULL, bounds);
-    double w = bounds[2] - bounds[0] + button_padding;
+    EmbReal w = bounds[2] - bounds[0] + button_padding;
     button.rect = emb_rect(x, y, w, 30);
     button.color = toolbar_button_color;
     button.text_color = toolbar_text;
@@ -328,7 +328,7 @@ draw_menubar(NVGcontext *vg, EmbRect container)
 
     draw_rect(vg, rect, toolbar_bg_color);
 
-    float bounds[4] = {0.0, 0.0, 0.0, 0.0};
+    float bounds[4] = {0.0F, 0.0F, 0.0F, 0.0F};
     float x_offset = -button_padding;
     for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
         x_offset += (bounds[2] - bounds[0]) + 2*button_padding;
@@ -347,7 +347,7 @@ draw_nvg_toolbar(NVGcontext *vg, EmbRect container)
 
     //draw_rect(vg, rect, toolbar_bg_color);
 
-    float bounds[4] = {0.0, 0.0, 0.0, 0.0};
+    float bounds[4] = {0.0F, 0.0F, 0.0F, 0.0F};
     for (int i=0; i<10; i++) {
         tool_buttons[i] = make_toolbar_button(5+5*i+16*i, 50, "Test");
         draw_button(vg, tool_buttons[i], bounds);
@@ -450,7 +450,7 @@ make_application(int argc, char *argv[])
         return 5;
     }
 
-    double prevt = glfwGetTime();
+    EmbReal prevt = glfwGetTime();
 
     /* FIXME: only works on linux and only works if adobe fonts are installed. */
     int font = nvgCreateFont(vg, "sans", sans_font);
@@ -470,8 +470,8 @@ make_application(int argc, char *argv[])
     }
 
     while (!glfwWindowShouldClose(window)) {
-        double t = glfwGetTime();
-        double dt = t - prevt;
+        EmbReal t = glfwGetTime();
+        EmbReal dt = t - prevt;
         printf("%f %f\n", t, dt);
 
         /* Cap at 120 updates a second. */

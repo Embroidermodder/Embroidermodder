@@ -252,7 +252,7 @@ void mapSignal(QObject* fieldObj, QString name, QVariant value);
 QToolButton* createToolButton(QString iconName, QString txt);
 
 void updateLineEditStrIfVaries(QLineEdit* lineEdit, QString str);
-void update_lineedit_num(QLineEdit* lineEdit, double num, bool useAnglePrecision);
+void update_lineedit_num(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision);
 void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString str);
 void update_lineedit_str(QComboBox* comboBox, QString str, const QStringList& strList);
 void update_lineedit_bool(QComboBox* comboBox, bool val, bool yesOrNoText);
@@ -280,9 +280,9 @@ QPixmap create_pixmap(QString icon);
 void nativeAlert(std::string txt);
 void nativeAppendPromptHistory(std::string txt);
 
-ScriptValue add_polygon_command(double startX, double startY, const QPainterPath& p, int rubberMode);
-ScriptValue add_polyline_command(double startX, double startY, const QPainterPath& p, int rubberMode);
-ScriptValue add_path_command(double startX, double startY, const QPainterPath& p, int rubberMode);
+ScriptValue add_polygon_command(double startX, EmbReal startY, const QPainterPath& p, int rubberMode);
+ScriptValue add_polyline_command(double startX, EmbReal startY, const QPainterPath& p, int rubberMode);
+ScriptValue add_path_command(double startX, EmbReal startY, const QPainterPath& p, int rubberMode);
 
 void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
 
@@ -315,16 +315,16 @@ void obj_update_rubber_grip(uint32_t obj, QPainter *painter);
 void obj_update_leader(Object *obj);
 void obj_update_path(Object *obj);
 void obj_update_path_r(Object *obj, QPainterPath p);
-void obj_update_arc_rect(Object *obj, double radius);
+void obj_update_arc_rect(Object *obj, EmbReal radius);
 
-void obj_set_line_weight(Object *obj, double lineWeight);
+void obj_set_line_weight(Object *obj, EmbReal lineWeight);
 
 void obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath);
 
 void obj_set_rect(uint32_t obj, QRectF r);
 QLineF obj_line(Object *obj);
 void obj_set_line(Object *obj, QLineF li);
-void obj_set_line(Object *obj, double x1, double y1, double x2, double y2);
+void obj_set_line(Object *obj, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
 void obj_set_path(Object *obj, QPainterPath p);
 
@@ -384,7 +384,7 @@ public:
     void addLayer(QString name,
         const bool visible,
         const bool frozen,
-        const double zValue,
+        const EmbReal zValue,
         const QRgb color,
         QString lineType,
         QString lineWeight,
@@ -476,7 +476,7 @@ public:
         QUndoCommand* parent = 0);
     UndoableCommand(int type_, EmbVector delta, QString text, Object* obj,
         int32_t v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector pivot, double rotAngle, QString text,
+    UndoableCommand(int type_, EmbVector pivot, EmbReal rotAngle, QString text,
         Object* obj, int32_t v, QUndoCommand* parent = 0);
     UndoableCommand(int type_, QString type, int32_t v, QUndoCommand* parent = 0);
     UndoableCommand(int type_, EmbVector start, EmbVector end, QString text,
@@ -484,7 +484,7 @@ public:
 
     void undo();
     void redo();
-    void rotate(double x, double y, double rot);
+    void rotate(double x, EmbReal y, EmbReal rot);
     int id() const { return 1234; }
     bool mergeWith(const QUndoCommand* command);
     void mirror();
@@ -556,7 +556,7 @@ public:
 
     void drawRubberLine(QLineF rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
 
-    void setObjectSize(double width, double height);
+    void setObjectSize(double width, EmbReal height);
 
     QPainterPath objectCopyPath() const;
     QPainterPath objectSavePath() const;
@@ -1377,7 +1377,7 @@ doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode)
 
 /* . */
 void
-obj_set_rotation(uint32_t id, double rotation)
+obj_set_rotation(uint32_t id, EmbReal rotation)
 {
     object_list[id]->setRotation(rotation);
 }
@@ -1533,12 +1533,12 @@ perpendicular_distance_command(ScriptEnv* context)
 {
     QLineF line(REAL(0), REAL(1), REAL(2), REAL(3));
     QLineF norm = line.normalVector();
-    double dx = REAL(4) - REAL(0);
-    double dy = REAL(5) - REAL(1);
+    EmbReal dx = REAL(4) - REAL(0);
+    EmbReal dy = REAL(5) - REAL(1);
     norm.translate(dx, dy);
     QPointF iPoint;
     norm.intersects(line, &iPoint);
-    double r = QLineF(REAL(4), REAL(5), iPoint.x(), iPoint.y()).length();
+    EmbReal r = QLineF(REAL(4), REAL(5), iPoint.x(), iPoint.y()).length();
     return script_real(r);
 }
 
@@ -1566,7 +1566,7 @@ UndoableCommand::UndoableCommand(int type_, EmbVector delta, QString text,
 }
 
 /* Rotate or scale */
-UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor,
+UndoableCommand::UndoableCommand(int type_, EmbVector pos, EmbReal scaleFactor,
     QString text, Object* obj, int32_t doc, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
@@ -1754,11 +1754,11 @@ UndoableCommand::redo()
 
 /* Rotate */
 void
-UndoableCommand::rotate(double x, double y, double rot)
+UndoableCommand::rotate(double x, EmbReal y, EmbReal rot)
 {
-    double rad = radians(rot);
-    double cosRot = cos(rad);
-    double sinRot = sin(rad);
+    EmbReal rad = radians(rot);
+    EmbReal cosRot = cos(rad);
+    EmbReal sinRot = sin(rad);
     EmbVector rotv;
     EmbVector p = to_emb_vector(object->scenePos());
     p.x -= x;
@@ -1816,7 +1816,7 @@ Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)
 }
 
 /* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+ * WARNING: and the item is EmbReal clicked, the scene will erratically move the item while zooming.
  * WARNING: All movement has to be handled explicitly by us, not by the scene.
  */
 uint32_t
@@ -1980,7 +1980,7 @@ obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath)
 }
 
 void
-Object::setObjectSize(double width, double height)
+Object::setObjectSize(double width, EmbReal height)
 {
     QRectF elRect = to_qrectf(obj_rect(core));
     elRect.setWidth(width);
@@ -2049,7 +2049,7 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
             painter->drawEllipse(r.translated(point));
         }
         else {
-            double gripRadius = emb_vector_distance(obj_center(obj->core), obj_rubber_point(obj, ""));
+            EmbReal gripRadius = emb_vector_distance(obj_center(obj->core), obj_rubber_point(obj, ""));
             painter->drawEllipse(QPointF(), gripRadius, gripRadius);
         }
 
@@ -2147,8 +2147,8 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
         EmbVector after = obj_rubber_point(obj, "");
         EmbVector delta = emb_vector_subtract(after, gripPoint);
         EmbVector tl = obj_top_left(obj->core);
-        double w = emb_width(obj->core->geometry);
-        double h = emb_height(obj->core->geometry);
+        EmbReal w = emb_width(obj->core->geometry);
+        EmbReal h = emb_height(obj->core->geometry);
         if (emb_approx(gripPoint, obj_top_left(obj->core))) {
             painter->drawPolygon(obj->mapFromScene(QRectF(
                 after.x,
@@ -2284,8 +2284,8 @@ obj_set_text(ObjectCore* obj, const char *str)
 
     /* Backward or Upside Down. */
     if (obj->textBackward || obj->textUpsideDown) {
-        double horiz = 1.0;
-        double vert = 1.0;
+        EmbReal horiz = 1.0;
+        EmbReal vert = 1.0;
         if (obj->textBackward) {
             horiz = -1.0;
         }
@@ -2340,8 +2340,8 @@ obj_update_path(Object *obj)
     QRectF r = to_qrectf(obj_rect(obj->core));
     switch (obj->core->geometry->type) {
     case EMB_ARC: {
-        double startAngle = emb_start_angle(obj->core->geometry) + obj->rotation();
-        double spanAngle = emb_included_angle(obj->core->geometry);
+        EmbReal startAngle = emb_start_angle(obj->core->geometry) + obj->rotation();
+        EmbReal spanAngle = emb_included_angle(obj->core->geometry);
 
         if (emb_clockwise(obj->core->geometry)) {
             spanAngle = -spanAngle;
@@ -2404,7 +2404,7 @@ obj_calculate_data(uint32_t obj_id)
     Object *obj = object_list[obj_id];
     EmbVector center = emb_arc_center(*(obj->core->geometry));
 
-    double radius = emb_vector_distance(center, obj->core->geometry->object.arc.mid);
+    EmbReal radius = emb_vector_distance(center, obj->core->geometry->object.arc.mid);
     obj_update_arc_rect(obj, radius);
     obj_update_path(obj);
     obj_set_rotation(obj_id, 0);
@@ -2413,7 +2413,7 @@ obj_calculate_data(uint32_t obj_id)
 
 /* . */
 void
-obj_update_arc_rect(Object *obj, double radius)
+obj_update_arc_rect(Object *obj, EmbReal radius)
 {
     QRectF arcRect;
     arcRect.setWidth(radius*2.0);
@@ -2424,7 +2424,7 @@ obj_update_arc_rect(Object *obj, double radius)
 
 /* . */
 void
-obj_set_line_weight(Object *obj, double lineWeight)
+obj_set_line_weight(Object *obj, EmbReal lineWeight)
 {
     obj->objPen.setWidthF(0); /* NOTE: The objPen will always be cosmetic. */
 
@@ -2566,7 +2566,7 @@ obj_set_rect(uint32_t obj, QRectF r)
 
 /* . */
 void
-obj_set_rect(uint32_t obj, double x, double y, double w, double h)
+obj_set_rect(uint32_t obj, EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
     // obj->setPos(x, y); ?
     QPainterPath p;
@@ -2594,7 +2594,7 @@ obj_set_line(Object *obj, QLineF li)
 
 /* . */
 void
-obj_set_line(Object *obj, double x1, double y1, double x2, double y2)
+obj_set_line(Object *obj, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     QPainterPath p;
     p.moveTo(x1, y1);
@@ -2619,21 +2619,23 @@ obj_set_path(Object *obj, QPainterPath p)
 
 /* . */
 void
-obj_set_rubber_point(Object *obj, std::string key, const EmbVector& point)
+obj_set_rubber_point(uint32_t id, EmbString key, EmbVector point)
 {
+    Object *obj = object_list[id];
     LabelledVector s;
-    string_copy(s.key, key.c_str());
+    string_copy(s.key, key);
     s.vector = point;
     obj->rubber_points.push_back(s);
 }
 
 /* . */
 void
-obj_set_rubber_text(Object *obj, std::string key, std::string txt)
+obj_set_rubber_text(uint32_t id, EmbString key, EmbString txt)
 {
+    Object *obj = object_list[id];
     StringMap s;
-    string_copy(s.key, key.c_str());
-    string_copy(s.value, txt.c_str());
+    string_copy(s.key, key);
+    string_copy(s.value, txt);
     obj->rubber_texts.push_back(s);
 }
 
@@ -2686,7 +2688,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
         obj_set_center(obj->core, sceneCenterPoint);
         QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
-        double radius = sceneLine.length();
+        EmbReal radius = sceneLine.length();
         emb_set_radius(obj->core->geometry, radius);
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2702,7 +2704,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
         obj_set_center(obj->core, sceneCenterPoint);
         QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
-        double diameter = sceneLine.length();
+        EmbReal diameter = sceneLine.length();
         emb_set_diameter(obj->core->geometry, diameter);
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2715,7 +2717,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_TAN2");
         QLineF sceneLine(to_qpointf(sceneTan1Point), to_qpointf(sceneQSnapPoint));
         obj_set_center(obj->core, to_emb_vector(sceneLine.pointAt(0.5)));
-        double diameter = sceneLine.length();
+        EmbReal diameter = sceneLine.length();
         emb_set_diameter(obj->core->geometry, diameter);
         obj_update_path(obj);
         break;
@@ -2728,7 +2730,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         g.type = EMB_ARC;
         EmbVector center = emb_arc_center(g);
         obj_set_center(obj->core, center);
-        double radius = emb_vector_distance(center, g.object.arc.end);
+        EmbReal radius = emb_vector_distance(center, g.object.arc.end);
         emb_set_radius(obj->core->geometry, radius);
         obj_update_path(obj);
         break;
@@ -2756,8 +2758,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
         EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
         EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
-        double ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
-        double ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
+        EmbReal ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
+        EmbReal ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
 
         todo("incorporate perpendicularDistance() into libembroidery.");
         QLineF line(to_qpointf(sceneAxis1Point1), to_qpointf(sceneAxis1Point2));
@@ -2766,7 +2768,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         norm.translate(delta.x, delta.y);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
-        double ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint))*2.0;
+        EmbReal ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint))*2.0;
 
         obj_set_center(obj->core, sceneCenterPoint);
         // FIXME: obj->setSize(ellipseWidth, ellipseHeight);
@@ -2785,8 +2787,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
         EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
         EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
-        double ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
-        double ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
+        EmbReal ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
+        EmbReal ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
 
         todo("incorporate perpendicularDistance() into libcgeometry.");
         QLineF line(to_qpointf(sceneCenterPoint), to_qpointf(sceneAxis1Point2));
@@ -2795,7 +2797,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         norm.translate(delta.x, delta.y);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
-        double ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint)) * 2.0;
+        EmbReal ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint)) * 2.0;
 
         obj_set_center(obj->core, sceneCenterPoint);
         obj->setObjectSize(ellipseWidth, ellipseHeight);
@@ -2853,7 +2855,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         obj_update_path_r(obj, rubberPath);
 
         /* Ensure the path isn't updated until the number of points is changed again. */
-        obj_set_rubber_text(obj, "POLYGON_NUM_POINTS", "");
+        obj_set_rubber_text(obj_id, "POLYGON_NUM_POINTS", "");
         break;
     }
     case RUBBER_POLYGON_INSCRIBE: {
@@ -2863,8 +2865,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
 
         EmbVector inscribePoint = obj_map_rubber(obj, "POLYGON_INSCRIBE_POINT");
         QLineF inscribeLine = QLineF(QPointF(0, 0), to_qpointf(inscribePoint));
-        double inscribeAngle = inscribeLine.angle();
-        double inscribeInc = 360.0/numSides;
+        EmbReal inscribeAngle = inscribeLine.angle();
+        EmbReal inscribeInc = 360.0/numSides;
 
         if (painter) {
             obj_draw_rubber_line(obj, inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2888,8 +2890,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
 
         EmbVector circumscribePoint = obj_map_rubber(obj, "POLYGON_CIRCUMSCRIBE_POINT");
         QLineF circumscribeLine = QLineF(QPointF(0, 0), to_qpointf(circumscribePoint));
-        double circumscribeAngle = circumscribeLine.angle();
-        double circumscribeInc = 360.0/numSides;
+        EmbReal circumscribeAngle = circumscribeLine.angle();
+        EmbReal circumscribeInc = 360.0/numSides;
 
         if (painter) {
             obj_draw_rubber_line(obj, circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2944,7 +2946,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         obj_update_path_r(obj, rubberPath);
 
         /* Ensure the path isn't updated until the number of points is changed again. */
-        obj_set_rubber_text(obj, "POLYLINE_NUM_POINTS", "");
+        obj_set_rubber_text(obj_id, "POLYLINE_NUM_POINTS", "");
         break;
     }
     case RUBBER_RECTANGLE: {
@@ -3099,7 +3101,7 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
             obj->moveBy(delta.x, delta.y);
         }
         else {
-            double length = emb_vector_distance(obj_center(core), after);
+            EmbReal length = emb_vector_distance(obj_center(core), after);
             emb_set_radius(core->geometry, length);
         }
         break;
@@ -3123,8 +3125,8 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
     }
     case EMB_IMAGE:
     case EMB_RECT: {
-        double height = emb_height(core->geometry);
-        double width = emb_width(core->geometry);
+        EmbReal height = emb_height(core->geometry);
+        EmbReal width = emb_width(core->geometry);
         EmbVector tl = obj_top_left(core);
         int obj_id = core->objID;
         if (emb_approx(before, tl)) {
@@ -3193,14 +3195,14 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 
     switch (core->geometry->type) {
     case EMB_ARC: {
-        double startAngle = (emb_start_angle(core->geometry) + rotation())*16;
-        double spanAngle = emb_included_angle(core->geometry) * 16;
+        EmbReal startAngle = (emb_start_angle(core->geometry) + rotation())*16;
+        EmbReal spanAngle = emb_included_angle(core->geometry) * 16;
 
         if (emb_clockwise(core->geometry)) {
             spanAngle = -spanAngle;
         }
 
-        double rad = obj_radius(this->core);
+        EmbReal rad = obj_radius(this->core);
         QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
         painter->drawArc(paintRect, startAngle, spanAngle);
         break;
@@ -3286,7 +3288,7 @@ Object::objectSavePath() const
         path.arcMoveTo(r, 0);
         path.arcTo(r, 0, 360);
 
-        double s = scale();
+        EmbReal s = scale();
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
@@ -3310,7 +3312,7 @@ Object::objectSavePath() const
         path.lineTo(r.topLeft());
         path.lineTo(r.bottomLeft());
 
-        double s = scale();
+        EmbReal s = scale();
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
@@ -3318,7 +3320,7 @@ Object::objectSavePath() const
     }
     case EMB_PATH:
     case EMB_POLYLINE: {
-        double s = scale();
+        EmbReal s = scale();
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
@@ -3327,7 +3329,7 @@ Object::objectSavePath() const
     case EMB_POLYGON: {
         QPainterPath closedPath = normalPath;
         closedPath.closeSubpath();
-        double s = scale();
+        EmbReal s = scale();
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
@@ -3528,7 +3530,7 @@ doc_delete_object(int32_t doc, uint32_t obj)
 
 /* . */
 void
-doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data_)
+doc_preview_on(int32_t doc, int clone, int mode, EmbReal x, EmbReal y, EmbReal data_)
 {
     debug_message("View previewOn()");
     DocumentData *data = doc_data(doc);
@@ -3814,15 +3816,15 @@ doc_create_origin(int32_t doc)
 void
 doc_create_grid_rect(int32_t doc)
 {
-    double xSpacing = get_real(GRID_SPACING_X);
-    double ySpacing = get_real(GRID_SPACING_Y);
+    EmbReal xSpacing = get_real(GRID_SPACING_X);
+    EmbReal ySpacing = get_real(GRID_SPACING_Y);
 
     QRectF gr(0, 0, get_real(GRID_SIZE_X), -get_real(GRID_SIZE_Y));
     /* Ensure the loop will work correctly with negative numbers */
-    double x1 = EMB_MIN(gr.left(), gr.right());
-    double y1 = EMB_MIN(gr.top(), gr.bottom());
-    double x2 = EMB_MAX(gr.left(), gr.right());
-    double y2 = EMB_MAX(gr.top(), gr.bottom());
+    EmbReal x1 = EMB_MIN(gr.left(), gr.right());
+    EmbReal y1 = EMB_MIN(gr.top(), gr.bottom());
+    EmbReal x2 = EMB_MAX(gr.left(), gr.right());
+    EmbReal y2 = EMB_MAX(gr.top(), gr.bottom());
 
     documents[doc]->gridPath = QPainterPath();
     documents[doc]->gridPath.addRect(gr);
@@ -3857,10 +3859,10 @@ doc_create_grid_rect(int32_t doc)
 void
 doc_create_grid_polar(int32_t doc)
 {
-    double radSpacing = get_real(GRID_SPACING_RADIUS);
-    double angSpacing = get_real(GRID_SPACING_ANGLE);
+    EmbReal radSpacing = get_real(GRID_SPACING_RADIUS);
+    EmbReal angSpacing = get_real(GRID_SPACING_ANGLE);
 
-    double rad = get_real(GRID_SIZE_RADIUS);
+    EmbReal rad = get_real(GRID_SIZE_RADIUS);
 
     documents[doc]->gridPath = QPainterPath();
     documents[doc]->gridPath.addEllipse(QPointF(0,0), rad, rad);
@@ -3873,8 +3875,8 @@ doc_create_grid_polar(int32_t doc)
     }
 
     if (!get_bool(GRID_CENTER_ON_ORIGIN)) {
-        double cx = get_real(GRID_CENTER_X);
-        double cy = get_real(GRID_CENTER_Y);
+        EmbReal cx = get_real(GRID_CENTER_X);
+        EmbReal cy = get_real(GRID_CENTER_Y);
         documents[doc]->gridPath.translate(cx, -cy);
     }
 }
@@ -3883,12 +3885,12 @@ doc_create_grid_polar(int32_t doc)
 void
 doc_create_grid_iso(int32_t doc)
 {
-    double xSpacing = get_real(GRID_SPACING_X);
-    double ySpacing = get_real(GRID_SPACING_Y);
+    EmbReal xSpacing = get_real(GRID_SPACING_X);
+    EmbReal ySpacing = get_real(GRID_SPACING_Y);
 
     /* Ensure the loop will work correctly with negative numbers. */
-    double isoW = fabs(get_real(GRID_SIZE_X));
-    double isoH = fabs(get_real(GRID_SIZE_Y));
+    EmbReal isoW = fabs(get_real(GRID_SIZE_X));
+    EmbReal isoH = fabs(get_real(GRID_SIZE_Y));
 
     QPointF p1 = QPointF(0,0);
     QPointF p2 = QLineF::fromPolar(isoW, 30).p2();
@@ -3918,9 +3920,9 @@ doc_create_grid_iso(int32_t doc)
 
     QRectF gridRect = documents[doc]->gridPath.boundingRect();
     /* bx is unused */
-    double by = -gridRect.height()/2.0;
-    double cx = get_real(GRID_CENTER_X);
-    double cy = -get_real(GRID_CENTER_Y);
+    EmbReal by = -gridRect.height()/2.0;
+    EmbReal cx = get_real(GRID_CENTER_X);
+    EmbReal cy = -get_real(GRID_CENTER_Y);
 
     if (get_real(GRID_CENTER_ON_ORIGIN)) {
         documents[doc]->gridPath.translate(0, -by);
@@ -3951,7 +3953,7 @@ draw_circle(QPainter* painter, EmbCircle circle)
 {
     QPainterPath path;
     EmbVector p = circle.center;
-    double rad = circle.radius;
+    EmbReal rad = circle.radius;
     path.moveTo(p.x, p.y + rad);
     path.arcTo(p.x-rad, p.y-rad, rad*2.0, rad*2.0, 90.0, 360.0);
     path.arcTo(p.x-rad, p.y-rad, rad*2.0, rad*2.0, 90.0, -360.0);
@@ -4124,7 +4126,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
         distStr.replace(i, 1, '0');
     }
     int unit = distStr.toInt();
-    double fraction;
+    EmbReal fraction;
     bool feet = true;
     if (data->rulerMetric) {
         if (unit < 10) {
@@ -4144,11 +4146,11 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
         }
     }
 
-    double little  = 0.20;
-    double medium = 0.40;
-    double rhTextOffset = documents[doc]->mapToScene(3, 0).x() - origin.x;
-    double rvTextOffset = documents[doc]->mapToScene(0, 3).y() - origin.y;
-    double textHeight = ruler_h.h*medium;
+    EmbReal little  = 0.20;
+    EmbReal medium = 0.40;
+    EmbReal rhTextOffset = documents[doc]->mapToScene(3, 0).x() - origin.x;
+    EmbReal rvTextOffset = documents[doc]->mapToScene(0, 3).y() - origin.y;
+    EmbReal textHeight = ruler_h.h*medium;
 
     std::vector<QLineF> lines;
     lines.push_back(QLineF(origin.x, ruler_h.y, ruler_h.x, ruler_h.y));
@@ -4211,8 +4213,8 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
         lines.push_back(QLineF(x, ruler_h.y, x, origin.y));
         if (data->rulerMetric) {
             for (int i=1; i<10; i++) {
-                double xf = x + fraction*i;
-                double tick = ruler_h.y - ruler_h.h * little;
+                EmbReal xf = x + fraction*i;
+                EmbReal tick = ruler_h.y - ruler_h.h * little;
                 if (i == 5) {
                     tick = ruler_h.y - ruler_h.h * medium;
                 }
@@ -4222,15 +4224,15 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
         else {
             if (feet) {
                 for (int i = 0; i < 12; ++i) {
-                    double xf = x + fraction*i;
-                    double tick = ruler_h.y - ruler_h.h * medium;
+                    EmbReal xf = x + fraction*i;
+                    EmbReal tick = ruler_h.y - ruler_h.h * medium;
                     lines.push_back(QLineF(xf, ruler_h.y, xf, tick));
                 }
             }
             else {
                 for (int i=1; i<16; i++) {
-                    double xf = x + fraction*i;
-                    double tick = ruler_h.y - ruler_h.h * little;
+                    EmbReal xf = x + fraction*i;
+                    EmbReal tick = ruler_h.y - ruler_h.h * little;
                     if (i % 4 == 0) {
                         tick = ruler_h.y - ruler_h.h * medium;
                     }
@@ -4264,8 +4266,8 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
         lines.push_back(QLineF(ruler_v.x, y, origin.x, y));
         if (data->rulerMetric) {
             for (int i=1; i<10; i++) {
-                double yf = y + fraction*i;
-                double tick = ruler_v.x - ruler_v.w * little;
+                EmbReal yf = y + fraction*i;
+                EmbReal tick = ruler_v.x - ruler_v.w * little;
                 if (i == 5) {
                     tick = ruler_v.x - ruler_v.w * medium;
                 }
@@ -4280,8 +4282,8 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
             }
             else {
                 for (int i=1; i<16; i++) {
-                    double yf = y + fraction*i;
-                    double tick = ruler_v.x - ruler_v.w * little;
+                    EmbReal yf = y + fraction*i;
+                    EmbReal tick = ruler_v.x - ruler_v.w * little;
                     if (i % 4 == 0) {
                         tick = ruler_v.x - ruler_v.w * medium;
                     }
@@ -4356,8 +4358,8 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
         EmbVector qsnapOffset = emb_vector(data->qsnapLocatorSize,
             data->qsnapLocatorSize);
 
-        double x = data->viewMousePoint.x - data->qsnapApertureSize;
-        double y = data->viewMousePoint.y - data->qsnapApertureSize;
+        EmbReal x = data->viewMousePoint.x - data->qsnapApertureSize;
+        EmbReal y = data->viewMousePoint.y - data->qsnapApertureSize;
         QList<EmbVector> apertureSnapPoints;
         QList<QGraphicsItem *> apertureItemList = items(x, y,
             data->qsnapApertureSize*2,
@@ -4609,7 +4611,7 @@ doc_cornerButtonClicked()
 
 /* . */
 void
-doc_scale(int32_t doc_id, double s)
+doc_scale(int32_t doc_id, EmbReal s)
 {
     Document *doc = documents[doc_id];
     doc->scale(s, s);
@@ -5013,15 +5015,15 @@ Document::mouseMoveEvent(QMouseEvent* event)
             documents[doc]->previewObjectItemGroup->setPos(p);
         }
         else if (data->previewMode == PREVIEW_ROTATE) {
-            double x = data->previewPoint.x;
-            double y = data->previewPoint.y;
-            double rot = data->previewData;
+            EmbReal x = data->previewPoint.x;
+            EmbReal y = data->previewPoint.y;
+            EmbReal rot = data->previewData;
 
-            double mouseAngle = QLineF(x, y, data->sceneMousePoint.x, data->sceneMousePoint.y).angle();
+            EmbReal mouseAngle = QLineF(x, y, data->sceneMousePoint.x, data->sceneMousePoint.y).angle();
 
-            double rad = radians(rot-mouseAngle);
-            double cosRot = cos(rad);
-            double sinRot = sin(rad);
+            EmbReal rad = radians(rot-mouseAngle);
+            EmbReal cosRot = cos(rad);
+            EmbReal sinRot = sin(rad);
             EmbVector p, rotv;
             p.x = -x;
             p.y = -y;
@@ -5034,11 +5036,11 @@ Document::mouseMoveEvent(QMouseEvent* event)
             documents[doc]->previewObjectItemGroup->setRotation(rot-mouseAngle);
         }
         else if (data->previewMode == PREVIEW_SCALE) {
-            double x = data->previewPoint.x;
-            double y = data->previewPoint.y;
-            double scaleFactor = data->previewData;
+            EmbReal x = data->previewPoint.x;
+            EmbReal y = data->previewPoint.y;
+            EmbReal scaleFactor = data->previewData;
 
-            double factor = QLineF(x, y, data->sceneMousePoint.x, data->sceneMousePoint.y).length() / scaleFactor;
+            EmbReal factor = QLineF(x, y, data->sceneMousePoint.x, data->sceneMousePoint.y).length() / scaleFactor;
 
             documents[doc]->previewObjectItemGroup->setScale(1);
             documents[doc]->previewObjectItemGroup->setPos(0, 0);
@@ -5056,8 +5058,8 @@ Document::mouseMoveEvent(QMouseEvent* event)
                 EmbVector old = emb_vector(0.0, 0.0);
                 QLineF scaleLine(x, y, old.x, old.y);
                 scaleLine.setLength(scaleLine.length()*factor);
-                double newX = scaleLine.x2();
-                double newY = scaleLine.y2();
+                EmbReal newX = scaleLine.x2();
+                EmbReal newY = scaleLine.y2();
 
                 delta.x = newX - old.x;
                 delta.y = newY - old.y;
@@ -5171,7 +5173,7 @@ doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
     DocumentData *data = doc_data(doc);
 
     /* Do The zoom */
-    double s;
+    EmbReal s;
     if (zoomDir > 0) {
         if (!doc_allow_zoom_in(doc)) {
             return;
@@ -5364,7 +5366,7 @@ undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString s)
 
 /* . */
 void
-undoable_scale(int doc, uint32_t obj, EmbVector v, double factor, EmbString msg)
+undoable_scale(int doc, uint32_t obj, EmbVector v, EmbReal factor, EmbString msg)
 {
     UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, msg,
         object_list[obj], doc, 0);
@@ -5741,7 +5743,7 @@ create_statusbar(MainWindow* mw)
 }
 
 void
-setMouseCoord(double x, double y)
+setMouseCoord(EmbReal x, EmbReal y)
 {
     /* TODO: set format from settings (Architectural, Decimal, Engineering, Fractional, Scientific) */
 
@@ -5882,7 +5884,7 @@ void
 LayerManager::addLayer(QString  name,
                             const bool visible,
                             const bool frozen,
-                            const double zValue,
+                            const EmbReal zValue,
                             const QRgb color,
                             QString  lineType,
                             QString  lineWeight,
@@ -5950,9 +5952,9 @@ create_details_dialog(void)
     uint32_t stitchesTrim = emb_pattern_count_type(pattern, TRIM);
     uint32_t colorTotal = pattern->thread_list->count;
     uint32_t colorChanges = emb_pattern_count_type(pattern, STOP);
-    double min_stitchlength = emb_pattern_shortest_stitch(pattern);
-    double max_stitchlength = emb_pattern_longest_stitch(pattern);
-    double total_stitchlength = emb_total_thread_length(pattern);
+    EmbReal min_stitchlength = emb_pattern_shortest_stitch(pattern);
+    EmbReal max_stitchlength = emb_pattern_longest_stitch(pattern);
+    EmbReal total_stitchlength = emb_total_thread_length(pattern);
 
     EmbRect bounds = emb_pattern_calcBoundingBox(pattern);
 
@@ -5966,7 +5968,7 @@ create_details_dialog(void)
     int bin[11];
     emb_length_histogram(pattern, bin);
 
-    double binSize = max_stitchlength / NUMBINS;
+    EmbReal binSize = max_stitchlength / NUMBINS;
     QString str;
     for (int i = 0; i < NUMBINS; i++) {
         str += QString::number(binSize * (i), 'f', 1);
@@ -7438,7 +7440,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     textSizeSelector->setFocusProxy(prompt);
     add_to_selector(textSizeSelector, text_size_list, "int", false);
-    setTextSize(get_int(TEXT_SIZE));
+    setTextSize(1.0*get_int(TEXT_SIZE));
     toolbar[TOOLBAR_TEXT]->addWidget(textSizeSelector);
     connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
 
@@ -8639,7 +8641,7 @@ updateLineEditStrIfVaries(QLineEdit* lineEdit, QString str)
 
 /* . */
 void
-update_lineedit_num(QLineEdit* lineEdit, double num, bool useAnglePrecision)
+update_lineedit_num(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision)
 {
     int precision = 0;
     if (useAnglePrecision) {
@@ -9099,7 +9101,7 @@ fieldEdited(QObject* fieldObj)
                 break;
             }
             if (objName == "lineEditTextSingleHeight") {
-                double height = line_edits["TextSingleHeight"]->text().toDouble();
+                EmbReal height = line_edits["TextSingleHeight"]->text().toDouble();
                 obj_set_text_size(tempObj->core, height);
                 break;
             }

@@ -165,7 +165,7 @@ spinBoxPromptFontSizeValueChanged(int value)
 
 /* . */
 void
-spinBoxRulerPixelSizeValueChanged(double value)
+spinBoxRulerPixelSizeValueChanged(EmbReal value)
 {
     setting[RULER_PIXEL_SIZE].dialog.r = value;
 }

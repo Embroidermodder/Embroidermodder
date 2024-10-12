@@ -799,7 +799,7 @@ runCommandMain(const char *cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandClick(const char *cmd, double x, double y)
+runCommandClick(const char *cmd, EmbReal x, EmbReal y)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
@@ -814,7 +814,7 @@ runCommandClick(const char *cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMove(const char *cmd, double x, double y)
+runCommandMove(const char *cmd, EmbReal x, EmbReal y)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
@@ -944,7 +944,7 @@ set_RubberMode(int mode)
 
 /* . */
 void
-set_RubberPoint(const EmbString key, double x, double y)
+set_RubberPoint(const EmbString key, EmbReal x, EmbReal y)
 {
     int32_t doc_index = activeDocument();
     if (doc_index >= 0) {
@@ -1146,7 +1146,7 @@ getCurrentLineWeight(void)
 
 /* . */
 void
-nativeCutSelected(double x, double y)
+nativeCutSelected(EmbReal x, EmbReal y)
 {
 }
 
@@ -2062,7 +2062,7 @@ calculate_distance_command(ScriptEnv* context)
 {
     EmbVector p1 = emb_vector(REAL(0), REAL(1));
     EmbVector p2 = emb_vector(REAL(2), REAL(3));
-    double r = emb_vector_distance(p1, p2);
+    EmbReal r = emb_vector_distance(p1, p2);
     return script_real(r);
 }
 
@@ -2237,8 +2237,8 @@ add_rubber_command(ScriptEnv* context)
     }
 
     /* FIXME: ERROR CHECKING */
-    double mx = run_command(context, "get mousex").r;
-    double my = run_command(context, "get mousey").r;
+    EmbReal mx = run_command(context, "get mousex").r;
+    EmbReal my = run_command(context, "get mousey").r;
 
     int type = -1;
     for (int i=0; !string_equal(geometry_type_keys[i], "END"); i++) {
@@ -2539,7 +2539,7 @@ get_command(ScriptEnv* context)
 
 /* . */
 void
-nativeScaleSelected(double x, double y, double factor)
+nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 {
     if (factor <= 0.0) {
         critical_box(translate("ScaleFactor Error"),

@@ -39,7 +39,7 @@ extern "C" {
 typedef char EmbStringTable[MAX_TABLE_LENGTH][MAX_STRING_LENGTH];
 
 typedef struct ScriptValue_ {
-    double r;
+    EmbReal r;
     int i;
     bool b;
     EmbString s;
@@ -128,8 +128,8 @@ typedef struct ObjectCore_ {
 
     EmbVector position;
 
-    double scale;
-    double rotation;
+    EmbReal scale;
+    EmbReal rotation;
 
     uint32_t rgb;
 
@@ -138,7 +138,7 @@ typedef struct ObjectCore_ {
     EmbString text;
     EmbString textFont;
     EmbString textJustify;
-    double textSize;
+    EmbReal textSize;
     bool textBold;
     bool textItalic;
     bool textUnderline;
@@ -152,10 +152,10 @@ typedef struct ObjectCore_ {
 
     bool curved;
     bool filled;
-    double arrowStyleAngle;
-    double arrowStyleLength;
-    double lineStyleAngle;
-    double lineStyleLength;
+    EmbReal arrowStyleAngle;
+    EmbReal arrowStyleLength;
+    EmbReal lineStyleAngle;
+    EmbReal lineStyleLength;
 
     int gripIndex;
 } ObjectCore;
@@ -166,8 +166,8 @@ typedef struct UndoData_ {
     int32_t doc;
     EmbVector delta;
     EmbVector pivot;
-    double angle;
-    double factor;
+    EmbReal angle;
+    EmbReal factor;
     EmbString navType;
     EmbVector fromCenter;
     EmbVector toCenter;
@@ -206,7 +206,7 @@ typedef struct DocumentData_ {
     bool qSnapToggle;
 
     EmbVector previewPoint;
-    double previewData;
+    EmbReal previewData;
     int previewMode;
 
     EmbVector viewMousePoint;
@@ -275,38 +275,38 @@ ScriptValue run_command(ScriptEnv *context, const char *cmd);
 
 ScriptValue script_bool(bool b);
 ScriptValue script_int(int i);
-ScriptValue script_real(double r);
+ScriptValue script_real(EmbReal r);
 ScriptValue script_string(EmbString s);
 ScriptValue command_prompt(ScriptEnv *context, EmbString line);
 
 ScriptEnv *add_string_argument(ScriptEnv *context, EmbString s);
-ScriptEnv *add_real_argument(ScriptEnv *context, double r);
+ScriptEnv *add_real_argument(ScriptEnv *context, EmbReal r);
 ScriptEnv *add_int_argument(ScriptEnv *context, int i);
 
 ScriptValue *setting_ptr(int key, int mode);
 void copy_setting(int key, int dst, int src);
 
 void set_int(int key, int value);
-void set_real(int key, double value);
+void set_real(int key, EmbReal value);
 void set_str(int key, EmbString value);
 void set_bool(int key, bool value);
 
 int get_int(int key);
-double get_real(int key);
+EmbReal get_real(int key);
 char *get_str(int key);
 bool get_bool(int key);
 
 void add_string_variable(ScriptEnv *context, const EmbString label, EmbString s);
 void add_int_variable(ScriptEnv *context, const EmbString label, int i);
-void add_real_variable(ScriptEnv *context, const EmbString label, double i);
+void add_real_variable(ScriptEnv *context, const EmbString label, EmbReal i);
 
 const char *script_get_string(ScriptEnv *context, const EmbString label);
 int script_get_int(ScriptEnv *context, const EmbString label);
-double script_get_real(ScriptEnv *context, const EmbString label);
+EmbReal script_get_real(ScriptEnv *context, const EmbString label);
 
 int script_set_string(ScriptEnv *context, const EmbString label, EmbString s);
 int script_set_int(ScriptEnv *context, const EmbString label, int i);
-int script_set_real(ScriptEnv *context, const EmbString label, double r);
+int script_set_real(ScriptEnv *context, const EmbString label, EmbReal r);
 
 void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, int id);
@@ -370,8 +370,8 @@ void processInput(char);
 /* -------------------------- Main Functions --------------------------- */
 
 void runCommandMain(const char *cmd);
-void runCommandClick(const char *cmd, double x, double y);
-void runCommandMove(const char *cmd, double x, double y);
+void runCommandClick(const char *cmd, EmbReal x, EmbReal y);
+void runCommandMove(const char *cmd, EmbReal x, EmbReal y);
 void runCommandContext(const char *cmd, const char *str);
 void runCommandPrompt(const char *cmd);
 
@@ -389,7 +389,7 @@ void updatePickAddMode(bool val);
 void pickAddModeToggled(void);
 
 void setTextFont(EmbString str);
-void setTextSize(double num);
+void setTextSize(EmbReal num);
 
 void promptHistoryAppended(EmbString txt);
 void logPromptInput(EmbString txt);
@@ -463,7 +463,7 @@ void comboBoxPromptFontStyleCurrentIndexChanged(EmbString);
 void spinBoxPromptFontSizeValueChanged(int);
 void spinBoxRecentMaxFilesValueChanged(int value);
 void spinBoxTrimDstNumJumpsValueChanged(int value);
-void spinBoxRulerPixelSizeValueChanged(double);
+void spinBoxRulerPixelSizeValueChanged(EmbReal);
 void sliderQSnapLocatorSizeValueChanged(int);
 void sliderQSnapApertureSizeValueChanged(int);
 void checkBoxLwtRealRenderStateChanged(int);
@@ -531,9 +531,9 @@ ScriptValue set_command(ScriptEnv *context);
 
 ScriptValue nativeRedo();
 
-void setMouseCoord(double x, double y);
+void setMouseCoord(EmbReal x, EmbReal y);
 
-void nativePrintArea(double x, double y, double w, double h);
+void nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
 void set_BackgroundColor(uint8_t r, uint8_t g, uint8_t b);
 void set_CrossHairColor(uint8_t r, uint8_t g, uint8_t b);
@@ -544,17 +544,17 @@ bool nativeAllowRubber();
 void nativeSpareRubber(int64_t id);
 
 void nativeDeleteSelected();
-void nativeCutSelected(double x, double y);
-void nativeCopySelected(double x, double y);
-void nativePasteSelected(double x, double y);
-void nativeMoveSelected(double dx, double dy);
-void nativeScaleSelected(double x, double y, double factor);
-void nativeRotateSelected(double x, double y, double rot);
-void nativeMirrorSelected(double x1, double y1, double x2, double y2);
+void nativeCutSelected(EmbReal x, EmbReal y);
+void nativeCopySelected(EmbReal x, EmbReal y);
+void nativePasteSelected(EmbReal x, EmbReal y);
+void nativeMoveSelected(EmbReal dx, EmbReal dy);
+void nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor);
+void nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot);
+void nativeMirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
 void set_cursor_shape(EmbString shape);
-double nativeCalculateDistance(double x1, double y1, double x2, double y2);
-double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
+double nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+double nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
 double nativeQSnapX();
 double nativeQSnapY();
@@ -570,7 +570,7 @@ void set_PromptPrefix(EmbString txt);
 /* TODO: void set_RubberFilter(int64_t id); */
 /* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
 void set_RubberMode(int mode);
-void set_RubberPoint(const EmbString key, double x, double y);
+void set_RubberPoint(const EmbString key, EmbReal x, EmbReal y);
 void set_RubberText(const EmbString key, EmbString txt);
 
 void toggleGrid(void);
@@ -593,7 +593,7 @@ EmbVector unpack_vector(ScriptEnv *context, int offset);
 
 void undoable_add(int32_t doc, uint32_t obj, EmbString label);
 void undoable_delete(int32_t doc, uint32_t obj, EmbString label);
-void undoable_scale(int32_t doc, uint32_t obj, EmbVector center, double factor, EmbString label);
+void undoable_scale(int32_t doc, uint32_t obj, EmbVector center, EmbReal factor, EmbString label);
 void undoable_move(int32_t doc, uint32_t obj, EmbVector delta, EmbString msg);
 void undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString msg);
 void undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
@@ -641,10 +641,10 @@ void doc_paste(int32_t doc);
 void doc_repeat_action(int32_t doc);
 void doc_move_action(int32_t doc);
 void doc_scale_action(int32_t doc);
-void doc_scale_selected(int32_t doc, double x, double y, double factor);
+void doc_scale_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal factor);
 void doc_rotate_action(int32_t doc);
-void doc_rotate_selected(int32_t doc, double x, double y, double rot);
-void doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2);
+void doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot);
+void doc_mirror_selected(int32_t doc, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 int doc_num_selected(int32_t doc);
 
 void doc_stop_gripping(int32_t, bool);
@@ -655,7 +655,7 @@ void doc_empty_grid(int32_t doc);
 void doc_set_grid_color(int32_t doc, uint32_t color);
 void doc_set_ruler_color(int32_t doc, uint32_t color);
 
-void doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data);
+void doc_preview_on(int32_t doc, int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
 void doc_preview_off(int32_t doc);
 
 void doc_delete_pressed(int32_t doc);
@@ -721,7 +721,7 @@ void doc_center_on(int32_t doc, EmbVector v);
 
 DocumentData *doc_data(int32_t doc);
 EmbVector doc_center(int32_t doc_id);
-void doc_scale(int32_t doc_id, double s);
+void doc_scale(int32_t doc_id, EmbReal s);
 void doc_begin_macro(int32_t doc, EmbString s);
 void doc_end_macro(int32_t doc);
 
@@ -755,7 +755,7 @@ void appendHistory(EmbString txt);
 /* -------------------------------- EmbString ------------------------------ */
 
 void emb_string(EmbString s, const char *str);
-int string_equal(EmbString a, const char *b);
+bool string_equal(EmbString a, const char *b);
 int string_compare(EmbString a, const char *b);
 void string_copy(EmbString dst, const char *src);
 int string_array_length(EmbString s[]);
@@ -805,24 +805,26 @@ EmbVector obj_end_point(ObjectCore *obj);
 double obj_length(ObjectCore *obj);
 
 void obj_set_pos(ObjectCore *obj, EmbVector point);
-void obj_set_x(ObjectCore *obj, double x);
-void obj_set_y(ObjectCore *obj, double y);
+void obj_set_x(ObjectCore *obj, EmbReal x);
+void obj_set_y(ObjectCore *obj, EmbReal y);
 
 void obj_set_center(ObjectCore *obj, EmbVector point);
-void obj_set_center_x(ObjectCore *obj, double centerX);
-void obj_set_center_y(ObjectCore *obj, double centerY);
+void obj_set_center_x(ObjectCore *obj, EmbReal centerX);
+void obj_set_center_y(ObjectCore *obj, EmbReal centerY);
 
 void obj_set_end_point_1(ObjectCore *obj, EmbVector endPt1);
 void obj_set_end_point_2(ObjectCore *obj, EmbVector endPt2);
 
-void obj_set_x1(ObjectCore *obj, double x);
-void obj_set_y1(ObjectCore *obj, double y);
-void obj_set_x2(ObjectCore *obj, double x);
-void obj_set_y2(ObjectCore *obj, double y);
+void obj_set_x1(ObjectCore *obj, EmbReal x);
+void obj_set_y1(ObjectCore *obj, EmbReal y);
+void obj_set_x2(ObjectCore *obj, EmbReal x);
+void obj_set_y2(ObjectCore *obj, EmbReal y);
 
-void obj_set_rect(uint32_t obj, double x, double y, double w, double h);
-void obj_set_rotation(uint32_t id, double rotation);
+void obj_set_rect(uint32_t obj, EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+void obj_set_rotation(uint32_t id, EmbReal rotation);
 void obj_set_rubber_mode(uint32_t id, int mode);
+void obj_set_rubber_point(uint32_t id, EmbString key, EmbVector v);
+void obj_set_rubber_text(uint32_t id, EmbString key, EmbString value);
 
 void obj_calculate_data(uint32_t obj);
 
@@ -836,7 +838,7 @@ EmbRect obj_rect(ObjectCore *obj);
 void obj_set_text(ObjectCore *obj, const char *str);
 void obj_set_text_font(ObjectCore *obj, const char *font);
 void obj_set_text_justify(ObjectCore *obj, const char *justify);
-void obj_set_text_size(ObjectCore *obj, double size);
+void obj_set_text_size(ObjectCore *obj, EmbReal size);
 void obj_set_text_style(ObjectCore *obj, bool bold, bool italic, bool under, bool strike, bool over);
 void obj_set_text_bold(ObjectCore *obj, bool val);
 void obj_set_text_italic(ObjectCore *obj, bool val);
@@ -867,9 +869,9 @@ extern EmbString lastCmd;
 
 extern ScriptEnv *global;
 
-extern ScriptValue script_null;
-extern ScriptValue script_true;
-extern ScriptValue script_false;
+extern const ScriptValue script_null;
+extern const ScriptValue script_true;
+extern const ScriptValue script_false;
 
 extern bool blinkState;
 

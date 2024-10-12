@@ -76,7 +76,7 @@ const char *index_th_name[] = {
     "seventh"
 };
 
-ScriptValue script_null = {
+const ScriptValue script_null = {
     .r = 0.0F,
     .i = 0,
     .b = false,
@@ -85,7 +85,7 @@ ScriptValue script_null = {
     .type = SCRIPT_NULL
 };
 
-ScriptValue script_true = {
+const ScriptValue script_true = {
     .r = 0.0F,
     .i = 1,
     .b = true,
@@ -94,7 +94,7 @@ ScriptValue script_true = {
     .type = SCRIPT_BOOL
 };
 
-ScriptValue script_false = {
+const ScriptValue script_false = {
     .r = 0.0F,
     .i = 0,
     .b = false,
@@ -270,7 +270,7 @@ set_int(int key, int value)
 
 /* . */
 void
-set_real(int key, double value)
+set_real(int key, EmbReal value)
 {
     if (settings_data[key].type != SCRIPT_REAL) {
         printf("ERROR: failed to set key %d (%s) as a real number.\n", key,
@@ -317,7 +317,7 @@ get_int(int key)
 }
 
 /* . */
-double
+EmbReal
 get_real(int key)
 {
     if (settings_data[key].type != SCRIPT_REAL) {
@@ -387,7 +387,7 @@ add_int_variable(ScriptEnv *context, const EmbString label, int i)
 }
 
 void
-add_real_variable(ScriptEnv *context, const EmbString label, double r)
+add_real_variable(ScriptEnv *context, const EmbString label, EmbReal r)
 {
     strcpy(context->variable[context->n_variables].label, label);
     context->variable[context->n_variables].r = r;
@@ -419,7 +419,7 @@ script_get_int(ScriptEnv *context, const EmbString label)
     return -1;
 }
 
-double
+EmbReal
 script_get_real(ScriptEnv *context, const EmbString label)
 {
     int i;
@@ -459,7 +459,7 @@ script_set_int(ScriptEnv *context, const EmbString label, int x)
 
 /* . */
 int
-script_set_real(ScriptEnv *context, const EmbString label, double r)
+script_set_real(ScriptEnv *context, const EmbString label, EmbReal r)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -500,7 +500,7 @@ script_int(int i)
 
 /* . */
 ScriptValue
-script_real(double r)
+script_real(EmbReal r)
 {
     ScriptValue value;
     value.type = SCRIPT_REAL;
@@ -529,7 +529,7 @@ add_string_argument(ScriptEnv *context, EmbString s)
 }
 
 ScriptEnv *
-add_real_argument(ScriptEnv *context, double r)
+add_real_argument(ScriptEnv *context, EmbReal r)
 {
     context->argument[context->argumentCount].r = r;
     context->argument[context->argumentCount].type = SCRIPT_REAL;
@@ -568,7 +568,7 @@ pack(ScriptEnv *context, const char *fmt, ...)
             add_int_argument(context, i);
             break;
         case 'r':
-            double r = va_arg(a, double);
+            EmbReal r = va_arg(a, double);
             add_real_argument(context, r);
             break;
         default:
@@ -1090,10 +1090,10 @@ emb_string(EmbString s, const char *str)
 /* Tests if EmbString matches a fixed string, often from compiled-in program
  * data.
  */
-int
+bool
 string_equal(EmbString a, const char *b)
 {
-    return !string_compare(a, b);
+    return (string_compare(a, b) == 0);
 }
 
 /* Compares two strings in a similar way to strcmp, however it is capped at
