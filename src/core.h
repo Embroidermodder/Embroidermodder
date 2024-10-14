@@ -178,6 +178,18 @@ typedef struct UndoData_ {
     uint32_t obj;
 } UndoData;
 
+typedef struct EmbVectorList_ {
+    EmbVector *data;
+    int count;
+    int size;
+} EmbVectorList;
+
+typedef struct EmbIdList_ {
+    int32_t *data;
+    int count;
+    int size;
+} EmbIdList;
+
 /* . */
 typedef struct DocumentData_ {
     EmbPattern *pattern;
@@ -186,10 +198,16 @@ typedef struct DocumentData_ {
 
     int32_t id;
 
-    /* Selection */
-    uint32_t *selected_items;
-    uint32_t n_selected;
-    uint32_t selected_memory;
+    EmbIdList *selectedItems;
+    EmbIdList *rubberRoomList;
+    EmbIdList *previewObjectList;
+    EmbIdList *spareRubberList;
+    EmbIdList *cutCopyObjectList;
+    EmbIdList *previewObjectItemGroup;
+    EmbIdList *hashDeletedObjects;
+    EmbIdList *pasteObjectItemGroup;
+
+    EmbVectorList *selectedGripPoints;
 
     /* UI State */
     bool grippingActive;
@@ -267,6 +285,10 @@ typedef struct DocumentData_ {
     EmbString curLineWeight;
 } DocumentData;
 
+typedef struct GlobalData_ {
+    const char *os;
+} GlobalData;
+
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
@@ -278,6 +300,20 @@ ScriptValue script_int(int i);
 ScriptValue script_real(EmbReal r);
 ScriptValue script_string(EmbString s);
 ScriptValue command_prompt(ScriptEnv *context, EmbString line);
+
+EmbVector find_mouse_snap_point(EmbVectorList *snap_points, EmbVector mouse_point);
+
+EmbVectorList *create_vector_list(void);
+void append_vector_to_list(EmbVectorList *, EmbVector);
+void remove_vector_from_list(EmbVectorList *, int32_t);
+void free_vector_list(EmbVectorList *);
+
+EmbIdList *create_id_list(void);
+void append_id_to_list(EmbIdList *list, int32_t);
+void remove_id_from_list(EmbIdList *list, int32_t);
+bool id_list_contains(EmbIdList *list, int32_t);
+void copy_object_list(EmbIdList *dst, EmbIdList *src);
+void free_id_list(EmbIdList *);
 
 ScriptEnv *add_string_argument(ScriptEnv *context, EmbString s);
 ScriptEnv *add_real_argument(ScriptEnv *context, EmbReal r);
@@ -607,13 +643,19 @@ void create_all_toolbars(void);
 void clearAllFields(void);
 void line_edit_clear(const char *key);
 void combo_box_clear(const char *key);
-void clear_font_combobox();
+void clear_font_combobox(void);
 
 int get_id(EmbStringTable, EmbString);
+
+const char *platform_string(void);
+
+void button_tip_of_the_day_clicked(int button);
+void free_objects(EmbIdList *);
 
 /* ------------------------------- Document -------------------------------- */
 
 void doc_init(int32_t doc);
+void free_doc(int32_t doc);
 
 bool doc_allow_zoom_in(int32_t doc);
 bool doc_allow_zoom_out(int32_t doc);
@@ -646,6 +688,8 @@ void doc_rotate_action(int32_t doc);
 void doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot);
 void doc_mirror_selected(int32_t doc, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 int doc_num_selected(int32_t doc);
+
+void doc_add_to_rubber_room(int32_t doc, int32_t item);
 
 void doc_stop_gripping(int32_t, bool);
 void hide_selectbox(int32_t);
@@ -710,12 +754,14 @@ void doc_pan_start(int32_t doc, EmbVector point);
 
 void doc_align_scene_point_with_view_point(int32_t doc, EmbVector scenePoint, EmbVector viewPoint);
 
-void doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode);
+void doc_undoable_add_obj(int32_t doc, uint32_t id, int rubberMode);
 
-double doc_width(int doc_index);
-double doc_height(int doc_index);
+double doc_width(int32_t doc);
+double doc_height(int32_t doc);
 
-void doc_update(int doc_index);
+void doc_corner_button_clicked(int32_t doc);
+void doc_add_item(int32_t doc, uint32_t id);
+void doc_update(int32_t doc_index);
 
 void doc_center_on(int32_t doc, EmbVector v);
 
@@ -782,8 +828,8 @@ uint32_t create_polyline(EmbPath *path, uint32_t rgb);
 uint32_t create_rect(EmbRect rect, uint32_t rgb);
 uint32_t create_text_single(EmbString str, EmbVector v, uint32_t rgb);
 
-void setObjectRubberPoint(uint32_t id, EmbString key, EmbVector value);
-void setObjectRubberText(uint32_t id, EmbString key, EmbString value);
+void obj_set_rubber_point(uint32_t id, EmbString key, EmbVector value);
+void obj_set_rubber_text(uint32_t id, EmbString key, EmbString value);
 
 EmbVector obj_pos(ObjectCore *obj);
 double obj_x(ObjectCore *obj);

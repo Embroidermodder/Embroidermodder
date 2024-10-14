@@ -545,7 +545,7 @@ run_command(ScriptEnv *context, const char *cmd)
 
     case ACTION_ERASE: {
         DocumentData *data = doc_data(doc_index);
-        if (data->n_selected <= 0) {
+        if (data->selectedItems->count <= 0) {
             /* TODO: Prompt to select objects if nothing is preselected. */
             prompt_output(
             translate("Preselect objects before invoking the delete command."));
@@ -1328,7 +1328,7 @@ main(void)
     context->delta = zero_vector;
 
     DocumentData *data = doc_data(doc_index);
-    if (data->n_selected <= 0) {
+    if (data->selectedItems->count <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();

@@ -253,6 +253,23 @@ create_text_single(EmbString str, EmbVector v, uint32_t rgb)
 
 /* . */
 EmbVector
+find_mouse_snap_point(EmbVectorList *snap_points, EmbVector mouse_point)
+{
+    float closest = 1.0e10;
+    EmbVector result = snap_points->data[0];
+    int i;
+    for (i=0; i<snap_points->count; i++) {
+        float distance = emb_vector_distance(snap_points->data[i], mouse_point);
+        if (distance < closest) {
+            closest = distance;
+            result = snap_points->data[i];
+        }
+    }
+    return result;
+}
+
+/* . */
+EmbVector
 obj_pos(ObjectCore *obj)
 {
     return obj->position;

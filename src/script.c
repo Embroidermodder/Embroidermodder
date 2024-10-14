@@ -108,6 +108,114 @@ const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
 int testing_mode = 0;
 
+int chunk_size = 100;
+
+/* EmbVectorList */
+EmbVectorList *
+create_vector_list(void)
+{
+    EmbVectorList *list;
+    list = (EmbVectorList*)malloc(sizeof(EmbVectorList));
+    list->data = (EmbVector*)malloc(chunk_size*sizeof(EmbVector));
+    list->count = 0;
+    list->size = chunk_size;
+    return list;
+}
+
+/* Checks if there is room to append a vector to the list, if there isn't then
+ * resize it, then append the vector.
+ */
+void
+append_vector_to_list(EmbVectorList *list, EmbVector v)
+{
+    if (list->count >= list->size - 1) {
+        list->size += chunk_size;
+        list->data = (EmbVector*)realloc(list->data,
+            (list->size)*sizeof(EmbVector));
+    }
+    list->data[list->count] = v;
+    list->count++;
+}
+
+/* Test this */
+void
+remove_vector_from_list(EmbVectorList *list, int32_t position)
+{
+    if (list->size <= 0) {
+        return;
+    }
+    memcpy(list->size + position + 1, list->size + position,
+        (list->size - position)*sizeof(EmbVector));
+    list->size--;
+}
+
+/* . */
+void
+free_vector_list(EmbVectorList *v)
+{
+    free(v->data);
+    free(v);
+}
+
+/* EmbIdList */
+EmbIdList *
+create_id_list(void)
+{
+    EmbIdList *list;
+    list = (EmbIdList*)malloc(sizeof(EmbIdList));
+    list->data = (int32_t*)malloc(chunk_size*sizeof(int32_t));
+    list->count = 0;
+    list->size = chunk_size;
+    return list;
+}
+
+/* Checks if there is room to append an id to the list, if there isn't then
+ * resize it, then append the id.
+ */
+void
+append_id_to_list(EmbIdList *list, int32_t i)
+{
+    if (list->count >= list->size - 1) {
+        list->size += chunk_size;
+        list->data = (EmbVector*)realloc(list->data,
+            (list->size)*sizeof(EmbVector));
+    }
+    list->data[list->count] = i;
+    list->count++;
+}
+
+bool
+id_list_contains(EmbIdList *list, int32_t a)
+{
+    for (int i=0; i<list->count; i++) {
+        if (list->data[i] == a) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/* Test this. */
+void
+remove_id_from_list(EmbIdList *list, int32_t position)
+{
+    if (list->size <= 0) {
+        return;
+    }
+    memcpy(list->size + position + 1, list->size + position,
+        (list->size - position)*sizeof(int32_t));
+    list->size --;
+}
+
+/* . */
+void
+free_id_list(EmbIdList *list)
+{
+    free(list->data);
+    free(list);
+}
+
+/* Print out version string and exit. */
 void
 version(void)
 {
@@ -1148,6 +1256,17 @@ string_list_contains(EmbStringTable list, EmbString entry)
         }
     }
     return 0;
+}
+
+/* . */
+const char *
+platform_string(void)
+{
+    EmbString message;
+    /* TODO: Append QSysInfo to string where applicable. */
+    sprintf(message, "Platform: %s", os);
+    debug_message(message);
+    return os;
 }
 
 /* . */

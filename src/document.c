@@ -25,9 +25,15 @@ doc_init(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
 
-    data->selected_memory = 1000;
-    data->selected_items = (int*)malloc(data->selected_memory*sizeof(int));
-    data->n_selected = 0;
+    data->selectedItems = create_id_list();
+    data->rubberRoomList = create_id_list();
+    data->previewObjectList = create_id_list();
+    data->spareRubberList = create_id_list();
+    data->previewObjectItemGroup = create_id_list();
+    data->pasteObjectItemGroup = create_id_list();
+    data->hashDeletedObjects = create_id_list();
+
+    data->selectedGripPoints = create_vector_list();
 
     /* NOTE: This has to be done before setting mouse tracking.
      * TODO: Review OpenGL for Qt5 later
@@ -96,6 +102,29 @@ doc_init(int32_t doc)
     }
 }
 
+/* TODO: review for memory leaks. */
+void
+free_doc(int32_t doc)
+{
+    DocumentData *data = doc_data(doc);
+
+    document_memory[doc] = false;
+
+    /* Prevent memory leaks by deleting any objects that were removed from the scene */
+    free_objects(data->hashDeletedObjects);
+
+    /* Prevent memory leaks by deleting any unused instances. */
+    free_objects(data->previewObjectList);
+
+    free_id_list(data->selectedItems);
+    free_id_list(data->rubberRoomList);
+    free_id_list(data->previewObjectList);
+    free_id_list(data->spareRubberList);
+    free_id_list(data->hashDeletedObjects);
+
+    free_vector_list(data->selectedGripPoints);
+}
+
 /* . */
 void
 doc_clear_selection(int32_t doc)
@@ -104,7 +133,7 @@ doc_clear_selection(int32_t doc)
         return;
     }
     DocumentData *data = doc_data(doc);
-    data->n_selected = 0;
+    data->selectedItems->count = 0;
 }
 
 /* TODO: finish this */
@@ -238,6 +267,73 @@ doc_zoom_window(int32_t doc)
 
 /* . */
 void
+doc_preview_on(int32_t doc, int clone, int mode, EmbReal x, EmbReal y, EmbReal data_)
+{
+    debug_message("View previewOn()");
+    DocumentData *data = doc_data(doc);
+    doc_preview_off(doc); /* Free the old objects before creating new ones */
+
+    data->previewMode = mode;
+
+    /* Create new objects and add them to the scene in an item group. */
+    if (clone == PREVIEW_CLONE_SELECTED) {
+        copy_object_list(data->previewObjectList, data->selectedItems);
+    }
+    else if (clone == PREVIEW_CLONE_RUBBER) {
+        copy_object_list(data->previewObjectList, data->rubberRoomList);
+    }
+    else {
+        return;
+    }
+    //FIXME: data->previewObjectItemGroup = documents[doc]->gscene->createItemGroup(documents[doc]->previewObjectList);
+
+    if (data->previewMode == PREVIEW_MOVE ||
+       data->previewMode == PREVIEW_ROTATE ||
+       data->previewMode == PREVIEW_SCALE) {
+        data->previewPoint.x = x;
+        data->previewPoint.y = y; /* NOTE: Move: basePt; Rotate: basePt; Scale: basePt; */
+        data->previewData = data_;           /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
+        data->previewActive = true;
+    }
+    else {
+        data->previewMode = PREVIEW_NULL;
+        data->previewPoint = emb_vector(0.0, 0.0);
+        data->previewData = 0;
+        data->previewActive = false;
+    }
+
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_preview_off(int32_t doc)
+{
+    /* Prevent memory leaks by deleting any unused instances */
+    DocumentData *data = doc_data(doc);
+    free_objects(data->previewObjectList);
+    data->previewObjectList->count = 0;
+
+    if (data->previewObjectItemGroup->count > 0) {
+        free_objects(data->previewObjectItemGroup);
+        data->previewObjectList->count = 0;
+    }
+
+    data->previewActive = false;
+
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_spare_rubber(int32_t doc, int64_t id)
+{
+    DocumentData *data = doc_data(doc);
+    append_id_to_list(data->spareRubberList, id);
+}
+
+/* . */
+void
 appendHistory(EmbString s)
 {
 }
@@ -253,7 +349,7 @@ void
 doc_cut(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    if (data->n_selected <= 0) {
+    if (data->selectedItems->count <= 0) {
         information_box(translate("Cut Preselect"),
             translate("Preselect objects before invoking the cut command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
@@ -343,7 +439,7 @@ void
 doc_copy(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    if (data->n_selected <= 0) {
+    if (data->selectedItems->count <= 0) {
         information_box(translate("Copy Preselect"),
             translate("Preselect objects before invoking the copy command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
@@ -351,6 +447,81 @@ doc_copy(int32_t doc)
 
     doc_copy_selected(doc);
     doc_clear_selection(doc);
+}
+/* . */
+void
+doc_set_rubber_mode(int32_t doc, int mode)
+{
+    DocumentData *data = doc_data(doc);
+    for (int i=0; i<data->rubberRoomList->count; i++) {
+        int32_t item = data->rubberRoomList->data[i];
+        obj_set_rubber_mode(item, mode);
+    }
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point)
+{
+    DocumentData *data = doc_data(doc);
+    for (int i=0; i<data->rubberRoomList->count; i++) {
+        int32_t item = data->rubberRoomList->data[i];
+        obj_set_rubber_point(item, key, point);
+    }
+    doc_update(doc);
+}
+
+/* . */
+void
+doc_set_rubber_text(int32_t doc, EmbString key, EmbString txt)
+{
+    DocumentData *data = doc_data(doc);
+    for (int i=0; i<data->rubberRoomList->count; i++) {
+        int32_t item = data->rubberRoomList->data[i];
+        obj_set_rubber_text(item, key, txt);
+    }
+    doc_update(doc);
+}
+
+/* The caller is responsible for allocating the memory. */
+void
+copy_object_list(EmbIdList *dst, EmbIdList *src)
+{
+    dst->count = 0;
+    for (int i = 0; i < src->count; i++) {
+        uint32_t copyObj = copy_object(src->data[i]);
+        append_id_to_list(dst, copyObj);
+    }
+}
+
+/* . */
+void
+doc_copy_selected(int32_t doc)
+{
+    DocumentData *data = doc_data(doc);
+
+    /* Prevent memory leaks by deleting any unpasted instances */
+    free_objects(data->cutCopyObjectList);
+
+    /* Create new objects but do not add them to the scene just yet.
+     * By creating them now, ensures that pasting will still work
+     * if the original objects are deleted before the paste occurs.
+     */
+    copy_object_list(data->cutCopyObjectList, data->selectedItems);
+}
+
+/* . */
+void
+doc_vulcanize_rubber_room(int32_t doc)
+{
+    DocumentData *data = doc_data(doc);
+    for (int i=0; i<data->rubberRoomList->count; i++) {
+        int32_t item = data->rubberRoomList->data[i];
+        doc_vulcanize_object(doc, item);
+    }
+    data->rubberRoomList->count = 0;
+    doc_update(doc);
 }
 
 /* . */
@@ -546,20 +717,20 @@ void
 doc_delete_selected(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         EmbString macro_name;
-        sprintf(macro_name, "%s %d", translate("Delete"), data->n_selected);
+        sprintf(macro_name, "%s %d", translate("Delete"), data->selectedItems->count);
         doc_begin_macro(doc, macro_name);
     }
-    for (int i = 0; i < data->n_selected; i++) {
-        ObjectCore* core = obj_get_core(data->selected_items[i]);
+    for (int i = 0; i < data->selectedItems->count; i++) {
+        ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
         if (core->geometry->type != OBJ_NULL) {
             EmbString label;
             sprintf(label, "%s%s", translate("Delete 1 "), core->OBJ_NAME);
-            undoable_delete(doc, data->selected_items[i], label);
+            undoable_delete(doc, data->selectedItems->data[i], label);
         }
     }
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         doc_end_macro(doc);
     }
 }
@@ -569,18 +740,18 @@ void
 doc_move_selected(int32_t doc, EmbVector delta)
 {
     DocumentData *data = doc_data(doc);
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         EmbString macro_name;
-        sprintf(macro_name, "%s %d", translate("Move"), data->n_selected);
+        sprintf(macro_name, "%s %d", translate("Move"), data->selectedItems->count);
         doc_begin_macro(doc, macro_name);
     }
-    for (int i = 0; i < data->n_selected; i++) {
-        ObjectCore* core = obj_get_core(data->selected_items[i]);
+    for (int i = 0; i < data->selectedItems->count; i++) {
+        ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
         EmbString msg;
         sprintf(msg, "%s 1 %s", translate("Move"), core->OBJ_NAME);
-        undoable_move(doc, data->selected_items[i], delta, msg);
+        undoable_move(doc, data->selectedItems->data[i], delta, msg);
     }
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         doc_end_macro(doc);
     }
 
@@ -593,19 +764,19 @@ void
 doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot)
 {
     DocumentData *data = doc_data(doc);
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         EmbString macro_name;
-        sprintf(macro_name, "%s %d", translate("Rotate"), data->n_selected);
+        sprintf(macro_name, "%s %d", translate("Rotate"), data->selectedItems->count);
         doc_begin_macro(doc, macro_name);
     }
-    for (int i = 0; i < data->n_selected; i++) {
-        ObjectCore* core = obj_get_core(data->selected_items[i]);
+    for (int i = 0; i < data->selectedItems->count; i++) {
+        ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
         EmbString msg;
         sprintf(msg, "%s 1 %s", translate("Rotate"), core->OBJ_NAME);
         EmbVector v = emb_vector(x, y);
-        undoable_rotate(doc, data->selected_items[i], v, msg);
+        undoable_rotate(doc, data->selectedItems->data[i], v, msg);
     }
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         doc_end_macro(doc);
     }
 
@@ -618,21 +789,21 @@ void
 doc_mirror_selected(int32_t doc, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     DocumentData *data = doc_data(doc);
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         EmbString macro_name;
-        sprintf(macro_name, "%s %d", translate("Mirror"), data->n_selected);
+        sprintf(macro_name, "%s %d", translate("Mirror"), data->selectedItems->count);
         doc_begin_macro(doc, macro_name);
     }
-    for (int i = 0; i < data->n_selected; i++) {
-        ObjectCore* core = obj_get_core(data->selected_items[i]);
+    for (int i = 0; i < data->selectedItems->count; i++) {
+        ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
         EmbString msg;
         sprintf(msg, "%s 1 %s", translate("Mirror"), core->OBJ_NAME);
         EmbVector start, end;
         start = emb_vector(x1, y1);
         end = emb_vector(x2, y2);
-        undoable_mirror(doc, data->selected_items[i], start, end, msg);
+        undoable_mirror(doc, data->selectedItems->data[i], start, end, msg);
     }
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         doc_end_macro(doc);
     }
 
@@ -645,19 +816,19 @@ void
 doc_scale_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal factor)
 {
     DocumentData *data = doc_data(doc);
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         EmbString macro_name;
-        sprintf(macro_name, "%s %d", translate("Scale"), data->n_selected);
+        sprintf(macro_name, "%s %d", translate("Scale"), data->selectedItems->count);
         doc_begin_macro(doc, macro_name);
     }
-    for (int i = 0; i < data->n_selected; i++) {
-        ObjectCore* core = obj_get_core(data->selected_items[i]);
+    for (int i = 0; i < data->selectedItems->count; i++) {
+        ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
         EmbVector v = emb_vector(x, y);
         EmbString msg;
         sprintf(msg, "%s%s", translate("Scale 1 "), core->OBJ_NAME);
-        undoable_scale(doc, data->selected_items[i], v, factor, msg);
+        undoable_scale(doc, data->selectedItems->data[i], v, factor, msg);
     }
-    if (data->n_selected > 1) {
+    if (data->selectedItems->count > 1) {
         doc_end_macro(doc);
     }
 

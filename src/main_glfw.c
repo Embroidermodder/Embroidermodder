@@ -98,8 +98,6 @@ activeDocument(void)
     }
 
 BASIC_DOC_F(doc_select_all)
-BASIC_DOC_F(doc_preview_off)
-BASIC_DOC_F(doc_vulcanize_rubber_room)
 BASIC_DOC_F(doc_pan_left)
 BASIC_DOC_F(doc_pan_right)
 BASIC_DOC_F(doc_pan_up)
@@ -107,7 +105,6 @@ BASIC_DOC_F(doc_pan_down)
 BASIC_DOC_F(doc_clear_rubber_room)
 BASIC_DOC_F(doc_paste)
 BASIC_DOC_F(doc_end_macro)
-BASIC_DOC_F(doc_copy_selected)
 BASIC_DOC_F(doc_recalculate_limits)
 BASIC_DOC_F(doc_create_origin)
 BASIC_DOC_F(doc_create_grid_polar)
@@ -145,6 +142,8 @@ NO_ARG_F(start_blinking)
 NO_ARG_F(prompt_end_command)
 NO_ARG_F(create_details_dialog)
 NO_ARG_F(onCloseWindow)
+
+void free_objects(EmbIdList*) {}
 
 void set_cursor_shape(EmbString shape) {}
 void doc_show_scroll_bars(int32_t doc, bool) {}
@@ -193,14 +192,9 @@ EmbVector doc_map_to_scene(int32_t, EmbVector v) {return v;}
 EmbVector doc_map_from_scene(int32_t, EmbVector v) {return v;}
 void doc_set_background_color(int doc_index, uint32_t color) {}
 void settingsDialog(EmbString s) {}
-void doc_set_rubber_point(int32_t, EmbString, EmbVector) {}
-void doc_set_rubber_text(int32_t, EmbString, EmbString) {}
 void setPromptFontFamily(char *) {}
 void setPromptFontStyle(char *) {}
 void setPromptFontSize(int) {}
-void doc_spare_rubber(int32_t, int64_t) {}
-void doc_set_rubber_mode(int32_t, int32_t) {}
-void doc_preview_on(int32_t, int, int, EmbReal, EmbReal, EmbReal) {}
 void doc_center_on(int32_t, EmbVector) {}
 EmbVector scene_get_point(EmbString) { return emb_vector(0.0F, 0.0F); }
 void doc_zoom_extents(int) {}
@@ -217,6 +211,9 @@ void obj_set_text(ObjectCore *obj, const char *text) {}
 void doc_scale(int32_t, EmbReal) {}
 void doc_stop_gripping(int32_t, bool) {}
 void doc_set_cross_hair_size(int32_t, uint8_t) {}
+void obj_set_rubber_point(uint32_t, EmbString, EmbVector) {}
+void obj_set_rubber_text(uint32_t, EmbString, EmbString) {}
+void doc_vulcanize_object(int32_t, uint32_t) {}
 
 /* TODO: Clear up memory. */
 void
