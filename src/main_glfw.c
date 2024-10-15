@@ -191,7 +191,8 @@ double doc_height(int32_t) {return 0.0;}
 EmbVector doc_map_to_scene(int32_t, EmbVector v) {return v;}
 EmbVector doc_map_from_scene(int32_t, EmbVector v) {return v;}
 void doc_set_background_color(int doc_index, uint32_t color) {}
-void settingsDialog(EmbString s) {}
+void settingsDialog(const char *s) {}
+void appendHistory(const char *s) {}
 void setPromptFontFamily(char *) {}
 void setPromptFontStyle(char *) {}
 void setPromptFontSize(int) {}

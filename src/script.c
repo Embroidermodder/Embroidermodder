@@ -42,8 +42,8 @@ int docIndex = 0;
 
 EmbString end_symbol = "END";
 EmbString settings_file = "settings.toml";
-ScriptValue state[MAX_STATE_VARIABLES];
-int state_length = 0;
+//ScriptValue state[MAX_STATE_VARIABLES];
+//int state_length = 0;
 bool key_state[N_KEY_SEQUENCES] = {
     false, false, false, false, false,
     false, false, false, false, false,
@@ -856,7 +856,6 @@ string_array_length(EmbString s[])
 /* table_name is stored at global scope in state,
  * so in order to access the 3rd element of table_name="array"
  * FIXME:
- */
 int
 load_string_table(toml_table_t* conf, const char *table_name)
 {
@@ -884,6 +883,8 @@ load_string_table(toml_table_t* conf, const char *table_name)
     free(str.u.s);
     return 1;
 }
+ */
+
 
 /* . */
 int
@@ -894,6 +895,7 @@ load_file(const char *fname)
     char error_buffer[200];
     toml_table_t *conf;
 
+/* FIXME:
     file = fopen(fname, "r");
     if (!file) {
         printf("ERROR: Failed to open \"%s\".\n", fname);
@@ -920,6 +922,7 @@ load_file(const char *fname)
         }
     }
     toml_free(conf);
+    */
     return 1;
 }
 
@@ -1264,9 +1267,9 @@ platform_string(void)
 {
     EmbString message;
     /* TODO: Append QSysInfo to string where applicable. */
-    sprintf(message, "Platform: %s", os);
+    sprintf(message, "Platform: %s", state.os);
     debug_message(message);
-    return os;
+    return state.os;
 }
 
 /* . */

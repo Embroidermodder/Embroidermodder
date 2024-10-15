@@ -791,7 +791,6 @@ public:
     ~CmdPrompt() {}
 
 public slots:
-    void setCurrentText(QString txt);
     void setPrefix(QString txt);
 
     void alert(QString txt);
@@ -1233,14 +1232,14 @@ promptInputPrevious(void)
         int maxNum = promptInputList.size();
         if (promptInputNum < 0) {
             promptInputNum = 0;
-            prompt->setCurrentText("");
+            prompt_set_current_text("");
         }
         else if (promptInputNum >= maxNum) {
             promptInputNum = maxNum;
-            prompt->setCurrentText("");
+            prompt_set_current_text("");
         }
         else {
-            prompt->setCurrentText(promptInputList.at(promptInputNum));
+            prompt_set_current_text(qPrintable(promptInputList.at(promptInputNum)));
         }
     }
 }
@@ -1259,14 +1258,14 @@ promptInputNext(void)
         int maxNum = promptInputList.size();
         if (promptInputNum < 0) {
             promptInputNum = 0;
-            prompt->setCurrentText("");
+            prompt_set_current_text("");
         }
         else if (promptInputNum >= maxNum) {
             promptInputNum = maxNum;
-            prompt->setCurrentText("");
+            prompt_set_current_text("");
         }
         else {
-            prompt->setCurrentText(promptInputList.at(promptInputNum));
+            prompt_set_current_text(qPrintable(promptInputList.at(promptInputNum)));
         }
     }
 }
@@ -1280,7 +1279,7 @@ MainWindow::runCommand()
         sprintf(message, "runCommand(%s)", qPrintable(act->objectName()));
         debug_message(message);
         prompt_end_command();
-        prompt->setCurrentText(act->objectName());
+        prompt_set_current_text(qPrintable(act->objectName()));
         processInput(' ');
     }
 }
@@ -3639,7 +3638,8 @@ doc_create_origin(int32_t doc)
 
     if (get_bool(GRID_SHOW_ORIGIN)) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */
-        svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path, emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
+        svg_to_painterpath(&(documents[doc]->originPath), state.circle_origin_path,
+            emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
     }
 }
 
@@ -3773,9 +3773,8 @@ doc_data(int32_t doc)
 
 /* . */
 void
-draw_arc(QPainter* painter, EmbArc arc)
+draw_arc(QPainter* /* unused */, EmbArc /* unused */)
 {
-    QPainterPath path;
 }
 
 /* . */
@@ -3794,9 +3793,8 @@ draw_circle(QPainter* painter, EmbCircle circle)
 
 /* . */
 void
-draw_ellipse(QPainter* painter, EmbEllipse ellipse)
+draw_ellipse(QPainter* /* unused */, EmbEllipse /* unused */)
 {
-    QPainterPath path;
 }
 
 /* . */
@@ -3808,7 +3806,7 @@ draw_line(QPainter* painter, EmbLine line)
 
 /* . */
 void
-draw_polygon(QPainter* painter, EmbPolygon polygon)
+draw_polygon(QPainter* /* unused */, EmbPolygon /* unused */)
 {
     QPainterPath path;
 }
@@ -5715,7 +5713,7 @@ LayerManager::addLayer(QString  name,
 
 /* . */
 QLabel *
-create_tr_label(char *label, QDialog *dialog)
+create_tr_label(const char *label, QDialog *dialog)
 {
     return new QLabel(translate(label), dialog);
 }
@@ -6295,17 +6293,10 @@ Application::setMainWin(MainWindow* mainWin)
 }
 
 void
-CmdPrompt::setCurrentText(QString txt)
-{
-    curText = prefix + txt;
-    promptInput->setText(curText);
-}
-
-void
 prompt_set_current_text(const char *txt)
 {
     curText = prefix + txt;
-    promptInput->setText(curText);
+    promptInput->setText(qPrintable(curText));
 }
 
 /* . */
@@ -6494,10 +6485,13 @@ CmdPrompt::setPrefix(QString  txt)
 
 /* . */
 void
-appendHistory(QString txt)
+appendHistory(const char *txt)
 {
-    if (txt.isNull()) {
-        txt = curText;
+    if (txt[0] == 0) {
+        promptHistory->append(curText);
+        /* emit historyAppended(formatStr); */
+        promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+        return;
     }
 
     promptHistory->append(txt);
@@ -6588,7 +6582,7 @@ processInput(char rapidChar)
             }
         }
         else {
-            appendHistory(curText);
+            appendHistory(qPrintable(curText));
             /* runCommand(curCmd, cmdtxt); */
         }
     }
@@ -6599,17 +6593,17 @@ processInput(char rapidChar)
             strcpy(lastCmd, qPrintable(curCmd));
             std::string cmd = aliasHash[cmdtxt.toStdString()];
             curCmd = QString(cmd.c_str());
-            appendHistory(curText);
+            appendHistory(qPrintable(curText));
             runCommandPrompt((char*)qPrintable(curCmd));
         }
         else if (cmdtxt.isEmpty()) {
             cmdActive = true;
-            appendHistory(curText);
+            appendHistory(qPrintable(curText));
             /* Rerun the last successful command. */
             runCommandPrompt((char*)qPrintable(lastCmd));
         }
         else {
-            appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>");
+            appendHistory(qPrintable(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>"));
         }
     }
 
@@ -6763,7 +6757,7 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         case Qt::Key_Escape: {
             prefix = defaultPrefix;
             clear();
-            appendHistory(curText + tr("*Cancel*"));
+            appendHistory(qPrintable(curText + translate("*Cancel*")));
             return true;
         }
         default: {
@@ -7930,7 +7924,7 @@ settingsPrompt(void)
 
 /* . */
 void
-settingsDialog(EmbString showTab)
+settingsDialog(const char *showTab)
 {
     Settings_Dialog dialog(_main, showTab, _main);
     dialog.exec();
@@ -9102,24 +9096,6 @@ updateAllBackgroundColor(uint32_t color)
 {
     mdiArea->setBackgroundColor(QColor(color));
 }
-
-/* . */
-EmbStringTable settings_tab_labels = {
-    "General",
-    "Files/Path",
-    "Display",
-    "Prompt",
-    "Open/Save",
-    "Printing",
-    "Snap",
-    "Grid/Ruler",
-    "Ortho/Polar",
-    "QuickSnap",
-    "QuickTrack",
-    "LineWeight",
-    "Selection",
-    "END"
-};
 
 /* . */
 Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* parent) : QDialog(parent)

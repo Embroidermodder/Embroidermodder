@@ -334,12 +334,6 @@ doc_spare_rubber(int32_t doc, int64_t id)
 
 /* . */
 void
-appendHistory(EmbString s)
-{
-}
-
-/* . */
-void
 updateColorLinetypeLineweight(void)
 {
 }

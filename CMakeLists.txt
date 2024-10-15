@@ -59,10 +59,9 @@ set(C_CORE
 	${SRC}/data/testing.c
 	${SRC}/data/tips.c
 	${SRC}/data/toolbars.c
-	${SRC}/data/paths.c
-	${SRC}/data/versions.c
 	${SRC}/data/constants.h
 
+	${SRC}/state.c
 	${SRC}/script.c
 	${SRC}/objects.c
 	${SRC}/commands.c

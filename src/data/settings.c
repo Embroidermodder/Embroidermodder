@@ -13,6 +13,24 @@
 #include "core.h"
 
 /* . */
+EmbStringTable settings_tab_labels = {
+    "General",
+    "Files/Path",
+    "Display",
+    "Prompt",
+    "Open/Save",
+    "Printing",
+    "Snap",
+    "Grid/Ruler",
+    "Ortho/Polar",
+    "QuickSnap",
+    "QuickTrack",
+    "LineWeight",
+    "Selection",
+    "END"
+};
+
+/* . */
 int preview_to_dialog[] = {
     GENERAL_MDI_BG_USE_LOGO,
     GENERAL_MDI_BG_USE_TEXTURE,

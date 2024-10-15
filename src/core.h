@@ -285,9 +285,34 @@ typedef struct DocumentData_ {
     EmbString curLineWeight;
 } DocumentData;
 
-typedef struct GlobalData_ {
-    const char *os;
-} GlobalData;
+/* Global variables and constants we need to access anywhere in the program
+ * with minimal overhead.
+ */
+typedef struct State_ {
+    char *os;
+
+    /* Versions */
+    char *embroidermodder_version;
+    char *libembroidery_version;
+    char *EmbroideryMobile_version;
+    char *PET_version;
+
+    /* Paths */
+    char *circle_origin_path;
+    char *one_path;
+    char *two_path;
+    char *three_path;
+    char *four_path;
+    char *five_path;
+    char *six_path;
+    char *seven_path;
+    char *eight_path;
+    char *nine_path;
+    char *zero_path;
+    char *minus_path;
+    char *apostrophe_path;
+    char *quote_path;
+} State;
 
 /* Scripting functions */
 ScriptEnv *create_script_env();
@@ -433,7 +458,7 @@ void logPromptInput(EmbString txt);
 void openFile(bool recent, EmbString recentFile);
 void openFilesSelected(EmbStringTable);
 
-void settingsDialog(EmbString showTab);
+void settingsDialog(const char *showTab);
 
 bool validFileFormat(EmbString fileName);
 
@@ -796,7 +821,7 @@ void window_previous(void);
 void enable_rapid_fire(void);
 void disable_rapid_fire(void);
 
-void appendHistory(EmbString txt);
+void appendHistory(const char *txt);
 
 /* -------------------------------- EmbString ------------------------------ */
 
@@ -929,20 +954,6 @@ extern EmbString end_symbol;
 
 extern const char *_appName_;
 extern const char *_appVer_;
-extern const char *one_path;
-extern const char *two_path;
-extern const char *three_path;
-extern const char *four_path;
-extern const char *five_path;
-extern const char *six_path;
-extern const char *seven_path;
-extern const char *eight_path;
-extern const char *nine_path;
-extern const char *zero_path;
-extern const char *minus_path;
-extern const char *apostrophe_path;
-extern const char *quote_path;
-extern const char *circle_origin_path;
 extern EmbString settings_file;
 
 extern const char *os;
@@ -1015,6 +1026,8 @@ extern EmbStringTable xpm_icon_labels;
 
 extern EmbString recent_files[MAX_FILES];
 
+extern EmbStringTable settings_tab_labels;
+
 extern int numOfDocs;
 extern int docIndex;
 extern bool shiftKeyPressedState;
@@ -1022,6 +1035,8 @@ extern bool cmdActive;
 extern bool rapidFireEnabled;
 extern bool isBlinking;
 extern bool key_state[N_KEY_SEQUENCES];
+
+extern State state;
 
 #ifdef __cplusplus
 }
