@@ -103,8 +103,8 @@ const ScriptValue script_false = {
     .type = SCRIPT_BOOL
 };
 
-const char* _appName_ = "Embroidermodder";
-const char* _appVer_  = "v2.0 alpha";
+EmbString _appName_ = "Embroidermodder";
+EmbString _appVer_  = "v2.0 alpha";
 bool exitApp = false;
 int testing_mode = 0;
 
@@ -287,9 +287,9 @@ run_testing(void)
 {
     int i;
     nanosleep_(2000);
-    int n = string_array_length(coverage_test);
+    int n = string_array_length(state.coverage_test);
     for (i=0; i<n; i++) {
-        runCommandMain(coverage_test[i]);
+        runCommandMain(state.coverage_test[i]);
         nanosleep_(1000);
     }        
 }

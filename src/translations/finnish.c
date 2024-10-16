@@ -4,15 +4,15 @@
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
  *
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
- * Czech Translation
+ * Finnish Translation
  */
 
 #include "../core.h"
 
-Translation czech_translation[] = {
+Translation finnish_translation[] = {
     {
         .source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
         .status = UNFINISHED
@@ -1294,6 +1294,38 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
+        .source = "Red",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Yellow",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Green",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Cyan",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Blue",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Magenta",
+        .status = UNFINISHED
+    },
+    {
+        .source = "White",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Other...",
+        .status = UNFINISHED
+    },
+    {
         .source = "&amp;File",
         .status = UNFINISHED
     },
@@ -1379,38 +1411,6 @@ Translation czech_translation[] = {
     },
     {
         .source = "Save",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Red",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Yellow",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Green",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Cyan",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Blue",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Magenta",
-        .status = UNFINISHED
-    },
-    {
-        .source = "White",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Other...",
         .status = UNFINISHED
     },
     {
@@ -1507,6 +1507,10 @@ Translation czech_translation[] = {
     },
     {
         .source = "Multiline Text",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Text",
         .status = UNFINISHED
     },
     {
@@ -1743,10 +1747,6 @@ Translation czech_translation[] = {
     },
     {
         .source = "Corner 4 Y",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Text",
         .status = UNFINISHED
     },
     {
@@ -2342,19 +2342,19 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Move 1",
+        .source = "Move 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Rotate 1",
+        .source = "Rotate 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Mirror 1",
+        .source = "Mirror 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Scale 1",
+        .source = "Scale 1 ",
         .status = UNFINISHED
     }
 };

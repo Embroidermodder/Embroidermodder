@@ -4,21 +4,21 @@
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
  *
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
- * Czech Translation
+ * Swedish Translation
  */
 
 #include "../core.h"
 
-Translation czech_translation[] = {
+Translation swedish_translation[] = {
     {
-        .source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
+        .source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify radius of circle or [Diameter]: ",
+        .source = "Specify radius of circle or [Diameter]:",
         .status = UNFINISHED
     },
     {
@@ -26,39 +26,39 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify second end point of circle&apos;s diameter: ",
+        .source = "Specify second end point of circle&apos;s diameter:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify second point on circle: ",
+        .source = "Specify second point on circle:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify third point on circle: ",
+        .source = "Specify third point on circle:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify point on object for second tangent of circle: ",
+        .source = "Specify point on object for second tangent of circle:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify radius of circle: ",
+        .source = "Specify radius of circle:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify second point: ",
+        .source = "Specify second point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify first end point of circle&apos;s diameter: ",
+        .source = "Specify first end point of circle&apos;s diameter:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify first point of circle: ",
+        .source = "Specify first point of circle:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify point on object for first tangent of circle: ",
+        .source = "Specify point on object for first tangent of circle:",
         .status = UNFINISHED
     },
     {
@@ -66,7 +66,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify diameter of circle: ",
+        .source = "Specify diameter of circle:",
         .status = UNFINISHED
     },
     {
@@ -82,19 +82,19 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify second point of circle: ",
+        .source = "Specify second point of circle:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify third point of circle: ",
+        .source = "Specify third point of circle:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify first point: ",
+        .source = "Specify first point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify second point: ",
+        .source = "Specify second point:",
         .status = UNFINISHED
     },
     {
@@ -118,15 +118,15 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify first axis start point or [Center]: ",
+        .source = "Specify first axis start point or [Center]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify first axis end point: ",
+        .source = "Specify first axis end point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify second axis end point or [Rotation]: ",
+        .source = "Specify second axis end point or [Rotation]:",
         .status = UNFINISHED
     },
     {
@@ -134,7 +134,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify center point: ",
+        .source = "Specify center point:",
         .status = UNFINISHED
     },
     {
@@ -146,11 +146,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify rotation: ",
+        .source = "Specify rotation:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify ellipse rotation: ",
+        .source = "Specify ellipse rotation:",
         .status = UNFINISHED
     },
     {
@@ -166,11 +166,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify first point: ",
+        .source = "Specify first point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify next point or [Undo]: ",
+        .source = "Specify next point or [Undo]:",
         .status = UNFINISHED
     },
     {
@@ -182,7 +182,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify point: ",
+        .source = "Specify point:",
         .status = UNFINISHED
     },
     {
@@ -198,11 +198,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify base point: ",
+        .source = "Specify base point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify destination point: ",
+        .source = "Specify destination point:",
         .status = UNFINISHED
     },
     {
@@ -210,11 +210,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify start point: ",
+        .source = "Specify start point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify next point or [Arc/Undo]: ",
+        .source = "Specify next point or [Arc/Undo]:",
         .status = UNFINISHED
     },
     {
@@ -226,11 +226,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify first point: ",
+        .source = "Specify first point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify next point: ",
+        .source = "Specify next point:",
         .status = UNFINISHED
     },
     {
@@ -246,7 +246,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify center point or [Sidelength]: ",
+        .source = "Specify center point or [Sidelength]:",
         .status = UNFINISHED
     },
     {
@@ -254,7 +254,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify start point: ",
+        .source = "Specify start point:",
         .status = UNFINISHED
     },
     {
@@ -262,11 +262,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify polygon corner point or [Distance]: ",
+        .source = "Specify polygon corner point or [Distance]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify polygon side point or [Distance]: ",
+        .source = "Specify polygon side point or [Distance]:",
         .status = UNFINISHED
     },
     {
@@ -278,7 +278,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify distance: ",
+        .source = "Specify distance:",
         .status = UNFINISHED
     },
     {
@@ -286,11 +286,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify first point: ",
+        .source = "Specify first point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify next point or [Undo]: ",
+        .source = "Specify next point or [Undo]:",
         .status = UNFINISHED
     },
     {
@@ -302,11 +302,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify first point: ",
+        .source = "Specify first point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify second point: ",
+        .source = "Specify second point:",
         .status = UNFINISHED
     },
     {
@@ -314,11 +314,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify first corner point or [Chamfer/Fillet]: ",
+        .source = "Specify first corner point or [Chamfer/Fillet]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify other corner point or [Dimensions]: ",
+        .source = "Specify other corner point or [Dimensions]:",
         .status = UNFINISHED
     },
     {
@@ -326,19 +326,19 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify first point: ",
+        .source = "Specify first point:",
         .status = UNFINISHED
     },
     {
-        .source = "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: ",
+        .source = "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify crosshair color: ",
+        .source = "Specify crosshair color:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify grid color: ",
+        .source = "Specify grid color:",
         .status = UNFINISHED
     },
     {
@@ -346,7 +346,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify background color: ",
+        .source = "Specify background color:",
         .status = UNFINISHED
     },
     {
@@ -358,19 +358,19 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify base point: ",
+        .source = "Specify base point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify rotation angle or [Reference]: ",
+        .source = "Specify rotation angle or [Reference]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify second point: ",
+        .source = "Specify second point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify the new angle: ",
+        .source = "Specify the new angle:",
         .status = UNFINISHED
     },
     {
@@ -402,15 +402,15 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify base point: ",
+        .source = "Specify base point:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify scale factor or [Reference]: ",
+        .source = "Specify scale factor or [Reference]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify second point: ",
+        .source = "Specify second point:",
         .status = UNFINISHED
     },
     {
@@ -418,7 +418,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify new length: ",
+        .source = "Specify new length:",
         .status = UNFINISHED
     },
     {
@@ -442,15 +442,15 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Current font: ",
+        .source = "Current font:",
         .status = UNFINISHED
     },
     {
-        .source = "Text height: ",
+        .source = "Text height:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify start point of text or [Justify/Setfont]: ",
+        .source = "Specify start point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
@@ -462,55 +462,55 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Enter text: ",
+        .source = "Enter text:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify center point of text or [Justify/Setfont]: ",
+        .source = "Specify center point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify right-end point of text or [Justify/Setfont]: ",
+        .source = "Specify right-end point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify middle point of text or [Justify/Setfont]: ",
+        .source = "Specify middle point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify top-left point of text or [Justify/Setfont]: ",
+        .source = "Specify top-left point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify top-center point of text or [Justify/Setfont]: ",
+        .source = "Specify top-center point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify top-right point of text or [Justify/Setfont]: ",
+        .source = "Specify top-right point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify middle-left point of text or [Justify/Setfont]: ",
+        .source = "Specify middle-left point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify middle-center point of text or [Justify/Setfont]: ",
+        .source = "Specify middle-center point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify middle-right point of text or [Justify/Setfont]: ",
+        .source = "Specify middle-right point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify bottom-left point of text or [Justify/Setfont]: ",
+        .source = "Specify bottom-left point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify bottom-center point of text or [Justify/Setfont]: ",
+        .source = "Specify bottom-center point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify bottom-right point of text or [Justify/Setfont]: ",
+        .source = "Specify bottom-right point of text or [Justify/Setfont]:",
         .status = UNFINISHED
     },
     {
@@ -518,11 +518,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ",
+        .source = "Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify font name: ",
+        .source = "Specify font name:",
         .status = UNFINISHED
     },
     {
@@ -542,15 +542,15 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Specify outer radius of star: ",
+        .source = "Specify outer radius of star:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify inner radius of star: ",
+        .source = "Specify inner radius of star:",
         .status = UNFINISHED
     },
     {
-        .source = "Specify center point: ",
+        .source = "Specify center point:",
         .status = UNFINISHED
     },
     {
@@ -562,7 +562,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Enter an option [Cascade/Tile]: ",
+        .source = "Enter an option [Cascade/Tile]:",
         .status = UNFINISHED
     },
     {
@@ -570,7 +570,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Command: ",
+        .source = "Command:",
         .status = UNFINISHED
     },
     {
@@ -846,7 +846,7 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "&amp;About ",
+        .source = "&amp;About",
         .status = UNFINISHED
     },
     {
@@ -1294,6 +1294,38 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
+        .source = "Red",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Yellow",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Green",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Cyan",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Blue",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Magenta",
+        .status = UNFINISHED
+    },
+    {
+        .source = "White",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Other...",
+        .status = UNFINISHED
+    },
+    {
         .source = "&amp;File",
         .status = UNFINISHED
     },
@@ -1379,38 +1411,6 @@ Translation czech_translation[] = {
     },
     {
         .source = "Save",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Red",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Yellow",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Green",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Cyan",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Blue",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Magenta",
-        .status = UNFINISHED
-    },
-    {
-        .source = "White",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Other...",
         .status = UNFINISHED
     },
     {
@@ -1507,6 +1507,10 @@ Translation czech_translation[] = {
     },
     {
         .source = "Multiline Text",
+        .status = UNFINISHED
+    },
+    {
+        .source = "Text",
         .status = UNFINISHED
     },
     {
@@ -1743,10 +1747,6 @@ Translation czech_translation[] = {
     },
     {
         .source = "Corner 4 Y",
-        .status = UNFINISHED
-    },
-    {
-        .source = "Text",
         .status = UNFINISHED
     },
     {
@@ -2318,11 +2318,11 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Grip Edit ",
+        .source = "Grip Edit",
         .status = UNFINISHED
     },
     {
-        .source = "Delete 1 ",
+        .source = "Delete 1",
         .status = UNFINISHED
     },
     {

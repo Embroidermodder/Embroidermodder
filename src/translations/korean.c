@@ -7,12 +7,12 @@
  * Visit https://www.libembroidery.org/refman for advice on altering this file,
  * or read the markdown version in embroidermodder2/docs/refman.
  *
- * Czech Translation
+ * Korean Translation
  */
 
 #include "../core.h"
 
-Translation czech_translation[] = {
+Translation korean_translation[] = {
     {
         .source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
         .status = UNFINISHED
@@ -2342,19 +2342,19 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Move 1",
+        .source = "Move 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Rotate 1",
+        .source = "Rotate 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Mirror 1",
+        .source = "Mirror 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Scale 1",
+        .source = "Scale 1 ",
         .status = UNFINISHED
     }
 };

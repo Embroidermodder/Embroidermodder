@@ -875,10 +875,10 @@ tipOfTheDay(void)
     ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
     // create_pixmap("did_you_know")
 
-    if (get_int(GENERAL_CURRENT_TIP) >= string_array_length(tips)) {
+    if (get_int(GENERAL_CURRENT_TIP) >= string_array_length(state.tips)) {
         set_int(GENERAL_CURRENT_TIP, 0);
     }
-    labelTipOfTheDay = new QLabel(tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(state.tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
@@ -928,17 +928,17 @@ button_tip_of_the_day_clicked(int button)
             current--;
         }
         else {
-            current = string_array_length(tips)-1;
+            current = string_array_length(state.tips)-1;
         }
-        labelTipOfTheDay->setText(tips[current]);
+        labelTipOfTheDay->setText(state.tips[current]);
         set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton2) {
         current++;
-        if (current >= string_array_length(tips)) {
+        if (current >= string_array_length(state.tips)) {
             current = 0;
         }
-        labelTipOfTheDay->setText(tips[current]);
+        labelTipOfTheDay->setText(state.tips[current]);
         set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton3) {
@@ -1805,7 +1805,7 @@ create_object(int type_, uint32_t rgb)
     obj->core = (ObjectCore*)malloc(sizeof(ObjectCore));
 
     if (type_ < 30) {
-        string_copy(obj->core->OBJ_NAME, object_names[type_]);
+        string_copy(obj->core->OBJ_NAME, state.object_names[type_]);
     }
     else {
         string_copy(obj->core->OBJ_NAME, "Unknown");
@@ -8213,7 +8213,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
     foreach (int objType, typeSet) {
         if ((objType > OBJ_BASE) && (objType <= OBJ_UNKNOWN)) {
             int index = objType - OBJ_ARC;
-            QString comboBoxStr = translate(object_names[index]);
+            QString comboBoxStr = translate(state.object_names[index]);
             comboBoxStr += " (" + QString().setNum(object_counts[index]) + ")";
             comboBoxSelected->addItem(comboBoxStr, objType);
         }
@@ -9125,9 +9125,9 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* paren
     tabWidget->addTab(createTabLineWeight(), translate("LineWeight"));
     tabWidget->addTab(createTabSelection(), translate("Selection"));
 
-    int n_tabs = string_array_length(settings_tab_labels);
+    int n_tabs = string_array_length(state.settings_tab_labels);
     for (int i=0; i<n_tabs; i++) {
-        if (showTab == settings_tab_labels[i]) {
+        if (showTab == state.settings_tab_labels[i]) {
             tabWidget->setCurrentIndex(i);
         }
     }
@@ -9334,8 +9334,8 @@ Settings_Dialog::createTabDisplay()
     /* TODO: Review OpenGL and Rendering settings for future inclusion */
     QGroupBox* groupBoxRender = new QGroupBox(translate("Rendering"), widget);
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
-    for (int i=0; render_hints[i] != TERMINATOR_SYMBOL; i++) {
-        QCheckBox* checkBox = create_checkbox(this, groupBoxRender, settings_data[render_hints[i]].id);
+    for (int i=0; state.render_hints[i] != TERMINATOR_SYMBOL; i++) {
+        QCheckBox* checkBox = create_checkbox(this, groupBoxRender, settings_data[state.render_hints[i]].id);
         vboxLayoutRender->addWidget(checkBox);
     }
     groupBoxRender->setLayout(vboxLayoutRender);
@@ -9499,9 +9499,9 @@ QWidget* Settings_Dialog::createTabOpenSave()
         SLOT(buttonCustomFilterClearAllClicked()));
 
     int i;
-    int n_extensions = string_array_length(extensions);
+    int n_extensions = string_array_length(state.extensions);
     for (i=0; i<n_extensions; i++) {
-        const char *extension = extensions[i];
+        const char *extension = state.extensions[i];
         custom_filter[extension] = new QCheckBox(extension, groupBoxCustomFilter);
         custom_filter[extension]->setChecked(QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("*." + QString(extension), Qt::CaseInsensitive));
         connect(custom_filter[extension], SIGNAL(stateChanged(int)), this,
@@ -9518,7 +9518,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     int row = 0;
     int column = 0;
     for (i=0; i<n_extensions; i++) {
-        const char *extension = extensions[i];
+        const char *extension = state.extensions[i];
         gridLayoutCustomFilter->addWidget(custom_filter[extension], row, column, Qt::AlignLeft);
         row++;
         if (row == 10) {
@@ -10453,10 +10453,10 @@ Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
     }
 
     bool dont_load = !setting[GRID_LOAD_FROM_FILE].dialog.b;
-    set_enabled_group(senderObj, grid_load_from_file_group, dont_load);
+    set_enabled_group(senderObj, state.grid_load_from_file_group, dont_load);
 
     bool use_this_origin = !setting[GRID_LOAD_FROM_FILE].dialog.b && !setting[GRID_CENTER_ON_ORIGIN].dialog.b;
-    set_enabled_group(senderObj, defined_origin_group, use_this_origin);
+    set_enabled_group(senderObj, state.defined_origin_group, use_this_origin);
 }
 
 /* . */
@@ -10470,8 +10470,8 @@ Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(QString type)
         return;
     }
     bool visibility = (type == "Circular");
-    set_visibility_group(senderObj, rectangular_grid_group, !visibility);
-    set_visibility_group(senderObj, circular_grid_group, visibility);
+    set_visibility_group(senderObj, state.rectangular_grid_group, !visibility);
+    set_visibility_group(senderObj, state.circular_grid_group, visibility);
 }
 
 /* . */
@@ -10482,7 +10482,7 @@ Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
 
     QObject* senderObj = sender();
     if (senderObj) {
-        set_enabled_group(senderObj, center_on_origin_group, !setting[GRID_CENTER_ON_ORIGIN].dialog.b);
+        set_enabled_group(senderObj, state.center_on_origin_group, !setting[GRID_CENTER_ON_ORIGIN].dialog.b);
     }
 }
 
@@ -10653,12 +10653,12 @@ Settings_Dialog::acceptChanges()
         setting[GRID_COLOR].dialog.i = setting[DISPLAY_CROSSHAIR_COLOR].accept.i;
     }
 
-    for (int i=0; preview_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
-        copy_setting(preview_to_dialog[i], SETTING_DIALOG, SETTING_PREVIEW);
+    for (int i=0; state.preview_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(state.preview_to_dialog[i], SETTING_DIALOG, SETTING_PREVIEW);
     }
 
-    for (int i=0; accept_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
-        copy_setting(accept_to_dialog[i], SETTING_DIALOG, SETTING_ACCEPT);
+    for (int i=0; state.accept_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(state.accept_to_dialog[i], SETTING_DIALOG, SETTING_ACCEPT);
     }
 
     for (int i=0; i < N_SETTINGS; i++) {

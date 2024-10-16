@@ -4,15 +4,15 @@
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
  *
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
- * Czech Translation
+ * Russian Translation
  */
 
 #include "../core.h"
 
-Translation czech_translation[] = {
+Translation russian_translation[] = {
     {
         .source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
         .status = UNFINISHED
@@ -575,7 +575,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "*Cancel*",
-        .status = UNFINISHED
+        .target = "*Отмена*",
     },
     {
         .source = "Embroidery Design Details",
@@ -823,7 +823,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Help",
-        .status = UNFINISHED
+        .target = "&amp;Справка",
     },
     {
         .source = "Displays help.",
@@ -847,7 +847,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;About ",
-        .status = UNFINISHED
+        .target = "&amp;О программе ",
     },
     {
         .source = "Displays information about this product.",
@@ -855,7 +855,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Undo",
-        .status = UNFINISHED
+        .target = "&amp;Отменить",
     },
     {
         .source = "Reverses the most recent action.",
@@ -1295,19 +1295,19 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;File",
-        .status = UNFINISHED
+        .target = "&amp;Файл",
     },
     {
         .source = "&amp;Edit",
-        .status = UNFINISHED
+        .target = "&amp;Редактировать",
     },
     {
         .source = "&amp;View",
-        .status = UNFINISHED
+        .target = "&amp;Вид",
     },
     {
         .source = "&amp;Window",
-        .status = UNFINISHED
+        .target = "&amp;Окно",
     },
     {
         .source = "Open &amp;Recent",
@@ -1323,15 +1323,15 @@ Translation czech_translation[] = {
     },
     {
         .source = "File",
-        .status = UNFINISHED
+        .target = "Файл",
     },
     {
         .source = "Edit",
-        .status = UNFINISHED
+        .target = "Редактировать",
     },
     {
         .source = "View",
-        .status = UNFINISHED
+        .target = "Вид",
     },
     {
         .source = "Zoom",
@@ -1347,7 +1347,8 @@ Translation czech_translation[] = {
     },
     {
         .source = "Help",
-        .status = UNFINISHED
+        .target = "Справка",
+        .status = DRAFT
     },
     {
         .source = "Layer",
@@ -2342,20 +2343,21 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Move 1",
+        .source = "Move 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Rotate 1",
+        .source = "Rotate 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Mirror 1",
+        .source = "Mirror 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Scale 1",
+        .source = "Scale 1 ",
         .status = UNFINISHED
     }
 };
+
 

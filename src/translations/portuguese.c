@@ -7,12 +7,12 @@
  * Visit https://www.libembroidery.org/refman for advice on altering this file,
  * or read the markdown version in embroidermodder2/docs/refman.
  *
- * Czech Translation
+ * Portuguese Translation
  */
 
 #include "../core.h"
 
-Translation czech_translation[] = {
+Translation portuguese_translation[] = {
     {
         .source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
         .status = UNFINISHED
@@ -575,7 +575,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "*Cancel*",
-        .status = UNFINISHED
+        .target = "*Cancelar*",
     },
     {
         .source = "Embroidery Design Details",
@@ -711,7 +711,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Cl&amp;ose",
-        .status = UNFINISHED
+        .target = "&amp;Fechar",
     },
     {
         .source = "Close the active window.",
@@ -719,7 +719,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Close &amp;All",
-        .status = UNFINISHED
+        .target = "Fec&amp;har todos",
     },
     {
         .source = "Close all the windows.",
@@ -743,7 +743,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;New",
-        .status = UNFINISHED
+        .target = "&amp;Novo",
     },
     {
         .source = "Create a new file.",
@@ -751,7 +751,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Open",
-        .status = UNFINISHED
+        .target = "A&amp;brir",
     },
     {
         .source = "Open an existing file.",
@@ -759,7 +759,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Save",
-        .status = UNFINISHED
+        .target = "&amp;Salvar",
     },
     {
         .source = "Save the design to disk.",
@@ -767,7 +767,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Save &amp;As",
-        .status = UNFINISHED
+        .target = "S&amp;alvar como",
     },
     {
         .source = "Save the design under a new name.",
@@ -775,7 +775,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Print",
-        .status = UNFINISHED
+        .target = "Im&amp;primir",
     },
     {
         .source = "Print the design.",
@@ -791,7 +791,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "E&amp;xit",
-        .status = UNFINISHED
+        .target = "Sa&amp;ir",
     },
     {
         .source = "Exit the application.",
@@ -1355,11 +1355,11 @@ Translation czech_translation[] = {
     },
     {
         .source = "Properties",
-        .status = UNFINISHED
+        .target = "Propriedades",
     },
     {
         .source = "Text",
-        .status = UNFINISHED
+        .target = "Texto",
     },
     {
         .source = "Command Prompt",
@@ -1415,7 +1415,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Properties",
-        .status = UNFINISHED
+        .target = "Propriedades",
     },
     {
         .source = "No Selection",
@@ -1515,7 +1515,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "General",
-        .status = UNFINISHED
+        .target = "Geral",
     },
     {
         .source = "Layer",
@@ -1535,7 +1535,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Geometry",
-        .status = UNFINISHED
+        .target = "Geometria",
     },
     {
         .source = "Center X",
@@ -1747,7 +1747,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Text",
-        .status = UNFINISHED
+        .target = "Texto",
     },
     {
         .source = "Contents",
@@ -1795,7 +1795,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "General",
-        .status = UNFINISHED
+        .target = "Geral",
     },
     {
         .source = "Files/Paths",
@@ -2342,19 +2342,19 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Move 1",
+        .source = "Move 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Rotate 1",
+        .source = "Rotate 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Mirror 1",
+        .source = "Mirror 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Scale 1",
+        .source = "Scale 1 ",
         .status = UNFINISHED
     }
 };

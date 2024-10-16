@@ -41,6 +41,7 @@ endif()
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
+set(TRANSLATION ${CMAKE_SOURCE_DIR}/src/translations)
 
 set(C_CORE
 	${EXTERN}/libembroidery/embroidery.c
@@ -48,6 +49,27 @@ set(C_CORE
 
 	${EXTERN}/tomlc99/toml.c
 	${EXTERN}/tomlc99/toml.h
+
+    ${TRANSLATION}/afrikaans.c
+    ${TRANSLATION}/arabic.c
+    ${TRANSLATION}/chinese.c
+    ${TRANSLATION}/czech.c
+    ${TRANSLATION}/danish.c
+    ${TRANSLATION}/dutch.c
+    ${TRANSLATION}/finnish.c
+    ${TRANSLATION}/french.c
+    ${TRANSLATION}/german.c
+    ${TRANSLATION}/greek.c
+    ${TRANSLATION}/korean.c
+    ${TRANSLATION}/italian.c
+    ${TRANSLATION}/japanese.c
+    ${TRANSLATION}/portuguese.c
+    ${TRANSLATION}/romanian.c
+    ${TRANSLATION}/polish.c
+    ${TRANSLATION}/russian.c
+    ${TRANSLATION}/spanish.c
+    ${TRANSLATION}/swedish.c
+    ${TRANSLATION}/turkish.c
 
 	${SRC}/commands_table.c
 	${SRC}/editors_table.c

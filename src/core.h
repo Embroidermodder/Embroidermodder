@@ -285,38 +285,78 @@ typedef struct DocumentData_ {
     EmbString curLineWeight;
 } DocumentData;
 
+/* Translations */
+#define UNFINISHED                     0
+#define DRAFT                          1
+#define FINISHED                       2
+
+#define ARABIC_SHORTCODE            "ar"
+#define AFRIKAANS_SHORTCODE         "af"
+#define CHINESE_SHORTCODE           "zh"
+#define CZECH_SHORTCODE             "cs"
+#define DANISH_SHORTCODE            "da"
+#define DUTCH_SHORTCODE             "nl"
+#define FINNISH_SHORTCODE           "fi"
+#define GERMAN_SHORTCODE            "de"
+#define GREEK_SHORTCODE             "el"
+#define ITALIAN_SHORTCODE           "it"
+#define JAPANESE_SHORTCODE          "ja"
+#define KOREAN_SHORTCODE            "ko"
+#define PORTUGUESE_SHORTCODE        "pt"
+#define ROMANIAN_SHORTCODE          "ro"
+#define RUSSIAN_SHORTCODE           "ru"
+#define SPANISH_SHORTCODE           "es"
+#define SWEDISH_SHORTCODE           "sv"
+#define TURKISH_SHORTCODE           "tr"
+
+/* For switch tables we can use this trick to use two character indices.
+ * For example: "case TWO_CHAR_INDEX(DUTCH_SHORTCODE):".
+ */
+#define TWO_CHAR_INDEX(A)             (0x100*A[0] + A[1])
+
+typedef struct Translation_ {
+    EmbString source;
+    EmbString target;
+    int32_t status;
+} Translation;
+
+typedef int EmbIntTable[100];
+
 /* Global variables and constants we need to access anywhere in the program
  * with minimal overhead.
+ *
+ * These are all fixed-size allocations so if they are capable of being
+ * replaced and makes the structure of the program in memory more interpretable.
  */
 typedef struct State_ {
-    char *os;
+    EmbString os;
 
     /* Versions */
-    char *embroidermodder_version;
-    char *libembroidery_version;
-    char *EmbroideryMobile_version;
-    char *PET_version;
+    EmbString embroidermodder_version;
+    EmbString libembroidery_version;
+    EmbString EmbroideryMobile_version;
+    EmbString PET_version;
 
     /* Paths */
-    char *circle_origin_path;
-    char *one_path;
-    char *two_path;
-    char *three_path;
-    char *four_path;
-    char *five_path;
-    char *six_path;
-    char *seven_path;
-    char *eight_path;
-    char *nine_path;
-    char *zero_path;
-    char *minus_path;
-    char *apostrophe_path;
-    char *quote_path;
+    EmbString circle_origin_path;
+    EmbString one_path;
+    EmbString two_path;
+    EmbString three_path;
+    EmbString four_path;
+    EmbString five_path;
+    EmbString six_path;
+    EmbString seven_path;
+    EmbString eight_path;
+    EmbString nine_path;
+    EmbString zero_path;
+    EmbString minus_path;
+    EmbString apostrophe_path;
+    EmbString quote_path;
 
     /* Menus */
     EmbStringTable menu_list;
-    int menubar_full_list[100];
-    int menubar_no_docs[100];
+    EmbIntTable menubar_full_list;
+    EmbIntTable menubar_no_docs;
 
     EmbStringTable file_menu;
     EmbStringTable edit_menu;
@@ -334,12 +374,12 @@ typedef struct State_ {
 
     /* Toolbars */
     EmbStringTable toolbar_list;
-    int toolbars_when_docs[100];
+    EmbIntTable toolbars_when_docs;
 
-    int top_toolbar[100];
-    int left_toolbar[100];
-    int bottom_toolbar[100];
-    int toolbar_horizontal[100];
+    EmbIntTable top_toolbar;
+    EmbIntTable left_toolbar;
+    EmbIntTable bottom_toolbar;
+    EmbIntTable toolbar_horizontal;
 
     EmbStringTable file_toolbar;
     EmbStringTable edit_toolbar; 
@@ -357,6 +397,29 @@ typedef struct State_ {
     EmbStringTable properties_toolbar;
     EmbStringTable text_toolbar;
     EmbStringTable prompt_toolbar;
+
+    /* Widget Groups */
+    EmbStringTable grid_load_from_file_group; 
+    EmbStringTable defined_origin_group; 
+    EmbStringTable rectangular_grid_group; 
+    EmbStringTable circular_grid_group; 
+    EmbStringTable center_on_origin_group; 
+
+    /* Settings */
+    EmbStringTable settings_tab_labels;
+    EmbIntTable preview_to_dialog;
+    EmbIntTable accept_to_dialog;
+    EmbIntTable render_hints;
+
+    /* Objects */
+    EmbStringTable object_names;
+
+    /* Testing */
+    EmbStringTable coverage_test;
+
+    /* Misc */
+    EmbStringTable tips;
+    EmbStringTable extensions;
 } State;
 
 /* Scripting functions */
@@ -997,17 +1060,9 @@ extern EmbStringTable button_list;
 
 extern EmbString end_symbol;
 
-extern const char *_appName_;
-extern const char *_appVer_;
+extern EmbString _appName_;
+extern EmbString _appVer_;
 extern EmbString settings_file;
-
-extern int render_hints[];
-
-extern EmbStringTable coverage_test;
-extern EmbStringTable object_names;
-
-extern int preview_to_dialog[];
-extern int accept_to_dialog[];
 
 extern EmbStringTable layer_list; 
 extern EmbStringTable color_list; 
@@ -1015,24 +1070,13 @@ extern EmbStringTable line_type_list;
 extern EmbStringTable line_weight_list; 
 extern EmbStringTable text_size_list; 
 
-extern EmbStringTable extensions; 
 extern EmbStringTable editor_list; 
 extern EmbStringTable combobox_list; 
-
-extern EmbStringTable grid_load_from_file_group; 
-extern EmbStringTable defined_origin_group; 
-extern EmbStringTable rectangular_grid_group; 
-extern EmbStringTable circular_grid_group; 
-extern EmbStringTable center_on_origin_group; 
-
-extern EmbStringTable tips; 
 
 extern char **xpm_icons[];
 extern EmbStringTable xpm_icon_labels;
 
 extern EmbString recent_files[MAX_FILES];
-
-extern EmbStringTable settings_tab_labels;
 
 extern int numOfDocs;
 extern int docIndex;

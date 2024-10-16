@@ -499,68 +499,247 @@ State state = {
         "END"
     },
 
-};
+    /* ---------------------------- Groups ------------------------------- */
 
-EmbStringTable coverage_test = {
-    "new",
-    "icon16",
-    "icon24",
-    "icon36",
-    "exit",
-    "END"
-};
+    .grid_load_from_file_group = {
+        "labelGridType",
+        "comboBoxGridType",
+        "checkBoxGridCenterOnOrigin",
+        "labelGridSpacingX",
+        "spinBoxGridSpacingX",
+        "labelGridSpacingY",
+        "spinBoxGridSpacingY",
+        "labelGridSizeRadius",
+        "spinBoxGridSizeRadius",
+        "labelGridSpacingRadius",
+        "spinBoxGridSpacingRadius",
+        "labelGridSpacingAngle",
+        "spinBoxGridSpacingAngle",
+        "END"
+    },
 
-EmbStringTable tips = {
-    "we need more tips?",
-    "you can change the color of the display through settings?",
-    "you can hide the scrollbars to increase the viewable area through settings?",
-    "you can change the icon size for increased visibility?",
-    "you can toggle the grid on and off by pressing the button in the statusbar?",
-    "the grid size can be changed to match your hoop size through settings?",
-    "the crosshair size is based on a percentage of your screen size? Setting it to 100 may help you visually line things up better.",
-    "you can pan by pressing the middle mouse button and dragging your mouse across the screen?",
-    "you can open and edit multiple designs simultaneously?",
-    "you that many embroidery machines support the .dst format?",
-    "that you can zoom in and out using your mouse wheel?",
-    "that you can use circular and isometric grids?",
-    "about our command line format converter?",
-    "that you can use the 'DAY' and 'NIGHT' commands to quickly switch the view colors to commonly used white or black?",
-    "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?",
-    "END"
-};
+    .defined_origin_group = {
+        "labelGridCenterX",
+        "spinBoxGridCenterX",
+        "labelGridCenterY",
+        "spinBoxGridCenterY",
+        "labelGridSizeX",
+        "spinBoxGridSizeX",
+        "labelGridSizeY",
+        "spinBoxGridSizeY",
+        "END"
+    },
 
-EmbStringTable object_names = {
-    "Base",
-    "Arc",
-    "Block",
-    "Circle",
-    "Aligned Dimension",
-    "Angular Dimension",
-    "Arc Length Dimension",
-    "Diameter Dimension",
-    "Leader Dimension",
-    "Linear Dimension",
-    "Ordinate Dimension",
-    "Radius Dimension",
-    "Ellipse",
-    "Elliptical Arc",
-    "Rubber",
-    "Grid",
-    "Hatch",
-    "Image",
-    "Infinite Line",
-    "Line",
-    "Path",
-    "Point",
-    "Polygon",
-    "Polyline",
-    "Ray",
-    "Rectangle",
-    "Slot",
-    "Spline",
-    "Multi Line Text",
-    "Single Line Text",
-    "Unknown"
+    .rectangular_grid_group = {
+        "labelGridSizeX",
+        "spinBoxGridSizeX",
+        "labelGridSizeY",
+        "spinBoxGridSizeY",
+        "labelGridSpacingX",
+        "spinBoxGridSpacingX",
+        "labelGridSpacingY",
+        "spinBoxGridSpacingY",
+        "END"
+    },
+
+    .circular_grid_group = {
+        "labelGridSizeRadius",
+        "spinBoxGridSizeRadius",
+        "labelGridSpacingRadius",
+        "spinBoxGridSpacingRadius",
+        "labelGridSpacingAngle",
+        "spinBoxGridSpacingAngle",
+        "END"
+    },
+
+    /* FIXME:. */
+    .center_on_origin_group = {
+        "END"
+    },
+
+    /* ---------------------------- Settings ------------------------------- */
+
+    .settings_tab_labels = {
+        "General",
+        "Files/Path",
+        "Display",
+        "Prompt",
+        "Open/Save",
+        "Printing",
+        "Snap",
+        "Grid/Ruler",
+        "Ortho/Polar",
+        "QuickSnap",
+        "QuickTrack",
+        "LineWeight",
+        "Selection",
+        "END"
+    },
+
+    .preview_to_dialog = {
+        GENERAL_MDI_BG_USE_LOGO,
+        GENERAL_MDI_BG_USE_TEXTURE,
+        GENERAL_MDI_BG_USE_COLOR,
+        DISPLAY_SHOW_SCROLLBARS,
+        DISPLAY_SELECTBOX_ALPHA,
+        PROMPT_FONT_FAMILY,
+        PROMPT_FONT_STYLE,
+        PROMPT_FONT_SIZE,
+        LWT_SHOW_LWT,
+        LWT_REAL_RENDER,
+        TERMINATOR_SYMBOL
+    },
+
+    .accept_to_dialog = {
+        GENERAL_MDI_BG_LOGO,
+        GENERAL_MDI_BG_TEXTURE,
+        GENERAL_MDI_BG_COLOR,
+        DISPLAY_CROSSHAIR_COLOR,
+        DISPLAY_BG_COLOR,
+        DISPLAY_SELECTBOX_LEFT_COLOR,
+        DISPLAY_SELECTBOX_LEFT_FILL,
+        DISPLAY_SELECTBOX_RIGHT_COLOR,
+        DISPLAY_SELECTBOX_RIGHT_FILL,
+        PROMPT_TEXT_COLOR,
+        PROMPT_BG_COLOR,
+        RULER_COLOR,
+        TERMINATOR_SYMBOL
+    },
+
+    .render_hints = {
+        DISPLAY_USE_OPENGL,
+        DISPLAY_RENDERHINT_AA,
+        DISPLAY_RENDERHINT_TEXT_AA,
+        DISPLAY_RENDERHINT_SMOOTH_PIX,
+        DISPLAY_RENDERHINT_HIGH_AA,
+        DISPLAY_RENDERHINT_NONCOSMETIC,
+        TERMINATOR_SYMBOL
+    },
+
+    /* ---------------------------- Objects ------------------------------- */
+
+    .object_names = {
+        "Base",
+        "Arc",
+        "Block",
+        "Circle",
+        "Aligned Dimension",
+        "Angular Dimension",
+        "Arc Length Dimension",
+        "Diameter Dimension",
+        "Leader Dimension",
+        "Linear Dimension",
+        "Ordinate Dimension",
+        "Radius Dimension",
+        "Ellipse",
+        "Elliptical Arc",
+        "Rubber",
+        "Grid",
+        "Hatch",
+        "Image",
+        "Infinite Line",
+        "Line",
+        "Path",
+        "Point",
+        "Polygon",
+        "Polyline",
+        "Ray",
+        "Rectangle",
+        "Slot",
+        "Spline",
+        "Multi Line Text",
+        "Single Line Text",
+        "Unknown"
+    },
+
+    /* ---------------------------- Testing ------------------------------- */
+
+    .coverage_test = {
+        "new",
+        "icon16",
+        "icon24",
+        "icon36",
+        "exit",
+        "END"
+    },
+
+    /* ---------------------------- Misc ---------------------------------- */
+
+    .tips = {
+        "we need more tips?",
+        "you can change the color of the display through settings?",
+        "you can hide the scrollbars to increase the viewable area through settings?",
+        "you can change the icon size for increased visibility?",
+        "you can toggle the grid on and off by pressing the button in the statusbar?",
+        "the grid size can be changed to match your hoop size through settings?",
+        "the crosshair size is based on a percentage of your screen size? Setting it to 100 may help you visually line things up better.",
+        "you can pan by pressing the middle mouse button and dragging your mouse across the screen?",
+        "you can open and edit multiple designs simultaneously?",
+        "you that many embroidery machines support the .dst format?",
+        "that you can zoom in and out using your mouse wheel?",
+        "that you can use circular and isometric grids?",
+        "about our command line format converter?",
+        "that you can use the 'DAY' and 'NIGHT' commands to quickly switch the view colors to commonly used white or black?",
+        "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?",
+        "END"
+    },
+
+    .extensions = {
+        "100",
+        "10o",
+        "ART",
+        "BMC",
+        "BRO",
+        "CND",
+        "COL",
+        "CSD",
+        "CSV",
+        "DAT",
+        "DEM",
+        "DSB",
+        "DST",
+        "DSZ",
+        "DXF",
+        "EDR",
+        "EMD",
+        "EXP",
+        "EXY",
+        "EYS",
+        "FXY",
+        "GNC",
+        "GT",
+        "HUS",
+        "INB",
+        "JEF",
+        "KSM",
+        "PCD",
+        "PCM",
+        "PCQ",
+        "PCS",
+        "PEC",
+        "PEL",
+        "PEM",
+        "PES",
+        "PHB",
+        "PHC",
+        "RGB",
+        "SEW",
+        "SHV",
+        "SST",
+        "STX",
+        "SVG",
+        "T09",
+        "TAP",
+        "THR",
+        "TXT",
+        "U00",
+        "U01",
+        "VIP",
+        "VP3",
+        "XXX",
+        "ZSK",
+        "END"
+    }
 };
 
 

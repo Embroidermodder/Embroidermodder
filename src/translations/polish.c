@@ -4,15 +4,15 @@
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
  *
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
- * Czech Translation
+ * Polish Translation
  */
 
 #include "../core.h"
 
-Translation czech_translation[] = {
+Translation polish_translation[] = {
     {
         .source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
         .status = UNFINISHED
@@ -79,7 +79,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Specify second point of circle: ",
@@ -143,7 +143,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Specify rotation: ",
@@ -175,7 +175,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Point or option keyword required.",
@@ -187,7 +187,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Preselect objects before invoking the move command.",
@@ -207,11 +207,11 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Specify start point: ",
-        .status = UNFINISHED
+        .target = "Określ punkt początkowy: ",
     },
     {
         .source = "Specify next point or [Arc/Undo]: ",
@@ -235,7 +235,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Enter number of sides",
@@ -251,11 +251,11 @@ Translation czech_translation[] = {
     },
     {
         .source = "Requires an integer between 3 and 1024.",
-        .status = UNFINISHED
+        .target = "Wymagana liczba całkowita z zakresu od 3 do 1024.",
     },
     {
         .source = "Specify start point: ",
-        .status = UNFINISHED
+        .target = "Określ punkt początkowy: ",
     },
     {
         .source = "Point or option keyword required.",
@@ -275,7 +275,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid option keyword.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowe słowo kluczowe opcji.",
     },
     {
         .source = "Specify distance: ",
@@ -295,7 +295,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Point or option keyword required.",
@@ -323,7 +323,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Specify first point: ",
@@ -375,7 +375,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Specify the reference angle",
@@ -423,7 +423,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Specify reference length",
@@ -515,7 +515,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid option keyword.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowe słowo kluczowe opcji.",
     },
     {
         .source = "Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ",
@@ -555,11 +555,11 @@ Translation czech_translation[] = {
     },
     {
         .source = "Requires an integer between 3 and 1024.",
-        .status = UNFINISHED
+        .target = "Wymagana liczba całkowita z zakresu od 3 do 1024.",
     },
     {
         .source = "Invalid point.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowy punkt.",
     },
     {
         .source = "Enter an option [Cascade/Tile]: ",
@@ -567,15 +567,15 @@ Translation czech_translation[] = {
     },
     {
         .source = "Invalid option keyword.",
-        .status = UNFINISHED
+        .target = "Nieprawidłowe słowo kluczowe opcji.",
     },
     {
         .source = "Command: ",
-        .status = UNFINISHED
+        .target = "Polecenie: ",
     },
     {
         .source = "*Cancel*",
-        .status = UNFINISHED
+        .target = "*Anuluj*",
     },
     {
         .source = "Embroidery Design Details",
@@ -639,7 +639,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Name",
-        .status = UNFINISHED
+        .target = "Nazwa",
     },
     {
         .source = "Visible",
@@ -655,7 +655,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Color",
-        .status = UNFINISHED
+        .target = "Kolor",
     },
     {
         .source = "Linetype",
@@ -667,7 +667,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Print",
-        .status = UNFINISHED
+        .target = "Drukuj",
     },
     {
         .source = "Error reading file",
@@ -743,6 +743,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;New",
+        .target = "&amp;Nowy",
         .status = UNFINISHED
     },
     {
@@ -751,6 +752,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Open",
+        .target = "&amp;Otwórz",
         .status = UNFINISHED
     },
     {
@@ -759,6 +761,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Save",
+        .target = "Zapi&amp;sz",
         .status = UNFINISHED
     },
     {
@@ -767,7 +770,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Save &amp;As",
-        .status = UNFINISHED
+        .target = "Zapisz j&amp;ako",
     },
     {
         .source = "Save the design under a new name.",
@@ -775,7 +778,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Print",
-        .status = UNFINISHED
+        .target = "&amp;Drukuj",
     },
     {
         .source = "Print the design.",
@@ -799,7 +802,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Cu&amp;t",
-        .status = UNFINISHED
+        .target = "Wy&amp;tnij",
     },
     {
         .source = "Cut the current selection&apos;s contents to the clipboard.",
@@ -807,7 +810,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Copy",
-        .status = UNFINISHED
+        .target = "&amp;Kopiuj",
     },
     {
         .source = "Copy the current selection&apos;s contents to the clipboard.",
@@ -815,7 +818,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Paste",
-        .status = UNFINISHED
+        .target = "&amp;Wklej",
     },
     {
         .source = "Paste the clipboard&apos;s contents into the current selection.",
@@ -823,7 +826,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Help",
-        .status = UNFINISHED
+        .target = "Pomo&amp;c",
     },
     {
         .source = "Displays help.",
@@ -855,7 +858,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Undo",
-        .status = UNFINISHED
+        .target = "&amp;Cofnij",
     },
     {
         .source = "Reverses the most recent action.",
@@ -863,7 +866,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Redo",
-        .status = UNFINISHED
+        .target = "&amp;Ponów",
     },
     {
         .source = "Reverses the effects of the previous undo action.",
@@ -1295,7 +1298,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;File",
-        .status = UNFINISHED
+        .target = "&amp;Plik",
     },
     {
         .source = "&amp;Edit",
@@ -1303,11 +1306,11 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;View",
-        .status = UNFINISHED
+        .target = "&amp;Widok",
     },
     {
         .source = "&amp;Window",
-        .status = UNFINISHED
+        .target = "&amp;Okno",
     },
     {
         .source = "Open &amp;Recent",
@@ -1319,7 +1322,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "&amp;Pan",
-        .status = UNFINISHED
+        .target = "&amp;Przesuń",
     },
     {
         .source = "File",
@@ -1331,7 +1334,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "View",
-        .status = UNFINISHED
+        .target = "Widok",
     },
     {
         .source = "Zoom",
@@ -1339,7 +1342,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Pan",
-        .status = UNFINISHED
+        .target = "Przesuń",
     },
     {
         .source = "Icon",
@@ -1347,7 +1350,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Help",
-        .status = UNFINISHED
+        .target = "Pomoc",
     },
     {
         .source = "Layer",
@@ -1367,7 +1370,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Open",
-        .status = UNFINISHED
+        .target = "Otwórz",
     },
     {
         .source = "Open w/Preview",
@@ -1383,31 +1386,31 @@ Translation czech_translation[] = {
     },
     {
         .source = "Red",
-        .status = UNFINISHED
+        .target = "Czerwony",
     },
     {
         .source = "Yellow",
-        .status = UNFINISHED
+        .target = "Żółty",
     },
     {
         .source = "Green",
-        .status = UNFINISHED
+        .target = "Zielony",
     },
     {
         .source = "Cyan",
-        .status = UNFINISHED
+        .target = "Niebiesko-Zielony",
     },
     {
         .source = "Blue",
-        .status = UNFINISHED
+        .target = "Niebieski",
     },
     {
         .source = "Magenta",
-        .status = UNFINISHED
+        .target = "Amarantowy",
     },
     {
         .source = "White",
-        .status = UNFINISHED
+        .target = "Biały",
     },
     {
         .source = "Other...",
@@ -1419,7 +1422,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "No Selection",
-        .status = UNFINISHED
+        .target = "Brak wyboru",
     },
     {
         .source = "Varies",
@@ -1427,7 +1430,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Arc",
-        .status = UNFINISHED
+        .target = "Łuk",
     },
     {
         .source = "Block",
@@ -1435,7 +1438,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Circle",
-        .status = UNFINISHED
+        .target = "Okrąg",
     },
     {
         .source = "Aligned Dimension",
@@ -1471,7 +1474,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Ellipse",
-        .status = UNFINISHED
+        .target = "Elipsa",
     },
     {
         .source = "Image",
@@ -1483,11 +1486,11 @@ Translation czech_translation[] = {
     },
     {
         .source = "Line",
-        .status = UNFINISHED
+        .target = "Linia",
     },
     {
         .source = "Point",
-        .status = UNFINISHED
+        .target = "Punkt",
     },
     {
         .source = "Polygon",
@@ -1495,7 +1498,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Polyline",
-        .status = UNFINISHED
+        .target = "Polilinia",
     },
     {
         .source = "Ray",
@@ -1503,7 +1506,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Rectangle",
-        .status = UNFINISHED
+        .target = "Prostokąt",
     },
     {
         .source = "Multiline Text",
@@ -1523,7 +1526,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Color",
-        .status = UNFINISHED
+        .target = "Kolor",
     },
     {
         .source = "LineType",
@@ -1531,23 +1534,23 @@ Translation czech_translation[] = {
     },
     {
         .source = "LineWeight",
-        .status = UNFINISHED
+        .target = "Szerokość linii",
     },
     {
         .source = "Geometry",
-        .status = UNFINISHED
+        .target = "Geometria",
     },
     {
         .source = "Center X",
-        .status = UNFINISHED
+        .target = "Środek X",
     },
     {
         .source = "Center Y",
-        .status = UNFINISHED
+        .target = "Środek Y",
     },
     {
         .source = "Radius",
-        .status = UNFINISHED
+        .target = "Promień",
     },
     {
         .source = "Start Angle",
@@ -1559,19 +1562,19 @@ Translation czech_translation[] = {
     },
     {
         .source = "Start X",
-        .status = UNFINISHED
+        .target = "Początek X",
     },
     {
         .source = "Start Y",
-        .status = UNFINISHED
+        .target = "Początek Y",
     },
     {
         .source = "End X",
-        .status = UNFINISHED
+        .target = "Koniec X",
     },
     {
         .source = "End Y",
-        .status = UNFINISHED
+        .target = "Koniec Y",
     },
     {
         .source = "Area",
@@ -1599,15 +1602,15 @@ Translation czech_translation[] = {
     },
     {
         .source = "Position X",
-        .status = UNFINISHED
+        .target = "Pozycja X",
     },
     {
         .source = "Position Y",
-        .status = UNFINISHED
+        .target = "Pozycja Y",
     },
     {
         .source = "Diameter",
-        .status = UNFINISHED
+        .target = "Średnica",
     },
     {
         .source = "Circumference",
@@ -1631,15 +1634,15 @@ Translation czech_translation[] = {
     },
     {
         .source = "Width",
-        .status = UNFINISHED
+        .target = "Szerokość",
     },
     {
         .source = "Height",
-        .status = UNFINISHED
+        .target = "Wysokość",
     },
     {
         .source = "Name",
-        .status = UNFINISHED
+        .target = "Nazwa",
     },
     {
         .source = "Path",
@@ -1671,7 +1674,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Angle",
-        .status = UNFINISHED
+        .target = "Kąt",
     },
     {
         .source = "Length",
@@ -1759,7 +1762,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "Justify",
-        .status = UNFINISHED
+        .target = "Justowanie",
     },
     {
         .source = "Rotation",
@@ -1839,7 +1842,7 @@ Translation czech_translation[] = {
     },
     {
         .source = "LineWeight",
-        .status = UNFINISHED
+        .target = "Szerokość linii",
     },
     {
         .source = "Selection",
@@ -2267,31 +2270,31 @@ Translation czech_translation[] = {
     },
     {
         .source = "Red",
-        .status = UNFINISHED
+        .target = "Czerwony",
     },
     {
         .source = "Yellow",
-        .status = UNFINISHED
+        .target = "Żółty",
     },
     {
         .source = "Green",
-        .status = UNFINISHED
+        .target = "Zielony",
     },
     {
         .source = "Cyan",
-        .status = UNFINISHED
+        .target = "Niebiesko-Zielony",
     },
     {
         .source = "Blue",
-        .status = UNFINISHED
+        .target = "Niebieski",
     },
     {
         .source = "Magenta",
-        .status = UNFINISHED
+        .target = "Amarantowy",
     },
     {
         .source = "White",
-        .status = UNFINISHED
+        .target = "Biały",
     },
     {
         .source = "Open File",
@@ -2342,19 +2345,19 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Move 1",
+        .source = "Move 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Rotate 1",
+        .source = "Rotate 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Mirror 1",
+        .source = "Mirror 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Scale 1",
+        .source = "Scale 1 ",
         .status = UNFINISHED
     }
 };

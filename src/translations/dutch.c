@@ -1,5 +1,4 @@
-/*
- * Embroidermodder 2.
+/* Embroidermodder 2.
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
@@ -7,74 +6,90 @@
  * Visit https://www.libembroidery.org/refman for advice on altering this file,
  * or read the markdown version in embroidermodder2/docs/refman.
  *
- * Czech Translation
+ * Dutch Translation
  */
 
 #include "../core.h"
 
-Translation czech_translation[] = {
+Translation dutch_translation[] = {
     {
         .source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify radius of circle or [Diameter]: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "This should never happen.",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify second end point of circle&apos;s diameter: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify second point on circle: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify third point on circle: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify point on object for second tangent of circle: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify radius of circle: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify second point: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify first end point of circle&apos;s diameter: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify first point of circle: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify point on object for first tangent of circle: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Point or option keyword required.",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Specify diameter of circle: ",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Requires numeric radius, point on circumference, or &quot;D&quot;.",
+        .target = "",
         .status = UNFINISHED
     },
     {
         .source = "Requires numeric distance or second point.",
+        .target = "",
         .status = UNFINISHED
     },
     {
@@ -2342,19 +2357,19 @@ Translation czech_translation[] = {
         .status = UNFINISHED
     },
     {
-        .source = "Move 1",
+        .source = "Move 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Rotate 1",
+        .source = "Rotate 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Mirror 1",
+        .source = "Mirror 1 ",
         .status = UNFINISHED
     },
     {
-        .source = "Scale 1",
+        .source = "Scale 1 ",
         .status = UNFINISHED
     }
 };
