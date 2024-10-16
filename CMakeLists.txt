@@ -49,18 +49,9 @@ set(C_CORE
 	${EXTERN}/tomlc99/toml.c
 	${EXTERN}/tomlc99/toml.h
 
-	${SRC}/data/commands.c
-	${SRC}/data/editors.c
-	${SRC}/data/menus.c
-	${SRC}/data/objects.c
-	${SRC}/data/properties.c
-	${SRC}/data/selectors.c
-	${SRC}/data/settings.c
-	${SRC}/data/testing.c
-	${SRC}/data/tips.c
-	${SRC}/data/toolbars.c
-	${SRC}/data/constants.h
-
+	${SRC}/commands_table.c
+	${SRC}/editors_table.c
+	${SRC}/settings_table.c
 	${SRC}/state.c
 	${SRC}/script.c
 	${SRC}/objects.c
@@ -70,6 +61,7 @@ set(C_CORE
 	${SRC}/properties.c
 	${SRC}/xpm.c
 
+	${SRC}/constants.h
 	${SRC}/core.h
 )
 

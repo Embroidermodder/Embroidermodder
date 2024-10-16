@@ -7023,11 +7023,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     _main = this;
 
     for (int i=0; i<N_MENUS; i++) {
-        menu[i] = new QMenu(translate(menu_list[i]), this);
+        menu[i] = new QMenu(translate(state.menu_list[i]), this);
     }
 
     for (int i=0; i<N_TOOLBARS; i++) {
-        toolbar[i] = new QToolBar(translate(toolbar_list[i]), this);
+        toolbar[i] = new QToolBar(translate(state.toolbar_list[i]), this);
     }
 
     /* Selectors */
@@ -7136,7 +7136,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     createAllActions();
     create_all_menus();
 
-    for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+    for (int i=0; state.menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
         menuBar()->addMenu(menu[i]);
     }
 
@@ -7237,14 +7237,14 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbar[TOOLBAR_PROMPT]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
     connect(toolbar[TOOLBAR_PROMPT], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 
-    add_to_toolbar(TOOLBAR_DRAW, draw_toolbar);
-    add_to_toolbar(TOOLBAR_MODIFY, modify_toolbar);
+    add_to_toolbar(TOOLBAR_DRAW, state.draw_toolbar);
+    add_to_toolbar(TOOLBAR_MODIFY, state.modify_toolbar);
 
-    set_toolbar_horizontal(toolbar_horizontal);
+    set_toolbar_horizontal(state.toolbar_horizontal);
 
-    add_toolbar_to_window(Qt::TopToolBarArea, top_toolbar);
-    add_toolbar_to_window(Qt::BottomToolBarArea, bottom_toolbar);
-    add_toolbar_to_window(Qt::LeftToolBarArea, left_toolbar);
+    add_toolbar_to_window(Qt::TopToolBarArea, state.top_toolbar);
+    add_toolbar_to_window(Qt::BottomToolBarArea, state.bottom_toolbar);
+    add_toolbar_to_window(Qt::LeftToolBarArea, state.left_toolbar);
 
     /* zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly); */
 
@@ -7632,8 +7632,8 @@ update_interface()
 
     if (numOfDocs) {
         /* Toolbars */
-        for (int i=0; toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
-            toolbar[toolbars_when_docs[i]]->show();
+        for (int i=0; state.toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
+            toolbar[state.toolbars_when_docs[i]]->show();
         }
 
         /* DockWidgets */
@@ -7642,8 +7642,8 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
-            menuBar()->addMenu(menu[menubar_full_list[i]]);
+        for (int i=0; state.menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+            menuBar()->addMenu(menu[state.menubar_full_list[i]]);
         }
         menu[MENU_WINDOW]->setEnabled(true);
 
@@ -7656,8 +7656,8 @@ update_interface()
     }
     else {
         /* Toolbars */
-        for (int i=0; toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
-            toolbar[toolbars_when_docs[i]]->hide();
+        for (int i=0; state.toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
+            toolbar[state.toolbars_when_docs[i]]->hide();
         }
 
         /* DockWidgets */
@@ -7666,8 +7666,8 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        for (int i=0; menubar_no_docs[i] != TERMINATOR_SYMBOL; i++) {
-            menuBar()->addMenu(menu[menubar_no_docs[i]]);
+        for (int i=0; state.menubar_no_docs[i] != TERMINATOR_SYMBOL; i++) {
+            menuBar()->addMenu(menu[state.menubar_no_docs[i]]);
         }
         menu[MENU_WINDOW]->setEnabled(false);
 
@@ -7817,7 +7817,7 @@ add_to_menu(int index, EmbStringTable menu_data)
             menu[index]->addSeparator();
         }
         else if (s[0] == '>') {
-            int id = get_id(menu_list, s+1);
+            int id = get_id(state.menu_list, s+1);
             if (id < 0) {
                 debug_message("Failed to identify submenu.");
                 continue;
@@ -7934,7 +7934,7 @@ settingsDialog(const char *showTab)
 void
 add_to_toolbar(int id, EmbStringTable toolbar_data)
 {
-    toolbar[id]->setObjectName(QString("toolbar") + toolbar_list[id]);
+    toolbar[id]->setObjectName(QString("toolbar") + state.toolbar_list[id]);
 
     int n = string_array_length(toolbar_data);
     for (int i=0; i<n; i++) {

@@ -25,7 +25,7 @@ extern "C" {
 
 #include "../extern/libembroidery/embroidery.h"
 
-#include "data/constants.h"
+#include "constants.h"
 
 #define REAL(arg) context->argument[arg].r
 #define INT(arg)  context->argument[arg].i
@@ -312,6 +312,51 @@ typedef struct State_ {
     char *minus_path;
     char *apostrophe_path;
     char *quote_path;
+
+    /* Menus */
+    EmbStringTable menu_list;
+    int menubar_full_list[100];
+    int menubar_no_docs[100];
+
+    EmbStringTable file_menu;
+    EmbStringTable edit_menu;
+    EmbStringTable view_menu;
+    EmbStringTable zoom_menu;
+    EmbStringTable pan_menu;
+    EmbStringTable help_menu;
+    EmbStringTable draw_menu;
+    EmbStringTable tools_menu;
+    EmbStringTable modify_menu;
+    EmbStringTable dimension_menu;
+    EmbStringTable sandbox_menu;
+    EmbStringTable recent_menu;
+    EmbStringTable window_menu;
+
+    /* Toolbars */
+    EmbStringTable toolbar_list;
+    int toolbars_when_docs[100];
+
+    int top_toolbar[100];
+    int left_toolbar[100];
+    int bottom_toolbar[100];
+    int toolbar_horizontal[100];
+
+    EmbStringTable file_toolbar;
+    EmbStringTable edit_toolbar; 
+    EmbStringTable view_toolbar; 
+    EmbStringTable zoom_toolbar; 
+    EmbStringTable pan_toolbar;
+    EmbStringTable icon_toolbar; 
+    EmbStringTable help_toolbar; 
+    EmbStringTable draw_toolbar; 
+    EmbStringTable inquiry_toolbar; 
+    EmbStringTable modify_toolbar; 
+    EmbStringTable dimension_toolbar; 
+    EmbStringTable sandbox_toolbar;
+    EmbStringTable layer_toolbar;
+    EmbStringTable properties_toolbar;
+    EmbStringTable text_toolbar;
+    EmbStringTable prompt_toolbar;
 } State;
 
 /* Scripting functions */
@@ -925,6 +970,7 @@ extern Command command_data[MAX_COMMANDS];
 extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
 extern SettingsData settings_data[N_SETTINGS];
+extern GroupBoxData group_box_list[];
 
 extern bool document_memory[MAX_OPEN_FILES];
 
@@ -947,7 +993,6 @@ extern const ScriptValue script_false;
 extern bool blinkState;
 
 extern int testing_mode;
-extern GroupBoxData group_box_list[];
 extern EmbStringTable button_list;
 
 extern EmbString end_symbol;
@@ -956,52 +1001,13 @@ extern const char *_appName_;
 extern const char *_appVer_;
 extern EmbString settings_file;
 
-extern const char *os;
-
 extern int render_hints[];
 
 extern EmbStringTable coverage_test;
 extern EmbStringTable object_names;
 
-extern EmbStringTable menu_list;
-extern int menubar_full_list[];
-extern int menubar_no_docs[];
-
-extern EmbStringTable file_menu;
-extern EmbStringTable edit_menu;
-extern EmbStringTable view_menu;
-extern EmbStringTable zoom_menu;
-extern EmbStringTable pan_menu;
-extern EmbStringTable help_menu;
-extern EmbStringTable draw_menu;
-extern EmbStringTable tools_menu;
-extern EmbStringTable modify_menu;
-extern EmbStringTable dimension_menu;
-extern EmbStringTable sandbox_menu;
-
-extern EmbStringTable toolbar_list;
-extern int toolbars_when_docs[];
-
 extern int preview_to_dialog[];
 extern int accept_to_dialog[];
-
-extern EmbStringTable file_toolbar;
-extern EmbStringTable edit_toolbar; 
-extern EmbStringTable view_toolbar; 
-extern EmbStringTable zoom_toolbar; 
-extern EmbStringTable pan_toolbar;
-extern EmbStringTable icon_toolbar; 
-extern EmbStringTable help_toolbar; 
-extern EmbStringTable draw_toolbar; 
-extern EmbStringTable inquiry_toolbar; 
-extern EmbStringTable modify_toolbar; 
-extern EmbStringTable dimension_toolbar; 
-extern EmbStringTable sandbox_toolbar;
-
-extern int top_toolbar[];
-extern int left_toolbar[];
-extern int bottom_toolbar[];
-extern int toolbar_horizontal[];
 
 extern EmbStringTable layer_list; 
 extern EmbStringTable color_list; 

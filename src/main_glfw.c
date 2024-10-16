@@ -328,10 +328,10 @@ draw_menubar(NVGcontext *vg, EmbRect container)
 
     float bounds[4] = {0.0F, 0.0F, 0.0F, 0.0F};
     float x_offset = -button_padding;
-    for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+    for (int i=0; state.menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
         x_offset += (bounds[2] - bounds[0]) + 2*button_padding;
         menu_buttons[i] = make_menubar_button(vg, x_offset, 3,
-            menu_list[menubar_full_list[i]], bounds);
+            state.menu_list[state.menubar_full_list[i]], bounds);
         draw_button(vg, menu_buttons[i], bounds);
     }
 }

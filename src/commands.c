@@ -2716,19 +2716,19 @@ create_all_menus(void)
      */
     debug_message("create all menus");
 
-    add_to_menu(MENU_FILE, file_menu);
-    add_to_menu(MENU_EDIT, edit_menu);
-    add_to_menu(MENU_VIEW, view_menu);
-    add_to_menu(MENU_DRAW, draw_menu);
-    add_to_menu(MENU_TOOLS, tools_menu);
-    add_to_menu(MENU_MODIFY, modify_menu);
-    add_to_menu(MENU_DIMENSION, dimension_menu);
-    add_to_menu(MENU_SANDBOX, sandbox_menu);
-//    add_to_menu(MENU_WINDOW, window_menu);
-    add_to_menu(MENU_HELP, help_menu);
-//    add_to_menu(MENU_RECENT, recent_menu);
-    add_to_menu(MENU_ZOOM, zoom_menu);
-    add_to_menu(MENU_PAN, pan_menu);
+    add_to_menu(MENU_FILE, state.file_menu);
+    add_to_menu(MENU_EDIT, state.edit_menu);
+    add_to_menu(MENU_VIEW, state.view_menu);
+    add_to_menu(MENU_DRAW, state.draw_menu);
+    add_to_menu(MENU_TOOLS, state.tools_menu);
+    add_to_menu(MENU_MODIFY, state.modify_menu);
+    add_to_menu(MENU_DIMENSION, state.dimension_menu);
+    add_to_menu(MENU_SANDBOX, state.sandbox_menu);
+//    add_to_menu(MENU_WINDOW, state.window_menu);
+    add_to_menu(MENU_HELP, state.help_menu);
+//    add_to_menu(MENU_RECENT, state.recent_menu);
+    add_to_menu(MENU_ZOOM, state.zoom_menu);
+    add_to_menu(MENU_PAN, state.pan_menu);
 }
 
 /* . */
@@ -2737,12 +2737,12 @@ create_all_toolbars(void)
 {
     debug_message("create all toolbars");
 
-    add_to_toolbar(TOOLBAR_FILE, file_toolbar);
-    add_to_toolbar(TOOLBAR_EDIT, edit_toolbar);
-    add_to_toolbar(TOOLBAR_ZOOM, zoom_toolbar);
-    add_to_toolbar(TOOLBAR_PAN, pan_toolbar);
-    add_to_toolbar(TOOLBAR_VIEW, view_toolbar);
-    add_to_toolbar(TOOLBAR_ICON, icon_toolbar);
-    add_to_toolbar(TOOLBAR_HELP, help_toolbar);
+    add_to_toolbar(TOOLBAR_FILE, state.file_toolbar);
+    add_to_toolbar(TOOLBAR_EDIT, state.edit_toolbar);
+    add_to_toolbar(TOOLBAR_ZOOM, state.zoom_toolbar);
+    add_to_toolbar(TOOLBAR_PAN, state.pan_toolbar);
+    add_to_toolbar(TOOLBAR_VIEW, state.view_toolbar);
+    add_to_toolbar(TOOLBAR_ICON, state.icon_toolbar);
+    add_to_toolbar(TOOLBAR_HELP, state.help_toolbar);
 }
 
