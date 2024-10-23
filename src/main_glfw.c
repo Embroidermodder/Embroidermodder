@@ -193,6 +193,9 @@ EmbVector doc_map_from_scene(int32_t, EmbVector v) {return v;}
 void doc_set_background_color(int doc_index, uint32_t color) {}
 void settingsDialog(const char *s) {}
 void appendHistory(const char *s) {}
+void mdiarea_set_bg(uint32_t) {}
+void setPromptTextColor(uint32_t) {}
+void setPromptBackgroundColor(uint32_t) {}
 void setPromptFontFamily(char *) {}
 void setPromptFontStyle(char *) {}
 void setPromptFontSize(int) {}
@@ -215,6 +218,12 @@ void doc_set_cross_hair_size(int32_t, uint8_t) {}
 void obj_set_rubber_point(uint32_t, EmbString, EmbVector) {}
 void obj_set_rubber_text(uint32_t, EmbString, EmbString) {}
 void doc_vulcanize_object(int32_t, uint32_t) {}
+
+void update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision){}
+void updateLineEditStrIfVaries(const char *key, const char *str){}
+void update_lineedit_str(const char *key, const char *str, EmbStringTable strList){}
+void update_lineedit_bool(const char *key, bool val, bool yesOrNoText){}
+void updateFontComboBoxStrIfVaries(const char *str){}
 
 /* TODO: Clear up memory. */
 void

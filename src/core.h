@@ -574,6 +574,11 @@ void onCloseWindow(void);
 
 void setUndoCleanIcon(bool opened);
 
+void mdiarea_set_bg(uint32_t color);
+void accept_interface_color(int32_t key, uint32_t color);
+void preview_interface_color(int32_t key, uint32_t color);
+void dialog_interface_color(int32_t key, uint32_t color);
+
 void currentLayerChanged(EmbString layer);
 void currentColorChanged(uint32_t color);
 void currentLinetypeChanged(EmbString type);
@@ -832,6 +837,9 @@ void doc_empty_grid(int32_t doc);
 void doc_set_grid_color(int32_t doc, uint32_t color);
 void doc_set_ruler_color(int32_t doc, uint32_t color);
 
+void setPromptTextColor(uint32_t color);
+void setPromptBackgroundColor(uint32_t color);
+
 void doc_preview_on(int32_t doc, int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
 void doc_preview_off(int32_t doc);
 
@@ -930,6 +938,22 @@ void enable_rapid_fire(void);
 void disable_rapid_fire(void);
 
 void appendHistory(const char *txt);
+
+/* -------------------------------- Interface ------------------------------ */
+
+void update_editors(int32_t id);
+void edit_field(int32_t id, const char *objName, const char *text);
+
+void showGroups(int objType);
+void showOneType(int index);
+void hideAllGroups(void);
+void clearAllFields(void);
+
+void update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision);
+void updateLineEditStrIfVaries(const char *key, const char *str);
+void update_lineedit_str(const char *key, const char *str, EmbStringTable strList);
+void update_lineedit_bool(const char *key, bool val, bool yesOrNoText);
+void updateFontComboBoxStrIfVaries(const char *str);
 
 /* -------------------------------- EmbString ------------------------------ */
 
