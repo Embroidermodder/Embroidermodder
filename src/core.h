@@ -285,6 +285,20 @@ typedef struct DocumentData_ {
     EmbString curLineWeight;
 } DocumentData;
 
+typedef struct Button_ {
+    EmbRect rect;
+    EmbColor color;
+    EmbColor highlight_color;
+    EmbString text;
+    EmbString font;
+    EmbColor text_color;
+    int state;
+} Button;
+
+typedef struct Tab_ {
+    int state;
+} Tab;
+
 /* Translations */
 #define UNFINISHED                     0
 #define DRAFT                          1
@@ -518,6 +532,8 @@ const char *getCurrentLineWeight();
 void statusbar_toggle(EmbString key, bool on);
 void zoomExtentsAllSubWindows(void);
 bool loadFile(const char *fileName);
+
+int glfw_application(int argc, char *argv[]);
 
 /* ------------------------------ Prompt ------------------------------- */
 

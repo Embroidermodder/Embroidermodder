@@ -277,6 +277,7 @@ State state = {
 
     .sandbox_menu = {
         "sandbox",
+        "glfw",
         "END"
     },
 

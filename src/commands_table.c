@@ -1249,6 +1249,17 @@ Command command_data[MAX_COMMANDS] = {
         .flags = REQUIRED_VIEW
     },
     {
+        .id = ACTION_GLFW,
+        .command = "glfw",
+        .arguments = "",
+        .icon = "glfw",
+        .tooltip = "GLFW test window",
+        .statustip = "GLFW test window",
+        .alias = "GLFW",
+        .shortcut = "",
+        .flags = CONTEXT_FREE
+    },
+    {
         .id = -2,
         .command = "blank",
         .arguments = "",

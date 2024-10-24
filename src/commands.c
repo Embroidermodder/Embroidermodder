@@ -249,6 +249,10 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     switch (command_data[id].id) {
+    case ACTION_GLFW:
+        glfw_application(0, NULL);
+        break;
+
     case ACTION_ABOUT:
         about_dialog();
         break;

@@ -241,6 +241,8 @@
 
 #define ACTION_TEST                  118
 
+#define ACTION_GLFW                  119
+
 /* UI Modes */
 #define CIRCLE_1P_RAD_ONE              0
 #define CIRCLE_1P_RAD_TWO              1

@@ -23,20 +23,6 @@
 
 #include "core.h"
 
-typedef struct Button_ {
-    EmbRect rect;
-    EmbColor color;
-    EmbColor highlight_color;
-    EmbString text;
-    EmbString font;
-    EmbColor text_color;
-    int state;
-} Button;
-
-typedef struct Tab_ {
-    int state;
-} Tab;
-
 void draw_rect(NVGcontext *vg, EmbRect rect, EmbColor color);
 void draw_button(NVGcontext *vg, Button button, float *bounds);
 void draw_text(NVGcontext *vg, int x, int y, char *font, char *txt, EmbColor color, float *bounds);
@@ -50,7 +36,7 @@ void draw_statusbar(NVGcontext *vg, EmbRect container);
 int icon_size = 16;
 
 Button menu_buttons[10];
-Button tool_buttons[100];
+Button tool_buttons_a[100];
 
 /* FIXME: this is very system-dependant. Could compile in somehow? */
 const char *sans_font = "/usr/share/fonts/truetype/open-sans/OpenSans-Regular.ttf";
@@ -79,171 +65,7 @@ char prompt_text[50][MAX_STRING_LENGTH] = {
 
 int n_prompt_lines = 3;
 
-void
-iconResize(int size)
-{
-    icon_size = size;
-}
-
-int32_t
-activeDocument(void)
-{
-    return 0;
-}
-
-/* Dummy Functions so GLFW version compiles. */
-#define BASIC_DOC_F(name) \
-    void name(int32_t doc) { \
-        printf("dummy command call on function of the form void f(doc=%d)\n", doc); \
-    }
-
-BASIC_DOC_F(doc_select_all)
-BASIC_DOC_F(doc_pan_left)
-BASIC_DOC_F(doc_pan_right)
-BASIC_DOC_F(doc_pan_up)
-BASIC_DOC_F(doc_pan_down)
-BASIC_DOC_F(doc_clear_rubber_room)
-BASIC_DOC_F(doc_paste)
-BASIC_DOC_F(doc_end_macro)
-BASIC_DOC_F(doc_recalculate_limits)
-BASIC_DOC_F(doc_create_origin)
-BASIC_DOC_F(doc_create_grid_polar)
-BASIC_DOC_F(doc_create_grid_iso)
-BASIC_DOC_F(doc_create_grid_rect)
-BASIC_DOC_F(doc_empty_grid)
-BASIC_DOC_F(remove_paste_object_item_group)
-BASIC_DOC_F(doc_set_corner_button)
-BASIC_DOC_F(doc_update)
-BASIC_DOC_F(doc_zoom_selected)
-BASIC_DOC_F(hide_selectbox)
-
-#define NO_ARG_F(name) \
-    void name(void) { \
-         printf("dummy command call to void f(void) function"); \
-    }
-
-NO_ARG_F(undo_command)
-NO_ARG_F(redo_command)
-NO_ARG_F(print_command)
-NO_ARG_F(new_file)
-NO_ARG_F(help)
-NO_ARG_F(about_dialog)
-NO_ARG_F(tipOfTheDay)
-NO_ARG_F(whats_this_mode)
-NO_ARG_F(window_close_all)
-NO_ARG_F(window_cascade)
-NO_ARG_F(window_tile)
-NO_ARG_F(window_next)
-NO_ARG_F(window_previous)
-NO_ARG_F(restore_cursor)
-NO_ARG_F(wait_cursor)
-NO_ARG_F(clear_selection)
-NO_ARG_F(start_blinking)
-NO_ARG_F(prompt_end_command)
-NO_ARG_F(create_details_dialog)
-NO_ARG_F(onCloseWindow)
-
-void free_objects(EmbIdList*) {}
-
-void set_cursor_shape(EmbString shape) {}
-void doc_show_scroll_bars(int32_t doc, bool) {}
-void doc_set_select_box_colors(int32_t doc, uint32_t, uint32_t, uint32_t, uint32_t, int) {}
-
-void add_to_menu(int, EmbStringTable) {}
-void add_to_toolbar(int, EmbStringTable) {}
-
-void undoable_delete(int32_t doc, uint32_t obj, EmbString label) {}
-void undoable_scale(int32_t doc, uint32_t obj, EmbVector delta, EmbReal a, EmbString label) {}
-void undoable_move(int32_t doc, uint32_t obj, EmbVector delta, EmbString msg) {}
-void undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString msg) {}
-void undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
-    EmbString msg) {}
-
-void line_edit_clear(const char *) {}
-void combo_box_clear(const char *) {}
-void combo_boxes_clear(const char *) {}
-void clear_font_combobox(void) {}
-void hide_group_box(int32_t) {}
-void show_group_box(int32_t) {}
-
-uint32_t create_object(int, uint32_t) {return 0;}
-void doc_undoable_add_obj(int32_t, uint32_t, int) {}
-
-void doc_begin_macro(int32_t, EmbString) {}
-
-void obj_set_rotation(uint32_t, EmbReal) {}
-void obj_calculate_data(uint32_t) {}
-
-void nanosleep_(int) {}
-
-DocumentData* doc_data(int32_t) {return NULL;}
-
-EmbRect obj_rect(ObjectCore *) {return emb_rect(0.0,0.0,1.0,1.0);}
-
-ObjectCore *obj_get_core(uint32_t) {return NULL;}
-
-void obj_set_rect(uint32_t, EmbReal, EmbReal, EmbReal, EmbReal) {}
-
-void doc_set_bool(int32_t, const char *key, bool) {}
-bool doc_get_bool(int32_t, const char *key) { return true; }
-double doc_width(int32_t) {return 0.0;}
-double doc_height(int32_t) {return 0.0;}
-EmbVector doc_map_to_scene(int32_t, EmbVector v) {return v;}
-EmbVector doc_map_from_scene(int32_t, EmbVector v) {return v;}
-void doc_set_background_color(int doc_index, uint32_t color) {}
-void settingsDialog(const char *s) {}
-void appendHistory(const char *s) {}
-void mdiarea_set_bg(uint32_t) {}
-void setPromptTextColor(uint32_t) {}
-void setPromptBackgroundColor(uint32_t) {}
-void setPromptFontFamily(char *) {}
-void setPromptFontStyle(char *) {}
-void setPromptFontSize(int) {}
-void doc_center_on(int32_t, EmbVector) {}
-EmbVector scene_get_point(EmbString) { return emb_vector(0.0F, 0.0F); }
-void doc_zoom_extents(int) {}
-void updatePickAddMode(bool) {}
-void set_CursorShape(char *) {}
-void processInput(char) {}
-void prompt_set_current_text(const char *) {}
-uint32_t rgb(uint8_t, uint8_t, uint8_t) {return 0;}
-void question_box(const char *, const char *) {}
-void warning_box(const char *, const char *) {}
-void critical_box(const char *, const char *) {}
-void information_box(const char *, const char *) {}
-void obj_set_text(ObjectCore *obj, const char *text) {}
-void doc_scale(int32_t, EmbReal) {}
-void doc_stop_gripping(int32_t, bool) {}
-void doc_set_cross_hair_size(int32_t, uint8_t) {}
-void obj_set_rubber_point(uint32_t, EmbString, EmbVector) {}
-void obj_set_rubber_text(uint32_t, EmbString, EmbString) {}
-void doc_vulcanize_object(int32_t, uint32_t) {}
-
-void update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision){}
-void updateLineEditStrIfVaries(const char *key, const char *str){}
-void update_lineedit_str(const char *key, const char *str, EmbStringTable strList){}
-void update_lineedit_bool(const char *key, bool val, bool yesOrNoText){}
-void updateFontComboBoxStrIfVaries(const char *str){}
-
-/* TODO: Clear up memory. */
-void
-exit_program(void)
-{
-    exit(0);
-}
-
-EmbVector
-doc_center(int32_t doc)
-{
-    return emb_vector(0.0F, 0.0F);
-}
-
-void
-openFile(bool recent, EmbString recentFile)
-{
-}
-
-/* check this */
+/* check this
 uint32_t
 qRgb(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -253,7 +75,8 @@ qRgb(uint8_t r, uint8_t g, uint8_t b)
     result += b;
     return result;
 }
-
+ */
+ 
 /* . */
 void
 draw_rect(NVGcontext *vg, EmbRect rect, EmbColor color)
@@ -356,8 +179,8 @@ draw_nvg_toolbar(NVGcontext *vg, EmbRect container)
 
     float bounds[4] = {0.0F, 0.0F, 0.0F, 0.0F};
     for (int i=0; i<10; i++) {
-        tool_buttons[i] = make_toolbar_button(5+5*i+16*i, 50, "Test");
-        draw_button(vg, tool_buttons[i], bounds);
+        tool_buttons_a[i] = make_toolbar_button(5+5*i+16*i, 50, "Test");
+        draw_button(vg, tool_buttons_a[i], bounds);
     }
 }
 
@@ -421,7 +244,7 @@ draw_interface(NVGcontext *vg)
 
 /* . */
 int
-make_application(int argc, char *argv[])
+glfw_application(int argc, char *argv[])
 {
     GLFWwindow* window;
     GLFWvidmode vidmode;
