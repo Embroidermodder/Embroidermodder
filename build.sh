@@ -2,10 +2,13 @@
 
 BUILD_DIR="build"
 BUILD_TYPE="Release"
-VERSION="2.0.0-alpha"
 GENERATOR="Unix Makefiles"
 SYSTEM="linux"
-VERSION="2_0_0-alpha"
+MAJOR="2"
+MINOR="0"
+PATCH="0"
+TAG="alpha"
+VERSION="$MAJOR_$MINOR_$PATCH-$TAG"
 
 function run_cmake () {
 

@@ -115,7 +115,7 @@ you will need to:
 ## Sample Files
 
 Various sample embroidery design files can be found in
-the `embroidermodder2/samples` folder.
+the `embroidermodder2/docs/samples` folder.
 
 ## Install/Uninstall
 
