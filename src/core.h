@@ -265,8 +265,8 @@ typedef struct DocumentData_ {
     bool enablePolar;
     bool enableQSnap;
     bool enableQTrack;
-    bool enableLwt;
-    bool enableReal;
+    bool enable_lwt;
+    bool enable_real;
 
     bool enableRuler;
     uint32_t rulerColor;
@@ -499,8 +499,8 @@ bool pattern_save(EmbPattern *pattern, EmbString fileName);
 
 int parse_floats(const char *line, float result[], int n);
 int parse_vector(const char *line, EmbVector *v);
-bool validRGB(float r, float g, float b);
-void reportDistance(EmbVector a, EmbVector b);
+bool valid_rgb(float r, float g, float b);
+void report_distance(EmbVector a, EmbVector b);
 
 void add_to_menu(int id, EmbStringTable menu_data);
 void add_to_toolbar(int id, EmbStringTable toolbar_data);
@@ -515,124 +515,127 @@ int get_state_variable(EmbString key);
 
 EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 
-bool willUnderflowInt32(int64_t a, int64_t b);
-bool willOverflowInt32(int64_t a, int64_t b);
-int roundToMultiple(bool roundUp, int numToRound, int multiple);
+bool int32_underflow(int64_t a, int64_t b);
+bool int32_overflow(int64_t a, int64_t b);
+int round_to_multiple(bool roundUp, int numToRound, int multiple);
 
+void messagebox(const char* logo, const char *title, const char *text);
 void information_box(const char *title, const char *text);
 void warning_box(const char *title, const char *text);
 void critical_box(const char *title, const char *text);
 void question_box(const char *title, const char *text);
 
-const char *getCurrentLayer();
-uint32_t getCurrentColor();
-const char *getCurrentLineType();
-const char *getCurrentLineWeight();
+const char *get_current_layer();
+uint32_t get_current_color();
+const char *get_current_line_type();
+const char *get_current_line_weight();
 
 void statusbar_toggle(EmbString key, bool on);
-void zoomExtentsAllSubWindows(void);
+void zoom_extents_all_sub_windows(void);
 bool loadFile(const char *fileName);
+
+int32_t free_glfw(void);
 
 int glfw_application(int argc, char *argv[]);
 
 /* ------------------------------ Prompt ------------------------------- */
 
-void setPromptTextColor(uint32_t color);
-void setPromptBackgroundColor(uint32_t color);
-void setPromptFontFamily(EmbString family);
-void setPromptFontStyle(EmbString style);
-void setPromptFontSize(int size);
+void set_prompt_text_color(uint32_t color);
+void set_prompt_background_color(uint32_t color);
+void set_prompt_font_family(EmbString family);
+void set_prompt_font_style(EmbString style);
+void set_prompt_font_size(int size);
 
-void promptHistoryAppended(EmbString txt);
-void logPromptInput(EmbString txt);
-void promptInputPrevious(void);
-void promptInputNext(void);
+void prompt_history_appended(EmbString txt);
+void log_prompt_input(EmbString txt);
+void prompt_input_previous(void);
+void prompt_input_next(void);
 void prompt_update_style(void);
 void prompt_end_command(void);
 void prompt_set_current_text(const char *);
-void processInput(char);
+void process_input(char);
 
 /* -------------------------- Main Functions --------------------------- */
 
-void runCommandMain(const char *cmd);
-void runCommandClick(const char *cmd, EmbReal x, EmbReal y);
-void runCommandMove(const char *cmd, EmbReal x, EmbReal y);
-void runCommandContext(const char *cmd, const char *str);
-void runCommandPrompt(const char *cmd);
+void run_command_main(const char *cmd);
+void run_command_click(const char *cmd, EmbReal x, EmbReal y);
+void run_command_move(const char *cmd, EmbReal x, EmbReal y);
+void run_command_context(const char *cmd, const char *str);
+void run_command_prompt(const char *cmd);
 
 uint32_t rgb(uint8_t r, uint8_t g, uint8_t b);
 
-void updateAllViewScrollBars(bool val);
-void updateAllViewCrossHairColors(uint32_t color);
-void updateAllViewBackgroundColors(uint32_t color);
-void updateAllViewSelectBoxColors(uint32_t colorL, uint32_t fillL,
+void update_all_view_scroll_bars(bool val);
+void update_all_view_cross_hair_colors(uint32_t color);
+void update_all_view_background_colors(uint32_t color);
+void update_all_view_select_box_colors(uint32_t colorL, uint32_t fillL,
     uint32_t colorR, uint32_t fillR, int alpha);
-void updateAllViewGridColors(uint32_t color);
-void updateAllViewRulerColors(uint32_t color);
+void update_all_view_grid_colors(uint32_t color);
+void update_all_view_ruler_colors(uint32_t color);
 
-void updatePickAddMode(bool val);
-void pickAddModeToggled(void);
+void update_pick_add_mode(bool val);
+void pick_add_mode_toggled(void);
 
-void setTextFont(EmbString str);
-void setTextSize(EmbReal num);
+void set_text_font(EmbString str);
+void set_text_size(EmbReal num);
 
-void promptHistoryAppended(EmbString txt);
-void logPromptInput(EmbString txt);
+void prompt_history_appended(EmbString txt);
+void log_prompt_input(EmbString txt);
 
-void openFile(bool recent, EmbString recentFile);
-void openFilesSelected(EmbStringTable);
+void open_file(bool recent, EmbString recentFile);
+void open_filesSelected(EmbStringTable);
 
-void settingsDialog(const char *showTab);
+void settings_dialog(const char *showTab);
 
-bool validFileFormat(EmbString fileName);
+bool valid_file_format(EmbString fileName);
 
-void onCloseWindow(void);
+void on_close_window(void);
 
-void setUndoCleanIcon(bool opened);
+void set_undo_clean_icon(bool opened);
 
 void mdiarea_set_bg(uint32_t color);
 void accept_interface_color(int32_t key, uint32_t color);
 void preview_interface_color(int32_t key, uint32_t color);
 void dialog_interface_color(int32_t key, uint32_t color);
 
-void currentLayerChanged(EmbString layer);
-void currentColorChanged(uint32_t color);
-void currentLinetypeChanged(EmbString type);
-void currentLineweightChanged(EmbString weight);
+void current_layer_changed(EmbString layer);
+void current_color_changed(uint32_t color);
+void current_linetype_changed(EmbString type);
+void current_lineweight_changed(EmbString weight);
 
-void promptInputPrevious(void);
-void promptInputNext(void);
+void prompt_input_previous(void);
+void prompt_input_next(void);
 
 void print_command(void);
 void undo_command(void);
 void redo_command(void);
 
-void layerSelectorIndexChanged(int index);
-void linetypeSelectorIndexChanged(int index);
-void lineweightSelectorIndexChanged(int index);
-void textSizeSelectorIndexChanged(int index);
+void layer_selector_changed(int index);
+void linetype_selector_changed(int index);
+void lineweight_selector_changed(int index);
+void text_size_selector_index_changed(int index);
 
-void makeLayerActive(void);
-void layerManager(void);
-void layerPrevious(void);
+void make_layer_active(void);
+void layer_manager(void);
+void layer_previous(void);
 
-void deletePressed(void);
-void escapePressed(void);
+void delete_pressed(void);
+void escape_pressed(void);
 
-bool isShiftPressed(void);
-void setShiftPressed(void);
-void setShiftReleased(void);
+bool is_shift_pressed(void);
+void set_shift_pressed(void);
+void set_shift_released(void);
 
-void iconResize(int iconSize);
+void icon_resize(int iconSize);
 
-void readSettings(void);
-void writeSettings(void);
+void read_settings(void);
+void write_settings(void);
 
-void createAllActions(void);
+void create_all_actions(void);
 
-void loadFormats(void);
+void load_formats(void);
 
-void settingsPrompt(void);
+void settings_prompt(void);
 
 void end_command(void);
 void debug_message(const char *msg);
@@ -646,26 +649,19 @@ void about_dialog(void);
 
 /* --------------------------------- Editors -------------------------------- */
 
-void comboBoxScrollBarWidgetCurrentIndexChanged(int);
-void spinBoxDisplaySelectBoxAlphaValueChanged(int);
-void comboBoxPromptFontFamilyCurrentIndexChanged(EmbString);
-void comboBoxPromptFontStyleCurrentIndexChanged(EmbString);
-void spinBoxPromptFontSizeValueChanged(int);
-void spinBoxRecentMaxFilesValueChanged(int value);
-void spinBoxTrimDstNumJumpsValueChanged(int value);
-void spinBoxRulerPixelSizeValueChanged(EmbReal);
-void sliderQSnapLocatorSizeValueChanged(int);
-void sliderQSnapApertureSizeValueChanged(int);
-void checkBoxLwtRealRenderStateChanged(int);
-void sliderSelectionGripSizeValueChanged(int);
-void sliderSelectionPickBoxSizeValueChanged(int);
-
-/* -------------------------------- Properties ------------------------------ */
-
-void hideAllGroups(void);
-void showGroups(int);
-void hide_group_box(int32_t key);
-void show_group_box(int32_t key);
+void combo_box_scroll_bar_widget_changed(int);
+void spin_box_display_select_box_alpha_changed(int);
+void combo_box_prompt_font_family_changed(EmbString);
+void combo_box_prompt_font_style_changed(EmbString);
+void spin_box_prompt_font_size_changed(int);
+void spin_box_recent_max_files_changed(int value);
+void spin_box_trim_dst_num_jumps_changed(int value);
+void spin_box_ruler_pixel_size_changed(EmbReal);
+void slider_qsnap_locator_size_changed(int);
+void slider_qsnap_aperture_size_changed(int);
+void check_box_lwt_real_render_changed(int);
+void slider_selection_grip_size_changed(int);
+void slider_selection_pick_box_size_changed(int);
 
 /* -------------------------------- Commands -------------------------------- */
 
@@ -681,7 +677,7 @@ void open_recent_file(void);
 void save_file(void);
 int save_as_file(void);
 void update_interface(void);
-void windowMenuAboutToShow();
+void window_menu_about_to_show();
 void hide_unimplemented(void);
 void start_blinking(void);
 void stop_blinking(void);
@@ -690,10 +686,10 @@ void move_action(void);
 
 void nanosleep_(int);
 
-void nativeBlinkPrompt();
+void native_blink_prompt();
 
-void checkBoxTipOfTheDayStateChanged(int checked);
-void buttonTipOfTheDayClicked(int button);
+void check_box_tip_of_the_day_changed(int checked);
+void button_tip_of_the_day_clicked(int button);
 
 ScriptValue add_arc_command(ScriptEnv *context);
 ScriptValue add_circle_command(ScriptEnv *context);
@@ -719,65 +715,65 @@ ScriptValue previewon_command(ScriptEnv *context);
 ScriptValue sandbox_command(ScriptEnv *context);
 ScriptValue set_command(ScriptEnv *context);
 
-ScriptValue nativeRedo();
+ScriptValue native_redo();
 
-void setMouseCoord(EmbReal x, EmbReal y);
+void set_mouse_coord(EmbReal x, EmbReal y);
 
-void nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+void native_print_area(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
-void set_BackgroundColor(uint8_t r, uint8_t g, uint8_t b);
-void set_CrossHairColor(uint8_t r, uint8_t g, uint8_t b);
-void set_GridColor(uint8_t r, uint8_t g, uint8_t b);
+void set_background_color(uint8_t r, uint8_t g, uint8_t b);
+void set_cross_hair_color(uint8_t r, uint8_t g, uint8_t b);
+void set_grid_color(uint8_t r, uint8_t g, uint8_t b);
 
-void nativeClearRubber();
-bool nativeAllowRubber();
-void nativeSpareRubber(int64_t id);
+void native_clear_rubber();
+bool native_allow_rubber();
+void native_spare_rubber(int64_t id);
 
-void nativeDeleteSelected();
-void nativeCutSelected(EmbReal x, EmbReal y);
-void nativeCopySelected(EmbReal x, EmbReal y);
-void nativePasteSelected(EmbReal x, EmbReal y);
-void nativeMoveSelected(EmbReal dx, EmbReal dy);
-void nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor);
-void nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot);
-void nativeMirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+void native_delete_selected();
+void native_cut_selected(EmbReal x, EmbReal y);
+void native_copy_selected(EmbReal x, EmbReal y);
+void native_paste_selected(EmbReal x, EmbReal y);
+void native_move_selected(EmbReal dx, EmbReal dy);
+void native_scale_selected(EmbReal x, EmbReal y, EmbReal factor);
+void native_rotate_selected(EmbReal x, EmbReal y, EmbReal rot);
+void native_mirror_selected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
 void set_cursor_shape(EmbString shape);
-double nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-double nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+double native_calculate_distance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+double native_perpendicular_distance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
-double nativeQSnapX();
-double nativeQSnapY();
+double native_q_snap_x();
+double native_q_snap_y();
 
-void enableLwt();
-void disableLwt();
-void enableReal();
-void disableReal();
+void enable_lwt();
+void disable_lwt();
+void enable_real();
+void disable_real();
 
 void create_details_dialog(void);
 
-void set_PromptPrefix(EmbString txt);
+void set_prompt_prefix(EmbString txt);
 /* TODO: void set_RubberFilter(int64_t id); */
 /* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
-void set_RubberMode(int mode);
-void set_RubberPoint(const EmbString key, EmbReal x, EmbReal y);
-void set_RubberText(const EmbString key, EmbString txt);
+void set_rubber_mode(int mode);
+void set_rubber_point(const EmbString key, EmbReal x, EmbReal y);
+void set_rubber_text(const EmbString key, EmbString txt);
 
-void toggleGrid(void);
-void toggleRuler(void);
-void toggleLwt(void);
+void toggle_grid(void);
+void toggle_ruler(void);
+void toggle_lwt(void);
 
 /* Help Menu */
-void tipOfTheDay();
-void buttonTipOfTheDayClicked(int);
-void checkBoxTipOfTheDayStateChanged(int);
+void tip_of_the_day();
+void button_tip_of_the_day_clicked(int);
+void check_box_tip_of_the_day_changed(int);
 void help();
 void changelog();
-void whatsThisContextHelp();
+void whats_this_context_help();
 
 int make_application(int argc, char* argv[]);
 
-void setObjectRubberMode(ObjectCore *core, int mode);
+void set_object_rubber_mode(ObjectCore *core, int mode);
 
 EmbVector unpack_vector(ScriptEnv *context, int offset);
 
@@ -789,12 +785,12 @@ void undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString msg);
 void undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
     EmbString msg);
 
-void updateAllBackgroundColor(uint32_t color);
+void update_all_background_color(uint32_t color);
 
 void create_all_menus(void);
 void create_all_toolbars(void);
 
-void clearAllFields(void);
+void clear_all_fields(void);
 void line_edit_clear(const char *key);
 void combo_box_clear(const char *key);
 void clear_font_combobox(void);
@@ -853,8 +849,8 @@ void doc_empty_grid(int32_t doc);
 void doc_set_grid_color(int32_t doc, uint32_t color);
 void doc_set_ruler_color(int32_t doc, uint32_t color);
 
-void setPromptTextColor(uint32_t color);
-void setPromptBackgroundColor(uint32_t color);
+void set_prompt_text_color(uint32_t color);
+void set_prompt_background_color(uint32_t color);
 
 void doc_preview_on(int32_t doc, int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
 void doc_preview_off(int32_t doc);
@@ -928,7 +924,7 @@ void doc_scale(int32_t doc_id, EmbReal s);
 void doc_begin_macro(int32_t doc, EmbString s);
 void doc_end_macro(int32_t doc);
 
-void updateColorLinetypeLineweight();
+void update_color_linetype_lineweight();
 
 void rotate_action(void);
 void scale_action(void);
@@ -940,7 +936,7 @@ void doc_add_object(int32_t doc, uint32_t obj);
 void doc_delete_object(int32_t doc, uint32_t obj);
 void doc_vulcanize_object(int32_t doc, uint32_t obj);
 
-int32_t activeDocument(void);
+int32_t active_document(void);
 
 void whats_this_mode(void);
 
@@ -953,23 +949,25 @@ void window_previous(void);
 void enable_rapid_fire(void);
 void disable_rapid_fire(void);
 
-void appendHistory(const char *txt);
+void append_history(const char *txt);
 
 /* -------------------------------- Interface ------------------------------ */
 
 void update_editors(int32_t id);
 void edit_field(int32_t id, const char *objName, const char *text);
 
-void showGroups(int objType);
-void showOneType(int index);
-void hideAllGroups(void);
-void clearAllFields(void);
+void show_groups(int objType);
+void show_one_type(int index);
+void hide_all_groups(void);
+void clear_all_fields(void);
+void hide_group_box(int32_t key);
+void show_group_box(int32_t key);
 
 void update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision);
-void updateLineEditStrIfVaries(const char *key, const char *str);
+void update_line_edit_str_if_varies(const char *key, const char *str);
 void update_lineedit_str(const char *key, const char *str, EmbStringTable strList);
 void update_lineedit_bool(const char *key, bool val, bool yesOrNoText);
-void updateFontComboBoxStrIfVaries(const char *str);
+void update_font_combo_box_str_if_varies(const char *str);
 
 /* -------------------------------- EmbString ------------------------------ */
 
@@ -1079,7 +1077,7 @@ extern bool document_memory[MAX_OPEN_FILES];
 
 extern char formatFilterOpen[MAX_LONG_STRING];
 extern char formatFilterSave[MAX_LONG_STRING];
-extern EmbString openFilesPath;
+extern EmbString open_filesPath;
 extern EmbString prompt_color_;
 extern EmbString prompt_selection_bg_color_;
 extern EmbString prompt_bg_color_;

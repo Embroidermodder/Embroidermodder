@@ -26,80 +26,80 @@ check_for_updates(void)
 }
 
 void
-checkBoxTipOfTheDayStateChanged(int checked)
+check_box_tip_of_the_day_changed(int checked)
 {
     set_bool(GENERAL_TIP_OF_THE_DAY, checked);
 }
 
 /* . */
 bool
-isShiftPressed(void)
+is_shift_pressed(void)
 {
     return shiftKeyPressedState;
 }
 
 /* . */
 void
-setShiftPressed(void)
+set_shift_pressed(void)
 {
     shiftKeyPressedState = true;
 }
 
 /* . */
 void
-setShiftReleased(void)
+set_shift_released(void)
 {
     shiftKeyPressedState = false;
 }
 
 /* . */
 void
-makeLayerActive(void)
+make_layer_active(void)
 {
-    debug_message("makeLayerActive()");
-    todo("Implement makeLayerActive.");
+    debug_message("make_layer_active()");
+    todo("Implement make_layer_active.");
 }
 
 /* . */
 void
-layerPrevious(void)
+layer_previous(void)
 {
-    debug_message("layerPrevious()");
-    todo("Implement layerPrevious.");
+    debug_message("layer_previous()");
+    todo("Implement layer_previous.");
 }
 
 /* . */
 void
-layerSelectorIndexChanged(int index)
+layer_selector_changed(int index)
 {
     EmbString message;
-    sprintf(message, "layerSelectorIndexChanged(%d)", index);
+    sprintf(message, "layer_selector_changed(%d)", index);
     debug_message(message);
 }
 
 /* . */
 void
-linetypeSelectorIndexChanged(int index)
+linetype_selector_changed(int index)
 {
     EmbString message;
-    sprintf(message, "linetypeSelectorIndexChanged(%d)", index);
+    sprintf(message, "linetype_selector_changed(%d)", index);
     debug_message(message);
 }
 
 /* . */
 void
-lineweightSelectorIndexChanged(int index)
+lineweight_selector_changed(int index)
 {
     char message[MAX_STRING_LENGTH];
-    sprintf(message, "lineweightSelectorIndexChanged(%d)", index);
+    sprintf(message, "lineweight_selector_changed(%d)", index);
     debug_message(message);
 }
 
 /* . */
 void
-currentLayerChanged(EmbString layer)
+current_layer_changed(EmbString layer)
 {
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -109,9 +109,9 @@ currentLayerChanged(EmbString layer)
 
 /* . */
 void
-currentColorChanged(uint32_t color)
+current_color_changed(uint32_t color)
 {
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -121,9 +121,9 @@ currentColorChanged(uint32_t color)
 
 /* . */
 void
-currentLinetypeChanged(EmbString type)
+current_linetype_changed(EmbString type)
 {
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -133,9 +133,9 @@ currentLinetypeChanged(EmbString type)
 
 /* . */
 void
-currentLineweightChanged(EmbString weight)
+current_lineweight_changed(EmbString weight)
 {
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -145,7 +145,7 @@ currentLineweightChanged(EmbString weight)
 
 /* . */
 void
-updateAllViewScrollBars(bool val)
+update_all_view_scroll_bars(bool val)
 {
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
@@ -156,7 +156,7 @@ updateAllViewScrollBars(bool val)
 
 /* . */
 void
-updateAllViewCrossHairColors(uint32_t color)
+update_all_view_cross_hair_colors(uint32_t color)
 {
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
@@ -167,7 +167,7 @@ updateAllViewCrossHairColors(uint32_t color)
 
 /* . */
 void
-updateAllViewBackgroundColors(uint32_t color)
+update_all_view_background_colors(uint32_t color)
 {
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
@@ -178,7 +178,7 @@ updateAllViewBackgroundColors(uint32_t color)
 
 /* . */
 void
-updateAllViewSelectBoxColors(uint32_t colorL, uint32_t fillL, uint32_t colorR, uint32_t fillR, int alpha)
+update_all_view_select_box_colors(uint32_t colorL, uint32_t fillL, uint32_t colorR, uint32_t fillR, int alpha)
 {
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
@@ -189,7 +189,7 @@ updateAllViewSelectBoxColors(uint32_t colorL, uint32_t fillL, uint32_t colorR, u
 
 /* . */
 void
-updateAllViewGridColors(uint32_t color)
+update_all_view_grid_colors(uint32_t color)
 {
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
@@ -200,7 +200,7 @@ updateAllViewGridColors(uint32_t color)
 
 /* . */
 void
-updateAllViewRulerColors(uint32_t color)
+update_all_view_ruler_colors(uint32_t color)
 {
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
@@ -234,7 +234,7 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     if (command_data[id].flags & REQUIRED_VIEW) {
-        doc_index = activeDocument();
+        doc_index = active_document();
         if (doc_index < 0) {
             return script_false;
         }
@@ -286,7 +286,7 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_COPY_SELECTED: {
-        /* nativeCopySelected(REAL(0), REAL(1)); */
+        /* native_copy_selected(REAL(0), REAL(1)); */
         break;
     }
 
@@ -295,11 +295,11 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_CUT:
-        nativeCutSelected(REAL(0), REAL(1));
+        native_cut_selected(REAL(0), REAL(1));
         break;
 
     case ACTION_DEBUG:
-        appendHistory(STR(0));
+        append_history(STR(0));
         break;
 
     case ACTION_DESIGN_DETAILS:
@@ -343,22 +343,22 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_ICON_128:
-        iconResize(128);
+        icon_resize(128);
         break;
     case ACTION_ICON_16:
-        iconResize(16);
+        icon_resize(16);
         break;
     case ACTION_ICON_24:
-        iconResize(24);
+        icon_resize(24);
         break;
     case ACTION_ICON_32:
-        iconResize(32);
+        icon_resize(32);
         break;
     case ACTION_ICON_48:
-        iconResize(48);
+        icon_resize(48);
         break;
     case ACTION_ICON_64:
-        iconResize(64);
+        icon_resize(64);
         break;
 
     case ACTION_MIRROR_SELECTED: {
@@ -378,7 +378,7 @@ run_command(ScriptEnv *context, const char *cmd)
  */
 
     case ACTION_OPEN:
-        openFile(false, "");
+        open_file(false, "");
         break;
 
     case ACTION_PASTE: {
@@ -388,7 +388,7 @@ run_command(ScriptEnv *context, const char *cmd)
 
     case ACTION_PASTE_SELECTED: {
         /* Paste with location x,y */
-        /* nativePasteSelected(REAL(0), REAL(1)); */
+        /* native_paste_selected(REAL(0), REAL(1)); */
         break;
     }
     case ACTION_PLATFORM:
@@ -412,7 +412,7 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_SETTINGS_DIALOG: {
-        settingsDialog("");
+        settings_dialog("");
         break;
     }
 
@@ -437,7 +437,7 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_TIP_OF_THE_DAY:
-        tipOfTheDay();
+        tip_of_the_day();
         break;
 
     case ACTION_TODO: {
@@ -480,11 +480,11 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_MAKE_LAYER_CURRENT:
-        /* makeLayerActive(); */
+        /* make_layer_active(); */
         break;
 
     case ACTION_LAYERS:
-        /* layerManager(); */
+        /* layer_manager(); */
         break;
 
     case ACTION_LAYER_SELECTOR:
@@ -698,7 +698,7 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_WINDOW_CLOSE: {
-        onCloseWindow();
+        on_close_window();
         break;
     }
 
@@ -783,12 +783,12 @@ run_command(ScriptEnv *context, const char *cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMain(const char *cmd)
+run_command_main(const char *cmd)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MAIN;
-    sprintf(message, "runCommandMain(%s)", cmd);
+    sprintf(message, "run_command_main(%s)", cmd);
     debug_message(message);
     /* TODO: Uncomment this when post-selection is available. */
     /*
@@ -803,12 +803,12 @@ runCommandMain(const char *cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandClick(const char *cmd, EmbReal x, EmbReal y)
+run_command_click(const char *cmd, EmbReal x, EmbReal y)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CLICK;
-    sprintf(message, "runCommandClick(%s, %.2f, %.2f)", cmd, x, y);
+    sprintf(message, "run_command_click(%s, %.2f, %.2f)", cmd, x, y);
     debug_message(message);
     /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
     run_command(context, cmd);
@@ -818,12 +818,12 @@ runCommandClick(const char *cmd, EmbReal x, EmbReal y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMove(const char *cmd, EmbReal x, EmbReal y)
+run_command_move(const char *cmd, EmbReal x, EmbReal y)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MOVE;
-    sprintf(message, "runCommandMove(%s, %.2f, %.2f)", cmd, x, y);
+    sprintf(message, "run_command_move(%s, %.2f, %.2f)", cmd, x, y);
     debug_message(message);
     /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
     run_command(context, cmd);
@@ -833,12 +833,12 @@ runCommandMove(const char *cmd, EmbReal x, EmbReal y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandContext(const char *cmd, const char *str)
+run_command_context(const char *cmd, const char *str)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CONTEXT;
-    sprintf(message, "runCommandContext(%s, %s)", cmd, str);
+    sprintf(message, "run_command_context(%s, %s)", cmd, str);
     debug_message(message);
     /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
     run_command(context, cmd);
@@ -849,11 +849,11 @@ runCommandContext(const char *cmd, const char *str)
  * NOTE: Replace any special characters that will cause a syntax error
  */
 void
-runCommandPrompt(const char *cmd)
+run_command_prompt(const char *cmd)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
-    sprintf(message, "runCommandPrompt(%s)", cmd);
+    sprintf(message, "run_command_prompt(%s)", cmd);
     debug_message(message);
     context->context = CONTEXT_PROMPT;
     if (rapidFireEnabled) {
@@ -880,10 +880,10 @@ enable_rapid_fire(void)
 
 /* . */
 void
-pickAddModeToggled(void)
+pick_add_mode_toggled(void)
 {
     bool val = !get_bool(SELECTION_MODE_PICKADD);
-    updatePickAddMode(val);
+    update_pick_add_mode(val);
 }
 
 /* . */
@@ -898,7 +898,7 @@ stub_testing(void)
 void
 cut(void)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_cut(doc_index);
     }
@@ -908,7 +908,7 @@ cut(void)
 ScriptValue
 clear_rubber_command(ScriptEnv* context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_clear_rubber_room(doc_index);
     }
@@ -917,9 +917,9 @@ clear_rubber_command(ScriptEnv* context)
 
 /* . */
 bool
-nativeAllowRubber()
+native_allow_rubber()
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         return doc_allow_rubber(doc_index);
     }
@@ -928,9 +928,9 @@ nativeAllowRubber()
 
 /* . */
 void
-nativeSpareRubber(int64_t id)
+native_spare_rubber(int64_t id)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_spare_rubber(doc_index, id);
     }
@@ -938,9 +938,9 @@ nativeSpareRubber(int64_t id)
 
 /* . */
 void
-set_RubberMode(int mode)
+set_rubber_mode(int mode)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_set_rubber_mode(doc_index, mode);
     }
@@ -948,9 +948,9 @@ set_RubberMode(int mode)
 
 /* . */
 void
-set_RubberPoint(const EmbString key, EmbReal x, EmbReal y)
+set_rubber_point(const EmbString key, EmbReal x, EmbReal y)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         EmbVector v = emb_vector(x, -y);
         doc_set_rubber_point(doc_index, key, v);
@@ -959,9 +959,9 @@ set_RubberPoint(const EmbString key, EmbReal x, EmbReal y)
 
 /* . */
 void
-set_RubberText(const EmbString key, EmbString txt)
+set_rubber_text(const EmbString key, EmbString txt)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_set_rubber_text(doc_index, key, txt);
     }
@@ -969,9 +969,9 @@ set_RubberText(const EmbString key, EmbString txt)
 
 /* . */
 double
-nativeQSnapX(void)
+native_q_snap_x(void)
 {
-    int32_t doc = activeDocument();
+    int32_t doc = active_document();
     if (doc < 0) {
         return 0.0;
     }
@@ -981,9 +981,9 @@ nativeQSnapX(void)
 
 /* . */
 double
-nativeQSnapY(void)
+native_q_snap_y(void)
 {
-    int32_t doc = activeDocument();
+    int32_t doc = active_document();
     if (doc < 0) {
         return 0.0;
     }
@@ -992,40 +992,40 @@ nativeQSnapY(void)
 }
 
 void
-enableLwt(void)
+enable_lwt(void)
 {
-    debug_message("StatusBarButton enableLwt()");
-    int32_t doc = activeDocument();
+    debug_message("StatusBarButton enable_lwt()");
+    int32_t doc = active_document();
     if (doc >= 0) {
         doc_toggle_lwt(doc, true);
     }
 }
 
 void
-disableLwt(void)
+disable_lwt(void)
 {
-    debug_message("StatusBarButton disableLwt()");
-    int32_t doc = activeDocument();
+    debug_message("StatusBarButton disable_lwt()");
+    int32_t doc = active_document();
     if (doc >= 0) {
         doc_toggle_lwt(doc, false);
     }
 }
 
 void
-enableReal(void)
+enable_real(void)
 {
-    debug_message("StatusBarButton enableReal()");
-    int32_t doc = activeDocument();
+    debug_message("StatusBarButton enable_real()");
+    int32_t doc = active_document();
     if (doc >= 0) {
         doc_toggle_real(doc, true);
     }
 }
 
 void
-disableReal(void)
+disable_real(void)
 {
-    debug_message("StatusBarButton disableReal()");
-    int32_t doc = activeDocument();
+    debug_message("StatusBarButton disable_real()");
+    int32_t doc = active_document();
     if (doc >= 0) {
         doc_toggle_real(doc, false);
     }
@@ -1033,10 +1033,10 @@ disableReal(void)
 
 /* . */
 void
-toggleGrid(void)
+toggle_grid(void)
 {
-    debug_message("toggleGrid()");
-    int doc = activeDocument();
+    debug_message("toggle_grid()");
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -1046,10 +1046,10 @@ toggleGrid(void)
 
 /* . */
 void
-toggleRuler(void)
+toggle_ruler(void)
 {
-    debug_message("toggleRuler()");
-    int doc = activeDocument();
+    debug_message("toggle_ruler()");
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -1059,24 +1059,24 @@ toggleRuler(void)
 
 /* . */
 void
-toggleLwt(void)
+toggle_lwt(void)
 {
-    debug_message("toggleLwt()");
-    int doc = activeDocument();
+    debug_message("toggle_lwt()");
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
     DocumentData *data = doc_data(doc);
-    data->enableLwt = !data->enableLwt;
+    data->enable_lwt = !data->enable_lwt;
 }
 
 /* . */
 void
-deletePressed(void)
+delete_pressed(void)
 {
-    debug_message("deletePressed()");
+    debug_message("delete_pressed()");
     wait_cursor();
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -1086,11 +1086,11 @@ deletePressed(void)
 
 /* . */
 void
-escapePressed(void)
+escape_pressed(void)
 {
-    debug_message("escapePressed()");
+    debug_message("escape_pressed()");
     wait_cursor();
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -1102,9 +1102,9 @@ escapePressed(void)
 
 /* . */
 const char *
-getCurrentLayer(void)
+get_current_layer(void)
 {
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return "0";
     }
@@ -1114,9 +1114,9 @@ getCurrentLayer(void)
 
 /* TODO: return color ByLayer */
 uint32_t
-getCurrentColor(void)
+get_current_color(void)
 {
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return 0;
     }
@@ -1126,9 +1126,9 @@ getCurrentColor(void)
 
 /* . */
 const char *
-getCurrentLineType(void)
+get_current_line_type(void)
 {
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return "ByLayer";
     }
@@ -1138,9 +1138,9 @@ getCurrentLineType(void)
 
 /* . */
 const char *
-getCurrentLineWeight(void)
+get_current_line_weight(void)
 {
-    int doc = activeDocument();
+    int doc = active_document();
     if (doc < 0) {
         return "ByLayer";
     }
@@ -1150,7 +1150,7 @@ getCurrentLineWeight(void)
 
 /* . */
 void
-nativeCutSelected(EmbReal x, EmbReal y)
+native_cut_selected(EmbReal x, EmbReal y)
 {
 }
 
@@ -1220,7 +1220,7 @@ set_command(ScriptEnv* context)
 
 /* Cartesian Coordinate System reported: anticlockwise angle from x-axis. */
 void
-reportDistance(EmbVector a, EmbVector b)
+report_distance(EmbVector a, EmbVector b)
 {
     EmbString output;
     EmbVector delta = emb_vector_subtract(b, a);
@@ -1259,7 +1259,7 @@ distance_command(ScriptEnv *context)
         }
         else {
             context->point2 = v;
-            reportDistance();
+            report_distance();
             end_command();
         }
         */
@@ -1291,7 +1291,7 @@ distance_command(ScriptEnv *context)
             }
             else {
                 context->point2 = v;
-                reportDistance();
+                report_distance();
                 end_command();
             }
         }
@@ -1682,7 +1682,7 @@ void prompt(str)
 ScriptValue
 sandbox_command(ScriptEnv * context)
 {
-    int32_t doc = activeDocument();
+    int32_t doc = active_document();
     EmbString msg;
     switch (context->context) {
     case CONTEXT_MAIN: {
@@ -2004,7 +2004,7 @@ void prompt(str)
         }
         else {
             parse_floats(str, v, 3);
-            if (!validRGB(v[0], v[1], v[2])) {
+            if (!valid_rgb(v[0], v[1], v[2])) {
                 alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
                 prompt_output(translate("Specify background color: "));
             }
@@ -2017,7 +2017,7 @@ void prompt(str)
     }
     case RGB_CROSSHAIR: {
         parse_floats(str, v, 3);
-        if (!validRGB(v[0], v[1], v[2])) {
+        if (!valid_rgb(v[0], v[1], v[2])) {
             alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
             prompt_output(translate("Specify crosshair color: "));
         }
@@ -2029,7 +2029,7 @@ void prompt(str)
     }
     case RGB_GRID: {
         parse_floats(str, v, 3);
-        if (!validRGB(v[0], v[1], v[2])) {
+        if (!valid_rgb(v[0], v[1], v[2])) {
             alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
             prompt_output(translate("Specify grid color: "));
         }
@@ -2087,7 +2087,7 @@ set_background_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    set_BackgroundColor(REAL(0), REAL(1), REAL(2));
+    set_background_color(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -2107,7 +2107,7 @@ set_crosshair_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    set_CrossHairColor(REAL(0), REAL(1), REAL(2));
+    set_cross_hair_color(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -2127,7 +2127,7 @@ set_grid_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    set_GridColor(REAL(0), REAL(1), REAL(2));
+    set_grid_color(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -2180,7 +2180,7 @@ scale_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    nativeScaleSelected(REAL(0), REAL(1), REAL(2));
+    native_scale_selected(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -2188,7 +2188,7 @@ scale_selected_command(ScriptEnv* context)
 ScriptValue
 set_rubber_point_command(ScriptEnv* context)
 {
-    // FIXME: set_RubberPoint(STR(0), REAL(1), REAL(2));
+    // FIXME: set_rubber_point(STR(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -2196,7 +2196,7 @@ set_rubber_point_command(ScriptEnv* context)
 ScriptValue
 set_rubber_text_command(ScriptEnv* context)
 {
-    // FIXME: set_RubberText(STR(0), STR(1));
+    // FIXME: set_rubber_text(STR(0), STR(1));
     return script_null;
 }
 
@@ -2235,7 +2235,7 @@ const char *geometry_type_keys[] = {
 ScriptValue
 add_rubber_command(ScriptEnv* context)
 {
-    if (!nativeAllowRubber()) {
+    if (!native_allow_rubber()) {
         prompt_output("UNKNOWN_ERROR addRubber(): You must use vulcanize() before you can add another rubber object.");
         return script_false;
     }
@@ -2295,58 +2295,58 @@ ScriptValue
 set_rubber_mode_command(ScriptEnv* context)
 {
     if (string_equal(STR(0),"CIRCLE_1P_RAD")) {
-        set_RubberMode(RUBBER_CIRCLE_1P_RAD);
+        set_rubber_mode(RUBBER_CIRCLE_1P_RAD);
     }
     else if (string_equal(STR(0),"CIRCLE_1P_DIA")) {
-        set_RubberMode(RUBBER_CIRCLE_1P_DIA);
+        set_rubber_mode(RUBBER_CIRCLE_1P_DIA);
     }
     else if (string_equal(STR(0),"CIRCLE_2P")) {
-        set_RubberMode(RUBBER_CIRCLE_2P);
+        set_rubber_mode(RUBBER_CIRCLE_2P);
     }
     else if (string_equal(STR(0),"CIRCLE_3P")) {
-        set_RubberMode(RUBBER_CIRCLE_3P);
+        set_rubber_mode(RUBBER_CIRCLE_3P);
     }
     else if (string_equal(STR(0),"CIRCLE_TTR")) {
-        set_RubberMode(RUBBER_CIRCLE_TTR);
+        set_rubber_mode(RUBBER_CIRCLE_TTR);
     }
     else if (string_equal(STR(0),"CIRCLE_TTT")) {
-        set_RubberMode(RUBBER_CIRCLE_TTT);
+        set_rubber_mode(RUBBER_CIRCLE_TTT);
     }
     else if (string_equal(STR(0),"DIMLEADER_LINE")) {
-        set_RubberMode(RUBBER_DIMLEADER_LINE);
+        set_rubber_mode(RUBBER_DIMLEADER_LINE);
     }
     else if (string_equal(STR(0),"ELLIPSE_LINE")) {
-        set_RubberMode(RUBBER_ELLIPSE_LINE);
+        set_rubber_mode(RUBBER_ELLIPSE_LINE);
     }
     else if (string_equal(STR(0),"ELLIPSE_MAJDIA_MINRAD")) {
-        set_RubberMode(RUBBER_ELLIPSE_MAJDIA_MINRAD);
+        set_rubber_mode(RUBBER_ELLIPSE_MAJDIA_MINRAD);
     }
     else if (string_equal(STR(0),"ELLIPSE_MAJRAD_MINRAD")) {
-        set_RubberMode(RUBBER_ELLIPSE_MAJRAD_MINRAD);
+        set_rubber_mode(RUBBER_ELLIPSE_MAJRAD_MINRAD);
     }
     else if (string_equal(STR(0),"ELLIPSE_ROTATION")) {
-        set_RubberMode(RUBBER_ELLIPSE_ROTATION);
+        set_rubber_mode(RUBBER_ELLIPSE_ROTATION);
     }
     else if (string_equal(STR(0),"LINE")) {
-        set_RubberMode(RUBBER_LINE);
+        set_rubber_mode(RUBBER_LINE);
     }
     else if (string_equal(STR(0),"POLYGON")) {
-        set_RubberMode(RUBBER_POLYGON);
+        set_rubber_mode(RUBBER_POLYGON);
     }
     else if (string_equal(STR(0),"POLYGON_INSCRIBE")) {
-        set_RubberMode(RUBBER_POLYGON_INSCRIBE);
+        set_rubber_mode(RUBBER_POLYGON_INSCRIBE);
     }
     else if (string_equal(STR(0),"POLYGON_CIRCUMSCRIBE")) {
-        set_RubberMode(RUBBER_POLYGON_CIRCUMSCRIBE);
+        set_rubber_mode(RUBBER_POLYGON_CIRCUMSCRIBE);
     }
     else if (string_equal(STR(0),"POLYLINE")) {
-        set_RubberMode(RUBBER_POLYLINE);
+        set_rubber_mode(RUBBER_POLYLINE);
     }
     else if (string_equal(STR(0),"RECTANGLE")) {
-        set_RubberMode(RUBBER_RECTANGLE);
+        set_rubber_mode(RUBBER_RECTANGLE);
     }
     else if (string_equal(STR(0),"TEXTSINGLE")) {
-        set_RubberMode(RUBBER_TEXTSINGLE);
+        set_rubber_mode(RUBBER_TEXTSINGLE);
     }
     else {
         prompt_output("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
@@ -2370,17 +2370,17 @@ spare_rubber_command(ScriptEnv* context)
     }
 
     if (string_equal(STR(0), "PATH")) {
-        nativeSpareRubber(SPARE_RUBBER_PATH);
+        native_spare_rubber(SPARE_RUBBER_PATH);
     }
     else if (string_equal(STR(0), "POLYGON")) {
-        nativeSpareRubber(SPARE_RUBBER_POLYGON);
+        native_spare_rubber(SPARE_RUBBER_POLYGON);
     }
     else if (string_equal(STR(0), "POLYLINE")) {
-        nativeSpareRubber(SPARE_RUBBER_POLYLINE);
+        native_spare_rubber(SPARE_RUBBER_POLYLINE);
     }
     else {
         /* FIXME:
-        nativeSpareRubber(context->objID);
+        native_spare_rubber(context->objID);
         */
     }
 
@@ -2391,7 +2391,7 @@ spare_rubber_command(ScriptEnv* context)
 ScriptValue
 allow_rubber_command(ScriptEnv* context)
 {
-    return script_bool(nativeAllowRubber());
+    return script_bool(native_allow_rubber());
 }
 
 /* LOCATEPOINT */
@@ -2485,7 +2485,7 @@ get_command(ScriptEnv* context)
 
     if (string_equal(STR(0), "MOUSEX")) {
         /* TODO: detect error */
-        int32_t doc = activeDocument();
+        int32_t doc = active_document();
         if (doc < 0) {
            return script_real(0.0);
         }
@@ -2497,7 +2497,7 @@ get_command(ScriptEnv* context)
     }
     else if (string_equal(STR(0), "MOUSEY")) {
         /* TODO: detect error */
-        int32_t doc = activeDocument();
+        int32_t doc = active_document();
         if (doc < 0) {
            return script_real(0.0);
         }
@@ -2532,10 +2532,10 @@ get_command(ScriptEnv* context)
         return setting[TEXT_STYLE_UNDERLINE].setting;
     }
     else if (string_equal(STR(0), "QSNAPX")) {
-        return script_bool(nativeQSnapX());
+        return script_bool(native_q_snap_x());
     }
     else if (string_equal(STR(0), "QSNAPY")) {
-        return script_bool(nativeQSnapY());
+        return script_bool(native_q_snap_y());
     }
 
     return script_null;
@@ -2543,7 +2543,7 @@ get_command(ScriptEnv* context)
 
 /* . */
 void
-nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
+native_scale_selected(EmbReal x, EmbReal y, EmbReal factor)
 {
     if (factor <= 0.0) {
         critical_box(translate("ScaleFactor Error"),
@@ -2551,7 +2551,7 @@ nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
             "If you are a developer, your code needs examined, and possibly your head too."));
     }
 
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_scale_selected(doc_index, x, -y, factor);
     }
@@ -2559,26 +2559,26 @@ nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 
 /* . */
 void
-set_BackgroundColor(uint8_t r, uint8_t g, uint8_t b)
+set_background_color(uint8_t r, uint8_t g, uint8_t b)
 {
     set_int(DISPLAY_BG_COLOR, rgb(r, g, b));
-    updateAllViewBackgroundColors(rgb(r, g, b));
+    update_all_view_background_colors(rgb(r, g, b));
 }
 
 /* . */
 void
-set_CrossHairColor(uint8_t r, uint8_t g, uint8_t b)
+set_cross_hair_color(uint8_t r, uint8_t g, uint8_t b)
 {
     set_int(DISPLAY_CROSSHAIR_COLOR, rgb(r, g, b));
-    updateAllViewCrossHairColors(rgb(r, g, b));
+    update_all_view_cross_hair_colors(rgb(r, g, b));
 }
 
 /* . */
 void
-set_GridColor(uint8_t r, uint8_t g, uint8_t b)
+set_grid_color(uint8_t r, uint8_t g, uint8_t b)
 {
     set_int(GRID_COLOR, rgb(r, g, b));
-    updateAllViewGridColors(rgb(r, g, b));
+    update_all_view_grid_colors(rgb(r, g, b));
 }
 
 /* . */
@@ -2619,7 +2619,7 @@ previewon_command(ScriptEnv *context)
         return script_false;
     }
 
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index) {
         doc_preview_on(doc_index, clone, mode, REAL(2), -REAL(3), REAL(4));
     }
@@ -2634,10 +2634,10 @@ ScriptValue
 print_area_command(ScriptEnv* context)
 {
     char message[MAX_STRING_LENGTH];
-    sprintf(message, "nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
+    sprintf(message, "native_print_area(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
     debug_message(message);
     /* TODO: Print Setup Stuff
-     * nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
+     * native_print_area(REAL(0), REAL(1), REAL(2), REAL(3));
      */
     print_command();
     return script_null;
@@ -2645,7 +2645,7 @@ print_area_command(ScriptEnv* context)
 
 /* . */
 void
-zoomExtentsAllSubWindows(void)
+zoom_extents_all_sub_windows(void)
 {
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
@@ -2661,7 +2661,7 @@ repeat_action(void)
 {
     prompt_end_command();
     prompt_set_current_text(lastCmd);
-    processInput(' ');
+    process_input(' ');
 }
 
 /* . */
@@ -2670,7 +2670,7 @@ move_action(void)
 {
     prompt_end_command();
     prompt_set_current_text("move");
-    processInput(' ');
+    process_input(' ');
 }
 
 /* . */
@@ -2679,7 +2679,7 @@ rotate_action(void)
 {
     prompt_end_command();
     prompt_set_current_text("rotate");
-    processInput(' ');
+    process_input(' ');
 }
 
 /* . */
@@ -2688,21 +2688,21 @@ doc_scaleAction()
 {
     prompt_end_command();
     prompt_set_current_text("scale");
-    processInput(' ');
+    process_input(' ');
 }
 
 /* . */
 void
 prompt_output(const EmbString txt)
 {
-    appendHistory((char*)txt);
+    append_history((char*)txt);
 }
 
 /* . */
 void
 end_command(void)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_clear_rubber_room(doc_index);
         doc_preview_off(doc_index);

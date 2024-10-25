@@ -12,16 +12,19 @@
 
 #include <stdio.h>
 
-#include <GL/glew.h>
+#include "glad/glad.h"
 
-#define GLFW_INCLUDE_GLEXT
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 #include "nanovg.h"
-#define NANOVG_GL2_IMPLEMENTATION
+#define NANOVG_GLES2_IMPLEMENTATION
 #include "nanovg_gl.h"
 
 #include "core.h"
+
+NVGcontext *vg;
+
+GLFWwindow* create_window(int32_t width, int32_t height, const char *title);
 
 void draw_rect(NVGcontext *vg, EmbRect rect, EmbColor color);
 void draw_button(NVGcontext *vg, Button button, float *bounds);
@@ -65,9 +68,9 @@ char prompt_text[50][MAX_STRING_LENGTH] = {
 
 int n_prompt_lines = 3;
 
-/* check this
+/* Check this. */
 uint32_t
-qRgb(uint8_t r, uint8_t g, uint8_t b)
+RGB(uint8_t r, uint8_t g, uint8_t b)
 {
     uint32_t result = 0xFF000000;
     result += 0x10000 * r;
@@ -75,7 +78,6 @@ qRgb(uint8_t r, uint8_t g, uint8_t b)
     result += b;
     return result;
 }
- */
  
 /* . */
 void
@@ -242,92 +244,132 @@ draw_interface(NVGcontext *vg)
     draw_statusbar(vg, emb_rect(0, 405, window_width, 75));
 }
 
-/* . */
+/* Set delta time, clear frame and resize. */
 int
-glfw_application(int argc, char *argv[])
+start_frame(GLFWwindow *window, EmbReal *prevt)
 {
-    GLFWwindow* window;
-    GLFWvidmode vidmode;
+    EmbReal t = glfwGetTime();
+    EmbReal dt = t - *prevt;
+    printf("%f %f\n", t, dt);
 
-    if (!load_data()) {
-        return 1;
+    /* Cap at 120 updates a second. */
+    if (dt < 1.0/120) {
+        return 0;
+    }
+    *prevt = t;
+
+    glfwGetWindowSize(window, &window_width, &window_height);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glViewport(0, 0, window_width, window_height);
+    nvgBeginFrame(vg, window_width, window_height, 1.0);
+    return 1;
+}
+
+/* Swap buffers and poll events. */
+void
+end_frame(GLFWwindow *window)
+{
+    nvgEndFrame(vg);
+
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
+
+/* . */
+void
+render_messagebox(const char *logo, const char *title, const char *text)
+{
+    float bounds[5];
+    EmbRect sb_rect = emb_rect(0, 0, window_width, window_height);
+    draw_rect(vg, sb_rect, prompt_bg_color);
+    draw_text(vg, 10, 40, "sans", title, prompt_color, bounds);
+    draw_text(vg, 10, 80, "sans", text, prompt_color, bounds);
+}
+
+/* FIXME: error code */
+void
+messagebox(const char *logo, const char *title, const char *text)
+{
+    GLFWwindow* window = create_window(480, 200, title);
+
+    EmbReal prevt = glfwGetTime();
+    while (!glfwWindowShouldClose(window)) {
+        if (!start_frame(window, &prevt)) {
+            continue;
+        }
+        render_messagebox(logo, title, text);
+        end_frame(window);
+    }
+}
+
+/* . */
+GLFWwindow*
+create_window(int32_t width, int32_t height, const char *title)
+{
+    GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
+    if (!window) {
+        glfwTerminate();
+        return NULL;
     }
 
-    if (!glfwInit()) {
-        return 2;
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGL()) {
+        puts("Failed load GL function pointers with glad.");
+        return NULL;
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
-    window = glfwCreateWindow(640, 480, "Embroidermodder 2 (GLFW)", NULL, NULL);
-    if (!window) {
-        glfwTerminate();
-        return 3;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    if (glewInit() != GLEW_OK) {
-        glfwTerminate();
-        return 4;
-    }
-
-    NVGcontext *vg = nvgCreateGL2(NVG_STENCIL_STROKES | NVG_DEBUG);
+    vg = nvgCreateGLES2(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
     if (!vg) {
         puts("Failed to initialize NanoVG.");
-        return 5;
+        return NULL;
     }
-
-    EmbReal prevt = glfwGetTime();
 
     /* FIXME: only works on linux and only works if adobe fonts are installed. */
     int font = nvgCreateFont(vg, "sans", sans_font);
     if (font == -1) {
         puts("Font failed to load.");
-        return 6;
+        return NULL;
     }
     font = nvgCreateFont(vg, "icons", icon_font);
     if (font == -1) {
         puts("Font failed to load.");
-        return 6;
+        return NULL;
     }
     font = nvgCreateFont(vg, "mono", mono_font);
     if (font == -1) {
         puts("Font failed to load.");
-        return 6;
+        return NULL;
     }
+    return window;
+}
 
+int32_t
+free_glfw(void)
+{
+    nvgDeleteGLES2(vg);
+    glfwTerminate();
+    return 0;
+}
+
+/* . */
+int
+glfw_application(int argc, char *argv[])
+{
+    GLFWwindow* window = create_window(640, 480, "Embroidermodder 2 (GLFW)");
+
+    EmbReal prevt = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
-        EmbReal t = glfwGetTime();
-        EmbReal dt = t - prevt;
-        printf("%f %f\n", t, dt);
-
-        /* Cap at 120 updates a second. */
-        if (dt < 1.0/120) {
+        if (!start_frame(window, &prevt)) {
             continue;
         }
-        prevt = t;
-
-        glfwGetWindowSize(window, &window_width, &window_height);
-
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glViewport(0, 0, window_width, window_height);
-
-        nvgBeginFrame(vg, window_width, window_height, 1.0);
-
         draw_interface(vg);
-        
-        nvgEndFrame(vg);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        end_frame(window);
     }
-
-    nvgDeleteGL2(vg);
-    glfwTerminate();
     return 0;
 }
 

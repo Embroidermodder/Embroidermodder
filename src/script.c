@@ -23,7 +23,7 @@
 
 char formatFilterOpen[MAX_LONG_STRING];
 char formatFilterSave[MAX_LONG_STRING];
-EmbString openFilesPath;
+EmbString open_filesPath;
 EmbString prompt_color_;
 EmbString prompt_selection_bg_color_;
 EmbString prompt_bg_color_;
@@ -258,7 +258,7 @@ main(int argc, char* argv[])
         else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
             version();
         }
-        else if (1 /* FIXME: QFile::exists(argv[i]) && emb_validFileFormat(argv[i])*/) {
+        else if (1 /* FIXME: QFile::exists(argv[i]) && emb_valid_file_format(argv[i])*/) {
             if (n_files >= MAX_FILES) {
                 printf("ERROR: More files to open than MAX_FILES.");
                 continue;
@@ -275,9 +275,21 @@ main(int argc, char* argv[])
         return 1;
     }
 
+    if (!load_data()) {
+        puts("Failed to load data.");
+        return 1;
+    }
+
+    if (!glfwInit()) {
+        puts("Failed to run glfwInit.");
+        return 2;
+    }
+
     global = create_script_env();
     int result = make_application(n_files, files_to_open);
+
     free_script_env(global);
+
     return result;
 }
 
@@ -289,7 +301,7 @@ run_testing(void)
     nanosleep_(2000);
     int n = string_array_length(state.coverage_test);
     for (i=0; i<n; i++) {
-        runCommandMain(state.coverage_test[i]);
+        run_command_main(state.coverage_test[i]);
         nanosleep_(1000);
     }        
 }
@@ -804,7 +816,7 @@ command_prompt(ScriptEnv *context, const char *line)
 
 /* . */
 bool
-validRGB(float r, float g, float b)
+valid_rgb(float r, float g, float b)
 {
     if (isnan(r)) {
         return false;
@@ -1046,7 +1058,7 @@ pattern_save(EmbPattern *pattern, EmbString fileName)
 }
 
 bool
-willUnderflowInt32(int64_t a, int64_t b)
+int32_underflow(int64_t a, int64_t b)
 {
     int64_t c;
     assert(LLONG_MAX>INT_MAX);
@@ -1058,7 +1070,7 @@ willUnderflowInt32(int64_t a, int64_t b)
 }
 
 bool
-willOverflowInt32(int64_t a, int64_t b)
+int32_overflow(int64_t a, int64_t b)
 {
     int64_t c;
     assert(LLONG_MAX>INT_MAX);
@@ -1071,7 +1083,7 @@ willOverflowInt32(int64_t a, int64_t b)
 
 /* . */
 int
-roundToMultiple(bool roundUp, int numToRound, int multiple)
+round_to_multiple(bool roundUp, int numToRound, int multiple)
 {
     if (multiple == 0) {
         return numToRound;
@@ -1281,7 +1293,7 @@ hide_unimplemented(void)
 
 /* . */
 bool
-validFileFormat(EmbString fileName)
+valid_file_format(EmbString fileName)
 {
     if (emb_identify_format(fileName) >= 0) {
         return true;

@@ -181,8 +181,8 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_TEXT_SINGLE: {
-        updateLineEditStrIfVaries("TextSingleContents", core->text);
-        updateFontComboBoxStrIfVaries(core->textFont);
+        update_line_edit_str_if_varies("TextSingleContents", core->text);
+        update_font_combo_box_str_if_varies(core->textFont);
         update_lineedit_str("TextSingleJustify", core->textJustify,
             objectTextJustifyList);
         update_lineedit_num("TextSingleHeight", core->textSize, false);
@@ -395,7 +395,7 @@ edit_field(int32_t id, const char *label, const char *text)
 
 /* This needs a int to int table. */
 void
-showGroups(int objType)
+show_groups(int objType)
 {
     switch (objType) {
     case EMB_ARC:
@@ -494,23 +494,23 @@ comboBoxIconThemeCurrentIndexChanged(EmbString theme)
 
 /* . */
 void
-spinBoxRecentMaxFilesValueChanged(int value)
+spin_box_recent_max_files_changed(int value)
 {
     setting[OPENSAVE_RECENT_MAX_FILES].dialog.i = value;
 }
 
 /* . */
 void
-spinBoxTrimDstNumJumpsValueChanged(int value)
+spin_box_trim_dst_num_jumps_changed(int value)
 {
     setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i = value;
 }
 
 void
-spinBoxDisplaySelectBoxAlphaValueChanged(int value)
+spin_box_display_select_box_alpha_changed(int value)
 {
     setting[DISPLAY_SELECTBOX_ALPHA].preview.i = value;
-    updateAllViewSelectBoxColors(
+    update_all_view_select_box_colors(
         setting[DISPLAY_SELECTBOX_LEFT_COLOR].accept.i,
         setting[DISPLAY_SELECTBOX_LEFT_FILL].accept.i,
         setting[DISPLAY_SELECTBOX_RIGHT_COLOR].accept.i,
@@ -520,86 +520,86 @@ spinBoxDisplaySelectBoxAlphaValueChanged(int value)
 
 /* . */
 void
-comboBoxPromptFontFamilyCurrentIndexChanged(EmbString family)
+combo_box_prompt_font_family_changed(EmbString family)
 {
     string_copy(setting[PROMPT_FONT_FAMILY].preview.s, family);
-    setPromptFontFamily(setting[PROMPT_FONT_FAMILY].preview.s);
+    set_prompt_font_family(setting[PROMPT_FONT_FAMILY].preview.s);
 }
 
 /* . */
 void
-comboBoxPromptFontStyleCurrentIndexChanged(EmbString style)
+combo_box_prompt_font_style_changed(EmbString style)
 {
     string_copy(setting[PROMPT_FONT_STYLE].preview.s, style);
-    setPromptFontStyle(setting[PROMPT_FONT_STYLE].preview.s);
+    set_prompt_font_style(setting[PROMPT_FONT_STYLE].preview.s);
 }
 
 /* . */
 void
-spinBoxPromptFontSizeValueChanged(int value)
+spin_box_prompt_font_size_changed(int value)
 {
     setting[PROMPT_FONT_SIZE].preview.i = value;
-    setPromptFontSize(setting[PROMPT_FONT_SIZE].preview.i);
+    set_prompt_font_size(setting[PROMPT_FONT_SIZE].preview.i);
 }
 
 /* . */
 void
-spinBoxRulerPixelSizeValueChanged(EmbReal value)
+spin_box_ruler_pixel_size_changed(EmbReal value)
 {
     setting[RULER_PIXEL_SIZE].dialog.r = value;
 }
 
 /* . */
 void
-sliderQSnapLocatorSizeValueChanged(int value)
+slider_qsnap_locator_size_changed(int value)
 {
     setting[QSNAP_LOCATOR_SIZE].dialog.i = value;
 }
 
 /* . */
 void
-sliderQSnapApertureSizeValueChanged(int value)
+slider_qsnap_aperture_size_changed(int value)
 {
     setting[QSNAP_APERTURE_SIZE].dialog.i = value;
 }
 
 /* . */
 void
-checkBoxLwtRealRenderStateChanged(int checked)
+check_box_lwt_real_render_changed(int checked)
 {
     setting[LWT_REAL_RENDER].preview.b = checked;
     if (setting[LWT_REAL_RENDER].preview.b) {
-        enableReal();
+        enable_real();
     }
     else {
-        disableReal();
+        disable_real();
     }
 }
 
 /* . */
 void
-sliderSelectionGripSizeValueChanged(int value)
+slider_selection_grip_size_changed(int value)
 {
     setting[SELECTION_GRIP_SIZE].dialog.i = value;
 }
 
 /* . */
 void
-sliderSelectionPickBoxSizeValueChanged(int value)
+slider_selection_pick_box_size_changed(int value)
 {
     setting[SELECTION_PICKBOX_SIZE].dialog.i = value;
 }
 
 /* . */
 void
-comboBoxScrollBarWidgetCurrentIndexChanged(int index)
+combo_box_scroll_bar_widget_changed(int index)
 {
     setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i = index;
 }
 
 /* NOTE: General group will never be hidden. */
 void
-hideAllGroups(void)
+hide_all_groups(void)
 {
     for (int i=0; group_box_list[i].id >= 0; i++) {
         if (group_box_list[i].id != GB_GENERAL) {
@@ -610,7 +610,7 @@ hideAllGroups(void)
 
 /* . */
 void
-clearAllFields(void)
+clear_all_fields(void)
 {
     int n = string_array_length(editor_list);
     for (int i=0; i<n; i++) {
@@ -630,16 +630,16 @@ accept_interface_color(int32_t key, uint32_t color)
     setting[key].accept.i = color;
     switch (key) {
     case DISPLAY_CROSSHAIR_COLOR:
-        updateAllViewCrossHairColors(setting[key].accept.i);
+        update_all_view_cross_hair_colors(setting[key].accept.i);
         break;
     case DISPLAY_BG_COLOR:
-        updateAllViewBackgroundColors(setting[key].accept.i);
+        update_all_view_background_colors(setting[key].accept.i);
         break;
     case DISPLAY_SELECTBOX_LEFT_COLOR:
     case DISPLAY_SELECTBOX_LEFT_FILL:
     case DISPLAY_SELECTBOX_RIGHT_COLOR:
     case DISPLAY_SELECTBOX_RIGHT_FILL:
-        updateAllViewSelectBoxColors(
+        update_all_view_select_box_colors(
             setting[DISPLAY_SELECTBOX_LEFT_COLOR].accept.i,
             setting[DISPLAY_SELECTBOX_LEFT_FILL].accept.i,
             setting[DISPLAY_SELECTBOX_RIGHT_COLOR].accept.i,
@@ -647,16 +647,16 @@ accept_interface_color(int32_t key, uint32_t color)
             setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
         break;
     case PROMPT_TEXT_COLOR:
-        setPromptTextColor(setting[key].accept.i);
+        set_prompt_text_color(setting[key].accept.i);
         break;
     case PROMPT_BG_COLOR:
-        setPromptBackgroundColor(setting[key].accept.i);
+        set_prompt_background_color(setting[key].accept.i);
         break;
     case GRID_COLOR:
-        updateAllViewGridColors(setting[GRID_COLOR].accept.i);
+        update_all_view_grid_colors(setting[GRID_COLOR].accept.i);
         break;
     case RULER_COLOR:
-        updateAllViewRulerColors(setting[key].accept.i);
+        update_all_view_ruler_colors(setting[key].accept.i);
         break;
     case GENERAL_MDI_BG_COLOR:
         mdiarea_set_bg(setting[key].accept.i);
@@ -673,16 +673,16 @@ preview_interface_color(int32_t key, uint32_t color)
     setting[key].preview.i = color;
     switch (key) {
     case DISPLAY_CROSSHAIR_COLOR:
-        updateAllViewCrossHairColors(setting[key].preview.i);
+        update_all_view_cross_hair_colors(setting[key].preview.i);
         break;
     case DISPLAY_BG_COLOR:
-        updateAllViewBackgroundColors(setting[key].preview.i);
+        update_all_view_background_colors(setting[key].preview.i);
         break;
     case DISPLAY_SELECTBOX_LEFT_COLOR:
     case DISPLAY_SELECTBOX_LEFT_FILL:
     case DISPLAY_SELECTBOX_RIGHT_COLOR:
     case DISPLAY_SELECTBOX_RIGHT_FILL:
-        updateAllViewSelectBoxColors(
+        update_all_view_select_box_colors(
             setting[DISPLAY_SELECTBOX_LEFT_COLOR].preview.i,
             setting[DISPLAY_SELECTBOX_LEFT_FILL].preview.i,
             setting[DISPLAY_SELECTBOX_RIGHT_COLOR].preview.i,
@@ -690,16 +690,16 @@ preview_interface_color(int32_t key, uint32_t color)
             setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
         break;
     case PROMPT_TEXT_COLOR:
-        setPromptTextColor(setting[key].preview.i);
+        set_prompt_text_color(setting[key].preview.i);
         break;
     case PROMPT_BG_COLOR:
-        setPromptBackgroundColor(setting[key].preview.i);
+        set_prompt_background_color(setting[key].preview.i);
         break;
     case GRID_COLOR:
-        updateAllViewGridColors(setting[GRID_COLOR].preview.i);
+        update_all_view_grid_colors(setting[GRID_COLOR].preview.i);
         break;
     case RULER_COLOR:
-        updateAllViewRulerColors(setting[key].preview.i);
+        update_all_view_ruler_colors(setting[key].preview.i);
         break;
     case GENERAL_MDI_BG_COLOR:
         mdiarea_set_bg(setting[key].preview.i);
@@ -716,16 +716,16 @@ dialog_interface_color(int32_t key, uint32_t color)
     setting[key].dialog.i = color;
     switch (key) {
     case DISPLAY_CROSSHAIR_COLOR:
-        updateAllViewCrossHairColors(setting[key].dialog.i);
+        update_all_view_cross_hair_colors(setting[key].dialog.i);
         break;
     case DISPLAY_BG_COLOR:
-        updateAllViewBackgroundColors(setting[key].dialog.i);
+        update_all_view_background_colors(setting[key].dialog.i);
         break;
     case DISPLAY_SELECTBOX_LEFT_COLOR:
     case DISPLAY_SELECTBOX_LEFT_FILL:
     case DISPLAY_SELECTBOX_RIGHT_COLOR:
     case DISPLAY_SELECTBOX_RIGHT_FILL:
-        updateAllViewSelectBoxColors(
+        update_all_view_select_box_colors(
             setting[DISPLAY_SELECTBOX_LEFT_COLOR].dialog.i,
             setting[DISPLAY_SELECTBOX_LEFT_FILL].dialog.i,
             setting[DISPLAY_SELECTBOX_RIGHT_COLOR].dialog.i,
@@ -733,16 +733,16 @@ dialog_interface_color(int32_t key, uint32_t color)
             setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
         break;
     case PROMPT_TEXT_COLOR:
-        setPromptTextColor(setting[key].dialog.i);
+        set_prompt_text_color(setting[key].dialog.i);
         break;
     case PROMPT_BG_COLOR:
-        setPromptBackgroundColor(setting[key].dialog.i);
+        set_prompt_background_color(setting[key].dialog.i);
         break;
     case GRID_COLOR:
-        updateAllViewGridColors(setting[GRID_COLOR].dialog.i);
+        update_all_view_grid_colors(setting[GRID_COLOR].dialog.i);
         break;
     case RULER_COLOR:
-        updateAllViewRulerColors(setting[key].dialog.i);
+        update_all_view_ruler_colors(setting[key].dialog.i);
         break;
     case GENERAL_MDI_BG_COLOR:
         mdiarea_set_bg(setting[key].dialog.i);

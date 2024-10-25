@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(Qt6 COMPONENTS Core Widgets PrintSupport OpenGL OpenGLWidgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets PrintSupport REQUIRED)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
@@ -43,6 +42,8 @@ set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(TRANSLATION ${CMAKE_SOURCE_DIR}/src/translations)
 
+include_directories(extern/glfw)
+
 qt_add_executable(embroidermodder2
 	${SRC}/widgets.cpp
 
@@ -54,6 +55,10 @@ qt_add_executable(embroidermodder2
 
 	${EXTERN}/tomlc99/toml.c
 	${EXTERN}/tomlc99/toml.h
+
+	${EXTERN}/glad/src/glad.c
+	${EXTERN}/glad/include/glad/glad.h
+	${EXTERN}/glad/include/KHR/khrplatform.h
 
 	${TRANSLATION}/afrikaans.c
 	${TRANSLATION}/arabic.c
@@ -97,8 +102,8 @@ include_directories(
 	${EXTERN}/libembroidery
 	${EXTERN}/tomlc99
 	${EXTERN}/glfw/include
+	${EXTERN}/glad/include
 	${EXTERN}/nanovg/src
-#	${GLEW_INCLUDE_DIRS}
 	${OPENGL_INCLUDE_DIRS}
 	${SRC}
 )
@@ -108,7 +113,6 @@ target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport
-	${GLEW_LIBRARIES}
 	${OPENGL_LIBRARIES}
 )
 
@@ -121,4 +125,3 @@ if (WIN32)
 else(WIN32)
 target_link_libraries(embroidermodder2 PRIVATE m)
 endif()
-

@@ -20,7 +20,7 @@
 ScriptValue
 add_arc_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -29,7 +29,7 @@ add_arc_command(ScriptEnv *context)
     arc.mid = unpack_vector(context, 2);
     arc.end = unpack_vector(context, 4);
     int rubberMode = INT(5);
-    uint32_t obj = create_arc(arc, getCurrentColor());
+    uint32_t obj = create_arc(arc, get_current_color());
     obj_set_rubber_mode(obj, rubberMode);
     doc_undoable_add_obj(doc_index, obj, rubberMode);
     return script_true;
@@ -39,7 +39,7 @@ add_arc_command(ScriptEnv *context)
 ScriptValue
 add_circle_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -47,7 +47,7 @@ add_circle_command(ScriptEnv *context)
     circle.center = unpack_vector(context, 0);
     circle.radius = REAL(2);
     int rubberMode = INT(3);
-    uint32_t obj = create_circle(circle, getCurrentColor());
+    uint32_t obj = create_circle(circle, get_current_color());
     obj_set_rubber_mode(obj, rubberMode);
     /* TODO: circle fill. */
     doc_undoable_add_obj(doc_index, obj, rubberMode);
@@ -58,7 +58,7 @@ add_circle_command(ScriptEnv *context)
 ScriptValue
 add_dimleader_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -67,7 +67,7 @@ add_dimleader_command(ScriptEnv *context)
     line.end = unpack_vector(context, 2);
     double rot = REAL(4);
     int rubberMode = INT(5);
-    uint32_t obj = create_dimleader(line, getCurrentColor());
+    uint32_t obj = create_dimleader(line, get_current_color());
     obj_set_rotation(obj, -rot);
     obj_set_rubber_mode(obj, rubberMode);
     doc_undoable_add_obj(doc_index, obj, rubberMode);
@@ -78,7 +78,7 @@ add_dimleader_command(ScriptEnv *context)
 ScriptValue
 add_ellipse_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -91,7 +91,7 @@ add_ellipse_command(ScriptEnv *context)
     ellipse.center = unpack_vector(context, 0);
     ellipse.radius.x = width/2.0;
     ellipse.radius.y = height/2.0;
-    uint32_t obj = create_ellipse(ellipse, getCurrentColor());
+    uint32_t obj = create_ellipse(ellipse, get_current_color());
     obj_set_rotation(obj, -rot);
     obj_set_rubber_mode(obj, rubberMode);
     /* TODO: ellipse fill */
@@ -103,7 +103,7 @@ add_ellipse_command(ScriptEnv *context)
 ScriptValue
 add_line_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -112,7 +112,7 @@ add_line_command(ScriptEnv *context)
     line.end = unpack_vector(context, 2);
     double rot = REAL(4);
     int rubberMode = INT(5);
-    uint32_t obj = create_line(line, getCurrentColor());
+    uint32_t obj = create_line(line, get_current_color());
     obj_set_rotation(obj, -rot);
     obj_set_rubber_mode(obj, rubberMode);
     doc_undoable_add_obj(doc_index, obj, rubberMode);
@@ -277,7 +277,7 @@ add_To_selection(const QPainterPath path, Qt::ItemSelectionMode mode)
 ScriptValue
 add_polygon_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -285,7 +285,7 @@ add_polygon_command(ScriptEnv *context)
     EmbVector start = unpack_vector(context, 0);
     int rubberMode = INT(2);
     /* FIXME: pass path */
-    uint32_t obj = create_polygon(NULL, getCurrentColor());
+    uint32_t obj = create_polygon(NULL, get_current_color());
     obj_set_rubber_mode(obj, rubberMode);
     doc_undoable_add_obj(doc_index, obj, rubberMode);
  
@@ -358,7 +358,7 @@ add_polygon_command(ScriptEnv *context)
 ScriptValue
 add_polyline_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -366,7 +366,7 @@ add_polyline_command(ScriptEnv *context)
     EmbVector start = unpack_vector(context, 0);
     int rubberMode = INT(2);
     /* FIXME: pass path */
-    uint32_t obj = create_polygon(NULL, getCurrentColor());
+    uint32_t obj = create_polygon(NULL, get_current_color());
     obj_set_rubber_mode(obj, rubberMode);
     doc_undoable_add_obj(doc_index, obj, rubberMode);
     
@@ -436,14 +436,14 @@ add_polyline_command(ScriptEnv *context)
 ScriptValue
 add_point_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
     EmbPoint point;
     point.position = unpack_vector(context, 0);
     int rubberMode = INT(2);
-    uint32_t obj = create_point(point, getCurrentColor());
+    uint32_t obj = create_point(point, get_current_color());
     doc_undoable_add_obj(doc_index, obj, rubberMode);
     return script_true;
 }
@@ -452,7 +452,7 @@ add_point_command(ScriptEnv *context)
 ScriptValue
 add_rectangle_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -460,7 +460,7 @@ add_rectangle_command(ScriptEnv *context)
     double rot = REAL(4);
     bool fill = BOOL(5);
     int rubberMode = INT(6);
-    uint32_t obj = create_rect(rect, getCurrentColor());
+    uint32_t obj = create_rect(rect, get_current_color());
     obj_set_rotation(obj, -rot);
     obj_set_rubber_mode(obj, rubberMode);
     /* TODO: rect fill */
@@ -473,12 +473,12 @@ ScriptValue
 add_slot_command(ScriptEnv *context)
 {
     /* TODO: Use UndoableCommand for slots */
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
     /*
-    uint32_t obj = create_object(EMB_SLOT, centerX, -centerY, diameter, length, getCurrentColor());
+    uint32_t obj = create_object(EMB_SLOT, centerX, -centerY, diameter, length, get_current_color());
     obj_set_rotation(obj, -rot);
     obj_set_rubber_mode(obj, rubberMode);
     if (rubberMode) {
@@ -495,7 +495,7 @@ add_slot_command(ScriptEnv *context)
 ScriptValue
 add_textsingle_command(ScriptEnv *context)
 {
-    int32_t doc_index = activeDocument();
+    int32_t doc_index = active_document();
     if (doc_index < 0) {
         return script_false;
     }
@@ -504,7 +504,7 @@ add_textsingle_command(ScriptEnv *context)
     double rot = REAL(3);
     bool fill = BOOL(4);
     int rubberMode = INT(5);
-    uint32_t obj = create_text_single(str, v, getCurrentColor());
+    uint32_t obj = create_text_single(str, v, get_current_color());
     ObjectCore *core = obj_get_core(obj);
     obj_set_text_font(core, get_str(TEXT_FONT));
     obj_set_text_size(core, get_real(TEXT_SIZE));

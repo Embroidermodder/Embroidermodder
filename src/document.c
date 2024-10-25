@@ -83,7 +83,7 @@ doc_init(int32_t doc)
     data->enableGrid = true;
     data->enableOrtho = false;
     data->enablePolar = false;
-    data->enableLwt = false;
+    data->enable_lwt = false;
     data->enableRuler = true;
 
     /* Randomize the hot grip location initially so it's not located at (0,0). */
@@ -188,10 +188,10 @@ doc_toggle_qtrack(int32_t doc, bool on)
 void
 doc_toggle_lwt(int32_t doc, bool on)
 {
-    debug_message("View toggleLwt()");
+    debug_message("View toggle_lwt()");
     wait_cursor();
     DocumentData *data = doc_data(doc);
-    data->enableLwt = on;
+    data->enable_lwt = on;
     doc_update(doc);
     restore_cursor();
 }
@@ -203,7 +203,7 @@ doc_toggle_real(int32_t doc, bool on)
     debug_message("View toggleReal()");
     wait_cursor();
     DocumentData *data = doc_data(doc);
-    data->enableReal = on;
+    data->enable_real = on;
     doc_update(doc);
     restore_cursor();
 }
@@ -334,7 +334,7 @@ doc_spare_rubber(int32_t doc, int64_t id)
 
 /* . */
 void
-updateColorLinetypeLineweight(void)
+update_color_linetype_lineweight(void)
 {
 }
 
@@ -391,7 +391,7 @@ open_recent_file(void)
     /* Check to see if this from the recent files list. */
     /* FIXME: QAction* recentSender = qobject_cast<QAction*>(sender());
     if (recentSender) {
-        openFile(true, recentSender->data().toString());
+        open_file(true, recentSender->data().toString());
     }
     */
 }
@@ -401,7 +401,7 @@ void
 statusbar_toggle(EmbString key, bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
-    int32_t doc = activeDocument();
+    int32_t doc = active_document();
     if (doc < 0) {
         return;
     }
@@ -642,7 +642,7 @@ doc_set_cross_hair_color(int32_t doc, uint32_t color)
 void
 doc_toggle_grid(int32_t doc, bool on)
 {
-    debug_message("View toggleGrid()");
+    debug_message("View toggle_grid()");
     wait_cursor();
     if (on) {
         doc_create_grid(doc, get_str(GRID_TYPE));
@@ -658,7 +658,7 @@ void
 doc_toggle_ruler(int32_t doc, bool on)
 {
     DocumentData *data = doc_data(doc);
-    debug_message("View toggleRuler()");
+    debug_message("View toggle_ruler()");
     wait_cursor();
     data->enableRuler = on;
     data->rulerMetric = get_bool(RULER_METRIC);
@@ -670,9 +670,9 @@ doc_toggle_ruler(int32_t doc, bool on)
 
 /* . */
 void
-doc_deletePressed(int32_t doc)
+doc_delete_pressed(int32_t doc)
 {
-    debug_message("View deletePressed()");
+    debug_message("View delete_pressed()");
     DocumentData *data = doc_data(doc);
     if (data->pastingActive) {
         remove_paste_object_item_group(doc);
@@ -687,9 +687,9 @@ doc_deletePressed(int32_t doc)
 
 /* . */
 void
-doc_escapePressed(int32_t doc)
+doc_escape_pressed(int32_t doc)
 {
-    debug_message("View escapePressed()");
+    debug_message("View escape_pressed()");
     DocumentData *data = doc_data(doc);
     if (data->pastingActive) {
         remove_paste_object_item_group(doc);

@@ -20,7 +20,7 @@ copy_object(uint32_t obj)
     debug_message("Object Copy()");
     ObjectCore *core = obj_get_core(obj);
     uint32_t copy = 0xFFFFFFFF; /* error symbol */
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     switch (core->geometry->type) {
     case EMB_ARC: {
         copy = create_arc(core->geometry->object.arc, core->rgb);
@@ -103,7 +103,7 @@ create_arc(EmbArc arc, uint32_t rgb)
     uint32_t obj = create_object(EMB_ARC, rgb);
     ObjectCore *core = obj_get_core(obj);
     core->geometry->object.arc = arc;
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     obj_calculate_data(obj);
     obj_set_pos(core, arc.start);
     return obj;
@@ -115,7 +115,7 @@ create_circle(EmbCircle circle, uint32_t rgb)
 {
     debug_message("CircleObject Constructor()");
     uint32_t obj = create_object(EMB_CIRCLE, rgb);
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     ObjectCore *core = obj_get_core(obj);
     core->geometry->object.circle = circle;
     /* update_path(); */
@@ -127,7 +127,7 @@ uint32_t
 create_dimleader(EmbLine line, uint32_t rgb)
 {
     debug_message("DimLeaderObject Constructor()");
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     uint32_t obj = create_object(EMB_DIM_LEADER, rgb);
     ObjectCore *core = obj_get_core(obj);
 
@@ -143,7 +143,7 @@ uint32_t
 create_ellipse(EmbEllipse ellipse, uint32_t rgb)
 {
     debug_message("EllipseObject Constructor()");
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     uint32_t obj = create_object(EMB_ELLIPSE, rgb);
     ObjectCore *core = obj_get_core(obj);
     core->geometry->object.ellipse = ellipse;
@@ -160,7 +160,7 @@ uint32_t
 create_image(EmbRect rect, uint32_t rgb)
 {
     debug_message("ImageObject Constructor()");
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     uint32_t obj = create_object(EMB_IMAGE, rgb);
     obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
     return obj;
@@ -173,7 +173,7 @@ create_line(EmbLine line, uint32_t rgb)
     debug_message("LineObject Constructor()");
     uint32_t obj = create_object(EMB_LINE, rgb);
     ObjectCore *core = obj_get_core(obj);
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     obj_set_end_point_1(core, line.start);
     obj_set_end_point_2(core, line.end);
     return obj;
@@ -185,7 +185,7 @@ create_path(EmbPath *p, uint32_t rgb)
 {
     debug_message("PathObject Constructor()");
     uint32_t obj = create_object(EMB_PATH, rgb);
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     // FIXME: obj_update_path_r(obj, p);
     //obj_set_pos(obj->core, v);
     return obj;
@@ -197,7 +197,7 @@ create_polygon(EmbPath *p, uint32_t rgb)
 {
     debug_message("PolygonObject Constructor()");
     uint32_t obj = create_object(EMB_POLYGON, rgb);
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     // FIXME: obj_update_path_r(obj, p);
     //obj_set_pos(obj->core, v);
     return obj;
@@ -208,7 +208,7 @@ uint32_t
 create_polyline(EmbPath *path, uint32_t rgb)
 {
     debug_message("PolylineObject Constructor()");
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     uint32_t obj = create_object(EMB_POLYLINE, rgb);
     // FIXME: obj_update_path_r(obj, p);
     /* EmbVector v; obj_set_pos(obj->core, v); */
@@ -228,7 +228,7 @@ uint32_t
 create_rect(EmbRect rect, uint32_t rgb)
 {
     debug_message("RectObject Constructor()");
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     uint32_t obj = create_object(EMB_RECT, rgb);
     obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
     return obj;
@@ -239,7 +239,7 @@ uint32_t
 create_text_single(EmbString str, EmbVector v, uint32_t rgb)
 {
     debug_message("TextSingleObject Constructor()");
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     uint32_t obj = create_object(EMB_TEXT_SINGLE, rgb);
     ObjectCore *core = obj_get_core(obj);
 
@@ -1422,7 +1422,7 @@ Object::Object(double x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObjec
 {
     debug_message("PointObject Constructor()");
     init(x, y, rgb, Qt::SolidLine);
-    todo("getCurrentLineType");
+    todo("get_current_line_type");
     init_geometry(EMB_POINT, rgb, lineType);
     obj_set_rect(obj, -0.00000001, -0.00000001, 0.00000002, 0.00000002);
     obj_set_pos(obj, x,y);
@@ -2006,7 +2006,7 @@ function prompt(str)
         context->mode = TEXTSINGLE_MODE_SETGEOM;
         context->textFont = str;
         obj_add_rubber_text(obj, "TEXT_FONT", context->textFont);
-        setTextFont(context->textFont);
+        set_text_font(context->textFont);
         prompt_output(translate("Specify start point of text or [Justify/Setfont]: "));
     }
     else if (context->mode == TEXTSINGLE_MODE_SETGEOM) {
