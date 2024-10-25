@@ -15,36 +15,11 @@
 ##   https://github.com/github/gitignore
 ##############################################################################
 
-#########################
-# Embroidermodder 2     #
-#########################
-embroidermodder2/TODO
-embroidermodder2/settings.ini
-embroidermodder2/prompt.log
-embroidermodder2/embroidermodder2
-embroidermodder2/doxygen
+build/
+debug/
+analysis/
 
-#########################
-# libembroidery         #
-#########################
-libembroidery/TODO
-libembroidery/doxygen
-libembroidery/lib
-
-#########################
-# libembroidery-convert #
-#########################
-libembroidery-convert/TODO
-libembroidery-convert/libembroidery-convert
-
-#########################
-# libembroidery-test    #
-#########################
-libembroidery-test/TODO
-libembroidery-test/libembroidery-test
-
-#########################
-# Misc Dev Files        #
+# Misc Dev Files
 #########################
 *.moc
 *.obj
@@ -57,8 +32,7 @@ moc_*.cpp
 qrc_*.cpp
 *-build-*
 
-#########################
-# Libraries             #
+# Libraries
 #########################
 ## Compiled Static libraries
 *.lai
@@ -71,15 +45,13 @@ qrc_*.cpp
 *.so.*
 *.dylib
 
-#########################
-# Executables           #
+# Executables
 #########################
 *.exe
 *.out
 *.app
 
-#########################
-# OS generated files    #
+# OS generated files
 #########################
 ## Macintosh
 .DS_Store
@@ -91,23 +63,10 @@ ehthumbs.db
 Thumbs.db
 Desktop.ini
 
-#########################
-# Python                #
+# Python
 #########################
 ## Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-#########################
-# Experimental Python   #
-#########################
-## Generated Settings Ini from experimental/python/gui
-embroidermodder2/settings-py.ini
-## Sphinx documentation
-experimental/python/gui/embroiderdocs/_build
-# Include the sphinx Makefile
-!experimental/python/gui/embroiderdocs/Makefile
-## Bindings stuff
-build-swigpython-Desktop_Qt_[0-9]_[0-9]_[0-9]_MinGW_32bit-Debug
