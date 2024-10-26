@@ -399,79 +399,79 @@ show_groups(int objType)
 {
     switch (objType) {
     case EMB_ARC:
-        show_group_box(GB_GEOM_ARC);
-        show_group_box(GB_MISC_ARC);
+        show_widget("GB_GEOM_ARC", WIDGET_GROUP_BOX);
+        show_widget("GB_MISC_ARC", WIDGET_GROUP_BOX);
         break;
     case OBJ_BLOCK:
-        show_group_box(GB_GEOM_BLOCK);
+        show_widget("GB_GEOM_BLOCK", WIDGET_GROUP_BOX);
         break;
     case EMB_CIRCLE:
-        show_group_box(GB_GEOM_CIRCLE);
+        show_widget("GB_GEOM_CIRCLE", WIDGET_GROUP_BOX);
         break;
     case OBJ_DIMALIGNED:
-        show_group_box(GB_GEOM_DIMALIGNED);
+        show_widget("GB_GEOM_DIMALIGNED", WIDGET_GROUP_BOX);
         break;
     case OBJ_DIMANGULAR:
-        show_group_box(GB_GEOM_DIMANGULAR);
+        show_widget("GB_GEOM_DIMANGULAR", WIDGET_GROUP_BOX);
         break;
     case OBJ_DIMARCLENGTH:
-        show_group_box(GB_GEOM_DIMARCLENGTH);
+        show_widget("GB_GEOM_DIMARCLENGTH", WIDGET_GROUP_BOX);
         break;
     case OBJ_DIMDIAMETER:
-        show_group_box(GB_GEOM_DIMDIAMETER);
+        show_widget("GB_GEOM_DIMDIAMETER", WIDGET_GROUP_BOX);
         break;
     case OBJ_DIMLEADER:
-        show_group_box(GB_GEOM_DIMLEADER);
+        show_widget("GB_GEOM_DIMLEADER", WIDGET_GROUP_BOX);
         break;
     case OBJ_DIMLINEAR:
-        show_group_box(GB_GEOM_DIMLINEAR);
+        show_widget("GB_GEOM_DIMLINEAR", WIDGET_GROUP_BOX);
         break;
     case OBJ_DIMORDINATE:
-        show_group_box(GB_GEOM_DIMORDINATE);
+        show_widget("GB_GEOM_DIMORDINATE", WIDGET_GROUP_BOX);
         break;
     case OBJ_DIMRADIUS:
-        show_group_box(GB_GEOM_DIMRADIUS);
+        show_widget("GB_GEOM_DIMRADIUS", WIDGET_GROUP_BOX);
         break;
     case EMB_ELLIPSE:
-        show_group_box(GB_GEOM_ELLIPSE);
+        show_widget("GB_GEOM_ELLIPSE", WIDGET_GROUP_BOX);
         break;
     case EMB_IMAGE:
-        show_group_box(GB_GEOM_IMAGE);
-        show_group_box(GB_MISC_IMAGE);
+        show_widget("GB_GEOM_IMAGE", WIDGET_GROUP_BOX);
+        show_widget("GB_MISC_IMAGE", WIDGET_GROUP_BOX);
         break;
     case OBJ_INFINITELINE:
-        show_group_box(GB_GEOM_INFINITE_LINE);
+        show_widget("GB_GEOM_INFINITE_LINE", WIDGET_GROUP_BOX);
         break;
     case EMB_LINE:
-        show_group_box(GB_GEOM_LINE);
+        show_widget("GB_GEOM_LINE", WIDGET_GROUP_BOX);
         break;
     case EMB_PATH:
-        show_group_box(GB_GEOM_PATH);
-        show_group_box(GB_MISC_PATH);
+        show_widget("GB_GEOM_PATH", WIDGET_GROUP_BOX);
+        show_widget("GB_MISC_PATH", WIDGET_GROUP_BOX);
         break;
     case EMB_POINT:
-        show_group_box(GB_GEOM_POINT);
+        show_widget("GB_GEOM_POINT", WIDGET_GROUP_BOX);
         break;
     case EMB_POLYGON:
-        show_group_box(GB_GEOM_POLYGON);
+        show_widget("GB_GEOM_POLYGON", WIDGET_GROUP_BOX);
         break;
     case EMB_POLYLINE:
-        show_group_box(GB_GEOM_POLYLINE);
-        show_group_box(GB_MISC_POLYLINE);
+        show_widget("GB_GEOM_POLYLINE", WIDGET_GROUP_BOX);
+        show_widget("GB_MISC_POLYLINE", WIDGET_GROUP_BOX);
         break;
     case OBJ_RAY:
-        show_group_box(GB_GEOM_RAY);
+        show_widget("GB_GEOM_RAY", WIDGET_GROUP_BOX);
         break;
     case EMB_RECT:
-        show_group_box(GB_GEOM_RECT);
+        show_widget("GB_GEOM_RECT", WIDGET_GROUP_BOX);
         break;
     case EMB_TEXT_MULTI:
-        show_group_box(GB_GEOM_TEXT_MULTI);
+        show_widget("GB_GEOM_TEXT_MULTI", WIDGET_GROUP_BOX);
         break;
     case EMB_TEXT_SINGLE:
-        show_group_box(GB_TEXT_TEXT_SINGLE);
-        show_group_box(GB_GEOM_TEXT_SINGLE);
-        show_group_box(GB_MISC_TEXT_SINGLE);
+        show_widget("GB_TEXT_TEXT_SINGLE", WIDGET_GROUP_BOX);
+        show_widget("GB_GEOM_TEXT_SINGLE", WIDGET_GROUP_BOX);
+        show_widget("GB_MISC_TEXT_SINGLE", WIDGET_GROUP_BOX);
         break;
     default:
         break;
@@ -601,9 +601,9 @@ combo_box_scroll_bar_widget_changed(int index)
 void
 hide_all_groups(void)
 {
-    for (int i=0; group_box_list[i].id >= 0; i++) {
-        if (group_box_list[i].id != GB_GENERAL) {
-            hide_group_box(group_box_list[i].id);
+    for (int i=0; group_box_list[i].id[0] != '.'; i++) {
+        if (string_equal(group_box_list[i].id, "GB_GENERAL")) {
+            hide_widget(group_box_list[i].id, WIDGET_GROUP_BOX);
         }
     }
 }
@@ -614,11 +614,11 @@ clear_all_fields(void)
 {
     int n = string_array_length(editor_list);
     for (int i=0; i<n; i++) {
-        line_edit_clear(editor_list[i]);
+        widget_clear(editor_list[i], WIDGET_LINEEDIT);
     }
     n = string_array_length(combobox_list);
     for (int i=0; i<n; i++) {
-        combo_box_clear(combobox_list[i]);
+        widget_clear(combobox_list[i], WIDGET_COMBOBOX);
     }
     clear_font_combobox();
 }

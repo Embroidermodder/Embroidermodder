@@ -1029,187 +1029,187 @@ Editor misc_text_single_editor_data[] = {
 /* . */
 GroupBoxData group_box_list[] = {
     {
-        .id = GB_GENERAL,
+        .id = "GB_GENERAL",
         .key = "General",
         .label = "General",
         .data = general_editor_data
     },
     {
-        .id = GB_GEOM_ARC,
+        .id = "GB_GEOM_ARC",
         .key = "GeometryArc",
         .label = "Geometry",
         .data = geometry_arc_editor_data
     },
     {
-        .id = GB_MISC_ARC,
+        .id = "GB_MISC_ARC",
         .key = "MiscArc",
         .label = "Misc",
         .data = misc_arc_editor_data
     },
     {
-        .id = GB_GEOM_BLOCK,
+        .id = "GB_GEOM_BLOCK",
         .key = "GeometryBlock",
         .label = "Geometry",
         .data = geometry_block_editor_data
     },
     {
-        .id = GB_GEOM_CIRCLE,
+        .id = "GB_GEOM_CIRCLE",
         .key = "GeometryCircle",
         .label = "Geometry",
         .data = geometry_circle_editor_data
     },
     {
-        .id = GB_GEOM_DIMALIGNED,
+        .id = "GB_GEOM_DIMALIGNED",
         .key = "GeometryDimAligned",
         .label = "Geometry",
         .data = geometry_dim_aligned_editor_data
     },
     {
-        .id = GB_GEOM_DIMANGULAR,
+        .id = "GB_GEOM_DIMANGULAR",
         .key = "GeometryDimAngular",
         .label = "Geometry",
         .data = geometry_dim_angular_editor_data
     },
     {
-        .id = GB_GEOM_DIMARCLENGTH,
+        .id = "GB_GEOM_DIMARCLENGTH",
         .key = "GeometryDimArcLength",
         .label = "Geometry",
         .data = geometry_dim_arc_length_editor_data
     },
     {
-        .id = GB_GEOM_DIMDIAMETER,
+        .id = "GB_GEOM_DIMDIAMETER",
         .key = "GeometryDiameter",
         .label = "Geometry",
         .data = geometry_dim_diameter_editor_data
     },
     {
-        .id = GB_GEOM_DIMLEADER,
+        .id = "GB_GEOM_DIMLEADER",
         .key = "GeometryDimLeader",
         .label = "Geometry",
         .data = geometry_dim_leader_editor_data
     },
     {
-        .id = GB_GEOM_DIMLINEAR,
+        .id = "GB_GEOM_DIMLINEAR",
         .key = "GeometryDimLinear",
         .label = "Geometry",
         .data = geometry_dim_linear_editor_data
     },
     {
-        .id = GB_GEOM_DIMORDINATE,
+        .id = "GB_GEOM_DIMORDINATE",
         .key = "GeometryDimOrdinate",
         .label = "Geometry",
         .data = geometry_dim_ordinate_editor_data
     },
     {
-        .id = GB_GEOM_DIMRADIUS,
+        .id = "GB_GEOM_DIMRADIUS",
         .key = "GeometryDimRadius",
         .label = "Geometry",
         .data = geometry_dim_radius_editor_data
     },
     {
-        .id = GB_GEOM_ELLIPSE,
+        .id = "GB_GEOM_ELLIPSE",
         .key = "GeometryEllipse",
         .label = "Geometry",
         .data = geometry_ellipse_editor_data
     },
     {
-        .id = GB_GEOM_IMAGE,
+        .id = "GB_GEOM_IMAGE",
         .key = "GeometryImage",
         .label = "Geometry",
         .data = geometry_image_editor_data
     },
     {
-        .id = GB_MISC_IMAGE,
+        .id = "GB_MISC_IMAGE",
         .key = "MiscImage",
         .label = "Misc",
         .data = misc_image_editor_data
     },
     {
-        .id = GB_GEOM_INFINITE_LINE,
+        .id = "GB_GEOM_INFINITE_LINE",
         .key = "GeometryInfiniteLine",
         .label = "Geometry",
         .data = geometry_infinite_line_editor_data
     },
     {
-        .id = GB_GEOM_LINE,
+        .id = "GB_GEOM_LINE",
         .key = "GeometryLine",
         .label = "Geometry",
         .data = geometry_line_editor_data
     },
     {
-        .id = GB_GEOM_PATH,
+        .id = "GB_GEOM_PATH",
         .key = "GeometryPath",
         .label = "Geometry",
         .data = geometry_path_editor_data
     },
     {
-        .id = GB_MISC_PATH,
+        .id = "GB_MISC_PATH",
         .key = "MiscPath",
         .label = "Misc",
         .data = misc_path_editor_data
     },
     {
-        .id = GB_GEOM_POINT,
+        .id = "GB_GEOM_POINT",
         .key = "GeometryPoint",
         .label = "Geometry",
         .data = geometry_point_editor_data
     },
     {
-        .id = GB_GEOM_POLYGON,
+        .id = "GB_GEOM_POLYGON",
         .key = "GeometryPolygon",
         .label = "Geometry",
         .data = geometry_polygon_editor_data
     },
     {
-        .id = GB_GEOM_POLYLINE,
+        .id = "GB_GEOM_POLYLINE",
         .key = "GeometryPolyline",
         .label = "Geometry",
         .data = geometry_polyline_editor_data
     },
     {
-        .id = GB_MISC_POLYLINE,
+        .id = "GB_MISC_POLYLINE",
         .key = "MiscPolyline",
         .label = "Geometry",
         .data = misc_polyline_editor_data
     },
     {
-        .id = GB_GEOM_RAY,
+        .id = "GB_GEOM_RAY",
         .key = "GeometryRay",
         .label = "Geometry",
         .data = geometry_ray_editor_data
     },
     {
-        .id = GB_GEOM_RECT,
+        .id = "GB_GEOM_RECT",
         .key = "GeometryRectangle",
         .label = "Geometry",
         .data = geometry_rectangle_editor_data
     },
     {
-        .id = GB_GEOM_TEXT_MULTI,
+        .id = "GB_GEOM_TEXT_MULTI",
         .key = "GeometryTextMulti",
         .label = "Geometry",
         .data = geometry_text_multi_editor_data
     },
     {
-        .id = GB_TEXT_TEXT_SINGLE,
+        .id = "GB_TEXT_TEXT_SINGLE",
         .key = "TextTextSingle",
         .label = "Geometry",
         .data = text_text_single_editor_data
     },
     {
-        .id = GB_GEOM_TEXT_SINGLE,
+        .id = "GB_GEOM_TEXT_SINGLE",
         .key = "GeometryTextSingle",
         .label = "Geometry",
         .data = geometry_text_single_editor_data
     },
     {
-        .id = GB_MISC_TEXT_SINGLE,
+        .id = "GB_MISC_TEXT_SINGLE",
         .key = "MiscTextSingle",
         .label = "Geometry",
         .data = misc_text_single_editor_data
     },
     {
-        .id = -1,
+        .id = ".END",
         .key = "END",
         .label = "END",
         .data = NULL

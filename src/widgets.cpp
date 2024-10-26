@@ -15,12 +15,7 @@
 #include <QGraphicsPathItem>
 #include <QtPrintSupport>
 
-/* TODO: Convert remaining unordered_maps into IntMaps */
-#include <unordered_map>
-
 #include "core.h"
-
-#define MAX_EDITORS 1000
 
 class CmdPrompt;
 class ImageWidget;
@@ -36,7 +31,7 @@ class CmdPromptInput;
 
 /* Generic widget pointer for a widget map. */
 typedef struct Widget_ {
-    QString key;
+    EmbString key;
     int type;
     QLabel *label;
     QGroupBox *groupbox;
@@ -53,10 +48,13 @@ IntMap obj_index[MAX_OBJECTS];
 QAction* actionHash[MAX_ACTIONS];
 StringMap aliasHash[MAX_ALIASES];
 QToolBar* toolbar[N_TOOLBARS];
+Widget widget_list[MAX_WIDGETS];
 QMenu* menu[N_MENUS];
+Object *object_list[MAX_OBJECTS];
 
 int n_aliases = 0;
 int n_objects = 0;
+int n_widgets = 0;
 int n_actions = 0;
 
 QString promptHistoryData;
@@ -135,19 +133,10 @@ IntMap key_map[] = {
 QToolButton* statusBarButtons[N_SB_BUTTONS];
 QLabel* statusBarMouseCoord;
 
-QGroupBox* create_group_box(int32_t label);
+QGroupBox* create_group_box(int32_t);
 
-Widget widgets[MAX_EDITORS];
-
-std::unordered_map<QString, QLineEdit*> line_edits;
-std::unordered_map<QString, QComboBox*> combo_boxes;
 QComboBox* comboBoxSelected;
-
-QGroupBox* group_boxes[NUM_GROUPBOXES];
-QToolButton* tool_buttons[NUM_EDITORS];
-
 QWidget* focusWidget_;
-
 QString iconDir;
 int iconSize;
 
@@ -353,7 +342,7 @@ public:
 
     DocumentData *data;
 
-    std::unordered_map<int64_t, QGraphicsItem*> hashDeletedObjects;
+    QVector<int64_t> hashDeletedObjects;
     QPainterPath gridPath;
     QPainterPath originPath;
 
@@ -750,8 +739,6 @@ protected:
     virtual void resizeEvent(QResizeEvent*);
     void closeEvent(QCloseEvent *event);
 };
-
-Object *object_list[MAX_OBJECTS];
 
 /* . */
 void
@@ -1244,6 +1231,18 @@ uint32_t
 rgb(uint8_t r, uint8_t g, uint8_t b)
 {
     return qRgb(r, g, b);
+}
+
+/* . */
+int
+find_widget_list(const char *key)
+{
+    for (int i=0; i<n_widgets; i++) {
+        if (string_equal(widget_list[i].key, key)) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 Object *
@@ -3294,7 +3293,7 @@ doc_add_object(int32_t doc, uint32_t obj)
 {
     doc_add_item(doc, obj);
     doc_update(doc);
-    documents[doc]->hashDeletedObjects.erase(obj);
+    documents[doc]->hashDeletedObjects.remove(obj);
 }
 
 /* NOTE: We really just remove the objects from the scene. Deletion actually
@@ -3306,7 +3305,7 @@ doc_delete_object(int32_t doc, uint32_t obj)
     get_obj(obj)->setSelected(false);
     doc_remove_item(doc, obj);
     doc_update(doc);
-    documents[doc]->hashDeletedObjects[obj] = get_obj(obj);
+    documents[doc]->hashDeletedObjects[obj] = obj;
 }
 
 /* . */
@@ -3341,9 +3340,12 @@ doc_clear_rubber_room(int32_t doc)
         int32_t item = data->rubberRoomList->data[i];
         Object *base = get_obj(item);
         int type = base->type();
-        if ((type == OBJ_PATH && id_list_contains(data->spareRubberList, SPARE_RUBBER_PATH))
-        || (type == OBJ_POLYGON && id_list_contains(data->spareRubberList, SPARE_RUBBER_POLYGON))
-        || (type == OBJ_POLYLINE && id_list_contains(data->spareRubberList, SPARE_RUBBER_POLYLINE))
+        if ((type == OBJ_PATH
+            && id_list_contains(data->spareRubberList, SPARE_RUBBER_PATH))
+        || (type == OBJ_POLYGON
+            && id_list_contains(data->spareRubberList, SPARE_RUBBER_POLYGON))
+        || (type == OBJ_POLYLINE
+            && id_list_contains(data->spareRubberList, SPARE_RUBBER_POLYLINE))
         || id_list_contains(data->spareRubberList, item)) {
             if (!obj_path(base).elementCount()) {
                 critical_box(translate("Empty Rubber Object Error"),
@@ -5054,16 +5056,24 @@ undoable_scale(int doc, uint32_t obj, EmbVector v, EmbReal factor, EmbString msg
     }
 }
 
+/* TODO: type should come from widget_list. */
 void
-line_edit_clear(const char *key)
+widget_clear(const char *key, int type)
 {
-    line_edits[key]->clear();
-}
-
-void
-combo_box_clear(const char *key)
-{
-    combo_boxes[key]->clear();
+    int index = find_widget_list(key);
+    if (index >= 0) {
+        switch (type) {
+        case WIDGET_LINEEDIT:
+            widget_list[index].lineedit->clear();
+            break;
+        case WIDGET_GROUP_BOX:
+        default:
+            break;        
+        }
+    }
+    else {
+        debug_message("Failed to find widget by key");
+    }
 }
 
 /* . */
@@ -5435,8 +5445,14 @@ SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColor& co
     rightBrush.setStyle(Qt::SolidPattern);
     rightBrush.setColor(rightBrushColor);
 
-    if (!boxDir) { dirPen = leftPen;  dirBrush = leftBrush;  }
-    else        { dirPen = rightPen; dirBrush = rightBrush; }
+    if (!boxDir) {
+        dirPen = leftPen;
+        dirBrush = leftBrush;
+    }
+    else {
+        dirPen = rightPen;
+        dirBrush = rightBrush;
+    }
 
     forceRepaint();
 }
@@ -7879,16 +7895,19 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
     hboxLayoutSelection->addWidget(createToolButtonPickAdd());
     widgetSelection->setLayout(hboxLayoutSelection);
 
-    for (int i=0; group_box_list[i].id >= 0; i++) {
+    for (int i=0; group_box_list[i].id[0] != '.'; i++) {
         create_group_box(i);
     }
 
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
-    for (int i=0; group_box_list[i].id >= 0; i++) {
-        int id = group_box_list[i].id;
-        vboxLayoutProperties->addWidget(group_boxes[id]);
+    for (int i=0; group_box_list[i].id[0] != '.'; i++) {
+        int id = find_widget_list(group_box_list[i].id);
+        if (id < 0) {
+            continue;
+        }
+        vboxLayoutProperties->addWidget(widget_list[id].groupbox);
     }
     vboxLayoutProperties->addStretch(1);
     widgetProperties->setLayout(vboxLayoutProperties);
@@ -8075,7 +8094,12 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
 void
 update_line_edit_str_if_varies(const char *key, const char *str)
 {
-    QLineEdit* lineEdit = line_edits[key];
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("update_line_edit_str_if_varies: Widget not found.");
+        return;
+    }
+    QLineEdit* lineEdit = widget_list[index].lineedit;
     fieldOldText = lineEdit->text();
     fieldNewText = QString(str);
 
@@ -8091,7 +8115,12 @@ update_line_edit_str_if_varies(const char *key, const char *str)
 void
 update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision)
 {
-    QLineEdit* lineEdit = line_edits[key];
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("update_line_edit_str_if_varies: Widget not found.");
+        return;
+    }
+    QLineEdit* lineEdit = widget_list[index].lineedit;
     int precision = 0;
     if (useAnglePrecision) {
         precision = precisionAngle;
@@ -8150,7 +8179,12 @@ update_font_combo_box_str_if_varies(const char *str)
 void
 update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
 {
-    QComboBox *comboBox = combo_boxes[key];
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("update_line_edit_str_if_varies: Widget not found.");
+        return;
+    }
+    QComboBox *comboBox = widget_list[index].combobox;
     fieldOldText = comboBox->currentText();
     fieldNewText = str;
 
@@ -8175,7 +8209,12 @@ update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
 void
 update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
 {
-    QComboBox* comboBox = combo_boxes[key];
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("update_line_edit_str_if_varies: Widget not found.");
+        return;
+    }
+    QComboBox *comboBox = widget_list[index].combobox;
     fieldOldText = comboBox->currentText();
     if (yesOrNoText) {
         if (val) {
@@ -8216,16 +8255,46 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
 
 /* . */
 void
-show_group_box(int32_t key)
+show_widget(const char *key, int type)
 {
-    group_boxes[key]->show();
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("show_widget: Widget not found.");
+        return;
+    }
+    switch (type) {
+    case WIDGET_LINEEDIT:
+        widget_list[index].lineedit->show();
+        break;
+    case WIDGET_COMBOBOX:
+        widget_list[index].combobox->show();
+        break;
+    default:
+        debug_message("widget type unknown");
+        break;
+    }
 }
 
 /* . */
 void
-hide_group_box(int32_t key)
+hide_widget(const char *key, int type)
 {
-    group_boxes[key]->hide();
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("hide_widget: Widget not found.");
+        return;
+    }
+    switch (type) {
+    case WIDGET_LINEEDIT:
+        widget_list[index].lineedit->hide();
+        break;
+    case WIDGET_COMBOBOX:
+        widget_list[index].combobox->hide();
+        break;
+    default:
+        debug_message("widget type unknown");
+        break;
+    }
 }
 
 /* . */
@@ -8246,6 +8315,24 @@ clear_font_combobox(void)
 
 /* . */
 void
+add_combobox(EmbString key, QComboBox *combobox)
+{
+    string_copy(widget_list[n_widgets].key, key);
+    widget_list[n_widgets].combobox = combobox;
+    n_widgets++;
+}
+
+/* . */
+void
+add_lineedit(EmbString key, QLineEdit *lineedit)
+{
+    string_copy(widget_list[n_widgets].key, key);
+    widget_list[n_widgets].lineedit = lineedit;
+    n_widgets++;
+}
+
+/* . */
+void
 create_editor(
     QFormLayout *layout,
     EmbString icon,
@@ -8259,15 +8346,16 @@ create_editor(
     QString s(signal_name);
     if (string_equal(signal_name, "combobox")) {
         sprintf(signal, "comboBox%s", signal_name);
-        combo_boxes[s] = new QComboBox(dockPropEdit);
+        QComboBox *combo_box = new QComboBox(dockPropEdit);
         if (signal_name[0] == 0) {
-            combo_boxes[s]->setDisabled(true);
+            combo_box->setDisabled(true);
         }
         else {
-            combo_boxes[s]->setDisabled(false);
-            mapSignal(combo_boxes[s], signal, obj_type);
+            combo_box->setDisabled(false);
+            mapSignal(combo_box, signal, obj_type);
         }
-        layout->addRow(toolButton, combo_boxes[s]);
+        layout->addRow(toolButton, combo_box);
+        add_combobox(signal, combo_box);
         return;
     }
     if (string_equal(signal_name, "fontcombobox")) {
@@ -8276,29 +8364,31 @@ create_editor(
 
         mapSignal(comboBoxTextSingleFont, "comboBoxTextSingleFont", OBJ_TEXTSINGLE);
         layout->addRow(toolButton, comboBoxTextSingleFont);
+        return;
     }
 
     sprintf(signal, "lineEdit%s", signal_name);
 
-    line_edits[s] = new QLineEdit(dockPropEdit);
+    QLineEdit *line_edit = new QLineEdit(dockPropEdit);
     if (string_equal(type_label, "int")) {
-        line_edits[s]->setValidator(new QIntValidator(line_edits[s]));
+        line_edit->setValidator(new QIntValidator(line_edit));
     }
     else if (string_equal(type_label, "double")) {
-        line_edits[s]->setValidator(new QDoubleValidator(line_edits[s]));
+        line_edit->setValidator(new QDoubleValidator(line_edit));
     }
     else if (string_equal(type_label, "string")) {
     }
 
     if (signal_name[0] != 0) {
-        line_edits[s]->setReadOnly(true);
+        line_edit->setReadOnly(true);
     }
     else {
-        line_edits[s]->setReadOnly(false);
-        mapSignal(line_edits[s], signal, obj_type);
+        line_edit->setReadOnly(false);
+        mapSignal(line_edit, signal, obj_type);
     }
 
-    layout->addRow(toolButton, line_edits[s]);
+    layout->addRow(toolButton, line_edit);
+    add_lineedit(signal, line_edit);
 }
 
 /* . */
@@ -8306,7 +8396,7 @@ QGroupBox*
 create_group_box(int32_t label)
 {
     todo("Use proper icons for tool buttons.");
-    group_boxes[label] = new QGroupBox(
+    QGroupBox *group_box = new QGroupBox(
         translate((char*)group_box_list[label].label), dockPropEdit);
 
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
@@ -8316,9 +8406,13 @@ create_group_box(int32_t label)
         create_editor(formLayout, editor.icon, editor.label, editor.data_type,
             editor.signal, editor.object);
     }
-    group_boxes[label]->setLayout(formLayout);
+    group_box->setLayout(formLayout);
 
-    return group_boxes[label];
+    string_copy(widget_list[n_widgets].key, group_box_list[label].id);
+    widget_list[n_widgets].type = WIDGET_GROUP_BOX;
+    widget_list[n_widgets].groupbox = group_box;
+    n_widgets++;
+    return group_box;
 }
 
 /* . */
@@ -8373,37 +8467,39 @@ fieldEdited(QObject* fieldObj)
         EmbString label;
         string_copy(label, qPrintable(objName));
 
+        int id = find_widget_list(label);
+
         if (strncmp(label, "comboBox", strlen("comboBox")) == 0) {
             ObjectCore *core = tempObj->core;
             const char *key = label + strlen("comboBox");
-            if (combo_boxes[key]->currentText() == fieldVariesText) {
+            if (widget_list[id].combobox->currentText() == fieldVariesText) {
                 continue;
             }
             if (string_equal(label, "comboBoxTextSingleFont")) {
                 obj_set_text_font(core,
                     qPrintable(comboBoxTextSingleFont->currentFont().family()));
                 continue;
-             }
-            const char *text = qPrintable(combo_boxes[key]->currentText());
-            int index = combo_boxes[key]->currentIndex();
+            }
+            const char *text = qPrintable(widget_list[id].combobox->currentText());
+            int index = widget_list[id].combobox->currentIndex();
             if (string_equal(label, "comboBoxTextSingleJustify")) {
                 obj_set_text_justify(core,
-                    qPrintable(combo_boxes[key]->itemData(index).toString()));
+                    qPrintable(widget_list[id].combobox->itemData(index).toString()));
                 continue;
             }
             if (string_equal(label, "comboBoxTextSingleBackward")) {
                 obj_set_text_backward(core,
-                    combo_boxes[key]->itemData(index).toBool());
+                    widget_list[id].combobox->itemData(index).toBool());
                 continue;
             }
             if (string_equal(label, "comboBoxTextSingleUpsideDown")) {
                 obj_set_text_upside_down(core,
-                    combo_boxes[key]->itemData(index).toBool());
+                    widget_list[id].combobox->itemData(index).toBool());
             }
         }
         else {
             const char *key = label + strlen("lineEdit");
-            const char *text = qPrintable(line_edits[key]->text());
+            const char *text = qPrintable(widget_list[id].lineedit->text());
             edit_field(tempObj->core->objID, label, text);
         }
     }
@@ -8976,7 +9072,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QGroupBox* groupBoxCustomFilter = new QGroupBox(translate("Custom Filter"), widget);
     groupBoxCustomFilter->setEnabled(false); /* TODO: Fixup custom filter */
 
-    std::unordered_map<QString, QCheckBox*> custom_filter;
+    QCheckBox* custom_filter[100];
 
     QPushButton* buttonCustomFilterSelectAll = new QPushButton(translate("Select All"), widget);
     connect(buttonCustomFilterSelectAll, SIGNAL(clicked()), this,
@@ -8989,16 +9085,16 @@ QWidget* Settings_Dialog::createTabOpenSave()
     int n_extensions = string_array_length(state.extensions);
     for (i=0; i<n_extensions; i++) {
         const char *extension = state.extensions[i];
-        custom_filter[extension] = new QCheckBox(extension, groupBoxCustomFilter);
-        custom_filter[extension]->setChecked(QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("*." + QString(extension), Qt::CaseInsensitive));
-        connect(custom_filter[extension], SIGNAL(stateChanged(int)), this,
+        custom_filter[i] = new QCheckBox(extension, groupBoxCustomFilter);
+        custom_filter[i]->setChecked(QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("*." + QString(extension), Qt::CaseInsensitive));
+        connect(custom_filter[i], SIGNAL(stateChanged(int)), this,
             SLOT(checkBoxCustomFilterStateChanged(int)));
 
         connect(this, SIGNAL(buttonCustomFilterSelectAll(bool)),
-            custom_filter[extension], SLOT(setChecked(bool)));
+            custom_filter[i], SLOT(setChecked(bool)));
 
         connect(this, SIGNAL(buttonCustomFilterClearAll(bool)),
-            custom_filter[extension], SLOT(setChecked(bool)));
+            custom_filter[i], SLOT(setChecked(bool)));
     }
 
     QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupBoxCustomFilter);
@@ -9006,7 +9102,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     int column = 0;
     for (i=0; i<n_extensions; i++) {
         const char *extension = state.extensions[i];
-        gridLayoutCustomFilter->addWidget(custom_filter[extension], row, column, Qt::AlignLeft);
+        gridLayoutCustomFilter->addWidget(custom_filter[i], row, column, Qt::AlignLeft);
         row++;
         if (row == 10) {
             row = 0;

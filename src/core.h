@@ -105,7 +105,7 @@ typedef struct Editor_ {
 } Editor;
 
 typedef struct GroupBoxData_ {
-    int32_t id;
+    const char *id;
     const char *key;
     const char *label;
     Editor *data;
@@ -968,12 +968,15 @@ void append_history(const char *txt);
 void update_editors(int32_t id);
 void edit_field(int32_t id, const char *objName, const char *text);
 
+void show_widget(const char *key, int type);
+void hide_widget(const char *key, int type);
+void widget_clear(const char *key, int type);
+int find_widget_map(const char *key);
+
 void show_groups(int objType);
 void show_one_type(int index);
 void hide_all_groups(void);
 void clear_all_fields(void);
-void hide_group_box(int32_t key);
-void show_group_box(int32_t key);
 
 void update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision);
 void update_line_edit_str_if_varies(const char *key, const char *str);
