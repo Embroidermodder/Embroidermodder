@@ -29,13 +29,19 @@
 #define MAX_OBJECTS                20000
 #define MAX_WIDGETS                 1000
 #define MAX_EDITORS                 1000
+#define MAX_LONG_STRING             1000
+#define MAX_TABLE_LENGTH             500
+#define MAX_OPEN_FILES               100
 
 #define NUMBINS                       10
 
 #define WIDGET_COMBOBOX                0
 #define WIDGET_LINEEDIT                1
 #define WIDGET_GROUP_BOX               2
-#define WIDGET_UNKNOWN                 3
+#define WIDGET_CHECKBOX                3
+#define WIDGET_SPINBOX                 4
+#define WIDGET_LABEL                   5
+#define WIDGET_UNKNOWN                 6
 
 #define SCRIPT_NULL                    0
 #define SCRIPT_INT                     1

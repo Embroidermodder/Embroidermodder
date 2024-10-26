@@ -1085,3 +1085,66 @@ SettingsData settings_data[] = {
     }
 };
 
+EmbStringTable grid_enabled_group = {
+    "labelGridType",
+    "comboBoxGridType",
+    "checkBoxGridCenterOnOrigin",
+    "labelGridCenterX",
+    "spinBoxGridCenterX",
+    "labelGridCenterY",
+    "spinBoxGridCenterY",
+    "labelGridSizeX",
+    "spinBoxGridSizeX",
+    "labelGridSizeY",
+    "spinBoxGridSizeY",
+    "labelGridSpacingX",
+    "spinBoxGridSpacingX",
+    "labelGridSpacingY",
+    "spinBoxGridSpacingY",
+    "labelGridSizeRadius",
+    "spinBoxGridSizeRadius",
+    "labelGridSpacingRadius",
+    "spinBoxGridSpacingRadius",
+    "labelGridSpacingAngle",
+    "spinBoxGridSpacingAngle",
+    "END"
+};
+
+EmbStringTable rectangular_grid_visible_group = {
+    "labelGridSizeX",
+    "spinBoxGridSizeX",
+    "labelGridSizeY",
+    "spinBoxGridSizeY",
+    "labelGridSpacingX",
+    "spinBoxGridSpacingX",
+    "labelGridSpacingY",
+    "spinBoxGridSpacingY",
+    "END"
+};
+
+EmbStringTable circular_grid_visible_group = {
+    "labelGridSizeRadius",
+    "spinBoxGridSizeRadius",
+    "labelGridSpacingRadius",
+    "spinBoxGridSpacingRadius",
+    "labelGridSpacingAngle",
+    "spinBoxGridSpacingAngle",
+    "END"
+};
+
+EmbStringTable grid_layout = {
+    "checkBoxGridLoadFromFile", "labelGridType",
+    "", "comboBoxGridType",
+    "checkBoxGridCenterOnOrigin",
+    "labelGridCenterX", "spinBoxGridCenterX",
+    "labelGridCenterY", "spinBoxGridCenterY",
+    "labelGridSizeX", "spinBoxGridSizeX",
+    "labelGridSizeY", "spinBoxGridSizeY",
+    "labelGridSpacingX", "spinBoxGridSpacingX",
+    "labelGridSpacingY", "spinBoxGridSpacingY",
+    "labelGridSizeRadius", "spinBoxGridSizeRadius",
+    "labelGridSpacingRadius", "spinBoxGridSpacingRadius",
+    "labelGridSpacingAngle", "spinBoxGridSpacingAngle",
+    "END", "END"
+};
+

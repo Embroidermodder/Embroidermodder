@@ -625,6 +625,96 @@ clear_all_fields(void)
 
 /* . */
 void
+checkBoxGridCenterOnOriginStateChanged(int checked)
+{
+    setting[GRID_CENTER_ON_ORIGIN].dialog.b = checked;
+
+    set_enabled_group(state.center_on_origin_group, !checked);
+}
+
+/* . */
+void
+checkBoxLwtShowLwtStateChanged(int checked)
+{
+    setting[LWT_SHOW_LWT].preview.b = checked;
+    if (setting[LWT_SHOW_LWT].preview.b) {
+        enable_lwt();
+    }
+    else {
+        disable_lwt();
+    }
+
+    set_enabled("checkBoxRealRender", setting[LWT_SHOW_LWT].preview.b);
+}
+
+/* . */
+void
+accept_settings(void)
+{
+    if (setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b) {
+        setting[GRID_COLOR].dialog.i = setting[DISPLAY_CROSSHAIR_COLOR].accept.i;
+    }
+
+    for (int i=0; state.preview_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(state.preview_to_dialog[i], SETTING_DIALOG, SETTING_PREVIEW);
+    }
+
+    for (int i=0; state.accept_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(state.accept_to_dialog[i], SETTING_DIALOG, SETTING_ACCEPT);
+    }
+
+    for (int i=0; i < N_SETTINGS; i++) {
+        copy_setting(i, SETTING_SETTING, SETTING_DIALOG);
+    }
+
+    /* Make sure the user sees the changes applied immediately. */
+    update_view();
+
+    write_settings();
+}
+
+/* . */
+void
+comboBoxGridTypeCurrentIndexChanged(const char *type)
+{
+    string_copy(setting[GRID_TYPE].dialog.s, type);
+
+    bool visibility = string_equal(type, "Circular");
+    set_visibility_group(state.rectangular_grid_group, !visibility);
+    set_visibility_group(state.circular_grid_group, visibility);
+}
+
+/* . */
+void
+checkBoxGridColorMatchCrossHairStateChanged(int checked)
+{
+    setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b = checked;
+    if (setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b) {
+        update_all_view_grid_colors(setting[DISPLAY_CROSSHAIR_PERCENT].accept.i);
+    }
+    else {
+        update_all_view_grid_colors(setting[GRID_COLOR].accept.i);
+    }
+
+    set_enabled("labelGridColor", !setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b);
+    set_enabled("buttonGridColor", !setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b);
+}
+
+/* . */
+void
+checkBoxGridLoadFromFileStateChanged(int checked)
+{
+    setting[GRID_LOAD_FROM_FILE].dialog.b = checked;
+
+    bool dont_load = !setting[GRID_LOAD_FROM_FILE].dialog.b;
+    set_enabled_group(state.grid_load_from_file_group, dont_load);
+
+    bool use_this_origin = !setting[GRID_LOAD_FROM_FILE].dialog.b && !setting[GRID_CENTER_ON_ORIGIN].dialog.b;
+    set_enabled_group(state.defined_origin_group, use_this_origin);
+}
+
+/* . */
+void
 accept_interface_color(int32_t key, uint32_t color)
 {
     setting[key].accept.i = color;

@@ -1404,6 +1404,30 @@ void prompt(str)
 }
 #endif
 
+/* . */
+void
+set_prompt_font_family(EmbString family)
+{
+    set_str(PROMPT_FONT_FAMILY, family);
+    prompt_update_style();
+}
+
+/* . */
+void
+set_prompt_font_style(EmbString style)
+{
+    set_str(PROMPT_FONT_STYLE, style);
+    prompt_update_style();
+}
+
+/* . */
+void
+set_prompt_font_size(int size)
+{
+    set_int(PROMPT_FONT_SIZE, size);
+    prompt_update_style();
+}
+
 /* SCALE . */
 ScriptValue
 scale_command(ScriptEnv * context)

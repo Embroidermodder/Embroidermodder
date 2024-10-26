@@ -32,10 +32,6 @@ extern "C" {
 #define STR(arg)  context->argument[arg].s
 #define BOOL(arg) context->argument[arg].b
 
-#define MAX_LONG_STRING             1000
-#define MAX_TABLE_LENGTH             500
-#define MAX_OPEN_FILES               100
-
 typedef char EmbStringTable[MAX_TABLE_LENGTH][MAX_STRING_LENGTH];
 
 typedef struct ScriptValue_ {
@@ -446,7 +442,7 @@ typedef struct State_ {
     EmbStringTable extensions;
 } State;
 
-/* Scripting functions */
+/* -------------------------------- Scripting ---------------------------- */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
 ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
@@ -549,6 +545,13 @@ int32_t free_glfw(void);
 int glfw_application(int argc, char *argv[]);
 
 int find_int_map(IntMap *, int);
+
+/* ------------------------------ Widgets ------------------------------- */
+
+void set_visibility(EmbString key, bool visibility);
+void set_enabled(EmbString key, bool visibility);
+void set_visibility_group(EmbStringTable key, bool visibility);
+void set_enabled_group(EmbStringTable key, bool visibility);
 
 /* ------------------------------ Prompt ------------------------------- */
 
@@ -661,19 +664,38 @@ void about_dialog(void);
 
 /* --------------------------------- Editors -------------------------------- */
 
+void check_box_lwt_real_render_changed(int);
 void combo_box_scroll_bar_widget_changed(int);
-void spin_box_display_select_box_alpha_changed(int);
 void combo_box_prompt_font_family_changed(EmbString);
 void combo_box_prompt_font_style_changed(EmbString);
+void spin_box_display_select_box_alpha_changed(int);
 void spin_box_prompt_font_size_changed(int);
 void spin_box_recent_max_files_changed(int value);
 void spin_box_trim_dst_num_jumps_changed(int value);
 void spin_box_ruler_pixel_size_changed(EmbReal);
 void slider_qsnap_locator_size_changed(int);
 void slider_qsnap_aperture_size_changed(int);
-void check_box_lwt_real_render_changed(int);
 void slider_selection_grip_size_changed(int);
 void slider_selection_pick_box_size_changed(int);
+
+void checkBoxGridCenterOnOriginStateChanged(int);
+void comboBoxGridTypeCurrentIndexChanged(const char *);
+void checkBoxGridColorMatchCrossHairStateChanged(int);
+void checkBoxGridLoadFromFileStateChanged(int);
+void checkBoxLwtShowLwtStateChanged(int);
+
+void accept_settings(void);
+
+void useBackgroundLogo(bool use);
+void useBackgroundTexture(bool use);
+void useBackgroundColor(bool use);
+
+void setBackgroundLogo(EmbString fileName);
+void setBackgroundTexture(EmbString fileName);
+void setBackgroundColor(uint32_t color);
+
+void update_view(void);
+void preview_update(void);
 
 /* -------------------------------- Commands -------------------------------- */
 
@@ -1131,6 +1153,11 @@ extern EmbStringTable text_size_list;
 
 extern EmbStringTable editor_list; 
 extern EmbStringTable combobox_list; 
+
+extern EmbStringTable grid_enabled_group;
+extern EmbStringTable rectangular_grid_visible_group;
+extern EmbStringTable circular_grid_visible_group;
+extern EmbStringTable grid_layout;
 
 extern char **xpm_icons[];
 extern EmbStringTable xpm_icon_labels;

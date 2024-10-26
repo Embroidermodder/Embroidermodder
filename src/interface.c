@@ -78,7 +78,77 @@ RGB(uint8_t r, uint8_t g, uint8_t b)
     result += b;
     return result;
 }
- 
+
+/* . */
+void
+update_all_background_color(uint32_t color)
+{
+    setBackgroundColor(color);
+}
+
+void
+preview_update(void)
+{
+    useBackgroundLogo(setting[GENERAL_MDI_BG_USE_LOGO].preview.b);
+    useBackgroundColor(setting[GENERAL_MDI_BG_USE_COLOR].preview.b);
+    useBackgroundTexture(setting[GENERAL_MDI_BG_USE_TEXTURE].preview.b);
+    update_all_view_scroll_bars(setting[DISPLAY_SHOW_SCROLLBARS].preview.b);
+}
+
+/* . */
+void
+update_view(void)
+{
+    useBackgroundLogo(setting[GENERAL_MDI_BG_USE_LOGO].dialog.b);
+    useBackgroundTexture(setting[GENERAL_MDI_BG_USE_TEXTURE].dialog.b);
+    useBackgroundColor(setting[GENERAL_MDI_BG_USE_COLOR].dialog.b);
+    setBackgroundLogo(setting[GENERAL_MDI_BG_LOGO].dialog.s);
+    setBackgroundTexture(setting[GENERAL_MDI_BG_TEXTURE].dialog.s);
+    setBackgroundColor(setting[GENERAL_MDI_BG_COLOR].dialog.i);
+
+    icon_resize(setting[GENERAL_ICON_SIZE].dialog.i);
+
+    update_all_view_scroll_bars(setting[DISPLAY_SHOW_SCROLLBARS].dialog.b);
+    update_all_view_cross_hair_colors(setting[DISPLAY_CROSSHAIR_COLOR].dialog.i);
+    update_all_view_background_colors(setting[DISPLAY_BG_COLOR].dialog.i);
+    update_all_view_select_box_colors(
+        setting[DISPLAY_SELECTBOX_LEFT_COLOR].dialog.i,
+        setting[DISPLAY_SELECTBOX_LEFT_FILL].dialog.i,
+        setting[DISPLAY_SELECTBOX_RIGHT_COLOR].dialog.i,
+        setting[DISPLAY_SELECTBOX_RIGHT_FILL].dialog.i,
+        setting[DISPLAY_SELECTBOX_ALPHA].dialog.i);
+    update_all_view_grid_colors(setting[GRID_COLOR].dialog.i);
+    update_all_view_ruler_colors(setting[RULER_COLOR].dialog.i);
+
+    set_prompt_text_color(setting[PROMPT_TEXT_COLOR].dialog.i);
+    set_prompt_background_color(setting[PROMPT_BG_COLOR].dialog.i);
+    set_prompt_font_family(setting[PROMPT_FONT_FAMILY].dialog.s);
+    set_prompt_font_style(setting[PROMPT_FONT_STYLE].dialog.s);
+    set_prompt_font_size(setting[PROMPT_FONT_SIZE].dialog.i);
+
+    if (setting[LWT_SHOW_LWT].dialog.b) {
+        enable_lwt();
+    }
+    else {
+        disable_lwt();
+    }
+    if (setting[LWT_REAL_RENDER].dialog.b) {
+        enable_real();
+    }
+    else {
+        disable_real();
+    }
+
+    update_pick_add_mode(setting[SELECTION_MODE_PICKADD].dialog.b);
+}
+
+/* . */
+void
+mdiarea_set_bg(uint32_t color)
+{
+    setBackgroundColor(color);
+}
+
 /* . */
 void
 draw_rect(NVGcontext *vg, EmbRect rect, EmbColor color)
