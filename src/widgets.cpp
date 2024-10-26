@@ -10,91 +10,17 @@
  * MainWindow Commands
  */
 
-/* Qt Headers */
 #include <QAction>
 #include <QApplication>
-#include <QBrush>
-#include <QClipboard>
-#include <QCloseEvent>
-#include <QColor>
-#include <QComboBox>
-#include <QContextMenuEvent>
-#include <QDate>
-#include <QDateTime>
-#include <QDebug>
-#include <QDesktopServices>
-#include <QDialog>
-#include <QDialogButtonBox>
-#include <QDir>
-#include <QDockWidget>
-#include <QFile>
-#include <QFileDialog>
-#include <QFileInfo>
-#include <QFontComboBox>
-#include <QFormLayout>
-#include <QFrame>
-#include <QGraphicsItem>
 #include <QGraphicsPathItem>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QImage>
-#include <QKeyEvent>
-#include <QLabel>
-#include <QLineEdit>
-#include <QList>
-#include <QLocale>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QMdiSubWindow>
-#include <QMenu>
-#include <QMenuBar>
-#include <QMessageBox>
-#include <QMetaObject>
-#include <QObject>
-#include <QPainter>
-#include <QPainterPath>
-#include <QPen>
-#include <QPixmap>
-#include <QPointF>
-#include <QProcess>
-#include <QPushButton>
-#include <QRubberBand>
-#include <QScrollArea>
-#include <QScrollBar>
-#include <QSettings>
-#include <QSignalMapper>
-#include <QSplitter>
-#include <QStandardPaths>
-#include <QStatusBar>
-#include <QString>
-#include <QStyleOption>
-#include <QTextBrowser>
-#include <QTextLayout>
-#include <QTextStream>
-#include <QToolBar>
-#include <QToolButton>
-#include <QTransform>
-#include <QUndoCommand>
-#include <QUndoGroup>
-#include <QUndoStack>
-#include <QUndoView>
-#include <QUrl>
-#include <QVBoxLayout>
-#include <QWhatsThis>
-
 #include <QtPrintSupport>
 
-/* C++ Headers */
+/* TODO: Convert remaining unordered_maps into IntMaps */
 #include <unordered_map>
-#include <string>
-#include <vector>
-#include <chrono>
-#include <thread>
 
-/* C Headers */
 #include "core.h"
+
+#define MAX_EDITORS 1000
 
 class CmdPrompt;
 class ImageWidget;
@@ -108,18 +34,30 @@ class UndoEditor;
 class Document;
 class CmdPromptInput;
 
-#define NUMBINS 10
+/* Generic widget pointer for a widget map. */
+typedef struct Widget_ {
+    QString key;
+    int type;
+    QLabel *label;
+    QGroupBox *groupbox;
+    QToolButton *toolbutton;
+    QLineEdit *lineedit;
+    QComboBox *combobox;
+} Widget;
 
 /* Could initialise all documents to NULL rather than having a seperate memory
  * usage array?
  */
 Document *documents[MAX_OPEN_FILES];
-StringMap aliases[MAX_ALIASES];
-std::unordered_map<uint32_t, Object*> object_list;
-std::unordered_map<int32_t, QAction*> actionHash;
-std::unordered_map<std::string, std::string> aliasHash;
+IntMap obj_index[MAX_OBJECTS];
+QAction* actionHash[MAX_ACTIONS];
+StringMap aliasHash[MAX_ALIASES];
 QToolBar* toolbar[N_TOOLBARS];
 QMenu* menu[N_MENUS];
+
+int n_aliases = 0;
+int n_objects = 0;
+int n_actions = 0;
 
 QString promptHistoryData;
 
@@ -165,7 +103,7 @@ QTimer* blinkTimer;
 bool blinkState;
 /* NOTE: These shortcuts need to be caught since QLineEdit uses them. */
 
-std::unordered_map<int, int> key_map = {
+IntMap key_map[] = {
     {QKeySequence::Cut, CUT_SEQUENCE},
     {QKeySequence::Copy, COPY_SEQUENCE},
     {QKeySequence::Paste, PASTE_SEQUENCE},
@@ -189,7 +127,9 @@ std::unordered_map<int, int> key_map = {
     {Qt::Key_F10, F10_KEY},
     {Qt::Key_F11, F11_KEY},
     {Qt::Key_F12, F12_KEY},
-    {Qt::Key_Shift, SHIFT_KEY}
+    {Qt::Key_Shift, SHIFT_KEY},
+    /* terminator symbol */
+    {-1, -1}
 };
 
 QToolButton* statusBarButtons[N_SB_BUTTONS];
@@ -197,15 +137,14 @@ QLabel* statusBarMouseCoord;
 
 QGroupBox* create_group_box(int32_t label);
 
-std::unordered_map<QString, QToolButton*> tool_buttons;
+Widget widgets[MAX_EDITORS];
+
 std::unordered_map<QString, QLineEdit*> line_edits;
 std::unordered_map<QString, QComboBox*> combo_boxes;
 QComboBox* comboBoxSelected;
 
 QGroupBox* group_boxes[NUM_GROUPBOXES];
-QToolButton* tool_buttons_[NUM_EDITORS];
-QLineEdit* line_edits_[NUM_EDITORS];
-QComboBox* combo_boxes_[NUM_EDITORS];
+QToolButton* tool_buttons[NUM_EDITORS];
 
 QWidget* focusWidget_;
 
@@ -240,7 +179,6 @@ QToolButton* toolButtonQSelect;
 QToolButton* toolButtonPickAdd;
 
 /* File-scope Functions ----------------------------------------------------- */
-EmbVector obj_map_rubber(Object *obj, const char *key);
 EmbVector map_from_scene(Object *obj, EmbVector v);
 
 void mapSignal(QObject* fieldObj, QString name, QVariant value);
@@ -261,8 +199,8 @@ QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
 QIcon create_icon(QString icon);
 QPixmap create_pixmap(QString icon);
 
-void nativeAlert(std::string txt);
-void nativeAppendPromptHistory(std::string txt);
+void nativeAlert(EmbString txt);
+void nativeAppendPromptHistory(EmbString txt);
 
 ScriptValue add_polygon_command(double startX, EmbReal startY, const QPainterPath& p, int rubberMode);
 ScriptValue add_polyline_command(double startX, EmbReal startY, const QPainterPath& p, int rubberMode);
@@ -283,15 +221,13 @@ QIcon create_swatch(int32_t color);
 void preview_update(void);
 
 void setHistory(QString txt);
-void add_command(std::string alias, std::string cmd);
+void add_command(EmbString alias, EmbString cmd);
 
 /* ------------------------- Object Functions ------------------------------- */
 
 Qt::PenStyle obj_line_type(Object* obj);
 double  obj_line_weight(Object* obj);
 QPainterPath obj_path(Object* obj);
-EmbVector obj_rubber_point(Object* obj, QString key);
-QString obj_rubber_text(Object* obj, QString key);
 
 void obj_update_rubber(uint32_t obj, QPainter* painter);
 void obj_update_rubber_grip(uint32_t obj, QPainter *painter);
@@ -510,8 +446,6 @@ public:
     QPen objPen;
     QPen lwtPen;
     QLineF objLine;
-    std::vector<LabelledVector> rubber_points;
-    std::vector<StringMap> rubber_texts;
 
     QPainterPath textPath;
     QPainterPath lineStylePath;
@@ -521,7 +455,6 @@ public:
     Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);
     ~Object();
 
-    void vulcanize();
     EmbVectorList *allGripPoints();
     EmbVector mouseSnapPoint(EmbVector mousePoint);
     void gripEdit(EmbVector before, EmbVector after);
@@ -817,6 +750,8 @@ protected:
     virtual void resizeEvent(QResizeEvent*);
     void closeEvent(QCloseEvent *event);
 };
+
+Object *object_list[MAX_OBJECTS];
 
 /* . */
 void
@@ -1311,18 +1246,28 @@ rgb(uint8_t r, uint8_t g, uint8_t b)
     return qRgb(r, g, b);
 }
 
+Object *
+get_obj(int key)
+{
+    int index = find_int_map(obj_index, key);
+    if (index >= 0) {
+        return object_list[index];
+    }
+    return NULL;
+}
+
 /* . */
 ObjectCore *
 obj_get_core(uint32_t id)
 {
-    return object_list[id]->core;
+    return get_obj(id)->core;
 }
 
 /* . */
 void
 doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode)
 {
-    Object *obj = object_list[id];
+    Object *obj = get_obj(id);
     if (rubberMode) {
         doc_add_to_rubber_room(doc_index, id);
         doc_add_item(doc_index, id);
@@ -1340,7 +1285,7 @@ doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode)
 void
 obj_set_rotation(uint32_t id, EmbReal rotation)
 {
-    object_list[id]->setRotation(rotation);
+    get_obj(id)->setRotation(rotation);
 }
 
 /* . */
@@ -1821,7 +1766,11 @@ create_object(int type_, uint32_t rgb)
     obj->core->geometry->object.color.b = qBlue(rgb);
     obj->core->geometry->lineType = lineType;
 
-    object_list[obj->core->objID] = obj;
+    obj_index[n_objects].key = obj->core->objID;
+    obj_index[n_objects].value = n_objects;
+
+    object_list[n_objects] = obj;
+    n_objects++;
     return obj->core->objID;
 }
 
@@ -1864,28 +1813,6 @@ obj_draw_rubber_line(Object *obj, const QLineF& rubLine, QPainter* painter, cons
         painter->drawLine(rubLine);
         painter->setPen(obj->objPen);
     }
-}
-
-/* . */
-void
-obj_set_rubber_point(uint32_t id, EmbString key, EmbVector point)
-{
-    Object *obj = object_list[id];
-    LabelledVector s;
-    string_copy(s.key, key);
-    s.vector = point;
-    obj->rubber_points.push_back(s);
-}
-
-/* . */
-void
-obj_set_rubber_text(uint32_t id, EmbString key, EmbString txt)
-{
-    Object *obj = object_list[id];
-    StringMap s;
-    string_copy(s.key, key);
-    string_copy(s.value, txt);
-    obj->rubber_texts.push_back(s);
 }
 
 /* . */
@@ -1951,13 +1878,13 @@ Object::setObjectSize(double width, EmbReal height)
     // FIXME: obj->setRect(elRect);
 }
 
-
+/* . */
 void
-obj_draw_rubber_grip(Object *obj, QPainter *painter)
+obj_draw_rubber_grip(uint32_t obj_id, QPainter *painter)
 {
-    QPointF point = to_qpointf(obj_map_rubber(obj, ""))
-        - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
-    painter->drawLine(obj_line(obj).translated(point));
+    QPointF point = to_qpointf(obj_map_rubber(obj_id, ""))
+        - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
+    painter->drawLine(obj_line(get_obj(obj_id)).translated(point));
 }
 
 /* . */
@@ -1967,8 +1894,8 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
     if (!painter) {
         return;
     }
-    Object *obj = object_list[obj_id];
-    EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
+    Object *obj = get_obj(obj_id);
+    EmbVector gripPoint = obj_rubber_point(obj_id, "GRIP_POINT");
     switch (obj->core->geometry->type) {
     case EMB_ARC: {
         todo("rubber grip arc");
@@ -1987,7 +1914,7 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
         break;
     }
     case EMB_LINE: {
-        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
         if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
             painter->drawLine(obj_line(obj).p2(), p);
         }
@@ -1995,31 +1922,31 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
             painter->drawLine(obj_line(obj).p1(), p);
         }
         else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
-            QPointF point = p - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
+            QPointF point = p - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
             QLineF line = obj_line(obj).translated(point);
             painter->drawLine(line);
         }
 
-        obj_draw_rubber_grip(obj, painter);
+        obj_draw_rubber_grip(obj_id, painter);
         break;
     }
     case EMB_CIRCLE: {
         if (emb_approx(gripPoint, obj_center(obj->core))) {
-            QPointF point = to_qpointf(obj_map_rubber(obj, ""))
-                - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
+            QPointF point = to_qpointf(obj_map_rubber(obj_id, ""))
+                - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
             QRectF r = to_qrectf(obj_rect(obj->core));
             painter->drawEllipse(r.translated(point));
         }
         else {
-            EmbReal gripRadius = emb_vector_distance(obj_center(obj->core), obj_rubber_point(obj, ""));
+            EmbReal gripRadius = emb_vector_distance(obj_center(obj->core), obj_rubber_point(obj_id, ""));
             painter->drawEllipse(QPointF(), gripRadius, gripRadius);
         }
 
-        obj_draw_rubber_grip(obj, painter);
+        obj_draw_rubber_grip(obj_id, painter);
         break;
     }
     case EMB_DIM_LEADER: {
-        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
         if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
             painter->drawLine(obj_line(obj).p2(), p);
         }
@@ -2027,19 +1954,19 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
             painter->drawLine(obj_line(obj).p1(), p);
         }
         else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
-            obj_draw_rubber_grip(obj, painter);
+            obj_draw_rubber_grip(obj_id, painter);
         }
         break;
     }
     case EMB_POINT: {
         if (emb_approx(gripPoint, obj_pos(obj->core))) {
-            obj_draw_rubber_grip(obj, painter);
+            obj_draw_rubber_grip(obj_id, painter);
         }
         break;
     }
     case EMB_POLYGON: {
         int elemCount = obj->normalPath.elementCount();
-        EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
+        EmbVector gripPoint = obj_rubber_point(obj_id, "GRIP_POINT");
         if (obj->core->gripIndex == -1) {
             obj->core->gripIndex = obj_find_index(obj, gripPoint);
                 if (obj->core->gripIndex == -1) {
@@ -2063,18 +1990,18 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
                 n = obj->core->gripIndex + 1;
             }
 
-            QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+            QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
             QPainterPath::Element em = obj->normalPath.elementAt(m);
             QPainterPath::Element en = obj->normalPath.elementAt(n);
             painter->drawLine(QPointF(em.x, em.y), p);
             painter->drawLine(QPointF(en.x, en.y), p);
 
-            obj_draw_rubber_grip(obj, painter);
+            obj_draw_rubber_grip(obj_id, painter);
             break;
         }
         case EMB_POLYLINE: {
             int elemCount = obj->normalPath.elementCount();
-            EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
+            EmbVector gripPoint = obj_rubber_point(obj_id, "GRIP_POINT");
             if (obj->core->gripIndex == -1) {
                 obj->core->gripIndex = obj_find_index(obj, gripPoint);
             }
@@ -2082,7 +2009,7 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
                 return;
             }
 
-            QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+            QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
             if (!obj->core->gripIndex) {
                 /* First */
                 QPainterPath::Element ef = obj->normalPath.elementAt(1);
@@ -2101,12 +2028,12 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
                 painter->drawLine(QPointF(en.x, en.y), p);
             }
 
-        obj_draw_rubber_grip(obj, painter);
+        obj_draw_rubber_grip(obj_id, painter);
         break;
     }
     case EMB_RECT: {
         todo("Make this work with rotation & scaling.");
-        EmbVector after = obj_rubber_point(obj, "");
+        EmbVector after = obj_rubber_point(obj_id, "");
         EmbVector delta = emb_vector_subtract(after, gripPoint);
         EmbVector tl = obj_top_left(obj->core);
         EmbReal w = emb_width(obj->core->geometry);
@@ -2140,15 +2067,15 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
                 h + delta.y)));
         }
 
-        obj_draw_rubber_grip(obj, painter);
+        obj_draw_rubber_grip(obj_id, painter);
         break;
     }
     case EMB_TEXT_SINGLE: {
         if (emb_approx(gripPoint, obj_pos(obj->core))) {
-           // painter->drawPath(obj_path(obj).translated(obj->mapFromScene(obj_rubber_point(obj, ""))- obj_map_rubber(obj, "GRIP_POINT"));
+           // painter->drawPath(obj_path(obj).translated(obj->mapFromScene(obj_rubber_point(obj_id, ""))- obj_map_rubber(obj_id, "GRIP_POINT"));
         }
 
-        obj_draw_rubber_grip(obj, painter);
+        obj_draw_rubber_grip(obj_id, painter);
         break;
     }
     default:
@@ -2346,7 +2273,7 @@ obj_update_path(Object *obj)
 void
 obj_calculate_data(uint32_t obj_id)
 {
-    Object *obj = object_list[obj_id];
+    Object *obj = get_obj(obj_id);
     EmbVector center = emb_arc_center(*(obj->core->geometry));
 
     EmbReal radius = emb_vector_distance(center, obj->core->geometry->object.arc.mid);
@@ -2447,40 +2374,12 @@ obj_set_line_type(Object *obj, Qt::PenStyle lineType)
 }
 
 /* . */
-EmbVector
-obj_rubber_point(Object *obj, QString key)
-{
-    for (int i=0; i<(int)obj->rubber_points.size(); i++) {
-        if (string_equal(obj->rubber_points[i].key, qPrintable(key))) {
-            return obj->rubber_points[i].vector;
-        }
-    }
-
-    /* TODO: object's scene rather than current. */
-    int doc = active_document();
-    DocumentData *data = doc_data(doc);
-    return data->sceneQSnapPoint;
-}
-
-/* . */
-QString
-obj_rubber_text(Object *obj, QString key)
-{
-    for (int i=0; i<(int)obj->rubber_texts.size(); i++) {
-        if (string_equal(obj->rubber_texts[i].key, qPrintable(key))) {
-            return obj->rubber_texts[i].value;
-        }
-    }
-    return "";
-}
-
-/* . */
 QRectF
-obj_bounding_rect(ObjectCore *obj)
+obj_bounding_rect(ObjectCore *core)
 {
     /* If gripped, force this object to be drawn even if it is offscreen. */
-    if (obj->rubber_mode == RUBBER_GRIP) {
-        return documents[obj->doc]->scene()->sceneRect();
+    if (core->rubber_mode == RUBBER_GRIP) {
+        return documents[core->doc]->scene()->sceneRect();
     }
     //return documents[obj->doc]->normalPath.boundingRect();
     return QRectF(0.0, 0.0, 1.0, 1.0);
@@ -2506,7 +2405,7 @@ obj_set_rect(uint32_t obj, QRectF r)
 {
     QPainterPath p;
     p.addRect(r);
-    object_list[obj]->setPath(p);
+    get_obj(obj)->setPath(p);
 }
 
 /* . */
@@ -2516,7 +2415,7 @@ obj_set_rect(uint32_t obj, EmbReal x, EmbReal y, EmbReal w, EmbReal h)
     // obj->setPos(x, y); ?
     QPainterPath p;
     p.addRect(x,y,w,h);
-    object_list[obj]->setPath(p);
+    get_obj(obj)->setPath(p);
 }
 
 /* . */
@@ -2590,24 +2489,24 @@ obj_find_index(Object *obj, EmbVector point)
 
 /* Map rubber point from scene. */
 EmbVector
-obj_map_rubber(Object *obj, const char *key)
+obj_map_rubber(int32_t obj_id, const char *key)
 {
-    EmbVector point = obj_rubber_point(obj, key);
-    return map_from_scene(obj, point);
+    EmbVector point = obj_rubber_point(obj_id, key);
+    return map_from_scene(get_obj(obj_id), point);
 }
 
 /* . */
 void
 obj_update_rubber(uint32_t obj_id, QPainter* painter)
 {
-    Object *obj = object_list[obj_id];
+    Object *obj = get_obj(obj_id);
     todo("Arc,Path Rubber Modes");
     switch (obj->core->rubber_mode) {
     case RUBBER_CIRCLE_1P_RAD: {
-        EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
-        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_RADIUS");
-        EmbVector itemCenterPoint = obj_map_rubber(obj, "CIRCLE_CENTER");
-        EmbVector itemQSnapPoint = obj_map_rubber(obj, "CIRCLE_RADIUS");
+        EmbVector sceneCenterPoint = obj_rubber_point(obj_id, "CIRCLE_CENTER");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "CIRCLE_RADIUS");
+        EmbVector itemCenterPoint = obj_map_rubber(obj_id, "CIRCLE_CENTER");
+        EmbVector itemQSnapPoint = obj_map_rubber(obj_id, "CIRCLE_RADIUS");
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
         obj_set_center(obj->core, sceneCenterPoint);
         QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
@@ -2620,10 +2519,10 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_CIRCLE_1P_DIA: {
-        EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
-        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_DIAMETER");
-        EmbVector itemCenterPoint = obj_map_rubber(obj, "CIRCLE_CENTER");
-        EmbVector itemQSnapPoint = obj_map_rubber(obj, "CIRCLE_DIAMETER");
+        EmbVector sceneCenterPoint = obj_rubber_point(obj_id, "CIRCLE_CENTER");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "CIRCLE_DIAMETER");
+        EmbVector itemCenterPoint = obj_map_rubber(obj_id, "CIRCLE_CENTER");
+        EmbVector itemQSnapPoint = obj_map_rubber(obj_id, "CIRCLE_DIAMETER");
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
         obj_set_center(obj->core, sceneCenterPoint);
         QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
@@ -2636,8 +2535,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_CIRCLE_2P: {
-        EmbVector sceneTan1Point = obj_rubber_point(obj, "CIRCLE_TAN1");
-        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_TAN2");
+        EmbVector sceneTan1Point = obj_rubber_point(obj_id, "CIRCLE_TAN1");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "CIRCLE_TAN2");
         QLineF sceneLine(to_qpointf(sceneTan1Point), to_qpointf(sceneQSnapPoint));
         obj_set_center(obj->core, to_emb_vector(sceneLine.pointAt(0.5)));
         EmbReal diameter = sceneLine.length();
@@ -2647,9 +2546,9 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
     }
     case RUBBER_CIRCLE_3P: {
         EmbGeometry g;
-        g.object.arc.start = obj_rubber_point(obj, "CIRCLE_TAN1");
-        g.object.arc.mid = obj_rubber_point(obj, "CIRCLE_TAN2");
-        g.object.arc.end = obj_rubber_point(obj, "CIRCLE_TAN3");
+        g.object.arc.start = obj_rubber_point(obj_id, "CIRCLE_TAN1");
+        g.object.arc.mid = obj_rubber_point(obj_id, "CIRCLE_TAN2");
+        g.object.arc.end = obj_rubber_point(obj_id, "CIRCLE_TAN3");
         g.type = EMB_ARC;
         EmbVector center = emb_arc_center(g);
         obj_set_center(obj->core, center);
@@ -2659,16 +2558,16 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_DIMLEADER_LINE: {
-        EmbVector sceneStartPoint = obj_rubber_point(obj, "DIMLEADER_LINE_START");
-        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "DIMLEADER_LINE_END");
+        EmbVector sceneStartPoint = obj_rubber_point(obj_id, "DIMLEADER_LINE_START");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "DIMLEADER_LINE_END");
 
         obj_set_end_point_1(obj->core, sceneStartPoint);
         obj_set_end_point_2(obj->core, sceneQSnapPoint);
         break;
     }
     case RUBBER_ELLIPSE_LINE: {
-        EmbVector itemLinePoint1  = obj_map_rubber(obj, "ELLIPSE_LINE_POINT1");
-        EmbVector itemLinePoint2  = obj_map_rubber(obj, "ELLIPSE_LINE_POINT2");
+        EmbVector itemLinePoint1  = obj_map_rubber(obj_id, "ELLIPSE_LINE_POINT1");
+        EmbVector itemLinePoint2  = obj_map_rubber(obj_id, "ELLIPSE_LINE_POINT2");
         QLineF itemLine(to_qpointf(itemLinePoint1), to_qpointf(itemLinePoint2));
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2677,12 +2576,12 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_ELLIPSE_MAJDIA_MINRAD: {
-        EmbVector sceneAxis1Point1 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT1");
-        EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
-        EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
-        EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
-        EmbReal ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
-        EmbReal ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
+        EmbVector sceneAxis1Point1 = obj_rubber_point(obj_id, "ELLIPSE_AXIS1_POINT1");
+        EmbVector sceneAxis1Point2 = obj_rubber_point(obj_id, "ELLIPSE_AXIS1_POINT2");
+        EmbVector sceneCenterPoint = obj_rubber_point(obj_id, "ELLIPSE_CENTER");
+        EmbVector sceneAxis2Point2 = obj_rubber_point(obj_id, "ELLIPSE_AXIS2_POINT2");
+        EmbReal ellipseWidth = obj_rubber_point(obj_id, "ELLIPSE_WIDTH").x;
+        EmbReal ellipseRot = obj_rubber_point(obj_id, "ELLIPSE_ROT").x;
 
         todo("incorporate perpendicularDistance() into libembroidery.");
         QLineF line(to_qpointf(sceneAxis1Point1), to_qpointf(sceneAxis1Point2));
@@ -2697,8 +2596,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         // FIXME: obj->setSize(ellipseWidth, ellipseHeight);
         obj->setRotation(-ellipseRot);
 
-        EmbVector itemCenterPoint = obj_map_rubber(obj, "ELLIPSE_CENTER");
-        EmbVector itemAxis2Point2 = obj_map_rubber(obj, "ELLIPSE_AXIS2_POINT2");
+        EmbVector itemCenterPoint = obj_map_rubber(obj_id, "ELLIPSE_CENTER");
+        EmbVector itemAxis2Point2 = obj_map_rubber(obj_id, "ELLIPSE_AXIS2_POINT2");
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemAxis2Point2));
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2707,11 +2606,11 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_ELLIPSE_MAJRAD_MINRAD: {
-        EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
-        EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
-        EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
-        EmbReal ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
-        EmbReal ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
+        EmbVector sceneAxis1Point2 = obj_rubber_point(obj_id, "ELLIPSE_AXIS1_POINT2");
+        EmbVector sceneCenterPoint = obj_rubber_point(obj_id, "ELLIPSE_CENTER");
+        EmbVector sceneAxis2Point2 = obj_rubber_point(obj_id, "ELLIPSE_AXIS2_POINT2");
+        EmbReal ellipseWidth = obj_rubber_point(obj_id, "ELLIPSE_WIDTH").x;
+        EmbReal ellipseRot = obj_rubber_point(obj_id, "ELLIPSE_ROT").x;
 
         todo("incorporate perpendicularDistance() into libcgeometry.");
         QLineF line(to_qpointf(sceneCenterPoint), to_qpointf(sceneAxis1Point2));
@@ -2726,8 +2625,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         obj->setObjectSize(ellipseWidth, ellipseHeight);
         obj->setRotation(-ellipseRot);
 
-        EmbVector itemCenterPoint = obj_map_rubber(obj, "ELLISPE_CENTER");
-        EmbVector itemAxis2Point2 = obj_map_rubber(obj, "ELLIPSE_AXIS2_POINT2");
+        EmbVector itemCenterPoint = obj_map_rubber(obj_id, "ELLISPE_CENTER");
+        EmbVector itemAxis2Point2 = obj_map_rubber(obj_id, "ELLIPSE_AXIS2_POINT2");
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemAxis2Point2));
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2736,16 +2635,16 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_IMAGE: {
-        EmbVector start = obj_rubber_point(obj, "IMAGE_START");
-        EmbVector end = obj_rubber_point(obj, "IMAGE_END");
+        EmbVector start = obj_rubber_point(obj_id, "IMAGE_START");
+        EmbVector end = obj_rubber_point(obj_id, "IMAGE_END");
         EmbVector delta = emb_vector_subtract(end, start);
         obj_set_rect(obj_id, start.x, start.y, delta.x, delta.y);
         obj_update_path(obj);
         break;
     }
     case RUBBER_LINE: {
-        EmbVector sceneStartPoint = obj_rubber_point(obj, "LINE_START");
-        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "LINE_END");
+        EmbVector sceneStartPoint = obj_rubber_point(obj_id, "LINE_START");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "LINE_END");
 
         obj_set_end_point_1(obj->core, sceneStartPoint);
         obj_set_end_point_2(obj->core, sceneQSnapPoint);
@@ -2754,10 +2653,10 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_POLYGON: {
-        obj_set_pos(obj->core, obj_rubber_point(obj, "POLYGON_POINT_0"));
+        obj_set_pos(obj->core, obj_rubber_point(obj_id, "POLYGON_POINT_0"));
 
         bool ok = false;
-        QString numStr = obj_rubber_text(obj, "POLYGON_NUM_POINTS");
+        QString numStr = obj_rubber_text(obj_id, "POLYGON_NUM_POINTS");
         if (numStr.isNull()) {
             return;
         }
@@ -2767,11 +2666,11 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         }
 
         QPainterPath rubberPath;
-        rubberPath.moveTo(to_qpointf(obj_map_rubber(obj, "POLYGON_POINT_0")));
+        rubberPath.moveTo(to_qpointf(obj_map_rubber(obj_id, "POLYGON_POINT_0")));
         for (int i = 1; i <= num; i++) {
             char key[MAX_STRING_LENGTH];
             sprintf(key, "POLYGON_POINT_%d", i);
-            EmbVector appendPoint = obj_map_rubber(obj, key);
+            EmbVector appendPoint = obj_map_rubber(obj_id, key);
             rubberPath.lineTo(to_qpointf(appendPoint));
         }
         /* rubberPath.lineTo(0,0); */
@@ -2782,11 +2681,11 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_POLYGON_INSCRIBE: {
-        obj_set_pos(obj->core, obj_rubber_point(obj, "POLYGON_CENTER"));
+        obj_set_pos(obj->core, obj_rubber_point(obj_id, "POLYGON_CENTER"));
 
-        quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x;
+        quint16 numSides = obj_rubber_point(obj_id, "POLYGON_NUM_SIDES").x;
 
-        EmbVector inscribePoint = obj_map_rubber(obj, "POLYGON_INSCRIBE_POINT");
+        EmbVector inscribePoint = obj_map_rubber(obj_id, "POLYGON_INSCRIBE_POINT");
         QLineF inscribeLine = QLineF(QPointF(0, 0), to_qpointf(inscribePoint));
         EmbReal inscribeAngle = inscribeLine.angle();
         EmbReal inscribeInc = 360.0/numSides;
@@ -2807,11 +2706,11 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_POLYGON_CIRCUMSCRIBE: {
-        obj_set_pos(obj->core, obj_rubber_point(obj, "POLYGON_CENTER"));
+        obj_set_pos(obj->core, obj_rubber_point(obj_id, "POLYGON_CENTER"));
 
-        quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x;
+        quint16 numSides = obj_rubber_point(obj_id, "POLYGON_NUM_SIDES").x;
 
-        EmbVector circumscribePoint = obj_map_rubber(obj, "POLYGON_CIRCUMSCRIBE_POINT");
+        EmbVector circumscribePoint = obj_map_rubber(obj_id, "POLYGON_CIRCUMSCRIBE_POINT");
         QLineF circumscribeLine = QLineF(QPointF(0, 0), to_qpointf(circumscribePoint));
         EmbReal circumscribeAngle = circumscribeLine.angle();
         EmbReal circumscribeInc = 360.0/numSides;
@@ -2843,16 +2742,16 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_POLYLINE: {
-        obj_set_pos(obj->core, obj_rubber_point(obj, "POLYLINE_POINT_0"));
+        obj_set_pos(obj->core, obj_rubber_point(obj_id, "POLYLINE_POINT_0"));
 
-        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
         QLineF rubberLine(obj->normalPath.currentPosition(), p);
         if (painter) {
             obj_draw_rubber_line(obj, rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
 
         bool ok = false;
-        QString numStr = obj_rubber_text(obj, "POLYLINE_NUM_POINTS");
+        QString numStr = obj_rubber_text(obj_id, "POLYLINE_NUM_POINTS");
         if (numStr.isNull()) return;
         int num = numStr.toInt(&ok);
         if (!ok) {
@@ -2863,7 +2762,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         for (int i = 1; i <= num; i++) {
             char msg[MAX_STRING_LENGTH];
             sprintf(msg, "POLYLINE_POINT_%d", i);
-            EmbVector appendPoint = obj_map_rubber(obj, msg);
+            EmbVector appendPoint = obj_map_rubber(obj_id, msg);
             rubberPath.lineTo(to_qpointf(appendPoint));
         }
         obj_update_path_r(obj, rubberPath);
@@ -2873,63 +2772,27 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_RECTANGLE: {
-        EmbVector start = obj_rubber_point(obj, "RECTANGLE_START");
-        EmbVector end = obj_rubber_point(obj, "RECTANGLE_END");
+        EmbVector start = obj_rubber_point(obj_id, "RECTANGLE_START");
+        EmbVector end = obj_rubber_point(obj_id, "RECTANGLE_END");
         EmbVector delta = emb_vector_subtract(end, start);
         obj_set_rect(obj_id, start.x, start.y, delta.x, delta.y);
         obj_update_path(obj);
         break;
     }
     case RUBBER_TEXTSINGLE: {
-        obj_set_text_font(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_FONT")));
-        obj_set_text_justify(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_JUSTIFY")));
-        obj_set_pos(obj->core, obj_rubber_point(obj, "TEXT_POINT"));
-        EmbVector hr = obj_rubber_point(obj, "TEXT_HEIGHT_ROTATION");
+        obj_set_text_font(obj->core, obj_rubber_text(obj_id, "TEXT_FONT"));
+        obj_set_text_justify(obj->core, obj_rubber_text(obj_id, "TEXT_JUSTIFY"));
+        obj_set_pos(obj->core, obj_rubber_point(obj_id, "TEXT_POINT"));
+        EmbVector hr = obj_rubber_point(obj_id, "TEXT_HEIGHT_ROTATION");
         obj_set_text_size(obj->core, hr.x);
         obj->setRotation(hr.y);
-        obj_set_text(obj->core, qPrintable(obj_rubber_text(obj, "TEXT_RAPID")));
+        obj_set_text(obj->core, obj_rubber_text(obj_id, "TEXT_RAPID"));
         break;
     }
     case RUBBER_GRIP: {
         obj_update_rubber_grip(obj_id, painter);
         break;
     }
-    default:
-        break;
-    }
-}
-
-/* . */
-void
-Object::vulcanize()
-{
-    debug_message("vulcanize()");
-    /* FIXME: obj_update_rubber(painter); */
-
-    core->rubber_mode = RUBBER_OFF;
-
-    switch (core->geometry->type) {
-    case EMB_POLYLINE:
-        if (!normalPath.elementCount()) {
-            critical_box(
-                translate("Empty Polyline Error"),
-                translate("The polyline added contains no points. The command that created this object has flawed logic."));
-        }
-        break;
-    case EMB_POLYGON:
-        if (!normalPath.elementCount()) {
-            critical_box(
-                translate("Empty Polygon Error"),
-                translate("The polygon added contains no points. The command that created this object has flawed logic."));
-        }
-        break;
-    case EMB_PATH:
-        if (!normalPath.elementCount()) {
-            critical_box(
-                translate("Empty Path Error"),
-                translate("The path added contains no points. The command that created this object has flawed logic."));
-        }
-        break;
     default:
         break;
     }
@@ -3276,7 +3139,7 @@ void
 free_objects(EmbIdList *list)
 {
     for (int i=0; i<list->count; i++) {
-        delete object_list[i];
+        delete get_obj(list->data[i]);
     }
 }
 
@@ -3415,14 +3278,14 @@ Document::enterEvent(QEvent* /*event*/)
 void
 doc_add_item(int32_t doc, uint32_t id)
 {
-    documents[doc]->gscene->addItem(object_list[id]);
+    documents[doc]->gscene->addItem(get_obj(id));
 }
 
 /* . */
 void
 doc_remove_item(int32_t doc, uint32_t id)
 {
-    documents[doc]->gscene->removeItem(object_list[id]);
+    documents[doc]->gscene->removeItem(get_obj(id));
 }
 
 /* . */
@@ -3440,10 +3303,10 @@ doc_add_object(int32_t doc, uint32_t obj)
 void
 doc_delete_object(int32_t doc, uint32_t obj)
 {
-    object_list[obj]->setSelected(false);
+    get_obj(obj)->setSelected(false);
     doc_remove_item(doc, obj);
     doc_update(doc);
-    documents[doc]->hashDeletedObjects[obj] = object_list[obj];
+    documents[doc]->hashDeletedObjects[obj] = get_obj(obj);
 }
 
 /* . */
@@ -3452,7 +3315,7 @@ doc_add_to_rubber_room(int32_t doc, int32_t item)
 {
     DocumentData *data = doc_data(doc);
     append_id_to_list(data->rubberRoomList, item);
-    object_list[item]->show();
+    get_obj(item)->show();
     doc_update(doc);
 }
 
@@ -3461,10 +3324,10 @@ void
 doc_vulcanize_object(int32_t doc, uint32_t obj)
 {
     /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
-    documents[doc]->gscene->removeItem(object_list[obj]);
-    object_list[obj]->vulcanize();
+    documents[doc]->gscene->removeItem(get_obj(obj));
+    obj_vulcanize(obj);
 
-    undoable_add(doc, obj, object_list[obj]->core->OBJ_NAME);
+    undoable_add(doc, obj, get_obj(obj)->core->OBJ_NAME);
 }
 
 /* TODO: Ensure SPARE_RUBBER_* are larger than all possible object values. */
@@ -3476,7 +3339,7 @@ doc_clear_rubber_room(int32_t doc)
     DocumentData *data = doc_data(doc);
     for (int i=0; i<data->rubberRoomList->count; i++) {
         int32_t item = data->rubberRoomList->data[i];
-        Object *base = object_list[item];
+        Object *base = get_obj(item);
         int type = base->type();
         if ((type == OBJ_PATH && id_list_contains(data->spareRubberList, SPARE_RUBBER_PATH))
         || (type == OBJ_POLYGON && id_list_contains(data->spareRubberList, SPARE_RUBBER_POLYGON))
@@ -3488,7 +3351,7 @@ doc_clear_rubber_room(int32_t doc)
                         "The command that created this object has flawed logic. "
                         "The object will be deleted."));
                 remove_id_from_list(data->spareRubberList, item);
-                delete object_list[item];
+                delete get_obj(item);
             }
             else {
                 doc_vulcanize_object(doc, item);
@@ -3496,7 +3359,7 @@ doc_clear_rubber_room(int32_t doc)
         }
         else {
             remove_id_from_list(data->spareRubberList, item);
-            delete object_list[item];
+            delete get_obj(item);
         }
     }
 
@@ -3949,14 +3812,15 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
     EmbReal rvTextOffset = documents[doc]->mapToScene(0, 3).y() - origin.y;
     EmbReal textHeight = ruler_h.h*medium;
 
-    std::vector<QLineF> lines;
-    lines.push_back(QLineF(origin.x, ruler_h.y, ruler_h.x, ruler_h.y));
-    lines.push_back(QLineF(ruler_v.x, origin.y, ruler_v.x, ruler_v.y));
+    int n_lines = 0;
+    QLineF lines[1000];
+    lines[n_lines++] = QLineF(origin.x, ruler_h.y, ruler_h.x, ruler_h.y);
+    lines[n_lines++] = QLineF(ruler_v.x, origin.y, ruler_v.x, ruler_v.y);
 
-    lines.push_back(QLineF(data->sceneMousePoint.x, ruler_h.y,
-        data->sceneMousePoint.x, origin.y));
-    lines.push_back(QLineF(ruler_v.x, data->sceneMousePoint.y,
-        origin.x, data->sceneMousePoint.y));
+    lines[n_lines++] = QLineF(data->sceneMousePoint.x, ruler_h.y,
+        data->sceneMousePoint.x, origin.y);
+    lines[n_lines++] = QLineF(ruler_v.x, data->sceneMousePoint.y,
+        origin.x, data->sceneMousePoint.y);
 
     QTransform transform;
 
@@ -4007,7 +3871,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
         transform.reset();
         painter->drawPath(rulerTextPath);
 
-        lines.push_back(QLineF(x, ruler_h.y, x, origin.y));
+        lines[n_lines++] = (QLineF(x, ruler_h.y, x, origin.y));
         if (data->rulerMetric) {
             for (int i=1; i<10; i++) {
                 EmbReal xf = x + fraction*i;
@@ -4015,7 +3879,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
                 if (i == 5) {
                     tick = ruler_h.y - ruler_h.h * medium;
                 }
-                lines.push_back(QLineF(xf, ruler_h.y, xf, tick));
+                lines[n_lines++] = (QLineF(xf, ruler_h.y, xf, tick));
             }
         }
         else {
@@ -4023,7 +3887,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
                 for (int i = 0; i < 12; ++i) {
                     EmbReal xf = x + fraction*i;
                     EmbReal tick = ruler_h.y - ruler_h.h * medium;
-                    lines.push_back(QLineF(xf, ruler_h.y, xf, tick));
+                    lines[n_lines++] = (QLineF(xf, ruler_h.y, xf, tick));
                 }
             }
             else {
@@ -4033,7 +3897,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
                     if (i % 4 == 0) {
                         tick = ruler_h.y - ruler_h.h * medium;
                     }
-                    lines.push_back(QLineF(xf, ruler_h.y, xf, tick));
+                    lines[n_lines++] = (QLineF(xf, ruler_h.y, xf, tick));
                 }
             }
         }
@@ -4060,7 +3924,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
         transform.reset();
         painter->drawPath(rulerTextPath);
 
-        lines.push_back(QLineF(ruler_v.x, y, origin.x, y));
+        lines[n_lines++] = (QLineF(ruler_v.x, y, origin.x, y));
         if (data->rulerMetric) {
             for (int i=1; i<10; i++) {
                 EmbReal yf = y + fraction*i;
@@ -4068,13 +3932,13 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
                 if (i == 5) {
                     tick = ruler_v.x - ruler_v.w * medium;
                 }
-                lines.push_back(QLineF(ruler_v.x, yf, tick, yf));
+                lines[n_lines++] = (QLineF(ruler_v.x, yf, tick, yf));
             }
         }
         else {
             if (feet) {
                 for (int i = 0; i < 12; ++i) {
-                    lines.push_back(QLineF(ruler_v.x, y+fraction*i, ruler_v.x-ruler_v.w*medium, y+fraction*i));
+                    lines[n_lines++] = (QLineF(ruler_v.x, y+fraction*i, ruler_v.x-ruler_v.w*medium, y+fraction*i));
                 }
             }
             else {
@@ -4084,14 +3948,14 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
                     if (i % 4 == 0) {
                         tick = ruler_v.x - ruler_v.w * medium;
                     }
-                    lines.push_back(QLineF(ruler_v.x, yf, tick, yf));
+                    lines[n_lines++] = (QLineF(ruler_v.x, yf, tick, yf));
                 }
             }
         }
     }
 
     QVector<QLineF> qlines;
-    for (int i=0; i<lines.size(); i++) {
+    for (int i=0; i<n_lines; i++) {
         qlines.append(lines[i]);
     }
 
@@ -4118,7 +3982,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
     EmbIdList *selectedItemList = data->selectedItems;
     if (selectedItemList->count <= 100) {
         for (int j=0; j<selectedItemList->count; j++) {
-            Object* item = object_list[selectedItemList->data[j]];
+            Object* item = get_obj(selectedItemList->data[j]);
             if (item->type() != OBJ_UNKNOWN) {
                 documents[doc]->tempBaseObj = item;
                 if (documents[doc]->tempBaseObj) {
@@ -4437,7 +4301,7 @@ doc_zoom_selected(int32_t doc_id)
     EmbIdList *itemList = doc->data->selectedItems;
     QPainterPath selectedRectPath;
     for (int i=0; i<itemList->count; i++) {
-        Object *item = object_list[itemList->data[i]];
+        Object *item = get_obj(itemList->data[i]);
         selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
     }
     QRectF selectedRect = selectedRectPath.boundingRect();
@@ -5029,7 +4893,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
     bool selectionEmpty = (data->selectedItems->count == 0);
 
     for (int i = 0; i < data->selectedItems->count; i++) {
-        Object *obj = object_list[data->selectedItems->data[i]];
+        Object *obj = get_obj(data->selectedItems->data[i]);
         if (obj->core->geometry->type != OBJ_NULL) {
             selectionEmpty = false;
             break;
@@ -5129,7 +4993,7 @@ doc_stop_gripping(int32_t doc, bool accept)
     DocumentData *data = doc_data(doc);
     data->grippingActive = false;
     if (documents[doc]->gripBaseObj) {
-        documents[doc]->gripBaseObj->vulcanize();
+        obj_vulcanize(documents[doc]->gripBaseObj->core->objID);
         if (accept) {
             QString s = translate("Grip Edit ");
             s += documents[doc]->gripBaseObj->core->OBJ_NAME;
@@ -5151,7 +5015,7 @@ void
 undoable_add(int32_t doc, uint32_t obj, EmbString label)
 {
     UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, label,
-        object_list[obj], doc, 0);
+        get_obj(obj), doc, 0);
     if (cmd) {
         documents[doc]->undoStack->push(cmd);
     }
@@ -5162,7 +5026,7 @@ void
 undoable_delete(int32_t doc, uint32_t obj, EmbString label)
 {
     UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, label,
-        object_list[obj], doc, 0);
+        get_obj(obj), doc, 0);
     if (cmd) {
         documents[doc]->undoStack->push(cmd);
     }
@@ -5173,7 +5037,7 @@ void
 undoable_rotate(int32_t doc, uint32_t obj, EmbVector v, EmbString s)
 {
     UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, s,
-        object_list[obj], doc, 0);
+        get_obj(obj), doc, 0);
     if (cmd) {
         documents[doc]->undoStack->push(cmd);
     }
@@ -5184,7 +5048,7 @@ void
 undoable_scale(int doc, uint32_t obj, EmbVector v, EmbReal factor, EmbString msg)
 {
     UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, msg,
-        object_list[obj], doc, 0);
+        get_obj(obj), doc, 0);
     if (cmd) {
         documents[doc]->undoStack->push(cmd);
     }
@@ -5238,7 +5102,7 @@ void
 undoable_move(int32_t doc, uint32_t obj, EmbVector delta, EmbString msg)
 {
     UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, delta, msg,
-        object_list[obj], doc, 0);
+        get_obj(obj), doc, 0);
     if (cmd) {
         documents[doc]->undoStack->push(cmd);
     }
@@ -5250,7 +5114,7 @@ undoable_mirror(int32_t doc, uint32_t obj, EmbVector start, EmbVector end,
     EmbString msg)
 {
     UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, start, end, msg,
-        object_list[obj], doc, 0);
+        get_obj(obj), doc, 0);
     if (cmd) {
         documents[doc]->undoStack->push(cmd);
     }
@@ -6555,14 +6419,13 @@ process_input(char rapidChar)
         }
     }
     else {
-        auto found = aliasHash.find(cmdtxt.toStdString());
-        if (found != aliasHash.end()) {
+        int index = find_in_map(aliasHash, n_aliases, qPrintable(cmdtxt));
+        if (index >= 0) {
             cmdActive = true;
             strcpy(lastCmd, qPrintable(curCmd));
-            std::string cmd = aliasHash[cmdtxt.toStdString()];
-            curCmd = QString(cmd.c_str());
+            curCmd = QString(aliasHash[index].value);
             append_history(qPrintable(curText));
-            run_command_prompt((char*)qPrintable(curCmd));
+            run_command_prompt(aliasHash[index].value);
         }
         else if (cmdtxt.isEmpty()) {
             cmdActive = true;
@@ -6702,8 +6565,8 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 
         QKeyEvent* pressedKey = (QKeyEvent*)event;
         int key = pressedKey->key();
-        auto found = key_map.find(key);
-        if (found != key_map.end()) {
+        int found = find_int_map(key_map, key);
+        if (found != -1) {
             if (key != (int)Qt::Key_Shift) {
                 pressedKey->accept();
             }
@@ -6733,9 +6596,9 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
             break;
         }
         }
-        if (found != key_map.end()) {
+        if (found != -1) {
             if (key != (int)Qt::Key_Shift) {
-                key_state[key] = true;
+                key_state[found] = true;
                 return true;
             }
             else {
@@ -6750,9 +6613,9 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         int key = releasedKey->key();
         /* We don't want to eat it, we just want to keep track of it. */
         releasedKey->ignore();
-        auto found = key_map.find(key);
-        if (found != key_map.end()) {
-            key_state[key] = false;
+        int found = find_int_map(key_map, key);
+        if (found != -1) {
+            key_state[found] = false;
         }
     }
     return QObject::eventFilter(obj, event);
@@ -6905,13 +6768,6 @@ make_application(int argc, char* argv[])
     }
 
     return app.exec();
-}
-
-/* . */
-void
-nanosleep_(int time)
-{
-    std::this_thread::sleep_for(std::chrono::milliseconds(time));
 }
 
 /*
@@ -7969,14 +7825,19 @@ create_all_actions(void)
 
         QObject::connect(ACTION, SIGNAL(triggered()), _main, SLOT(runCommand()));
 
-        aliasHash[icon.toStdString()] = icon.toStdString();
+        string_copy(aliasHash[n_aliases].key, command_data[i].icon);
+        string_copy(aliasHash[n_aliases].value, command_data[i].icon);
+        n_aliases++;
         actionHash[command_data[i].id] = ACTION;
+        n_actions++;
 
         foreach (QString alias, aliases) {
-            char msg[200];
-            aliasHash[alias.toStdString()] = icon.toStdString();
-            sprintf(msg, "Command Added: %s, %s", qPrintable(icon), qPrintable(icon));
+            EmbString msg;
+            string_copy(aliasHash[n_aliases].key, qPrintable(alias));
+            string_copy(aliasHash[n_aliases].value, command_data[i].icon);
+            sprintf(msg, "Command Added: %s, %s", command_data[i].icon, command_data[i].icon);
             debug_message(msg);
+            n_aliases++;
         }
     }
 
@@ -8975,8 +8836,7 @@ Settings_Dialog::createTabDisplay()
 
     QLabel* labelScrollBarWidget = new QLabel(translate("Perform action when clicking corner widget"), groupBoxScrollBars);
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
-    int numActions = actionHash.size();
-    for (int i = 0; i < numActions; i++) {
+    for (int i = 0; i < n_actions; i++) {
         QAction* action = actionHash[i];
         if (action) {
             comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));

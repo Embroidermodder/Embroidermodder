@@ -2405,6 +2405,94 @@ obj_set_end_point_1(ObjectCore *obj, EmbVector endPt1)
 }
 
 /* . */
+void
+obj_vulcanize(int32_t obj)
+{
+    debug_message("vulcanize()");
+    /* FIXME: obj_update_rubber(painter); */
+
+    ObjectCore *core = obj_get_core(obj);
+    core->rubber_mode = RUBBER_OFF;
+    EmbGeometry *g = core->geometry;
+
+    switch (g->type) {
+    case EMB_POLYLINE:
+        if (g->object.polyline.pointList->length == 0) {
+            critical_box(
+                translate("Empty Polyline Error"),
+                translate("The polyline added contains no points. The command that created this object has flawed logic."));
+        }
+        break;
+    case EMB_POLYGON:
+        if (g->object.polygon.pointList->length == 0) {
+            critical_box(
+                translate("Empty Polygon Error"),
+                translate("The polygon added contains no points. The command that created this object has flawed logic."));
+        }
+        break;
+    case EMB_PATH:
+        if (g->object.path.pointList->length == 0) {
+            critical_box(
+                translate("Empty Path Error"),
+                translate("The path added contains no points. The command that created this object has flawed logic."));
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+obj_set_rubber_point(uint32_t id, EmbString key, EmbVector point)
+{
+    ObjectCore *core = obj_get_core(id);
+    string_copy(core->rubber_points[core->n_rubber_points].key, key);
+    core->rubber_points[core->n_rubber_points].vector = point;
+    core->n_rubber_points++;
+}
+
+/* . */
+void
+obj_set_rubber_text(uint32_t id, EmbString key, EmbString txt)
+{
+    ObjectCore *core = obj_get_core(id);
+    string_copy(core->rubber_texts[core->n_rubber_texts].key, key);
+    string_copy(core->rubber_texts[core->n_rubber_texts].value, txt);
+    core->n_rubber_texts++;
+}
+
+/* . */
+EmbVector
+obj_rubber_point(int32_t id, const char *key)
+{
+    ObjectCore *core = obj_get_core(id);
+    for (int i=0; i<(int)core->n_rubber_points; i++) {
+        if (string_equal(core->rubber_points[i].key, key)) {
+            return core->rubber_points[i].vector;
+        }
+    }
+
+    /* TODO: object's scene rather than current. */
+    int doc = active_document();
+    DocumentData *data = doc_data(doc);
+    return data->sceneQSnapPoint;
+}
+
+/* . */
+const char *
+obj_rubber_text(int32_t id, const char *key)
+{
+    ObjectCore *core = obj_get_core(id);
+    for (int i=0; i<(int)core->n_rubber_texts; i++) {
+        if (string_equal(core->rubber_texts[i].key, key)) {
+            return core->rubber_texts[i].value;
+        }
+    }
+    return "";
+}
+
+/* . */
 EmbArc
 emb_arc_set_radius(EmbArc arc, EmbReal radius)
 {

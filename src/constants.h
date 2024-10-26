@@ -25,6 +25,11 @@
 #define MAX_STATE_STRING_LENGTH      200
 #define MAX_LABEL_LENGTH              50
 #define MAX_UNDO                     100
+#define MAX_ACTIONS                 1000
+#define MAX_OBJECTS                20000
+#define MAX_WIDGETS                 1000
+
+#define NUMBINS                       10
 
 #define SCRIPT_NULL                    0
 #define SCRIPT_INT                     1

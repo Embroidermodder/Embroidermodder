@@ -17,6 +17,12 @@
 #include <errno.h>
 #include <time.h>
 
+#if defined(LINUX)
+#include <unistd.h>
+#elif defined(WINDOWS)
+#include <windows.h>
+#endif
+
 #include "core.h"
 
 #include "toml.h"
@@ -213,6 +219,48 @@ free_id_list(EmbIdList *list)
 {
     free(list->data);
     free(list);
+}
+
+/* Find index of integer in IntMap.
+ * IntMaps have terminator symbols.
+ */
+int
+find_int_map(IntMap *map, int key)
+{
+    for (int i=0; map[i].value != -1; i++) {
+        if (map[i].key == key) {
+            return map[i].value;
+        }
+    }
+    return -1;
+}
+
+/* Find index of string in StringMap. */
+int
+find_in_map(StringMap *hash, int length, const char *key)
+{
+    for (int i=0; i<length; i++) {
+        if (string_equal(hash[i].key, key)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/* . */
+void
+nanosleep_(int time)
+{
+#if defined(WINDOWS)
+    if (time/1000000 == 0) {
+        Sleep(1);
+    }
+    else {
+        Sleep(time/1000000);
+    }
+#elif defined(LINUX)
+    usleep(time/1000);
+#endif
 }
 
 /* Print out version string and exit. */

@@ -126,6 +126,11 @@ typedef struct ObjectCore_ {
 
     EmbGeometry *geometry;
 
+    LabelledVector *rubber_points;
+    int n_rubber_points;
+    StringMap *rubber_texts;
+    int n_rubber_texts;
+
     EmbVector position;
 
     EmbReal scale;
@@ -177,6 +182,11 @@ typedef struct UndoData_ {
     EmbLine mirrorLine;
     uint32_t obj;
 } UndoData;
+
+typedef struct IntMap_ {
+    int key;
+    int value;
+} IntMap;
 
 typedef struct EmbVectorList_ {
     EmbVector *data;
@@ -537,6 +547,8 @@ bool loadFile(const char *fileName);
 int32_t free_glfw(void);
 
 int glfw_application(int argc, char *argv[]);
+
+int find_int_map(IntMap *, int);
 
 /* ------------------------------ Prompt ------------------------------- */
 
@@ -977,6 +989,7 @@ int string_compare(EmbString a, const char *b);
 void string_copy(EmbString dst, const char *src);
 int string_array_length(EmbString s[]);
 int string_list_contains(EmbStringTable list, EmbString entry);
+int find_in_map(StringMap *hash, int length, const char *key);
 
 /* ----------------------------- Object Core ------------------------------- */
 
@@ -1001,6 +1014,11 @@ uint32_t create_text_single(EmbString str, EmbVector v, uint32_t rgb);
 
 void obj_set_rubber_point(uint32_t id, EmbString key, EmbVector value);
 void obj_set_rubber_text(uint32_t id, EmbString key, EmbString value);
+void obj_vulcanize(int32_t obj);
+
+EmbVector obj_rubber_point(int32_t id, const char *key);
+const char *obj_rubber_text(int32_t id, const char *key);
+EmbVector obj_map_rubber(int32_t obj, const char *key);
 
 EmbVector obj_pos(ObjectCore *obj);
 double obj_x(ObjectCore *obj);
