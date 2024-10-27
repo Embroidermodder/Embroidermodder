@@ -53,9 +53,6 @@ qt_add_executable(embroidermodder2
 	${EXTERN}/nanovg/src/nanovg.c
 	${EXTERN}/nanovg/src/nanovg.h
 
-	${EXTERN}/tomlc99/toml.c
-	${EXTERN}/tomlc99/toml.h
-
 	${EXTERN}/glad/src/glad.c
 	${EXTERN}/glad/include/glad/glad.h
 	${EXTERN}/glad/include/KHR/khrplatform.h
@@ -83,14 +80,16 @@ qt_add_executable(embroidermodder2
 
 	${SRC}/commands_table.c
 	${SRC}/settings_table.c
+	${SRC}/editors_table.c
+	${SRC}/state.c
+
 	${SRC}/commands.c
 	${SRC}/document.c
-	${SRC}/editors_table.c
 	${SRC}/interface.c
 	${SRC}/geometry.c
 	${SRC}/objects.c
 	${SRC}/properties.c
-	${SRC}/state.c
+	${SRC}/settings.c
 	${SRC}/script.c
 	${SRC}/xpm.c
 
@@ -100,7 +99,6 @@ qt_add_executable(embroidermodder2
 
 include_directories(
 	${EXTERN}/libembroidery
-	${EXTERN}/tomlc99
 	${EXTERN}/glfw/include
 	${EXTERN}/glad/include
 	${EXTERN}/nanovg/src

@@ -90,10 +90,10 @@ doc_init(int32_t doc)
     srand(time(NULL));
     data->sceneGripPoint = emb_vector(rand()*1000, rand()*1000);
 
-    strcpy(data->curLayer, "0");
+    string_copy(data->curLayer, "0");
     data->curColor = 0; /* TODO: color ByLayer */
-    strcpy(data->curLineType, "ByLayer");
-    strcpy(data->curLineWeight, "ByLayer");
+    string_copy(data->curLineType, "ByLayer");
+    string_copy(data->curLineWeight, "ByLayer");
 
     data->pattern = emb_pattern_create();
     if (!data->pattern) {

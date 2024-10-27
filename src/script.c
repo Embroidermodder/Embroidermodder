@@ -8,24 +8,31 @@
  * for advice on altering this file.
  *
  * Script
+ *
+ * Operating system-specific system calls like usleep go in this file:
+ * see the block of system-specific headers below.
  */
 
+#include <stdio.h>
 #include <assert.h>
-#include <string.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <errno.h>
 #include <time.h>
+#include <math.h>
 
-#if defined(LINUX)
+/* Advice on safe C preprocessor directive use:
+ * https://github.com/cpredef/predef
+ */
+#if defined(linux) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
 #include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 #elif defined(WINDOWS)
 #include <windows.h>
 #endif
 
 #include "core.h"
-
-#include "toml.h"
 
 char formatFilterOpen[MAX_LONG_STRING];
 char formatFilterSave[MAX_LONG_STRING];
@@ -48,8 +55,6 @@ int docIndex = 0;
 
 EmbString end_symbol = "END";
 EmbString settings_file = "settings.toml";
-//ScriptValue state[MAX_STATE_VARIABLES];
-//int state_length = 0;
 bool key_state[N_KEY_SEQUENCES] = {
     false, false, false, false, false,
     false, false, false, false, false,
@@ -150,7 +155,7 @@ remove_vector_from_list(EmbVectorList *list, int32_t position)
     if (list->size <= 0) {
         return;
     }
-    memcpy(list->size + position + 1, list->size + position,
+    memory_copy(list->data + position + 1, list->data + position,
         (list->size - position)*sizeof(EmbVector));
     list->size--;
 }
@@ -183,7 +188,7 @@ append_id_to_list(EmbIdList *list, int32_t i)
 {
     if (list->count >= list->size - 1) {
         list->size += chunk_size;
-        list->data = (EmbVector*)realloc(list->data,
+        list->data = (int32_t*)realloc(list->data,
             (list->size)*sizeof(EmbVector));
     }
     list->data[list->count] = i;
@@ -208,7 +213,7 @@ remove_id_from_list(EmbIdList *list, int32_t position)
     if (list->size <= 0) {
         return;
     }
-    memcpy(list->size + position + 1, list->size + position,
+    memory_copy(list->data + position + 1, list->data + position,
         (list->size - position)*sizeof(int32_t));
     list->size --;
 }
@@ -258,7 +263,7 @@ nanosleep_(int time)
     else {
         Sleep(time/1000000);
     }
-#elif defined(LINUX)
+#elif defined(unix) || defined(__unix__) || defined(__APPLE__)
     usleep(time/1000);
 #endif
 }
@@ -278,10 +283,10 @@ main(int argc, char* argv[])
     int n_files = 0;
     EmbStringTable files_to_open;
     for (int i = 1; i < argc; i++) {
-        if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
+        if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")  ) {
             testing_mode = 1;
         }
-        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
+        else if (string_equal(argv[i], "-h") || string_equal(argv[i], "--help")   ) {
 
     fprintf(stderr,
     " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"
@@ -303,7 +308,7 @@ main(int argc, char* argv[])
            );
     exitApp = true;
     }
-        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
+        else if (string_equal(argv[i], "-v") || string_equal(argv[i], "--version")) {
             version();
         }
         else if (1 /* FIXME: QFile::exists(argv[i]) && emb_valid_file_format(argv[i])*/) {
@@ -311,7 +316,7 @@ main(int argc, char* argv[])
                 printf("ERROR: More files to open than MAX_FILES.");
                 continue;
             }
-            strcpy(files_to_open[n_files], argv[i]);
+            string_copy(files_to_open[n_files], argv[i]);
             n_files++;
         }
         else {
@@ -323,13 +328,8 @@ main(int argc, char* argv[])
         return 1;
     }
 
-    if (!load_data()) {
-        puts("Failed to load data.");
-        return 1;
-    }
-
-    if (!glfwInit()) {
-        puts("Failed to run glfwInit.");
+    if (!init_glfw()) {
+        puts("Failed to initialize.");
         return 2;
     }
 
@@ -370,7 +370,7 @@ argument_checks(ScriptEnv *context, int id)
     int i;
     const char *function = command_data[id].command;
     const char *args = command_data[id].arguments;
-    if (context->argumentCount != strlen(args)) {
+    if (context->argumentCount != string_length(args)) {
         sprintf(s, "%s() requires %d arguments.", function, context->argumentCount);
         prompt_output(s);
         return 0;
@@ -450,14 +450,14 @@ set_real(int key, EmbReal value)
 
 /* . */
 void
-set_str(int key, char *value)
+set_str(int key, const char *value)
 {
     if (settings_data[key].type != SCRIPT_STRING) {
         printf("ERROR: failed to load key %d (%s) as a string.\n", key,
             settings_data[key].key);
         return;
     }
-    strcpy(setting[key].setting.s, value);
+    string_copy(setting[key].setting.s, value);
 }
 
 /* . */
@@ -522,7 +522,7 @@ get_bool(int key)
 
 /* . */
 char *
-translate(const EmbString msg)
+translate(const char *msg)
 {
     return msg;
 }
@@ -532,111 +532,7 @@ create_script_env()
 {
     ScriptEnv *context = (ScriptEnv*)malloc(sizeof(ScriptEnv));
     context->argumentCount = 0;
-    context->n_variables = 0;
     return context;
-}
-
-void
-add_string_variable(ScriptEnv *context, const EmbString label, EmbString s)
-{
-    strcpy(context->variable[context->n_variables].label, label);
-    strcpy(context->variable[context->n_variables].s, s);
-    context->variable[context->n_variables].type = SCRIPT_STRING;
-    context->n_variables++;
-}
-
-void
-add_int_variable(ScriptEnv *context, const EmbString label, int i)
-{
-    strcpy(context->variable[context->n_variables].label, label);
-    context->variable[context->n_variables].i = i;
-    context->variable[context->n_variables].type = SCRIPT_INT;
-    context->n_variables++;
-}
-
-void
-add_real_variable(ScriptEnv *context, const EmbString label, EmbReal r)
-{
-    strcpy(context->variable[context->n_variables].label, label);
-    context->variable[context->n_variables].r = r;
-    context->variable[context->n_variables].type = SCRIPT_REAL;
-    context->n_variables++;
-}
-
-const char *
-script_get_string(ScriptEnv *context, const EmbString label)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            return context->variable[i].s;
-        }
-    }
-    return "ERROR: string not found.";
-}
-
-int
-script_get_int(ScriptEnv *context, const EmbString label)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            return context->variable[i].i;
-        }
-    }
-    return -1;
-}
-
-EmbReal
-script_get_real(ScriptEnv *context, const EmbString label)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            return context->variable[i].r;
-        }
-    }
-    return -1.0;
-}
-
-int
-script_set_string(ScriptEnv *context, const EmbString label, EmbString s)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            strcpy(context->variable[i].s, s);
-            return 1;
-        }
-    }
-    return 0;
-}
-
-int
-script_set_int(ScriptEnv *context, const EmbString label, int x)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            context->variable[i].i = x;
-            return 1;
-        }
-    }
-    return 0;
-}
-
-/* . */
-int
-script_set_real(ScriptEnv *context, const EmbString label, EmbReal r)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            context->variable[i].r = r;
-            return 1;
-        }
-    }
-    return 0;
 }
 
 /* . */
@@ -682,15 +578,15 @@ script_string(EmbString s)
 {
     ScriptValue value;
     value.type = SCRIPT_STRING;
-    strcpy(value.s, s);
+    string_copy(value.s, s);
     return value;
 }
 
 /* These pack the arguments for function calls in the command environment. */
 ScriptEnv *
-add_string_argument(ScriptEnv *context, EmbString s)
+add_string_argument(ScriptEnv *context, const char *s)
 {
-    strcpy(context->argument[context->argumentCount].s, s);
+    string_copy(context->argument[context->argumentCount].s, s);
     context->argument[context->argumentCount].type = SCRIPT_STRING;
     context->argumentCount++;
     return context;
@@ -787,80 +683,39 @@ parse_vector(const char *line, EmbVector *v)
     return 1;
 }
 
-/* FIXME: parse strings arguments with quotes.
+/* NOTE: translation is the repsonisbility of the caller, because some reports
+ * include parts that aren't translated. For example:
  *
- * There are 5 steps to the parsing algorithm:
- *     1. Split the string into string arguments in the style of "argc, argv".
- *     2. Identify the command by the first argument.
- *     3. Process arguments into ScriptValues.
- *     4. Check that the arguments parsed matched the required arguments for that
- *        commands.
- *     5. Call the main function.
+ *     char message[MAX_STRING_LENGTH];
+ *     sprintf(message, "%s: x > %f", translate("Value of X is too small"), x);
+ *     critical_box(translate("Out of Bounds"), message);
  */
- #if 0
-ScriptValue
-command_prompt(ScriptEnv *context, const char *line)
+void
+critical_box(const char *title, const char *text)
 {
-    /* Split arguments into seperate strings. */
-    int i;
-    char args[10][MAX_STRING_LENGTH];
-    char *c;
-    int n_args = 0;
-    int str_pos = 0;
-    for (c=(char*)line; *c; c++) {
-        args[n_args][str_pos] = *c;
-        if (*c == ' ') {
-            args[n_args][str_pos] = 0;
-            n_args++;
-            str_pos = 0;
-        }
-        else {
-            str_pos++;
-        }
-    }
-    args[n_args][str_pos] = 0;
-
-    /* Identify function. */
-    int function = -1;
-    for (i=0; command_data[i].id != -2; i++) {
-        if (!strcmp(command_data[i].icon, args[0])) {
-            function = i;
-            break;
-        }
-    }
-    if (function < 0) {
-        return script_false;
-    }
-
-    /* Check there are enough arguments. */
-    if (strlen(command_data[function].arguments) != n_args) {
-        return script_false;
-    }
-
-    /* Parse arguments into ScriptValues. */
-    if (n_args > 1) {
-        for (i=1; i<n_args; i++) {
-            switch (command_data[function].arguments[i]) {
-            case 'i':
-            case 'b':
-                context = add_int_argument(context, atoi(args[i-1]));
-                break;
-            case 's':
-                context = add_string_argument(context, args[i-1]);
-                break;
-            case 'r':
-                context = add_real_argument(context, atof(args[i-1]));
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    /* Call command's main. */
-    return command_data[function].main(context);
+    messagebox("critical", title, text);
 }
-#endif
+
+/* See critical_box comment. */
+void
+information_box(const char *title, const char *text)
+{
+    messagebox("information", title, text);
+}
+
+/* See critical_box comment. */
+void
+question_box(const char *title, const char *text)
+{
+    messagebox("question", title, text);
+}
+
+/* See critical_box comment. */
+void
+warning_box(const char *title, const char *text)
+{
+    messagebox("warning", title, text);
+}
 
 /* . */
 bool
@@ -887,19 +742,7 @@ valid_rgb(float r, float g, float b)
     return true;
 }
 
-/* Within the state, if a table starts on index i then the end of the table
- * is at index i + state[i].n_leaves - 1.
- *
- * For regular lookups that are expensive we can keep the state variable's index
- * in another variable.
-
-int
-string_array_length(const char *s)
-{
-    int key = get_state_variable(s);
-    return state[key].n_leaves;
-}
- */
+/* . */
 int
 string_array_length(EmbString s[])
 {
@@ -913,54 +756,33 @@ string_array_length(EmbString s[])
     return MAX_TABLE_LENGTH - 1;
 }
 
-/* table_name is stored at global scope in state,
- * so in order to access the 3rd element of table_name="array"
- * FIXME:
+/* Replace strlen to reduce crashes. Has -1 as an error code. */
 int
-load_string_table(toml_table_t* conf, const char *table_name)
+string_length(char *src)
 {
-    int table_index = state_length;
-    toml_array_t* str_table = toml_array_in(conf, table_name);
-    toml_datum_t str;
-    for (int i=0; ; i++) {
-        str = toml_string_at(str_table, i);
-        if (!str.ok) {
-            state[table_index].n_leaves = i;
-            break;
-        }
-        else {
-            if (i>0) {
-                char label[MAX_STRING_LENGTH];
-                sprintf(label, "%s.%d", table_name, i);
-                //add_state_string_variable(label, str.u.s);
-            }
-            else {
-                //add_state_string_variable(table_name, str.u.s);
-            }
+    for (int i=0; i<MAX_LONG_STRING; i++) {
+        if (src[i] == 0) {
+            return i;
         }
     }
-
-    free(str.u.s);
-    return 1;
+    return -1;
 }
- */
-
 
 /* . */
 int
 load_file(const char *fname)
 {
-    int i;
     FILE* file;
-    char error_buffer[200];
-    toml_table_t *conf;
-
-/* FIXME:
     file = fopen(fname, "r");
     if (!file) {
         printf("ERROR: Failed to open \"%s\".\n", fname);
         return 0;
     }
+
+/* FIXME:
+    int i;
+    EmbString error_buffer;
+    toml_table_t *conf;
 
     conf = toml_parse_file(file, error_buffer, sizeof(error_buffer));
     fclose(file);
@@ -1045,7 +867,7 @@ get_command_id(EmbString name)
         if (command_data[i].id == -2) {
             break;
         }
-        if (!strcmp(command_data[i].icon, name)) {
+        if (string_equal(command_data[i].icon, name)) {
             return i;
         }
     }
@@ -1234,7 +1056,7 @@ copy_setting(int key, int dst, int src)
         dst_set->r = src_set->r;
         break;
     case SCRIPT_STRING:
-        strcpy(dst_set->s, src_set->s);
+        string_copy(dst_set->s, src_set->s);
         break;
     case SCRIPT_BOOL:
         dst_set->b = src_set->b;
@@ -1288,23 +1110,6 @@ string_compare(EmbString a, const char *b)
     a[MAX_STRING_LENGTH-1] = 0;
     return 1;
 }
-
-/* . 
-void
-string_copy(EmbString dst, const char *src)
-{
-    for (int i=0; i<MAX_STRING_LENGTH; i++) {
-        dst[i] = src[i];
-        if (!src[i]) {
-            return;
-        }
-    }
-*/
-    /* Ensure there's a null terminaton regardless of string content. */
-/*
-    dst[MAX_STRING_LENGTH-1] = 0;
-}
-*/
 
 /* . */
 int

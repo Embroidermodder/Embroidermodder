@@ -1915,7 +1915,7 @@ function prompt(str)
     if (context->mode == TEXTSINGLE_MODE_JUSTIFY) {
         if (str == "C" || str == "CENTER") {
             context->mode = TEXTSINGLE_MODE_SETGEOM;
-            strcpy(context->textJustify, "Center");
+            string_copy(context->textJustify, "Center");
             obj_add_rubber_text(obj, "TEXT_JUSTIFY", context->textJustify);
             prompt_output(translate("Specify center point of text or [Justify/Setfont]: "));
         }

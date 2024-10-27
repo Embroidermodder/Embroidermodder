@@ -11,7 +11,6 @@
  */
 
 #include <stdio.h>
-#include <string.h>
 
 #include "core.h"
 
@@ -104,7 +103,7 @@ current_layer_changed(EmbString layer)
         return;
     }
     DocumentData *data = doc_data(doc);
-    strcpy(data->curLayer, layer);
+    string_copy(data->curLayer, layer);
 }
 
 /* . */
@@ -128,7 +127,7 @@ current_linetype_changed(EmbString type)
         return;
     }
     DocumentData *data = doc_data(doc);
-    strcpy(data->curLineType, type);
+    string_copy(data->curLineType, type);
 }
 
 /* . */
@@ -140,7 +139,7 @@ current_lineweight_changed(EmbString weight)
         return;
     }
     DocumentData *data = doc_data(doc);
-    strcpy(data->curLineWeight, weight);
+    string_copy(data->curLineWeight, weight);
 }
 
 /* . */

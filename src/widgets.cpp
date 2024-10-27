@@ -1186,40 +1186,6 @@ MainWindow::runCommand()
     }
 }
 
-/* NOTE: translation is the repsonisbility of the caller, because some reports
- * include parts that aren't translated. For example:
- *
- *     char message[MAX_STRING_LENGTH];
- *     sprintf(message, "%s: x > %f", translate("Value of X is too small"), x);
- *     critical_box(translate("Out of Bounds"), message);
- */
-void
-critical_box(const char *title, const char *text)
-{
-    messagebox("critical", title, text);
-}
-
-/* See critical_box comment. */
-void
-information_box(const char *title, const char *text)
-{
-    messagebox("information", title, text);
-}
-
-/* See critical_box comment. */
-void
-question_box(const char *title, const char *text)
-{
-    messagebox("question", title, text);
-}
-
-/* See critical_box comment. */
-void
-warning_box(const char *title, const char *text)
-{
-    messagebox("warning", title, text);
-}
-
 /* . */
 uint32_t
 rgb(uint8_t r, uint8_t g, uint8_t b)
@@ -3863,7 +3829,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
                 if (i == 5) {
                     tick = ruler_h.y - ruler_h.h * medium;
                 }
-                lines[n_lines++] = (QLineF(xf, ruler_h.y, xf, tick));
+                lines[n_lines++] = QLineF(xf, ruler_h.y, xf, tick);
             }
         }
         else {
@@ -3871,7 +3837,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
                 for (int i = 0; i < 12; ++i) {
                     EmbReal xf = x + fraction*i;
                     EmbReal tick = ruler_h.y - ruler_h.h * medium;
-                    lines[n_lines++] = (QLineF(xf, ruler_h.y, xf, tick));
+                    lines[n_lines++] = QLineF(xf, ruler_h.y, xf, tick);
                 }
             }
             else {
@@ -3881,7 +3847,7 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
                     if (i % 4 == 0) {
                         tick = ruler_h.y - ruler_h.h * medium;
                     }
-                    lines[n_lines++] = (QLineF(xf, ruler_h.y, xf, tick));
+                    lines[n_lines++] = QLineF(xf, ruler_h.y, xf, tick);
                 }
             }
         }
@@ -6028,7 +5994,7 @@ MdiWindow::saveBMC()
 void
 MdiWindow::setCurrentFile(QString fileName)
 {
-    strcpy(documents[doc_index]->data->curFile,
+    string_copy(documents[doc_index]->data->curFile,
         qPrintable(QFileInfo(fileName).canonicalFilePath()));
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
@@ -6138,10 +6104,10 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 
     this->setLayout(promptVBoxLayout);
 
-    strcpy(prompt_color_, "#000000"); /* Match --------------------| */
-    strcpy(prompt_selection_bg_color_, "#000000"); /* Match -------| */
-    strcpy(prompt_bg_color_, "#FFFFFF");
-    strcpy(prompt_selection_color_, "#FFFFFF");
+    string_copy(prompt_color_, "#000000"); /* Match --------------------| */
+    string_copy(prompt_selection_bg_color_, "#000000"); /* Match -------| */
+    string_copy(prompt_bg_color_, "#FFFFFF");
+    string_copy(prompt_selection_color_, "#FFFFFF");
     set_str(PROMPT_FONT_FAMILY, "Monospace");
     set_str(PROMPT_FONT_STYLE, "normal");
     set_int(PROMPT_FONT_SIZE, 12);
@@ -6207,8 +6173,8 @@ CmdPrompt::blink()
 void
 set_prompt_text_color(uint32_t color)
 {
-    strcpy(prompt_color_, (char*)qPrintable(QColor(color).name()));
-    strcpy(prompt_selection_bg_color_, (char*)qPrintable(QColor(color).name()));
+    string_copy(prompt_color_, (char*)qPrintable(QColor(color).name()));
+    string_copy(prompt_selection_bg_color_, (char*)qPrintable(QColor(color).name()));
     prompt_update_style();
 }
 
@@ -6216,8 +6182,8 @@ set_prompt_text_color(uint32_t color)
 void
 set_prompt_background_color(uint32_t color)
 {
-    strcpy(prompt_bg_color_, (char*)qPrintable(QColor(color).name()));
-    strcpy(prompt_selection_color_, (char*)qPrintable(QColor(color).name()));
+    string_copy(prompt_bg_color_, (char*)qPrintable(QColor(color).name()));
+    string_copy(prompt_selection_color_, (char*)qPrintable(QColor(color).name()));
     prompt_update_style();
 }
 
@@ -6282,7 +6248,7 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     prefix = defaultPrefix;
     curText = prefix;
 
-    strcpy(lastCmd, "help");
+    string_copy(lastCmd, "help");
     curCmd = "help";
     cmdActive = false;
 
@@ -6310,7 +6276,7 @@ void
 prompt_end_command(void)
 {
     debug_message("prompt_end_command");
-    strcpy(lastCmd, qPrintable(curCmd));
+    string_copy(lastCmd, qPrintable(curCmd));
     cmdActive = false;
     rapidFireEnabled = false;
     stop_blinking();
@@ -6363,7 +6329,7 @@ process_input(char rapidChar)
         int index = find_in_map(aliasHash, n_aliases, qPrintable(cmdtxt));
         if (index >= 0) {
             cmdActive = true;
-            strcpy(lastCmd, qPrintable(curCmd));
+            string_copy(lastCmd, qPrintable(curCmd));
             curCmd = QString(aliasHash[index].value);
             append_history(qPrintable(curText));
             run_command_prompt(aliasHash[index].value);
@@ -6688,7 +6654,7 @@ make_application(int argc, char* argv[])
 
     EmbStringTable filesToOpen;
     for (int i=0; i<argc; i++) {
-        strcpy(filesToOpen[i], argv[i]);
+        string_copy(filesToOpen[i], argv[i]);
     }
     
     _main = new MainWindow();
@@ -7075,11 +7041,11 @@ MainWindow::recentMenuAboutToShow(void)
     }
     /* Ensure the list only has max amount of entries. */
     if (get_int(OPENSAVE_RECENT_MAX_FILES) < MAX_FILES) {
-        strcpy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], "END");
+        string_copy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], "END");
     }
     else {
         set_int(OPENSAVE_RECENT_MAX_FILES, MAX_FILES - 1);
-        strcpy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], "END");
+        string_copy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], "END");
     }
 }
 
@@ -7159,12 +7125,12 @@ open_file(bool recent, EmbString recentFile)
     EmbStringTable files;
     int n_files = 0;
     bool preview = get_bool(OPENSAVE_OPEN_THUMBNAIL);
-    strcpy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
+    string_copy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
 
     /* Check to see if this from the recent files list. */
     if (recent) {
-        strcpy(files[0], (char*)qPrintable(recentFile));
-        strcpy(files[1], end_symbol);
+        string_copy(files[0], (char*)qPrintable(recentFile));
+        string_copy(files[1], end_symbol);
         open_filesSelected(files);
     }
     else if (!preview) {
@@ -7232,7 +7198,7 @@ open_filesSelected(EmbStringTable filesToOpen)
             /* Prevent duplicate entries in the recent files list. */
             if (!string_list_contains(recent_files, filesToOpen[i])) {
                 for (int j=0; j<MAX_FILES-1; j++) {
-                    strcpy(recent_files[j], recent_files[j+1]);
+                    string_copy(recent_files[j], recent_files[j+1]);
                 }
                 string_copy(recent_files[0], filesToOpen[i]);
             }
@@ -7272,7 +7238,7 @@ save_as_file(void)
     }
 
     DocumentData *data = doc_data(doc);
-    strcpy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
+    string_copy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
     QString fileName = QFileDialog::getSaveFileName(_main,
         translate("Save As"), QString(open_filesPath), formatFilterSave);
     
@@ -7677,13 +7643,6 @@ write_settings(void)
 
 /* . */
 void
-settings_prompt(void)
-{
-    settings_dialog("Prompt");
-}
-
-/* . */
-void
 settings_dialog(const char *showTab)
 {
     Settings_Dialog dialog(_main, showTab, _main);
@@ -7781,7 +7740,9 @@ create_all_actions(void)
 
 
 /* TODO: Alphabetic/Categorized TabWidget */
-
+/* TODO: Load precisionAngle and precisionLength from settings and provide
+ * function for updating from settings.
+ */
 PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     iconDir = iconDirectory;
@@ -7791,8 +7752,8 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
 
     pickAdd = pickAddMode;
 
-    precisionAngle = 0; /* TODO: Load this from settings and provide function for updating from settings */
-    precisionLength = 4; /* TODO: Load this from settings and provide function for updating from settings */
+    precisionAngle = 0;
+    precisionLength = 4;
 
     signalMapper = new QSignalMapper(this);
 
@@ -8687,7 +8648,7 @@ Settings_Dialog::createTabGeneral()
 
     QLabel* labelLanguage = new QLabel(translate("Language (Requires Restart)"), groupBoxLanguage);
     QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
-    strcpy(setting[GENERAL_LANGUAGE].dialog.s,
+    string_copy(setting[GENERAL_LANGUAGE].dialog.s,
         qPrintable(QString(get_str(GENERAL_LANGUAGE)).toLower()));
     comboBoxLanguage->addItem("Default");
     comboBoxLanguage->addItem("System");
@@ -9657,7 +9618,7 @@ Settings_Dialog::chooseGeneralMdiBackgroundLogo()
             translate("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
-            strcpy(setting[GENERAL_MDI_BG_LOGO].accept.s, qPrintable(selectedImage));
+            string_copy(setting[GENERAL_MDI_BG_LOGO].accept.s, qPrintable(selectedImage));
         }
 
         /* Update immediately so it can be previewed */
@@ -9676,7 +9637,7 @@ Settings_Dialog::chooseGeneralMdiBackgroundTexture()
             translate("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
-            strcpy(setting[GENERAL_MDI_BG_TEXTURE].accept.s, qPrintable(selectedImage));
+            string_copy(setting[GENERAL_MDI_BG_TEXTURE].accept.s, qPrintable(selectedImage));
         }
 
         /* Update immediately so it can be previewed */
@@ -9724,7 +9685,7 @@ Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
         else {
             QString s;
             s = QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).remove("*." + format, Qt::CaseInsensitive);
-            strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, qPrintable(s));
+            string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, qPrintable(s));
         }
         /* setting[OPENSAVE_USE_CUSTOM_FILTER].dialog.s = checked; */ /* TODO */
     }
@@ -9734,14 +9695,14 @@ void
 Settings_Dialog::buttonCustomFilterSelectAllClicked()
 {
     emit buttonCustomFilterSelectAll(true);
-    strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "supported");
+    string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "supported");
 }
 
 void
 Settings_Dialog::buttonCustomFilterClearAllClicked()
 {
     emit buttonCustomFilterClearAll(false);
-    strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "");
+    string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "");
 }
 
 /* . */

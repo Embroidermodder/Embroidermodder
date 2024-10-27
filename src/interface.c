@@ -68,6 +68,22 @@ char prompt_text[50][MAX_STRING_LENGTH] = {
 
 int n_prompt_lines = 3;
 
+/* . */
+int
+init_glfw(void)
+{
+    if (!load_data()) {
+        puts("Failed to load data.");
+        return 0;
+    }
+
+    if (!glfwInit()) {
+        puts("Failed to run glfwInit.");
+        return 0;
+    }
+    return 1;
+}
+
 /* Check this. */
 uint32_t
 RGB(uint8_t r, uint8_t g, uint8_t b)
@@ -199,8 +215,8 @@ make_menubar_button(NVGcontext *vg, int x, int y, char *text, float *bounds)
     button.rect = emb_rect(x, y, w, 30);
     button.color = toolbar_button_color;
     button.text_color = toolbar_text;
-    strcpy(button.text, text);
-    strcpy(button.font, "sans");
+    string_copy(button.text, text);
+    string_copy(button.font, "sans");
     button.state = 0;
     return button;
 }
@@ -213,8 +229,8 @@ make_toolbar_button(int x, int y, char *text)
     button.rect = emb_rect(x, y, icon_size, icon_size);
     button.color = toolbar_button_color;
     button.text_color = toolbar_text;
-    strcpy(button.text, text);
-    strcpy(button.font, "icons");
+    string_copy(button.text, text);
+    string_copy(button.font, "icons");
     button.state = 0;
     return button;
 }

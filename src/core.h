@@ -21,7 +21,6 @@ extern "C" {
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <math.h>
 
 #include "../extern/libembroidery/embroidery.h"
 
@@ -45,13 +44,11 @@ typedef struct ScriptValue_ {
 } ScriptValue;
 
 typedef struct ScriptEnv_ {
-    ScriptValue *variable;
-    int n_variables;
+    ScriptValue argument[MAX_ARGS];
+    int argumentCount;
     int context;
     int mode;
     bool firstRun;
-    ScriptValue argument[MAX_ARGS];
-    int argumentCount;
 } ScriptEnv;
 
 typedef struct Command_ {
@@ -443,7 +440,8 @@ typedef struct State_ {
 } State;
 
 /* -------------------------------- Scripting ---------------------------- */
-ScriptEnv *create_script_env();
+
+ScriptEnv *create_script_env(void);
 void free_script_env(ScriptEnv *);
 ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
 ScriptValue run_command(ScriptEnv *context, const char *cmd);
@@ -452,7 +450,7 @@ ScriptValue script_bool(bool b);
 ScriptValue script_int(int i);
 ScriptValue script_real(EmbReal r);
 ScriptValue script_string(EmbString s);
-ScriptValue command_prompt(ScriptEnv *context, EmbString line);
+ScriptValue command_prompt(ScriptEnv *context, const char *line);
 
 EmbVector find_mouse_snap_point(EmbVectorList *snap_points, EmbVector mouse_point);
 
@@ -468,7 +466,7 @@ bool id_list_contains(EmbIdList *list, int32_t);
 void copy_object_list(EmbIdList *dst, EmbIdList *src);
 void free_id_list(EmbIdList *);
 
-ScriptEnv *add_string_argument(ScriptEnv *context, EmbString s);
+ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
 ScriptEnv *add_real_argument(ScriptEnv *context, EmbReal r);
 ScriptEnv *add_int_argument(ScriptEnv *context, int i);
 
@@ -477,25 +475,13 @@ void copy_setting(int key, int dst, int src);
 
 void set_int(int key, int value);
 void set_real(int key, EmbReal value);
-void set_str(int key, EmbString value);
+void set_str(int key, const char *value);
 void set_bool(int key, bool value);
 
 int get_int(int key);
 EmbReal get_real(int key);
 char *get_str(int key);
 bool get_bool(int key);
-
-void add_string_variable(ScriptEnv *context, const EmbString label, EmbString s);
-void add_int_variable(ScriptEnv *context, const EmbString label, int i);
-void add_real_variable(ScriptEnv *context, const EmbString label, EmbReal i);
-
-const char *script_get_string(ScriptEnv *context, const EmbString label);
-int script_get_int(ScriptEnv *context, const EmbString label);
-EmbReal script_get_real(ScriptEnv *context, const EmbString label);
-
-int script_set_string(ScriptEnv *context, const EmbString label, EmbString s);
-int script_set_int(ScriptEnv *context, const EmbString label, int i);
-int script_set_real(ScriptEnv *context, const EmbString label, EmbReal r);
 
 void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, int id);
@@ -517,7 +503,6 @@ int load_settings(const char *appDir, const char *configDir);
 int save_settings(EmbString appDir, EmbString configDir);
 
 int get_command_id(EmbString );
-int get_state_variable(EmbString key);
 
 EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 
@@ -531,10 +516,10 @@ void warning_box(const char *title, const char *text);
 void critical_box(const char *title, const char *text);
 void question_box(const char *title, const char *text);
 
-const char *get_current_layer();
-uint32_t get_current_color();
-const char *get_current_line_type();
-const char *get_current_line_weight();
+const char *get_current_layer(void);
+uint32_t get_current_color(void);
+const char *get_current_line_type(void);
+const char *get_current_line_weight(void);
 
 void statusbar_toggle(EmbString key, bool on);
 void zoom_extents_all_sub_windows(void);
@@ -711,7 +696,7 @@ void open_recent_file(void);
 void save_file(void);
 int save_as_file(void);
 void update_interface(void);
-void window_menu_about_to_show();
+void window_menu_about_to_show(void);
 void hide_unimplemented(void);
 void start_blinking(void);
 void stop_blinking(void);
@@ -720,7 +705,7 @@ void move_action(void);
 
 void nanosleep_(int);
 
-void native_blink_prompt();
+void native_blink_prompt(void);
 
 void check_box_tip_of_the_day_changed(int checked);
 void button_tip_of_the_day_clicked(int button);
@@ -749,7 +734,7 @@ ScriptValue previewon_command(ScriptEnv *context);
 ScriptValue sandbox_command(ScriptEnv *context);
 ScriptValue set_command(ScriptEnv *context);
 
-ScriptValue native_redo();
+ScriptValue native_redo(void);
 
 void set_mouse_coord(EmbReal x, EmbReal y);
 
@@ -759,11 +744,11 @@ void set_background_color(uint8_t r, uint8_t g, uint8_t b);
 void set_cross_hair_color(uint8_t r, uint8_t g, uint8_t b);
 void set_grid_color(uint8_t r, uint8_t g, uint8_t b);
 
-void native_clear_rubber();
-bool native_allow_rubber();
+void native_clear_rubber(void);
+bool native_allow_rubber(void);
 void native_spare_rubber(int64_t id);
 
-void native_delete_selected();
+void native_delete_selected(void);
 void native_cut_selected(EmbReal x, EmbReal y);
 void native_copy_selected(EmbReal x, EmbReal y);
 void native_paste_selected(EmbReal x, EmbReal y);
@@ -776,13 +761,13 @@ void set_cursor_shape(EmbString shape);
 double native_calculate_distance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 double native_perpendicular_distance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
-double native_q_snap_x();
-double native_q_snap_y();
+double native_q_snap_x(void);
+double native_q_snap_y(void);
 
-void enable_lwt();
-void disable_lwt();
-void enable_real();
-void disable_real();
+void enable_lwt(void);
+void disable_lwt(void);
+void enable_real(void);
+void disable_real(void);
 
 void create_details_dialog(void);
 
@@ -798,12 +783,12 @@ void toggle_ruler(void);
 void toggle_lwt(void);
 
 /* Help Menu */
-void tip_of_the_day();
+void tip_of_the_day(void);
 void button_tip_of_the_day_clicked(int);
 void check_box_tip_of_the_day_changed(int);
-void help();
-void changelog();
-void whats_this_context_help();
+void help(void);
+void changelog(void);
+void whats_this_context_help(void);
 
 int make_application(int argc, char* argv[]);
 
@@ -958,7 +943,7 @@ void doc_scale(int32_t doc_id, EmbReal s);
 void doc_begin_macro(int32_t doc, EmbString s);
 void doc_end_macro(int32_t doc);
 
-void update_color_linetype_lineweight();
+void update_color_linetype_lineweight(void);
 
 void rotate_action(void);
 void scale_action(void);
@@ -987,6 +972,8 @@ void append_history(const char *txt);
 
 /* -------------------------------- Interface ------------------------------ */
 
+int init_glfw(void);
+
 void update_editors(int32_t id);
 void edit_field(int32_t id, const char *objName, const char *text);
 
@@ -1012,6 +999,8 @@ void emb_string(EmbString s, const char *str);
 bool string_equal(EmbString a, const char *b);
 int string_compare(EmbString a, const char *b);
 void string_copy(EmbString dst, const char *src);
+int string_length(char *src);
+void memory_copy(void *src, void *dst, size_t length);
 int string_array_length(EmbString s[]);
 int string_list_contains(EmbStringTable list, EmbString entry);
 int find_in_map(StringMap *hash, int length, const char *key);
