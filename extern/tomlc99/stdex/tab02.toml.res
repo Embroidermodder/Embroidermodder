@@ -1,9 +1,0 @@
-{
-  dog = {
-    tater.man = {
-      type = {
-        name = "pug",
-      },
-    },
-  },
-}

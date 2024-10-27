@@ -1,6 +1,0 @@
-#! /bin/sh
-
-cd /usr/share/embroidermodder2
-./embroidermodder2 $@
-
-
