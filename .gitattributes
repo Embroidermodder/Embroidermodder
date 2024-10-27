@@ -1,6 +1,0 @@
-# Don't include documentation in code statistics.
-embroidermodder2/help/** linguist-documentation
-
-# Ignore these directories.
-extern/** -linguist-detectable
-embroidermodder2/samples/** -linguist-detectable
