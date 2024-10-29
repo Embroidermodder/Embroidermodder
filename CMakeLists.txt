@@ -87,6 +87,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/document.c
 	${SRC}/interface.c
 	${SRC}/geometry.c
+	${SRC}/grip.c
 	${SRC}/objects.c
 	${SRC}/properties.c
 	${SRC}/settings.c

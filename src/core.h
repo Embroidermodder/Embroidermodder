@@ -1097,6 +1097,13 @@ void obj_set_text_overline(ObjectCore *obj, bool val);
 void obj_set_text_backward(ObjectCore *obj, bool val);
 void obj_set_text_upside_down(ObjectCore *obj, bool val);
 
+void obj_move_by(int32_t id, EmbVector delta);
+int32_t obj_find_index(int32_t id, EmbVector delta);
+void obj_update_rubber_grip(uint32_t obj);
+
+EmbVectorList *all_grip_points(int32_t obj_id);
+EmbVector mouse_snap_point(int32_t obj_id, EmbVector mousePoint);
+
 /* ---------------------------- Global Variables --------------------------- */
 
 extern Command command_data[MAX_COMMANDS];

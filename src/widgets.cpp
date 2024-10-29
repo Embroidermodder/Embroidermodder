@@ -184,8 +184,7 @@ QToolButton* createToolButtonPickAdd(void);
 
 void create_statusbar(MainWindow* mw);
 
-MdiWindow* activeMdiWindow(void);
-QUndoStack* activeUndoStack(void);
+QUndoStack* active_undo_stack(void);
 
 QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
 QIcon create_icon(QString icon);
@@ -218,7 +217,6 @@ double  obj_line_weight(Object* obj);
 QPainterPath obj_path(Object* obj);
 
 void obj_update_rubber(uint32_t obj, QPainter* painter);
-void obj_update_rubber_grip(uint32_t obj, QPainter *painter);
 void obj_update_leader(Object *obj);
 void obj_update_path(Object *obj);
 void obj_update_path_r(Object *obj, QPainterPath p);
@@ -234,8 +232,6 @@ void obj_set_line(Object *obj, QLineF li);
 void obj_set_line(Object *obj, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
 void obj_set_path(Object *obj, QPainterPath p);
-
-int obj_find_index(Object *obj, EmbVector point);
 
 void obj_set_color(Object *obj, const QColor& color);
 void obj_set_color_rgb(Object *obj, QRgb rgb);
@@ -426,6 +422,7 @@ public:
     QPen objPen;
     QPen lwtPen;
     QLineF objLine;
+    QPainter* obj_painter;
 
     QPainterPath textPath;
     QPainterPath lineStylePath;
@@ -435,8 +432,6 @@ public:
     Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);
     ~Object() { free_object(core); }
 
-    EmbVectorList *allGripPoints();
-    EmbVector mouseSnapPoint(EmbVector mousePoint);
     void gripEdit(EmbVector before, EmbVector after);
     QPainterPath shape() const { return path(); }
 
@@ -530,25 +525,25 @@ private:
 
 private slots:
 
-    void checkBoxCustomFilterStateChanged(int);
-    void comboBoxIconSizeCurrentIndexChanged(int);
-    void chooseGeneralMdiBackgroundLogo();
-    void chooseGeneralMdiBackgroundTexture();
-    void buttonCustomFilterSelectAllClicked();
-    void buttonCustomFilterClearAllClicked();
-    void comboBoxRulerMetricCurrentIndexChanged(int);
-    void buttonQSnapSelectAllClicked();
-    void buttonQSnapClearAllClicked();
-    void comboBoxQSnapLocatorColorCurrentIndexChanged(int);
-    void comboBoxSelectionCoolGripColorCurrentIndexChanged(int);
-    void comboBoxSelectionHotGripColorCurrentIndexChanged(int);
+    void check_custom_filter_changed(int);
+    void combo_icon_size_index_changed(int);
+    void choose_mdi_bg_logo(void);
+    void chooseGeneralMdiBackgroundTexture(void);
+    void button_custom_filter_select_all_clicked(void);
+    void button_custom_filter_clear_all_clicked(void);
+    void combo_ruler_metric_index_changed(int);
+    void buttonQSnapSelectAllClicked(void);
+    void buttonQSnapClearAllClicked(void);
+    void combo_qsnap_locator_color_changed(int);
+    void combo_cool_grip_color_changed(int);
+    void combobox_hot_grip_color_index_changed(int);
 
-    void acceptChanges();
-    void rejectChanges();
+    void acceptChanges(void);
+    void rejectChanges(void);
 
 signals:
-    void buttonCustomFilterSelectAll(bool);
-    void buttonCustomFilterClearAll(bool);
+    void button_custom_filter_select_all(bool);
+    void button_custom_filter_clear_all(bool);
     void buttonQSnapSelectAll(bool);
     void buttonQSnapClearAll(bool);
 };
@@ -733,6 +728,210 @@ protected:
     virtual void resizeEvent(QResizeEvent*);
     void closeEvent(QCloseEvent *event);
 };
+
+/* ----------------------------- Qt Wrapper ------------------------------ */
+
+QWidget *get_widget(EmbString key);
+void create_label(QGroupBox *groupbox, const char *key, const char *text);
+void set_grid_layout(QGroupBox *groupbox, EmbStringTable table);
+int find_widget_list(const char *key);
+Object *get_obj(int key);
+
+/* . */
+int32_t
+active_document(void)
+{
+    debug_message("active_document()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        return mdiWin->doc_index;
+    }
+    return -1;
+}
+
+/* FIXME: */
+QUndoStack*
+active_undo_stack(void)
+{
+    return NULL;
+    int32_t doc_index = active_document();
+    if (doc_index >= 0) {
+        QUndoStack* u = documents[doc_index]->undoStack;
+        return u;
+    }
+    return 0;
+}
+
+/* . */
+int
+find_widget_list(const char *key)
+{
+    for (int i=0; i<n_widgets; i++) {
+        if (string_equal(widget_list[i].key, key)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Object *
+get_obj(int key)
+{
+    int index = find_int_map(obj_index, key);
+    if (index >= 0) {
+        return object_list[index];
+    }
+    return NULL;
+}
+
+/* . */
+ObjectCore *
+obj_get_core(uint32_t id)
+{
+    return get_obj(id)->core;
+}
+
+/* . */
+QWidget *
+get_widget(EmbString key)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Failed to find widget.");
+        debug_message(key);
+    }
+    switch (widget_list[index].type) {
+    case WIDGET_LABEL:
+        return widget_list[index].label;
+    case WIDGET_SPINBOX:
+        return widget_list[index].spinbox;
+    case WIDGET_CHECKBOX:
+        return widget_list[index].checkbox;
+    case WIDGET_COMBOBOX:
+        return widget_list[index].combobox;
+    case WIDGET_GROUP_BOX:
+        return widget_list[index].groupbox;
+    default:
+        break;
+    }
+    debug_message("Failed to set widget's visibility.");
+    debug_message((char*)key);
+    return NULL;
+}
+
+/* . */
+void
+set_visibility(EmbString key, bool visibility)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Failed to find widget.");
+        debug_message(key);
+    }
+    switch (widget_list[index].type) {
+    case WIDGET_LABEL:
+        widget_list[index].label->setVisible(visibility);
+        break;
+    case WIDGET_SPINBOX:
+        widget_list[index].spinbox->setVisible(visibility);
+        break;
+    case WIDGET_CHECKBOX:
+        widget_list[index].checkbox->setVisible(visibility);
+        break;
+    case WIDGET_COMBOBOX:
+        widget_list[index].combobox->setVisible(visibility);
+        break;
+    case WIDGET_GROUP_BOX:
+        widget_list[index].groupbox->setVisible(visibility);
+        break;
+    default:
+        debug_message("Failed to set widget's visibility.");
+        debug_message((char*)key);
+        break;
+    }
+}
+
+/* . */
+void
+set_visibility_group(EmbStringTable keylist, bool visibility)
+{
+    int i;
+    int n = string_array_length(keylist);
+    for (i=0; i<n; i++) {
+        set_visibility(keylist[i], visibility);
+    }
+}
+
+/* . */
+void
+set_enabled(EmbString key, bool enabled)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Failed to find widget.");
+        debug_message(key);
+    }
+    switch (widget_list[index].type) {
+    case WIDGET_LABEL:
+        widget_list[index].label->setEnabled(enabled);
+        break;
+    case WIDGET_SPINBOX:
+        widget_list[index].spinbox->setEnabled(enabled);
+        break;
+    case WIDGET_CHECKBOX:
+        widget_list[index].checkbox->setEnabled(enabled);
+        break;
+    case WIDGET_COMBOBOX:
+        widget_list[index].combobox->setEnabled(enabled);
+        break;
+    case WIDGET_GROUP_BOX:
+        widget_list[index].groupbox->setEnabled(enabled);
+        break;
+    default:
+        debug_message("Failed to enable/disable the variable");
+        debug_message((char*)key);
+        break;
+    }
+}
+
+/* . */
+void
+set_enabled_group(EmbStringTable keylist, bool enabled)
+{
+    int i;
+    int n = string_array_length(keylist);
+    for (i=0; i<n; i++) {
+        set_enabled(keylist[i], enabled);
+    }
+}
+
+void
+create_label(QGroupBox *groupbox, const char *key, const char *text)
+{
+    QLabel* label = new QLabel(translate(text), groupbox);
+    string_copy(widget_list[n_widgets].key, key);
+    widget_list[n_widgets].type = WIDGET_LABEL;
+    widget_list[n_widgets].label = label;
+}
+
+void
+set_grid_layout(QGroupBox *groupbox, EmbStringTable table)
+{
+    QGridLayout* layout = new QGridLayout(groupbox);
+    for (int i=0; !string_equal(table[2*i], "END"); i++) {
+        if (strlen(table[2*i]) > 0) {
+            QWidget *widget = get_widget(table[2*i]);
+            layout->addWidget(widget, i, 0, Qt::AlignLeft);
+        }
+        if (strlen(grid_layout[2*i+1]) > 0) {
+            QWidget *widget = get_widget(table[2*i+1]);
+            layout->addWidget(widget, i, 1, Qt::AlignRight);
+        }
+    }
+    groupbox->setLayout(layout);
+}
+
+/* ----------------------------------------------------------------------- */
 
 /* . */
 void
@@ -929,42 +1128,6 @@ icon_resize(int iconSize)
     /* TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size. */
 
     set_int(GENERAL_ICON_SIZE, iconSize);
-}
-
-/* . */
-MdiWindow*
-activeMdiWindow(void)
-{
-    debug_message("activeMdiWindow()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    return mdiWin;
-}
-
-/* . */
-int32_t
-active_document(void)
-{
-    debug_message("active_document()");
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        return mdiWin->doc_index;
-    }
-    return -1;
-}
-
-/* . */
-QUndoStack*
-activeUndoStack(void)
-{
-    debug_message("activeUndoStack()");
-    //FIXME
-    return NULL;
-    int32_t doc_index = active_document();
-    if (doc_index >= 0) {
-        QUndoStack* u = documents[doc_index]->undoStack;
-        return u;
-    }
-    return 0;
 }
 
 /* . */
@@ -1194,35 +1357,6 @@ rgb(uint8_t r, uint8_t g, uint8_t b)
 }
 
 /* . */
-int
-find_widget_list(const char *key)
-{
-    for (int i=0; i<n_widgets; i++) {
-        if (string_equal(widget_list[i].key, key)) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-Object *
-get_obj(int key)
-{
-    int index = find_int_map(obj_index, key);
-    if (index >= 0) {
-        return object_list[index];
-    }
-    return NULL;
-}
-
-/* . */
-ObjectCore *
-obj_get_core(uint32_t id)
-{
-    return get_obj(id)->core;
-}
-
-/* . */
 void
 doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode)
 {
@@ -1233,7 +1367,7 @@ doc_undoable_add_obj(int32_t doc_index, uint32_t id, int rubberMode)
         doc_update(doc_index);
     }
     else {
-        QUndoStack* stack = activeUndoStack();
+        QUndoStack* stack = active_undo_stack();
         UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
             obj->core->OBJ_NAME, obj, doc_index, 0);
         stack->push(cmd);
@@ -1753,19 +1887,20 @@ obj_path(Object* obj)
 
 /* . */
 void
-obj_draw_rubber_line(Object *obj, const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
+obj_draw_rubber_line(Object *obj, const QLineF& rubLine, const char* colorFromScene)
 {
-    if (painter) {
-        QGraphicsScene* objScene = obj->scene();
-        if (!objScene) {
-            return;
-        }
-        QPen colorPen = obj->objPen;
-        colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
-        painter->setPen(colorPen);
-        painter->drawLine(rubLine);
-        painter->setPen(obj->objPen);
+    if (!obj->obj_painter) {
+        return;
     }
+    QGraphicsScene* objScene = obj->scene();
+    if (!objScene) {
+        return;
+    }
+    QPen colorPen = obj->objPen;
+    colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
+    obj->obj_painter->setPen(colorPen);
+    obj->obj_painter->drawLine(rubLine);
+    obj->obj_painter->setPen(obj->objPen);
 }
 
 /* . */
@@ -1842,12 +1977,13 @@ obj_draw_rubber_grip(uint32_t obj_id, QPainter *painter)
 
 /* . */
 void
-obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
+obj_update_rubber_grip(uint32_t obj_id)
 {
+    Object *obj = get_obj(obj_id);
+    QPainter *painter = obj->obj_painter;
     if (!painter) {
         return;
     }
-    Object *obj = get_obj(obj_id);
     EmbVector gripPoint = obj_rubber_point(obj_id, "GRIP_POINT");
     switch (obj->core->geometry->type) {
     case EMB_ARC: {
@@ -1921,7 +2057,7 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
         int elemCount = obj->normalPath.elementCount();
         EmbVector gripPoint = obj_rubber_point(obj_id, "GRIP_POINT");
         if (obj->core->gripIndex == -1) {
-            obj->core->gripIndex = obj_find_index(obj, gripPoint);
+            obj->core->gripIndex = obj_find_index(obj_id, gripPoint);
                 if (obj->core->gripIndex == -1) {
                     return;
                 }
@@ -1956,7 +2092,7 @@ obj_update_rubber_grip(uint32_t obj_id, QPainter *painter)
             int elemCount = obj->normalPath.elementCount();
             EmbVector gripPoint = obj_rubber_point(obj_id, "GRIP_POINT");
             if (obj->core->gripIndex == -1) {
-                obj->core->gripIndex = obj_find_index(obj, gripPoint);
+                obj->core->gripIndex = obj_find_index(obj_id, gripPoint);
             }
             if (obj->core->gripIndex == -1) {
                 return;
@@ -2423,8 +2559,9 @@ obj_save_path_list(Object *obj)
 
 /* . */
 int
-obj_find_index(Object *obj, EmbVector point)
+obj_find_index(int32_t obj_id, EmbVector point)
 {
+    Object *obj = get_obj(obj_id);
     int elemCount = obj->normalPath.elementCount();
     /* NOTE: Points here are in item coordinates */
     EmbVector itemPoint = map_from_scene(obj, point);
@@ -2453,6 +2590,7 @@ void
 obj_update_rubber(uint32_t obj_id, QPainter* painter)
 {
     Object *obj = get_obj(obj_id);
+    ObjectCore *core = obj->core;
     todo("Arc,Path Rubber Modes");
     switch (obj->core->rubber_mode) {
     case RUBBER_CIRCLE_1P_RAD: {
@@ -2461,13 +2599,11 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector itemCenterPoint = obj_map_rubber(obj_id, "CIRCLE_CENTER");
         EmbVector itemQSnapPoint = obj_map_rubber(obj_id, "CIRCLE_RADIUS");
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
-        obj_set_center(obj->core, sceneCenterPoint);
+        obj_set_center(core, sceneCenterPoint);
         QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
         EmbReal radius = sceneLine.length();
-        emb_set_radius(obj->core->geometry, radius);
-        if (painter) {
-            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
+        emb_set_radius(core->geometry, radius);
+        obj_draw_rubber_line(obj, itemLine, "VIEW_COLOR_CROSSHAIR");
         obj_update_path(obj);
         break;
     }
@@ -2477,13 +2613,11 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector itemCenterPoint = obj_map_rubber(obj_id, "CIRCLE_CENTER");
         EmbVector itemQSnapPoint = obj_map_rubber(obj_id, "CIRCLE_DIAMETER");
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
-        obj_set_center(obj->core, sceneCenterPoint);
+        obj_set_center(core, sceneCenterPoint);
         QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
         EmbReal diameter = sceneLine.length();
-        emb_set_diameter(obj->core->geometry, diameter);
-        if (painter) {
-            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
+        emb_set_diameter(core->geometry, diameter);
+        obj_draw_rubber_line(obj, itemLine, "VIEW_COLOR_CROSSHAIR");
         obj_update_path(obj);
         break;
     }
@@ -2491,9 +2625,9 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneTan1Point = obj_rubber_point(obj_id, "CIRCLE_TAN1");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "CIRCLE_TAN2");
         QLineF sceneLine(to_qpointf(sceneTan1Point), to_qpointf(sceneQSnapPoint));
-        obj_set_center(obj->core, to_emb_vector(sceneLine.pointAt(0.5)));
+        obj_set_center(core, to_emb_vector(sceneLine.pointAt(0.5)));
         EmbReal diameter = sceneLine.length();
-        emb_set_diameter(obj->core->geometry, diameter);
+        emb_set_diameter(core->geometry, diameter);
         obj_update_path(obj);
         break;
     }
@@ -2504,9 +2638,9 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         g.object.arc.end = obj_rubber_point(obj_id, "CIRCLE_TAN3");
         g.type = EMB_ARC;
         EmbVector center = emb_arc_center(g);
-        obj_set_center(obj->core, center);
+        obj_set_center(core, center);
         EmbReal radius = emb_vector_distance(center, g.object.arc.end);
-        emb_set_radius(obj->core->geometry, radius);
+        emb_set_radius(core->geometry, radius);
         obj_update_path(obj);
         break;
     }
@@ -2514,17 +2648,15 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneStartPoint = obj_rubber_point(obj_id, "DIMLEADER_LINE_START");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "DIMLEADER_LINE_END");
 
-        obj_set_end_point_1(obj->core, sceneStartPoint);
-        obj_set_end_point_2(obj->core, sceneQSnapPoint);
+        obj_set_end_point_1(core, sceneStartPoint);
+        obj_set_end_point_2(core, sceneQSnapPoint);
         break;
     }
     case RUBBER_ELLIPSE_LINE: {
         EmbVector itemLinePoint1  = obj_map_rubber(obj_id, "ELLIPSE_LINE_POINT1");
         EmbVector itemLinePoint2  = obj_map_rubber(obj_id, "ELLIPSE_LINE_POINT2");
         QLineF itemLine(to_qpointf(itemLinePoint1), to_qpointf(itemLinePoint2));
-        if (painter) {
-            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
+        obj_draw_rubber_line(obj, itemLine, "VIEW_COLOR_CROSSHAIR");
         obj_update_path(obj);
         break;
     }
@@ -2552,9 +2684,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector itemCenterPoint = obj_map_rubber(obj_id, "ELLIPSE_CENTER");
         EmbVector itemAxis2Point2 = obj_map_rubber(obj_id, "ELLIPSE_AXIS2_POINT2");
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemAxis2Point2));
-        if (painter) {
-            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
+        obj_draw_rubber_line(obj, itemLine, "VIEW_COLOR_CROSSHAIR");
         obj_update_path(obj);
         break;
     }
@@ -2574,16 +2704,14 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         norm.intersects(line, &iPoint);
         EmbReal ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint)) * 2.0;
 
-        obj_set_center(obj->core, sceneCenterPoint);
+        obj_set_center(core, sceneCenterPoint);
         obj->setObjectSize(ellipseWidth, ellipseHeight);
         obj->setRotation(-ellipseRot);
 
         EmbVector itemCenterPoint = obj_map_rubber(obj_id, "ELLISPE_CENTER");
         EmbVector itemAxis2Point2 = obj_map_rubber(obj_id, "ELLIPSE_AXIS2_POINT2");
         QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemAxis2Point2));
-        if (painter) {
-            obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
+        obj_draw_rubber_line(obj, itemLine, "VIEW_COLOR_CROSSHAIR");
         obj_update_path(obj);
         break;
     }
@@ -2599,10 +2727,10 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneStartPoint = obj_rubber_point(obj_id, "LINE_START");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "LINE_END");
 
-        obj_set_end_point_1(obj->core, sceneStartPoint);
-        obj_set_end_point_2(obj->core, sceneQSnapPoint);
+        obj_set_end_point_1(core, sceneStartPoint);
+        obj_set_end_point_2(core, sceneQSnapPoint);
 
-        obj_draw_rubber_line(obj, obj_line(obj), painter, "VIEW_COLOR_CROSSHAIR");
+        obj_draw_rubber_line(obj, obj_line(obj), "VIEW_COLOR_CROSSHAIR");
         break;
     }
     case RUBBER_POLYGON: {
@@ -2643,9 +2771,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbReal inscribeAngle = inscribeLine.angle();
         EmbReal inscribeInc = 360.0/numSides;
 
-        if (painter) {
-            obj_draw_rubber_line(obj, inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
+        obj_draw_rubber_line(obj, inscribeLine, "VIEW_COLOR_CROSSHAIR");
 
         QPainterPath inscribePath;
         /* First Point */
@@ -2668,9 +2794,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbReal circumscribeAngle = circumscribeLine.angle();
         EmbReal circumscribeInc = 360.0/numSides;
 
-        if (painter) {
-            obj_draw_rubber_line(obj, circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
+        obj_draw_rubber_line(obj, circumscribeLine, "VIEW_COLOR_CROSSHAIR");
 
         QPainterPath circumscribePath;
         /* First Point */
@@ -2699,9 +2823,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
 
         QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
         QLineF rubberLine(obj->normalPath.currentPosition(), p);
-        if (painter) {
-            obj_draw_rubber_line(obj, rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
+        obj_draw_rubber_line(obj, rubberLine, "VIEW_COLOR_CROSSHAIR");
 
         bool ok = false;
         QString numStr = obj_rubber_text(obj_id, "POLYLINE_NUM_POINTS");
@@ -2743,7 +2865,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         break;
     }
     case RUBBER_GRIP: {
-        obj_update_rubber_grip(obj_id, painter);
+        obj_update_rubber_grip(obj_id);
         break;
     }
     default:
@@ -2751,166 +2873,11 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
     }
 }
 
-/* The caller is responsible for freeing this memory, currently. */
-EmbVectorList *
-Object::allGripPoints(void)
-{
-    EmbVectorList *gripPoints = create_vector_list();
-    switch (core->geometry->type) {
-    case EMB_ARC: {
-        append_vector_to_list(gripPoints, obj_center(core));
-        append_vector_to_list(gripPoints, obj_start_point(core));
-        append_vector_to_list(gripPoints, obj_mid_point(core));
-        append_vector_to_list(gripPoints, obj_end_point(core));
-        break;
-    }
-    case EMB_CIRCLE:
-    case EMB_ELLIPSE: {
-        append_vector_to_list(gripPoints, obj_center(core));
-        append_vector_to_list(gripPoints, emb_quadrant(core->geometry, 0));
-        append_vector_to_list(gripPoints, emb_quadrant(core->geometry, 90));
-        append_vector_to_list(gripPoints, emb_quadrant(core->geometry, 180));
-        append_vector_to_list(gripPoints, emb_quadrant(core->geometry, 270));
-        break;
-    }
-    case EMB_DIM_LEADER: {
-        append_vector_to_list(gripPoints, obj_end_point_1(core));
-        append_vector_to_list(gripPoints, obj_end_point_2(core));
-        if (core->curved) {
-            append_vector_to_list(gripPoints, obj_mid_point(core));
-        }
-        break;
-    }
-    case EMB_IMAGE: {
-        append_vector_to_list(gripPoints, obj_top_left(core));
-        append_vector_to_list(gripPoints, obj_top_right(core));
-        append_vector_to_list(gripPoints, obj_bottom_left(core));
-        append_vector_to_list(gripPoints, obj_bottom_right(core));
-        break;
-    }
-    case EMB_LINE: {
-        append_vector_to_list(gripPoints, obj_end_point_1(core));
-        append_vector_to_list(gripPoints, obj_end_point_2(core));
-        append_vector_to_list(gripPoints, obj_mid_point(core));
-        break;
-    }
-    case EMB_PATH: {
-        append_vector_to_list(gripPoints, obj_pos(core));
-        todo("loop thru all path Elements and return their points.");
-        break;
-    }
-    case EMB_POLYGON:
-    case EMB_POLYLINE: {
-        QPainterPath::Element element;
-        for (int i = 0; i < normalPath.elementCount(); ++i) {
-            element = normalPath.elementAt(i);
-            append_vector_to_list(gripPoints, to_emb_vector(mapToScene(element.x, element.y)));
-        }
-        break;
-    }
-    case EMB_TEXT_SINGLE:
-    case EMB_POINT:
-    default:
-        append_vector_to_list(gripPoints, obj_pos(core));
-        break;
-    }
-    return gripPoints;
-}
-
-/* Returns the closest snap point to the mouse point */
-EmbVector
-Object::mouseSnapPoint(EmbVector mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-/* . */
 void
-obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
+obj_move_by(int32_t obj_id, EmbVector delta)
 {
-    EmbVector delta = emb_vector_subtract(after, before);
-    ObjectCore *core = obj->core;
-    switch (core->geometry->type) {
-    case EMB_ARC: {
-        todo("gripEdit() for ArcObject.");
-        break;
-    }
-    case EMB_CIRCLE: {
-        if (emb_approx(before, obj_center(core))) {
-            obj->moveBy(delta.x, delta.y);
-        }
-        else {
-            EmbReal length = emb_vector_distance(obj_center(core), after);
-            emb_set_radius(core->geometry, length);
-        }
-        break;
-    }
-    case EMB_DIM_LEADER:
-    case EMB_LINE: {
-        if (emb_approx(before, obj_end_point_1(core))) {
-            obj_set_end_point_1(core, after);
-        }
-        else if (emb_approx(before, obj_end_point_2(core))) {
-            obj_set_end_point_2(core, after);
-        }
-        else if (emb_approx(before, obj_mid_point(core))) {
-            obj->moveBy(delta.x, delta.y);
-        }
-        break;
-    }
-    case EMB_ELLIPSE: {
-        todo("gripEdit() for EllipseObject");
-        break;
-    }
-    case EMB_IMAGE:
-    case EMB_RECT: {
-        EmbReal height = emb_height(core->geometry);
-        EmbReal width = emb_width(core->geometry);
-        EmbVector tl = obj_top_left(core);
-        int obj_id = core->objID;
-        if (emb_approx(before, tl)) {
-            obj_set_rect(obj_id, after.x, after.y,
-                width - delta.x, height - delta.y);
-        }
-        else if (emb_approx(before, obj_top_right(core))) {
-            obj_set_rect(obj_id, tl.x, tl.y+delta.y,
-                width + delta.x, height - delta.y);
-        }
-        else if (emb_approx(before, obj_bottom_left(core))) {
-            obj_set_rect(obj_id, tl.x+delta.x, tl.y,
-                width - delta.x, height + delta.y);
-        }
-        else if (emb_approx(before, obj_bottom_right(core))) {
-            obj_set_rect(obj_id, tl.x, tl.y,
-                width + delta.x, height + delta.y);
-        }
-        break;
-    }
-    case EMB_PATH: {
-        todo("gripEdit() for PathObject");
-        break;
-    }
-    case EMB_POLYGON:
-    case EMB_POLYLINE: {
-        core->gripIndex = obj_find_index(obj, before);
-        if (core->gripIndex == -1) {
-            return;
-        }
-        EmbVector a = map_from_scene(obj, after);
-        obj->normalPath.setElementPositionAt(core->gripIndex, a.x, a.y);
-        obj_update_path_r(obj, obj->normalPath);
-        obj->core->gripIndex = -1;
-        break;
-    }
-    case EMB_TEXT_SINGLE:
-    case EMB_POINT:
-    default: {
-        if (emb_approx(before, obj_pos(core))) {
-            obj->moveBy(delta.x, delta.y);
-        }
-        break;
-    }
-    }
+    Object *obj = get_obj(obj_id);
+    obj->moveBy(delta.x, delta.y);
 }
 
 void
@@ -2920,6 +2887,8 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
     if (!objScene) {
         return;
     }
+
+    obj_painter = painter;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -3080,9 +3049,7 @@ Object::objectSavePath() const
     return normalPath;
 }
 
-/*
- * View
- */
+/* Document */
 Document::Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
 }
@@ -3936,7 +3903,8 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
             if (item->type() != OBJ_UNKNOWN) {
                 documents[doc]->tempBaseObj = item;
                 if (documents[doc]->tempBaseObj) {
-                    data->selectedGripPoints = documents[doc]->tempBaseObj->allGripPoints();
+                    int id = documents[doc]->tempBaseObj->core->objID;
+                    data->selectedGripPoints = all_grip_points(id);
                 }
 
                 EmbVector offset = to_emb_vector(gripOffset);
@@ -3983,7 +3951,8 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                 documents[doc]->tempBaseObj = static_cast<Object*>(item);
                 if (documents[doc]->tempBaseObj) {
                     EmbVector p = data->sceneMousePoint;
-                    EmbVector q = documents[doc]->tempBaseObj->mouseSnapPoint(p);
+                    EmbVector q = mouse_snap_point(
+                        documents[doc]->tempBaseObj->core->objID, p);
                     apertureSnapPoints << q;
                 }
             }
@@ -4240,7 +4209,7 @@ void
 doc_zoom_selected(int32_t doc_id)
 {
     Document *doc = documents[doc_id];
-    QUndoStack* stack = activeUndoStack();
+    QUndoStack* stack = active_undo_stack();
     if (stack) {
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected",
             doc->data->id, 0);
@@ -4268,7 +4237,7 @@ doc_zoom_selected(int32_t doc_id)
 void
 doc_zoom_extents(int32_t doc)
 {
-    QUndoStack* stack = activeUndoStack();
+    QUndoStack* stack = active_undo_stack();
     if (stack) {
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", doc, 0);
         stack->push(cmd);
@@ -4289,7 +4258,7 @@ doc_zoom_extents(int32_t doc)
 void
 doc_pan_left(int32_t doc)
 {
-    QUndoStack* stack = activeUndoStack();
+    QUndoStack* stack = active_undo_stack();
     DocumentData *data = doc_data(doc);
     if (stack) {
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", doc, 0);
@@ -4305,7 +4274,7 @@ doc_pan_left(int32_t doc)
 void
 doc_pan_right(int32_t doc)
 {
-    QUndoStack* stack = activeUndoStack();
+    QUndoStack* stack = active_undo_stack();
     DocumentData *data = doc_data(doc);
     if (stack) {
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", doc, 0);
@@ -4322,7 +4291,7 @@ doc_pan_right(int32_t doc)
 void
 doc_pan_up(int32_t doc)
 {
-    QUndoStack* stack = activeUndoStack();
+    QUndoStack* stack = active_undo_stack();
     DocumentData *data = doc_data(doc);
     if (stack) {
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", doc, 0);
@@ -4338,7 +4307,7 @@ doc_pan_up(int32_t doc)
 void
 doc_pan_down(int32_t doc)
 {
-    QUndoStack* stack = activeUndoStack();
+    QUndoStack* stack = active_undo_stack();
     DocumentData *data = doc_data(doc);
     if (stack) {
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", doc, 0);
@@ -4413,7 +4382,7 @@ Document::mousePressEvent(QMouseEvent* event)
                 }
 
                 QPoint qsnapOffset(data->qsnapLocatorSize, data->qsnapLocatorSize);
-                QPointF gripPoint = to_qpointf(base->mouseSnapPoint(data->sceneMousePoint));
+                QPointF gripPoint = to_qpointf(mouse_snap_point(base->core->objID, data->sceneMousePoint));
                 QPoint p1 = mapFromScene(gripPoint) - qsnapOffset;
                 QPoint q1 = mapFromScene(gripPoint) + qsnapOffset;
                 QRectF gripRect = QRectF(documents[doc]->mapToScene(p1), documents[doc]->mapToScene(q1));
@@ -4931,7 +4900,7 @@ doc_start_gripping(int32_t doc, Object* obj)
     DocumentData *data = doc_data(doc);
     data->grippingActive = true;
     documents[doc]->gripBaseObj = obj;
-    data->sceneGripPoint = documents[doc]->gripBaseObj->mouseSnapPoint(data->sceneMousePoint);
+    data->sceneGripPoint = mouse_snap_point(documents[doc]->gripBaseObj->core->objID, data->sceneMousePoint);
     obj_set_rubber_point(doc, "GRIP_POINT", data->sceneGripPoint);
     obj_set_rubber_mode(doc, RUBBER_GRIP);
 }
@@ -8050,6 +8019,20 @@ update_font_combo_box_str_if_varies(const char *str)
     }
 }
 
+const char *
+combobox_text(int32_t index)
+{
+    QComboBox *comboBox = widget_list[index].combobox;
+    return qPrintable(comboBox->currentText());
+}
+
+int32_t
+combobox_find_text(int32_t index, const char *text)
+{
+    QComboBox *comboBox = widget_list[index].combobox;
+    return comboBox->findText(QString(text));
+}
+
 /* . */
 void
 update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
@@ -8060,7 +8043,7 @@ update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
         return;
     }
     QComboBox *comboBox = widget_list[index].combobox;
-    fieldOldText = comboBox->currentText();
+    fieldOldText = QString(combobox_text(index));
     fieldNewText = str;
 
     if (fieldOldText.isEmpty()) {
@@ -8069,14 +8052,16 @@ update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
             QString s(strList[i]);
             comboBox->addItem(s, s);
         }
-        comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
+        int current_index = combobox_find_text(index, qPrintable(fieldNewText));
+        comboBox->setCurrentIndex(current_index);
     }
     else if (fieldOldText != fieldNewText) {
         /* Prevent multiple entries */
         if (comboBox->findText(fieldVariesText) == -1) {
             comboBox->addItem(fieldVariesText);
         }
-        comboBox->setCurrentIndex(comboBox->findText(fieldVariesText));
+        int current_index = combobox_find_text(index, qPrintable(fieldVariesText));
+        comboBox->setCurrentIndex(current_index);
     }
 }
 
@@ -8090,7 +8075,7 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
         return;
     }
     QComboBox *comboBox = widget_list[index].combobox;
-    fieldOldText = comboBox->currentText();
+    fieldOldText = QString(combobox_text(index));
     if (yesOrNoText) {
         if (val) {
             fieldNewText = fieldYesText;
@@ -8117,14 +8102,16 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
             comboBox->addItem(fieldOnText, true);
             comboBox->addItem(fieldOffText, false);
         }
-        comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
+        int current_index = combobox_find_text(index, qPrintable(fieldNewText));
+        comboBox->setCurrentIndex(current_index);
     }
     else if (fieldOldText != fieldNewText) {
         /* Prevent multiple entries. */
         if (comboBox->findText(fieldVariesText) == -1) {
             comboBox->addItem(fieldVariesText);
         }
-        comboBox->setCurrentIndex(comboBox->findText(fieldVariesText));
+        int current_index = combobox_find_text(index, qPrintable(fieldVariesText));
+        comboBox->setCurrentIndex(current_index);
     }
 }
 
@@ -8447,119 +8434,6 @@ Settings_Dialog::create_int_spinbox(QGroupBox* groupbox, int key)
     return spinbox;
 }
 
-/* . */
-QWidget *
-get_widget(EmbString key)
-{
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("Failed to find widget.");
-        debug_message(key);
-    }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        return widget_list[index].label;
-    case WIDGET_SPINBOX:
-        return widget_list[index].spinbox;
-    case WIDGET_CHECKBOX:
-        return widget_list[index].checkbox;
-    case WIDGET_COMBOBOX:
-        return widget_list[index].combobox;
-    case WIDGET_GROUP_BOX:
-        return widget_list[index].groupbox;
-    default:
-        break;
-    }
-    debug_message("Failed to set widget's visibility.");
-    debug_message((char*)key);
-    return NULL;
-}
-
-/* . */
-void
-set_visibility(EmbString key, bool visibility)
-{
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("Failed to find widget.");
-        debug_message(key);
-    }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        widget_list[index].label->setVisible(visibility);
-        break;
-    case WIDGET_SPINBOX:
-        widget_list[index].spinbox->setVisible(visibility);
-        break;
-    case WIDGET_CHECKBOX:
-        widget_list[index].checkbox->setVisible(visibility);
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->setVisible(visibility);
-        break;
-    case WIDGET_GROUP_BOX:
-        widget_list[index].groupbox->setVisible(visibility);
-        break;
-    default:
-        debug_message("Failed to set widget's visibility.");
-        debug_message((char*)key);
-        break;
-    }
-}
-
-/* . */
-void
-set_visibility_group(EmbStringTable keylist, bool visibility)
-{
-    int i;
-    int n = string_array_length(keylist);
-    for (i=0; i<n; i++) {
-        set_visibility(keylist[i], visibility);
-    }
-}
-
-/* . */
-void
-set_enabled(EmbString key, bool enabled)
-{
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("Failed to find widget.");
-        debug_message(key);
-    }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        widget_list[index].label->setEnabled(enabled);
-        break;
-    case WIDGET_SPINBOX:
-        widget_list[index].spinbox->setEnabled(enabled);
-        break;
-    case WIDGET_CHECKBOX:
-        widget_list[index].checkbox->setEnabled(enabled);
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->setEnabled(enabled);
-        break;
-    case WIDGET_GROUP_BOX:
-        widget_list[index].groupbox->setEnabled(enabled);
-        break;
-    default:
-        debug_message("Failed to enable/disable the variable");
-        debug_message((char*)key);
-        break;
-    }
-}
-
-/* . */
-void
-set_enabled_group(EmbStringTable keylist, bool enabled)
-{
-    int i;
-    int n = string_array_length(keylist);
-    for (i=0; i<n; i++) {
-        set_enabled(keylist[i], enabled);
-    }
-}
 
 /* . */
 Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* parent) : QDialog(parent)
@@ -8696,7 +8570,7 @@ Settings_Dialog::createTabGeneral()
     comboBoxIconSize->addItem(QIcon(dialog_icon + "icon128.png"), "I'm Blind", 128);
     setting[GENERAL_ICON_SIZE].dialog.i = get_int(GENERAL_ICON_SIZE);
     comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(setting[GENERAL_ICON_SIZE].dialog.i));
-    connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxIconSizeCurrentIndexChanged(int)));
+    connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_icon_size_index_changed(int)));
 
     QVBoxLayout* vboxLayoutIcon = new QVBoxLayout(groupBoxIcon);
     vboxLayoutIcon->addWidget(labelIconTheme);
@@ -8714,7 +8588,7 @@ Settings_Dialog::createTabGeneral()
 
     QPushButton* buttonMdiBGLogo = new QPushButton(translate("Choose"), groupBoxMdiBG);
     buttonMdiBGLogo->setEnabled(setting[GENERAL_MDI_BG_USE_LOGO].dialog.b);
-    connect(buttonMdiBGLogo, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundLogo()));
+    connect(buttonMdiBGLogo, SIGNAL(clicked()), this, SLOT(choose_mdi_bg_logo()));
     connect(checkBoxMdiBGUseLogo, SIGNAL(toggled(bool)), buttonMdiBGLogo, SLOT(setEnabled(bool)));
 
     QPushButton* buttonMdiBGTexture = new QPushButton(translate("Choose"), groupBoxMdiBG);
@@ -8943,35 +8817,35 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QWidget* widget = new QWidget(this);
 
     /* Custom Filter */
-    QGroupBox* groupBoxCustomFilter = new QGroupBox(translate("Custom Filter"), widget);
-    groupBoxCustomFilter->setEnabled(false); /* TODO: Fixup custom filter */
+    QGroupBox* groupbox_custom_filter = new QGroupBox(translate("Custom Filter"), widget);
+    groupbox_custom_filter->setEnabled(false); /* TODO: Fixup custom filter */
 
     QCheckBox* custom_filter[100];
 
-    QPushButton* buttonCustomFilterSelectAll = new QPushButton(translate("Select All"), widget);
-    connect(buttonCustomFilterSelectAll, SIGNAL(clicked()), this,
-        SLOT(buttonCustomFilterSelectAllClicked()));
-    QPushButton* buttonCustomFilterClearAll = new QPushButton("Clear All", widget);
-    connect(buttonCustomFilterClearAll, SIGNAL(clicked()), this,
-        SLOT(buttonCustomFilterClearAllClicked()));
+    QPushButton* button_custom_filter_select_all = new QPushButton(translate("Select All"), widget);
+    connect(button_custom_filter_select_all, SIGNAL(clicked()), this,
+        SLOT(button_custom_filter_select_all_clicked()));
+    QPushButton* button_custom_filter_clear_all = new QPushButton("Clear All", widget);
+    connect(button_custom_filter_clear_all, SIGNAL(clicked()), this,
+        SLOT(button_custom_filter_clear_all_clicked()));
 
     int i;
     int n_extensions = string_array_length(state.extensions);
     for (i=0; i<n_extensions; i++) {
         const char *extension = state.extensions[i];
-        custom_filter[i] = new QCheckBox(extension, groupBoxCustomFilter);
+        custom_filter[i] = new QCheckBox(extension, groupbox_custom_filter);
         custom_filter[i]->setChecked(QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("*." + QString(extension), Qt::CaseInsensitive));
         connect(custom_filter[i], SIGNAL(stateChanged(int)), this,
-            SLOT(checkBoxCustomFilterStateChanged(int)));
+            SLOT(check_custom_filter_changed(int)));
 
-        connect(this, SIGNAL(buttonCustomFilterSelectAll(bool)),
+        connect(this, SIGNAL(button_custom_filter_select_all(bool)),
             custom_filter[i], SLOT(setChecked(bool)));
 
-        connect(this, SIGNAL(buttonCustomFilterClearAll(bool)),
+        connect(this, SIGNAL(button_custom_filter_clear_all(bool)),
             custom_filter[i], SLOT(setChecked(bool)));
     }
 
-    QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupBoxCustomFilter);
+    QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupbox_custom_filter);
     int row = 0;
     int column = 0;
     for (i=0; i<n_extensions; i++) {
@@ -8983,13 +8857,13 @@ QWidget* Settings_Dialog::createTabOpenSave()
             column++;
         }
     }
-    gridLayoutCustomFilter->addWidget(buttonCustomFilterClearAll);
-    gridLayoutCustomFilter->addWidget(buttonCustomFilterSelectAll);
+    gridLayoutCustomFilter->addWidget(button_custom_filter_clear_all);
+    gridLayoutCustomFilter->addWidget(button_custom_filter_select_all);
     gridLayoutCustomFilter->setColumnStretch(6,1);
-    groupBoxCustomFilter->setLayout(gridLayoutCustomFilter);
+    groupbox_custom_filter->setLayout(gridLayoutCustomFilter);
 
     if (QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("supported", Qt::CaseInsensitive)) {
-        buttonCustomFilterSelectAllClicked();
+        button_custom_filter_select_all_clicked();
     }
 
     /* Opening */
@@ -9058,7 +8932,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
 
     /* Widget Layout */
     QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
-    vboxLayoutMain->addWidget(groupBoxCustomFilter);
+    vboxLayoutMain->addWidget(groupbox_custom_filter);
     vboxLayoutMain->addWidget(groupBoxOpening);
     vboxLayoutMain->addWidget(groupBoxSaving);
     vboxLayoutMain->addWidget(groupBoxTrim);
@@ -9117,32 +8991,6 @@ Settings_Dialog::createTabSnap()
 
     QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
     return make_scrollable(this, vboxLayoutMain, widget);
-}
-
-void
-create_label(QGroupBox *groupbox, const char *key, const char *text)
-{
-    QLabel* label = new QLabel(translate(text), groupbox);
-    string_copy(widget_list[n_widgets].key, key);
-    widget_list[n_widgets].type = WIDGET_LABEL;
-    widget_list[n_widgets].label = label;
-}
-
-void
-set_grid_layout(QGroupBox *groupbox, EmbStringTable table)
-{
-    QGridLayout* layout = new QGridLayout(groupbox);
-    for (int i=0; !string_equal(table[2*i], "END"); i++) {
-        if (strlen(table[2*i]) > 0) {
-            QWidget *widget = get_widget(table[2*i]);
-            layout->addWidget(widget, i, 0, Qt::AlignLeft);
-        }
-        if (strlen(grid_layout[2*i+1]) > 0) {
-            QWidget *widget = get_widget(table[2*i+1]);
-            layout->addWidget(widget, i, 1, Qt::AlignRight);
-        }
-    }
-    groupbox->setLayout(layout);
 }
 
 QWidget*
@@ -9256,7 +9104,7 @@ Settings_Dialog::createTabGridRuler()
     comboBoxRulerMetric->addItem("Imperial", false);
     comboBoxRulerMetric->addItem("Metric", true);
     comboBoxRulerMetric->setCurrentIndex(comboBoxRulerMetric->findData(setting[RULER_METRIC].dialog.i));
-    connect(comboBoxRulerMetric, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxRulerMetricCurrentIndexChanged(int)));
+    connect(comboBoxRulerMetric, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_ruler_metric_index_changed(int)));
 
     QGridLayout* gridLayoutRulerMisc = new QGridLayout(widget);
     gridLayoutRulerMisc->addWidget(checkBoxRulerShowOnLoad, 0, 0, Qt::AlignLeft);
@@ -9394,7 +9242,7 @@ Settings_Dialog::createTabQuickSnap()
     QComboBox* comboBoxQSnapLocColor = new QComboBox(groupBoxQSnapVisual);
     addColorsToComboBox(comboBoxQSnapLocColor);
     comboBoxQSnapLocColor->setCurrentIndex(comboBoxQSnapLocColor->findData(setting[QSNAP_LOCATOR_COLOR].dialog.i));
-    connect(comboBoxQSnapLocColor, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxQSnapLocatorColorCurrentIndexChanged(int)));
+    connect(comboBoxQSnapLocColor, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_qsnap_locator_color_changed(int)));
 
     QLabel* labelQSnapLocSize = new QLabel(translate("Locator Size"), groupBoxQSnapVisual);
     QSlider* sliderQSnapLocSize = new QSlider(Qt::Horizontal, groupBoxQSnapVisual);
@@ -9532,13 +9380,13 @@ QWidget* Settings_Dialog::createTabSelection()
     QComboBox* comboBoxCoolGripColor = new QComboBox(groupBoxSelectionColors);
     addColorsToComboBox(comboBoxCoolGripColor);
     comboBoxCoolGripColor->setCurrentIndex(comboBoxCoolGripColor->findData(setting[SELECTION_COOLGRIP_COLOR].dialog.i));
-    connect(comboBoxCoolGripColor, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxSelectionCoolGripColorCurrentIndexChanged(int)));
+    connect(comboBoxCoolGripColor, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_cool_grip_color_changed(int)));
 
     QLabel* labelHotGripColor = new QLabel(translate("Hot Grip (Selected)"), groupBoxSelectionColors);
     QComboBox* comboBoxHotGripColor = new QComboBox(groupBoxSelectionColors);
     addColorsToComboBox(comboBoxHotGripColor);
     comboBoxHotGripColor->setCurrentIndex(comboBoxHotGripColor->findData(setting[SELECTION_HOTGRIP_COLOR].dialog.i));
-    connect(comboBoxHotGripColor, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxSelectionHotGripColorCurrentIndexChanged(int)));
+    connect(comboBoxHotGripColor, SIGNAL(currentIndexChanged(int)), this, SLOT(combobox_hot_grip_color_index_changed(int)));
 
     QVBoxLayout* vboxLayoutSelectionColors = new QVBoxLayout(groupBoxSelectionColors);
     vboxLayoutSelectionColors->addWidget(labelCoolGripColor);
@@ -9592,7 +9440,7 @@ Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 }
 
 void
-Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
+Settings_Dialog::combo_icon_size_index_changed(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     if (comboBox) {
@@ -9608,41 +9456,43 @@ Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
 }
 
 void
-Settings_Dialog::chooseGeneralMdiBackgroundLogo()
+Settings_Dialog::choose_mdi_bg_logo(void)
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (button) {
-        QString selectedImage = QFileDialog::getOpenFileName(this,
-            translate("Open File"),
-            QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
-            translate("Images (*.bmp *.png *.jpg)"));
-
-        if (!selectedImage.isNull()) {
-            string_copy(setting[GENERAL_MDI_BG_LOGO].accept.s, qPrintable(selectedImage));
-        }
-
-        /* Update immediately so it can be previewed */
-        setBackgroundLogo(setting[GENERAL_MDI_BG_LOGO].accept.s);
+    if (!button) {
+        return;
     }
+    QString selectedImage = QFileDialog::getOpenFileName(this,
+        translate("Open File"),
+        QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+        translate("Images (*.bmp *.png *.jpg)"));
+
+    if (!selectedImage.isNull()) {
+        string_copy(setting[GENERAL_MDI_BG_LOGO].accept.s, qPrintable(selectedImage));
+    }
+
+    /* Update immediately so it can be previewed */
+    setBackgroundLogo(setting[GENERAL_MDI_BG_LOGO].accept.s);
 }
 
 void
 Settings_Dialog::chooseGeneralMdiBackgroundTexture()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (button) {
-        QString selectedImage;
-        selectedImage = QFileDialog::getOpenFileName(this, translate("Open File"),
-            QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
-            translate("Images (*.bmp *.png *.jpg)"));
-
-        if (!selectedImage.isNull()) {
-            string_copy(setting[GENERAL_MDI_BG_TEXTURE].accept.s, qPrintable(selectedImage));
-        }
-
-        /* Update immediately so it can be previewed */
-        setBackgroundTexture(setting[GENERAL_MDI_BG_TEXTURE].accept.s);
+    if (!button) {
+        return;
     }
+    QString selectedImage;
+    selectedImage = QFileDialog::getOpenFileName(this, translate("Open File"),
+        QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+        translate("Images (*.bmp *.png *.jpg)"));
+
+    if (!selectedImage.isNull()) {
+        string_copy(setting[GENERAL_MDI_BG_TEXTURE].accept.s, qPrintable(selectedImage));
+    }
+
+    /* Update immediately so it can be previewed */
+    setBackgroundTexture(setting[GENERAL_MDI_BG_TEXTURE].accept.s);
 }
 
 /* . */
@@ -9670,44 +9520,45 @@ Settings_Dialog::chooseColor(int key)
 
 /* . */
 void
-Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
+Settings_Dialog::check_custom_filter_changed(int checked)
 {
     QCheckBox* checkBox = qobject_cast<QCheckBox*>(sender());
-    if (checkBox) {
-        EmbString message;
-        QString format = checkBox->text();
-        sprintf(message, "CustomFilter: %s %d", qPrintable(format), checked);
-        debug_message(message);
-        if (checked) {
-            strcat(setting[OPENSAVE_CUSTOM_FILTER].dialog.s,
-                qPrintable(" *." + format.toLower()));
-        }
-        else {
-            QString s;
-            s = QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).remove("*." + format, Qt::CaseInsensitive);
-            string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, qPrintable(s));
-        }
-        /* setting[OPENSAVE_USE_CUSTOM_FILTER].dialog.s = checked; */ /* TODO */
+    if (!checkBox) {
+        return;
     }
+    EmbString message;
+    QString format = checkBox->text();
+    sprintf(message, "CustomFilter: %s %d", qPrintable(format), checked);
+    debug_message(message);
+    if (checked) {
+        strcat(setting[OPENSAVE_CUSTOM_FILTER].dialog.s,
+            qPrintable(" *." + format.toLower()));
+    }
+    else {
+        QString s;
+        s = QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).remove("*." + format, Qt::CaseInsensitive);
+        string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, qPrintable(s));
+    }
+    /* setting[OPENSAVE_USE_CUSTOM_FILTER].dialog.s = checked; */ /* TODO */
 }
 
 void
-Settings_Dialog::buttonCustomFilterSelectAllClicked()
+Settings_Dialog::button_custom_filter_select_all_clicked()
 {
-    emit buttonCustomFilterSelectAll(true);
+    emit button_custom_filter_select_all(true);
     string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "supported");
 }
 
 void
-Settings_Dialog::buttonCustomFilterClearAllClicked()
+Settings_Dialog::button_custom_filter_clear_all_clicked()
 {
-    emit buttonCustomFilterClearAll(false);
+    emit button_custom_filter_clear_all(false);
     string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "");
 }
 
 /* . */
 void
-Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
+Settings_Dialog::combo_ruler_metric_index_changed(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     if (comboBox) {
@@ -9734,7 +9585,7 @@ Settings_Dialog::buttonQSnapClearAllClicked()
 
 /* TODO: Alert user if color matched the display bg color. */
 void
-Settings_Dialog::comboBoxQSnapLocatorColorCurrentIndexChanged(int index)
+Settings_Dialog::combo_qsnap_locator_color_changed(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     combobox_selection_index_changed(index, comboBox, QSNAP_LOCATOR_COLOR,
@@ -9759,7 +9610,7 @@ Settings_Dialog::combobox_selection_index_changed(
 
 /* TODO: Alert user if color matched the display bg color */
 void
-Settings_Dialog::comboBoxSelectionCoolGripColorCurrentIndexChanged(int index)
+Settings_Dialog::combo_cool_grip_color_changed(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     combobox_selection_index_changed(index, comboBox, SELECTION_COOLGRIP_COLOR,
@@ -9768,7 +9619,7 @@ Settings_Dialog::comboBoxSelectionCoolGripColorCurrentIndexChanged(int index)
 
 /* TODO: Alert user if color matched the display bg color. */
 void
-Settings_Dialog::comboBoxSelectionHotGripColorCurrentIndexChanged(int index)
+Settings_Dialog::combobox_hot_grip_color_index_changed(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     combobox_selection_index_changed(index, comboBox, SELECTION_HOTGRIP_COLOR,
@@ -9789,7 +9640,6 @@ Settings_Dialog::rejectChanges()
 {
     /* Update the view since the user must accept the preview */
     update_view();
-
     reject();
 }
 
