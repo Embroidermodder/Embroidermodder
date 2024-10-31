@@ -43,26 +43,18 @@ typedef struct Widget_ {
     QSpinBox *int_spinbox;
 } Widget;
 
+void setHistory(const char *txt);
+void obj_set_rect(uint32_t obj, EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+
 /* Could initialise all documents to NULL rather than having a seperate memory
  * usage array?
  */
 Document *documents[MAX_OPEN_FILES];
-IntMap obj_index[MAX_OBJECTS];
 QAction* actionHash[MAX_ACTIONS];
-StringMap aliasHash[MAX_ALIASES];
 QToolBar* toolbar[N_TOOLBARS];
 Widget widget_list[MAX_WIDGETS];
 QMenu* menu[N_MENUS];
 Object *object_list[MAX_OBJECTS];
-
-int n_aliases = 0;
-int n_objects = 0;
-int n_widgets = 0;
-int n_actions = 0;
-
-QString promptHistoryData;
-
-EmbIdList *cutCopyObjectList;
 
 QStatusBar* statusbar;
 MdiArea* mdiArea;
@@ -89,8 +81,7 @@ QComboBox* textSizeSelector;
 QByteArray layoutState;
 
 MainWindow *_main;
- 
-QString curText;
+
 QString defaultPrefix;
 QString prefix;
 
@@ -100,7 +91,6 @@ QTextBrowser* promptHistory;
 CmdPromptInput* promptInput;
 
 QTimer* blinkTimer;
-bool blinkState;
 /* NOTE: These shortcuts need to be caught since QLineEdit uses them. */
 
 IntMap key_map[] = {
@@ -135,30 +125,13 @@ IntMap key_map[] = {
 QToolButton* statusBarButtons[N_SB_BUTTONS];
 QLabel* statusBarMouseCoord;
 
-void create_properties_group_box(int32_t);
 QGroupBox *create_group_box(QWidget *parent, const char *key, const char *label);
 
 QComboBox* comboBoxSelected;
 QWidget* focusWidget_;
 QString iconDir;
-int iconSize;
-
-bool pickAdd;
 
 QList<QString> promptInputList = {""};
-int promptInputNum = 0;
-
-int precisionAngle;
-int precisionLength;
-
-/* Used when checking if fields vary. */
-QString fieldOldText;
-QString fieldNewText;
-QString fieldVariesText;
-QString fieldYesText;
-QString fieldNoText;
-QString fieldOnText;
-QString fieldOffText;
 
 QFontComboBox* comboBoxTextSingleFont;
 
@@ -205,10 +178,6 @@ EmbVector to_emb_vector(QPointF p);
 QPointF to_qpointf(EmbVector v);
 
 QIcon create_swatch(int32_t color);
-void preview_update(void);
-
-void setHistory(QString txt);
-void add_command(EmbString alias, EmbString cmd);
 
 /* ------------------------- Object Functions ------------------------------- */
 
@@ -226,10 +195,7 @@ void obj_set_line_weight(Object *obj, EmbReal lineWeight);
 
 void obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath);
 
-void obj_set_rect(uint32_t obj, QRectF r);
-QLineF obj_line(Object *obj);
-void obj_set_line(Object *obj, QLineF li);
-void obj_set_line(Object *obj, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+QLineF obj_line(uint32_t obj);
 
 void obj_set_path(Object *obj, QPainterPath p);
 
@@ -333,8 +299,9 @@ public:
     QPainterPath gridPath;
     QPainterPath originPath;
 
+    QPainter* scene_painter;
+
     Object* gripBaseObj;
-    Object* tempBaseObj;
 
     QGraphicsScene* gscene;
     QUndoStack* undoStack;
@@ -1272,7 +1239,7 @@ set_text_size(double num)
 void
 prompt_history_appended(EmbString txt)
 {
-    promptHistoryData.append(QString("<br/>") + txt);
+    sprintf(promptHistoryData, "%s<br/>%s", promptHistoryData, txt);
 }
 
 /* . */
@@ -1972,7 +1939,7 @@ obj_draw_rubber_grip(uint32_t obj_id, QPainter *painter)
 {
     QPointF point = to_qpointf(obj_map_rubber(obj_id, ""))
         - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
-    painter->drawLine(obj_line(get_obj(obj_id)).translated(point));
+    painter->drawLine(obj_line(obj_id).translated(point));
 }
 
 /* . */
@@ -2005,14 +1972,14 @@ obj_update_rubber_grip(uint32_t obj_id)
     case EMB_LINE: {
         QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
         if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
-            painter->drawLine(obj_line(obj).p2(), p);
+            painter->drawLine(obj_line(obj_id).p2(), p);
         }
         else if (emb_approx(gripPoint, obj_end_point_2(obj->core))) {
-            painter->drawLine(obj_line(obj).p1(), p);
+            painter->drawLine(obj_line(obj_id).p1(), p);
         }
         else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
             QPointF point = p - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
-            QLineF line = obj_line(obj).translated(point);
+            QLineF line = obj_line(obj_id).translated(point);
             painter->drawLine(line);
         }
 
@@ -2037,10 +2004,10 @@ obj_update_rubber_grip(uint32_t obj_id)
     case EMB_DIM_LEADER: {
         QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
         if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
-            painter->drawLine(obj_line(obj).p2(), p);
+            painter->drawLine(obj_line(obj_id).p2(), p);
         }
         else if (emb_approx(gripPoint, obj_end_point_2(obj->core))) {
-            painter->drawLine(obj_line(obj).p1(), p);
+            painter->drawLine(obj_line(obj_id).p1(), p);
         }
         else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
             obj_draw_rubber_grip(obj_id, painter);
@@ -2380,7 +2347,7 @@ obj_update_arc_rect(Object *obj, EmbReal radius)
     arcRect.setWidth(radius*2.0);
     arcRect.setHeight(radius*2.0);
     arcRect.moveCenter(QPointF(0, 0));
-    obj_set_rect(obj->core->objID, arcRect);
+    obj_set_rect(obj->core->objID, arcRect.x(), arcRect.y(), arcRect.width(), arcRect.height());
 }
 
 /* . */
@@ -2490,15 +2457,6 @@ obj_rect(ObjectCore *obj)
 
 /* . */
 void
-obj_set_rect(uint32_t obj, QRectF r)
-{
-    QPainterPath p;
-    p.addRect(r);
-    get_obj(obj)->setPath(p);
-}
-
-/* . */
-void
 obj_set_rect(uint32_t obj, EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
     // obj->setPos(x, y); ?
@@ -2509,31 +2467,10 @@ obj_set_rect(uint32_t obj, EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 
 /* . */
 QLineF
-obj_line(Object *obj)
+obj_line(uint32_t obj_id)
 {
+    Object *obj = get_obj(obj_id);
     return obj->objLine;
-}
-
-/* . */
-void
-obj_set_line(Object *obj, QLineF li)
-{
-    QPainterPath p;
-    p.moveTo(li.p1());
-    p.lineTo(li.p2());
-    obj->setPath(p);
-    obj->objLine = li;
-}
-
-/* . */
-void
-obj_set_line(Object *obj, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
-{
-    QPainterPath p;
-    p.moveTo(x1, y1);
-    p.lineTo(x2, y2);
-    obj->setPath(p);
-    obj->objLine.setLine(x1, y1, x2, y2);
 }
 
 /* . */
@@ -2730,7 +2667,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         obj_set_end_point_1(core, sceneStartPoint);
         obj_set_end_point_2(core, sceneQSnapPoint);
 
-        obj_draw_rubber_line(obj, obj_line(obj), "VIEW_COLOR_CROSSHAIR");
+        obj_draw_rubber_line(obj, obj_line(obj_id), "VIEW_COLOR_CROSSHAIR");
         break;
     }
     case RUBBER_POLYGON: {
@@ -2931,7 +2868,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
     }
     case EMB_LINE: {
         if (core->rubber_mode != RUBBER_LINE) {
-            painter->drawLine(obj_line(this));
+            painter->drawLine(obj_line(core->objID));
         }
 
         if (objScene->property("ENABLE_LWT").toBool()
@@ -3102,7 +3039,6 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->verticalScrollBar()->setCursor(Qt::ArrowCursor);
 
     doc->gripBaseObj = 0;
-    doc->tempBaseObj = 0;
 
     doc->selectBox = new SelectBox(QRubberBand::Rectangle, doc);
     doc->selectBox->setColors(
@@ -3901,9 +3837,9 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
         for (int j=0; j<selectedItemList->count; j++) {
             Object* item = get_obj(selectedItemList->data[j]);
             if (item->type() != OBJ_UNKNOWN) {
-                documents[doc]->tempBaseObj = item;
-                if (documents[doc]->tempBaseObj) {
-                    int id = documents[doc]->tempBaseObj->core->objID;
+                Object *tempBaseObj = item;
+                if (tempBaseObj) {
+                    int id = tempBaseObj->core->objID;
                     data->selectedGripPoints = all_grip_points(id);
                 }
 
@@ -3948,11 +3884,11 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
             data->qsnapApertureSize*2);
         foreach(QGraphicsItem* item, apertureItemList) {
             if (item->type() >= OBJ_BASE) {
-                documents[doc]->tempBaseObj = static_cast<Object*>(item);
-                if (documents[doc]->tempBaseObj) {
+                tempBaseObj = static_cast<Object*>(item);
+                if (tempBaseObj) {
                     EmbVector p = data->sceneMousePoint;
                     EmbVector q = mouse_snap_point(
-                        documents[doc]->tempBaseObj->core->objID, p);
+                        tempBaseObj->core->objID, p);
                     apertureSnapPoints << q;
                 }
             }
@@ -5810,7 +5746,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
     resize(sizeHint());
 
-    promptHistoryData = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
+    strcpy(promptHistoryData, "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.");
     setHistory(promptHistoryData);
 
     /* Due to strange Qt4.2.3 feature the child window icon is not drawn
@@ -6012,9 +5948,9 @@ MdiWindow::sizeHint() const
 }
 
 void
-setHistory(QString txt)
+setHistory(const char *txt)
 {
-    promptHistory->setHtml(txt);
+    promptHistory->setHtml(QString(txt));
     promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
@@ -6027,8 +5963,8 @@ Application::setMainWin(MainWindow* mainWin)
 void
 prompt_set_current_text(const char *txt)
 {
-    curText = prefix + txt;
-    promptInput->setText(qPrintable(curText));
+    sprintf(curText, "%s%s", qPrintable(prefix), txt);
+    promptInput->setText(curText);
 }
 
 /* . */
@@ -6187,7 +6123,7 @@ void
 CmdPrompt::setPrefix(QString  txt)
 {
     prefix = txt;
-    curText = txt;
+    string_copy(curText, qPrintable(txt));
     promptInput->setText(txt);
 }
 
@@ -6215,7 +6151,7 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
 
     defaultPrefix = tr("Command: ");
     prefix = defaultPrefix;
-    curText = prefix;
+    string_copy(curText, qPrintable(prefix));
 
     string_copy(lastCmd, "help");
     curCmd = "help";
@@ -6310,7 +6246,11 @@ process_input(char rapidChar)
             run_command_prompt((char*)qPrintable(lastCmd));
         }
         else {
-            append_history(qPrintable(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>"));
+            EmbString msg;
+            sprintf(msg,
+                "%s<br/><font color=\"red\">Unknown command \"%s\". Press F1 for help.</font>",
+                curText, cmdtxt);
+            append_history(msg);
         }
     }
 
@@ -6362,7 +6302,7 @@ CmdPromptInput::updateCurrentText(QString  txt)
     }
     else {
         /* input is okay so update curText */
-        curText = txt;
+        string_copy(curText, qPrintable(txt));
         this->setText(curText);
     }
     setCursorPosition(cursorPos);
@@ -6381,7 +6321,7 @@ CmdPromptInput::checkEditedText(QString  txt)
 
 /* . */
 void
-CmdPromptInput::checkChangedText(QString  txt)
+CmdPromptInput::checkChangedText(QString txt)
 {
     updateCurrentText(txt);
 }
@@ -6390,7 +6330,7 @@ CmdPromptInput::checkChangedText(QString  txt)
 void
 CmdPromptInput::copyClip()
 {
-    QString copyText = curText.remove(0, prefix.length());
+    QString copyText = QString(curText).remove(0, prefix.length());
     qApp->clipboard()->setText(copyText);
 }
 
@@ -6462,9 +6402,11 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
             return true;
         }
         case Qt::Key_Escape: {
+            EmbString msg;
             prefix = defaultPrefix;
             clear();
-            append_history(qPrintable(curText + translate("*Cancel*")));
+            sprintf(msg, "%s%s", curText, translate("*Cancel*"));
+            append_history(msg);
             return true;
         }
         default: {
@@ -7726,13 +7668,13 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
 
     signalMapper = new QSignalMapper(this);
 
-    fieldOldText = "";
-    fieldNewText = "";
-    fieldVariesText = "*Varies*";
-    fieldYesText = "Yes";
-    fieldNoText = "No";
-    fieldOnText = "On";
-    fieldOffText = "Off";
+    string_copy(fieldOldText, "");
+    string_copy(fieldNewText, "");
+    string_copy(fieldVariesText, "*Varies*");
+    string_copy(fieldYesText, "Yes");
+    string_copy(fieldNoText, "No");
+    string_copy(fieldOnText, "On");
+    string_copy(fieldOffText, "Off");
 
     QWidget* widgetMain = new QWidget(this);
 
@@ -7944,13 +7886,13 @@ update_line_edit_str_if_varies(const char *key, const char *str)
         return;
     }
     QLineEdit* lineEdit = widget_list[index].lineedit;
-    fieldOldText = lineEdit->text();
-    fieldNewText = QString(str);
+    string_copy(fieldOldText, qPrintable(lineEdit->text()));
+    string_copy(fieldNewText, str);
 
-    if (fieldOldText.isEmpty()) {
+    if (fieldOldText[0] == 0) {
         lineEdit->setText(fieldNewText);
     }
-    else if (fieldOldText != fieldNewText) {
+    else if (!string_equal(fieldOldText, fieldNewText)) {
         lineEdit->setText(fieldVariesText);
     }
 }
@@ -7973,22 +7915,23 @@ update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision)
         precision = precisionLength;
     }
 
-    fieldOldText = lineEdit->text();
-    fieldNewText.setNum(num, 'f', precision);
+    string_copy(fieldOldText, qPrintable(lineEdit->text()));
+    sprintf(fieldNewText, "%*f", precision, num);
 
     /* Prevent negative zero :D */
-    QString negativeZero = "-0.";
+    EmbString negativeZero = "-0.";
     for (int i = 0; i < precision; ++i) {
-        negativeZero.append('0');
+        sprintf(negativeZero, "%s0", negativeZero);
     }
-    if (fieldNewText == negativeZero) {
-        fieldNewText = negativeZero.replace("-", "");
+    if (string_equal(fieldNewText, negativeZero)) {
+        /* Trim the first character (the minus sign). */
+        string_copy(fieldNewText, (char*)(fieldNewText + 1));
     }
 
-    if (fieldOldText.isEmpty()) {
+    if (fieldOldText[0] == 0) {
         lineEdit->setText(fieldNewText);
     }
-    else if (fieldOldText != fieldNewText) {
+    else if (!string_equal(fieldOldText, fieldNewText)) {
         lineEdit->setText(fieldVariesText);
     }
 }
@@ -7999,18 +7942,19 @@ update_font_combo_box_str_if_varies(const char *str)
 {
     QFontComboBox* fontComboBox = comboBoxTextSingleFont;
     EmbString message;
-    fieldOldText = fontComboBox->property("FontFamily").toString();
-    fieldNewText = str;
+    string_copy(fieldOldText,
+        qPrintable(fontComboBox->property("FontFamily").toString()));
+    string_copy(fieldNewText, str);
     /*
     sprintf(message, "old: %d %s, new: %d %s",
         oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str));
     debug_message(message);
     */
-    if (fieldOldText.isEmpty()) {
+    if (fieldOldText[0] == 0) {
         fontComboBox->setCurrentFont(QFont(fieldNewText));
-        fontComboBox->setProperty("FontFamily", fieldNewText);
+        fontComboBox->setProperty("FontFamily", QString(fieldNewText));
     }
-    else if (fieldOldText != fieldNewText) {
+    else if (!string_equal(fieldOldText, fieldNewText)) {
         /* Prevent multiple entries */
         if (fontComboBox->findText(fieldVariesText) == -1) {
             fontComboBox->addItem(fieldVariesText);
@@ -8043,10 +7987,10 @@ update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
         return;
     }
     QComboBox *comboBox = widget_list[index].combobox;
-    fieldOldText = QString(combobox_text(index));
-    fieldNewText = str;
+    string_copy(fieldOldText, combobox_text(index));
+    string_copy(fieldNewText, str);
 
-    if (fieldOldText.isEmpty()) {
+    if (fieldOldText[0] == 0) {
         int n = string_array_length(strList);
         for (int i=0; i<n; i++) {
             QString s(strList[i]);
@@ -8055,7 +7999,7 @@ update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
         int current_index = combobox_find_text(index, qPrintable(fieldNewText));
         comboBox->setCurrentIndex(current_index);
     }
-    else if (fieldOldText != fieldNewText) {
+    else if (!string_equal(fieldOldText, fieldNewText)) {
         /* Prevent multiple entries */
         if (comboBox->findText(fieldVariesText) == -1) {
             comboBox->addItem(fieldVariesText);
@@ -8075,25 +8019,25 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
         return;
     }
     QComboBox *comboBox = widget_list[index].combobox;
-    fieldOldText = QString(combobox_text(index));
+    string_copy(fieldOldText, combobox_text(index));
     if (yesOrNoText) {
         if (val) {
-            fieldNewText = fieldYesText;
+            string_copy(fieldNewText, fieldYesText);
         }
         else {
-            fieldNewText = fieldNoText;
+            string_copy(fieldNewText, fieldNoText);
         }
     }
     else {
         if (val) {
-            fieldNewText = fieldOnText;
+            string_copy(fieldNewText, fieldOnText);
         }
         else {
-            fieldNewText = fieldOffText;
+            string_copy(fieldNewText, fieldOffText);
         }
     }
 
-    if (fieldOldText.isEmpty()) {
+    if (fieldOldText[0] == 0) {
         if (yesOrNoText) {
             comboBox->addItem(fieldYesText, true);
             comboBox->addItem(fieldNoText, false);
@@ -8105,7 +8049,7 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
         int current_index = combobox_find_text(index, qPrintable(fieldNewText));
         comboBox->setCurrentIndex(current_index);
     }
-    else if (fieldOldText != fieldNewText) {
+    else if (!string_equal(fieldOldText, fieldNewText)) {
         /* Prevent multiple entries. */
         if (comboBox->findText(fieldVariesText) == -1) {
             comboBox->addItem(fieldVariesText);

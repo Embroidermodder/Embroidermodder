@@ -974,6 +974,11 @@ void append_history(const char *txt);
 
 int init_glfw(void);
 
+void create_properties_group_box(int32_t);
+
+void add_command(EmbString alias, EmbString cmd);
+
+void preview_update(void);
 void update_editors(int32_t id);
 void edit_field(int32_t id, const char *objName, const char *text);
 
@@ -1167,6 +1172,40 @@ extern bool cmdActive;
 extern bool rapidFireEnabled;
 extern bool isBlinking;
 extern bool key_state[N_KEY_SEQUENCES];
+
+extern StringMap aliasHash[MAX_ALIASES];
+extern IntMap obj_index[MAX_OBJECTS];
+
+extern EmbIdList *cutCopyObjectList;
+
+extern bool blinkState;
+
+extern int iconSize;
+
+extern bool pickAdd;
+
+extern int promptInputNum;
+
+extern int precisionAngle;
+extern int precisionLength;
+
+extern int n_aliases;
+extern int n_objects;
+extern int n_widgets;
+extern int n_actions;
+
+extern EmbString curText;
+
+extern char promptHistoryData[MAX_LONG_STRING];
+
+/* Used when checking if fields vary. */
+extern EmbString fieldOldText;
+extern EmbString fieldNewText;
+extern EmbString fieldVariesText;
+extern EmbString fieldYesText;
+extern EmbString fieldNoText;
+extern EmbString fieldOnText;
+extern EmbString fieldOffText;
 
 extern State state;
 

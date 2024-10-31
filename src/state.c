@@ -276,8 +276,18 @@ State state = {
     },
 
     .sandbox_menu = {
-        "sandbox",
-        "glfw",
+        "simulate",
+        "play",
+        "pause",
+        "rewind",
+        "fast-forward",
+        "stop",
+        "export-video",
+        "---",
+        "qr",
+        "lettering",
+        "pattern",
+        "design",
         "END"
     },
 
@@ -939,4 +949,38 @@ EmbStringTable text_size_list = {
     "72 pt", "72", "",
     "END", "END", "END"
 };
+
+StringMap aliasHash[MAX_ALIASES];
+IntMap obj_index[MAX_OBJECTS];
+
+EmbIdList *cutCopyObjectList;
+
+bool blinkState;
+
+int iconSize;
+
+bool pickAdd;
+
+int promptInputNum = 0;
+
+int precisionAngle;
+int precisionLength;
+
+int n_aliases = 0;
+int n_objects = 0;
+int n_widgets = 0;
+int n_actions = 0;
+
+EmbString curText;
+
+char promptHistoryData[MAX_LONG_STRING];
+
+/* Used when checking if fields vary. */
+EmbString fieldOldText;
+EmbString fieldNewText;
+EmbString fieldVariesText;
+EmbString fieldYesText;
+EmbString fieldNoText;
+EmbString fieldOnText;
+EmbString fieldOffText;
 

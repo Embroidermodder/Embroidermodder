@@ -248,10 +248,6 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     switch (command_data[id].id) {
-    case ACTION_GLFW:
-        glfw_application(0, NULL);
-        break;
-
     case ACTION_ABOUT:
         about_dialog();
         break;
@@ -568,8 +564,9 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_HEART:
+    case ACTION_HEART: {
         break;
+    }
 
     case ACTION_LINE: {
         value = add_line_command(context);
@@ -588,14 +585,18 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_PATH:
+    case ACTION_PATH: {
         break;
-    case ACTION_POINT:
+    }
+    case ACTION_POINT: {
         break;
-    case ACTION_POLYGON:
+    }
+    case ACTION_POLYGON: {
         break;
-    case ACTION_POLYLINE:
+    }
+    case ACTION_POLYLINE: {
         break;
+    }
 
     case ACTION_PREVIEW_OFF: {
         doc_preview_off(doc_index);
@@ -621,11 +622,6 @@ run_command(ScriptEnv *context, const char *cmd)
 
     case ACTION_ROTATE: {
         doc_rotate_selected(doc_index, REAL(0), -REAL(1), -REAL(2));
-        break;
-    }
-
-    case ACTION_SANDBOX: {
-        value = sandbox_command(context);
         break;
     }
 
@@ -769,6 +765,43 @@ run_command(ScriptEnv *context, const char *cmd)
         doc_zoom_window(doc_index);
         break;
     }
+
+    case ACTION_SIMULATE: {
+        glfw_application(0, NULL);
+        break;
+    }
+    case ACTION_PLAY: {
+        break;
+    }
+    case ACTION_PAUSE: {
+        break;
+    }
+    case ACTION_STOP: {
+        break;
+    }
+    case ACTION_FAST_FORWARD: {
+        break;
+    }
+    case ACTION_REWIND: {
+        break;
+    }
+    case ACTION_EXPORT_VIDEO: {
+        break;
+    }
+
+    case ACTION_QR: {
+        break;
+    }
+    case ACTION_LETTERING: {
+        break;
+    }
+    case ACTION_PATTERN: {
+        break;
+    }
+    case ACTION_DESIGN: {
+        break;
+    }
+
     default:
         break;
     }

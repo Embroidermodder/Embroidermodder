@@ -211,6 +211,7 @@
 /* TODO: ACTION_spellcheck, */
 /* TODO: ACTION_quickselect, */
 
+/* Geometry */
 #define ACTION_ANGLE                  75
 #define ACTION_CIRCLE                 76
 #define ACTION_DEBUG                  77
@@ -239,7 +240,6 @@
 #define ACTION_RECTANGLE             100
 #define ACTION_RGB                   101
 #define ACTION_ROTATE                102
-#define ACTION_SANDBOX               103
 #define ACTION_SCALE                 104
 #define ACTION_SCALE_SELECTED        105
 #define ACTION_SELECT_ALL            106
@@ -258,7 +258,20 @@
 
 #define ACTION_TEST                  118
 
-#define ACTION_GLFW                  119
+/* Simulation controls */
+#define ACTION_SIMULATE              119
+#define ACTION_PLAY                  120
+#define ACTION_STOP                  121
+#define ACTION_PAUSE                 122
+#define ACTION_FAST_FORWARD          123
+#define ACTION_REWIND                124
+#define ACTION_EXPORT_VIDEO          125
+
+/* Generators */
+#define ACTION_QR                    126
+#define ACTION_LETTERING             127
+#define ACTION_PATTERN               128
+#define ACTION_DESIGN                129
 
 /* UI Modes */
 #define CIRCLE_1P_RAD_ONE              0

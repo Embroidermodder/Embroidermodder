@@ -776,17 +776,6 @@ Command command_data[MAX_COMMANDS] = {
         .flags = REQUIRED_VIEW
     },
     {
-        .id = ACTION_SANDBOX,
-        .command = "sandbox",
-        .arguments = "",
-        .icon = "sandbox",
-        .tooltip = "&Sandbox",
-        .statustip = "A sandbox to play in: SANDBOX",
-        .alias = "SAND, SANDBOX",
-        .shortcut = "",
-        .flags = REQUIRED_VIEW
-    },
-    {
         .id = ACTION_SAVE,
         .command = "save",
         .arguments = "",
@@ -1249,13 +1238,123 @@ Command command_data[MAX_COMMANDS] = {
         .flags = REQUIRED_VIEW
     },
     {
-        .id = ACTION_GLFW,
-        .command = "glfw",
+        .id = ACTION_SIMULATE,
+        .command = "simulate",
         .arguments = "",
-        .icon = "glfw",
-        .tooltip = "GLFW test window",
-        .statustip = "GLFW test window",
-        .alias = "GLFW",
+        .icon = "simulate",
+        .tooltip = "Show Simulation Controls",
+        .statustip = "Show simulation controls.",
+        .alias = "SIMULATE,SIM",
+        .shortcut = "",
+        .flags = CONTEXT_FREE
+    },
+    {
+        .id = ACTION_PLAY,
+        .command = "play",
+        .arguments = "",
+        .icon = "play",
+        .tooltip = "Play",
+        .statustip = "Start/resume the simulation.",
+        .alias = "PLAY",
+        .shortcut = "",
+        .flags = CONTEXT_FREE
+    },
+    {
+        .id = ACTION_PAUSE,
+        .command = "pause",
+        .arguments = "",
+        .icon = "pause",
+        .tooltip = "Pause",
+        .statustip = "Simulate the current pattern.",
+        .alias = "PAUSE",
+        .shortcut = "",
+        .flags = CONTEXT_FREE
+    },
+    {
+        .id = ACTION_FAST_FORWARD,
+        .command = "fast-forward",
+        .arguments = "",
+        .icon = "simulate",
+        .tooltip = "Fast-forward",
+        .statustip = "Simulate the current pattern.",
+        .alias = "FAST_FORWARD,FF",
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
+    },
+    {
+        .id = ACTION_REWIND,
+        .command = "rewind",
+        .arguments = "",
+        .icon = "simulate",
+        .tooltip = "Rewind",
+        .statustip = "Rewind the active simulation.",
+        .alias = "REWIND,REW",
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
+    },
+    {
+        .id = ACTION_STOP,
+        .command = "stop",
+        .arguments = "",
+        .icon = "stop",
+        .tooltip = "Stop simulation",
+        .statustip = "Stop the active simulation.",
+        .alias = "STOP",
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
+    },
+    {
+        .id = ACTION_EXPORT_VIDEO,
+        .command = "export-video",
+        .arguments = "",
+        .icon = "video",
+        .tooltip = "Export simulation video",
+        .statustip = "Export the simulation as a *.gif or *.mp4 file.",
+        .alias = "export-video",
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
+    },
+    {
+        .id = ACTION_QR,
+        .command = "qr",
+        .arguments = "",
+        .icon = "qr",
+        .tooltip = "Generate QR code",
+        .statustip = "Generate a QR code.",
+        .alias = "QR",
+        .shortcut = "",
+        .flags = CONTEXT_FREE
+    },
+    {
+        .id = ACTION_LETTERING,
+        .command = "lettering",
+        .arguments = "",
+        .icon = "lettering",
+        .tooltip = "Generate stitched lettering",
+        .statustip = "Generate a lettering as stitches for machines without fonts.",
+        .alias = "LETTERING",
+        .shortcut = "",
+        .flags = CONTEXT_FREE
+    },
+    {
+        .id = ACTION_PATTERN,
+        .command = "pattern",
+        .arguments = "s",
+        .icon = "pattern",
+        .tooltip = "Paste stitch pattern...",
+        .statustip = "Paste one of the included designs to the stitch layer.",
+        .alias = "PATTERN",
+        .shortcut = "",
+        .flags = CONTEXT_FREE
+    },
+    {
+        .id = ACTION_DESIGN,
+        .command = "design",
+        .arguments = "s",
+        .icon = "design",
+        .tooltip = "Paste vector design...",
+        .statustip = "Paste one of the included designs to the vector layer.",
+        .alias = "DESIGN",
         .shortcut = "",
         .flags = CONTEXT_FREE
     },
@@ -1271,3 +1370,4 @@ Command command_data[MAX_COMMANDS] = {
         .flags = CONTEXT_FREE
     }
 };
+
