@@ -7,7 +7,10 @@
  * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
  * for advice on altering this file.
  *
- * String Data
+ * Global data: so we don't pollute the global namespace a lot of the global
+ * constants and variables are packed into a special struct called State.
+ * There is exactly one instance of this struct, defined in this file as
+ * "state".
  */
 
 #include "core.h"

@@ -90,6 +90,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/grip.c
 	${SRC}/objects.c
 	${SRC}/properties.c
+	${SRC}/prompt.c
 	${SRC}/settings.c
 	${SRC}/script.c
 	${SRC}/xpm.c

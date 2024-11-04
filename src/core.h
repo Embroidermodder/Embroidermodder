@@ -998,6 +998,25 @@ void update_lineedit_str(const char *key, const char *str, EmbStringTable strLis
 void update_lineedit_bool(const char *key, bool val, bool yesOrNoText);
 void update_font_combo_box_str_if_varies(const char *str);
 
+void setHistory(const char *txt);
+void obj_set_rect(uint32_t obj, EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+
+void combobox_selection_index_changed(const char *key, int32_t setting_key,
+    int32_t index, uint32_t defaultColor);
+
+void combo_ruler_metric_index_changed(int);
+void combo_qsnap_locator_color_changed(int);
+void combo_cool_grip_color_changed(int);
+void combobox_hot_grip_color_index_changed(int);
+
+void choose_mdi_bg_logo(void);
+void choose_mdi_bg_texture(void);
+
+void prompt_history_appended(EmbString txt);
+void log_prompt_input(EmbString txt);
+void prompt_input_previous(void);
+void prompt_input_next(void);
+
 /* -------------------------------- EmbString ------------------------------ */
 
 void emb_string(EmbString s, const char *str);
@@ -1158,7 +1177,9 @@ extern EmbStringTable combobox_list;
 extern EmbStringTable grid_enabled_group;
 extern EmbStringTable rectangular_grid_visible_group;
 extern EmbStringTable circular_grid_visible_group;
+
 extern EmbStringTable grid_layout;
+extern EmbStringTable zoom_layout;
 
 extern char **xpm_icons[];
 extern EmbStringTable xpm_icon_labels;

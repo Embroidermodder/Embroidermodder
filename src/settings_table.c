@@ -1148,3 +1148,9 @@ EmbStringTable grid_layout = {
     "END", "END"
 };
 
+EmbStringTable zoom_layout = {
+    "labelZoomInScale", "spinboxZoomInScale",
+    "labelZoomOutScale", "spinboxZoomOutScale",
+    "END", "END"
+};
+
