@@ -22,7 +22,6 @@ To build Embroidermodder 2 from source you will need at least:
 - The [Embroidermodder 2](https://github.com/Embroidermodder/Embroidermodder) source code.
 - [Qt](http://www.qt-project.org) (version >= 6.0).
 - [OpenGL](http://www.opengl.org) (version >= 2.0).
-- [Git](http://www.github.com) for version control.
 
 Optionally, you may want to add:
 
