@@ -12,20 +12,12 @@ VERSION="$MAJOR_$MINOR_$PATCH-$TAG"
 
 function run_cmake () {
 
-	git submodule init
-	git submodule update
-
 	cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	cd $BUILD_DIR
 	cmake --build .
 	cd ..
 
 }
-
-# Run packagers with
-# curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/main/build.sh
-# bash build.sh --package-windows
-# etc.
 
 function get_dependancies () {
 
@@ -52,12 +44,7 @@ function get_dependancies () {
 }
 
 # build_emscripten_version
-#
-# git clone https://github.com/embroidermodder/libembroidery
-# cd libembroidery
-# emcc embroidery.c -o embroidery.wasm
-# mv embroidery.wasm ../downloads
-# cd ..
+# emcc libembroidery/*.c -o embroidery.wasm
 
 function assemble_release () {
 
@@ -91,9 +78,6 @@ function build_debug () {
 	BUILD_DIR="debug"
 	BUILD_TYPE="Debug"
 
-	git submodule init
-	git submodule update
-
 	run_cmake
 
 	cd $BUILD_DIR
@@ -109,7 +93,7 @@ function build_debug () {
 # This is not intended to be portable and the requirements are whatever is
 # necessary since the program builds and ships without this function.
 #
-# Current requirements: GNU time, clang-tidy, git, gnuplot, bash,
+# Current requirements: GNU time, clang-tidy, gnuplot, bash,
 # standard UNIX tools, python3 and the module: clang_html
 #
 # https://www.gnu.org/software/complexity/manual/complexity.html

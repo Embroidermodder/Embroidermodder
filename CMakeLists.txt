@@ -42,13 +42,12 @@ set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(TRANSLATION ${CMAKE_SOURCE_DIR}/src/translations)
 
+add_subdirectory(extern/libembroidery)
+
 include_directories(extern/glfw)
 
 qt_add_executable(embroidermodder2
 	${SRC}/widgets.cpp
-
-	${EXTERN}/libembroidery/embroidery.c
-	${EXTERN}/libembroidery/embroidery.h
 
 	${EXTERN}/nanovg/src/nanovg.c
 	${EXTERN}/nanovg/src/nanovg.h
@@ -100,7 +99,7 @@ qt_add_executable(embroidermodder2
 )
 
 include_directories(
-	${EXTERN}/libembroidery
+	${EXTERN}/libembroidery/src
 	${EXTERN}/glfw/include
 	${EXTERN}/glad/include
 	${EXTERN}/nanovg/src
@@ -110,6 +109,7 @@ include_directories(
 
 target_link_libraries(embroidermodder2 PRIVATE
 	glfw
+	embroidery_static
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport

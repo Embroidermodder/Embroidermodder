@@ -5374,7 +5374,7 @@ create_details_dialog(void)
     EmbReal max_stitchlength = emb_pattern_longest_stitch(pattern);
     EmbReal total_stitchlength = emb_total_thread_length(pattern);
 
-    EmbRect bounds = emb_pattern_calcBoundingBox(pattern);
+    EmbRect bounds = emb_pattern_bounds(pattern);
 
     if (pattern->stitch_list->count == 0) {
         warning_box(

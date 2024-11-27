@@ -22,7 +22,7 @@ extern "C" {
 #include <stdbool.h>
 #include <stdarg.h>
 
-#include "../extern/libembroidery/embroidery.h"
+#include "embroidery.h"
 
 #include "constants.h"
 
@@ -32,24 +32,6 @@ extern "C" {
 #define BOOL(arg) context->argument[arg].b
 
 typedef char EmbStringTable[MAX_TABLE_LENGTH][MAX_STRING_LENGTH];
-
-typedef struct ScriptValue_ {
-    EmbReal r;
-    int i;
-    bool b;
-    EmbString s;
-    EmbString label;
-    int n_leaves;
-    char type;
-} ScriptValue;
-
-typedef struct ScriptEnv_ {
-    ScriptValue argument[MAX_ARGS];
-    int argumentCount;
-    int context;
-    int mode;
-    bool firstRun;
-} ScriptEnv;
 
 typedef struct Command_ {
     int32_t id;
@@ -63,14 +45,6 @@ typedef struct Command_ {
     int32_t flags;
 } Command;
 
-typedef struct EmbDimLeader_ {
-    EmbVector start;
-    EmbVector end;
-    int arrow_style;
-    int line_style;
-    EmbColor color;
-} EmbDimLeader;
-
 typedef struct Setting_ {
     EmbString key;
     ScriptValue setting;
@@ -78,16 +52,6 @@ typedef struct Setting_ {
     ScriptValue accept;
     ScriptValue preview;
 } Setting;
-
-typedef struct LabelledVector_ {
-    EmbString key;
-    EmbVector vector;
-} LabelledVector;
-
-typedef struct StringMap_ {
-    EmbString key;
-    EmbString value;
-} StringMap;
 
 typedef struct Editor_ {
     EmbString icon;
@@ -175,23 +139,6 @@ typedef struct UndoData_ {
     EmbLine mirrorLine;
     uint32_t obj;
 } UndoData;
-
-typedef struct IntMap_ {
-    int key;
-    int value;
-} IntMap;
-
-typedef struct EmbVectorList_ {
-    EmbVector *data;
-    int count;
-    int size;
-} EmbVectorList;
-
-typedef struct EmbIdList_ {
-    int32_t *data;
-    int count;
-    int size;
-} EmbIdList;
 
 /* . */
 typedef struct DocumentData_ {
