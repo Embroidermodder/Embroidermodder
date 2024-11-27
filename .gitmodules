@@ -1,12 +1,6 @@
 [submodule "extern/libembroidery"]
 	path = extern/libembroidery
 	url = https://github.com/embroidermodder/libembroidery
-[submodule "extern/EmbroideryMobile"]
-	path = extern/EmbroideryMobile
-	url = https://github.com/embroidermodder/EmbroideryMobile
 [submodule "docs/refman"]
 	path = docs/refman
 	url = https://github.com/embroidermodder/refman
-[submodule "docs/website"]
-	path = docs/website
-	url = https://github.com/embroidermodder/website
