@@ -67,9 +67,6 @@ bash build.sh -b
 git clone https://github.com/embroidermodder/embroidermodder
 cd embroidermodder
 
-git submodule init
-git submodule update
-
 mkdir build
 cd build
 cmake ..
