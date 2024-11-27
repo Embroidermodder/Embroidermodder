@@ -7,9 +7,6 @@
 [submodule "docs/refman"]
 	path = docs/refman
 	url = https://github.com/embroidermodder/refman
-[submodule "docs/userman"]
-	path = docs/userman
-	url = https://github.com/embroidermodder/userman
 [submodule "docs/website"]
 	path = docs/website
 	url = https://github.com/embroidermodder/website
