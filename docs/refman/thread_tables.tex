@@ -1,0 +1,148 @@
+\newcommand{\threadtable}[3]{
+  \begin{center}
+    \label{tab:#1}
+      \csvreader[tabular=l l l,
+table head=\multicolumn{3}{c}{\bfseries #2}\\\hline
+  \bfseries Catalog Code & \bfseries Name & \bfseries Color\\\hline,
+late after line=\\\hline]{#3}%
+{Catalog Code=\catalogcode,Name=\catalogname,Color=\catalogcolor}{%
+\texttt{\catalogcode} & \catalogname & \catalogcolor
+    }
+  \end{center}
+}
+
+\chapter{Tread Tables}
+
+\section{Arc Threads}
+
+\threadtable{arcpoly}{Arc Polyester Colors}{data/arc_rayon_colors.csv}
+
+\threadtable{arcrayon}{Arc Rayon Colors}{data/arc_rayon_colors.csv}
+
+\section{Coats and Clark Codes}
+
+\threadtable{coatsclarkrayon}{Coats and Clark Rayon}%
+{data/coats_and_clark_rayon_colors.csv}
+
+\section{DXF Colors}
+
+Based on the DraftSight color table.
+
+%\threadtable{dxfcolors}{DXF Colors}{data/dxf_colors.csv}
+
+\section{Exquisite Polyester Codes}
+
+\threadtable{exqpoly}{Exquisite Polyester Codes}{data/exquisite_polyester_colors.csv}
+
+\section{Fufu Threads}
+
+\threadtable{fufupoly}{Fufu Polyester Threads}{data/fufu_polyester_colors.csv}
+
+\threadtable{fufurayon}{Fufu Rayon Threads}{data/fufu_rayon_colors.csv}
+
+\section{Hemingworth Polyester Codes}
+
+%\threadtable{shvcolors}{SHV Colors}{data/hemingworth_polyester_colors.csv}
+
+\section{HUS Colors}
+
+(find a citation)
+
+CSV format: red, green, blue, name, catalog number
+
+.HUS Colors
+
+\threadtable{hus-colors}{HUS Colors}{data/hus_colors.csv}
+
+\section{Isacord Polyester Codes}
+
+%\threadtable{isacordpoly}{Isacord Polyester Colors}{data/isacord_polyester_colors.csv}
+
+\section{Isafil Rayon Codes}
+
+%\threadtable{isafilrayon}{Isafil Rayon Codes}{data/isafil_rayon_colors.csv}
+
+\section{JEF Colors}
+
+To do: find a citation
+
+%\threadtable{jefcolors}{JEF Colors}{data/jef_colors.csv}
+
+\section{Madeira Threads}
+
+%\threadtable{madeirapoly}{Madeira Polyester Colors}%
+{data/madeira_polyester_colors.csv}
+
+%\threadtable{madeirarayon}{Madeira Rayon Colors}{data/madeira_rayon_colors.csv}
+
+\section{Marathon Polyester Codes}
+
+%\threadtable{marathonpoly}{Marathon Polyester Codes}{data/shv_colors.csv}
+
+\section{Marathon Rayon Codes}
+
+%\threadtable{marathonrayon}{Marathon Rayon Codes}{data/shv_colors.csv}
+
+\section{Metro Polyester Code}
+
+%\threadtable{metropoly}{SHV Colors}{data/shv_colors.csv}
+
+\section{Pantone Codes}
+
+See \url{https://www.pantone-colours.com/}
+
+%\threadtable{pantone}{Pantone Colors}{data/pantone_colors.csv}
+
+\section{PCM Color Codes}
+\index{PCM Colors}
+
+%\threadtable{pcmcolors}{PCM Colors}{data/pcm_colors.csv}
+
+\section{PEC Color Codes}
+\index{PEC Colors}
+
+%\threadtable{peccolors}{PEC Colors}{data/pec_colors.csv}
+
+\section{Robinson Anton Polyester Codes}
+\index{Robinson Anton}
+
+\threadtable{robinsonanton}{Robinson Anton Colors}%
+{data/robinson_anton_colors.csv}
+
+\section{Sigma Polyester Codes}
+
+%\threadtable{sigmapoly}{Sigma Polyester Colors}%
+%{data/sigma_polyester_colors.csv}
+
+\section{Sulky Rayon Colors}
+\index{Sulky}
+\index{Rayon}
+
+%\threadtable{sulkyrayon}{Sulky Rayon Colors}{data/sulky_rayon_colors.csv}
+
+\section{SVG Colors}
+\index{SVG}
+
+Converted from the table at:
+\url{https://www.w3.org/TR/SVGb/types.html#ColorKeywords}
+
+NOTE: This supports both UK and US English names, so the repeated values aren't
+an error.
+
+\section{ThreadArt Threads}
+\index{ThreadArt}
+
+\threadtable{threadartpoly}{ThreadArt Polyester Colors}%
+{data/threadart_polyester_colors.csv}
+
+\threadtable{threadartrayon}{ThreadArt Rayon Colors}%
+{data/threadart_rayon_colors.csv}
+
+\section{ThreaDelight Polyester Codes}
+\index{ThreadDelight}
+
+\section{Z102 Threads}
+
+%\threadtable{z102isacord}{Z102 Isacord Polyester}%
+%{data/z102_isacord_polyester_colors.csv}
+

@@ -1,0 +1,422 @@
+"Name","Color","Catalog Code"
+"Light Pink", 0xFFEFCCCE, 2243
+"Pink", 0xFFFCBFC9, 2223
+"Pink Bazaar", 0xFFEFC6D3, 2599
+"Pink Mist", 0xFFF9B2B7, 2373
+"Emily Pink", 0xFFF9AFAD, 2374
+"Rose", 0xFFFC9BB2, 2293
+"Rose Cerise", 0xFFFC8C99, 2244
+"Carnation", 0xFFF2AFC1, 2237
+"Shrimp", 0xFFE5566D, 2246
+"Bashful Pink", 0xFFF4476B, 2248
+"Begonia", 0xFFE5566D, 2228
+"Azalea", 0xFFF9848E, 2412
+"Dusty Rose", 0xFFF26877, 2375
+"Rose Tint", 0xFFD8899B, 2591
+"Burgundy", 0xFF8C2633, 2249
+"TH Burgundy", 0xFF7C2128, 2608
+"Russet", 0xFF7A2638, 2252
+"Pro Firebrand", 0xFF75263D, 2622
+"Wine", 0xFF772D35, 2225
+"Intense Maroon", 0xFF593344, 2587
+"Dark Maroon", 0xFF4F213A, 2376
+"Carbernet", 0xFF931638, 2494
+"Mountain Rose", 0xFFF9B2B7, 2495
+"Warm Wine", 0xFF661E2B, 2496
+"Primrose", 0xFFE5566D, 2491
+"Perfect Ruby", 0xFF8E2344, 2497
+"Brushed Burgundy", 0xFF6D213F, 2498
+"Passion Rose", 0xFF8E2344, 2499
+"New Berry", 0xFFAD0075, 2500
+"Petal Pink", 0xFFFCC9C6, 2501
+"Memphis Belle", 0xFFF4BFD1, 2502
+"Desert Bloom", 0xFFF7BFBF, 2503
+"Wild Pink", 0xFFCE007C, 2259
+"Floral Pink", 0xFFED72AA, 2415
+"Hot Pink", 0xFFD36B9E, 2260
+"Crimson", 0xFFD60270, 2416
+"Ruby Glint", 0xFFE22882, 2261
+"Cherrystone", 0xFFAA004F, 2504
+"Cherry Punch", 0xFFAA004F, 2417
+"Cherry Blossom", 0xFFEA0F6B, 2262
+"Red Berry", 0xFFAF1E2D, 2418
+"Jockey Red", 0xFFBF0A30, 2281
+"Very Red", 0xFFBF0A30, 2419
+"Red Berry", 0xFFBF0A30, 2378
+"Foxy Red", 0xFFCE1126, 2263
+"Tuxedo Red", 0xFFD62828, 2420
+"Lipstick", 0xFFBF0A30, 2233
+"Scarlet", 0xFFC41E3A, 2219
+"Radiant Red", 0xFFC41E3A, 2266
+"Wildfire", 0xFFA32638, 2267
+"Carolina Red", 0xFF8C2633, 2268
+"Red Jubilee", 0xFF75263D, 2421
+"Cranberry", 0xFF992135, 2270
+"Antique Red", 0xFFA32638, 2505
+"Devil Red", 0xFFC41E3A, 2506
+"Rosewood", 0xFFD81C3F, 2508
+"Bitteroot", 0xFFFC5E72, 2509
+"Bisque", 0xFFF2C4AF, 2377
+"Flesh", 0xFFF4CCAA, 2413
+"Flesh Pink", 0xFFF9BAAA, 2253
+"Opal Mist", 0xFFF7BFBF, 2255
+"Candy Apple Red", 0xFFAF003D, 2507
+"Tawny", 0xFFF9BF9E, 2256
+"Peach", 0xFFF9C6AA, 2257
+"Melon", 0xFFF98E6D, 2294
+"Flamingo", 0xFFF9A58C, 2258
+"Coral", 0xFFF98972, 2414
+"Persimmon", 0xFFF43F4F, 2277
+"Peach Blossom", 0xFFF9C6AA, 2510
+"Illusion", 0xFFF9BAAA, 2511
+"Melonade", 0xFFF98972, 2512
+"Honeysuckle", 0xFFE23D28, 2513
+"Brite Jade", 0xFF008C82, 2514
+"Bluestone", 0xFF00B2A0, 2515
+"Aqua Pearl", 0xFF47D6C1, 2516
+"Seafrost", 0xFF87DDD1, 2517
+"J. Turquoise", 0xFF008789, 2492
+"Indian Ocean Blue", 0xFF2DC6D6, 2518
+"Surf Blue", 0xFF00A5DB, 2519
+"Mid Windsor", 0xFF00A3DD, 2520
+"Deep Windsor", 0xFF003F54, 2589
+"Pro Dark Blue", 0xFF002D47, 2620
+"Mallard Blue", 0xFF006D75, 2521
+"Sky Blue", 0xFF9BC4E2, 2239
+"Lake Blue", 0xFFAFBCDB, 2304
+"Pro Lusty Blue", 0xFF5B77CC, 2614
+"Slate Blue", 0xFF6D87A8, 2275
+"Blue Frost", 0xFF99D6DD, 2305
+"Periwinkle", 0xFF28C4D8, 2306
+"Aquamarine", 0xFF00ADC6, 2307
+"California Blue", 0xFF00A0C4, 2389
+"Baltic Blue", 0xFF008ED6, 2441
+"Solar Blue", 0xFF0054A0, 2442
+"Pacific Blue", 0xFF008ED6, 2388  
+"Boo Boo Blue", 0xFF00A3DD, 2730
+"Pro Band Blue", 0xFF00709E, 2737
+"Pro Peacock", 0xFF007AA5, 2740
+"Light Blue", 0xFFC9E8DD, 2222
+"Royal", 0xFF1E1C77, 2210
+"Blue Suede", 0xFF002B7F, 2438
+"Imperial Blue", 0xFF335687, 2302
+"Bridgeport Blue", 0xFFAFBCDB, 2522
+"China Blue", 0xFF335687, 2523
+"Pro Imperial", 0xFF26547C, 2612
+"Country Blue", 0xFF7796B2, 2524
+"Heron Blue", 0xFFC1C9DD, 2525
+"Pro Saxon", 0xFF7796B2, 2624
+"Bright Blue", 0xFF6689CC, 2526
+"Soldier Blue", 0xFF5960A8, 2527
+"Pro Brilliance", 0xFF0051BA, 2619
+"Atlantis Blue", 0xFF6689CC, 2528  
+"Dolphin Blue", 0xFF3A75C4, 2529
+"Caribbean Blue", 0xFF75AADB, 2530
+"Dana Blue", 0xFFC4D8E2, 2531
+"Cadet Blue", 0xFFC4D8E2, 2532
+"Ozone", 0xFF60AFDD, 2533
+"Salem Blue", 0xFF003D6B, 2534
+"Blue Ribbon", 0xFF0F2B5B, 2439
+"Pro Navy", 0xFF192168, 2625
+"Blue Ink", 0xFF2B265B, 2440
+"Pro Midnight", 0xFF002654, 2613
+"Pro College Blue", 0xFF002649, 2647
+"Light Midnight", 0xFF353F5B, 2386
+"Fleet Blue", 0xFF35264F, 2450
+"Light Navy", 0xFF112151, 2303
+"Flag Blue", 0xFF14213D, 2603
+"TH Navy", 0xFF002654, 2609  
+"Navy", 0xFF14213D, 2215
+"Midnight Navy", 0xFF14213D, 2387  
+"Pastel Blue", 0xFFC6D1D6, 2382
+"Blue Hint", 0xFFC1C9DD, 2598  
+"Ice Blue", 0xFFB5D1E8, 2300
+"Paris Blue", 0xFFD1CEDD, 2283
+"Baby Blue", 0xFF99BADD, 2206
+"Sun Blue", 0xFFAFBCDB, 2269  
+"Cristy Blue", 0xFFA5BAE0, 2383
+"Ultra Blue", 0xFF75B2DD, 2433
+"Tropic Blue", 0xFF75AADB, 2434
+"Blue Horizon", 0xFF6689CC, 2435
+"Oriental Blue", 0xFF7F8CBF, 2301
+"Copen", 0xFF6D87A8, 2245
+"Jay Blue", 0xFF5B77CC, 2384
+"Blue", 0xFF2D338E, 2220
+"Sapphire", 0xFF2D338E, 2280
+"Pro Royal", 0xFF00337F, 2627
+"Fire Blue", 0xFF003893, 2436
+"Jamie Blue", 0xFF2D338E, 2385
+"Empire Blue", 0xFF3F2893, 2437
+"Enchanted Sea", 0xFF3A564F, 2535
+"Pro Twinkle", 0xFF8499A5, 2617
+"Rockport Blue", 0xFF9BAABF, 2536
+"Wonder Blue", 0xFF5E99AA, 2577
+"Traditional Gray", 0xFFADAFAA, 2540
+"Steel", 0xFFBFBAAF, 2537
+"Pro Pearl", 0xFFBAB7AF, 2741
+"Pro Cool Gray", 0xFFC4C1BA, 2733
+"Stainless Steel", 0xFFCCC1B2, 2538
+"Chrome", 0xFFD1CCBF, 2539
+"Pro Night Sky", 0xFFADAFAA, 2618  
+"Gull", 0xFF8C8984, 2731
+"Mineral", 0xFF686663, 2729
+"Black Chrome", 0xFF443D38, 2541
+"Heather", 0xFFDDC6C4, 2271
+"Grape", 0xFFD3B7A3, 2272
+"Satin Wine", 0xFFB5939B, 2314
+"Ducky Mauve", 0xFF8E6877, 2422
+"Pale Orchid", 0xFFFCBFC9, 2423
+"Orchid", 0xFFE5BFC6, 2379
+"Lavender", 0xFFEFC6D3, 2276
+"Violet", 0xFFEDC4DD, 2285
+"Cachet", 0xFFB58CB2, 2424
+"Tulip", 0xFFC9ADD8, 2286
+"Mid Lilac", 0xFFE29ED6, 2588
+"Port Wine", 0xFF512654, 2600
+"Pro Maroon", 0xFF512D44, 2616
+"Laurie Lilac", 0xFF8E47AD, 2425
+"Iris", 0xFFAF72C1, 2288
+"Raspberry", 0xFF9B4F96, 2426
+"Mulberry", 0xFF66116D, 2380
+"Plum Wine", 0xFF63305E, 2490
+"Purple Twist", 0xFF1E1C77, 2429  
+"Violet Blue", 0xFF332875, 2427
+"Purple Maze", 0xFF35006D, 2428
+"Pro Brite Star", 0xFF2B1166, 2736
+"Pro Violet", 0xFF38197A, 2742
+"Pro Purple", 0xFF35006D, 2628  
+"Purple", 0xFF8E47AD, 2254
+"Purple Shadow", 0xFF5B027A, 2430
+"Dark Purple", 0xFF4C145E, 2381
+"Mauve", 0xFF8977BA, 2287
+"Purple Accent", 0xFF44235E, 2431
+"Hot Peony", 0xFFAA0066, 2590
+"Passion", 0xFFCE007C, 2291
+"Strawberry", 0xFFAA004F, 2432
+"Plum", 0xFF9E2387, 2292
+"Misty", 0xFF5E99AA, 2308  
+"Mystic Teal", 0xFF609191, 2443
+"Teal", 0xFF609191, 2309  
+"Dark Teal", 0xFF003F54, 2444
+"Mint Julep", 0xFF93DDDB, 2310
+"Turquoise", 0xFF7FD6DB, 2204
+"M.D. Green", 0xFF007272, 2445
+"Seafoam", 0xFF70CE9B, 2311
+"Isle Green", 0xFF70CE9B, 2312
+"Peppermint", 0xFF35C4AF, 2390
+"Oceanic Green", 0xFF006D75, 2446
+"Pro Teal", 0xFF006B77, 2621
+"Garden Green", 0xFF006663, 2447
+"Pro Green", 0xFF006D66, 2735
+"Pine Green", 0xFF008C82, 2391
+"Greenstone", 0xFF008272, 2448
+"Fern Green", 0xFF006663, 2449  
+"Pro Hunter", 0xFF006D66, 2615
+"Palm Leaf", 0xFFBCC1B2, 2241
+"Flite Green", 0xFFC6D6A0, 2282
+"Willow", 0xFF9EAA99, 2221
+"Sprite", 0xFFB2D8D8, 2313
+"Moss", 0xFF7AA891, 2278
+"Wintergreen", 0xFF7AA891, 2594
+"Green Forest", 0xFF006056, 2451
+"Pro Forest", 0xFF006056, 2743
+"Harbor Green", 0xFF4F6D5E, 2392
+"Evergreen", 0xFF024930, 2315
+"Pro Dark Green", 0xFF004438, 2734
+"Lizzy Lime", 0xFF2B4C3F, 2631
+"D.H. Green", 0xFF282D26, 2411
+"Celery", 0xFFF2EABC, 2316
+"Pistachio", 0xFFCCC693, 2250
+"Olive Drab", 0xFF5E663A, 2317
+"Olive", 0xFF779182, 2202
+"Pale Green", 0xFFC9E8DD, 2318  
+"Green Pearl", 0xFF93DDDB, 2452
+"Sea Mist", 0xFF93DDDB, 2393
+"Mint", 0xFFB5E8BF, 2238
+"Spruce", 0xFFAADD6D, 2279
+"Nile", 0xFFA0DB8E, 2211
+"Green Oak", 0xFFB5CC8E, 2319
+"Erin Green", 0xFF8CD600, 2320
+"Pro Erin", 0xFF56AA1C, 2738
+"Emerald", 0xFF339E35, 2214
+"Dark Emerald", 0xFF007A3D, 2453
+"Light Kelly", 0xFF007A3D, 2410
+"Kelly", 0xFF007A3D, 2240
+"Dark Green", 0xFF008751, 2208
+"Fleece Green", 0xFF006B3F, 2454
+"TH Green", 0xFF006854, 2607
+"Harvest Green", 0xFF1EB53A, 2578
+"Vibrant Green", 0xFF009E49, 2579
+"Green Grass", 0xFF009E49, 2580
+"Deep Green", 0xFF006B3F, 2284
+"Green Bay", 0xFF006B54, 2455
+"Jungle Green", 0xFF007C66, 2597
+"Peapod", 0xFFA3AF07, 2456
+"Pastoral Green", 0xFF7FBA00, 2321
+"Green Dust", 0xFF7FBA00, 2457  
+"Ming", 0xFF7FBA00, 2322
+"Meadow", 0xFF568E14, 2226
+"Tamarack", 0xFF939905, 2230
+"Palmetto", 0xFF566314, 2229
+"Green Petal", 0xFF024930, 2458  
+"Sage", 0xFF547730, 2595
+"Hedge", 0xFF3F4926, 2601
+"Green", 0xFF3A7728, 2209
+"Green Sail", 0xFF193833, 2459
+"Holly", 0xFF215B33, 2323
+"Field Green", 0xFF265142, 2460
+"Dress Green", 0xFF3F4926, 2584
+"Foliage Green", 0xFF99840A, 2542
+"Autumn Green", 0xFFA38205, 2543
+"Desert Cactus", 0xFF897719, 2544
+"Cypress", 0xFF707014, 2545
+"Crescent Moon", 0xFF848205, 2546
+"Pebblestone", 0xFFE2E584, 2547
+"Sun Shadow", 0xFF998E07, 2548
+"Blue Spruce", 0xFF00494F, 2549
+"Newport", 0xFF4F6D5E, 2550
+"Spring Garden", 0xFF779182, 2551
+"Water Lilly", 0xFF546856, 2554
+"Ivy", 0xFF0C3026, 2552
+"Dark Army Green", 0xFF233A2D, 2553
+"Army Green", 0xFF213D30, 2728
+"Pastel Green", 0xFFC9D6A3, 2555
+"Pollen Gold", 0xFFE0AA0F, 2556
+"Pale Yellow", 0xFFF4E287, 2557
+"Buttercup", 0xFFFFC61E, 2558
+"Tusk", 0xFFF7E8AA, 2559
+"Moonbeam", 0xFFF9DD16, 2560
+"Black Eyed Susie", 0xFFC6A00C, 2561
+"Bullion", 0xFFA37F14, 2562
+"Chinese Yellow", 0xFFF7E8AA, 2324
+"Maize", 0xFFF7E8AA, 2264
+"Wheat", 0xFFEADD96, 2461
+"Pro Maize", 0xFFF9E08C, 2732
+"Glow", 0xFFFFD87F, 2234
+"Star Gold", 0xFFFCD856, 2408
+"Mango", 0xFFFCA311, 2394
+"Yellow Mist", 0xFFFCA311, 2409  
+"Yellow", 0xFFFCA311, 2213
+"Sunflower", 0xFFF9DD16, 2462
+"Lemon", 0xFFF4ED47, 2325
+"Daffodil", 0xFFF9E814, 2326
+"Merit Gold", 0xFFFCB514, 2463
+"Cornsilk", 0xFFFFCC49, 2395
+"Nectar", 0xFFFFC61E, 2464
+"Scholastic", 0xFFFCBF49, 2465
+"Canary Yellow", 0xFFFCE016, 2235
+"Pro Gold", 0xFFFFC61E, 2626
+"Manila", 0xFFFCD116, 2466
+"Goldenrod", 0xFFFCD116, 2242
+"Brite Yellow", 0xFFFFCC49, 2396
+"Honeydew", 0xFFF99B0C, 2327
+"Pumpkin", 0xFFF77F00, 2328
+"Orangeade", 0xFFF74902, 2467
+"Sun Orange", 0xFFF74902, 2397  
+"Paprika", 0xFFF95602, 2236
+"Saffron", 0xFFF93F26, 2329
+"Tex Orange", 0xFFF95602, 2468  
+"Orange", 0xFFF96B07, 2218
+"Dark Tex Orange", 0xFFF96302, 2469
+"Old Dark Tex Orange", 0xFFA53F0F, 2581
+"Golden Poppy", 0xFFFC8744, 2330
+"Rust", 0xFFBC4F07, 2289
+"Copper", 0xFFAF7505, 2295
+"Light Bronze", 0xFFC18E60, 2493
+"Visor Gold", 0xFFFCCE87, 2398
+"Goldenlite", 0xFFFFCC49, 2605
+"Honey", 0xFFFCBA5E, 2247
+"Marigold", 0xFFFFCC49, 2216
+"Mustard", 0xFFE0AA0F, 2331
+"Sun Gold", 0xFFE0AA0F, 2212
+"Karat", 0xFFE0AA0F, 2470
+"Penny", 0xFFF2BF49, 2332
+"New Gold", 0xFFFCCE87, 2399  
+"Pro Beige", 0xFFE2D6B5, 2630
+"Marine Gold", 0xFFC6A00C, 2596
+"Ginger", 0xFFA37F14, 2333
+"Shimmering Gold", 0xFFC6A00C, 2471
+"Old Gold", 0xFFBF910C, 2201
+"Salmon", 0xFFEAB2B2, 2299
+"Dark Rust", 0xFFC13828, 2205
+"Terra Cotta", 0xFFA03033, 2334
+"Pro Red", 0xFFAF1E2D, 2623
+"Auburn", 0xFFAF1E2D, 2472
+"Bone", 0xFFFAE6CC, 2582
+"Ivory", 0xFFFAE6CF, 2335
+"Opaline", 0xFFF7D3B5, 2473
+"Ecru", 0xFFEDD3BC, 2232
+"Wicker", 0xFFAA753F, 2489
+"Tan", 0xFFD3A87C, 2273
+"Cottage Beige", 0xFFEDD3B5, 2593
+"Rattan", 0xFFC1A875, 2474
+"Gold", 0xFFE2BF9B, 2203
+"Mocha Cream", 0xFFD3A87C, 2475
+"Topaz", 0xFFBF910C, 2400
+"Ashley Gold", 0xFFD18E54, 2401
+"Amber Beige", 0xFFD8B596, 2336
+"Seashell", 0xFFD6CCAF, 2476
+"Light Maize", 0xFFF2E3C4, 2604
+"Beige", 0xFFAA753F, 2224
+"Sand Dune", 0xFF6B4714, 2477
+"Taupe", 0xFFD1BF91, 2298
+"Pro Brown", 0xFF6C463D, 2610
+"Chocolate", 0xFF876028, 2227
+"Pro Walnut", 0xFF755426, 2629
+"Light Cocoa", 0xFF755426, 2478  
+"Cocoa Mulch", 0xFFB28260, 2488
+"Brown", 0xFF593D2B, 2251
+"Dark Brown", 0xFF593D2B, 2372
+"Espresso", 0xFF3F302B, 2337
+"Bamboo", 0xFFC18E60, 2338  
+"Almond", 0xFFAF7505, 2479  
+"Toast", 0xFFBA7530, 2231
+"Sienna", 0xFF755426, 2402
+"K.A. Bronze", 0xFFB26B70, 2480
+"Pro Cinnamon", 0xFFA2464E, 2611
+"Date", 0xFF9B4F19, 2290
+"Hazel", 0xFF9B4F19, 2481
+"Coffee Bean", 0xFF5B2D28, 2339
+"Dogwood", 0xFF593D2B, 2563
+"Mahogany", 0xFF3F302B, 2564
+"Best Brown", 0xFF3D3028, 2566
+"Mushroom", 0xFF633A11, 2567
+"Perfect Tan", 0xFFC1A875, 2568  
+"Earthen Tan", 0xFF7A5B11, 2569
+"Golden Tan", 0xFFC1A875, 2570
+"14 Kt. Gold", 0xFFF2BF49, 2586
+"TH Gold", 0xFFF2CE68, 2606
+"24 Kt. Gold", 0xFFD88C02, 2602
+"Platinum", 0xFFC1B5A5, 2571
+"Pro Gray", 0xFF99897C, 2739
+"Grayrod", 0xFFADA07A, 2572
+"Pewter", 0xFFADA07A, 2573
+"Aspen White", 0xFFF5E3CC, 2574
+"Dark Taupe", 0xFF66594C, 2575
+"Egyptian Brown", 0xFF493533, 2576
+"Oyster", 0xFFF5EBE0, 2403
+"Gray", 0xFFDDC6C4, 2207  
+"Pearl Gray", 0xFFDBD3D3, 2340
+"Steel Gray", 0xFFD8CCD1, 2274
+"Skylight", 0xFFCCC1C6, 2482
+"Cloud", 0xFFAFAAA3, 2483
+"Silver Steel", 0xFFADAFAA, 2592
+"Banner Gray", 0xFF919693, 2585
+"Silvery Gray", 0xFF8C8984, 2484
+"Cinder", 0xFFCCC1C6, 2404
+"Saturn Gray", 0xFFDBD3D3, 2485
+"Dover Gray", 0xFFCCC1C6, 2405
+"Storm Gray", 0xFFB2A8B5, 2486
+"Sterling", 0xFFA893AD, 2406
+"Metal", 0xFF666D70, 2407
+"Twilight", 0xFF686663, 2217  
+"Aged Charcoal", 0xFF443D38, 2565
+"Charcoal", 0xFF777772, 2265
+"Smokey", 0xFF353842, 2487
+"Ash", 0xFF3A4972, 2341
+"Black", 0xFF1C2630, 2296
+"Snow White", 0xFFF5EBE0, 2297  
+"Natural White", 0xFFF5EDDE, 2342
+"Eggshell", 0xFFF0E8D6, 2343
+"Jet Black", 0xFF1C2630, 2632
+

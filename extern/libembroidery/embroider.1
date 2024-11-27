@@ -1,0 +1,182 @@
+.TH EMBROIDER 1 "2024-03-28" "libembroidery" "Embroidermodder"
+.SH NAME
+embroider \- program for converting and altering machine embroidery files
+.SH SYNOPSIS
+Usage: embroider [\fIoptions\fR] [\fIinput_file\fR]...
+.SH DESCRIPTION
+.PP
+Embroider is the command-line front end to the libembroidery library.
+.SS Conversion and Simple Generation
+.PP
+To convert a file to CSV format as part of a longer pipeline, imagine that the program
+"\f[C]my_program\f[R]" generates a dst file and consider this example:
+.PP
+\f[C]
+$ my_program | embroider -t csv ${file} | head -n 10
+\f[R]
+
+.PP
+In Bash, for example you could convert every csv pattern in a folder to dst like this:
+.PP
+\f[C]
+.IP
+for file in *.csv
+.IP
+do
+.IP
+    embroider ${file} -o ${file::-4}.dst
+.IP
+done
+\f[R]
+.SS PostScript Engine
+.PP
+Since \fBembroider\fR needs to process vector drawings as designs, there is
+a basic PostScript (R) language interpreter embedded in libembroidery.
+.PP
+If you run \fBembroider\fR with no arguments, rather than using the flags to
+create and alter designs, you can use the syntax of Adobe's PostScript (R) language.
+By default, a pattern is loaded, so to add a circle to the empty design
+then the call would be:
+.PP
+\f[C]
+.IP
+emb> 50 60 40 circle
+.IP
+emb> "output.dst" saveas
+.IP
+emb> quit
+\f[R]
+.PP
+Which is equivalent to the command line:
+.PP
+\f[C]
+.IP
+$ embroider -c "50 60 40 circle" -o output.dst
+\f[R]
+.PP
+These are both translated into the same underlying internal script.
+.SH OPTIONS
+.SS Conversion:
+.IP "\fB\-o, \-\-output\fR" 4
+.IX Item "-o"
+.IX Item "--output"
+.PD
+Convert all files given to the format specified by the arguments to the flag,
+for example:
+.PD
+\f[C]
+.IP
+$ embroider -o output.dst input.pes
+\f[R]
+
+.PD
+would convert \fBinput.pes\fR to \fBinput.dst\fR in the same directory the program
+runs in.
+.PD
+For information on what formats are accepted for input and output, use the
+\fB--formats\fR flag.
+.IP "\fB\-f\fR, \fB\-\-from\fR"
+.IX Item "-f"
+.IX Item "--from"
+.PD
+The \fB\-f\fR flag fixes the input format. So in our piping example from the description,
+the input doesn't have to be a format that can be interpreted from the opening bytes.
+.IP "\fB\-t\fR, \fB\-\-to\fR"
+.IX Item "-t"
+.IX Item "--to"
+.PD
+The \fB\-t\fR flag fixes the output format.
+By default, the output on the command line is the focussed pattern, in TXT format.
+If you want the CSV output, which would also be entirely be printable characters,
+then pass \fBcsv\fR to the \fB\-t\fR flag like this:
+.PD
+\f[C]
+.IP
+$ embroider -t csv input.pes
+\f[R]
+
+.PD
+If the output flag \fB-o\fR is used then this overrides the output format to the given
+one. For example:
+.PD
+\f[C]
+$ embroider -t csv input.pes -o output.txt
+\f[R]
+
+.PD
+Ensures that the output is CSV even though the extension is TXT.
+.SS Command Line Output:
+.IP "\fB\-h\fR, \fB\-\-help\fR" 4
+.IX "-h"
+.IX "--help"
+.PD
+Print this message.
+.IP "\fB-F\fR, \fB\-\-formats" 4
+.IX "-F"
+.IX "--formats"
+.PD
+Print help on the formats that embroider can deal with.
+.IP "\fB\-q\fR, \fB\-\-quiet\fR" 4
+.IX "-q"
+.IX "--quiet"
+.PD
+Only print fatal errors.
+.IP "\fB\-V\fR, \fB\-\-verbose\fR" 4
+.IX "-V"
+.IX "--verbose"
+.PD
+Print everything that has reporting.
+.IP "\fB\-v\fR, \fB\-\-version\fR" 4
+.IX "-v"
+.IX "--version"
+.PD
+Print the version.
+.SS Manage patterns:
+.IP "\fB\-\-combine\fR" 4
+.IX "--combine"
+.PD
+takes all arguments and combines them by placing them atop each other
+and outputs to the third
+\f[C]
+$ embroider --combine a.dst b.dst -o output.dst
+\f[R]
+.IP "\fB\-c\fR, \fB\-\-commands\fR" 4
+.IX "-c"
+.IX "--commands"
+.PD
+Allows the command line to have a PostScript script to act directly on the current focussed
+pattern.
+.SS Graphics:
+.IP "\fB\-r\fR, \fB\-\-render\fR" 4
+.IX "-r"
+.IX "--render"
+.PD
+Create an image in PNG format of what the embroidery should look like.
+.IP "\fB\-s\fR, \fB\-\-satin\fR" 4
+.IX "-s"
+.IX "--satin"
+.PD
+Fill the current geometry with satin stitches according
+to the defined algorithm.
+.IP "\fB\-S\fR, \fB\-\-stitch\fR" 4
+.IX "-S"
+.IX "--stitch"
+.PD
+Add a stitch defined by the arguments given to the current pattern.
+This is equivalent to the command \f[C]-c "X Y COLOR stitch"\f[R].
+.SS Quality Assurance:
+.IP "\fB\-\-test\fR" 4
+.IX "--test"
+.PD
+Run the basic test suite.
+.IP "\fB\-\-full-test-suite\fR" 4
+.IX "--full-test-suite"
+.PD
+Run all tests, even those we expect to fail.
+.SH AUTHORS
+.PP
+Copyright 2018-2024 The Embroidermodder Team.
+.PP
+Licensed under the terms of the zlib license.
+.PP
+https://www.libembroidery.org

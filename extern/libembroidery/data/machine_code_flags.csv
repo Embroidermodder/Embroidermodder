@@ -1,0 +1,7 @@
+"label","description","value"
+"NORMAL","Stitch to (x, y).","0x00"
+"JUMP","Move to (x, y).","0x01"
+"TRIM","Trim and move to (x, y).","0x02"
+"STOP","Pause machine for a thread change.","0x04"
+"SEQUIN","Add a sequin at the current co-ordinates.","0x08"
+"END","End of program.","0x10"

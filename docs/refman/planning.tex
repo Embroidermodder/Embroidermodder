@@ -1,0 +1,499 @@
+
+\chapter{Planning}
+
+\subsection{Current work}
+
+\begin{itemize}
+\item `EmbPattern *pattern` as a variable in the `View` class.
+\item Removing the now unnecessary `SaveObject` class.
+\item Converting all comments to C style.
+\item Switching away from Doxygen-style in favour of direct commentary and a custom written reference manual.
+\end{itemize}
+
+\subsection{Arduino To-Do}
+
+\begin{itemize}
+\item Fix emb-outline files
+\item Fix thread-color files
+\item Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced), wait until TRE is available to avoid rework
+\item inotool.org - seems like the logical solution for Nightly/CI builds
+\item Smoothieboard experiments
+\end{itemize}
+
+\subsection{libembroidery-tests To-Do}
+
+\begin{itemize}
+\item looping test that reads 10 times while running valgrind. See \texttt{embPattern\_loadExternalColorFile()} Arduino leak note for more info.
+\end{itemize}
+
+\subsection{Documentation To-Do}
+
+\begin{itemize}
+\item Document all tests.
+\item Automation of tests.
+\item Ensure that the stitch count matches what we know the file has
+\end{itemize}
+
+\section{Embroidermodder and Libembroidery To-Do}
+
+\subsection{2.0 alpha1}
+
+\begin{itemize}
+\item WIP - Statistics from 1.0, needs histogram
+\item WIP - Saving DST/PES/JEF (varga)
+\item WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
+\end{itemize}
+
+\subsection{2.0 alpha2}
+
+\begin{itemize}
+\item Notify user of data loss if not saving to an object format.
+\item Import Raster Image
+\item SNAP/ORTHO/POLAR
+\item Layer Manager + LayerSwitcher DockWidget
+\item Reading DXF
+\end{itemize}
+
+\subsection{2.0 alpha3}
+
+\begin{itemize}
+\item Writing DXF
+\item Up and Down keys cycle thru commands in the command prompt
+\item Amount of Thread and Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc. that way a realistic total time can be estimated)
+\item Otto Theme Icons - whatsthis icon doesn't scale well, needs redone
+\item embroidermodder2.ico 16 x 16 looks horrible
+\end{itemize}
+
+\subsection{2.0 alpha4}
+
+\begin{itemize}
+\item WIP - CAD Command: Arc (rt)
+\item Load/Save Menu/Toolbars configurations into settings.ini
+\end{itemize}
+
+\subsection{2.0 beta1}
+
+\begin{itemize}
+\item Custom Filter Bug - doesn't save changes in some cases
+\item Cannot open file with \# in name when opening multiple files (works fine when opening the single file)
+\item Closing Settings Dialog with the X in the window saves settings rather than discards them
+\item WIP - Advanced Printing
+\item Filling Algorithms (varga)
+\item Otto Theme Icons - beta (rt) - Units, Render, Selectors
+\end{itemize}
+
+\subsection{2.0 rc1}
+
+\begin{itemize}
+\item QDoc Comments
+\item Review KDE4 Thumbnailer
+\item Documentation for libembroidery and formats
+\item HTML Help files
+\item Update language translations
+\item CAD Command review: line
+\item CAD Command review: circle
+\item CAD Command review: rectangle
+\item CAD Command review: polygon
+\item CAD Command review: polyline
+\item CAD Command review: point
+\item CAD Command review: ellipse
+\item CAD Command review: arc
+\item CAD Command review: distance
+\item CAD Command review: locatepoint
+\item CAD Command review: move
+\item CAD Command review: rgb
+\item CAD Command review: rotate
+\item CAD Command review: scale
+\item CAD Command review: singlelinetext
+\item CAD Command review: star
+\item Clean up all compiler warning messages, right now theres plenty :P
+\end{itemize}
+
+\subsection{2.0 release}
+
+\begin{itemize}
+\item tar.gz archive
+\item zip archive
+\item Debian Package (rt)
+\item NSIS Installer for Windows (rt)
+\item RPM package
+\item Mac Bundle?
+\item press release
+\end{itemize}
+
+\subsection{2.x/Ideas}
+
+\begin{itemize}
+\item Cut/copy allow post-selection.
+\item Layout into config.
+\item beta
+\item Get undo history widget back (BUG).
+\item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+\item Update all formats without color to check for edr or rgb files.
+\item Setting for reverse scrolling direction (for zoom, vertical pan)
+\item New embroidermodder2.ico 16x16 logo that looks good at that scale.
+\item Saving dst, pes, jef.
+\item Trim jumps over a certain length.
+\item FAQ about setting high number of jumps for more controlled trimming.
+\item Minimum stitch length option. (Many machines also have this option too)
+\item Add 'Design Details' functionality to libembroidery-convert
+\item Add 'Batch convert many to one format' functionality to libembroidery-convert
+\item EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+\item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+\item Update language translations.
+\item Replace KDE4 thumbnailer.
+\item Import raster image.
+\item Notify user of data loss if not saving to an object format.
+\item Add which formats to work with to preferences.
+\item Cannot open file with `\#` in the name when opening multiple files but works with opening a single file.
+\item Closing settings dialog with the X in the window saves settings rather than discarding them.
+\item Otto theme icons: units, render, selectors, what's this icon doesn't scale.
+\item Layer manager and Layer switcher dock widget.
+\item Test that all formats read data in correct scale (format details should match other programs).
+\item Custom filter bug -- doesn't save changes in some cases.
+\item Tools to find common problems in the source code and suggest fixes to the developers. For example, a translation miss: that is, for any language other than English a missing entry in the translation table should supply a clear warning to developers.
+\item Converting Qt C++ version to native GUI C throughout.
+\item OpenGL Rendering: `Real` rendering to see what the embroidery looks like, Icons and toolbars, Menu bar.
+\item Libembroidery interfacing: get all classes to use the proper libembroidery types within them. So `Ellipse` has `EmbEllipse` as public data within it.
+\item Move calculations of rotation and scaling into `EmbVector` calls.
+\item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+\item Update all formats without color to check for edr or rgb files.
+\item Setting for reverse scrolling direction (for zoom, vertical pan)
+\item Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
+\end{itemize}
+
+\begin{itemize}
+\item libembroidery.mk for MXE project (refer to qt submodule packages for qmake based
+    building. Also refer to plibc.mk for example of how write an update macro for
+    github.)
+\item libembroidery safeguard for all writers - check if the last stitch is an END
+    stitch. If not, add an end stitch in the writer and modify the header data if
+    necessary.
+\item Cut/Copy - Allow Post-selection
+\item CAD Command: Array
+\item CAD Command: Offset
+\item CAD Command: Extend
+\item CAD Command: Trim
+\item CAD Command: BreakAtPoint
+\item CAD Command: Break2Points
+\item CAD Command: Fillet
+\item CAD Command: Chamfer
+\item CAD Command: Split
+\item CAD Command: Area
+\item CAD Command: Time
+\item CAD Command: PickAdd
+\item CAD Command: Product
+\item CAD Command: Program
+\item CAD Command: ZoomFactor
+\item CAD Command: GripHot
+\item CAD Command: GripColor and GripCool
+\item CAD Command: GripSize
+\item CAD Command: Highlight
+\item CAD Command: Units
+\item CAD Command: Grid
+\item CAD Command: Find
+\item CAD Command: Divide
+\item CAD Command: ZoomWindow (Move out of view.cpp)
+\item Command: Web (Generates Spiderweb patterns)
+\item Command: Guilloche (Generates Guilloche patterns)
+\item Command: Celtic Knots
+\item Command: Knotted Wreath
+\item Lego Mindstorms NXT/EV3 ports and/or commands.
+\item native function that flashes the command prompt to get users attention when
+    using the prompt is required for a command.
+\item libembroidery-composer like app that combines multiple files into one.
+\item Settings Dialog, it would be nice to have it notify you when switching tabs that
+    a setting has been changed. Adding an Apply button is what would make sense for
+    this to happen.
+\item Keyboard Zooming/Panning
+\item G-Code format?
+\item 3D Raised Embroidery
+\item Gradient Filling Algorithms
+\item Stitching Simulation
+\item RPM packages?
+\item Reports?
+\item Record and Playback Commands
+\item Settings option for reversing zoom scrolling direction
+\item Qt GUI for libembroidery-convert
+\item EPS format? Look at using Ghostscript as an optional add-on to libembroidery...
+\item optional compile option for including LGPL/GPL libs etc. with warning to user
+    about license requirements.
+\item Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+\item Stippling Fill
+\item User Designed Custom Fill
+\item Honeycomb Fill
+\item Hilbert Curve Fill
+\item Sierpinski Triangle fill
+\item Circle Grid Fill
+\item Spiral Fill
+\item Offset Fill
+\item Brick Fill
+\item Trim jumps over a certain length.
+\item FAQ about setting high number of jumps for more controlled trimming.
+\item Minimum stitch length option. (Many machines also have this option too)
+\item Add 'Design Details' functionality to libembroidery-convert
+\item Add 'Batch convert many to one format' functionality to libembroidery-convert
+\item EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+\item emscripten/javascript port of libembroidery
+\end{itemize}
+
+\begin{itemize}
+\item todo sort todo list.
+\item beta
+\item Custom Filter Bug - doesn't save changes in some cases
+\item Cannot open file with `\#` in name when opening multiple files (works fine when opening the single file)
+\item Closing Settings Dialog with the X in the window saves settings rather than discards them
+\item Advanced Printing
+\item Filling Algorithms (varga)
+\item Otto Theme Icons - beta (rt) - Units, Render, Selectors
+\item 2.x/Ideas
+\item libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)
+\item libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.
+\item Cut/Copy - Allow Post-selection
+\item optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.
+\item Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+\item Trim jumps over a certain length.
+\item FAQ about setting high number of jumps for more controlled trimming.
+\item Minimum stitch length option. (Many machines also have this option too)
+\item Add 'Design Details' functionality to libembroidery-convert
+\item Add 'Batch convert many to one format' functionality to libembroidery-convert
+\item EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+\item beta
+\item Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+\item Get undo history widget back (BUG).
+\item Mac Bundle, .tar.gz and .zip source archive.
+\item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+\item Update all formats without color to check for edr or rgb files.
+\item Setting for reverse scrolling direction (for zoom, vertical pan)
+\item Keyboard zooming, panning
+\item New embroidermodder2.ico 16x16 logo that looks good at that scale.
+\item Saving dst, pes, jef.
+\item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+\item Update language translations.
+\item Replace KDE4 thumbnailer.
+\item Import raster image.
+\item Statistics from 1.0, needs histogram.
+\item SNAP/ORTHO/POLAR.
+\item Cut/copy allow post-selection.
+\item Layout into config.
+\item Notify user of data loss if not saving to an object format.
+\item Add which formats to work with to preferences.
+\item Cannot open file with `\#` in the name when opening multiple files but works with opening a single file.
+\item Closing settings dialog with the X in the window saves settings rather than discarding them.
+\item Otto theme icons: units, render, selectors, what's this icon doesn't scale.
+\item Layer manager and Layer switcher dock widget.
+\item Test that all formats read data in correct scale (format details should match other programs).
+\item Custom filter bug -- doesn't save changes in some cases.
+\item Tools to find common problems in the source code and suggest fixes to the developers. For example, a translation miss: that is, for any language other than English a missing entry in the translation table should supply a clear warning to developers.
+\item Converting Qt C++ version to native GUI C throughout.
+\item OpenGL Rendering: `Real` rendering to see what the embroidery looks like, Icons and toolbars, Menu bar.
+\item Libembroidery interfacing: get all classes to use the proper libembroidery types within them. So `Ellipse` has `EmbEllipse` as public data within it.
+\item Move calculations of rotation and scaling into `EmbVector` calls.
+\item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+\item Update all formats without color to check for edr or rgb files.
+\item Setting for reverse scrolling direction (for zoom, vertical pan)
+\item Keyboard zooming, panning
+\item Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
+\item New embroidermodder2.ico 16x16 logo that looks good at that scale.
+\item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+\end{itemize}
+
+\begin{verbatim}
+# To Do
+
+## Current work
+
+1. `EmbPattern *pattern` as a variable in the `View` class.
+2. Removing the now unnecessary `SaveObject` class.
+3. Converting all comments to C style.
+4. Switching away from Doxygen-style in favour of direct commentary and a custom written reference manual.
+
+## Documentation
+
+* Document all tests.
+* Automation of tests.
+* Ensure that the stitch count matches what we know the file has
+
+### 2.x/Ideas
+
+* Cut/Copy - Allow Post-selection
+* CAD Command: Array
+* CAD Command: Offset
+* CAD Command: Extend
+* CAD Command: Trim
+* CAD Command: BreakAtPoint
+* CAD Command: Break2Points
+* CAD Command: Fillet
+* CAD Command: Chamfer
+* CAD Command: Split
+* CAD Command: Area
+* CAD Command: Time
+* CAD Command: PickAdd
+* CAD Command: Product
+* CAD Command: Program
+* CAD Command: ZoomFactor
+* CAD Command: GripHot
+* CAD Command: GripColor and GripCool
+* CAD Command: GripSize
+* CAD Command: Highlight
+* CAD Command: Units
+* CAD Command: Grid
+* CAD Command: Find
+* CAD Command: Divide
+* CAD Command: ZoomWindow (Move out of view.cpp)
+* native function that flashes the command prompt to get users attention when using the prompt is required for a command.
+* libembroidery-composer like app that combines multiple files into one.
+* Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen.
+* Keyboard Zooming/Panning
+* G-Code format?
+* 3D Raised Embroidery
+* Gradient Filling Algorithms
+* Stitching Simulation
+* RPM packages?
+* Reports?
+* Record and Playback Commands
+* Settings option for reversing zoom scrolling direction
+* Qt GUI for libembroidery-convert
+* EPS format? Look at using Ghostscript as an optional add-on to libembroidery
+* optional compile option for including LGPL/GPL libs etc. with warning to user about license requirements.
+* Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+* Trim jumps over a certain length.
+* FAQ about setting high number of jumps for more controlled trimming.
+* Minimum stitch length option. (Many machines also have this option too)
+* Add 'Design Details' functionality to libembroidery-convert
+* Add 'Batch convert many to one format' functionality to libembroidery-convert
+* EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+* emscripten/javascript port of libembroidery
+
+### Arduino
+
+* Fix emb-outline files
+* Fix thread-color files
+* Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced), wait until TRE is available to avoid rework
+* inotool.org - seems like the logical solution for Nightly/CI builds
+* Smoothieboard experiments
+
+### libembroidery-tests
+
+* looping test that reads 10 times while running valgrind. See ``embPattern\_loadExternalColorFile()`` Arduino leak note for more info.
+
+* todo sort todo list.
+\item Alpha: low priority
+  \item Writing DXF\item Up and Down keys cycle thru commands in the command prompt
+  \item Amount of Thread, Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
+  \item Otto Theme Icons - whatsthis icon doesn't scale well, needs redone
+  \item embroidermodder2.ico 16 x 16 looks horrible
+\item Alpha: lower priority
+  \item CAD Command: Arc (rt)
+\item beta
+  \item Custom Filter Bug - doesn't save changes in some cases
+  \item Cannot open file with `\#` in name when opening multiple files (works fine when opening the single file)
+  \item Closing Settings Dialog with the X in the window saves settings rather than discards them
+  \item Advanced Printing
+  \item Filling Algorithms (varga)
+  \item Otto Theme Icons - beta (rt) - Units, Render, Selectors
+\item 2.0
+  \item tar.gz archive
+  \item zip archive
+  \item Debian Package (rt)
+  \item NSIS Installer (rt)
+  \item Mac Bundle?
+  \item press release
+\item 2.x/Ideas
+  \item libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)
+  \item libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.
+  \item Cut/Copy - Allow Post-selection
+  \item CAD Command: Array
+  \item CAD Command: Offset
+  \item CAD Command: Extend
+  \item CAD Command: Trim
+  \item CAD Command: BreakAtPoint
+  \item CAD Command: Break2Points
+  \item CAD Command: Fillet
+  \item CAD Command: Chamfer
+  \item CAD Command: Split
+  \item CAD Command: Area
+  \item CAD Command: Time
+  \item CAD Command: PickAdd
+  \item CAD Command: Product
+  \item CAD Command: Program
+  \item CAD Command: ZoomFactor
+  \item CAD Command: GripHot
+  \item CAD Command: GripColor and GripCool
+  \item CAD Command: GripSize
+  \item CAD Command: Highlight
+  \item CAD Command: Units
+  \item CAD Command: Grid
+  \item CAD Command: Find
+  \item CAD Command: Divide
+  \item CAD Command: ZoomWindow (Move out of view.cpp)
+  \item Command: Web (Generates Spiderweb patterns)
+  \item Command: Guilloche (Generates Guilloche patterns)
+  \item Command: Celtic Knots
+  \item Command: Knotted Wreath
+  \item Lego Mindstorms NXT/EV3 ports and/or commands.
+  \item native function that flashes the command prompt to get users attention when using the prompt is required for a command.
+  \item libembroidery-composer like app that combines multiple files into one.
+  \item Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen.
+  \item Keyboard Zooming/Panning
+  \item G-Code format?
+  \item 3D Raised Embroidery
+  \item Gradient Filling Algorithms
+  \item Stitching Simulation
+  \item RPM packages?
+  \item Reports?
+  \item Record and Playback Commands
+  \item Settings option for reversing zoom scrolling direction
+  \item Qt GUI for libembroidery-convert
+  \item EPS format? Look at using Ghostscript as an optional add-on to libembroidery...
+  \item optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.
+  \item Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+  \item Trim jumps over a certain length.
+  \item FAQ about setting high number of jumps for more controlled trimming.
+  \item Minimum stitch length option. (Many machines also have this option too)
+  \item Add 'Design Details' functionality to libembroidery-convert
+  \item Add 'Batch convert many to one format' functionality to libembroidery-convert
+  \item EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+\item beta
+  \item Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+  \item Get undo history widget back (BUG).
+  \item Mac Bundle, .tar.gz and .zip source archive.
+  \item NSIS installer for Windows, Debian package, RPM package
+  \item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+  \item Update all formats without color to check for edr or rgb files.
+  \item Setting for reverse scrolling direction (for zoom, vertical pan)
+  \item Keyboard zooming, panning
+  \item New embroidermodder2.ico 16x16 logo that looks good at that scale.
+  \item Saving dst, pes, jef.
+  \item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+  \item Update language translations.
+  \item Replace KDE4 thumbnailer.
+  \item Import raster image.
+  \item Statistics from 1.0, needs histogram.
+  \item SNAP/ORTHO/POLAR.
+  \item Cut/copy allow post-selection.
+  \item Layout into config.
+  \item Notify user of data loss if not saving to an object format.
+  \item Add which formats to work with to preferences.
+  \item Cannot open file with `\#` in the name when opening multiple files but works with opening a single file.
+  \item Closing settings dialog with the X in the window saves settings rather than discarding them.
+  \item Otto theme icons: units, render, selectors, what's this icon doesn't scale.
+  \item Layer manager and Layer switcher dock widget.
+  \item Test that all formats read data in correct scale (format details should match other programs).
+  \item Custom filter bug -- doesn't save changes in some cases.
+  \item Tools to find common problems in the source code and suggest fixes to the developers. For example, a translation miss: that is, for any language other than English a missing entry in the translation table should supply a clear warning to developers.
+  \item Converting Qt C++ version to native GUI C throughout.
+  \item OpenGL Rendering: `Real` rendering to see what the embroidery looks like, Icons and toolbars, Menu bar.
+  \item Libembroidery interfacing: get all classes to use the proper libembroidery types within them. So `Ellipse` has `EmbEllipse` as public data within it.
+  \item Move calculations of rotation and scaling into `EmbVector` calls.
+  \item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+  \item Update all formats without color to check for edr or rgb files.
+  \item Setting for reverse scrolling direction (for zoom, vertical pan)
+  \item Keyboard zooming, panning
+  \item Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
+  \item New embroidermodder2.ico 16x16 logo that looks good at that scale.
+  \item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+\end{itemize}
+\end{verbatim}
+
+

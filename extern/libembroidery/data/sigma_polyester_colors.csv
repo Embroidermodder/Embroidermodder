@@ -1,0 +1,151 @@
+"Name","Color","Catalog Code"
+"White", 0xFFFFFFFF, 10
+"Black", 0xFF000000, 20
+"Light Neon Green", 0xFFEDFF50, 21
+"Neon Green", 0xFF96E845, 32
+"Light Neon Orange", 0xFFFFE756, 33
+"Med Neon Orange", 0xFFFF7824, 43
+"Neon Pink", 0xFFF28DA6, 46
+"Neon Orange Pink", 0xFFC70C57, 47
+"Silver", 0xFFE22D2A, 101
+"Silver Diamond", 0xFFB8B8B8, 102
+"Lava Stone", 0xFF889186, 112
+"Medium Grey", 0xFF737F7F, 115
+"Dark Platinum", 0xFF565E5A, 116
+"Charcoal", 0xFF515250, 117
+"Badger Grey", 0xFF787668, 118
+"Pumpkin Orange", 0xFFED572F, 135
+"Turquoise", 0xFF2EA59C, 138
+"Dark Wedgewood", 0xFF396276, 142
+"Cardinal Red", 0xFF9B3B40, 213
+"Maroon", 0xFF6C3E47, 216
+"Rust", 0xFFBA6E4D, 253
+"Medium Rust", 0xFFBB3D2E, 255
+"Natural Pink", 0xFFF9DFCF, 301
+"Baby Pink", 0xFFFBDED6, 303
+"Piggy Pink", 0xFFF7CDD5, 304
+"Sweet Pink", 0xFFF2AFB4, 305
+"Blushing Pink", 0xFFE8418C, 307
+"Pink", 0xFFE77F9D, 309
+"Rose Pink", 0xFFF06F8C, 313
+"Green", 0xFF008340, 317
+"Shocking Pink", 0xFFDF99B6, 321
+"Ruby", 0xFF820052, 325
+"Garnet", 0xFFB1415F, 333
+"Light Purple", 0xFFC394AE, 345
+"Medium Purple", 0xFFA86E91, 347
+"Dark Grape", 0xFF694169, 348
+"Pastel Light Pink", 0xFFE6CFD5, 376
+"Light Baby Blue", 0xFFA8BED7, 379
+"Crystal Blue", 0xFFA0BFD7, 380
+"Very Light Lavender", 0xFF90A6C6, 381
+"Cornflower", 0xFF8FAFC6, 382
+"Lavender", 0xFFB1B8D3, 383
+"Denim", 0xFF416C9B, 385
+"Light Violet", 0xFF7D77AF, 386
+"Misty Rose", 0xFFFADAF4, 387
+"Grape", 0xFF664090, 390
+"Lt. Weathered Blue", 0xFFEAF0F9, 402
+"Baby Blue", 0xFFA6D8F6, 403
+"Med Baby Blue", 0xFF7B9CB0, 404
+"Med Pastel Blue", 0xFF648DC7, 406
+"Blue Raspberry", 0xFF3D6AA1, 409
+"Med Royal Blue", 0xFF2D4491, 413
+"Ocean Blue", 0xFF143D7A, 414
+"Med Navy", 0xFF113263, 415
+"Dark Navy", 0xFF0E1F38, 423
+"Bright Sunshine", 0xFF0E1F38, 432 /* TODO: duplicate case value */
+"Teal", 0xFF0091A5, 443
+"Deep Teal", 0xFF005B63, 448
+"Dark Teal", 0xFF00474D, 449
+"Old Gold", 0xFFE5B15C, 466
+"Cream", 0xFFD5BF9B, 501
+"Pale Salmon", 0xFFFFD085, 503
+"Med Peach", 0xFFF6B08E, 505
+"Pink Salmon", 0xFFB3E851, 506
+"Dark Peach", 0xFFF1A236, 508
+"Dark Brown", 0xFF6E4337, 513
+"Pale Red", 0xFFD8493E, 527
+"Heron Blue", 0xFF697698, 541
+"Pale Yellow", 0xFFFDE896, 601
+"Pastel Yellow", 0xFFEDE55D, 602
+"Golden Puppy", 0xFFDFA200, 609
+"Buttercup", 0xFFFDE896, 612 /* TODO: duplicate case value */
+"Treasure Gold", 0xFFCEB24C, 616
+"Old Gold", 0xFFAD953E, 619
+"Pale Apricot", 0xFFFEF9EA, 627
+"Tan", 0xFFBD9565, 628
+"Mellow Yellow", 0xFFFDF76C, 632
+"Lemon", 0xFFEDEF05, 633
+"Amber", 0xFFF8C300, 646
+"Mandarina", 0xFFE77817, 649
+"Orange", 0xFFE66535, 650
+"Golden Rod", 0xFFC69632, 652
+"Light Olive", 0xFF98996D, 653
+"Bright Gold", 0xFFC98300, 654
+"Blue-Green", 0xFF007B8D, 688
+"Forrest Green", 0xFF004D3D, 695
+"Midnight Blue", 0xFF007EBA, 697
+"Med Red", 0xFFCF0040, 700
+"Med Blue", 0xFF28438C, 809
+"Sweet Apricot", 0xFFD0B478, 812
+"Skin", 0xFFE5BE6C, 818
+"Jade", 0xFF449284, 825
+"Light Silver", 0xFFCFCFCF, 829
+"Papaya Whip", 0xFFDC875E, 831
+"Cooper", 0xFFB4705D, 832
+"Light Pecan", 0xFF9B5C4B, 833
+"Burnt Rust", 0xFFA93121, 838
+"Vegas Gold", 0xFFB18B00, 842
+"Med Brown", 0xFF86462E, 857
+"Med Russett", 0xFF614125, 859
+"Med Copper", 0xFFB25C31, 864
+"Dark Driftwood", 0xFF806A61, 873
+"Birch", 0xFF634831, 878
+"Dark Chocolate", 0xFF1A0C06, 891
+"Sky Blue 2", 0xFF96D5C8, 903
+"Aquamarine", 0xFFB4DCD8, 904
+"Golden Brown", 0xFFAF7D3E, 905
+"Sea Blue", 0xFF00A3A0, 906
+"Deep Sea", 0xFF00405D, 913
+"Pastel Mint", 0xFFC9E3C5, 947
+"True Green", 0xFF55AF78, 949
+"Med Olive", 0xFF858325, 951
+"Olive", 0xFF61601C, 955
+"Light Jade", 0xFF709188, 961
+"Smith Apple", 0xFFBEDC8C, 984
+"Light Lime", 0xFFBEE678, 985
+"Grass Green", 0xFF76C850, 988
+"Deep Teal", 0xFF466E64, 448
+"Med Forrest Green", 0xFF356936, 992
+"Deep Violet", 0xFF4B4884, 1031
+"Light Natural", 0xFFEDEDD2, 1140
+"Wheat", 0xFFF3D8A8, 1145
+"Desert Sand", 0xFFC8BE96, 1148
+"Egyptian Blue", 0xFF243A7D, 1163
+"Gecko", 0xFF86BE4E, 1183
+"Burgandy", 0xFF8E4044, 1241
+"Med Orchid", 0xFF893480, 1323
+"Med Purple", 0xFF8C6DAA, 1324
+"Very Old Gold", 0xFFB6A36C, 1552
+"Light Spruce", 0xFF2E9F76, 1615
+"Paris Green", 0xFF98C173, 1619
+"Timberwolf", 0xFFCDCDCD, 1707
+"Bright Blue", 0xFF2A377E, 2031
+"Turquoise Blue", 0xFF006CA5, 2093
+"Dark Wine", 0xFF834455, 2250
+"Beige", 0xFFD0A44F, 2518
+"Gold", 0xFFED9206, 2519
+"Med Orange", 0xFFEDEF05, 3001
+"Dark Salmon", 0xFFC07A46, 3014
+"Fire Red", 0xFFB43C3C, 3015
+"Saddle Brown", 0xFF915F46, 3142
+"Yellow Sun", 0xFFFFC500, 4117
+"Deep Taupe", 0xFFA68A68, 4371
+"Sky Blue", 0xFF00A4D9, 4419
+"Wild Peacock", 0xFF0B7F85, 4627
+"Millard Green", 0xFF002D1F, 4735
+"Dark Blue", 0xFF11263C, 5552
+"Powder Blue", 0xFF91B9E2, 5554
+"Froggy Green", 0xFF429648, 5557
+"Stone Grey", 0xFF878C8C, 8010

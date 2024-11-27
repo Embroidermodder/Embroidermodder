@@ -1,0 +1,11 @@
+{
+    "Value must be positive and nonzero.": {
+        "English": "Value must be positive and nonzero."
+    },
+    "Point or option keyword required.": {
+        "English": "Point or option keyword required."
+    },
+    "Specify top-center point of text or [Justify/Setfont]: ": {
+        "English": "Specify top-center point of text or [Justify/Setfont]: "
+    }
+}
