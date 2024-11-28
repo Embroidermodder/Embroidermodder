@@ -53,6 +53,28 @@ set_shift_released(void)
 
 /* . */
 void
+set_visibility_group(EmbStringTable keylist, bool visibility)
+{
+    int i;
+    int n = string_array_length(keylist);
+    for (i=0; i<n; i++) {
+        set_visibility(keylist[i], visibility);
+    }
+}
+
+/* . */
+void
+set_enabled_group(EmbStringTable keylist, bool enabled)
+{
+    int i;
+    int n = string_array_length(keylist);
+    for (i=0; i<n; i++) {
+        set_enabled(keylist[i], enabled);
+    }
+}
+
+/* . */
+void
 make_layer_active(void)
 {
     debug_message("make_layer_active()");

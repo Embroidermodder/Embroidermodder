@@ -48,6 +48,7 @@ include_directories(extern/glfw)
 
 qt_add_executable(embroidermodder2
 	${SRC}/widgets.cpp
+	${SRC}/wrapper.cpp
 
 	${EXTERN}/nanovg/src/nanovg.c
 	${EXTERN}/nanovg/src/nanovg.h
@@ -95,6 +96,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/xpm.c
 
 	${SRC}/constants.h
+	${SRC}/wrapper.h
 	${SRC}/core.h
 )
 

@@ -15,6 +15,7 @@
 #include <QGraphicsPathItem>
 #include <QtPrintSupport>
 
+#include "wrapper.h"
 #include "core.h"
 
 class CmdPrompt;
@@ -29,68 +30,20 @@ class UndoEditor;
 class Document;
 class CmdPromptInput;
 
-/* Generic widget pointer for a widget map. */
-typedef struct Widget_ {
-    EmbString key;
-    int type;
-    QLabel *label;
-    QGroupBox *groupbox;
-    QToolButton *toolbutton;
-    QPushButton *button;
-    QLineEdit *lineedit;
-    QComboBox *combobox;
-    QCheckBox *checkbox;
-    QDoubleSpinBox *spinbox;
-    QSpinBox *int_spinbox;
-} Widget;
-
 /* Could initialise all documents to NULL rather than having a seperate memory
  * usage array?
  */
 Document *documents[MAX_OPEN_FILES];
-QAction* actionHash[MAX_ACTIONS];
-QToolBar* toolbar[N_TOOLBARS];
-Widget widget_list[MAX_WIDGETS];
-QMenu* menu[N_MENUS];
 Object *object_list[MAX_OBJECTS];
-
-QStatusBar* statusbar;
 MdiArea* mdiArea;
 CmdPrompt* prompt;
 PropertyEditor* dockPropEdit;
 UndoEditor* dockUndoEdit;
-
 QList<MdiWindow*> listMdiWin;
-
-QAction* myFileSeparator;
-
-QWizard* wizardTipOfTheDay;
-QLabel* labelTipOfTheDay;
-QCheckBox* checkBoxTipOfTheDay;
-
-/* Selectors */
-QComboBox* layerSelector;
-QComboBox* colorSelector;
-QComboBox* linetypeSelector;
-QComboBox* lineweightSelector;
-QFontComboBox* textFontSelector;
-QComboBox* textSizeSelector;
-
-QByteArray layoutState;
-
 MainWindow *_main;
-
-QString defaultPrefix;
-QString prefix;
-
-QString curCmd;
-
-QTextBrowser* promptHistory;
 CmdPromptInput* promptInput;
 
-QTimer* blinkTimer;
 /* NOTE: These shortcuts need to be caught since QLineEdit uses them. */
-
 IntMap key_map[] = {
     {QKeySequence::Cut, CUT_SEQUENCE},
     {QKeySequence::Copy, COPY_SEQUENCE},
@@ -120,71 +73,14 @@ IntMap key_map[] = {
     {-1, -1}
 };
 
-QToolButton* statusBarButtons[N_SB_BUTTONS];
-QLabel* statusBarMouseCoord;
-
-QGroupBox *create_group_box(QWidget *parent, const char *key, const char *label);
-
-QComboBox* comboBoxSelected;
-QWidget* focusWidget_;
-QString iconDir;
-
-QList<QString> promptInputList = {""};
-
-QFontComboBox* comboBoxTextSingleFont;
-
-QSignalMapper* signalMapper;
-Qt::ToolButtonStyle propertyEditorButtonStyle;
-
-QList<QGraphicsItem*> selectedItemList;
-
-QToolButton* toolButtonQSelect;
-QToolButton* toolButtonPickAdd;
-
-/* File-scope Functions ----------------------------------------------------- */
 EmbVector map_from_scene(Object *obj, EmbVector v);
-
-void mapSignal(QObject* fieldObj, QString name, QVariant value);
-QToolButton* createToolButton(QString iconName, QString txt);
-
-void fieldEdited(QObject* fieldObj);
-
-QComboBox* createComboBoxSelected(void);
-QToolButton* createToolButtonQSelect(void);
-QToolButton* createToolButtonPickAdd(void);
-
 void create_statusbar(MainWindow* mw);
-void create_spinbox(QGroupBox* groupbox, int key);
-
-QUndoStack* active_undo_stack(void);
-
 QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
-QIcon create_icon(QString icon);
-QPixmap create_pixmap(QString icon);
-
-void nativeAlert(EmbString txt);
-void nativeAppendPromptHistory(EmbString txt);
-
-ScriptValue add_polygon_command(double startX, EmbReal startY, const QPainterPath& p, int rubberMode);
-ScriptValue add_polyline_command(double startX, EmbReal startY, const QPainterPath& p, int rubberMode);
-ScriptValue add_path_command(double startX, EmbReal startY, const QPainterPath& p, int rubberMode);
-
-void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-
-QAction *get_action_by_icon(EmbString icon);
-
-EmbVector to_emb_vector(QPointF p);
-QPointF to_qpointf(EmbVector v);
-
-QIcon create_swatch(int32_t color);
-
-/* ------------------------- Object Functions ------------------------------- */
 
 Qt::PenStyle obj_line_type(Object* obj);
 double  obj_line_weight(Object* obj);
 QPainterPath obj_path(Object* obj);
 
-void obj_update_rubber(uint32_t obj, QPainter* painter);
 void obj_update_leader(Object *obj);
 void obj_update_path(Object *obj);
 void obj_update_path_r(Object *obj, QPainterPath p);
@@ -202,36 +98,13 @@ void obj_set_color(Object *obj, const QColor& color);
 void obj_set_color_rgb(Object *obj, QRgb rgb);
 void obj_set_line_type(Object *obj, Qt::PenStyle lineType);
 
-/* ---------------------- Document Functions --------------------------- */
-
 Document *create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent);
-
-void draw_arc(QPainter* painter, EmbArc arc);
-void draw_circle(QPainter* painter, EmbCircle circle);
-void draw_ellipse(QPainter* painter, EmbEllipse ellipse);
-void draw_line(QPainter* painter, EmbLine line);
-void draw_polygon(QPainter* painter, EmbPolygon polygon);
-void draw_polyline(QPainter* painter, EmbPolyline polyline);
-void draw_rect(QPainter* painter, EmbRect rect);
-void draw_spline(QPainter* painter, EmbSpline spline);
-
-QPainterPath doc_create_ruler_text_path(EmbString str, float height);
 
 void doc_start_gripping(int32_t doc, Object* obj);
 void doc_stop_gripping(int32_t doc, bool accept = false);
 
-void textFontSelectorCurrentFontChanged(const QFont& font);
-
-void onWindowActivated(QMdiSubWindow* w);
-
-QAction* getFileSeparator();
 QAction* createAction(Command command);
-QMdiSubWindow* findMdiWindow(EmbString fileName);
 void onCloseMdiWin(MdiWindow*);
-
-void process_input(char rapidChar);
-
-QCheckBox* create_checkbox(QGroupBox* groupbox, int key);
 
 /* ---------------------- Class Declarations --------------------------- */
 
@@ -466,17 +339,15 @@ public:
 private:
     QTabWidget* tabWidget;
 
+    QWidget* createTab(WidgetDesc desc);
+
     QWidget* createTabGeneral();
-    QWidget* createTabFilesPaths();
     QWidget* createTabDisplay();
     QWidget* createTabPrompt();
     QWidget* createTabOpenSave();
     QWidget* createTabPrinting();
-    QWidget* createTabSnap();
     QWidget* createTabGridRuler();
-    QWidget* createTabOrthoPolar();
     QWidget* createTabQuickSnap();
-    QWidget* createTabQuickTrack();
     QWidget* createTabLineWeight();
     QWidget* createTabSelection();
 
@@ -484,7 +355,6 @@ private:
 
     void addColorsToComboBox(QComboBox* comboBox);
     void chooseColor(int key);
-    QSpinBox* create_int_spinbox(QGroupBox* groupbox, int key);
 
 private slots:
 
@@ -688,10 +558,6 @@ protected:
 
 /* ----------------------------- Qt Wrapper ------------------------------ */
 
-QWidget *get_widget(EmbString key);
-void create_label(QGroupBox *groupbox, const char *key, const char *text);
-void set_grid_layout(QGroupBox *groupbox, EmbStringTable table);
-int find_widget_list(const char *key);
 Object *get_obj(int key);
 
 /* . */
@@ -720,18 +586,6 @@ active_undo_stack(void)
 }
 
 /* . */
-int
-find_widget_list(const char *key)
-{
-    for (int i=0; i<n_widgets; i++) {
-        if (string_equal(widget_list[i].key, key)) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-/* . */
 Object *
 get_obj(int key)
 {
@@ -750,120 +604,6 @@ obj_get_core(uint32_t id)
 }
 
 /* . */
-QWidget *
-get_widget(EmbString key)
-{
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("Failed to find widget.");
-        debug_message(key);
-    }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        return widget_list[index].label;
-    case WIDGET_SPINBOX:
-        return widget_list[index].spinbox;
-    case WIDGET_CHECKBOX:
-        return widget_list[index].checkbox;
-    case WIDGET_COMBOBOX:
-        return widget_list[index].combobox;
-    case WIDGET_GROUP_BOX:
-        return widget_list[index].groupbox;
-    default:
-        break;
-    }
-    debug_message("Failed to set widget's visibility.");
-    debug_message((char*)key);
-    return NULL;
-}
-
-/* . */
-void
-set_visibility(EmbString key, bool visibility)
-{
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("Failed to find widget.");
-        debug_message(key);
-    }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        widget_list[index].label->setVisible(visibility);
-        break;
-    case WIDGET_SPINBOX:
-        widget_list[index].spinbox->setVisible(visibility);
-        break;
-    case WIDGET_CHECKBOX:
-        widget_list[index].checkbox->setVisible(visibility);
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->setVisible(visibility);
-        break;
-    case WIDGET_GROUP_BOX:
-        widget_list[index].groupbox->setVisible(visibility);
-        break;
-    default:
-        debug_message("Failed to set widget's visibility.");
-        debug_message((char*)key);
-        break;
-    }
-}
-
-/* . */
-void
-set_visibility_group(EmbStringTable keylist, bool visibility)
-{
-    int i;
-    int n = string_array_length(keylist);
-    for (i=0; i<n; i++) {
-        set_visibility(keylist[i], visibility);
-    }
-}
-
-/* . */
-void
-set_enabled(EmbString key, bool enabled)
-{
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("Failed to find widget.");
-        debug_message(key);
-    }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        widget_list[index].label->setEnabled(enabled);
-        break;
-    case WIDGET_SPINBOX:
-        widget_list[index].spinbox->setEnabled(enabled);
-        break;
-    case WIDGET_CHECKBOX:
-        widget_list[index].checkbox->setEnabled(enabled);
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->setEnabled(enabled);
-        break;
-    case WIDGET_GROUP_BOX:
-        widget_list[index].groupbox->setEnabled(enabled);
-        break;
-    default:
-        debug_message("Failed to enable/disable the variable");
-        debug_message((char*)key);
-        break;
-    }
-}
-
-/* . */
-void
-set_enabled_group(EmbStringTable keylist, bool enabled)
-{
-    int i;
-    int n = string_array_length(keylist);
-    for (i=0; i<n; i++) {
-        set_enabled(keylist[i], enabled);
-    }
-}
-
-/* . */
 void
 create_label(QGroupBox *groupbox, const char *key, const char *text)
 {
@@ -871,24 +611,6 @@ create_label(QGroupBox *groupbox, const char *key, const char *text)
     string_copy(widget_list[n_widgets].key, key);
     widget_list[n_widgets].type = WIDGET_LABEL;
     widget_list[n_widgets].label = label;
-}
-
-/* . */
-void
-set_grid_layout(QGroupBox *groupbox, EmbStringTable table)
-{
-    QGridLayout* layout = new QGridLayout(groupbox);
-    for (int i=0; !string_equal(table[2*i], "END"); i++) {
-        if (strlen(table[2*i]) > 0) {
-            QWidget *widget = get_widget(table[2*i]);
-            layout->addWidget(widget, i, 0, Qt::AlignLeft);
-        }
-        if (strlen(table[2*i+1]) > 0) {
-            QWidget *widget = get_widget(table[2*i+1]);
-            layout->addWidget(widget, i, 1, Qt::AlignRight);
-        }
-    }
-    groupbox->setLayout(layout);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1088,14 +810,6 @@ icon_resize(int iconSize)
     /* TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size. */
 
     set_int(GENERAL_ICON_SIZE, iconSize);
-}
-
-/* . */
-void
-whats_this_mode(void)
-{
-    debug_message("whats_this_context_help()");
-    QWhatsThis::enterWhatsThisMode();
 }
 
 void
@@ -4835,26 +4549,6 @@ undoable_scale(int doc, uint32_t obj, EmbVector v, EmbReal factor, EmbString msg
     }
 }
 
-/* TODO: type should come from widget_list. */
-void
-widget_clear(const char *key, int type)
-{
-    int index = find_widget_list(key);
-    if (index >= 0) {
-        switch (type) {
-        case WIDGET_LINEEDIT:
-            widget_list[index].lineedit->clear();
-            break;
-        case WIDGET_GROUP_BOX:
-        default:
-            break;        
-        }
-    }
-    else {
-        debug_message("Failed to find widget by key");
-    }
-}
-
 /* . */
 void
 doc_begin_macro(int32_t doc, EmbString s)
@@ -5322,20 +5016,6 @@ LayerManager::addLayer(QString name, const bool visible, const bool frozen,
     layerModel->setData(layerModel->index(0, 5), lineType);
     layerModel->setData(layerModel->index(0, 6), lineWeight);
     layerModel->setData(layerModel->index(0, 7), print);
-}
-
-/* . */
-QLabel *
-create_tr_label(const char *label, QDialog *dialog)
-{
-    return new QLabel(translate(label), dialog);
-}
-
-/* . */
-QLabel *
-create_int_label(uint32_t value, QDialog *dialog)
-{
-    return new QLabel(QString::number(value), dialog);
 }
 
 /* TODO: Move majority of this code into libembroidery.
@@ -6398,53 +6078,6 @@ create_pixmap(QString icon)
     return pixmap;
 }
 
-/* . */
-QIcon
-create_icon(QString icon)
-{
-    return QIcon(create_pixmap(icon));
-}
-
-/* . */
-QIcon
-create_swatch(int32_t color)
-{
-    QPixmap pixmap(16, 16);
-    pixmap.fill(QColor(color));
-    return QIcon(pixmap); 
-}
-
-
-/* . */
-void
-wait_cursor(void)
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-}
-
-/* . */
-void
-arrow_cursor(void)
-{
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-}
-
-/* . */
-void
-restore_cursor(void)
-{
-    QApplication::restoreOverrideCursor();
-}
-
-/* . */
-void
-set_toolbar_horizontal(int data[])
-{
-    for (int i=0; data[i] != TERMINATOR_SYMBOL; i++) {
-        toolbar[data[i]]->setOrientation(Qt::Horizontal);
-    }
-}
-
 QMenuBar *menuBar()
 {
     return _main->menuBar();
@@ -6510,54 +6143,6 @@ make_application(int argc, char* argv[])
     }
 
     return app.exec();
-}
-
-/*
- * BUG: two layer properties dropdowns malfunctioning
- * BUG: layers button broken icon
- * BUG: text size dropdown broken
- *
- * Read the code that this replaces carefully.
- */
-void
-add_to_selector(QComboBox* box, EmbStringTable list, EmbString type, int use_icon)
-{
-    int n = string_array_length(list) / 3;
-    for (int i=0; i<n; i++) {
-        if (!use_icon) {
-            if (string_equal(type, "real")) {
-                box->addItem(list[3*i+0], atof(list[3*i+1]));
-                continue;
-            }
-            if (string_equal(type, "int")) {
-                box->addItem(list[3*i+0], atoi(list[3*i+1]));
-            }
-            continue;
-        }
-        if (string_equal(type, "string")) {
-            box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
-            continue;
-        }
-        if (string_equal(type, "int")) {
-            if (strlen(list[3*i+2]) > 0) {
-                box->addItem(create_icon(list[3*i+0]), list[3*i+1],
-                    atoi(list[3*i+2]));
-            }
-            else {
-                box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
-            }
-            continue;
-        }
-        if (string_equal(type, "real")) {
-            if (strlen(list[3*i+2]) > 0) {
-                box->addItem(create_icon(list[3*i+0]), list[3*i+1],
-                    atof(list[3*i+2]));
-            }
-            else {
-                box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
-            }
-        }
-    }
 }
 
 /* . */
@@ -7985,50 +7570,6 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
 
 /* . */
 void
-show_widget(const char *key, int type)
-{
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("show_widget: Widget not found.");
-        return;
-    }
-    switch (type) {
-    case WIDGET_LINEEDIT:
-        widget_list[index].lineedit->show();
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->show();
-        break;
-    default:
-        debug_message("widget type unknown");
-        break;
-    }
-}
-
-/* . */
-void
-hide_widget(const char *key, int type)
-{
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("hide_widget: Widget not found.");
-        return;
-    }
-    switch (type) {
-    case WIDGET_LINEEDIT:
-        widget_list[index].lineedit->hide();
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->hide();
-        break;
-    default:
-        debug_message("widget type unknown");
-        break;
-    }
-}
-
-/* . */
-void
 show_one_type(int index)
 {
     hide_all_groups();
@@ -8041,15 +7582,6 @@ clear_font_combobox(void)
 {
     comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); /* NOTE: Do not clear comboBoxTextSingleFont. */
     comboBoxTextSingleFont->setProperty("FontFamily", "");
-}
-
-/* . */
-void
-add_combobox(EmbString key, QComboBox *combobox)
-{
-    string_copy(widget_list[n_widgets].key, key);
-    widget_list[n_widgets].combobox = combobox;
-    n_widgets++;
 }
 
 /* . */
@@ -8122,19 +7654,6 @@ create_editor(
 }
 
 /* . */
-QGroupBox *
-create_group_box(QWidget *parent, const char *key, const char *label)
-{
-    QGroupBox *group_box = new QGroupBox(translate(label), parent);
-
-    string_copy(widget_list[n_widgets].key, key);
-    widget_list[n_widgets].type = WIDGET_GROUP_BOX;
-    widget_list[n_widgets].groupbox = group_box;
-    n_widgets++;
-    return group_box;
-}
-
-/* . */
 void
 create_properties_group_box(int32_t key)
 {
@@ -8151,36 +7670,6 @@ create_properties_group_box(int32_t key)
             editor.signal, editor.object);
     }
     group_box->setLayout(formLayout);
-}
-
-/* . */
-QToolButton*
-createToolButton(QString iconName, QString txt)
-{
-    QToolButton* tb = new QToolButton(dockPropEdit);
-    tb->setIcon(create_icon(iconName));
-    tb->setIconSize(QSize(iconSize, iconSize));
-    tb->setText(txt);
-    tb->setToolButtonStyle(propertyEditorButtonStyle);
-    tb->setStyleSheet("border:none;");
-    return tb;
-}
-
-/* . */
-void
-mapSignal(QObject* fieldObj, QString name, QVariant value)
-{
-    fieldObj->setObjectName(name);
-    fieldObj->setProperty(qPrintable(name), value);
-
-    if (name.startsWith("lineEdit")) {
-        QObject::connect(fieldObj, SIGNAL(editingFinished()), signalMapper, SLOT(map()));
-    }
-    else if (name.startsWith("comboBox")) {
-        QObject::connect(fieldObj, SIGNAL(activated(QString)), signalMapper, SLOT(map()));
-    }
-
-    signalMapper->setMapping(fieldObj, fieldObj);
 }
 
 /* . */
@@ -8259,54 +7748,6 @@ fieldEdited(QObject* fieldObj)
 }
 
 /* . */
-QCheckBox*
-create_checkbox(QDialog *dialog, QGroupBox* groupbox, int key)
-{
-    QCheckBox* checkBox = new QCheckBox(translate(settings_data[key].label), groupbox);
-    checkBox->setChecked(setting[key].dialog.b);
-    QObject::connect(checkBox, &QCheckBox::stateChanged, dialog,
-        [=](int checked) { setting[key].dialog.b = checked; preview_update(); });
-    if (QString(settings_data[key].icon) != "") {
-        checkBox->setIcon(create_icon(settings_data[key].icon));
-    }
-    return checkBox;
-}
-
-/* . */
-void
-create_spinbox(QGroupBox* groupbox, int key)
-{
-    QDoubleSpinBox* spinbox = new QDoubleSpinBox(groupbox);
-    QStringList data = QString(settings_data[key].editor_data).split(',');
-    spinbox->setObjectName(settings_data[key].key);
-    spinbox->setSingleStep(data[0].toFloat());
-    spinbox->setRange(data[1].toFloat(), data[2].toFloat());
-    spinbox->setValue(setting[key].dialog.r);
-    QObject::connect(spinbox, &QDoubleSpinBox::valueChanged, _main,
-        [=](double value) { setting[key].dialog.r = value; });
-
-    string_copy(widget_list[n_widgets].key, settings_data[key].key);
-    widget_list[n_widgets].type = WIDGET_LABEL;
-    widget_list[n_widgets].spinbox = spinbox;
-}
-
-/* . */
-QSpinBox*
-Settings_Dialog::create_int_spinbox(QGroupBox* groupbox, int key)
-{
-    QSpinBox* spinbox = new QSpinBox(groupbox);
-    QStringList data = QString(settings_data[key].editor_data).split(',');
-    spinbox->setObjectName(settings_data[key].key);
-    spinbox->setSingleStep(data[0].toInt());
-    spinbox->setRange(data[1].toInt(), data[2].toInt());
-    spinbox->setValue(setting[key].dialog.i);
-    QObject::connect(spinbox, &QSpinBox::valueChanged, this,
-        [=](int value) { setting[key].dialog.i = value; });
-    return spinbox;
-}
-
-
-/* . */
 Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
@@ -8320,17 +7761,18 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* paren
     }
 
     /* TODO: Add icons to tabs */
+    WidgetDesc desc;
     tabWidget->addTab(createTabGeneral(), translate("General"));
-    tabWidget->addTab(createTabFilesPaths(), translate("Files/Paths"));
+    tabWidget->addTab(createTab(desc), translate("Files/Paths"));
     tabWidget->addTab(createTabDisplay(), translate("Display"));
     tabWidget->addTab(createTabPrompt(), translate("Prompt"));
     tabWidget->addTab(createTabOpenSave(), translate("Open/Save"));
     tabWidget->addTab(createTabPrinting(), translate("Printing"));
-    tabWidget->addTab(createTabSnap(), translate("Snap"));
+    tabWidget->addTab(createTab(desc), translate("Snap"));
     tabWidget->addTab(createTabGridRuler(), translate("Grid/Ruler"));
-    tabWidget->addTab(createTabOrthoPolar(), translate("Ortho/Polar"));
+    tabWidget->addTab(createTab(desc), translate("Ortho/Polar"));
     tabWidget->addTab(createTabQuickSnap(), translate("QuickSnap"));
-    tabWidget->addTab(createTabQuickTrack(), translate("QuickTrack"));
+    tabWidget->addTab(createTab(desc), translate("QuickTrack"));
     tabWidget->addTab(createTabLineWeight(), translate("LineWeight"));
     tabWidget->addTab(createTabSelection(), translate("Selection"));
 
@@ -8356,18 +7798,6 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* paren
     arrow_cursor();
 }
 
-QWidget *
-make_scrollable(QDialog *dialog, QVBoxLayout *layout, QWidget* widget)
-{
-    layout->addStretch(1);
-    widget->setLayout(layout);
-
-    QScrollArea* scrollArea = new QScrollArea(dialog);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    return scrollArea;
-}
-
 /* . */
 void
 Settings_Dialog::labelled_button(QGroupBox* groupbox, QGridLayout *layout,
@@ -8380,6 +7810,16 @@ Settings_Dialog::labelled_button(QGroupBox* groupbox, QGridLayout *layout,
     button->setIcon(create_swatch(setting[key].preview.i));
     connect(button, &QPushButton::clicked, this, [=] () { chooseColor(key); });
     layout->addWidget(button, row, 1, Qt::AlignRight);
+}
+
+/* . */
+QWidget*
+Settings_Dialog::createTab(WidgetDesc desc)
+{
+    QWidget* widget = new QWidget(this);
+
+    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
+    return make_scrollable(this, vboxLayoutMain, widget);
 }
 
 /* . */
@@ -8453,9 +7893,9 @@ Settings_Dialog::createTabGeneral()
     /* Mdi Background */
     QGroupBox* groupBoxMdiBG = new QGroupBox(translate("Background"), widget);
 
-    QCheckBox* checkBoxMdiBGUseLogo = create_checkbox(this, groupBoxMdiBG, GENERAL_MDI_BG_USE_LOGO);
-    QCheckBox* checkBoxMdiBGUseTexture = create_checkbox(this, groupBoxMdiBG, GENERAL_MDI_BG_USE_TEXTURE);
-    QCheckBox* checkBoxMdiBGUseColor = create_checkbox(this, groupBoxMdiBG, GENERAL_MDI_BG_USE_COLOR);
+    QCheckBox* checkBoxMdiBGUseLogo = create_checkbox(groupBoxMdiBG, GENERAL_MDI_BG_USE_LOGO);
+    QCheckBox* checkBoxMdiBGUseTexture = create_checkbox(groupBoxMdiBG, GENERAL_MDI_BG_USE_TEXTURE);
+    QCheckBox* checkBoxMdiBGUseColor = create_checkbox(groupBoxMdiBG, GENERAL_MDI_BG_USE_COLOR);
 
     QPushButton* buttonMdiBGLogo = new QPushButton(translate("Choose"), groupBoxMdiBG);
     buttonMdiBGLogo->setEnabled(setting[GENERAL_MDI_BG_USE_LOGO].dialog.b);
@@ -8486,7 +7926,7 @@ Settings_Dialog::createTabGeneral()
     /* Tips */
     QGroupBox* groupBoxTips = new QGroupBox(translate("Tips"), widget);
 
-    QCheckBox* checkBoxTipOfTheDay = create_checkbox(this, groupBoxTips, GENERAL_TIP_OF_THE_DAY);
+    QCheckBox* checkBoxTipOfTheDay = create_checkbox(groupBoxTips, GENERAL_TIP_OF_THE_DAY);
 
     QVBoxLayout* vboxLayoutTips = new QVBoxLayout(groupBoxTips);
     vboxLayoutTips->addWidget(checkBoxTipOfTheDay);
@@ -8517,16 +7957,6 @@ Settings_Dialog::createTabGeneral()
     return make_scrollable(this, vboxLayoutMain, widget);
 }
 
-/* . */
-QWidget*
-Settings_Dialog::createTabFilesPaths()
-{
-    QWidget* widget = new QWidget(this);
-
-    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
-    return make_scrollable(this, vboxLayoutMain, widget);
-}
-
 /* TODO: Review OpenGL and Rendering settings for future inclusion */
 QWidget*
 Settings_Dialog::createTabDisplay()
@@ -8537,7 +7967,7 @@ Settings_Dialog::createTabDisplay()
     QGroupBox* groupBoxRender = new QGroupBox(translate("Rendering"), widget);
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
     for (int i=0; state.render_hints[i] != TERMINATOR_SYMBOL; i++) {
-        QCheckBox* checkBox = create_checkbox(this, groupBoxRender, settings_data[state.render_hints[i]].id);
+        QCheckBox* checkBox = create_checkbox(groupBoxRender, settings_data[state.render_hints[i]].id);
         vboxLayoutRender->addWidget(checkBox);
     }
     groupBoxRender->setLayout(vboxLayoutRender);
@@ -8545,7 +7975,7 @@ Settings_Dialog::createTabDisplay()
     /* ScrollBars */
     QGroupBox* groupBoxScrollBars = new QGroupBox(translate("ScrollBars"), widget);
 
-    QCheckBox* checkBoxShowScrollBars = create_checkbox(this, groupBoxScrollBars,
+    QCheckBox* checkBoxShowScrollBars = create_checkbox(groupBoxScrollBars,
         DISPLAY_SHOW_SCROLLBARS);
 
     QLabel* labelScrollBarWidget = new QLabel(translate("Perform action when clicking corner widget"), groupBoxScrollBars);
@@ -8661,8 +8091,8 @@ Settings_Dialog::createTabPrompt()
     QGroupBox* groupBoxHistory = new QGroupBox(translate("History"), widget);
 
     QVBoxLayout* vboxLayoutHistory = new QVBoxLayout(groupBoxHistory);
-    vboxLayoutHistory->addWidget(create_checkbox(this, groupBoxHistory, PROMPT_SAVE_HISTORY));
-    vboxLayoutHistory->addWidget(create_checkbox(this, groupBoxHistory, PROMPT_SAVE_HISTORY_AS_HTML));
+    vboxLayoutHistory->addWidget(create_checkbox(groupBoxHistory, PROMPT_SAVE_HISTORY));
+    vboxLayoutHistory->addWidget(create_checkbox(groupBoxHistory, PROMPT_SAVE_HISTORY_AS_HTML));
     groupBoxHistory->setLayout(vboxLayoutHistory);
 
     /* Widget Layout */
@@ -8833,7 +8263,7 @@ Settings_Dialog::createTabPrinting()
     QGroupBox* groupBoxSaveInk = new QGroupBox(translate("Save Ink"), widget);
 
     QVBoxLayout* vboxLayoutSaveInk = new QVBoxLayout(groupBoxSaveInk);
-    vboxLayoutSaveInk->addWidget(create_checkbox(this, groupBoxSaveInk, PRINTING_DISABLE_BG));
+    vboxLayoutSaveInk->addWidget(create_checkbox(groupBoxSaveInk, PRINTING_DISABLE_BG));
     groupBoxSaveInk->setLayout(vboxLayoutSaveInk);
 
     /* Widget Layout */
@@ -8841,17 +8271,6 @@ Settings_Dialog::createTabPrinting()
     vboxLayoutMain->addWidget(groupBoxDefaultPrinter);
     vboxLayoutMain->addWidget(groupBoxSaveInk);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
-}
-
-/* TODO: finish this */
-QWidget*
-Settings_Dialog::createTabSnap()
-{
-    QWidget* widget = new QWidget(this);
-
-
-    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
     return make_scrollable(this, vboxLayoutMain, widget);
 }
 
@@ -8863,8 +8282,8 @@ Settings_Dialog::createTabGridRuler()
     /* Grid Misc */
     QGroupBox* groupBoxGridMisc = new QGroupBox(translate("Grid Misc"), widget);
 
-    QCheckBox* checkBoxGridShowOnLoad = create_checkbox(this, groupBoxGridMisc, GRID_SHOW_ON_LOAD);
-    QCheckBox* checkBoxGridShowOrigin = create_checkbox(this, groupBoxGridMisc, GRID_SHOW_ORIGIN);
+    QCheckBox* checkBoxGridShowOnLoad = create_checkbox(groupBoxGridMisc, GRID_SHOW_ON_LOAD);
+    QCheckBox* checkBoxGridShowOrigin = create_checkbox(groupBoxGridMisc, GRID_SHOW_ORIGIN);
 
     QGridLayout* gridLayoutGridMisc = new QGridLayout(widget);
     gridLayoutGridMisc->addWidget(checkBoxGridShowOnLoad, 0, 0, Qt::AlignLeft);
@@ -8957,7 +8376,7 @@ Settings_Dialog::createTabGridRuler()
     /* Ruler Misc */
     QGroupBox* groupBoxRulerMisc = new QGroupBox(translate("Ruler Misc"), widget);
 
-    QCheckBox* checkBoxRulerShowOnLoad = create_checkbox(this, groupBoxRulerMisc,
+    QCheckBox* checkBoxRulerShowOnLoad = create_checkbox(groupBoxRulerMisc,
         RULER_SHOW_ON_LOAD);
 
     QLabel* labelRulerMetric = new QLabel(translate("Ruler Units"), groupBoxRulerMisc);
@@ -9013,16 +8432,6 @@ Settings_Dialog::createTabGridRuler()
     return make_scrollable(this, vboxLayoutMain, widget);
 }
 
-/* TODO: finish this */
-QWidget* Settings_Dialog::createTabOrthoPolar()
-{
-    QWidget* widget = new QWidget(this);
-
-
-    QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
-    return make_scrollable(this, vboxLayoutMain, widget);
-}
-
 QWidget*
 Settings_Dialog::createTabQuickSnap()
 {
@@ -9031,19 +8440,19 @@ Settings_Dialog::createTabQuickSnap()
     /* QSnap Locators */
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(translate("Locators Used"), widget);
 
-    QCheckBox* checkBoxQSnapEndPoint = create_checkbox(this, groupBoxQSnapLoc, QSNAP_ENDPOINT);
-    QCheckBox* checkBoxQSnapMidPoint = create_checkbox(this, groupBoxQSnapLoc, QSNAP_MIDPOINT);
-    QCheckBox* checkBoxQSnapCenter = create_checkbox(this, groupBoxQSnapLoc, QSNAP_CENTER);
-    QCheckBox* checkBoxQSnapNode = create_checkbox(this, groupBoxQSnapLoc, QSNAP_NODE);
-    QCheckBox* checkBoxQSnapQuadrant = create_checkbox(this, groupBoxQSnapLoc, QSNAP_QUADRANT);
-    QCheckBox* checkBoxQSnapIntersection = create_checkbox(this, groupBoxQSnapLoc, QSNAP_INTERSECTION);
-    QCheckBox* checkBoxQSnapExtension = create_checkbox(this, groupBoxQSnapLoc, QSNAP_EXTENSION);
-    QCheckBox* checkBoxQSnapInsertion = create_checkbox(this, groupBoxQSnapLoc, QSNAP_INSERTION);
-    QCheckBox* checkBoxQSnapPerpendicular = create_checkbox(this, groupBoxQSnapLoc, QSNAP_PERPENDICULAR);
-    QCheckBox* checkBoxQSnapTangent = create_checkbox(this, groupBoxQSnapLoc, QSNAP_TANGENT);
-    QCheckBox* checkBoxQSnapNearest = create_checkbox(this, groupBoxQSnapLoc, QSNAP_NEAREST);
-    QCheckBox* checkBoxQSnapApparent = create_checkbox(this, groupBoxQSnapLoc, QSNAP_APPARENT);
-    QCheckBox* checkBoxQSnapParallel = create_checkbox(this, groupBoxQSnapLoc, QSNAP_PARALLEL);
+    QCheckBox* checkBoxQSnapEndPoint = create_checkbox(groupBoxQSnapLoc, QSNAP_ENDPOINT);
+    QCheckBox* checkBoxQSnapMidPoint = create_checkbox(groupBoxQSnapLoc, QSNAP_MIDPOINT);
+    QCheckBox* checkBoxQSnapCenter = create_checkbox(groupBoxQSnapLoc, QSNAP_CENTER);
+    QCheckBox* checkBoxQSnapNode = create_checkbox(groupBoxQSnapLoc, QSNAP_NODE);
+    QCheckBox* checkBoxQSnapQuadrant = create_checkbox(groupBoxQSnapLoc, QSNAP_QUADRANT);
+    QCheckBox* checkBoxQSnapIntersection = create_checkbox(groupBoxQSnapLoc, QSNAP_INTERSECTION);
+    QCheckBox* checkBoxQSnapExtension = create_checkbox(groupBoxQSnapLoc, QSNAP_EXTENSION);
+    QCheckBox* checkBoxQSnapInsertion = create_checkbox(groupBoxQSnapLoc, QSNAP_INSERTION);
+    QCheckBox* checkBoxQSnapPerpendicular = create_checkbox(groupBoxQSnapLoc, QSNAP_PERPENDICULAR);
+    QCheckBox* checkBoxQSnapTangent = create_checkbox(groupBoxQSnapLoc, QSNAP_TANGENT);
+    QCheckBox* checkBoxQSnapNearest = create_checkbox(groupBoxQSnapLoc, QSNAP_NEAREST);
+    QCheckBox* checkBoxQSnapApparent = create_checkbox(groupBoxQSnapLoc, QSNAP_APPARENT);
+    QCheckBox* checkBoxQSnapParallel = create_checkbox(groupBoxQSnapLoc, QSNAP_PARALLEL);
 
     QPushButton* buttonQSnapSelectAll = new QPushButton(translate("Select All"), groupBoxQSnapLoc);
     connect(buttonQSnapSelectAll, SIGNAL(clicked()), this, SLOT(buttonQSnapSelectAllClicked()));
@@ -9143,22 +8552,10 @@ Settings_Dialog::createTabQuickSnap()
 
 /* TODO: finish this */
 QWidget*
-Settings_Dialog::createTabQuickTrack()
-{
-    QWidget* widget = new QWidget(this);
-
-    QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
-    return make_scrollable(this, vboxLayoutMain, widget);
-}
-
-/* TODO: finish this */
-QWidget*
 Settings_Dialog::createTabLineWeight()
 {
     QWidget* widget = new QWidget(this);
 
-
-    /* Misc */
     QGroupBox* groupBoxLwtMisc = new QGroupBox(translate("LineWeight Misc"), widget);
 
     int32_t doc = active_document();
@@ -9199,21 +8596,23 @@ Settings_Dialog::createTabLineWeight()
     return make_scrollable(this, vboxLayoutMain, widget);
 }
 
-QWidget* Settings_Dialog::createTabSelection()
+QWidget*
+Settings_Dialog::createTabSelection()
 {
     QWidget* widget = new QWidget(this);
 
     /* Selection Modes */
     QGroupBox* groupBoxSelectionModes = new QGroupBox(translate("Modes"), widget);
 
-    QCheckBox* checkBoxSelectionModePickFirst = create_checkbox(this, groupBoxSelectionModes, SELECTION_MODE_PICKFIRST);
+    QCheckBox* checkBoxSelectionModePickFirst = create_checkbox(
+        groupBoxSelectionModes, SELECTION_MODE_PICKFIRST);
     checkBoxSelectionModePickFirst->setEnabled(false);
     /* TODO: Remove this line when Post-selection is available. */
 
-    QCheckBox* checkBoxSelectionModePickAdd = create_checkbox(this, groupBoxSelectionModes,
+    QCheckBox* checkBoxSelectionModePickAdd = create_checkbox(groupBoxSelectionModes,
         SELECTION_MODE_PICKADD);
 
-    QCheckBox* checkBoxSelectionModePickDrag = create_checkbox(this, groupBoxSelectionModes,
+    QCheckBox* checkBoxSelectionModePickDrag = create_checkbox(groupBoxSelectionModes,
         SELECTION_MODE_PICKDRAG);
     checkBoxSelectionModePickDrag->setEnabled(false);
     /* TODO: Remove this line when this functionality is available. */
@@ -9304,18 +8703,6 @@ Settings_Dialog::combo_icon_size_index_changed(int index)
     else {
         setting[GENERAL_ICON_SIZE].dialog.i = 16;
     }
-}
-
-/* . */
-QPushButton *
-get_button(const char *key)
-{
-    int widget = find_widget_list(key);
-    if (widget < 0) {
-        debug_message("get_button: Widget not found.");
-        return NULL;
-    }
-    return widget_list[widget].button;
 }
 
 /* . */

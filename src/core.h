@@ -235,6 +235,21 @@ typedef struct DocumentData_ {
     EmbString curLineWeight;
 } DocumentData;
 
+#define MAX_LEAVES          10
+
+/* For dialogs and tabs */
+typedef struct WidgetDesc_ {
+    int id;
+    EmbString label;
+    EmbString key;
+    EmbString icon;
+    EmbString value;
+    EmbString editor_data;
+    int type;
+    int n_leaves;
+    int leaves[MAX_LEAVES];
+} WidgetDesc;
+
 typedef struct Button_ {
     EmbRect rect;
     EmbColor color;
