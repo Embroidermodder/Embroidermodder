@@ -105,6 +105,7 @@ include_directories(
 	${EXTERN}/glfw/include
 	${EXTERN}/glad/include
 	${EXTERN}/nanovg/src
+	${EXTERN}/nanosvg/src
 	${OPENGL_INCLUDE_DIRS}
 	${SRC}
 )

@@ -401,6 +401,8 @@ typedef struct State_ {
     EmbStringTable extensions;
 } State;
 
+char *load_file(char *fname);
+
 /* -------------------------------- Scripting ---------------------------- */
 
 ScriptEnv *create_script_env(void);

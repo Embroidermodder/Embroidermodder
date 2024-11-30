@@ -11,6 +11,8 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <math.h>
 
 #include "glad/glad.h"
 
@@ -20,6 +22,9 @@
 #define NANOVG_GLES2_IMPLEMENTATION
 #include "nanovg_gl.h"
 
+#define NANOSVG_IMPLEMENTATION
+#include "nanosvg.h"
+
 #include "core.h"
 
 NVGcontext *vg;
@@ -28,7 +33,8 @@ GLFWwindow* create_window(int32_t width, int32_t height, const char *title);
 
 void draw_rect(NVGcontext *vg, EmbRect rect, EmbColor color);
 void draw_button(NVGcontext *vg, Button button, float *bounds);
-void draw_text(NVGcontext *vg, int x, int y, char *font, char *txt, EmbColor color, float *bounds);
+void draw_text(NVGcontext *vg, int x, int y, char *font, char *txt,
+    EmbColor color, float *bounds);
 void draw_view(NVGcontext *vg, EmbRect container);
 void draw_mdiarea(NVGcontext *vg, EmbRect container);
 void draw_dockarea(NVGcontext *vg, EmbRect container);
@@ -321,6 +327,57 @@ draw_statusbar(NVGcontext *vg, EmbRect container)
 
 /* . */
 void
+svg_test(void)
+{
+    EmbVector pos = emb_vector(100.0, 100.0);
+    EmbVector scale = emb_vector(1.0, 1.0);
+
+    char *data = load_file("draft.svg");
+    NSVGimage *image = nsvgParse(data, "px", 96);
+    free(data);
+    NSVGshape *shape;
+    NSVGpath *path;
+    int i;
+
+    FILE *f = fopen("parsed.svg", "w");
+    fprintf(f, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
+    fprintf(f, "<svg version=\"1.1\" width=\"128\" height=\"128\"\n");
+    fprintf(f, "    viewBox=\"0 0 128 128\" xmlns=\"http://www.w3.org/2000/svg\"\n");
+    fprintf(f, "    xmlns:svg=\"http://www.w3.org/2000/svg\">\n");
+
+    for (shape = image->shapes; shape != NULL; shape = shape->next)
+    for (path = shape->paths; path != NULL; path = path->next) {
+        unsigned int c = shape->stroke.color;
+        unsigned char r = (c & 0xFF);
+        unsigned char g = (c & 0xFF00) >> 8;
+        unsigned char b = (c & 0xFF0000) >> 16;
+        NVGcolor color = nvgRGBA(r, g, b, 255);
+        nvgStrokeColor(vg, color);
+        nvgStrokeWidth(vg, shape->strokeWidth);
+        fprintf(f, "<path color=\"%d,%d,%d\" width=\"%.2f\" d=\"",
+            r, g, b, shape->strokeWidth);
+        float* p = &path->pts[0];
+        fprintf(f, "M %.2f %.2f ", p[0], p[1]);
+        nvgMoveTo(vg, p[0], p[1]);
+        for (i = 3; i < path->npts-1; i += 3) {
+	        float* p = &path->pts[i*2];
+            nvgBezierTo(vg, p[2], p[3], p[4], p[5], p[6], p[7]);
+            fprintf(f, "C %.2f %.2f %.2f %.2f %.2f %.2f ",
+                p[2], p[3], p[4], p[5], p[6], p[7]);
+        }
+        if (path->closed) {
+            fprintf(f, "z");
+        }
+        fprintf(f, "\"/>\n");
+    }
+    fprintf(f, "</svg>\n");
+    fclose(f);
+
+    nsvgDelete(image);
+}
+
+/* . */
+void
 draw_interface(NVGcontext *vg)
 {
     draw_menubar(vg, emb_rect(0, 405, window_width, 75));
@@ -328,6 +385,7 @@ draw_interface(NVGcontext *vg)
     draw_mdiarea(vg, emb_rect(0, prompt_divider, window_width, 75));
     draw_prompt(vg, emb_rect(0, prompt_divider, window_width, 75));
     draw_statusbar(vg, emb_rect(0, 405, window_width, 75));
+    svg_test();
 }
 
 /* Set delta time, clear frame and resize. */
@@ -336,7 +394,6 @@ start_frame(GLFWwindow *window, EmbReal *prevt)
 {
     EmbReal t = glfwGetTime();
     EmbReal dt = t - *prevt;
-    printf("%f %f\n", t, dt);
 
     /* Cap at 120 updates a second. */
     if (dt < 1.0/120) {

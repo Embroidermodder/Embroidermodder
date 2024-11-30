@@ -282,6 +282,7 @@ main(int argc, char* argv[])
 {
     int n_files = 0;
     EmbStringTable files_to_open;
+    
     for (int i = 1; i < argc; i++) {
         if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")  ) {
             testing_mode = 1;
@@ -769,17 +770,34 @@ string_length(char *src)
 }
 
 /* . */
-int
-load_file(const char *fname)
+char *
+load_file(char *fname)
 {
-    FILE* file;
-    file = fopen(fname, "r");
-    if (!file) {
+    FILE *f = fopen(fname, "r");
+    if (!f) {
         printf("ERROR: Failed to open \"%s\".\n", fname);
-        return 0;
+        return NULL;
     }
+    fseek(f, 0, SEEK_END);
+    size_t length = ftell(f);
+    char *data = malloc(length+1);
+    fseek(f, 0, SEEK_SET);
+    int read_bytes = fread(data, 1, length, f);
+    fclose(f);
+    if (read_bytes != length) {
+        printf("ERROR: Failed to read all the %d bytes in the file \"%s\".\n",
+            length,
+            fname);
+        return NULL;
+    }
+    return data;
+}
 
-/* FIXME:
+void
+toml_load_file(const char *fname)
+{
+    char *data = load_file(fname);
+    /* FIXME:
     int i;
     EmbString error_buffer;
     toml_table_t *conf;
@@ -805,7 +823,7 @@ load_file(const char *fname)
     }
     toml_free(conf);
     */
-    return 1;
+    free(data);
 }
 
 /* Rather than loading necessary configuration data from file at load, it is
