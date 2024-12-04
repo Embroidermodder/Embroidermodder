@@ -27,6 +27,12 @@
 
 #include "core.h"
 
+#define MAX_HISTORY            300
+
+EmbString prompt_input_list[MAX_HISTORY];
+int prompt_history_size = 0;
+int prompt_history_position = 0;
+
 NVGcontext *vg;
 
 GLFWwindow* create_window(int32_t width, int32_t height, const char *title);
@@ -78,11 +84,6 @@ int n_prompt_lines = 3;
 int
 init_glfw(void)
 {
-    if (!load_data()) {
-        puts("Failed to load data.");
-        return 0;
-    }
-
     if (!glfwInit()) {
         puts("Failed to run glfwInit.");
         return 0;
@@ -148,18 +149,8 @@ update_view(void)
     set_prompt_font_style(setting[PROMPT_FONT_STYLE].dialog.s);
     set_prompt_font_size(setting[PROMPT_FONT_SIZE].dialog.i);
 
-    if (setting[LWT_SHOW_LWT].dialog.b) {
-        enable_lwt();
-    }
-    else {
-        disable_lwt();
-    }
-    if (setting[LWT_REAL_RENDER].dialog.b) {
-        enable_real();
-    }
-    else {
-        disable_real();
-    }
+    statusbar_toggle("LWT", setting[LWT_SHOW_LWT].dialog.b);
+    statusbar_toggle("REAL", setting[LWT_REAL_RENDER].dialog.b);
 
     update_pick_add_mode(setting[SELECTION_MODE_PICKADD].dialog.b);
 }
@@ -254,10 +245,10 @@ draw_menubar(NVGcontext *vg, EmbRect container)
 
     float bounds[4] = {0.0F, 0.0F, 0.0F, 0.0F};
     float x_offset = -button_padding;
-    for (int i=0; state.menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+    for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
         x_offset += (bounds[2] - bounds[0]) + 2*button_padding;
         menu_buttons[i] = make_menubar_button(vg, x_offset, 3,
-            state.menu_list[state.menubar_full_list[i]], bounds);
+            menu_list[menubar_full_list[i]], bounds);
         draw_button(vg, menu_buttons[i], bounds);
     }
 }
@@ -418,18 +409,15 @@ end_frame(GLFWwindow *window)
     glfwPollEvents();
 }
 
-/* . */
-void
-render_messagebox(const char *logo, const char *title, const char *text)
-{
-    float bounds[5];
-    EmbRect sb_rect = emb_rect(0, 0, window_width, window_height);
-    draw_rect(vg, sb_rect, prompt_bg_color);
-    draw_text(vg, 10, 40, "sans", title, prompt_color, bounds);
-    draw_text(vg, 10, 80, "sans", text, prompt_color, bounds);
-}
-
-/* FIXME: error code */
+/* FIXME: error code
+ *
+ * NOTE: translation is the repsonisbility of the caller, because some reports
+ * include parts that aren't translated. For example:
+ *
+ *     char message[MAX_STRING_LENGTH];
+ *     sprintf(message, "%s: x > %f", translate("Value of X is too small"), x);
+ *     messagebox("critical", translate("Out of Bounds"), message);
+ */
 void
 messagebox(const char *logo, const char *title, const char *text)
 {
@@ -440,7 +428,11 @@ messagebox(const char *logo, const char *title, const char *text)
         if (!start_frame(window, &prevt)) {
             continue;
         }
-        render_messagebox(logo, title, text);
+        float bounds[5];
+        EmbRect sb_rect = emb_rect(0, 0, window_width, window_height);
+        draw_rect(vg, sb_rect, prompt_bg_color);
+        draw_text(vg, 10, 40, "sans", title, prompt_color, bounds);
+        draw_text(vg, 10, 80, "sans", text, prompt_color, bounds);
         end_frame(window);
     }
 }
@@ -514,5 +506,209 @@ glfw_application(int argc, char *argv[])
         end_frame(window);
     }
     return 0;
+}
+
+/* . */
+void
+settings_prompt(void)
+{
+    settings_dialog("Prompt");
+}
+
+/* . */
+void
+accept_interface_color(int32_t key, uint32_t color)
+{
+    setting[key].accept.i = color;
+    switch (key) {
+    case DISPLAY_CROSSHAIR_COLOR:
+        update_all_view_cross_hair_colors(setting[key].accept.i);
+        break;
+    case DISPLAY_BG_COLOR:
+        update_all_view_background_colors(setting[key].accept.i);
+        break;
+    case DISPLAY_SELECTBOX_LEFT_COLOR:
+    case DISPLAY_SELECTBOX_LEFT_FILL:
+    case DISPLAY_SELECTBOX_RIGHT_COLOR:
+    case DISPLAY_SELECTBOX_RIGHT_FILL:
+        update_all_view_select_box_colors(
+            setting[DISPLAY_SELECTBOX_LEFT_COLOR].accept.i,
+            setting[DISPLAY_SELECTBOX_LEFT_FILL].accept.i,
+            setting[DISPLAY_SELECTBOX_RIGHT_COLOR].accept.i,
+            setting[DISPLAY_SELECTBOX_RIGHT_FILL].accept.i,
+            setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
+        break;
+    case PROMPT_TEXT_COLOR:
+        set_prompt_text_color(setting[key].accept.i);
+        break;
+    case PROMPT_BG_COLOR:
+        set_prompt_background_color(setting[key].accept.i);
+        break;
+    case GRID_COLOR:
+        update_all_view_grid_colors(setting[GRID_COLOR].accept.i);
+        break;
+    case RULER_COLOR:
+        update_all_view_ruler_colors(setting[key].accept.i);
+        break;
+    case GENERAL_MDI_BG_COLOR:
+        mdiarea_set_bg(setting[key].accept.i);
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+preview_interface_color(int32_t key, uint32_t color)
+{
+    setting[key].preview.i = color;
+    switch (key) {
+    case DISPLAY_CROSSHAIR_COLOR:
+        update_all_view_cross_hair_colors(setting[key].preview.i);
+        break;
+    case DISPLAY_BG_COLOR:
+        update_all_view_background_colors(setting[key].preview.i);
+        break;
+    case DISPLAY_SELECTBOX_LEFT_COLOR:
+    case DISPLAY_SELECTBOX_LEFT_FILL:
+    case DISPLAY_SELECTBOX_RIGHT_COLOR:
+    case DISPLAY_SELECTBOX_RIGHT_FILL:
+        update_all_view_select_box_colors(
+            setting[DISPLAY_SELECTBOX_LEFT_COLOR].preview.i,
+            setting[DISPLAY_SELECTBOX_LEFT_FILL].preview.i,
+            setting[DISPLAY_SELECTBOX_RIGHT_COLOR].preview.i,
+            setting[DISPLAY_SELECTBOX_RIGHT_FILL].preview.i,
+            setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
+        break;
+    case PROMPT_TEXT_COLOR:
+        set_prompt_text_color(setting[key].preview.i);
+        break;
+    case PROMPT_BG_COLOR:
+        set_prompt_background_color(setting[key].preview.i);
+        break;
+    case GRID_COLOR:
+        update_all_view_grid_colors(setting[GRID_COLOR].preview.i);
+        break;
+    case RULER_COLOR:
+        update_all_view_ruler_colors(setting[key].preview.i);
+        break;
+    case GENERAL_MDI_BG_COLOR:
+        mdiarea_set_bg(setting[key].preview.i);
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+dialog_interface_color(int32_t key, uint32_t color)
+{
+    setting[key].dialog.i = color;
+    switch (key) {
+    case DISPLAY_CROSSHAIR_COLOR:
+        update_all_view_cross_hair_colors(setting[key].dialog.i);
+        break;
+    case DISPLAY_BG_COLOR:
+        update_all_view_background_colors(setting[key].dialog.i);
+        break;
+    case DISPLAY_SELECTBOX_LEFT_COLOR:
+    case DISPLAY_SELECTBOX_LEFT_FILL:
+    case DISPLAY_SELECTBOX_RIGHT_COLOR:
+    case DISPLAY_SELECTBOX_RIGHT_FILL:
+        update_all_view_select_box_colors(
+            setting[DISPLAY_SELECTBOX_LEFT_COLOR].dialog.i,
+            setting[DISPLAY_SELECTBOX_LEFT_FILL].dialog.i,
+            setting[DISPLAY_SELECTBOX_RIGHT_COLOR].dialog.i,
+            setting[DISPLAY_SELECTBOX_RIGHT_FILL].dialog.i,
+            setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
+        break;
+    case PROMPT_TEXT_COLOR:
+        set_prompt_text_color(setting[key].dialog.i);
+        break;
+    case PROMPT_BG_COLOR:
+        set_prompt_background_color(setting[key].dialog.i);
+        break;
+    case GRID_COLOR:
+        update_all_view_grid_colors(setting[GRID_COLOR].dialog.i);
+        break;
+    case RULER_COLOR:
+        update_all_view_ruler_colors(setting[key].dialog.i);
+        break;
+    case GENERAL_MDI_BG_COLOR:
+        mdiarea_set_bg(setting[key].dialog.i);
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+prompt_history_appended(EmbString txt)
+{
+    sprintf(promptHistoryData, "%s<br/>%s", promptHistoryData, txt);
+}
+
+/* . */
+void
+log_prompt_input(EmbString txt)
+{
+    string_copy(prompt_input_list[prompt_history_size], txt);
+    prompt_history_size++;
+    prompt_history_position = prompt_history_size;
+}
+
+/* . */
+void
+prompt_input_previous(void)
+{
+    if (prompt_history_size <= 0) {
+        messagebox("critical", translate("Prompt Previous Error"),
+            translate("The prompt input is empty! Please report this as a bug!"));
+        debug_message("The prompt input is empty! Please report this as a bug!");
+    }
+    else {
+        prompt_history_position--;
+        int maxNum = prompt_history_size;
+        if (prompt_history_position < 0) {
+            prompt_history_position = 0;
+            prompt_set_current_text("");
+        }
+        else if (prompt_history_position >= maxNum) {
+            prompt_history_position = maxNum;
+            prompt_set_current_text("");
+        }
+        else {
+            prompt_set_current_text(prompt_input_list[prompt_history_position]);
+        }
+    }
+}
+
+/* . */
+void
+prompt_input_next(void)
+{
+    if (prompt_history_size <= 0) {
+        messagebox("critical", translate("Prompt Next Error"),
+            translate("The prompt input is empty! Please report this as a bug!"));
+        debug_message("The prompt input is empty! Please report this as a bug!");
+    }
+    else {
+        prompt_history_position++;
+        int maxNum = prompt_history_size;
+        if (prompt_history_position < 0) {
+            prompt_history_position = 0;
+            prompt_set_current_text("");
+        }
+        else if (prompt_history_position >= maxNum) {
+            prompt_history_position = maxNum;
+            prompt_set_current_text("");
+        }
+        else {
+            prompt_set_current_text(prompt_input_list[prompt_history_position]);
+        }
+    }
 }
 

@@ -20,7 +20,7 @@ obj_grip_edit(int32_t obj_id, EmbVector before, EmbVector after)
     ObjectCore *core = obj_get_core(obj_id);
     switch (core->geometry->type) {
     case EMB_ARC: {
-        todo("gripEdit() for ArcObject.");
+        debug_message("TODO: gripEdit() for ArcObject.");
         break;
     }
     case EMB_CIRCLE: {
@@ -47,7 +47,7 @@ obj_grip_edit(int32_t obj_id, EmbVector before, EmbVector after)
         break;
     }
     case EMB_ELLIPSE: {
-        todo("gripEdit() for EllipseObject");
+        debug_message("TODO: gripEdit() for EllipseObject");
         break;
     }
     case EMB_IMAGE:
@@ -75,7 +75,7 @@ obj_grip_edit(int32_t obj_id, EmbVector before, EmbVector after)
         break;
     }
     case EMB_PATH: {
-        todo("gripEdit() for PathObject");
+        debug_message("TODO: gripEdit() for PathObject");
         break;
     }
     case EMB_POLYGON:
@@ -149,7 +149,7 @@ all_grip_points(int32_t obj_id)
     }
     case EMB_PATH: {
         append_vector_to_list(gripPoints, obj_pos(core));
-        todo("loop thru all path Elements and return their points.");
+        debug_message("TODO: loop thru all path Elements and return their points.");
         break;
     }
     case EMB_POLYGON:

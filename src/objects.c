@@ -20,7 +20,7 @@ copy_object(uint32_t obj)
     debug_message("Object Copy()");
     ObjectCore *core = obj_get_core(obj);
     uint32_t copy = 0xFFFFFFFF; /* error symbol */
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     switch (core->geometry->type) {
     case EMB_ARC: {
         copy = create_arc(core->geometry->object.arc, core->rgb);
@@ -103,7 +103,7 @@ create_arc(EmbArc arc, uint32_t rgb)
     uint32_t obj = create_object(EMB_ARC, rgb);
     ObjectCore *core = obj_get_core(obj);
     core->geometry->object.arc = arc;
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     obj_calculate_data(obj);
     obj_set_pos(core, arc.start);
     return obj;
@@ -115,7 +115,7 @@ create_circle(EmbCircle circle, uint32_t rgb)
 {
     debug_message("CircleObject Constructor()");
     uint32_t obj = create_object(EMB_CIRCLE, rgb);
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     ObjectCore *core = obj_get_core(obj);
     core->geometry->object.circle = circle;
     /* update_path(); */
@@ -127,7 +127,7 @@ uint32_t
 create_dimleader(EmbLine line, uint32_t rgb)
 {
     debug_message("DimLeaderObject Constructor()");
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     uint32_t obj = create_object(EMB_DIM_LEADER, rgb);
     ObjectCore *core = obj_get_core(obj);
 
@@ -143,7 +143,7 @@ uint32_t
 create_ellipse(EmbEllipse ellipse, uint32_t rgb)
 {
     debug_message("EllipseObject Constructor()");
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     uint32_t obj = create_object(EMB_ELLIPSE, rgb);
     ObjectCore *core = obj_get_core(obj);
     core->geometry->object.ellipse = ellipse;
@@ -160,7 +160,7 @@ uint32_t
 create_image(EmbRect rect, uint32_t rgb)
 {
     debug_message("ImageObject Constructor()");
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     uint32_t obj = create_object(EMB_IMAGE, rgb);
     obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
     return obj;
@@ -173,7 +173,7 @@ create_line(EmbLine line, uint32_t rgb)
     debug_message("LineObject Constructor()");
     uint32_t obj = create_object(EMB_LINE, rgb);
     ObjectCore *core = obj_get_core(obj);
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     obj_set_end_point_1(core, line.start);
     obj_set_end_point_2(core, line.end);
     return obj;
@@ -185,7 +185,7 @@ create_path(EmbPath *p, uint32_t rgb)
 {
     debug_message("PathObject Constructor()");
     uint32_t obj = create_object(EMB_PATH, rgb);
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     // FIXME: obj_update_path_r(obj, p);
     //obj_set_pos(obj->core, v);
     return obj;
@@ -197,7 +197,7 @@ create_polygon(EmbPath *p, uint32_t rgb)
 {
     debug_message("PolygonObject Constructor()");
     uint32_t obj = create_object(EMB_POLYGON, rgb);
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     // FIXME: obj_update_path_r(obj, p);
     //obj_set_pos(obj->core, v);
     return obj;
@@ -208,7 +208,7 @@ uint32_t
 create_polyline(EmbPath *path, uint32_t rgb)
 {
     debug_message("PolylineObject Constructor()");
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     uint32_t obj = create_object(EMB_POLYLINE, rgb);
     // FIXME: obj_update_path_r(obj, p);
     /* EmbVector v; obj_set_pos(obj->core, v); */
@@ -228,7 +228,7 @@ uint32_t
 create_rect(EmbRect rect, uint32_t rgb)
 {
     debug_message("RectObject Constructor()");
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     uint32_t obj = create_object(EMB_RECT, rgb);
     obj_set_rect(obj, rect.x, rect.y, rect.w, rect.h);
     return obj;
@@ -239,7 +239,7 @@ uint32_t
 create_text_single(EmbString str, EmbVector v, uint32_t rgb)
 {
     debug_message("TextSingleObject Constructor()");
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     uint32_t obj = create_object(EMB_TEXT_SINGLE, rgb);
     ObjectCore *core = obj_get_core(obj);
 
@@ -538,7 +538,7 @@ circle_command(ScriptEnv *context)
 
     switch (context->mode) {
     case CONTEXT_CONTEXT:
-        todo("CIRCLE context()");
+        debug_message("TODO: CIRCLE context()");
         break;
     default:
         break;
@@ -660,7 +660,7 @@ circle_click(ScriptEnv *context)
             prompt_output(translate("Specify second point: "));
         }
         else {
-            todo("CIRCLE click() for TTR");
+            debug_message("TODO: CIRCLE click() for TTR");
         }
     #endif
         break;
@@ -826,7 +826,7 @@ circle_prompt(ScriptEnv *context)
         
     }
     else if (context->mode == context->mode_TTR) {
-        todo("CIRCLE prompt() for TTR");
+        debug_message("TODO: CIRCLE prompt() for TTR");
     }
     #endif
         break;
@@ -868,7 +868,7 @@ circle_prompt(ScriptEnv *context)
 void
 DimLeaderobj_updateLeader()
 {
-    todo("Make arrowStyle, arrowStyleAngle, arrowStyleLength, lineStyleAngle, lineStyleLength customizable");
+    debug_message("TODO: Make arrowStyle, arrowStyleAngle, arrowStyleLength, lineStyleAngle, lineStyleLength customizable");
     int arrowStyle = Closed;
     EmbReal arrowStyleAngle = 15.0;
     EmbReal arrowStyleLength = 1.0;
@@ -1050,7 +1050,7 @@ function click(EmbVector v)
 
 function context(str)
 {
-    todo("ELLIPSE context()");
+    debug_message("TODO: ELLIPSE context()");
 }
 
 function prompt(str)
@@ -1229,7 +1229,7 @@ line_command(ScriptEnv *context)
         break;
     }
     case CONTEXT_CONTEXT: {
-        todo("LINE context()");
+        debug_message("TODO: LINE context()");
         break;
     }
     default:
@@ -1259,7 +1259,7 @@ function prompt(str)
     }
     else {
         if (str == "U" || str == "UNDO") {
-            todo("LINE prompt() for UNDO");
+            debug_message("TODO: LINE prompt() for UNDO");
         }
         else {
             if (!parse_vector(str, &v)) {
@@ -1286,7 +1286,7 @@ function prompt(str)
 ScriptValue
 path_command(ScriptEnv *context)
 {
-    todo("Path command is currently broken.");
+    debug_message("TODO: Path command is currently broken.");
     switch (context->mode) {
     case CONTEXT_MAIN:
         /*
@@ -1314,15 +1314,15 @@ path_command(ScriptEnv *context)
         */
         break;
     case CONTEXT_CONTEXT:
-        todo("PATH context()");
+        debug_message("TODO: PATH context()");
         break;
     case CONTEXT_PROMPT:
         /*
         if (str == "A" || str == "ARC") {
-            todo("PATH prompt() for ARC");
+            debug_message("TODO: PATH prompt() for ARC");
         }
         else if (str == "U" || str == "UNDO") {
-            todo("PATH prompt() for UNDO");
+            debug_message("TODO: PATH prompt() for UNDO");
         }
         else {
             if (!parse_vector(str, &v)) {
@@ -1363,7 +1363,7 @@ function main()
 {
     global->firstRun = true;
     prompt_output("TODO: Current point settings: PDMODE=?  PDSIZE=?");
-    todo("translate needed here when complete");
+    debug_message("TODO: translate needed here when complete");
     prompt_output(translate("Specify first point: "));
 }
 
@@ -1382,7 +1382,7 @@ click(EmbVector v)
 
 function context(str)
 {
-    todo("POINT context()");
+    debug_message("TODO: POINT context()");
 }
 
 function prompt(str)
@@ -1390,10 +1390,10 @@ function prompt(str)
     EmbVector v;
     if (global->firstRun) {
         if (str == "M" || str == "MODE") {
-            todo("POINT prompt() for PDMODE");
+            debug_message("TODO: POINT prompt() for PDMODE");
         }
         else if (str == "S" || str == "SIZE") {
-            todo("POINT prompt() for PDSIZE");
+            debug_message("TODO: POINT prompt() for PDSIZE");
         }
         if (!parse_vector(str, v)) {
             alert(translate("Invalid point."));
@@ -1422,7 +1422,7 @@ Object::Object(double x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObjec
 {
     debug_message("PointObject Constructor()");
     init(x, y, rgb, Qt::SolidLine);
-    todo("get_current_line_type");
+    debug_message("TODO: get_current_line_type");
     init_geometry(EMB_POINT, rgb, lineType);
     obj_set_rect(obj, -0.00000001, -0.00000001, 0.00000002, 0.00000002);
     obj_set_pos(obj, x,y);
@@ -1486,7 +1486,7 @@ click(EmbVector v)
         break;
     }
     case POLYGON_MODE_SIDE_LEN: {
-        todo("POLYGON Sidelength mode");
+        debug_message("TODO: POLYGON Sidelength mode");
         break;
     }
     }
@@ -1495,7 +1495,7 @@ click(EmbVector v)
 function
 context(char *str)
 {
-    todo("POLYGON context()");
+    debug_message("TODO: POLYGON context()");
 }
 
 function
@@ -1651,7 +1651,7 @@ prompt(char *str)
         break;
     }
     case POLYGON_MODE_SIDE_LEN: {
-        todo("POLYGON Sidelength mode");
+        debug_message("TODO: POLYGON Sidelength mode");
         break;
     }
     default:
@@ -1702,7 +1702,7 @@ function click(EmbVector v)
 
 function context(str)
 {
-    todo("POLYLINE context()");
+    debug_message("TODO: POLYLINE context()");
 }
 
 function prompt(str)
@@ -1724,7 +1724,7 @@ function prompt(str)
     }
     else {
         if (str == "U" || str == "UNDO") {
-            todo("POLYLINE prompt() for UNDO");
+            debug_message("TODO: POLYLINE prompt() for UNDO");
         }
         else {
             if (!parse_vector(str, v)) {
@@ -1784,19 +1784,19 @@ click(EmbVector v)
 
 function context(str)
 {
-    todo("RECTANGLE context()");
+    debug_message("TODO: RECTANGLE context()");
 }
 
 function prompt(str)
 {
     if (str == "C" || str == "CHAMFER") {
-        todo("RECTANGLE prompt() for CHAMFER");
+        debug_message("TODO: RECTANGLE prompt() for CHAMFER");
     }
     else if (str == "D" || str == "DIMENSIONS") {
-        todo("RECTANGLE prompt() for DIMENSIONS");
+        debug_message("TODO: RECTANGLE prompt() for DIMENSIONS");
     }
     else if (str == "F" || str == "FILLET") {
-        todo("RECTANGLE prompt() for FILLET");
+        debug_message("TODO: RECTANGLE prompt() for FILLET");
     }
     else {
         if (!parse_vector(str, &v)) {
@@ -1828,9 +1828,9 @@ function prompt(str)
 void
 SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 {
-    todo("saving polygons, polylines and paths must be stable before we go here.");
+    debug_message("TODO: saving polygons, polylines and paths must be stable before we go here.");
 
-    todo("This needs to work like a path, not a polyline. Improve this");
+    debug_message("TODO: This needs to work like a path, not a polyline. Improve this");
 
     TextSingleObjectCore* obj = static_cast<TextSingleObjectCore*>(item);
     if (obj) {
@@ -1838,8 +1838,8 @@ SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
             QList<QPainterPath> pathList = obj->objectSavePathList();
             foreach(QPainterPath path, pathList) {
                 toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj_color(obj), "CONTINUOUS", "BYLAYER");
-                todo("proper layer/lineType/lineWeight");
-                todo("Improve precision, replace simplified");
+                debug_message("TODO: proper layer/lineType/lineWeight");
+                debug_message("TODO: Improve precision, replace simplified");
             }
         }
     }
@@ -1907,7 +1907,7 @@ click(EmbVector v)
 
 function context(str)
 {
-    todo("SINGLELINETEXT context()");
+    debug_message("TODO: SINGLELINETEXT context()");
 }
 
 function prompt(str)
@@ -2096,7 +2096,7 @@ function prompt(str)
             else {
                 vulcanize();
                 endCommand();
-                todo("Rather than ending the command, calculate where the next line would be and modify the x/y to the new point.");
+                debug_message("TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point.");
             }
         }
         else {
@@ -2167,7 +2167,7 @@ quickleader_command(ScriptEnv *context)
 #if 0
 function main()
 {
-    todo("Adding the text is not complete yet.");
+    debug_message("TODO: Adding the text is not complete yet.");
     context->point1 = emb_vector(0.0, 0.0);
     context->point2 = emb_vector(0.0, 0.0);
     prompt_output(translate("Specify first point: "));
@@ -2194,7 +2194,7 @@ click(EmbVector v)
 void
 context(str)
 {
-    todo("QUICKLEADER context()");
+    debug_message("TODO: QUICKLEADER context()");
 }
 
 void
@@ -2304,7 +2304,7 @@ obj_set_text_justify(ObjectCore* obj, const char *justify)
     /* Default */
     string_copy(obj->textJustify, "Left");
     /* See if a valid justify option has been passed in, then set it if it is. */
-    int n = string_array_length(justify_options);
+    int n = table_length(justify_options);
     for (int i=0; i<n; i++) {
         if (string_equal(justify, justify_options[i])) {
             string_copy(obj->textJustify, "Left");
@@ -2418,21 +2418,21 @@ obj_vulcanize(int32_t obj)
     switch (g->type) {
     case EMB_POLYLINE:
         if (g->object.polyline.pointList->length == 0) {
-            critical_box(
+            messagebox("critical",
                 translate("Empty Polyline Error"),
                 translate("The polyline added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_POLYGON:
         if (g->object.polygon.pointList->length == 0) {
-            critical_box(
+            messagebox("critical",
                 translate("Empty Polygon Error"),
                 translate("The polygon added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_PATH:
         if (g->object.path.pointList->length == 0) {
-            critical_box(
+            messagebox("critical",
                 translate("Empty Path Error"),
                 translate("The path added contains no points. The command that created this object has flawed logic."));
         }

@@ -273,6 +273,8 @@
 #define ACTION_PATTERN               128
 #define ACTION_DESIGN                129
 
+#define N_ACTIONS                    130
+
 /* UI Modes */
 #define CIRCLE_1P_RAD_ONE              0
 #define CIRCLE_1P_RAD_TWO              1
@@ -713,6 +715,87 @@
 #define PROP_ARC_CENTER_Y              1
 #define PROP_ARC_RADIUS                2
 #define N_PROPS                        3
+
+/* View Properties */
+#define VIEW_SNAP                      0
+#define VIEW_GRID                      1
+#define VIEW_ORTHO                     2
+#define VIEW_POLAR                     3
+#define VIEW_QSNAP                     4
+#define VIEW_QTRACK                    5
+#define VIEW_LWT                       6
+#define VIEW_REAL                      7
+#define VIEW_RULER                     8
+#define VIEW_METRIC                    9
+#define VIEW_GRIPPING                 10
+#define VIEW_RAPID_MOVING             11
+#define VIEW_PREVIEWING               12
+#define VIEW_PASTING                  13
+#define VIEW_MOVING                   14
+#define VIEW_SELECTING                15
+#define VIEW_ZOOMING                  16
+#define VIEW_PANNING_RT               17
+#define VIEW_PANNING_POINT            18
+#define VIEW_PANNING                  19
+#define N_VIEW_PROPS                  20
+
+/* Translations */
+#define UNFINISHED                     0
+#define DRAFT                          1
+#define FINISHED                       2
+
+#define ARABIC_SHORTCODE            "ar"
+#define AFRIKAANS_SHORTCODE         "af"
+#define CHINESE_SHORTCODE           "zh"
+#define CZECH_SHORTCODE             "cs"
+#define DANISH_SHORTCODE            "da"
+#define DUTCH_SHORTCODE             "nl"
+#define FINNISH_SHORTCODE           "fi"
+#define GERMAN_SHORTCODE            "de"
+#define GREEK_SHORTCODE             "el"
+#define ITALIAN_SHORTCODE           "it"
+#define JAPANESE_SHORTCODE          "ja"
+#define KOREAN_SHORTCODE            "ko"
+#define PORTUGUESE_SHORTCODE        "pt"
+#define ROMANIAN_SHORTCODE          "ro"
+#define RUSSIAN_SHORTCODE           "ru"
+#define SPANISH_SHORTCODE           "es"
+#define SWEDISH_SHORTCODE           "sv"
+#define TURKISH_SHORTCODE           "tr"
+
+#define END_SYMBOL                 "END"
+
+#define GB_GENERAL                     0
+#define GB_GEOM_ARC                    1
+#define GB_MISC_ARC                    2
+#define GB_GEOM_BLOCK                  3
+#define GB_GEOM_CIRCLE                 4
+#define GB_GEOM_DIMALIGNED             5
+#define GB_GEOM_DIMANGULAR             6
+#define GB_GEOM_DIMARCLENGTH           7
+#define GB_GEOM_DIMDIAMETER            8
+#define GB_GEOM_DIMLEADER              9
+#define GB_GEOM_DIMLINEAR             10
+#define GB_GEOM_DIMORDINATE           11
+#define GB_GEOM_DIMRADIUS             12
+#define GB_GEOM_ELLIPSE               13
+#define GB_GEOM_IMAGE                 14
+#define GB_MISC_IMAGE                 15
+#define GB_GEOM_INFINITE_LINE         16
+#define GB_GEOM_LINE                  17
+#define GB_GEOM_PATH                  18
+#define GB_MISC_PATH                  19
+#define GB_GEOM_POINT                 20
+#define GB_GEOM_POLYGON               21
+#define GB_GEOM_POLYLINE              22
+#define GB_MISC_POLYLINE              23
+#define GB_GEOM_RAY                   24
+#define GB_GEOM_RECT                  25
+#define GB_GEOM_TEXT_MULTI            26
+#define GB_TEXT_TEXT_SINGLE           27
+#define GB_GEOM_TEXT_SINGLE           28
+#define GB_MISC_TEXT_SINGLE           29
+#define N_GROUPBOX                    30
 
 #endif
 

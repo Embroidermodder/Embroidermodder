@@ -34,10 +34,12 @@ function get_dependancies () {
 	fi
 
 	if [[ $1 = "linux" ]]; then
-		sudo apt update
-		sudo apt install build-essential cmake qt6-base-dev libqt6gui6 libqt6widgets6 \
-			libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev \
-                        libglew-dev
+		sudo apt-get update
+		sudo apt-get install \
+     git build-essential cmake \
+     qt6-base-dev libqt6widgets6 \
+			libqt6printsupport6 libqt6core6 libgl-dev libgl1-mesa-dev libglx-dev \
+    wayland-scanner
 		sudo apt upgrade
 	fi
 
@@ -93,7 +95,7 @@ function build_debug () {
 # This is not intended to be portable and the requirements are whatever is
 # necessary since the program builds and ships without this function.
 #
-# Current requirements: GNU time, clang-tidy, gnuplot, bash,
+# Current requirements: GNU time, clang-tidy, bash,
 # standard UNIX tools, python3 and the module: clang_html
 #
 # https://www.gnu.org/software/complexity/manual/complexity.html
@@ -107,18 +109,10 @@ function analysis () {
     run_cmake
 
     echo "Producing clang-tidy report."
-    mkdir -p analysis
     FNAME_TIME="`date -Iseconds`"
-    REPORT="analysis/clang-tidy-report-$FNAME_TIME.txt"
+    REPORT="clang-tidy-report-$FNAME_TIME.txt"
     clang-tidy --config-file=clang-tidy.txt -p debug src/* &> $REPORT
 
-    echo "Recording output size"
-    SEC=`date +%s`
-    LEN=`cat $REPORT | wc -l`
-    echo "$SEC, $LEN" >> analysis/history.csv
-
-    echo "Plotting"
-    gnuplot -e "set terminal png size 400,300; set output 'analysis/progress.png'; set datafile separator \",\"; plot 'analysis/history.csv' using 1:2 with lines"
     python3 -m clang_html $REPORT -o analysis/clang-report.html
 }
 

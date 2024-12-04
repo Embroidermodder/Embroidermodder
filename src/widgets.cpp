@@ -10,25 +10,7 @@
  * MainWindow Commands
  */
 
-#include <QAction>
-#include <QApplication>
-#include <QGraphicsPathItem>
-#include <QtPrintSupport>
-
-#include "wrapper.h"
-#include "core.h"
-
-class CmdPrompt;
-class ImageWidget;
-class MainWindow;
-class MdiArea;
-class MdiWindow;
-class Object;
-class PropertyEditor;
-class SelectBox;
-class UndoEditor;
-class Document;
-class CmdPromptInput;
+#include "widgets.h"
 
 /* Could initialise all documents to NULL rather than having a seperate memory
  * usage array?
@@ -36,12 +18,17 @@ class CmdPromptInput;
 Document *documents[MAX_OPEN_FILES];
 Object *object_list[MAX_OBJECTS];
 MdiArea* mdiArea;
-CmdPrompt* prompt;
+QWidget* prompt;
 PropertyEditor* dockPropEdit;
 UndoEditor* dockUndoEdit;
 QList<MdiWindow*> listMdiWin;
 MainWindow *_main;
 CmdPromptInput* promptInput;
+
+void blink(void);
+void alert(const char *txt);
+void save_prompt_history(QString fileName, bool html);
+void set_prompt_prefix(QString txt);
 
 /* NOTE: These shortcuts need to be caught since QLineEdit uses them. */
 IntMap key_map[] = {
@@ -78,7 +65,7 @@ void create_statusbar(MainWindow* mw);
 QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
 
 Qt::PenStyle obj_line_type(Object* obj);
-double  obj_line_weight(Object* obj);
+double obj_line_weight(Object* obj);
 QPainterPath obj_path(Object* obj);
 
 void obj_update_leader(Object *obj);
@@ -98,7 +85,7 @@ void obj_set_color(Object *obj, const QColor& color);
 void obj_set_color_rgb(Object *obj, QRgb rgb);
 void obj_set_line_type(Object *obj, Qt::PenStyle lineType);
 
-Document *create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent);
+Document *create_doc(QGraphicsScene* theScene, QWidget *parent);
 
 void doc_start_gripping(int32_t doc, Object* obj);
 void doc_stop_gripping(int32_t doc, bool accept = false);
@@ -106,459 +93,549 @@ void doc_stop_gripping(int32_t doc, bool accept = false);
 QAction* createAction(Command command);
 void onCloseMdiWin(MdiWindow*);
 
-/* ---------------------- Class Declarations --------------------------- */
-
-class LayerManager : public QDialog
-{
-    Q_OBJECT
-
-public:
-    LayerManager(MainWindow* mw, QWidget *parent = 0);
-    ~LayerManager() { restore_cursor(); }
-
-    void addLayer(QString name,
-        const bool visible,
-        const bool frozen,
-        const EmbReal zValue,
-        const QRgb color,
-        QString lineType,
-        QString lineWeight,
-        const bool print);
-
-    QStandardItemModel*    layerModel;
-    QSortFilterProxyModel* layerModelSorted;
-    QTreeView*             treeView;
-};
-
-class MdiArea : public QMdiArea
-{
-    Q_OBJECT
-
-public:
-    MdiArea(MainWindow* mw, QWidget* parent = 0);
-    ~MdiArea() {}
-
-    bool useLogo;
-    bool useTexture;
-    bool useColor;
-
-    QPixmap bgLogo;
-    QPixmap bgTexture;
-    QColor  bgColor;
-
-    void forceRepaint();
-
-public slots:
-    void cascade();
-    void tile();
-protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent* e);
-    virtual void paintEvent(QPaintEvent* e);
-};
-
-/* . */
-class Document: public QGraphicsView
-{
-    Q_OBJECT
-
-public:
-    Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
-    ~Document() { free_doc(data->id); }
-
-    DocumentData *data;
-
-    QVector<int64_t> hashDeletedObjects;
-    QPainterPath gridPath;
-    QPainterPath originPath;
-
-    QPainter* scene_painter;
-
-    Object* gripBaseObj;
-
-    QGraphicsScene* gscene;
-    QUndoStack* undoStack;
-
-    SelectBox* selectBox;
-    QGraphicsItemGroup* pasteObjectItemGroup;
-
-protected:
-    void mouseDoubleClickEvent(QMouseEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void wheelEvent(QWheelEvent* event);
-    void contextMenuEvent(QContextMenuEvent* event);
-    void drawBackground(QPainter* painter, const QRectF& rect);
-    void draw_rulers(QPainter* painter, const QRectF& rect);
-    void drawForeground(QPainter* painter, const QRectF& rect);
-    void enterEvent(QEvent* event);
-};
-class UndoableCommand : public QUndoCommand
-{
-public:
-    UndoableCommand(int type_, QString text, Object* obj, int32_t v,
-        QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector delta, QString text, Object* obj,
-        int32_t v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector pivot, EmbReal rotAngle, QString text,
-        Object* obj, int32_t v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, QString type, int32_t v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector start, EmbVector end, QString text,
-        Object* obj, int32_t v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-    void rotate(double x, EmbReal y, EmbReal rot);
-    int id() const { return 1234; }
-    bool mergeWith(const QUndoCommand* command);
-    void mirror();
+QGroupBox* make_groupbox(QWidget *parent, const char *title, WidgetData data[], char *layout[]);
 
-    UndoData data;
-    Object *object;
-    QTransform toTransform;
-    QTransform fromTransform;
-};
+QLabel *create_tr_label(const char *label, QDialog *dialog);
+QLabel *create_int_label(uint32_t value, QDialog *dialog);
+QSpinBox* create_int_spinbox(QGroupBox* groupbox, int key);
+void create_spinbox(QGroupBox* groupbox, int key);
+QCheckBox* create_checkbox(QGroupBox* groupbox, int key);
+QIcon create_icon(QString icon);
+QPixmap create_pixmap(QString icon);
+void create_label(QGroupBox *groupbox, const char *key, const char *text);
+QIcon create_swatch(int32_t color);
 
-class UndoEditor : public QDockWidget
-{
-    Q_OBJECT
+void add_combobox(EmbString key, QComboBox *combobox);
+void add_to_selector(QComboBox* box, EmbStringTable list, EmbString type,
+    int use_icon);
 
-public:
-    UndoEditor(QString iconDirectory = "", QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
-    ~UndoEditor() {}
+QPushButton *get_button(const char *key);
+QWidget *get_widget(EmbString key);
+QAction *get_action_by_icon(EmbString icon);
 
-    void addStack(QUndoStack* stack);
+QWidget *make_scrollable(QDialog *dialog, QVBoxLayout *layout, QWidget* widget);
 
-    bool canUndo() const;
-    bool canRedo() const;
+void set_grid_layout(QGroupBox *groupbox, char *table[]);
+void set_toolbar_horizontal(int data[]);
 
-    QString undoText() const;
-    QString redoText() const;
-protected:
+void mapSignal(QObject* fieldObj, QString name, QVariant value);
 
-public slots:
-    void undo();
-    void redo();
+void obj_update_rubber(uint32_t obj, QPainter* painter);
 
-    void updateCleanIcon(bool opened);
+void draw_arc(QPainter* painter, EmbArc arc);
+void draw_circle(QPainter* painter, EmbCircle circle);
+void draw_ellipse(QPainter* painter, EmbEllipse ellipse);
+void draw_line(QPainter* painter, EmbLine line);
+void draw_polygon(QPainter* painter, EmbPolygon polygon);
+void draw_polyline(QPainter* painter, EmbPolyline polyline);
+void draw_rect(QPainter* painter, EmbRect rect);
+void draw_spline(QPainter* painter, EmbSpline spline);
 
-private:
-    QWidget* focusWidget;
+int find_widget_list(const char *key);
 
-    QString iconDir;
-    int iconSize;
+void nativeAlert(EmbString txt);
+void nativeAppendPromptHistory(EmbString txt);
 
-    QUndoGroup* undoGroup;
-    QUndoView*  undoView;
-};
+ScriptValue add_polygon_command(double startX, EmbReal startY,
+    const QPainterPath& p, int rubberMode);
+ScriptValue add_polyline_command(double startX, EmbReal startY,
+    const QPainterPath& p, int rubberMode);
+ScriptValue add_path_command(double startX, EmbReal startY,
+    const QPainterPath& p, int rubberMode);
 
-class Object: public QGraphicsPathItem
-{
-public:
-    ObjectCore *core;
+void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
 
-    QGraphicsPathItem path_;
-    QPen objPen;
-    QPen lwtPen;
-    QLineF objLine;
-    QPainter* obj_painter;
+void fieldEdited(QObject* fieldObj);
+QUndoStack* active_undo_stack(void);
+EmbVector to_emb_vector(QPointF p);
+QPointF to_qpointf(EmbVector v);
 
-    QPainterPath textPath;
-    QPainterPath lineStylePath;
-    QPainterPath arrowStylePath;
-    QPainterPath normalPath;
+QPainterPath doc_create_ruler_text_path(EmbString str, float height);
 
-    Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);
-    ~Object() { free_object(core); }
+void textFontSelectorCurrentFontChanged(const QFont& font);
 
-    void gripEdit(EmbVector before, EmbVector after);
-    QPainterPath shape() const { return path(); }
+void onWindowActivated(QMdiSubWindow* w);
 
-    void drawRubberLine(QLineF rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
+QAction* getFileSeparator();
 
-    void setObjectSize(double width, EmbReal height);
+QMdiSubWindow* findMdiWindow(EmbString fileName);
 
-    QPainterPath objectCopyPath() const;
-    QPainterPath objectSavePath() const;
-    QList<QPainterPath> objectSavePathList() const { return subPathList(); }
-    QList<QPainterPath> subPathList() const;
-
-protected:
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-
-class PreviewDialog : public QFileDialog
-{
-    Q_OBJECT
-
-public:
-    PreviewDialog(QWidget* parent = 0, QString caption = "",
-        QString directory = "", QString filter = "");
-    ~PreviewDialog() { debug_message("PreviewDialog Destructor"); }
-
-private:
-    ImageWidget* imgWidget;
-};
-
-class PropertyEditor: public QDockWidget
-{
-    Q_OBJECT
-
-public:
-    PropertyEditor(QString iconDirectory = "", bool pickAddMode = true,
-        QWidget* widgetToFocus = 0, QWidget* parent = 0);
-        /*, Qt::WindowFlags flags = 0); */
-    ~PropertyEditor() {}
-
-    void togglePickAddMode();
-
-protected:
-    bool eventFilter(QObject *obj, QEvent *event);
-
-signals:
-    void pick_add_mode_toggled();
-
-public slots:
-    void setSelectedItems(QList<QGraphicsItem*> itemList);
-    void update_pick_add_modeButton(bool pickAddMode);
-};
-
-class Settings_Dialog : public QDialog
-{
-    Q_OBJECT
-
-public:
-    Settings_Dialog(MainWindow* mw, QString showTab = "", QWidget *parent = 0);
-    ~Settings_Dialog() { restore_cursor(); }
-
-    void color_dialog(QPushButton *button, int key);
-    void labelled_button(QGroupBox* groupbox, QGridLayout *layout,
-        int row, const char *name, int key);
-
-private:
-    QTabWidget* tabWidget;
-
-    QWidget* createTab(WidgetDesc desc);
-
-    QWidget* createTabGeneral();
-    QWidget* createTabDisplay();
-    QWidget* createTabPrompt();
-    QWidget* createTabOpenSave();
-    QWidget* createTabPrinting();
-    QWidget* createTabGridRuler();
-    QWidget* createTabQuickSnap();
-    QWidget* createTabLineWeight();
-    QWidget* createTabSelection();
-
-    QDialogButtonBox* buttonBox;
-
-    void addColorsToComboBox(QComboBox* comboBox);
-    void chooseColor(int key);
-
-private slots:
-
-    void check_custom_filter_changed(int);
-    void combo_icon_size_index_changed(int);
-    void button_custom_filter_select_all_clicked(void);
-    void button_custom_filter_clear_all_clicked(void);
-    void buttonQSnapSelectAllClicked(void);
-    void buttonQSnapClearAllClicked(void);
-
-    void acceptChanges(void);
-    void rejectChanges(void);
-
-signals:
-    void button_custom_filter_select_all(bool);
-    void button_custom_filter_clear_all(bool);
-    void buttonQSnapSelectAll(bool);
-    void buttonQSnapClearAll(bool);
-};
-
-class SelectBox: public QRubberBand
-{
-    Q_OBJECT
-
-public:
-    SelectBox(Shape s, QWidget* parent = 0);
-
-public slots:
-    void setDirection(int dir);
-    void setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha);
-
-protected:
-    void paintEvent(QPaintEvent*);
-
-private:
-    QColor leftBrushColor;
-    QColor rightBrushColor;
-    QColor leftPenColor;
-    QColor rightPenColor;
-    uint8_t alpha;
-
-    QBrush dirBrush;
-    QBrush leftBrush;
-    QBrush rightBrush;
-
-    QPen dirPen;
-    QPen leftPen;
-    QPen rightPen;
-
-    bool boxDir;
-
-    void forceRepaint();
-};
-
-class MdiWindow: public QMdiSubWindow
-{
-    Q_OBJECT
-
-public:
-    MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
-    ~MdiWindow() {
-        debug_message("MdiWindow Destructor()");
-        emb_pattern_free(documents[doc_index]->data->pattern);
-    }
-
-    QMdiArea* mdiArea;
-    QGraphicsScene* gscene;
-    int32_t doc_index;
-
-    QPrinter printer;
-
-    virtual QSize sizeHint() const;
-    QString getShortCurrentFile();
-    bool loadFile(const char *fileName);
-signals:
-    void sendCloseMdiWin(MdiWindow*);
-
-public slots:
-    void closeEvent(QCloseEvent* e);
-    void onWindowActivated();
-
-    void print();
-    void saveBMC();
-
-private:
-    void setCurrentFile(QString fileName);
-    QString fileExtension(QString fileName);
-};
-
-class ImageWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    ImageWidget(QString filename, QWidget* parent = 0);
-    ~ImageWidget() { debug_message("imageWidget destructor"); }
-
-    bool load(QString fileName);
-    bool save(QString fileName);
-
-protected:
-    void paintEvent(QPaintEvent* event);
-
-private:
-    QImage img;
-};
-
-/* On Mac, if the user drops a file on the app's Dock icon, or uses Open As,
- * then this is how the app actually opens the file.
- */
-class Application : public QApplication
-{
-    Q_OBJECT
-public:
-    Application(int argc, char **argv);
-    void setMainWin(MainWindow* mainWin);
-protected:
-    virtual bool event(QEvent *e);
-private:
-    MainWindow* _mainWin;
-};
-
-class CmdPromptInput: public QLineEdit
-{
-    Q_OBJECT
-
-public:
-    CmdPromptInput(QWidget* parent = 0);
-    ~CmdPromptInput() {}
-
-protected:
-    void contextMenuEvent(QContextMenuEvent *event);
-    bool eventFilter(QObject *obj, QEvent *event);
-
-public slots:
-    void checkSelection();
-    void updateCurrentText(QString txt);
-    void checkEditedText(QString txt);
-    void checkChangedText(QString txt);
-    void checkCursorPosition(int oldpos, int newpos);
-private slots:
-    void copyClip();
-    void pasteClip();
-};
-
-class CmdPrompt : public QWidget
-{
-    Q_OBJECT
-
-public:
-    CmdPrompt(QWidget* parent = 0);
-    ~CmdPrompt() {}
-
-public slots:
-    void setPrefix(QString txt);
-
-    void alert(QString txt);
-
-    void blink();
-
-    void saveHistory(QString fileName, bool html);
-
-signals:
-    /* For connecting outside of command prompt. */
-    void showSettings();
-
-    void historyAppended(QString txt);
-};
-
-class MainWindow: public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    MainWindow();
-    ~MainWindow() {
-        debug_message("Destructor()");
-
-        /* Prevent memory leaks by deleting any unpasted objects. */
-        free_objects(cutCopyObjectList);
-        free_id_list(cutCopyObjectList);
-    }
-
-    void add_toolbar_to_window(Qt::ToolBarArea area, int data[]);
-
-public slots:
-    void recentMenuAboutToShow();
-    void windowMenuActivated(bool checked /*, int id*/);
-
-    void closeToolBar(QAction*);
-    void floatingChangedToolBar(bool);
-
-    void runCommand();
-
-    void colorSelectorIndexChanged(int index);
-
-protected:
-    virtual void resizeEvent(QResizeEvent*);
-    void closeEvent(QCloseEvent *event);
-};
+QWidget* create_editor(QWidget *parent, EmbString type_label,
+    EmbString signal_name, int obj_type);
 
 /* ----------------------------- Qt Wrapper ------------------------------ */
 
 Object *get_obj(int key);
+void labelled_button(QWidget* parent, QGridLayout *layout,
+    int row, const char *name, int key);
+void chooseColor(QWidget *parent, QPushButton *button, int key);
+
+Widget widget_list[MAX_WIDGETS];
+QAction* actionHash[MAX_ACTIONS];
+QToolBar* toolbar[N_TOOLBARS];
+QMenu* menu[N_MENUS];
+
+QAction* myFileSeparator;
+
+QWizard* wizardTipOfTheDay;
+QLabel* labelTipOfTheDay;
+QCheckBox* checkBoxTipOfTheDay;
+
+/* Selectors */
+QComboBox* layerSelector;
+QComboBox* colorSelector;
+QComboBox* linetypeSelector;
+QComboBox* lineweightSelector;
+QFontComboBox* textFontSelector;
+QComboBox* textSizeSelector;
+
+QByteArray layoutState;
+
+QString defaultPrefix;
+QString prefix;
+
+QString curCmd;
+
+QTextBrowser* promptHistory;
+
+QStatusBar* statusbar;
+
+QTimer* blinkTimer;
+QToolButton* statusBarButtons[N_SB_BUTTONS];
+QLabel* statusBarMouseCoord;
+
+QGroupBox *create_group_box(QWidget *parent, const char *key, const char *label);
+
+QComboBox* comboBoxSelected;
+QWidget* focusWidget_;
+QString iconDir;
+
+QList<QString> promptInputList = {""};
+
+QFontComboBox* comboBoxTextSingleFont;
+
+QSignalMapper* signalMapper;
+Qt::ToolButtonStyle propertyEditorButtonStyle;
+
+QList<QGraphicsItem*> selectedItemList;
+
+QToolButton* toolButtonPickAdd;
+
+/* . */
+int
+find_widget_list(const char *key)
+{
+    for (int i=0; i<n_widgets; i++) {
+        if (string_equal(widget_list[i].key, key)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/* . */
+void
+wait_cursor(void)
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+}
+
+/* . */
+void
+arrow_cursor(void)
+{
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+}
+
+/* . */
+void
+restore_cursor(void)
+{
+    QApplication::restoreOverrideCursor();
+}
+
+/* . */
+void
+whats_this_mode(void)
+{
+    debug_message("whats_this_context_help()");
+    QWhatsThis::enterWhatsThisMode();
+}
+
+
+/* . */
+QLabel *
+create_tr_label(const char *label, QDialog *dialog)
+{
+    return new QLabel(translate(label), dialog);
+}
+
+/* . */
+QLabel *
+create_int_label(uint32_t value, QDialog *dialog)
+{
+    return new QLabel(QString::number(value), dialog);
+}
+
+/* . */
+void
+mapSignal(QObject* fieldObj, QString name, QVariant value)
+{
+    fieldObj->setObjectName(name);
+    fieldObj->setProperty(qPrintable(name), value);
+
+    if (name.startsWith("lineEdit")) {
+        QObject::connect(fieldObj, SIGNAL(editingFinished()), signalMapper, SLOT(map()));
+    }
+    else if (name.startsWith("comboBox")) {
+        QObject::connect(fieldObj, SIGNAL(activated(QString)), signalMapper, SLOT(map()));
+    }
+
+    signalMapper->setMapping(fieldObj, fieldObj);
+}
+
+/* . */
+QWidget *
+get_widget(EmbString key)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Failed to find widget with key %s.", key);
+        return NULL;
+    }
+    switch (widget_list[index].type) {
+    case WIDGET_LABEL:
+        return widget_list[index].label;
+    case WIDGET_SPINBOX:
+        return widget_list[index].spinbox;
+    case WIDGET_CHECKBOX:
+        return widget_list[index].checkbox;
+    case WIDGET_COMBOBOX:
+        return widget_list[index].combobox;
+    case WIDGET_GROUP_BOX:
+        return widget_list[index].groupbox;
+    default:
+        break;
+    }
+    debug_message("Failed to find widget with key %s.", key);
+    return NULL;
+}
+
+/* . */
+QPushButton *
+get_button(const char *key)
+{
+    int widget = find_widget_list(key);
+    if (widget < 0) {
+        debug_message("get_button: Widget not found.");
+        return NULL;
+    }
+    return widget_list[widget].button;
+}
+
+/* . */
+void
+set_visibility(const char *key, bool visibility)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Failed to find widget_list with key %s.", key);
+        return;
+    }
+    switch (widget_list[index].type) {
+    case WIDGET_LABEL:
+        widget_list[index].label->setVisible(visibility);
+        break;
+    case WIDGET_SPINBOX:
+        widget_list[index].spinbox->setVisible(visibility);
+        break;
+    case WIDGET_CHECKBOX:
+        widget_list[index].checkbox->setVisible(visibility);
+        break;
+    case WIDGET_COMBOBOX:
+        widget_list[index].combobox->setVisible(visibility);
+        break;
+    case WIDGET_GROUP_BOX:
+        widget_list[index].groupbox->setVisible(visibility);
+        break;
+    default:
+        debug_message("Failed to set widget's visibility with key %s at index.", key, index);
+        break;
+    }
+}
+
+/* . */
+void
+set_enabled(const char *key, bool enabled)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Failed to find widget_list with key %s.", key);
+        return;
+    }
+    switch (widget_list[index].type) {
+    case WIDGET_LABEL:
+        widget_list[index].label->setEnabled(enabled);
+        break;
+    case WIDGET_SPINBOX:
+        widget_list[index].spinbox->setEnabled(enabled);
+        break;
+    case WIDGET_CHECKBOX:
+        widget_list[index].checkbox->setEnabled(enabled);
+        break;
+    case WIDGET_COMBOBOX:
+        widget_list[index].combobox->setEnabled(enabled);
+        break;
+    case WIDGET_GROUP_BOX:
+        widget_list[index].groupbox->setEnabled(enabled);
+        break;
+    default:
+        debug_message("Failed to set widget's enabled state with key %s at index.", key, index);
+        break;
+    }
+}
+
+/* . */
+void
+set_grid_layout(QGroupBox *groupbox, char *table[])
+{
+    QGridLayout* layout = new QGridLayout(groupbox);
+    for (int i=0; !string_equal(table[2*i], "END"); i++) {
+        if (strlen(table[2*i]) > 0) {
+            QWidget *widget = get_widget(table[2*i]);
+            layout->addWidget(widget, i, 0, Qt::AlignLeft);
+        }
+        if (strlen(table[2*i+1]) > 0) {
+            QWidget *widget = get_widget(table[2*i+1]);
+            layout->addWidget(widget, i, 1, Qt::AlignRight);
+        }
+    }
+    groupbox->setLayout(layout);
+}
+
+/* . */
+void
+show_widget(const char *key, int type)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("show_widget: Widget not found.");
+        return;
+    }
+    switch (type) {
+    case WIDGET_LINEEDIT:
+        widget_list[index].lineedit->show();
+        break;
+    case WIDGET_COMBOBOX:
+        widget_list[index].combobox->show();
+        break;
+    default:
+        debug_message("widget type unknown");
+        break;
+    }
+}
+
+/* . */
+void
+hide_widget(const char *key, int type)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("hide_widget: Widget not found.");
+        return;
+    }
+    switch (type) {
+    case WIDGET_LINEEDIT:
+        widget_list[index].lineedit->hide();
+        break;
+    case WIDGET_COMBOBOX:
+        widget_list[index].combobox->hide();
+        break;
+    default:
+        debug_message("widget type unknown");
+        break;
+    }
+}
+
+/* TODO: type should come from widget_list. */
+void
+widget_clear(const char *key, int type)
+{
+    int index = find_widget_list(key);
+    if (index >= 0) {
+        switch (type) {
+        case WIDGET_LINEEDIT:
+            widget_list[index].lineedit->clear();
+            break;
+        case WIDGET_GROUP_BOX:
+        default:
+            break;        
+        }
+    }
+    else {
+        debug_message("Failed to find widget by key");
+    }
+}
+
+/* HACK: using statusbar as a proxy for global scope function calls. */
+QCheckBox*
+create_checkbox(QGroupBox* groupbox, int key)
+{
+    char *label = settings_data[6*key + 2];
+    char *icon = settings_data[6*key + 3];
+    QCheckBox* checkBox = new QCheckBox(translate(label), groupbox);
+    checkBox->setChecked(setting[key].dialog.b);
+    QObject::connect(checkBox, &QCheckBox::stateChanged, statusbar,
+        [=](int checked) { setting[key].dialog.b = checked; preview_update(); });
+    if (QString(icon) != "") {
+        checkBox->setIcon(create_icon(icon));
+    }
+    return checkBox;
+}
+
+/* . */
+QIcon
+create_icon(QString icon)
+{
+    return QIcon(create_pixmap(icon));
+}
+
+/* . */
+QIcon
+create_swatch(int32_t color)
+{
+    QPixmap pixmap(16, 16);
+    pixmap.fill(QColor(color));
+    return QIcon(pixmap); 
+}
+
+/* . */
+void
+set_toolbar_horizontal(int data[])
+{
+    for (int i=0; data[i] != TERMINATOR_SYMBOL; i++) {
+        toolbar[data[i]]->setOrientation(Qt::Horizontal);
+    }
+}
+
+/*
+ * BUG: two layer properties dropdowns malfunctioning
+ * BUG: layers button broken icon
+ * BUG: text size dropdown broken
+ *
+ * Read the code that this replaces carefully.
+ */
+void
+add_to_selector(QComboBox* box, char *list[], EmbString type, int use_icon)
+{
+    int n = table_length(list) / 3;
+    for (int i=0; i<n; i++) {
+        if (!use_icon) {
+            if (string_equal(type, "real")) {
+                box->addItem(list[3*i+0], atof(list[3*i+1]));
+                continue;
+            }
+            if (string_equal(type, "int")) {
+                box->addItem(list[3*i+0], atoi(list[3*i+1]));
+            }
+            continue;
+        }
+        if (string_equal(type, "string")) {
+            box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
+            continue;
+        }
+        if (string_equal(type, "int")) {
+            if (strlen(list[3*i+2]) > 0) {
+                box->addItem(create_icon(list[3*i+0]), list[3*i+1],
+                    atoi(list[3*i+2]));
+            }
+            else {
+                box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
+            }
+            continue;
+        }
+        if (string_equal(type, "real")) {
+            if (strlen(list[3*i+2]) > 0) {
+                box->addItem(create_icon(list[3*i+0]), list[3*i+1],
+                    atof(list[3*i+2]));
+            }
+            else {
+                box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
+            }
+        }
+    }
+}
+
+/* . */
+void
+add_combobox(EmbString key, QComboBox *combobox)
+{
+    string_copy(widget_list[n_widgets].key, key);
+    widget_list[n_widgets].combobox = combobox;
+    n_widgets++;
+}
+
+QWidget *
+make_scrollable(QDialog *dialog, QVBoxLayout *layout, QWidget* widget)
+{
+    layout->addStretch(1);
+    widget->setLayout(layout);
+
+    QScrollArea* scrollArea = new QScrollArea(dialog);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(widget);
+    return scrollArea;
+}
+
+/* . */
+QSpinBox*
+create_int_spinbox(QGroupBox* groupbox, int key)
+{
+    QSpinBox* spinbox = new QSpinBox(groupbox);
+    char *name = settings_data[6*key + 0];
+    char *editor_data = settings_data[6*key + 5];
+    QStringList data = QString(editor_data).split(',');
+    spinbox->setObjectName(name);
+    spinbox->setSingleStep(data[0].toInt());
+    spinbox->setRange(data[1].toInt(), data[2].toInt());
+    spinbox->setValue(setting[key].dialog.i);
+    QObject::connect(spinbox, &QSpinBox::valueChanged, statusbar,
+        [=](int value) { setting[key].dialog.i = value; });
+    return spinbox;
+}
+
+/* . */
+void
+create_spinbox(QGroupBox* groupbox, int key)
+{
+    QDoubleSpinBox* spinbox = new QDoubleSpinBox(groupbox);
+    char *name = settings_data[6*key + 0];
+    char *editor_data = settings_data[6*key + 5];
+    QStringList data = QString(editor_data).split(',');
+    spinbox->setObjectName(name);
+    spinbox->setSingleStep(data[0].toFloat());
+    spinbox->setRange(data[1].toFloat(), data[2].toFloat());
+    spinbox->setValue(setting[key].dialog.r);
+    QObject::connect(spinbox, &QDoubleSpinBox::valueChanged, statusbar,
+        [=](double value) { setting[key].dialog.r = value; });
+
+    string_copy(widget_list[n_widgets].key, name);
+    widget_list[n_widgets].type = WIDGET_LABEL;
+    widget_list[n_widgets].spinbox = spinbox;
+}
+
+/* . */
+QGroupBox *
+create_group_box(QWidget *parent, const char *key, const char *label)
+{
+    QGroupBox *group_box = new QGroupBox(translate(label), parent);
+
+    string_copy(widget_list[n_widgets].key, key);
+    widget_list[n_widgets].type = WIDGET_GROUP_BOX;
+    widget_list[n_widgets].groupbox = group_box;
+    n_widgets++;
+    return group_box;
+}
 
 /* . */
 int32_t
@@ -615,13 +692,28 @@ create_label(QGroupBox *groupbox, const char *key, const char *text)
 
 /* ----------------------------------------------------------------------- */
 
+void
+prompt_output(const char *txt)
+{
+    if (txt[0] == 0) {
+        promptHistory->append(curText);
+        /* emit historyAppended(formatStr); */
+        promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+        return;
+    }
+
+    promptHistory->append(txt);
+    /* emit historyAppended(formatStr); */
+    promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+}
+
 /* . */
 void
 exit_program(void)
 {
     debug_message("exit()");
     if (get_bool(PROMPT_SAVE_HISTORY)) {
-        prompt->saveHistory("prompt.log", get_bool(PROMPT_SAVE_HISTORY_AS_HTML));
+        save_prompt_history("prompt.log", get_bool(PROMPT_SAVE_HISTORY_AS_HTML));
         /* TODO: get filename from settings */
     }
     qApp->closeAllWindows();
@@ -658,15 +750,16 @@ tip_of_the_day(void)
     ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
     // create_pixmap("did_you_know")
 
-    if (get_int(GENERAL_CURRENT_TIP) >= string_array_length(state.tips)) {
+    if (get_int(GENERAL_CURRENT_TIP) >= table_length(tips)) {
         set_int(GENERAL_CURRENT_TIP, 0);
     }
-    labelTipOfTheDay = new QLabel(state.tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
     checkBoxTipOfTheDay->setChecked(get_bool(GENERAL_TIP_OF_THE_DAY));
-    QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main, SLOT(check_box_tip_of_the_day_changed(int)));
+    QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main,
+        SLOT([](int checked) { set_bool(GENERAL_TIP_OF_THE_DAY, checked); }));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
     layout->addWidget(imgBanner);
@@ -702,26 +795,24 @@ tip_of_the_day(void)
 void
 button_tip_of_the_day_clicked(int button)
 {
-    char message[MAX_STRING_LENGTH];
-    sprintf(message, "button_tip_of_the_day_clicked(%d)", button);
-    debug_message(message);
+    debug_message("button_tip_of_the_day_clicked(%d)", button);
     int current = get_int(GENERAL_CURRENT_TIP);
     if (button == QWizard::CustomButton1) {
         if (current > 0) {
             current--;
         }
         else {
-            current = string_array_length(state.tips)-1;
+            current = table_length(tips)-1;
         }
-        labelTipOfTheDay->setText(state.tips[current]);
+        labelTipOfTheDay->setText(tips[current]);
         set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton2) {
         current++;
-        if (current >= string_array_length(state.tips)) {
+        if (current >= table_length(tips)) {
             current = 0;
         }
-        labelTipOfTheDay->setText(state.tips[current]);
+        labelTipOfTheDay->setText(tips[current]);
         set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton3) {
@@ -764,14 +855,12 @@ undo_command(void)
 {
     debug_message("undo_command()");
     if (dockUndoEdit->canUndo()) {
-        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
-        append_history("");
+        prompt_output(qPrintable("Undo " + dockUndoEdit->undoText()));
         dockUndoEdit->undo();
-        prompt->setPrefix(prefix);
+        set_prompt_prefix(prefix);
     }
     else {
-        prompt->alert("Nothing to undo");
-        prompt->setPrefix(prefix);
+        alert("Nothing to undo");
     }
 }
 
@@ -781,14 +870,12 @@ redo_command(void)
 {
     debug_message("redo_command()");
     if (dockUndoEdit->canRedo()) {
-        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
-        append_history("");
+        prompt_output(qPrintable("Redo " + dockUndoEdit->redoText()));
         dockUndoEdit->redo();
-        prompt->setPrefix(prefix);
+        set_prompt_prefix(prefix);
     }
     else {
-        prompt->alert("Nothing to redo");
-        prompt->setPrefix(prefix);
+        alert("Nothing to redo");
     }
 }
 
@@ -858,23 +945,19 @@ update_pick_add_mode(bool val)
 }
 
 /* Layer ToolBar */
-
-/* . */
 void
 layer_manager(void)
 {
     debug_message("layer_manager()");
-    todo("Implement layer_manager.");
-    LayerManager layman(_main, _main);
+    debug_message("TODO: Implement layer_manager.");
+    LayerManager layman(_main);
     layman.exec();
 }
 
 void
 MainWindow::colorSelectorIndexChanged(int index)
 {
-    EmbString message;
-    sprintf(message, "colorSelectorIndexChanged(%d)", index);
-    debug_message(message);
+    debug_message("colorSelectorIndexChanged(%d)", index);
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     uint32_t newColor;
@@ -883,12 +966,12 @@ MainWindow::colorSelectorIndexChanged(int index)
         /* TODO: Handle ByLayer and ByBlock and Other... */
         newColor = comboBox->itemData(index).toUInt(&ok);
         if (!ok) {
-            warning_box(translate("Color Selector Conversion Error"),
+            messagebox("warning", translate("Color Selector Conversion Error"),
                 translate("<b>An error has occured while changing colors.</b>"));
         }
     }
     else {
-        warning_box(translate("Color Selector Pointer Error"),
+        messagebox("warning", translate("Color Selector Pointer Error"),
             translate("<b>An error has occured while changing colors.</b>"));
     }
 
@@ -911,9 +994,7 @@ textFontSelectorCurrentFontChanged(const QFont& font)
 void
 text_size_selector_index_changed(int index)
 {
-    EmbString message;
-    sprintf(message, "text_size_selector_index_changed(%d)", index);
-    debug_message(message);
+    debug_message("text_size_selector_index_changed(%d)", index);
     /* TODO: check that the toReal() conversion is ok. */
     set_real(TEXT_SIZE, fabs(textSizeSelector->itemData(index).toReal()));
 }
@@ -947,9 +1028,7 @@ MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
     if (act) {
-        EmbString message;
-        sprintf(message, "runCommand(%s)", qPrintable(act->objectName()));
-        debug_message(message);
+        debug_message("runCommand(%s)", qPrintable(act->objectName()));
         prompt_end_command();
         prompt_set_current_text(qPrintable(act->objectName()));
         process_input(' ');
@@ -1068,9 +1147,8 @@ set_cursor_shape(EmbString shape)
 /* Simple Commands (other commands, like circle_command are housed in their
  * own file with their associated functions)
  * ------------------------------------------------------------------------
- */
-
-/* TODO: QTabWidget for about dialog
+ *
+ * TODO: QTabWidget for about dialog
  */
 void
 about_dialog(void)
@@ -1129,7 +1207,7 @@ about_dialog(void)
 ScriptValue
 set_prompt_prefix_command(ScriptEnv* context)
 {
-    prompt->setPrefix(QString(STR(0)));
+    set_prompt_prefix(QString(STR(0)));
     return script_null;
 }
 
@@ -1184,7 +1262,7 @@ UndoableCommand::UndoableCommand(int type_, EmbVector pos, EmbReal scaleFactor,
         if (scaleFactor <= 0.0) {
             data.delta = emb_vector(0.0, 0.0);
             data.factor = 1.0;
-            critical_box(translate("ScaleFactor Error"),
+            messagebox("critical", translate("ScaleFactor Error"),
                 translate("Hi there. If you are not a developer, report this as a bug. "
                "If you are a developer, your code needs examined, and possibly your head too."));
         }
@@ -1321,29 +1399,19 @@ UndoableCommand::redo()
         else if (string_equal(data.navType, "ZoomOutToPoint")) {
             doc_zoom_to_point(data.doc, d->viewMousePoint, -1);
         }
-        else if (string_equal(data.navType, "ZoomExtents")) {
-            doc_zoom_extents(data.doc);
-        }
-        else if (string_equal(data.navType, "ZoomSelected")) {
-            doc_zoom_selected(data.doc);
-        }
         else if (string_equal(data.navType, "PanStart")) {
             /* Do Nothing. We are just recording the spot where the pan started. */
         }
         else if (string_equal(data.navType, "PanStop")) {
             /* Do Nothing. We are just recording the spot where the pan stopped. */
         }
-        else if (string_equal(data.navType, "PanLeft")) {
-            doc_pan_left(data.doc);
-        }
-        else if (string_equal(data.navType, "PanRight")) {
-            doc_pan_right(data.doc);
-        }
-        else if (string_equal(data.navType, "PanUp")) {
-            doc_pan_up(data.doc);
-        }
-        else if (string_equal(data.navType, "PanDown")) {
-            doc_pan_down(data.doc);
+        else if (string_equal(data.navType, "ZoomSelected")
+            || string_equal(data.navType, "ZoomExtents")
+            || string_equal(data.navType, "PanLeft")
+            || string_equal(data.navType, "PanRight")
+            || string_equal(data.navType, "PanUp")
+            || string_equal(data.navType, "PanDown")) {
+            doc_nav(data.navType, data.doc);
         }
         toTransform = documents[data.doc]->transform();
         data.toCenter = doc_center(data.doc);
@@ -1435,7 +1503,7 @@ create_object(int type_, uint32_t rgb)
     obj->core = (ObjectCore*)malloc(sizeof(ObjectCore));
 
     if (type_ < 30) {
-        string_copy(obj->core->OBJ_NAME, state.object_names[type_]);
+        string_copy(obj->core->OBJ_NAME, object_names[type_]);
     }
     else {
         string_copy(obj->core->OBJ_NAME, "Unknown");
@@ -1456,7 +1524,7 @@ create_object(int type_, uint32_t rgb)
     obj_set_color(obj, rgb);
     obj_set_line_type(obj, lineType);
     obj_set_line_weight(obj, 0.35);
-    todo("pass in proper lineweight");
+    debug_message("TODO: pass in proper lineweight");
     obj->setPen(obj->objPen);
 
     obj->core->geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
@@ -1520,7 +1588,7 @@ obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath)
     /* If we have a dark color, lighten it. */
     int darkness = color1.lightness();
     int threshold = 32;
-    todo("This number may need adjusted or maybe just add it to settings.");
+    debug_message("TODO: This number may need adjusted or maybe just add it to settings.");
     if (darkness < threshold) {
         color2 = color1;
         if (!darkness) {
@@ -1594,19 +1662,19 @@ obj_update_rubber_grip(uint32_t obj_id)
     EmbVector gripPoint = obj_rubber_point(obj_id, "GRIP_POINT");
     switch (obj->core->geometry->type) {
     case EMB_ARC: {
-        todo("rubber grip arc");
+        debug_message("TODO: rubber grip arc");
         break;
     }
     case EMB_ELLIPSE: {
-        todo("rubber grip ellipse");
+        debug_message("TODO: rubber grip ellipse");
         break;
     }
     case EMB_IMAGE: {
-        todo("rubber grip image");
+        debug_message("TODO: rubber grip image");
         break;
     }
     case EMB_PATH: {
-        todo("rubber grip path");
+        debug_message("TODO: rubber grip path");
         break;
     }
     case EMB_LINE: {
@@ -1728,7 +1796,7 @@ obj_update_rubber_grip(uint32_t obj_id)
         break;
     }
     case EMB_RECT: {
-        todo("Make this work with rotation & scaling.");
+        debug_message("TODO: Make this work with rotation & scaling.");
         EmbVector after = obj_rubber_point(obj_id, "");
         EmbVector delta = emb_vector_subtract(after, gripPoint);
         EmbVector tl = obj_top_left(obj->core);
@@ -1814,13 +1882,13 @@ obj_set_text(ObjectCore* obj, const char *str)
         textPath.translate(-jRect.right(), 0);
     }
     else if (string_equal(obj->textJustify, "Aligned")) {
-        todo("TextSingleObject Aligned Justification.");
+        debug_message("TODO: TextSingleObject Aligned Justification.");
     }
     else if (string_equal(obj->textJustify, "Middle")) {
         textPath.translate(-jRect.center());
     }
     else if (string_equal(obj->textJustify, "Fit")) {
-        todo("TextSingleObject Fit Justification.");
+        debug_message("TODO: TextSingleObject Fit Justification.");
     }
     else if (string_equal(obj->textJustify, "Top Left")) {
         textPath.translate(-jRect.topLeft());
@@ -1999,16 +2067,16 @@ obj_set_line_weight(Object *obj, EmbReal lineWeight)
     if (lineWeight < 0) {
         if (lineWeight == OBJ_LWT_BYLAYER) {
             obj->lwtPen.setWidthF(0.35);
-            todo("getLayerLineWeight");
+            debug_message("TODO: getLayerLineWeight");
         }
         else if (lineWeight == OBJ_LWT_BYBLOCK) {
             obj->lwtPen.setWidthF(0.35);
-            todo("getBlockLineWeight");
+            debug_message("TODO: getBlockLineWeight");
         }
         else {
             char msg[MAX_STRING_LENGTH];
             sprintf(msg, "Lineweight: %f", lineWeight);
-            warning_box(translate("Error - Negative Lineweight"), msg);
+            messagebox("warning", translate("Error - Negative Lineweight"), msg);
             debug_message("Lineweight cannot be negative! Inverting sign.");
             obj->lwtPen.setWidthF(-lineWeight);
         }
@@ -2168,7 +2236,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
 {
     Object *obj = get_obj(obj_id);
     ObjectCore *core = obj->core;
-    todo("Arc,Path Rubber Modes");
+    debug_message("TODO: Arc,Path Rubber Modes");
     switch (obj->core->rubber_mode) {
     case RUBBER_CIRCLE_1P_RAD: {
         EmbVector sceneCenterPoint = obj_rubber_point(obj_id, "CIRCLE_CENTER");
@@ -2245,7 +2313,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbReal ellipseWidth = obj_rubber_point(obj_id, "ELLIPSE_WIDTH").x;
         EmbReal ellipseRot = obj_rubber_point(obj_id, "ELLIPSE_ROT").x;
 
-        todo("incorporate perpendicularDistance() into libembroidery.");
+        debug_message("TODO: incorporate perpendicularDistance() into libembroidery.");
         QLineF line(to_qpointf(sceneAxis1Point1), to_qpointf(sceneAxis1Point2));
         QLineF norm = line.normalVector();
         EmbVector delta = emb_vector_subtract(sceneAxis2Point2, sceneAxis1Point1);
@@ -2272,7 +2340,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbReal ellipseWidth = obj_rubber_point(obj_id, "ELLIPSE_WIDTH").x;
         EmbReal ellipseRot = obj_rubber_point(obj_id, "ELLIPSE_ROT").x;
 
-        todo("incorporate perpendicularDistance() into libcgeometry.");
+        debug_message("TODO: incorporate perpendicularDistance() into libcgeometry.");
         QLineF line(to_qpointf(sceneCenterPoint), to_qpointf(sceneAxis1Point2));
         QLineF norm = line.normalVector();
         EmbVector delta = emb_vector_subtract(sceneAxis2Point2, sceneCenterPoint);
@@ -2473,7 +2541,8 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
     if (option->state & QStyle::State_Selected) {
         paintPen.setStyle(Qt::DashLine);
     }
-    if (objScene->property("ENABLE_LWT").toBool()) {
+    DocumentData *data = doc_data(core->doc);
+    if (data->properties[VIEW_LWT]) {
         paintPen = lwtPen;
     }
     painter->setPen(paintPen);
@@ -2511,8 +2580,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
             painter->drawLine(obj_line(core->objID));
         }
 
-        if (objScene->property("ENABLE_LWT").toBool()
-            && objScene->property("ENABLE_REAL").toBool()) {
+        if (data->properties[VIEW_LWT] && data->properties[VIEW_REAL]) {
             obj_real_render(this, painter, path());
         }
         break;
@@ -2538,8 +2606,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
     case EMB_POLYLINE: {
         painter->drawPath(normalPath);
 
-        if (objScene->property("ENABLE_LWT").toBool()
-            && objScene->property("ENABLE_REAL").toBool()) {
+        if (data->properties[VIEW_LWT] && data->properties[VIEW_REAL]) {
             obj_real_render(this, painter, normalPath);
         }
         break;
@@ -2627,7 +2694,7 @@ Object::objectSavePath() const
 }
 
 /* Document */
-Document::Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
+Document::Document(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
 }
 
@@ -2642,33 +2709,34 @@ free_objects(EmbIdList *list)
 
 /* FIXME */
 Document*
-create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
+create_doc(QGraphicsScene* theScene, QWidget *parent)
 {
-    Document* doc = new Document(mw, theScene, parent);
+    Document* doc = new Document(theScene, parent);
     documents[numOfDocs] = doc;
-    doc->data = (DocumentData*)malloc(sizeof(DocumentData));
+    DocumentData* data = (DocumentData*)malloc(sizeof(DocumentData));
+    doc->data = data;
     doc_init(numOfDocs);
-    doc->data->id = numOfDocs;
+    data->id = numOfDocs;
     doc->gscene = theScene;
-    document_memory[doc->data->id] = true;
+    document_memory[data->id] = true;
 
-    doc_set_cross_hair_color(doc->data->id, get_int(DISPLAY_CROSSHAIR_COLOR));
-    doc_set_cross_hair_size(doc->data->id, get_int(DISPLAY_CROSSHAIR_PERCENT));
-    doc_set_grid_color(doc->data->id, get_int(GRID_COLOR));
+    doc_set_cross_hair_color(data->id, get_int(DISPLAY_CROSSHAIR_COLOR));
+    doc_set_cross_hair_size(data->id, get_int(DISPLAY_CROSSHAIR_PERCENT));
+    doc_set_grid_color(data->id, get_int(GRID_COLOR));
 
-    doc_toggle_ruler(doc->data->id, get_bool(RULER_SHOW_ON_LOAD));
-    doc_toggle_real(doc->data->id, true);
+    doc_toggle(data->id, "RULER", get_bool(RULER_SHOW_ON_LOAD));
+    doc_toggle(data->id, "REAL", true);
     /* TODO: load this from file, else settings with default being true. */
 
     if (get_bool(GRID_SHOW_ON_LOAD)) {
-        doc_create_grid(doc->data->id, get_str(GRID_TYPE));
+        doc_create_grid(data->id, get_str(GRID_TYPE));
     }
     else {
-        doc_create_grid(doc->data->id, "");
+        doc_create_grid(data->id, "");
     }
 
-    doc_show_scroll_bars(doc->data->id, get_bool(DISPLAY_SHOW_SCROLLBARS));
-    doc_set_corner_button(doc->data->id);
+    doc_show_scroll_bars(data->id, get_bool(DISPLAY_SHOW_SCROLLBARS));
+    doc_set_corner_button(data->id);
 
     doc->setFrameShape(QFrame::NoFrame);
 
@@ -2839,7 +2907,7 @@ doc_clear_rubber_room(int32_t doc)
             && id_list_contains(data->spareRubberList, SPARE_RUBBER_POLYLINE))
         || id_list_contains(data->spareRubberList, item)) {
             if (!obj_path(base).elementCount()) {
-                critical_box(translate("Empty Rubber Object Error"),
+                messagebox("critical", translate("Empty Rubber Object Error"),
                     translate("The rubber object added contains no points. "
                         "The command that created this object has flawed logic. "
                         "The object will be deleted."));
@@ -2962,7 +3030,7 @@ doc_create_origin(int32_t doc)
 
     if (get_bool(GRID_SHOW_ORIGIN)) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */
-        svg_to_painterpath(&(documents[doc]->originPath), state.circle_origin_path,
+        svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path,
             emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
     }
 }
@@ -3174,7 +3242,8 @@ Document::drawBackground(QPainter* painter, const QRectF& rect)
     DocumentData *data = doc_data(doc);
     painter->fillRect(rect, backgroundBrush());
 
-    if (data->enableGrid && rect.intersects(documents[doc]->gridPath.controlPointRect())) {
+    if (data->properties[VIEW_GRID]
+        && rect.intersects(documents[doc]->gridPath.controlPointRect())) {
         QPen gridPen(QColor(data->gridColor));
         gridPen.setJoinStyle(Qt::MiterJoin);
         gridPen.setCosmetic(true);
@@ -3505,7 +3574,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
     /* Draw the closest qsnap point */
 
     /* TODO: && findClosestSnapPoint == true */
-    if (!data->selectingActive) {
+    if (!data->properties[VIEW_SELECTING]) {
         QPen qsnapPen(data->qsnapLocatorColor);
         qsnapPen.setWidth(2);
         qsnapPen.setJoinStyle(Qt::MiterJoin);
@@ -3517,18 +3586,15 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
         EmbReal x = data->viewMousePoint.x - data->qsnapApertureSize;
         EmbReal y = data->viewMousePoint.y - data->qsnapApertureSize;
         QList<EmbVector> apertureSnapPoints;
-        #if 0
-        FIXME:
         QList<QGraphicsItem *> apertureItemList = items(x, y,
             data->qsnapApertureSize*2,
             data->qsnapApertureSize*2);
         foreach(QGraphicsItem* item, apertureItemList) {
             if (item->type() >= OBJ_BASE) {
-                tempBaseObj = static_cast<Object*>(item);
+                Object *tempBaseObj = static_cast<Object*>(item);
                 if (tempBaseObj) {
                     EmbVector p = data->sceneMousePoint;
-                    EmbVector q = mouse_snap_point(
-                        tempBaseObj->core->objID, p);
+                    EmbVector q = mouse_snap_point(tempBaseObj->core->objID, p);
                     apertureSnapPoints << q;
                 }
             }
@@ -3541,17 +3607,16 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                 to_qpointf(doc_map_to_scene(doc, p1)),
                 to_qpointf(doc_map_to_scene(doc, q1))));
         }
-        #endif
     }
 
     /* Draw horizontal and vertical rulers */
 
-    if (data->enableRuler) {
+    if (data->properties[VIEW_RULER]) {
         draw_rulers(painter, rect);
     }
 
     /* Draw the crosshair */
-    if (!data->selectingActive) {
+    if (!data->properties[VIEW_SELECTING]) {
         /* painter->setBrush(Qt::NoBrush); */
         QPen crosshairPen(data->crosshairColor);
         crosshairPen.setCosmetic(true);
@@ -3745,7 +3810,7 @@ doc_set_corner_button(int32_t doc)
         QAction* act = actionHash[num];
         /* NOTE: Prevent crashing if the action is NULL. */
         if (!act) {
-            information_box(translate("Corner Widget Error"),
+            messagebox("information", translate("Corner Widget Error"),
                 translate("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
             documents[doc]->setCornerWidget(0);
         }
@@ -3780,119 +3845,93 @@ doc_scale(int32_t doc_id, EmbReal s)
     doc->scale(s, s);
 }
 
-/* . */
+/* Covers navigation:
+ *     ZoomIn, ZoomOut, ZoomExtents, ZoomSelected
+ *     PanLeft, PanRight, PanUp, PanRight.
+ */
 void
-doc_zoom_selected(int32_t doc_id)
+doc_nav(char *label, int32_t doc_id)
 {
     Document *doc = documents[doc_id];
-    QUndoStack* stack = active_undo_stack();
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected",
-            doc->data->id, 0);
-        stack->push(cmd);
-    }
-
+    debug_message("doc_nav(%s, %d)", label, doc_id);
     wait_cursor();
-    EmbIdList *itemList = doc->data->selectedItems;
-    QPainterPath selectedRectPath;
-    for (int i=0; i<itemList->count; i++) {
-        Object *item = get_obj(itemList->data[i]);
-        selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
+
+    if (string_equal(label, "ZoomIn")) {
+        if (!doc_allow_zoom_in(doc_id)) {
+            return;
+        }
+        EmbVector cntr = doc_map_to_scene(doc_id, doc_center(doc_id));
+        EmbReal s = get_real(DISPLAY_ZOOMSCALE_IN);
+        doc_scale(doc_id, s);
+
+        doc_center_on(doc_id, cntr);
+        restore_cursor();
+        return;
     }
-    QRectF selectedRect = selectedRectPath.boundingRect();
-    if (selectedRect.isNull()) {
-        information_box(translate("ZoomSelected Preselect"),
-            translate("Preselect objects before invoking the zoomSelected command."));
-        /* TODO: Support Post selection of objects */
+    if (string_equal(label, "ZoomOut")) {
+        if (!doc_allow_zoom_out(doc_id)) {
+            return;
+        }
+        EmbVector cntr = doc_map_to_scene(doc_id, doc_center(doc_id));
+        EmbReal s = get_real(DISPLAY_ZOOMSCALE_OUT);
+        doc_scale(doc_id, s);
+
+        doc_center_on(doc_id, cntr);
+        restore_cursor();
+        return;
     }
-    doc->fitInView(selectedRect, Qt::KeepAspectRatio);
+
+    QUndoStack* stack = active_undo_stack();
+    DocumentData *data = doc_data(doc_id);
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, label, doc_id, 0);
+        stack->push(cmd);
+    }
+
+    if (string_equal(label, "ZoomSelected")) {
+        EmbIdList *itemList = data->selectedItems;
+        QPainterPath selectedRectPath;
+        for (int i=0; i<itemList->count; i++) {
+            Object *item = get_obj(itemList->data[i]);
+            selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
+        }
+        QRectF selectedRect = selectedRectPath.boundingRect();
+        if (selectedRect.isNull()) {
+            messagebox("information", translate("ZoomSelected Preselect"),
+                translate("Preselect objects before invoking the zoomSelected command."));
+            /* TODO: Support Post selection of objects */
+        }
+        doc->fitInView(selectedRect, Qt::KeepAspectRatio);
+    }
+    if (string_equal(label, "ZoomExtents")) {
+        QRectF extents = doc->gscene->itemsBoundingRect();
+        if (extents.isNull()) {
+            extents.setWidth(get_real(GRID_SIZE_X));
+            extents.setHeight(get_real(GRID_SIZE_Y));
+            extents.moveCenter(QPointF(0,0));
+        }
+        doc->fitInView(extents, Qt::KeepAspectRatio);
+    }
+    if (string_equal(label, "PanLeft")) {
+        double value = doc->horizontalScrollBar()->value();
+        doc->horizontalScrollBar()->setValue(value + data->panDistance);
+    }
+    if (string_equal(label, "PanRight")) {
+        double value = doc->horizontalScrollBar()->value();
+        doc->horizontalScrollBar()->setValue(value - data->panDistance);
+    }
+    if (string_equal(label, "PanUp")) {
+        double value = doc->verticalScrollBar()->value();
+        doc->verticalScrollBar()->setValue(value + data->panDistance);
+    }
+    if (string_equal(label, "PanDown")) {
+        double value = doc->verticalScrollBar()->value();
+        doc->verticalScrollBar()->setValue(value - data->panDistance);
+    }
+
+    doc_update_mouse_coords(doc_id, data->viewMousePoint.x, data->viewMousePoint.y);
+    doc_update(doc_id);
     restore_cursor();
-}
-
-/* . */
-void
-doc_zoom_extents(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", doc, 0);
-        stack->push(cmd);
-    }
-
-    wait_cursor();
-    QRectF extents = documents[doc]->gscene->itemsBoundingRect();
-    if (extents.isNull()) {
-        extents.setWidth(get_real(GRID_SIZE_X));
-        extents.setHeight(get_real(GRID_SIZE_Y));
-        extents.moveCenter(QPointF(0,0));
-    }
-    documents[doc]->fitInView(extents, Qt::KeepAspectRatio);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_pan_left(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    DocumentData *data = doc_data(doc);
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", doc, 0);
-        stack->push(cmd);
-    }
-
-    documents[doc]->horizontalScrollBar()->setValue(documents[doc]->horizontalScrollBar()->value() + data->panDistance);
-    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
-    doc_update(doc);
-}
-
-/* . */
-void
-doc_pan_right(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    DocumentData *data = doc_data(doc);
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", doc, 0);
-        stack->push(cmd);
-    }
-
-    documents[doc]->horizontalScrollBar()->setValue(documents[doc]->horizontalScrollBar()->value() - data->panDistance);
-    doc_update_mouse_coords(doc, data->viewMousePoint.x,
-        data->viewMousePoint.y);
-    doc_update(doc);
-}
-
-/* . */
-void
-doc_pan_up(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    DocumentData *data = doc_data(doc);
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", doc, 0);
-        stack->push(cmd);
-    }
-
-    documents[doc]->verticalScrollBar()->setValue(documents[doc]->verticalScrollBar()->value() + data->panDistance);
-    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
-    doc_update(doc);
-}
-
-/* . */
-void
-doc_pan_down(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    DocumentData *data = doc_data(doc);
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", doc, 0);
-        stack->push(cmd);
-    }
-
-    documents[doc]->verticalScrollBar()->setValue(documents[doc]->verticalScrollBar()->value() - data->panDistance);
-    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
-    doc_update(doc);
 }
 
 /* . */
@@ -3925,6 +3964,58 @@ Document::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
+/* Selection box code.
+ * -------------------
+ * After normalising the the selection box by changing the ItemSelectionMode,
+ * there are 4 possible selection modes based on the product of the shift key state,
+ * and PICKADD mode.
+ *
+ * SHIFT | PICKADD | ACTION
+ * ------|---------|------------------------------------------------------------------
+ * true  | true    | Add current selectbox to the selection.
+ * false | true    | Remove current selectbox from the selection.
+ * true  | false   | If the selectbox is empty, clear the selection,
+ *       |         | otherwise toggle the state of the contents of the selectbox.
+ * false | false   | Replace the selection with the selectbox contents.
+ */
+void
+set_selection(int32_t doc)
+{
+    QPainterPath path;
+    DocumentData *data = doc_data(doc);
+    path.addPolygon(documents[doc]->mapToScene(documents[doc]->selectBox->geometry()));
+
+    Qt::ItemSelectionMode mode = Qt::IntersectsItemShape;
+    if (data->sceneReleasePoint.x > data->scenePressPoint.x) {
+        mode = Qt::ContainsItemShape;
+    }
+    QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, mode);
+
+    if (get_bool(SELECTION_MODE_PICKADD)) {
+        foreach(QGraphicsItem* item, itemList) {
+            item->setSelected(!shiftKeyPressedState);
+        }
+    }
+    else {
+        if (shiftKeyPressedState) {
+            if (!itemList.size()) {
+                doc_clear_selection(doc);
+            }
+            else {
+                foreach(QGraphicsItem* item, itemList) {
+                    item->setSelected(!item->isSelected()); /* Toggle selected */
+                }
+            }
+        }
+        else {
+            doc_clear_selection(doc);
+            foreach(QGraphicsItem* item, itemList) {
+                item->setSelected(true);
+            }
+        }
+    }
+}
+
 /* . */
 void
 Document::mousePressEvent(QMouseEvent* event)
@@ -3939,20 +4030,25 @@ Document::mousePressEvent(QMouseEvent* event)
             return;
         }
         QPainterPath path;
-        #if 0
-        QList<QGraphicsItem*> pickList = documents[doc]->gscene->items(
-            QRectF(documents[doc]->mapToScene(data->viewMousePoint.x-data->pickBoxSize, data->viewMousePoint.y-data->pickBoxSize),
-                                                              documents[doc]->mapToScene(data->viewMousePoint.x+data->pickBoxSize, data->viewMousePoint.y+data->pickBoxSize)));
+        QRectF pickRect = QRectF(
+            documents[doc]->mapToScene(
+                data->viewMousePoint.x-data->pickBoxSize,
+                data->viewMousePoint.y-data->pickBoxSize),
+            documents[doc]->mapToScene(
+                data->viewMousePoint.x+data->pickBoxSize,
+                data->viewMousePoint.y+data->pickBoxSize));
+        QList<QGraphicsItem*> pickList = documents[doc]->gscene->items(pickRect);
 
         bool itemsInPickBox = pickList.size();
-        if (itemsInPickBox && !data->selectingActive && !data->grippingActive) {
+        if (itemsInPickBox && !data->properties[VIEW_SELECTING] && !data->properties[VIEW_GRIPPING]) {
             bool itemsAlreadySelected = pickList.at(0)->isSelected();
             if (!itemsAlreadySelected) {
                 pickList.at(0)->setSelected(true);
             }
             else {
                 bool foundGrip = false;
-                Object* base = static_cast<Object*>(pickList.at(0)); /* TODO: Allow multiple objects to be gripped at once */
+                Object* base = static_cast<Object*>(pickList.at(0));
+                /* TODO: Allow multiple objects to be gripped at once */
                 if (!base) {
                     return;
                 }
@@ -3961,9 +4057,8 @@ Document::mousePressEvent(QMouseEvent* event)
                 QPointF gripPoint = to_qpointf(mouse_snap_point(base->core->objID, data->sceneMousePoint));
                 QPoint p1 = mapFromScene(gripPoint) - qsnapOffset;
                 QPoint q1 = mapFromScene(gripPoint) + qsnapOffset;
-                QRectF gripRect = QRectF(documents[doc]->mapToScene(p1), documents[doc]->mapToScene(q1));
-                QRectF pickRect = QRectF(documents[doc]->mapToScene(data->viewMousePoint.x -data->pickBoxSize, data->viewMousePoint.y - data->pickBoxSize),
-                                        documents[doc]->mapToScene(data->viewMousePoint.x + data->pickBoxSize, data->viewMousePoint.y+data->pickBoxSize));
+                QRectF gripRect = QRectF(documents[doc]->mapToScene(p1),
+                    documents[doc]->mapToScene(q1));
                 if (gripRect.intersects(pickRect)) {
                     foundGrip = true;
                 }
@@ -3974,17 +4069,17 @@ Document::mousePressEvent(QMouseEvent* event)
                 }
                 else {
                     /* start moving */
-                    data->movingActive = true;
+                    doc_set_prop(doc, VIEW_MOVING, true);
                     data->pressPoint = to_emb_vector(event->pos());
                     data->scenePressPoint = doc_map_to_scene(doc, data->pressPoint);
                 }
             }
         }
-        else if (data->grippingActive) {
+        else if (data->properties[VIEW_GRIPPING]) {
             doc_stop_gripping(doc, true);
         }
-        else if (!data->selectingActive) {
-            data->selectingActive = true;
+        else if (!data->properties[VIEW_SELECTING]) {
+            doc_set_prop(doc, VIEW_SELECTING, true);
             data->pressPoint = to_emb_vector(event->pos());
             data->scenePressPoint = doc_map_to_scene(doc, data->pressPoint);
 
@@ -3996,83 +4091,15 @@ Document::mousePressEvent(QMouseEvent* event)
             documents[doc]->selectBox->show();
         }
         else {
-            data->selectingActive = false;
+            data->properties[VIEW_SELECTING] = false;
             documents[doc]->selectBox->hide();
             data->releasePoint = to_emb_vector(event->pos());
             data->sceneReleasePoint = doc_map_to_scene(doc, data->releasePoint);
 
-            /* Start SelectBox Code */
-            path.addPolygon(documents[doc]->mapToScene(documents[doc]->selectBox->geometry()));
-            if (data->sceneReleasePoint.x > data->scenePressPoint.x) {
-                if (get_bool(SELECTION_MODE_PICKADD)) {
-                    if (is_shift_pressed()) {
-                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
-                        foreach(QGraphicsItem* item, itemList) {
-                            item->setSelected(false);
-                        }
-                    }
-                    else {
-                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
-                        foreach(QGraphicsItem* item, itemList) {
-                            item->setSelected(true);
-                        }
-                    }
-                }
-                else {
-                    if (is_shift_pressed()) {
-                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
-                        if (!itemList.size()) {
-                            doc_clear_selection(doc);
-                        }
-                        else {
-                            foreach(QGraphicsItem* item, itemList) {
-                                item->setSelected(!item->isSelected()); /* Toggle selected */
-                            }
-                        }
-                    }
-                    else {
-                        doc_clear_selection(doc);
-                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(true);
-                    }
-                }
-            }
-            else {
-                if (get_bool(SELECTION_MODE_PICKADD)) {
-                    if (is_shift_pressed()) {
-                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(false);
-                    }
-                    else {
-                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(true);
-                    }
-                }
-                else {
-                    if (is_shift_pressed()) {
-                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
-                        if (!itemList.size())
-                            doc_clear_selection(doc);
-                        else {
-                            foreach (QGraphicsItem* item, itemList)
-                                item->setSelected(!item->isSelected()); /* Toggle selected */
-                        }
-                    }
-                    else {
-                        doc_clear_selection(doc);
-                        QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(true);
-                    }
-                }
-            }
-            /* End SelectBox Code */
+            set_selection(doc);
         }
 
-        if (data->pastingActive) {
+        if (data->properties[VIEW_PASTING]) {
             QList<QGraphicsItem*> itemList = documents[doc]->pasteObjectItemGroup->childItems();
             documents[doc]->gscene->destroyItemGroup(documents[doc]->pasteObjectItemGroup);
             foreach(QGraphicsItem* item, itemList) {
@@ -4092,14 +4119,13 @@ Document::mousePressEvent(QMouseEvent* event)
             }
             documents[doc]->undoStack->endMacro();
 
-            data->pastingActive = false;
-            data->selectingActive = false;
+            data->properties[VIEW_PASTING] = false;
+            data->properties[VIEW_SELECTING] = false;
         }
-        if (data->zoomWindowActive) {
+        if (data->properties[VIEW_ZOOMING]) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
             doc_clear_selection(doc);
         }
-        #endif
     }
     if (event->button() == Qt::MiddleButton) {
         //FIXME: doc_pan_start(doc, event->pos());
@@ -4120,7 +4146,7 @@ doc_pan_start(int32_t doc, const QPoint& point)
 
     doc_align_scene_point_with_view_point(doc, doc_map_to_scene(doc, to_emb_vector(point)), to_emb_vector(point));
 
-    data->panningActive = true;
+    doc_set_prop(doc, VIEW_PANNING, true);
     data->panStartX = point.x();
     data->panStartY = point.y();
 }
@@ -4174,12 +4200,12 @@ Document::mouseMoveEvent(QMouseEvent* event)
     data->sceneMovePoint = doc_map_to_scene(doc, data->movePoint);
 
     if (cmdActive) {
-        if (data->rapidMoveActive) {
+        if (data->properties[VIEW_RAPID_MOVING]) {
             run_command_move((char*)qPrintable(curCmd), data->sceneMovePoint.x,
                 data->sceneMovePoint.y);
         }
     }
-    if (data->previewActive) {
+    if (data->properties[VIEW_PREVIEWING]) {
     #if 0
     //FIXME:
         if (data->previewMode == PREVIEW_MOVE) {
@@ -4244,18 +4270,18 @@ Document::mouseMoveEvent(QMouseEvent* event)
         }
     #endif
     }
-    if (data->pastingActive) {
+    if (data->properties[VIEW_PASTING]) {
         EmbVector p = emb_vector_subtract(data->sceneMousePoint,
             data->pasteDelta);
         documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
     }
-    if (data->movingActive) {
+    if (data->properties[VIEW_MOVING]) {
         /* Ensure that the preview is only shown if the mouse has moved. */
-        if (!data->previewActive)
+        if (!data->properties[VIEW_PREVIEWING])
             doc_preview_on(doc, PREVIEW_CLONE_SELECTED, PREVIEW_MOVE,
                 data->scenePressPoint.x, data->scenePressPoint.y, 0);
     }
-    if (data->selectingActive) {
+    if (data->properties[VIEW_SELECTING]) {
         if ((data->sceneMovePoint.x >= data->scenePressPoint.x)
             && (data->sceneMovePoint.y >= data->scenePressPoint.y)) {
             documents[doc]->selectBox->setDirection(1);
@@ -4264,13 +4290,13 @@ Document::mouseMoveEvent(QMouseEvent* event)
             documents[doc]->selectBox->setDirection(0);
         }
         QPointF p = documents[doc]->mapFromScene(to_qpointf(data->scenePressPoint));
-        /* FIXME:
-        QRect rect = QRect(p, event->pos());
-        documents[doc]->selectBox->setGeometry(rect).normalized();
-        */
+        QPoint p1(p.x(), p.y());
+        QRect rect(p1, event->pos());
+        documents[doc]->selectBox->setGeometry(rect);
+        // FIXME: .normalized();
         event->accept();
     }
-    if (data->panningActive) {
+    if (data->properties[VIEW_PANNING]) {
         documents[doc]->horizontalScrollBar()->setValue(
             documents[doc]->horizontalScrollBar()->value() - (event->position().x() - data->panStartX));
         documents[doc]->verticalScrollBar()->setValue(
@@ -4287,7 +4313,7 @@ Document::mouseReleaseEvent(QMouseEvent* event)
 {
     doc_update_mouse_coords(data->id, event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
-        if (data->movingActive) {
+        if (data->properties[VIEW_MOVING]) {
             doc_preview_off(data->id);
             EmbVector delta = emb_vector_subtract(data->sceneMousePoint,
                 data->scenePressPoint);
@@ -4295,12 +4321,12 @@ Document::mouseReleaseEvent(QMouseEvent* event)
             if (emb_vector_distance(delta, emb_vector(0.0, 0.0)) >= 1) {
                 doc_move_selected(data->id, delta);
             }
-            data->movingActive = false;
+            data->properties[VIEW_MOVING] = false;
         }
         event->accept();
     }
     if (event->button() == Qt::MiddleButton) {
-        data->panningActive = false;
+        data->properties[VIEW_PANNING] = false;
         /* The Undo command will record the spot where the pan completed. */
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", data->id, 0);
         documents[data->id]->undoStack->push(cmd);
@@ -4324,19 +4350,19 @@ void
 Document::wheelEvent(QWheelEvent* event)
 {
     // FIXME: int zoomDir = event->delta();
+    int zoomDir = -1;
     QPoint mousePoint = event->position().toPoint();
 
     doc_update_mouse_coords(data->id, mousePoint.x(), mousePoint.y());
-    /* FIXME:
+
     if (zoomDir > 0) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", data->id, 0);
-        documents[doc]->undoStack->push(cmd);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomInToPoint", data->id, 0);
+        this->undoStack->push(cmd);
     }
     else {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", data->id, 0);
-        documents[doc]->undoStack->push(cmd);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomOutToPoint", data->id, 0);
+        this->undoStack->push(cmd);
     }
-    */
 }
 
 /* . */
@@ -4367,12 +4393,12 @@ doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
     doc_align_scene_point_with_view_point(doc, pointBeforeScale, mousePoint);
 
     doc_update_mouse_coords(doc, mousePoint.x, mousePoint.y);
-    if (data->pastingActive) {
+    if (data->properties[VIEW_PASTING]) {
         EmbVector p = emb_vector_subtract(data->sceneMousePoint,
             data->pasteDelta);
         documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
     }
-    if (data->selectingActive) {
+    if (data->properties[VIEW_SELECTING]) {
         QPointF v1 = documents[doc]->mapFromScene(to_qpointf(data->scenePressPoint));
         QPointF v2 = to_qpointf(mousePoint);
         QRectF r(v1, v2);
@@ -4395,7 +4421,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         }
     }
 
-    if (data->pastingActive) {
+    if (data->properties[VIEW_PASTING]) {
         return;
     }
     if (!cmdActive) {
@@ -4404,7 +4430,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if (data->zoomWindowActive) {
+    if (data->properties[VIEW_ZOOMING]) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escape_pressed()));
@@ -4474,7 +4500,7 @@ doc_start_gripping(int32_t doc, Object* obj)
         return;
     }
     DocumentData *data = doc_data(doc);
-    data->grippingActive = true;
+    data->properties[VIEW_GRIPPING] = true;
     documents[doc]->gripBaseObj = obj;
     data->sceneGripPoint = mouse_snap_point(documents[doc]->gripBaseObj->core->objID, data->sceneMousePoint);
     obj_set_rubber_point(doc, "GRIP_POINT", data->sceneGripPoint);
@@ -4486,7 +4512,7 @@ void
 doc_stop_gripping(int32_t doc, bool accept)
 {
     DocumentData *data = doc_data(doc);
-    data->grippingActive = false;
+    data->properties[VIEW_GRIPPING] = false;
     if (documents[doc]->gripBaseObj) {
         obj_vulcanize(documents[doc]->gripBaseObj->core->objID);
         if (accept) {
@@ -4568,7 +4594,7 @@ void
 doc_paste(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    if (data->pastingActive) {
+    if (data->properties[VIEW_PASTING]) {
         documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
         delete documents[doc]->pasteObjectItemGroup;
     }
@@ -4577,7 +4603,7 @@ doc_paste(int32_t doc)
     data->pasteDelta = to_emb_vector(documents[doc]->pasteObjectItemGroup->boundingRect().bottomLeft());
     EmbVector p = emb_vector_subtract(data->sceneMousePoint, data->pasteDelta);
     documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
-    data->pastingActive = true;
+    data->properties[VIEW_PASTING] = true;
 }
 
 /* . */
@@ -4810,14 +4836,17 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
     else if (object->objectName() == "StatusBarButtonLWT") {
         int32_t doc = active_document();
         if (doc >= 0) {
+            DocumentData *data = doc_data(doc);
             QAction* enable_realAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
-            enable_realAction->setEnabled(!documents[doc]->data->enable_real);
-            QObject::connect(enable_realAction, &QAction::triggered, _main, enable_real);
+            enable_realAction->setEnabled(!data->properties[VIEW_REAL]);
+            QObject::connect(enable_realAction, SIGNAL(triggered), _main,
+                SLOT([=](void) { statusbar_toggle("REAL", true); }));
             menu.addAction(enable_realAction);
 
             QAction* disable_realAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
-            disable_realAction->setEnabled(documents[doc]->data->enable_real);
-            QObject::connect(disable_realAction, &QAction::triggered, _main, disable_real);
+            disable_realAction->setEnabled(data->properties[VIEW_REAL]);
+            QObject::connect(disable_realAction, SIGNAL(triggered), _main,
+                SLOT([=](void) { statusbar_toggle("REAL", false); }));
             menu.addAction(disable_realAction);
         }
 
@@ -4951,7 +4980,7 @@ SelectBox::forceRepaint()
 }
 
 
-LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
+LayerManager::LayerManager(QWidget* parent) : QDialog(parent)
 {
     layerModel = new QStandardItemModel(0, 8, this);
 
@@ -5057,7 +5086,7 @@ create_details_dialog(void)
     EmbRect bounds = emb_pattern_bounds(pattern);
 
     if (pattern->stitch_list->count == 0) {
-        warning_box(
+        messagebox("warning", 
             translate("No Design Loaded"),
             translate("<b>A design needs to be loaded or created before details can be determined.</b>"));
         return;
@@ -5091,9 +5120,7 @@ create_details_dialog(void)
         frame->setPalette( palette );
         frame->setAutoFillBackground(true);
         grid->addWidget(frame, currentRow,0,1,1);
-        char message[MAX_STRING_LENGTH];
-        sprintf(message, "size: %d i: %d", stitchLengths.size(), i);
-        debug_message(message);
+        debug_message("size: %d i: %d", stitchLengths.size(), i);
         grid->addWidget(new QLabel(QString::number(stitchLengths.at(i)) + " mm"), currentRow,1,1,1);
         */
         currentRow++;
@@ -5170,16 +5197,14 @@ create_details_dialog(void)
     arrow_cursor();
 }
 
-PreviewDialog::PreviewDialog(QWidget* parent,
-                             QString  caption,
-                             QString  dir,
-                             QString  filter) : QFileDialog(parent, caption, dir, filter)
+/* TODO: get actual thumbnail image from file, lets also use a size of 128x128 for now...
+ * TODO: make thumbnail size adjustable thru settings dialog
+ */
+PreviewDialog::PreviewDialog(QWidget* parent, QString caption,
+    QString dir, QString filter): QFileDialog(parent, caption, dir, filter)
 {
     debug_message("PreviewDialog Constructor");
 
-    /* TODO: get actual thumbnail image from file, lets also use a size of 128x128 for now...
-     * TODO: make thumbnail size adjustable thru settings dialog
-     */
     imgWidget = new ImageWidget("icons/default/nopreview.png", this);
 
     QLayout* lay = layout();
@@ -5197,7 +5222,7 @@ PreviewDialog::PreviewDialog(QWidget* parent,
     /* TODO: connect the currentChanged signal to update the preview imgWidget. */
 }
 
-MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent)
+MdiArea::MdiArea(QWidget *parent): QMdiArea(parent)
 {
     setTabsClosable(true);
 
@@ -5321,7 +5346,7 @@ MdiArea::forceRepaint()
 }
 
 /* . */
-MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
+MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
     mdiArea = parent;
 
@@ -5332,7 +5357,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     gscene = new QGraphicsScene(0,0,0,0, this);
     /* FIXME:. */
     doc_index = numOfDocs;
-    documents[doc_index] = create_doc(_main, gscene, this);
+    documents[doc_index] = create_doc(gscene, this);
     DocumentData *data = documents[doc_index]->data;
 
     data->myIndex = theIndex;
@@ -5377,35 +5402,32 @@ MdiWindow::loadFile(const char *fileName)
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         const char *msg = qPrintable(tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
-        warning_box(translate("Error reading file"), msg);
+        messagebox("warning", translate("Error reading file"), msg);
         return false;
     }
 
     wait_cursor();
 
     QString ext = fileExtension(fileName);
-    debug_message("ext: ");
-    debug_message((char*)qPrintable(ext));
+    debug_message("ext: %s", (char*)qPrintable(ext));
 
     EmbPattern *pattern = data->pattern;
 
     /* Read */
     int format = EMB_FORMAT_CSV; /* emb_identify_format(qPrintable(fileName)); */
     if (format <= 0) {
-        debug_message("Unsupported read file type: ");
-        debug_message((char*)qPrintable(fileName));
+        debug_message("Unsupported read file type: %s", (char*)qPrintable(fileName));
         restore_cursor();
-        warning_box(translate("Error reading pattern"),
+        messagebox("warning", translate("Error reading pattern"),
             qPrintable(tr("Unsupported read file type: ") + fileName));
         return false;
     }
 
     int readSuccessful = emb_pattern_read(data->pattern, fileName, format);
     if (!readSuccessful) {
-        debug_message("Reading file was unsuccessful:");
-        debug_message(fileName);
+        debug_message("Reading file was unsuccessful: %s", fileName);
         restore_cursor();
-        warning_box(translate("Error reading pattern"),
+        messagebox("warning", translate("Error reading pattern"),
             qPrintable(tr("Reading file was unsuccessful: ") + fileName));
         return false;
     }
@@ -5533,14 +5555,14 @@ MdiWindow::onWindowActivated()
     // FIXME: documents[doc]->undoStack->setActive(true);
     DocumentData *data = doc_data(doc_index);
     set_undo_clean_icon(data->fileWasLoaded);
-    statusBarButtons[SB_SNAP]->setChecked(data->enableSnap);
-    statusBarButtons[SB_GRID]->setChecked(data->enableGrid);
-    statusBarButtons[SB_RULER]->setChecked(data->enableRuler);
-    statusBarButtons[SB_ORTHO]->setChecked(data->enableOrtho);
-    statusBarButtons[SB_POLAR]->setChecked(data->enablePolar);
-    statusBarButtons[SB_QSNAP]->setChecked(data->enableQSnap);
-    statusBarButtons[SB_QTRACK]->setChecked(data->enableQTrack);
-    statusBarButtons[SB_LWT]->setChecked(data->enable_lwt);
+    statusBarButtons[SB_SNAP]->setChecked(data->properties[VIEW_SNAP]);
+    statusBarButtons[SB_GRID]->setChecked(data->properties[VIEW_GRID]);
+    statusBarButtons[SB_RULER]->setChecked(data->properties[VIEW_RULER]);
+    statusBarButtons[SB_ORTHO]->setChecked(data->properties[VIEW_ORTHO]);
+    statusBarButtons[SB_POLAR]->setChecked(data->properties[VIEW_POLAR]);
+    statusBarButtons[SB_QSNAP]->setChecked(data->properties[VIEW_QSNAP]);
+    statusBarButtons[SB_QTRACK]->setChecked(data->properties[VIEW_QTRACK]);
+    statusBarButtons[SB_LWT]->setChecked(data->properties[VIEW_LWT]);
     setHistory(promptHistoryData);
 }
 
@@ -5559,12 +5581,6 @@ setHistory(const char *txt)
 }
 
 void
-Application::setMainWin(MainWindow* mainWin)
-{
-    _main = mainWin;
-}
-
-void
 prompt_set_current_text(const char *txt)
 {
     sprintf(curText, "%s%s", qPrintable(prefix), txt);
@@ -5572,67 +5588,8 @@ prompt_set_current_text(const char *txt)
 }
 
 /* . */
-CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
-{
-    QFrame* promptDivider;
-    QVBoxLayout* promptVBoxLayout;
-    debug_message("CmdPrompt Constructor");
-    setObjectName("Command Prompt");
-
-    promptInput = new CmdPromptInput(this);
-    promptHistory = new QTextBrowser();
-    promptDivider = new QFrame(this);
-    promptVBoxLayout = new QVBoxLayout(this);
-
-    debug_message("CmdPromptHistory Constructor");
-    setObjectName("Command Prompt History");
-
-    int initHeight = 19*3; /* (approximately three lines of text) */
-
-    promptHistory->setFrameStyle(QFrame::NoFrame);
-    promptHistory->setMaximumHeight(initHeight);
-    promptHistory->setMinimumWidth(200);
-    /* TODO: use float/dock events to set minimum size
-     * so when floating, it isn't smooshed. */
-
-    promptHistory->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-
-    this->setFocusProxy(promptInput);
-    promptHistory->setFocusProxy(promptInput);
-
-    promptDivider->setLineWidth(1);
-    promptDivider->setFrameStyle(QFrame::HLine);
-    promptDivider->setMaximumSize(QWIDGETSIZE_MAX, 1);
-
-    promptVBoxLayout->addWidget(promptHistory);
-    promptVBoxLayout->addWidget(promptDivider);
-    promptVBoxLayout->addWidget(promptInput);
-
-    promptVBoxLayout->setSpacing(0);
-    promptVBoxLayout->setContentsMargins(0,0,0,0);
-
-    this->setLayout(promptVBoxLayout);
-
-    string_copy(prompt_color_, "#000000"); /* Match --------------------| */
-    string_copy(prompt_selection_bg_color_, "#000000"); /* Match -------| */
-    string_copy(prompt_bg_color_, "#FFFFFF");
-    string_copy(prompt_selection_color_, "#FFFFFF");
-    set_str(PROMPT_FONT_FAMILY, "Monospace");
-    set_str(PROMPT_FONT_STYLE, "normal");
-    set_int(PROMPT_FONT_SIZE, 12);
-
-    blinkState = false;
-    blinkTimer = new QTimer(this);
-    connect(blinkTimer, SIGNAL(timeout()), this, SLOT(blink()));
-
-    this->show();
-
-    connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
-}
-
-/* . */
 void
-CmdPrompt::saveHistory(QString  fileName, bool html)
+save_prompt_history(QString fileName, bool html)
 {
     debug_message("CmdPrompt saveHistory");
     FILE *file = fopen(qPrintable(fileName), "w");
@@ -5645,14 +5602,15 @@ CmdPrompt::saveHistory(QString  fileName, bool html)
     fclose(file);
 }
 
-/* . */
+/* TODO: Make the alert color customizable.
+ * BUG: Remains red after the first alert.
+ */
 void
-CmdPrompt::alert(QString  txt)
+alert(const char *txt)
 {
-    QString alertTxt = "<font color=\"red\">" + txt + "</font>";
-    /* TODO: Make the alert color customizable. */
-    setPrefix(alertTxt);
-    append_history("");
+    EmbString alertTxt;
+    sprintf(alertTxt, "<font color=\"red\">%s</font>", txt);
+    prompt_output(alertTxt);
 }
 
 /* . */
@@ -5673,7 +5631,7 @@ stop_blinking(void)
 
 /* . */
 void
-CmdPrompt::blink()
+blink(void)
 {
     blinkState = !blinkState;
 }
@@ -5724,27 +5682,11 @@ prompt_update_style(void)
 
 /* . */
 void
-CmdPrompt::setPrefix(QString  txt)
+set_prompt_prefix(QString txt)
 {
     prefix = txt;
     string_copy(curText, qPrintable(txt));
     promptInput->setText(txt);
-}
-
-/* . */
-void
-append_history(const char *txt)
-{
-    if (txt[0] == 0) {
-        promptHistory->append(curText);
-        /* emit historyAppended(formatStr); */
-        promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-        return;
-    }
-
-    promptHistory->append(txt);
-    /* emit historyAppended(formatStr); */
-    promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
 /* . */
@@ -5813,7 +5755,7 @@ process_input(char rapidChar)
         if (rapidFireEnabled) {
             /*
             if (rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return) {
-                append_history(curText);
+                prompt_output(curText);
                 runCommand(curCmd, "RAPID_ENTER");
                 curText.clear();
                 clear();
@@ -5830,7 +5772,7 @@ process_input(char rapidChar)
             }
         }
         else {
-            append_history(qPrintable(curText));
+            prompt_output(qPrintable(curText));
             /* runCommand(curCmd, cmdtxt); */
         }
     }
@@ -5840,12 +5782,12 @@ process_input(char rapidChar)
             cmdActive = true;
             string_copy(lastCmd, qPrintable(curCmd));
             curCmd = QString(aliasHash[index].value);
-            append_history(qPrintable(curText));
+            prompt_output(qPrintable(curText));
             run_command_prompt(aliasHash[index].value);
         }
         else if (cmdtxt.isEmpty()) {
             cmdActive = true;
-            append_history(qPrintable(curText));
+            prompt_output(qPrintable(curText));
             /* Rerun the last successful command. */
             run_command_prompt((char*)qPrintable(lastCmd));
         }
@@ -5854,7 +5796,7 @@ process_input(char rapidChar)
             sprintf(msg,
                 "%s<br/><font color=\"red\">Unknown command \"%s\". Press F1 for help.</font>",
                 curText, cmdtxt);
-            append_history(msg);
+            prompt_output(msg);
         }
     }
 
@@ -5877,9 +5819,7 @@ CmdPromptInput::checkSelection()
 void
 CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
 {
-    char message[MAX_STRING_LENGTH];
-    sprintf(message, "CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos);
-    debug_message(message);
+    debug_message("CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos);
     if (this->hasSelectedText()) {
         this->deselect();
     }
@@ -6010,7 +5950,7 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
             prefix = defaultPrefix;
             clear();
             sprintf(msg, "%s%s", curText, translate("*Cancel*"));
-            append_history(msg);
+            prompt_output(msg);
             return true;
         }
         default: {
@@ -6067,7 +6007,7 @@ QPixmap
 create_pixmap(QString icon)
 {
     int id = 0;
-    int n = string_array_length(xpm_icon_labels);
+    int n = table_length(xpm_icon_labels);
     for (int i=0; i<n; i++) {
         if (string_equal((char*)qPrintable(icon), xpm_icon_labels[i])) {
             id = i;
@@ -6082,8 +6022,8 @@ QMenuBar *menuBar()
 {
     return _main->menuBar();
 }
- 
-Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
+
+Application::Application(int argc, char **argv): QApplication(argc, argv)
 {
 }
 
@@ -6094,13 +6034,16 @@ Application::event(QEvent *event)
     case QEvent::FileOpen:
         if (_main) {
             QStringList sl = QStringList(static_cast<QFileOpenEvent *>(event)->file());
-            EmbStringTable files;
+            char *files_ptrs[MAX_FILES];
+            char files[MAX_FILES][MAX_STRING_LENGTH];
             int i;
             for (i=0; i < MAX_FILES && i < sl.size(); i++) {
                 string_copy(files[i], qPrintable(sl[i]));
+                files_ptrs[i] = (char*)files[i];
             }
-            string_copy(files[i], end_symbol);
-            open_filesSelected(files);
+            string_copy(files[i], END_SYMBOL);
+            files_ptrs[i] = (char*)files[i];
+            open_filesSelected(files_ptrs);
             return true;
         }
         /* Fall through */
@@ -6120,16 +6063,17 @@ make_application(int argc, char* argv[])
     app.setApplicationName(_appName_);
     app.setApplicationVersion(_appVer_);
 
-    EmbStringTable filesToOpen;
-    for (int i=0; i<argc; i++) {
+    char *files_ptrs[MAX_FILES];
+    char filesToOpen[MAX_FILES][MAX_STRING_LENGTH];
+    int i;
+    for (i=0; i<argc; i++) {
         string_copy(filesToOpen[i], argv[i]);
+        files_ptrs[i] = (char*)filesToOpen[i];
     }
+    string_copy(filesToOpen[i], END_SYMBOL);
+    files_ptrs[i] = (char*)filesToOpen[i];
     
     _main = new MainWindow();
-#if defined(Q_OS_MAC)
-    app.setMainWin(_main);
-#endif
-
     QObject::connect(&app, SIGNAL(lastWindowClosed()), _main, SLOT(quit()));
 
     _main->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
@@ -6139,7 +6083,7 @@ make_application(int argc, char* argv[])
      * slot commands wont work and the window menu will be screwed
      */
     if (argc > 1) {
-        open_filesSelected(filesToOpen);
+        open_filesSelected(files_ptrs);
     }
 
     return app.exec();
@@ -6178,11 +6122,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     _main = this;
 
     for (int i=0; i<N_MENUS; i++) {
-        menu[i] = new QMenu(translate(state.menu_list[i]), this);
+        menu[i] = new QMenu(translate(menu_list[i]), this);
     }
 
     for (int i=0; i<N_TOOLBARS; i++) {
-        toolbar[i] = new QToolBar(translate(state.toolbar_list[i]), this);
+        toolbar[i] = new QToolBar(translate(toolbar_list[i]), this);
     }
 
     /* Selectors */
@@ -6208,7 +6152,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     QVBoxLayout* layout = new QVBoxLayout(vbox);
     /* layout->setMargin(0); */
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    mdiArea = new MdiArea(this, vbox);
+    mdiArea = new MdiArea(vbox);
     useBackgroundLogo(get_bool(GENERAL_MDI_BG_USE_LOGO));
     useBackgroundTexture(get_bool(GENERAL_MDI_BG_USE_TEXTURE));
     useBackgroundColor(get_bool(GENERAL_MDI_BG_USE_COLOR));
@@ -6224,7 +6168,63 @@ MainWindow::MainWindow() : QMainWindow(0)
     setCentralWidget(vbox);
 
     /* create the Command Prompt */
-    prompt = new CmdPrompt(this);
+    prompt = new QWidget(this);
+
+    QFrame* promptDivider;
+    QVBoxLayout* promptVBoxLayout;
+    debug_message("CmdPrompt Constructor");
+    setObjectName("Command Prompt");
+
+    promptInput = new CmdPromptInput(prompt);
+    promptHistory = new QTextBrowser();
+    promptDivider = new QFrame(prompt);
+    promptVBoxLayout = new QVBoxLayout(prompt);
+
+    debug_message("CmdPromptHistory Constructor");
+    setObjectName("Command Prompt History");
+
+    int initHeight = 19*3; /* (approximately three lines of text) */
+
+    promptHistory->setFrameStyle(QFrame::NoFrame);
+    promptHistory->setMaximumHeight(initHeight);
+    promptHistory->setMinimumWidth(200);
+    /* TODO: use float/dock events to set minimum size
+     * so when floating, it isn't smooshed. */
+
+    promptHistory->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    prompt->setFocusProxy(promptInput);
+    promptHistory->setFocusProxy(promptInput);
+
+    promptDivider->setLineWidth(1);
+    promptDivider->setFrameStyle(QFrame::HLine);
+    promptDivider->setMaximumSize(QWIDGETSIZE_MAX, 1);
+
+    promptVBoxLayout->addWidget(promptHistory);
+    promptVBoxLayout->addWidget(promptDivider);
+    promptVBoxLayout->addWidget(promptInput);
+
+    promptVBoxLayout->setSpacing(0);
+    promptVBoxLayout->setContentsMargins(0,0,0,0);
+
+    prompt->setLayout(promptVBoxLayout);
+
+    string_copy(prompt_color_, "#000000"); /* Match --------------------| */
+    string_copy(prompt_selection_bg_color_, "#000000"); /* Match -------| */
+    string_copy(prompt_bg_color_, "#FFFFFF");
+    string_copy(prompt_selection_color_, "#FFFFFF");
+    set_str(PROMPT_FONT_FAMILY, "Monospace");
+    set_str(PROMPT_FONT_STYLE, "normal");
+    set_int(PROMPT_FONT_SIZE, 12);
+
+    blinkState = false;
+    blinkTimer = new QTimer(prompt);
+    connect(blinkTimer, SIGNAL(timeout()), prompt, SLOT(blink()));
+
+    prompt->show();
+
+    connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
+
     prompt_update_style();
     prompt->setFocus(Qt::OtherFocusReason);
     this->setFocusProxy(prompt);
@@ -6262,8 +6262,10 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(undoPressed()), this, SLOT(undo()));
     connect(prompt, SIGNAL(redoPressed()), this, SLOT(redo()));
 
-    connect(prompt, SIGNAL(shiftPressed()), this, SLOT(set_shift_pressed()));
-    connect(prompt, SIGNAL(shiftReleased()), this, SLOT(set_shift_released()));
+    connect(prompt, SIGNAL(shiftPressed), this,
+        SLOT([=](void) { shiftKeyPressedState = true; }));
+    connect(prompt, SIGNAL(shiftReleased), this,
+        SLOT([=](void) { shiftKeyPressedState = false; }));
 
     connect(prompt, SIGNAL(showSettings()), this, SLOT(settings_prompt()));
 
@@ -6291,7 +6293,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     create_all_actions();
     create_all_menus();
 
-    for (int i=0; state.menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+    for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
         menuBar()->addMenu(menu[i]);
     }
 
@@ -6392,14 +6394,14 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbar[TOOLBAR_PROMPT]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
     connect(toolbar[TOOLBAR_PROMPT], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 
-    add_to_toolbar(TOOLBAR_DRAW, state.draw_toolbar);
-    add_to_toolbar(TOOLBAR_MODIFY, state.modify_toolbar);
+    add_to_toolbar(TOOLBAR_DRAW, draw_toolbar);
+    add_to_toolbar(TOOLBAR_MODIFY, modify_toolbar);
 
-    set_toolbar_horizontal(state.toolbar_horizontal);
+    set_toolbar_horizontal(toolbar_horizontal);
 
-    add_toolbar_to_window(Qt::TopToolBarArea, state.top_toolbar);
-    add_toolbar_to_window(Qt::BottomToolBarArea, state.bottom_toolbar);
-    add_toolbar_to_window(Qt::LeftToolBarArea, state.left_toolbar);
+    add_toolbar_to_window(Qt::TopToolBarArea, top_toolbar);
+    add_toolbar_to_window(Qt::BottomToolBarArea, bottom_toolbar);
+    add_toolbar_to_window(Qt::LeftToolBarArea, left_toolbar);
 
     /* zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly); */
 
@@ -6429,8 +6431,7 @@ MainWindow::recentMenuAboutToShow(void)
     debug_message("recentMenuAboutToShow()");
     menu[MENU_RECENT]->clear();
 
-    int n = string_array_length(recent_files);
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; !string_equal(recent_files[i], END_SYMBOL); ++i) {
         /* If less than the max amount of entries add to menu. */
         if (i < get_int(OPENSAVE_RECENT_MAX_FILES)) {
             QFileInfo recentFileInfo = QFileInfo(recent_files[i]);
@@ -6461,11 +6462,11 @@ MainWindow::recentMenuAboutToShow(void)
     }
     /* Ensure the list only has max amount of entries. */
     if (get_int(OPENSAVE_RECENT_MAX_FILES) < MAX_FILES) {
-        string_copy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], "END");
+        string_copy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], END_SYMBOL);
     }
     else {
         set_int(OPENSAVE_RECENT_MAX_FILES, MAX_FILES - 1);
-        string_copy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], "END");
+        string_copy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], END_SYMBOL);
     }
 }
 
@@ -6518,7 +6519,7 @@ new_file(void)
     debug_message("new_file()");
     docIndex++;
     numOfDocs++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
+    MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
     QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main,
         SLOT(onCloseMdiWin(MdiWindow*)));
     QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main,
@@ -6530,7 +6531,7 @@ new_file(void)
     int32_t doc_index = mdiWin->doc_index;
     if (doc_index) {
         doc_recalculate_limits(doc_index);
-        doc_zoom_extents(doc_index);
+        doc_nav("ZoomExtents", doc_index);
     }
 }
 
@@ -6542,7 +6543,8 @@ open_file(bool recent, EmbString recentFile)
 
     arrow_cursor();
 
-    EmbStringTable files;
+    char *files_ptrs[MAX_FILES];
+    char files[MAX_FILES][MAX_STRING_LENGTH];
     int n_files = 0;
     bool preview = get_bool(OPENSAVE_OPEN_THUMBNAIL);
     string_copy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
@@ -6550,8 +6552,10 @@ open_file(bool recent, EmbString recentFile)
     /* Check to see if this from the recent files list. */
     if (recent) {
         string_copy(files[0], (char*)qPrintable(recentFile));
-        string_copy(files[1], end_symbol);
-        open_filesSelected(files);
+        string_copy(files[1], END_SYMBOL);
+        files_ptrs[0] = (char*)files[0];
+        files_ptrs[1] = (char*)files[1];
+        open_filesSelected(files_ptrs);
     }
     else if (!preview) {
         /* TODO: set getOpenFileNames' selectedFilter parameter from opensave_open_format.setting */
@@ -6560,9 +6564,11 @@ open_file(bool recent, EmbString recentFile)
         int i;
         for (i=0; i < MAX_FILES && i < sl.size(); i++) {
             string_copy(files[i], qPrintable(sl[i]));
+            files_ptrs[i] = (char*)files[i];
         }
-        string_copy(files[i], end_symbol);
-        open_filesSelected(files);
+        string_copy(files[i], END_SYMBOL);
+        files_ptrs[i] = (char*)files[i];
+        open_filesSelected(files_ptrs);
     }
     else if (preview) {
         PreviewDialog* openDialog = new PreviewDialog(_main,
@@ -6579,16 +6585,14 @@ open_file(bool recent, EmbString recentFile)
 
 /* . */
 void
-open_filesSelected(EmbStringTable filesToOpen)
+open_filesSelected(char *filesToOpen[])
 {
     debug_message("open_fileSelected()");
     bool doOnce = true;
 
-    int n = string_array_length(filesToOpen);
+    int n = table_length(filesToOpen);
     for (int i = 0; i < n; i++) {
-        EmbString message;
-        sprintf(message, "opening %s...", qPrintable(filesToOpen[i]));
-        debug_message(message);
+        debug_message("opening %s...", qPrintable(filesToOpen[i]));
 
         QMdiSubWindow* existing = findMdiWindow((char*)qPrintable(filesToOpen[i]));
         if (existing) {
@@ -6599,7 +6603,7 @@ open_filesSelected(EmbStringTable filesToOpen)
 
         /* The docIndex doesn't need increased as it is only used for unnamed files. */
         numOfDocs++;
-        MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
+        MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
         QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main,
             SLOT(onCloseMdiWin(MdiWindow*)));
         QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main,
@@ -6616,27 +6620,32 @@ open_filesSelected(EmbStringTable filesToOpen)
             mdiWin->show();
             mdiWin->showMaximized();
             /* Prevent duplicate entries in the recent files list. */
+            #if 0
+            // FIXME
             if (!string_list_contains(recent_files, filesToOpen[i])) {
-                for (int j=0; j<MAX_FILES-1; j++) {
+                int j;
+                for (j=0; j<MAX_FILES-1; j++) {
                     string_copy(recent_files[j], recent_files[j+1]);
                 }
                 string_copy(recent_files[0], filesToOpen[i]);
             }
             /* Move the recent file to the top of the list */
-            else {
+            else
+            #endif
+             {
                 string_copy(recent_files[0], filesToOpen[i]);
-                string_copy(recent_files[1], end_symbol);
+                string_copy(recent_files[1], END_SYMBOL);
             }
             set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(filesToOpen[i]).absolutePath()));
 
             int32_t doc_index = mdiWin->doc_index;
             if (doc_index) {
                 doc_recalculate_limits(doc_index);
-                doc_zoom_extents(doc_index);
+                doc_nav("ZoomExtents", doc_index);
             }
         }
         else {
-            critical_box(translate("Failed to load file"),
+            messagebox("critical", translate("Failed to load file"),
                 translate("Failed to load file."));
             debug_message("Failed to load file.");
             mdiWin->close();
@@ -6669,9 +6678,7 @@ save_as_file(void)
 QMdiSubWindow*
 findMdiWindow(EmbString fileName)
 {
-    EmbString message;
-    sprintf(message, "findMdiWindow(%s)", fileName);
-    debug_message(message);
+    debug_message("findMdiWindow(%s)", fileName);
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
     foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
@@ -6778,8 +6785,8 @@ update_interface()
 
     if (numOfDocs) {
         /* Toolbars */
-        for (int i=0; state.toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
-            toolbar[state.toolbars_when_docs[i]]->show();
+        for (int i=0; toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
+            toolbar[toolbars_when_docs[i]]->show();
         }
 
         /* DockWidgets */
@@ -6788,8 +6795,8 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        for (int i=0; state.menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
-            menuBar()->addMenu(menu[state.menubar_full_list[i]]);
+        for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+            menuBar()->addMenu(menu[menubar_full_list[i]]);
         }
         menu[MENU_WINDOW]->setEnabled(true);
 
@@ -6802,8 +6809,8 @@ update_interface()
     }
     else {
         /* Toolbars */
-        for (int i=0; state.toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
-            toolbar[state.toolbars_when_docs[i]]->hide();
+        for (int i=0; toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
+            toolbar[toolbars_when_docs[i]]->hide();
         }
 
         /* DockWidgets */
@@ -6812,8 +6819,8 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        for (int i=0; state.menubar_no_docs[i] != TERMINATOR_SYMBOL; i++) {
-            menuBar()->addMenu(menu[state.menubar_no_docs[i]]);
+        for (int i=0; menubar_no_docs[i] != TERMINATOR_SYMBOL; i++) {
+            menuBar()->addMenu(menu[menubar_no_docs[i]]);
         }
         menu[MENU_WINDOW]->setEnabled(false);
 
@@ -6824,7 +6831,6 @@ update_interface()
             statusBarButtons[i]->hide();
         }
     }
-    hide_unimplemented();
 }
 
 /* . */
@@ -6911,29 +6917,31 @@ void
 MainWindow::floatingChangedToolBar(bool isFloating)
 {
     QToolBar* tb = qobject_cast<QToolBar*>(sender());
-    if (tb) {
-        if (isFloating) {
-            /* TODO: Determine best suited close button on various platforms. */
-            /*
-            QStyle::SP_DockWidgetCloseButton
-            QStyle::SP_TitleBarCloseButton
-            QStyle::SP_DialogCloseButton
-            */
-            QAction *ACTION = new QAction(tb->style()->standardIcon(QStyle::SP_DialogCloseButton), "Close", this);
-            ACTION->setStatusTip("Close the " + tb->windowTitle() + " Toolbar");
-            ACTION->setObjectName("toolbarclose");
-            tb->addAction(ACTION);
-            connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
-        }
-        else {
-            QList<QAction*> actList = tb->actions();
-            for (int i = 0; i < actList.size(); ++i) {
-                QAction* ACTION = actList[i];
-                if (ACTION->objectName() == "toolbarclose") {
-                    tb->removeAction(ACTION);
-                    disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
-                    delete ACTION;
-                }
+    if (!tb) {
+        /* TODO: error report */
+        return;
+    }
+    if (isFloating) {
+        /* TODO: Determine best suited close button on various platforms. */
+        /*
+        QStyle::SP_DockWidgetCloseButton
+        QStyle::SP_TitleBarCloseButton
+        QStyle::SP_DialogCloseButton
+        */
+        QAction *ACTION = new QAction(tb->style()->standardIcon(QStyle::SP_DialogCloseButton), "Close", this);
+        ACTION->setStatusTip("Close the " + tb->windowTitle() + " Toolbar");
+        ACTION->setObjectName("toolbarclose");
+        tb->addAction(ACTION);
+        connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+    }
+    else {
+        QList<QAction*> actList = tb->actions();
+        for (int i = 0; i < actList.size(); ++i) {
+            QAction* ACTION = actList[i];
+            if (ACTION->objectName() == "toolbarclose") {
+                tb->removeAction(ACTION);
+                disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+                delete ACTION;
             }
         }
     }
@@ -6944,9 +6952,9 @@ QAction*
 get_action_by_icon(EmbString icon)
 {
     int i;
-    for (i=0; command_data[i].id != -2; i++) {
+    for (i=0; i < N_ACTIONS; i++) {
         if (string_equal(command_data[i].icon, icon)) {
-            return actionHash[command_data[i].id];
+            return actionHash[i];
         }
     }
     return actionHash[ACTION_DO_NOTHING];
@@ -6954,16 +6962,16 @@ get_action_by_icon(EmbString icon)
 
 /* . */
 void
-add_to_menu(int index, EmbStringTable menu_data)
+add_to_menu(int index, char *menu_data[])
 {
-    int n = string_array_length(menu_data);
+    int n = table_length(menu_data);
     for (int i=0; i<n; i++) {
         char *s = menu_data[i];
         if (s[0] == '-') {
             menu[index]->addSeparator();
         }
         else if (s[0] == '>') {
-            int id = get_id(state.menu_list, s+1);
+            int id = get_id(menu_list, s+1);
             if (id < 0) {
                 debug_message("Failed to identify submenu.");
                 continue;
@@ -7014,28 +7022,28 @@ read_settings(void)
     }
 
     for (int i=0; i<N_SETTINGS; i++) {
-        char *label = settings_data[i].label;
-        char *value = settings_data[i].value;
-        switch (settings_data[i].type) {
-        case SCRIPT_INT: {
+        char *label = settings_data[6*i+2];
+        char *value = settings_data[6*i+4];
+        switch (settings_data[6*i+1][0]) {
+        case 'i': {
             int x = settings.value(label, atoi(value)).toInt();
             printf("%d %s %d %d\n", i, label, atoi(value), x);
             set_int(i, x);
             break;
         }
-        case SCRIPT_BOOL: {
+        case 'b': {
             bool x = settings.value(label, (bool)atoi(value)).toBool();
             printf("%d %s %d %d\n", i, label, (bool)atoi(value), x);
             set_bool(i, x);
             break;
         }
-        case SCRIPT_STRING: {
+        case 's': {
             char *x = (char *)qPrintable(settings.value(label, QString(value)).toString());
             printf("%d %s %s %s\n", i, label, value, x);
             set_str(i, x);
             break;
         }
-        case SCRIPT_REAL: {
+        case 'r': {
             float x = settings.value(label, atof(value)).toFloat();
             printf("%d %s %f %f\n", i, label, atof(value), x);
             set_real(i, x);
@@ -7065,17 +7073,17 @@ write_settings(void)
 void
 settings_dialog(const char *showTab)
 {
-    Settings_Dialog dialog(_main, showTab, _main);
+    Settings_Dialog dialog(showTab, _main);
     dialog.exec();
 }
 
 /* . */
 void
-add_to_toolbar(int id, EmbStringTable toolbar_data)
+add_to_toolbar(int id, char *toolbar_data[])
 {
-    toolbar[id]->setObjectName(QString("toolbar") + state.toolbar_list[id]);
+    toolbar[id]->setObjectName(QString("toolbar") + toolbar_list[id]);
 
-    int n = string_array_length(toolbar_data);
+    int n = table_length(toolbar_data);
     for (int i=0; i<n; i++) {
         if (toolbar_data[i][0] == '-') {
             toolbar[id]->addSeparator();
@@ -7113,7 +7121,7 @@ void
 create_all_actions(void)
 {
     debug_message("Creating All Actions...");
-    for (int i=0; command_data[i].id != -2; i++) {
+    for (int i=0; i < N_ACTIONS; i++) {
         QString icon(command_data[i].icon);
         QString toolTip(command_data[i].tooltip);
         QString statusTip(command_data[i].statustip);
@@ -7127,7 +7135,7 @@ create_all_actions(void)
         ACTION->setObjectName(icon);
         ACTION->setWhatsThis(statusTip);
 
-        if (command_data[i].shortcut[0] = 0) {
+        if (strlen(command_data[i].shortcut) > 0) {
             ACTION->setShortcut(QKeySequence(command_data[i].shortcut));
         }
 
@@ -7141,7 +7149,8 @@ create_all_actions(void)
         string_copy(aliasHash[n_aliases].key, command_data[i].icon);
         string_copy(aliasHash[n_aliases].value, command_data[i].icon);
         n_aliases++;
-        actionHash[command_data[i].id] = ACTION;
+
+        actionHash[i] = ACTION;
         n_actions++;
 
         foreach (QString alias, aliases) {
@@ -7157,7 +7166,6 @@ create_all_actions(void)
     actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
     actionHash[ACTION_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
 }
-
 
 /* TODO: Alphabetic/Categorized TabWidget */
 /* TODO: Load precisionAngle and precisionLength from settings and provide
@@ -7189,20 +7197,63 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
 
     QWidget* widgetSelection = new QWidget(this);
     QHBoxLayout* hboxLayoutSelection = new QHBoxLayout(this);
-    hboxLayoutSelection->addWidget(createComboBoxSelected());
-    hboxLayoutSelection->addWidget(createToolButtonQSelect());
-    hboxLayoutSelection->addWidget(createToolButtonPickAdd());
+
+    QComboBox *comboBoxSelected = new QComboBox(dockPropEdit);
+    comboBoxSelected->addItem(translate("No Selection"));
+
+    QToolButton *toolButtonQSelect = new QToolButton(dockPropEdit);
+    toolButtonQSelect->setIcon(create_icon("quickselect"));
+    toolButtonQSelect->setIconSize(QSize(iconSize, iconSize));
+    toolButtonQSelect->setText("QSelect");
+    toolButtonQSelect->setToolTip("QSelect"); /* TODO: Better Description */
+    toolButtonQSelect->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+    /* TODO: Set as PickAdd or PickNew based on settings */
+    toolButtonPickAdd = new QToolButton(dockPropEdit);
+    dockPropEdit->update_pick_add_modeButton(pickAdd);
+    QObject::connect(toolButtonPickAdd, SIGNAL(clicked(bool)), dockPropEdit, SLOT(togglePickAddMode()));
+
+    hboxLayoutSelection->addWidget(comboBoxSelected);
+    hboxLayoutSelection->addWidget(toolButtonQSelect);
+    hboxLayoutSelection->addWidget(toolButtonPickAdd);
     widgetSelection->setLayout(hboxLayoutSelection);
 
-    for (int i=0; group_box_list[i].id[0] != '.'; i++) {
-        create_properties_group_box(i);
+    for (int i=0; i < N_GROUPBOX; i++) {
+        printf("GB %d\n", i);
+        debug_message("TODO: Use proper icons for tool buttons.");
+        QGroupBox *group_box = create_group_box(this,
+            (char*)group_box_list[i].key,
+            translate((char*)group_box_list[i].label));
+
+        QFormLayout* formLayout = new QFormLayout(this);
+        char **table = group_box_list[i].data;
+        int n = table_length(group_box_list[i].data) / 4;
+        for (int j = 0; j < n; j ++) {
+            /* CSV table row */
+            const char *data_type = table[4*j + 0];
+            const char *icon = table[4*j + 1];
+            const char *label = translate((char*)table[4*j + 2]);
+            const char *signal_name = table[4*j + 3];
+
+            QToolButton* tb = new QToolButton(this);
+            tb->setIcon(create_icon(icon));
+            tb->setIconSize(QSize(iconSize, iconSize));
+            tb->setText(label);
+            tb->setToolButtonStyle(propertyEditorButtonStyle);
+            tb->setStyleSheet("border:none;");
+
+            QWidget *widget = create_editor(this, (char*)data_type, (char*)signal_name,
+                group_box_list[i].object);
+            formLayout->addRow(tb, widget);
+        }
+        group_box->setLayout(formLayout);
     }
 
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
-    for (int i=0; group_box_list[i].id[0] != '.'; i++) {
-        int id = find_widget_list(group_box_list[i].id);
+    for (int i=0; i < N_GROUPBOX; i++) {
+        int id = find_widget_list(group_box_list[i].key);
         if (id < 0) {
             continue;
         }
@@ -7224,7 +7275,8 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
 
     hide_all_groups();
 
-    QObject::connect(signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(fieldEdited(QObject*)));
+    QObject::connect(signalMapper, SIGNAL(mapped(QObject*)), this,
+        SLOT(fieldEdited(QObject*)));
 
     focusWidget_ = widgetToFocus;
     this->installEventFilter(this);
@@ -7248,39 +7300,6 @@ bool PropertyEditor::eventFilter(QObject *obj, QEvent *event)
         }
     }
     return QObject::eventFilter(obj, event);
-}
-
-/* . */
-QComboBox*
-createComboBoxSelected(void)
-{
-    comboBoxSelected = new QComboBox(dockPropEdit);
-    comboBoxSelected->addItem(translate("No Selection"));
-    return comboBoxSelected;
-}
-
-/* . */
-QToolButton*
-createToolButtonQSelect(void)
-{
-    toolButtonQSelect = new QToolButton(dockPropEdit);
-    toolButtonQSelect->setIcon(create_icon("quickselect"));
-    toolButtonQSelect->setIconSize(QSize(iconSize, iconSize));
-    toolButtonQSelect->setText("QSelect");
-    toolButtonQSelect->setToolTip("QSelect"); /* TODO: Better Description */
-    toolButtonQSelect->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    return toolButtonQSelect;
-}
-
-/* . */
-QToolButton*
-createToolButtonPickAdd(void)
-{
-    /* TODO: Set as PickAdd or PickNew based on settings */
-    toolButtonPickAdd = new QToolButton(dockPropEdit);
-    dockPropEdit->update_pick_add_modeButton(pickAdd);
-    QObject::connect(toolButtonPickAdd, SIGNAL(clicked(bool)), dockPropEdit, SLOT(togglePickAddMode()));
-    return toolButtonPickAdd;
 }
 
 void
@@ -7360,7 +7379,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
     foreach (int objType, typeSet) {
         if ((objType > OBJ_BASE) && (objType <= OBJ_UNKNOWN)) {
             int index = objType - OBJ_ARC;
-            QString comboBoxStr = translate(state.object_names[index]);
+            QString comboBoxStr = translate(object_names[index]);
             comboBoxStr += " (" + QString().setNum(object_counts[index]) + ")";
             comboBoxSelected->addItem(comboBoxStr, objType);
         }
@@ -7455,9 +7474,8 @@ update_font_combo_box_str_if_varies(const char *str)
         qPrintable(fontComboBox->property("FontFamily").toString()));
     string_copy(fieldNewText, str);
     /*
-    sprintf(message, "old: %d %s, new: %d %s",
+    debug_message("old: %d %s, new: %d %s",
         oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str));
-    debug_message(message);
     */
     if (fieldOldText[0] == 0) {
         fontComboBox->setCurrentFont(QFont(fieldNewText));
@@ -7488,7 +7506,7 @@ combobox_find_text(int32_t index, const char *text)
 
 /* . */
 void
-update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
+update_lineedit_str(const char *key, const char *str, char *strList[])
 {
     int index = find_widget_list(key);
     if (index < 0) {
@@ -7500,7 +7518,7 @@ update_lineedit_str(const char *key, const char *str, EmbStringTable strList)
     string_copy(fieldNewText, str);
 
     if (fieldOldText[0] == 0) {
-        int n = string_array_length(strList);
+        int n = table_length(strList);
         for (int i=0; i<n; i++) {
             QString s(strList[i]);
             comboBox->addItem(s, s);
@@ -7593,22 +7611,18 @@ add_lineedit(EmbString key, QLineEdit *lineedit)
     n_widgets++;
 }
 
-/* . */
-void
-create_editor(
-    QFormLayout *layout,
-    EmbString icon,
-    EmbString label,
-    EmbString type_label,
-    EmbString signal_name,
+/* 
+ * Data order: (signal_name, icon, label, signal).
+ * TODO: icon not set here.
+ */
+QWidget*
+create_editor(QWidget *parent, EmbString type_label, EmbString signal_name,
     int obj_type)
 {
     EmbString signal;
-    QToolButton *toolButton = createToolButton(icon, translate((char*)label));
-    QString s(signal_name);
-    if (string_equal(signal_name, "combobox")) {
+    if (string_equal(type_label, "combobox")) {
         sprintf(signal, "comboBox%s", signal_name);
-        QComboBox *combo_box = new QComboBox(dockPropEdit);
+        QComboBox *combo_box = new QComboBox(parent);
         if (signal_name[0] == 0) {
             combo_box->setDisabled(true);
         }
@@ -7616,22 +7630,20 @@ create_editor(
             combo_box->setDisabled(false);
             mapSignal(combo_box, signal, obj_type);
         }
-        layout->addRow(toolButton, combo_box);
         add_combobox(signal, combo_box);
-        return;
+        return combo_box;
     }
-    if (string_equal(signal_name, "fontcombobox")) {
-        comboBoxTextSingleFont = new QFontComboBox(dockPropEdit);
+    if (string_equal(type_label, "fontcombobox")) {
+        comboBoxTextSingleFont = new QFontComboBox(parent);
         comboBoxTextSingleFont->setDisabled(false);
 
         mapSignal(comboBoxTextSingleFont, "comboBoxTextSingleFont", OBJ_TEXTSINGLE);
-        layout->addRow(toolButton, comboBoxTextSingleFont);
-        return;
+        return comboBoxTextSingleFont;
     }
 
     sprintf(signal, "lineEdit%s", signal_name);
 
-    QLineEdit *line_edit = new QLineEdit(dockPropEdit);
+    QLineEdit *line_edit = new QLineEdit(parent);
     if (string_equal(type_label, "int")) {
         line_edit->setValidator(new QIntValidator(line_edit));
     }
@@ -7649,27 +7661,8 @@ create_editor(
         mapSignal(line_edit, signal, obj_type);
     }
 
-    layout->addRow(toolButton, line_edit);
     add_lineedit(signal, line_edit);
-}
-
-/* . */
-void
-create_properties_group_box(int32_t key)
-{
-    todo("Use proper icons for tool buttons.");
-    QGroupBox *group_box = create_group_box(dockPropEdit,
-        (char*)group_box_list[key].id,
-        translate((char*)group_box_list[key].label));
-
-    QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    Editor *editor_data = group_box_list[key].data;
-    for (int i=0; !string_equal(editor_data[i].icon, "END"); i++) {
-        Editor editor = editor_data[i];
-        create_editor(formLayout, editor.icon, editor.label, editor.data_type,
-            editor.signal, editor.object);
-    }
-    group_box->setLayout(formLayout);
+    return line_edit;
 }
 
 /* . */
@@ -7748,7 +7741,7 @@ fieldEdited(QObject* fieldObj)
 }
 
 /* . */
-Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* parent) : QDialog(parent)
+Settings_Dialog::Settings_Dialog(QString showTab, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
 
@@ -7776,9 +7769,9 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* paren
     tabWidget->addTab(createTabLineWeight(), translate("LineWeight"));
     tabWidget->addTab(createTabSelection(), translate("Selection"));
 
-    int n_tabs = string_array_length(state.settings_tab_labels);
+    int n_tabs = table_length(settings_tab_labels);
     for (int i=0; i<n_tabs; i++) {
-        if (showTab == state.settings_tab_labels[i]) {
+        if (showTab == settings_tab_labels[i]) {
             tabWidget->setCurrentIndex(i);
         }
     }
@@ -7798,17 +7791,23 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* paren
     arrow_cursor();
 }
 
+QPushButton*
+choose_button(QWidget *parent, int key)
+{
+    QPushButton* button = new QPushButton(translate("Choose"), parent);
+    button->setIcon(create_swatch(setting[key].preview.i));
+    QObject::connect(button, &QPushButton::clicked, parent, [=] () { chooseColor(parent, button, key); });
+    return button;
+}
+
 /* . */
 void
-Settings_Dialog::labelled_button(QGroupBox* groupbox, QGridLayout *layout,
+labelled_button(QWidget* parent, QGridLayout *layout,
     int row, const char *name, int key)
 {
-    QLabel* label = new QLabel(translate(name), groupbox);
+    QLabel* label = new QLabel(translate(name), parent);
     layout->addWidget(label, row, 0, Qt::AlignLeft);
-
-    QPushButton* button = new QPushButton(translate("Choose"), groupbox);
-    button->setIcon(create_swatch(setting[key].preview.i));
-    connect(button, &QPushButton::clicked, this, [=] () { chooseColor(key); });
+    QPushButton* button = choose_button(parent, key);
     layout->addWidget(button, row, 1, Qt::AlignRight);
 }
 
@@ -7848,7 +7847,8 @@ Settings_Dialog::createTabGeneral()
     QString current = setting[GENERAL_LANGUAGE].dialog.s;
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
-    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxLanguageCurrentIndexChanged(QString )));
+    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString )), this,
+        DIALOG_STRING_SLOT(GENERAL_LANGUAGE));
 
     QVBoxLayout* vboxLayoutLanguage = new QVBoxLayout(groupBoxLanguage);
     vboxLayoutLanguage->addWidget(labelLanguage);
@@ -7866,7 +7866,8 @@ Settings_Dialog::createTabGeneral()
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/theme.png"), dirName);
     }
     comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(setting[GENERAL_ICON_THEME].dialog.s));
-    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxIconThemeCurrentIndexChanged(QString )));
+    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString)), this,
+        DIALOG_STRING_SLOT(GENERAL_ICON_THEME));
 
     QLabel* labelIconSize = new QLabel(translate("Icon Size"), groupBoxIcon);
     QComboBox* comboBoxIconSize = new QComboBox(groupBoxIcon);
@@ -7910,7 +7911,7 @@ Settings_Dialog::createTabGeneral()
     QPushButton* buttonMdiBGColor = new QPushButton(translate("Choose"), groupBoxMdiBG);
     buttonMdiBGColor->setIcon(create_swatch(setting[GENERAL_MDI_BG_COLOR].preview.i));
     connect(buttonMdiBGColor, &QPushButton::clicked, this,
-        [=] () { chooseColor(GENERAL_MDI_BG_COLOR); });
+        [=] () { chooseColor(this, buttonMdiBGColor, GENERAL_MDI_BG_COLOR); });
     buttonMdiBGColor->setEnabled(setting[GENERAL_MDI_BG_USE_COLOR].dialog.b);
     connect(checkBoxMdiBGUseColor, SIGNAL(toggled(bool)), buttonMdiBGColor, SLOT(setEnabled(bool)));
 
@@ -7957,6 +7958,21 @@ Settings_Dialog::createTabGeneral()
     return make_scrollable(this, vboxLayoutMain, widget);
 }
 
+/* . */
+QGroupBox*
+make_groupbox(QWidget *parent, const char *title, WidgetData data[], char *layout[])
+{
+    QGroupBox* gb = new QGroupBox(translate(title), parent);
+
+    for (int i=0; data[i].id >= 0; i++) {
+        create_label(gb, translate(data[i].label), data[i].key);
+        create_spinbox(gb, data[i].id);
+    }
+
+    set_grid_layout(gb, layout);
+    return gb;
+}
+
 /* TODO: Review OpenGL and Rendering settings for future inclusion */
 QWidget*
 Settings_Dialog::createTabDisplay()
@@ -7966,8 +7982,8 @@ Settings_Dialog::createTabDisplay()
     /* Rendering */
     QGroupBox* groupBoxRender = new QGroupBox(translate("Rendering"), widget);
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
-    for (int i=0; state.render_hints[i] != TERMINATOR_SYMBOL; i++) {
-        QCheckBox* checkBox = create_checkbox(groupBoxRender, settings_data[state.render_hints[i]].id);
+    for (int i=0; render_hints[i] != TERMINATOR_SYMBOL; i++) {
+        QCheckBox* checkBox = create_checkbox(groupBoxRender, render_hints[i]);
         vboxLayoutRender->addWidget(checkBox);
     }
     groupBoxRender->setLayout(vboxLayoutRender);
@@ -7987,7 +8003,8 @@ Settings_Dialog::createTabDisplay()
         }
     }
     comboBoxScrollBarWidget->setCurrentIndex(setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i);
-    connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_box_scroll_bar_widget_changed(int)));
+    connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this,
+        DIALOG_INT_SLOT(DISPLAY_SCROLLBAR_WIDGET_NUM));
 
     QVBoxLayout* vboxLayoutScrollBars = new QVBoxLayout(groupBoxScrollBars);
     vboxLayoutScrollBars->addWidget(checkBoxShowScrollBars);
@@ -8023,14 +8040,7 @@ Settings_Dialog::createTabDisplay()
     groupBoxColor->setLayout(gridLayoutColor);
 
     /* Zoom */
-    QGroupBox* groupBoxZoom = new QGroupBox(translate("Zoom"), widget);
-
-    create_label(groupBoxZoom, translate("Zoom In Scale"), "labelZoomInScale");
-    create_spinbox(groupBoxZoom, DISPLAY_ZOOMSCALE_IN);
-    create_label(groupBoxZoom, translate("Zoom Out Scale"), "labelZoomOutScale");
-    create_spinbox(groupBoxZoom, DISPLAY_ZOOMSCALE_OUT);
-
-    set_grid_layout(groupBoxZoom, zoom_layout);
+    QGroupBox* groupBoxZoom = make_groupbox(widget, "Zoom", zoom_gb_data, zoom_layout);
 
     /* Widget Layout */
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
@@ -8063,14 +8073,14 @@ Settings_Dialog::createTabPrompt()
     QLabel* labelFontFamily = new QLabel(translate("Font Family"), groupBoxFont);
     QFontComboBox* comboBoxFontFamily = new QFontComboBox(groupBoxFont);
     comboBoxFontFamily->setCurrentFont(QFont(setting[PROMPT_FONT_FAMILY].preview.s));
-    connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(QString )), this, SLOT(combo_box_prompt_font_family_changed(QString )));
+    connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(QString)), this, SLOT(combo_box_prompt_font_family_changed(QString)));
 
     QLabel* labelFontStyle = new QLabel(translate("Font Style"), groupBoxFont);
     QComboBox* comboBoxFontStyle = new QComboBox(groupBoxFont);
     comboBoxFontStyle->addItem("Normal");
     comboBoxFontStyle->addItem("Italic");
     comboBoxFontStyle->setEditText(setting[PROMPT_FONT_STYLE].preview.s);
-    connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(QString )), this, SLOT(combo_box_prompt_font_style_changed(QString )));
+    connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(QString)), this, SLOT(combo_box_prompt_font_style_changed(QString)));
 
     QLabel* labelFontSize = new QLabel(translate("Font Size"), groupBoxFont);
     QSpinBox* spinBoxFontSize = new QSpinBox(groupBoxFont);
@@ -8078,6 +8088,12 @@ Settings_Dialog::createTabPrompt()
     spinBoxFontSize->setValue(setting[PROMPT_FONT_SIZE].preview.i);
     connect(spinBoxFontSize, SIGNAL(valueChanged(int)), this, SLOT(spin_box_prompt_font_size_changed(int)));
 
+    /*
+    "labelFontFamily", "comboBoxFontFamily",
+    "labelFontStyle", "comboBoxFontStyle",
+    "labelFontSize", "spinBoxFontSize"
+    */
+    
     QGridLayout* gridLayoutFont = new QGridLayout(groupBoxFont);
     gridLayoutFont->addWidget(labelFontFamily, 0, 0, Qt::AlignLeft);
     gridLayoutFont->addWidget(comboBoxFontFamily, 0, 1, Qt::AlignRight);
@@ -8123,9 +8139,9 @@ QWidget* Settings_Dialog::createTabOpenSave()
         SLOT(button_custom_filter_clear_all_clicked()));
 
     int i;
-    int n_extensions = string_array_length(state.extensions);
+    int n_extensions = table_length(extensions);
     for (i=0; i<n_extensions; i++) {
-        const char *extension = state.extensions[i];
+        const char *extension = extensions[i];
         custom_filter[i] = new QCheckBox(extension, groupbox_custom_filter);
         custom_filter[i]->setChecked(QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("*." + QString(extension), Qt::CaseInsensitive));
         connect(custom_filter[i], SIGNAL(stateChanged(int)), this,
@@ -8142,7 +8158,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     int row = 0;
     int column = 0;
     for (i=0; i<n_extensions; i++) {
-        const char *extension = state.extensions[i];
+        const char *extension = extensions[i];
         gridLayoutCustomFilter->addWidget(custom_filter[i], row, column, Qt::AlignLeft);
         row++;
         if (row == 10) {
@@ -8173,7 +8189,8 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QSpinBox* spinBoxRecentMaxFiles = new QSpinBox(groupBoxOpening);
     spinBoxRecentMaxFiles->setRange(0, 10);
     spinBoxRecentMaxFiles->setValue(setting[OPENSAVE_RECENT_MAX_FILES].dialog.b);
-    connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), this, SLOT(spin_box_recent_max_files_changed(int)));
+    connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), this,
+        DIALOG_INT_SLOT(OPENSAVE_RECENT_MAX_FILES));
 
     QFrame* frameRecent = new QFrame(groupBoxOpening);
     QGridLayout* gridLayoutRecent = new QGridLayout(frameRecent);
@@ -8211,7 +8228,8 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QSpinBox* spinBoxTrimDstNumJumps = new QSpinBox(groupBoxTrim);
     spinBoxTrimDstNumJumps->setRange(1, 20);
     spinBoxTrimDstNumJumps->setValue(setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i);
-    connect(spinBoxTrimDstNumJumps, SIGNAL(valueChanged(int)), this, SLOT(spin_box_trim_dst_num_jumps_changed(int)));
+    connect(spinBoxTrimDstNumJumps, SIGNAL(valueChanged(int)), this,
+        DIALOG_INT_SLOT(OPENSAVE_TRIM_DST_NUM_JUMPS));
 
     QFrame* frameTrimDstNumJumps = new QFrame(groupBoxTrim);
     QGridLayout* gridLayoutTrimDstNumJumps = new QGridLayout(frameTrimDstNumJumps);
@@ -8309,7 +8327,7 @@ Settings_Dialog::createTabGridRuler()
     }
     buttonGridColor->setIcon(QIcon(create_swatch(setting[GRID_COLOR].preview.i)));
     connect(buttonGridColor, &QPushButton::clicked, this,
-        [=] () { chooseColor(GRID_COLOR); });
+        [=] () { chooseColor(this, buttonGridColor, GRID_COLOR); });
 
     labelGridColor->setEnabled(!setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b);
     buttonGridColor->setEnabled(!setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b);
@@ -8341,24 +8359,10 @@ Settings_Dialog::createTabGridRuler()
     checkBoxGridCenterOnOrigin->setChecked(setting[GRID_CENTER_ON_ORIGIN].dialog.b);
     connect(checkBoxGridCenterOnOrigin, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridCenterOnOriginStateChanged(int)));
 
-    create_label(groupBoxGridGeom, "Grid Center X", "labelGridCenterX");
-    create_spinbox(groupBoxGridGeom, GRID_CENTER_X);
-    create_label(groupBoxGridGeom, "Grid Center Y", "labelGridCenterY");
-    create_spinbox(groupBoxGridGeom, GRID_CENTER_Y);
-    create_label(groupBoxGridGeom, "Grid Size X", "labelGridSizeX");
-    create_spinbox(groupBoxGridGeom, GRID_SIZE_X);
-    create_label(groupBoxGridGeom, "Grid Size Y", "labelGridSizeY");
-    create_spinbox(groupBoxGridGeom, GRID_SIZE_Y);
-    create_label(groupBoxGridGeom, "Grid Spacing X", "labelGridSpacingX");
-    create_spinbox(groupBoxGridGeom, GRID_SPACING_X);
-    create_label(groupBoxGridGeom, "Grid Spacing Y", "labelGridSpacingY");
-    create_spinbox(groupBoxGridGeom, GRID_SPACING_Y);
-    create_label(groupBoxGridGeom, "Grid Size Radius", "labelGridSizeRadius");
-    create_spinbox(groupBoxGridGeom, GRID_SIZE_RADIUS);
-    create_label(groupBoxGridGeom, "Grid Spacing Radius", "labelGridSpacingRadius");
-    create_spinbox(groupBoxGridGeom, GRID_SPACING_RADIUS);
-    create_label(groupBoxGridGeom, "Grid Spacing Angle", "labelGridSpacingAngle");
-    create_spinbox(groupBoxGridGeom, GRID_SPACING_ANGLE);
+    for (int i=0; grid_gb_data[i].id >= 0; i++) {
+        create_label(groupBoxGridGeom, grid_gb_data[i].label, grid_gb_data[i].key);
+        create_spinbox(groupBoxGridGeom, grid_gb_data[i].id);
+    }
 
     bool disable = setting[GRID_LOAD_FROM_FILE].dialog.b;
     set_enabled_group(grid_enabled_group, disable);
@@ -8401,7 +8405,7 @@ Settings_Dialog::createTabGridRuler()
     buttonRulerColor->setObjectName("buttonRulerColor");
     buttonRulerColor->setIcon(create_swatch(setting[RULER_COLOR].preview.i));
     connect(buttonRulerColor, &QPushButton::clicked, this,
-        [=] () { chooseColor(RULER_COLOR); });
+        [=] () { chooseColor(this, buttonRulerColor, RULER_COLOR); });
 
     QGridLayout* gridLayoutRulerColor = new QGridLayout(widget);
     gridLayoutRulerColor->addWidget(labelRulerColor, 1, 0, Qt::AlignLeft);
@@ -8518,7 +8522,8 @@ Settings_Dialog::createTabQuickSnap()
     QSlider* sliderQSnapLocSize = new QSlider(Qt::Horizontal, groupBoxQSnapVisual);
     sliderQSnapLocSize->setRange(1,20);
     sliderQSnapLocSize->setValue(setting[QSNAP_LOCATOR_SIZE].dialog.i);
-    connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this, SLOT(slider_qsnap_locator_size_changed(int)));
+    connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this,
+        DIALOG_INT_SLOT(QSNAP_LOCATOR_SIZE));
 
     QVBoxLayout* vboxLayoutQSnapVisual = new QVBoxLayout(groupBoxQSnapVisual);
     vboxLayoutQSnapVisual->addWidget(labelQSnapLocColor);
@@ -8534,7 +8539,8 @@ Settings_Dialog::createTabQuickSnap()
     QSlider* sliderQSnapApertureSize = new QSlider(Qt::Horizontal, groupBoxQSnapSensitivity);
     sliderQSnapApertureSize->setRange(1,20);
     sliderQSnapApertureSize->setValue(setting[QSNAP_APERTURE_SIZE].dialog.i);
-    connect(sliderQSnapApertureSize, SIGNAL(valueChanged(int)), this, SLOT(slider_qsnap_aperture_size_changed(int)));
+    connect(sliderQSnapApertureSize, SIGNAL(valueChanged(int)), this,
+        DIALOG_INT_SLOT(QSNAP_APERTURE_SIZE));
 
     QVBoxLayout* vboxLayoutQSnapSensitivity = new QVBoxLayout(groupBoxQSnapSensitivity);
     vboxLayoutQSnapSensitivity->addWidget(labelQSnapApertureSize);
@@ -8652,13 +8658,13 @@ Settings_Dialog::createTabSelection()
     QSlider* sliderSelectionGripSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionGripSize->setRange(1,20);
     sliderSelectionGripSize->setValue(setting[SELECTION_GRIP_SIZE].dialog.i);
-    connect(sliderSelectionGripSize, SIGNAL(valueChanged(int)), this, SLOT(slider_selection_grip_size_changed(int)));
+    connect(sliderSelectionGripSize, SIGNAL(valueChanged(int)), this, DIALOG_INT_SLOT(SELECTION_GRIP_SIZE));
 
     QLabel* labelSelectionPickBoxSize = new QLabel(translate("Pickbox Size"), groupBoxSelectionSizes);
     QSlider* sliderSelectionPickBoxSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionPickBoxSize->setRange(1,20);
     sliderSelectionPickBoxSize->setValue(setting[SELECTION_PICKBOX_SIZE].dialog.i);
-    connect(sliderSelectionPickBoxSize, SIGNAL(valueChanged(int)), this, SLOT(slider_selection_pick_box_size_changed(int)));
+    connect(sliderSelectionPickBoxSize, SIGNAL(valueChanged(int)), this, DIALOG_INT_SLOT(SELECTION_PICKBOX_SIZE));
 
     QVBoxLayout* vboxLayoutSelectionSizes = new QVBoxLayout(groupBoxSelectionSizes);
     vboxLayoutSelectionSizes->addWidget(labelSelectionGripSize);
@@ -8749,14 +8755,11 @@ choose_mdi_bg_texture(void)
 
 /* . */
 void
-Settings_Dialog::chooseColor(int key)
+chooseColor(QWidget *parent, QPushButton *button, int key)
 {
-    QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (!button) {
-        return;
-    }
-    QColorDialog* colorDialog = new QColorDialog(QColor(setting[key].accept.i), this);
-    connect(colorDialog, &QColorDialog::currentColorChanged, this,
+    QColorDialog* colorDialog = new QColorDialog(QColor(setting[key].accept.i),
+        parent);
+    QObject::connect(colorDialog, &QColorDialog::currentColorChanged, parent,
         [=](const QColor& color) { preview_interface_color(key, color.rgb()); });
     colorDialog->exec();
 
@@ -8778,10 +8781,8 @@ Settings_Dialog::check_custom_filter_changed(int checked)
     if (!checkBox) {
         return;
     }
-    EmbString message;
     QString format = checkBox->text();
-    sprintf(message, "CustomFilter: %s %d", qPrintable(format), checked);
-    debug_message(message);
+    debug_message("CustomFilter: %s %d", qPrintable(format), checked);
     if (checked) {
         strcat(setting[OPENSAVE_CUSTOM_FILTER].dialog.s,
             qPrintable(" *." + format.toLower()));
@@ -8903,6 +8904,4 @@ Settings_Dialog::rejectChanges()
     update_view();
     reject();
 }
-
-#include "widgets.moc"
 

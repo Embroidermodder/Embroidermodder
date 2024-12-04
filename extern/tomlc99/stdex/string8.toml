@@ -1,3 +1,0 @@
-# apos15 = '''Here are fifteen apostrophes: ''''''''''''''''''  # INVALID
-apos15 = "Here are fifteen apostrophes: '''''''''''''''"
-

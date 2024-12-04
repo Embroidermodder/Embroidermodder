@@ -11,6 +11,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -55,18 +56,18 @@ doc_init(int32_t doc)
 
     data->panDistance = 10; /* TODO: should there be a setting for this??? */
 
-    data->grippingActive = false;
-    data->rapidMoveActive = false;
+    data->properties[VIEW_GRIPPING] = false;
+    data->properties[VIEW_RAPID_MOVING] = false;
     data->previewMode = PREVIEW_NULL;
     data->previewData = 0;
-    data->previewActive = false;
-    data->pastingActive = false;
-    data->movingActive = false;
-    data->selectingActive = false;
-    data->zoomWindowActive = false;
-    data->panningRealTimeActive = false;
-    data->panningPointActive = false;
-    data->panningActive = false;
+    data->properties[VIEW_PREVIEWING] = false;
+    data->properties[VIEW_PASTING] = false;
+    data->properties[VIEW_MOVING] = false;
+    data->properties[VIEW_SELECTING] = false;
+    data->properties[VIEW_ZOOMING] = false;
+    data->properties[VIEW_PANNING_RT] = false;
+    data->properties[VIEW_PANNING_POINT] = false;
+    data->properties[VIEW_PANNING] = false;
     data->qSnapActive = false;
     data->qSnapToggle = false;
 
@@ -79,12 +80,12 @@ doc_init(int32_t doc)
     data->pickBoxSize = get_int(SELECTION_PICKBOX_SIZE);
 
     /* TODO: set up config */
-    data->enableRuler = true;
-    data->enableGrid = true;
-    data->enableOrtho = false;
-    data->enablePolar = false;
-    data->enable_lwt = false;
-    data->enableRuler = true;
+    data->properties[VIEW_RULER] = true;
+    data->properties[VIEW_GRID] = true;
+    data->properties[VIEW_ORTHO] = false;
+    data->properties[VIEW_POLAR] = false;
+    data->properties[VIEW_LWT] = false;
+    data->properties[VIEW_RULER] = true;
 
     /* Randomize the hot grip location initially so it's not located at (0,0). */
     srand(time(NULL));
@@ -136,132 +137,13 @@ doc_clear_selection(int32_t doc)
     data->selectedItems->count = 0;
 }
 
-/* TODO: finish this */
-void
-doc_toggle_snap(int32_t doc, bool on)
-{
-    debug_message("View toggleSnap()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enableSnap = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* TODO: finish this */
-void
-doc_toggle_polar(int32_t doc, bool on)
-{
-    debug_message("View togglePolar()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enablePolar = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* TODO: finish this */
-void
-doc_toggle_ortho(int32_t doc, bool on)
-{
-    debug_message("View toggleOrtho()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enableOrtho = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* TODO: finish this */
-void
-doc_toggle_qtrack(int32_t doc, bool on)
-{
-    debug_message("View toggleQTrack()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enableQTrack = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_toggle_lwt(int32_t doc, bool on)
-{
-    debug_message("View toggle_lwt()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enable_lwt = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_toggle_real(int32_t doc, bool on)
-{
-    debug_message("View toggleReal()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enable_real = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_toggle_qsnap(int32_t doc, bool on)
-{
-    debug_message("View toggleQSnap()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->qSnapToggle = on;
-    data->enableQSnap = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_zoom_in(int32_t doc)
-{
-    debug_message("View zoomIn()");
-    if (!doc_allow_zoom_in(doc)) {
-        return;
-    }
-    wait_cursor();
-    EmbVector cntr = doc_map_to_scene(doc, doc_center(doc));
-    EmbReal s = get_real(DISPLAY_ZOOMSCALE_IN);
-    doc_scale(s, s);
-
-    doc_center_on(doc, cntr);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_zoom_out(int32_t doc)
-{
-    debug_message("View zoomOut()");
-    if (!doc_allow_zoom_out(doc)) {
-        return;
-    }
-    wait_cursor();
-    EmbVector cntr = doc_map_to_scene(doc, doc_center(doc));
-    EmbReal s = get_real(DISPLAY_ZOOMSCALE_OUT);
-    doc_scale(doc, s);
-
-    doc_center_on(doc, cntr);
-    restore_cursor();
-}
-
 /* . */
 void
 doc_zoom_window(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    data->zoomWindowActive = true;
-    data->selectingActive = false;
+    data->properties[VIEW_ZOOMING] = true;
+    data->properties[VIEW_SELECTING] = false;
     doc_clear_selection(doc);
 }
 
@@ -293,13 +175,13 @@ doc_preview_on(int32_t doc, int clone, int mode, EmbReal x, EmbReal y, EmbReal d
         data->previewPoint.x = x;
         data->previewPoint.y = y; /* NOTE: Move: basePt; Rotate: basePt; Scale: basePt; */
         data->previewData = data_;           /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
-        data->previewActive = true;
+        data->properties[VIEW_PREVIEWING] = true;
     }
     else {
         data->previewMode = PREVIEW_NULL;
         data->previewPoint = emb_vector(0.0, 0.0);
         data->previewData = 0;
-        data->previewActive = false;
+        data->properties[VIEW_PREVIEWING] = false;
     }
 
     doc_update(doc);
@@ -319,7 +201,7 @@ doc_preview_off(int32_t doc)
         data->previewObjectList->count = 0;
     }
 
-    data->previewActive = false;
+    data->properties[VIEW_PREVIEWING] = false;
 
     doc_update(doc);
 }
@@ -344,7 +226,7 @@ doc_cut(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
     if (data->selectedItems->count <= 0) {
-        information_box(translate("Cut Preselect"),
+        messagebox("information", translate("Cut Preselect"),
             translate("Preselect objects before invoking the cut command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
     }
@@ -360,21 +242,21 @@ void
 doc_create_grid(int32_t doc, EmbString gridType)
 {
     DocumentData *data = doc_data(doc);
-    if (string_equal(gridType, "Rectangular")) {
+    if (!strcmp(gridType, "Rectangular")) {
         doc_create_grid_rect(doc);
-        data->enableGrid = true;
+        data->properties[VIEW_GRID] = true;
     }
-    else if (string_equal(gridType, "Circular")) {
+    else if (!strcmp(gridType, "Circular")) {
         doc_create_grid_polar(doc);
-        data->enableGrid = true;
+        data->properties[VIEW_GRID] = true;
     }
-    else if (string_equal(gridType, "Isometric")) {
+    else if (!strcmp(gridType, "Isometric")) {
         doc_create_grid_iso(doc);
-        data->enableGrid = true;
+        data->properties[VIEW_GRID] = true;
     }
     else {
         doc_empty_grid(doc);
-        data->enableGrid = false;
+        data->properties[VIEW_GRID] = false;
     }
 
     doc_create_origin(doc);
@@ -398,34 +280,14 @@ open_recent_file(void)
 
 /* . */
 void
-statusbar_toggle(EmbString key, bool on)
+statusbar_toggle(const char *key, bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
     int32_t doc = active_document();
     if (doc < 0) {
         return;
     }
-    if (string_equal(key, "SNAP")) {
-        doc_toggle_snap(doc, on);
-    }
-    else if (string_equal(key, "GRID")) {
-        doc_toggle_grid(doc, on);
-    }
-    else if (string_equal(key, "RULER")) {
-        doc_toggle_ruler(doc, on);
-    }
-    else if (string_equal(key, "ORTHO")) {
-        doc_toggle_ortho(doc, on);
-    }
-    else if (string_equal(key, "POLAR")) {
-        doc_toggle_polar(doc, on);
-    }
-    else if (string_equal(key, "QSNAP")) {
-        doc_toggle_qsnap(doc, on);
-    }
-    else if (string_equal(key, "LWT")) {
-        doc_toggle_lwt(doc, on);
-    }
+    doc_toggle(doc, key, on);
 }
 
 /* . */
@@ -434,7 +296,7 @@ doc_copy(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
     if (data->selectedItems->count <= 0) {
-        information_box(translate("Copy Preselect"),
+        messagebox("information", translate("Copy Preselect"),
             translate("Preselect objects before invoking the copy command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
     }
@@ -531,22 +393,6 @@ doc_center_at(int32_t doc, EmbVector centerPoint)
 }
 
 /* . */
-void
-doc_pan_real_time(int32_t doc)
-{
-    DocumentData *data = doc_data(doc);
-    data->panningRealTimeActive = true;
-}
-
-/* . */
-void
-doc_pan_point(int32_t doc)
-{
-    DocumentData *data = doc_data(doc);
-    data->panningPointActive = true;
-}
-
-/* . */
 bool
 doc_allow_zoom_in(int32_t doc)
 {
@@ -557,9 +403,7 @@ doc_allow_zoom_in(int32_t doc)
     EmbReal maxHeight = corner.y - origin.y;
 
     if (EMB_MIN(maxWidth, maxHeight) < zoomInLimit) {
-        char message[MAX_STRING_LENGTH];
-        sprintf(message, "ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
-        debug_message(message);
+        debug_message("ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
         return false;
     }
 
@@ -577,9 +421,7 @@ doc_allow_zoom_out(int32_t doc)
     EmbReal maxHeight = corner.y - origin.y;
 
     if (EMB_MAX(maxWidth, maxHeight) > zoomOutLimit) {
-        char message[MAX_STRING_LENGTH];
-        sprintf(message, "ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
-        debug_message(message);
+        debug_message("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
         return false;
     }
 
@@ -588,18 +430,10 @@ doc_allow_zoom_out(int32_t doc)
 
 /* . */
 void
-doc_enable_move_rapid_fire(int32_t doc)
+doc_set_prop(int32_t doc, int key, bool value)
 {
     DocumentData *data = doc_data(doc);
-    data->rapidMoveActive = true;
-}
-
-/* . */
-void
-doc_disable_move_rapid_fire(int32_t doc)
-{
-    DocumentData *data = doc_data(doc);
-    data->rapidMoveActive = false;
+    data->properties[key] = value;
 }
 
 /* . */
@@ -640,32 +474,74 @@ doc_set_cross_hair_color(int32_t doc, uint32_t color)
 
 /* . */
 void
-doc_toggle_grid(int32_t doc, bool on)
+doc_toggle(int32_t doc, const char *key, bool on)
 {
-    debug_message("View toggle_grid()");
+    debug_message("doc_toggle(%d, %s, %d)", doc, key, on);
+    DocumentData *data = doc_data(doc);
     wait_cursor();
-    if (on) {
-        doc_create_grid(doc, get_str(GRID_TYPE));
+
+    if (!strcmp(key, "GRID")) {
+        if (on) {
+            doc_create_grid(doc, get_str(GRID_TYPE));
+        }
+        else {
+            doc_create_grid(doc, "");
+        }
     }
-    else {
-        doc_create_grid(doc, "");
+    if (!strcmp(key, "RULER")) {
+        data->properties[VIEW_RULER] = on;
+        data->rulerMetric = get_bool(RULER_METRIC);
+        data->rulerColor = get_int(RULER_COLOR);
+        data->rulerPixelSize = get_int(RULER_PIXEL_SIZE);
     }
+    if (!strcmp(key, "SNAP")) {    
+        /* TODO: finish this */
+        data->properties[VIEW_SNAP] = on;
+    }
+    if (!strcmp(key, "POLAR")) {    
+        /* TODO: finish this */
+        data->properties[VIEW_POLAR] = on;
+    }
+    if (!strcmp(key, "ORTHO")) {
+        /* TODO: finish this */
+        data->properties[VIEW_ORTHO] = on;
+    }
+    if (!strcmp(key, "QTRACK")) {
+        /* TODO: finish this */
+        data->properties[VIEW_QTRACK] = on;
+    }
+    if (!strcmp(key, "LWT")) {
+        data->properties[VIEW_LWT] = on;
+    }
+    if (!strcmp(key, "REAL")) {
+        data->properties[VIEW_REAL] = on;
+    }
+    if (!strcmp(key, "QSNAP")) {
+        data->properties[VIEW_QSNAP] = on;
+    }
+
+    doc_update(doc);
     restore_cursor();
 }
 
-/* . */
+/* Stop any active interactions the user is engaged in. */
 void
-doc_toggle_ruler(int32_t doc, bool on)
+doc_stop(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    debug_message("View toggle_ruler()");
-    wait_cursor();
-    data->enableRuler = on;
-    data->rulerMetric = get_bool(RULER_METRIC);
-    data->rulerColor = get_int(RULER_COLOR);
-    data->rulerPixelSize = get_int(RULER_PIXEL_SIZE);
-    doc_update(doc);
-    restore_cursor();
+    if (data->properties[VIEW_PASTING]) {
+        remove_paste_object_item_group(doc);
+    }
+    data->properties[VIEW_PASTING] = false;
+    data->properties[VIEW_ZOOMING] = false;
+    data->properties[VIEW_SELECTING] = false;
+    hide_selectbox(doc);
+    if (data->properties[VIEW_GRIPPING]) {
+        doc_stop_gripping(doc, false);
+    }
+    else {
+        doc_clear_selection(doc);
+    }
 }
 
 /* . */
@@ -673,15 +549,7 @@ void
 doc_delete_pressed(int32_t doc)
 {
     debug_message("View delete_pressed()");
-    DocumentData *data = doc_data(doc);
-    if (data->pastingActive) {
-        remove_paste_object_item_group(doc);
-    }
-    data->pastingActive = false;
-    data->zoomWindowActive = false;
-    data->selectingActive = false;
-    hide_selectbox(doc);
-    doc_stop_gripping(doc, false);
+    doc_stop(doc);
     doc_delete_selected(doc);
 }
 
@@ -690,20 +558,7 @@ void
 doc_escape_pressed(int32_t doc)
 {
     debug_message("View escape_pressed()");
-    DocumentData *data = doc_data(doc);
-    if (data->pastingActive) {
-        remove_paste_object_item_group(doc);
-    }
-    data->pastingActive = false;
-    data->zoomWindowActive = false;
-    data->selectingActive = false;
-    hide_selectbox(doc);
-    if (data->grippingActive) {
-        doc_stop_gripping(doc, false);
-    }
-    else {
-        doc_clear_selection(doc);
-    }
+    doc_stop(doc);
 }
 
 /* . */
@@ -755,7 +610,7 @@ doc_move_selected(int32_t doc, EmbVector delta)
 
 /* . */
 void
-doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot)
+doc_rotate_selected(int32_t doc, EmbVector v, EmbReal rot)
 {
     DocumentData *data = doc_data(doc);
     if (data->selectedItems->count > 1) {
@@ -767,7 +622,6 @@ doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot)
         ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
         EmbString msg;
         sprintf(msg, "%s 1 %s", translate("Rotate"), core->OBJ_NAME);
-        EmbVector v = emb_vector(x, y);
         undoable_rotate(doc, data->selectedItems->data[i], v, msg);
     }
     if (data->selectedItems->count > 1) {

@@ -11,10 +11,42 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "core.h"
 
-EmbString lastCmd = "help";
+char lastCmd[MAX_STRING_LENGTH] = "help";
+
+/* BUG: combine with other labels in libembroidery */
+const char *geometry_type_keys[] = {
+    "ARC",
+    "BLOCK",
+    "CIRCLE",
+    "DIMALIGNED",
+    "DIMANGULAR",
+    "DIMARCLENGTH",
+    "DIMDIAMETER",
+    "DIMLEADER",
+    "DIMLINEAR",
+    "DIMORDINATE",
+    "DIMRADIUS",
+    "ELLIPSE",
+    "ELLIPSEARC",
+    "HATCH",
+    "IMAGE",
+    "INFINITELINE",
+    "LINE",
+    "PATH",
+    "POINT",
+    "POLYGON",
+    "POLYLINE",
+    "RAY",
+    "RECTANGLE",
+    "SPLINE",
+    "TEXTMULTI",
+    "TEXTSINGLE",
+    END_SYMBOL
+};
 
 /* . */
 void
@@ -24,39 +56,12 @@ check_for_updates(void)
     /* TODO: Check website for new versions, commands, etc... */
 }
 
-void
-check_box_tip_of_the_day_changed(int checked)
-{
-    set_bool(GENERAL_TIP_OF_THE_DAY, checked);
-}
-
-/* . */
-bool
-is_shift_pressed(void)
-{
-    return shiftKeyPressedState;
-}
-
 /* . */
 void
-set_shift_pressed(void)
-{
-    shiftKeyPressedState = true;
-}
-
-/* . */
-void
-set_shift_released(void)
-{
-    shiftKeyPressedState = false;
-}
-
-/* . */
-void
-set_visibility_group(EmbStringTable keylist, bool visibility)
+set_visibility_group(char *keylist[], bool visibility)
 {
     int i;
-    int n = string_array_length(keylist);
+    int n = table_length(keylist);
     for (i=0; i<n; i++) {
         set_visibility(keylist[i], visibility);
     }
@@ -64,10 +69,10 @@ set_visibility_group(EmbStringTable keylist, bool visibility)
 
 /* . */
 void
-set_enabled_group(EmbStringTable keylist, bool enabled)
+set_enabled_group(char *keylist[], bool enabled)
 {
     int i;
-    int n = string_array_length(keylist);
+    int n = table_length(keylist);
     for (i=0; i<n; i++) {
         set_enabled(keylist[i], enabled);
     }
@@ -78,7 +83,7 @@ void
 make_layer_active(void)
 {
     debug_message("make_layer_active()");
-    todo("Implement make_layer_active.");
+    debug_message("TODO: Implement make_layer_active.");
 }
 
 /* . */
@@ -86,39 +91,33 @@ void
 layer_previous(void)
 {
     debug_message("layer_previous()");
-    todo("Implement layer_previous.");
+    debug_message("TODO: Implement layer_previous.");
 }
 
 /* . */
 void
 layer_selector_changed(int index)
 {
-    EmbString message;
-    sprintf(message, "layer_selector_changed(%d)", index);
-    debug_message(message);
+    debug_message("layer_selector_changed(%d)", index);
 }
 
 /* . */
 void
 linetype_selector_changed(int index)
 {
-    EmbString message;
-    sprintf(message, "linetype_selector_changed(%d)", index);
-    debug_message(message);
+    debug_message("linetype_selector_changed(%d)", index);
 }
 
 /* . */
 void
 lineweight_selector_changed(int index)
 {
-    char message[MAX_STRING_LENGTH];
-    sprintf(message, "lineweight_selector_changed(%d)", index);
-    debug_message(message);
+    debug_message("lineweight_selector_changed(%d)", index);
 }
 
 /* . */
 void
-current_layer_changed(EmbString layer)
+current_layer_changed(char *layer)
 {
     int doc = active_document();
     if (doc < 0) {
@@ -142,7 +141,7 @@ current_color_changed(uint32_t color)
 
 /* . */
 void
-current_linetype_changed(EmbString type)
+current_linetype_changed(char *type)
 {
     int doc = active_document();
     if (doc < 0) {
@@ -154,7 +153,7 @@ current_linetype_changed(EmbString type)
 
 /* . */
 void
-current_lineweight_changed(EmbString weight)
+current_lineweight_changed(char *weight)
 {
     int doc = active_document();
     if (doc < 0) {
@@ -236,21 +235,18 @@ update_all_view_ruler_colors(uint32_t color)
 ScriptValue
 run_command(ScriptEnv *context, const char *cmd)
 {
-    char message[MAX_STRING_LENGTH];
     int id = get_command_id((char*)cmd);
     int doc_index = 0;
     ScriptValue value = script_true;
-    sprintf(message, "run_command(%s) %d", cmd, id);
-    debug_message(message);
+    debug_message("run_command(%s) %d", cmd, id);
 
     if (id < 0) {
-        sprintf(message, "ERROR: %s not found in command_data.", cmd);
-        debug_message(message);
+        debug_message("ERROR: %s not found in command_data.", cmd);
         return script_false;
     }
 
     if (!argument_checks(context, id)) {
-        /* TODO: error */
+        debug_message("Failed argument checks.");
         return script_false;
     }
 
@@ -269,7 +265,7 @@ run_command(ScriptEnv *context, const char *cmd)
         //doc_clear_selection(doc_index);
     }
 
-    switch (command_data[id].id) {
+    switch (id) {
     case ACTION_ABOUT:
         about_dialog();
         break;
@@ -316,7 +312,7 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_DEBUG:
-        append_history(STR(0));
+        prompt_output(STR(0));
         break;
 
     case ACTION_DESIGN_DETAILS:
@@ -329,10 +325,10 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_DISABLE: {
-        if (string_equal(STR(0), "MOVERAPIDFIRE")) {
-            doc_disable_move_rapid_fire(doc_index);
+        if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
+            doc_set_prop(doc_index, VIEW_RAPID_MOVING, false);
         }
-        if (string_equal(STR(0), "PROMPTRAPIDFIRE")) {
+        if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
             disable_rapid_fire();
         }
         break;
@@ -342,10 +338,10 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_ENABLE: {
-        if (string_equal(STR(0), "MOVERAPIDFIRE")) {
-            doc_enable_move_rapid_fire(doc_index);
+        if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
+            doc_set_prop(doc_index, VIEW_RAPID_MOVING, true);
         }
-        if (string_equal(STR(0), "PROMPTRAPIDFIRE")) {
+        if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
             enable_rapid_fire();
         }
         break;
@@ -458,7 +454,7 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_TODO: {
-        todo(STR(0));
+        debug_message("TODO: %s", STR(0));
         break;
     }
 
@@ -496,17 +492,20 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_MAKE_LAYER_CURRENT:
+    case ACTION_MAKE_LAYER_CURRENT: {
         /* make_layer_active(); */
         break;
+    }
 
-    case ACTION_LAYERS:
+    case ACTION_LAYERS: {
         /* layer_manager(); */
         break;
+    }
 
-    case ACTION_LAYER_SELECTOR:
+    case ACTION_LAYER_SELECTOR: {
         /* TODO: layer_selector */
         break;
+    }
 
     case ACTION_LAYER_PREVIOUS:
         /* TODO: layer_previous */
@@ -570,7 +569,7 @@ run_command(ScriptEnv *context, const char *cmd)
             /* TODO: Prompt to select objects if nothing is preselected. */
             prompt_output(
             translate("Preselect objects before invoking the delete command."));
-            information_box(translate("Delete Preselect"),
+            messagebox("information", translate("Delete Preselect"),
                 translate("Preselect objects before invoking the delete command."));
         }
         else {
@@ -580,9 +579,7 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_ERROR: {
-        EmbString s;
-        sprintf(s, "ERROR: (%s) %s", STR(0), STR(1));
-        prompt_output(s);
+        debug_message("ERROR: (%s) %s", STR(0), STR(1));
         break;
     }
 
@@ -643,7 +640,7 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_ROTATE: {
-        doc_rotate_selected(doc_index, REAL(0), -REAL(1), -REAL(2));
+        doc_rotate_selected(doc_index, unpack_vector(context, 0), -REAL(2));
         break;
     }
 
@@ -690,27 +687,27 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_PAN_REAL_TIME: {
-        doc_pan_real_time(doc_index);
+        doc_set_prop(doc_index, VIEW_PANNING_RT, true);
         break;
     }
     case ACTION_PAN_POINT: {
-        doc_pan_point(doc_index);
+        doc_set_prop(doc_index, VIEW_PANNING_POINT, true);
         break;
     }
     case ACTION_PAN_LEFT: {
-        doc_pan_left(doc_index);
+        doc_nav("PanLeft", doc_index);
         break;
     }
     case ACTION_PAN_RIGHT: {
-        doc_pan_right(doc_index);
+        doc_nav("PanRight", doc_index);
         break;
     }
     case ACTION_PAN_UP: {
-        doc_pan_up(doc_index);
+        doc_nav("PanUp", doc_index);
         break;
     }
     case ACTION_PAN_DOWN: {
-        doc_pan_down(doc_index);
+        doc_nav("PanDown", doc_index);
         break;
     }
 
@@ -741,46 +738,47 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_ZOOM_ALL: {
-        todo("Implement zoomAll.");
+        debug_message("TODO: Implement zoomAll.");
         break;
     }
 
     case ACTION_ZOOM_CENTER: {
-        todo("Implement zoomCenter.");
+        debug_message("TODO: Implement zoomCenter.");
         break;
     }
 
     case ACTION_ZOOM_DYNAMIC: {
-        todo("Implement zoomDynamic.");
+        debug_message("TODO: Implement zoomDynamic.");
         break;
     }
 
     case ACTION_ZOOM_EXTENTS: {
-        doc_zoom_extents(doc_index);
+        doc_nav("ZoomExtents", doc_index);
         break;
     }
+
     case ACTION_ZOOM_IN: {
-        doc_zoom_in(doc_index);
+        doc_nav("ZoomIn", doc_index);
         break;
     }
     case ACTION_ZOOM_OUT: {
-        doc_zoom_out(doc_index);
-        break;
-    }
-    case ACTION_ZOOM_PREVIOUS: {
-        todo("Implement zoomPrevious.");
-        break;
-    }
-    case ACTION_ZOOM_REAL_TIME: {
-        todo("Implement zoomRealtime.");
-        break;
-    }
-    case ACTION_ZOOM_SCALE: {
-        todo("Implement zoomScale.");
+        doc_nav("ZoomOut", doc_index);
         break;
     }
     case ACTION_ZOOM_SELECTED: {
-        doc_zoom_selected(doc_index);
+        doc_nav("ZoomSelected", doc_index);
+        break;
+    }
+    case ACTION_ZOOM_PREVIOUS: {
+        debug_message("TODO: Implement zoomPrevious.");
+        break;
+    }
+    case ACTION_ZOOM_REAL_TIME: {
+        debug_message("TODO: Implement zoomRealtime.");
+        break;
+    }
+    case ACTION_ZOOM_SCALE: {
+        debug_message("TODO: Implement zoomScale.");
         break;
     }
     case ACTION_ZOOM_WINDOW: {
@@ -839,11 +837,9 @@ run_command(ScriptEnv *context, const char *cmd)
 void
 run_command_main(const char *cmd)
 {
-    EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MAIN;
-    sprintf(message, "run_command_main(%s)", cmd);
-    debug_message(message);
+    debug_message("run_command_main(%s)", cmd);
     /* TODO: Uncomment this when post-selection is available. */
     /*
     if (!get_bool(SELECTION_MODE_PICKFIRST)) {
@@ -859,11 +855,9 @@ run_command_main(const char *cmd)
 void
 run_command_click(const char *cmd, EmbReal x, EmbReal y)
 {
-    EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CLICK;
-    sprintf(message, "run_command_click(%s, %.2f, %.2f)", cmd, x, y);
-    debug_message(message);
+    debug_message("run_command_click(%s, %.2f, %.2f)", cmd, x, y);
     /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
     run_command(context, cmd);
     free_script_env(context);
@@ -874,11 +868,9 @@ run_command_click(const char *cmd, EmbReal x, EmbReal y)
 void
 run_command_move(const char *cmd, EmbReal x, EmbReal y)
 {
-    EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MOVE;
-    sprintf(message, "run_command_move(%s, %.2f, %.2f)", cmd, x, y);
-    debug_message(message);
+    debug_message("run_command_move(%s, %.2f, %.2f)", cmd, x, y);
     /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
     run_command(context, cmd);
     free_script_env(context);
@@ -889,11 +881,9 @@ run_command_move(const char *cmd, EmbReal x, EmbReal y)
 void
 run_command_context(const char *cmd, const char *str)
 {
-    EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CONTEXT;
-    sprintf(message, "run_command_context(%s, %s)", cmd, str);
-    debug_message(message);
+    debug_message("run_command_context(%s, %s)", cmd, str);
     /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
     run_command(context, cmd);
     free_script_env(context);
@@ -905,10 +895,8 @@ run_command_context(const char *cmd, const char *str)
 void
 run_command_prompt(const char *cmd)
 {
-    EmbString message;
     ScriptEnv *context = create_script_env();
-    sprintf(message, "run_command_prompt(%s)", cmd);
-    debug_message(message);
+    debug_message("run_command_prompt(%s)", cmd);
     context->context = CONTEXT_PROMPT;
     if (rapidFireEnabled) {
         run_command(context, cmd);
@@ -944,7 +932,7 @@ pick_add_mode_toggled(void)
 void
 stub_testing(void)
 {
-    warning_box(translate("Testing Feature"),
+    messagebox("warning", translate("Testing Feature"),
         translate("<b>This feature is in testing.</b>"));
 }
 
@@ -1002,7 +990,7 @@ set_rubber_mode(int mode)
 
 /* . */
 void
-set_rubber_point(const EmbString key, EmbReal x, EmbReal y)
+set_rubber_point(const char *key, EmbReal x, EmbReal y)
 {
     int32_t doc_index = active_document();
     if (doc_index >= 0) {
@@ -1013,7 +1001,7 @@ set_rubber_point(const EmbString key, EmbReal x, EmbReal y)
 
 /* . */
 void
-set_rubber_text(const EmbString key, EmbString txt)
+set_rubber_text(const char *key, char *txt)
 {
     int32_t doc_index = active_document();
     if (doc_index >= 0) {
@@ -1045,83 +1033,17 @@ native_q_snap_y(void)
     return data->sceneQSnapPoint.y;
 }
 
-void
-enable_lwt(void)
-{
-    debug_message("StatusBarButton enable_lwt()");
-    int32_t doc = active_document();
-    if (doc >= 0) {
-        doc_toggle_lwt(doc, true);
-    }
-}
-
-void
-disable_lwt(void)
-{
-    debug_message("StatusBarButton disable_lwt()");
-    int32_t doc = active_document();
-    if (doc >= 0) {
-        doc_toggle_lwt(doc, false);
-    }
-}
-
-void
-enable_real(void)
-{
-    debug_message("StatusBarButton enable_real()");
-    int32_t doc = active_document();
-    if (doc >= 0) {
-        doc_toggle_real(doc, true);
-    }
-}
-
-void
-disable_real(void)
-{
-    debug_message("StatusBarButton disable_real()");
-    int32_t doc = active_document();
-    if (doc >= 0) {
-        doc_toggle_real(doc, false);
-    }
-}
-
 /* . */
 void
-toggle_grid(void)
+toggle(int mode)
 {
-    debug_message("toggle_grid()");
+    debug_message("toggle()");
     int doc = active_document();
     if (doc < 0) {
         return;
     }
     DocumentData *data = doc_data(doc);
-    data->enableGrid = !data->enableGrid;
-}
-
-/* . */
-void
-toggle_ruler(void)
-{
-    debug_message("toggle_ruler()");
-    int doc = active_document();
-    if (doc < 0) {
-        return;
-    }
-    DocumentData *data = doc_data(doc);
-    data->enableRuler = !data->enableRuler;
-}
-
-/* . */
-void
-toggle_lwt(void)
-{
-    debug_message("toggle_lwt()");
-    int doc = active_document();
-    if (doc < 0) {
-        return;
-    }
-    DocumentData *data = doc_data(doc);
-    data->enable_lwt = !data->enable_lwt;
+    data->properties[mode] = !data->properties[mode];
 }
 
 /* . */
@@ -1220,49 +1142,49 @@ set_command(ScriptEnv* context)
         return script_false;
     }
 
-    if (string_equal(STR(0), "TEXTANGLE")) {
+    if (!strcmp(STR(0), "TEXTANGLE")) {
         if (context->argument[1].type != SCRIPT_REAL) {
             return script_false;
         }
         set_real(TEXT_ANGLE, REAL(1));
     }
-    else if (string_equal(STR(0), "TEXTBOLD")) {
+    else if (!strcmp(STR(0), "TEXTBOLD")) {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
         set_bool(TEXT_STYLE_BOLD, BOOL(1));
     }
-    else if (string_equal(STR(0), "TEXTITALIC")) {
+    else if (!strcmp(STR(0), "TEXTITALIC")) {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
         set_bool(TEXT_STYLE_ITALIC, BOOL(1));
     }
-    else if (string_equal(STR(0), "TEXTFONT")) {
+    else if (!strcmp(STR(0), "TEXTFONT")) {
         if (context->argument[1].type != SCRIPT_STRING) {
             return script_false;
         }
         set_str(TEXT_FONT, STR(1));
     }
-    else if (string_equal(STR(0), "TEXTOVERLINE")) {
+    else if (!strcmp(STR(0), "TEXTOVERLINE")) {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
         set_bool(TEXT_STYLE_OVERLINE, BOOL(1));
     }
-    else if (string_equal(STR(0), "TEXTSIZE")) {
+    else if (!strcmp(STR(0), "TEXTSIZE")) {
         if (context->argument[1].type != SCRIPT_REAL) {
             return script_false;
         }
         set_real(TEXT_SIZE, REAL(1));
     }
-    else if (string_equal(STR(0), "TEXTSTRIKEOUT")) {
+    else if (!strcmp(STR(0), "TEXTSTRIKEOUT")) {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
         set_bool(TEXT_STYLE_STRIKEOUT, BOOL(1));
     }
-    else if (string_equal(STR(0), "TEXTUNDERLINE")) {
+    else if (!strcmp(STR(0), "TEXTUNDERLINE")) {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
@@ -1319,7 +1241,7 @@ distance_command(ScriptEnv *context)
         */
         break;
     case CONTEXT_CONTEXT:
-        /* todo("DISTANCE", "context()"); */
+        debug_message("TODO: DISTANCE", "context()");
         break;
     case CONTEXT_PROMPT:
         /*
@@ -1390,7 +1312,7 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
-        information_box(translate("Move Preselect"),
+        messagebox("information", translate("Move Preselect"),
             translate("Preselect objects before invoking the move command."));
     }
     else {
@@ -1421,7 +1343,7 @@ click(EmbVector v)
 
 void context(str)
 {
-    todo("MOVE", "context()");
+    debug_message("TODO: MOVE", "context()");
 }
 
 void prompt(str)
@@ -1460,7 +1382,7 @@ void prompt(str)
 
 /* . */
 void
-set_prompt_font_family(EmbString family)
+set_prompt_font_family(char *family)
 {
     set_str(PROMPT_FONT_FAMILY, family);
     prompt_update_style();
@@ -1468,7 +1390,7 @@ set_prompt_font_family(EmbString family)
 
 /* . */
 void
-set_prompt_font_style(EmbString style)
+set_prompt_font_style(char *style)
 {
     set_str(PROMPT_FONT_STYLE, style);
     prompt_update_style();
@@ -1488,19 +1410,19 @@ scale_command(ScriptEnv * context)
 {
     switch (context->context) {
     case CONTEXT_MAIN: {
-        todo("SCALE main()");
+        debug_message("TODO: SCALE main()");
         break;
     }
     case CONTEXT_CLICK: {
-        todo("SCALE click()");
+        debug_message("TODO: SCALE click()");
         break;
     }
     case CONTEXT_CONTEXT: {
-        todo("SCALE context()");
+        debug_message("TODO: SCALE context()");
         break;
     }
     case CONTEXT_PROMPT: {
-        todo("SCALE prompt()");
+        debug_message("TODO: SCALE prompt()");
         break;
     }
     default:
@@ -1528,7 +1450,8 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected */
         alert(translate("Preselect objects before invoking the scale command."));
         end_command();
-        information_box(translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
+        messagebox("information", translate("Scale Preselect"),
+            translate("Preselect objects before invoking the scale command."));
     }
     else {
         prompt_output(translate("Specify base point: "));
@@ -1770,7 +1693,8 @@ sandbox_command(ScriptEnv * context)
         doc_mirror_selected(doc, 0, 0, 0, 1);
 
         doc_select_all(doc);
-        doc_rotate_selected(doc, 0, 0, 90);
+        EmbVector position = emb_vector(0.0, 0.0);
+        doc_rotate_selected(doc, position, 90.0);
 
         /* Polyline & Polygon Testing */
         EmbVector offset = emb_vector(0.0, 0.0);
@@ -1843,7 +1767,7 @@ rotate_command(ScriptEnv * context)
     case CONTEXT_CLICK:
         break;
     case CONTEXT_CONTEXT: {
-        todo("ROTATE context()");
+        debug_message("TODO: ROTATE context()");
         break;
     }
     case CONTEXT_PROMPT:
@@ -1873,7 +1797,7 @@ main()
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the rotate command."));
         end_command();
-        information_box(translate("Rotate Preselect"),
+        messagebox("information", translate("Rotate Preselect"),
             translate("Preselect objects before invoking the rotate command."));
     }
     else {
@@ -2058,7 +1982,7 @@ rgb_command(ScriptEnv *context)
         /* Do Nothing, prompt only command. */
         break;
     case CONTEXT_CONTEXT:
-        /* todo("RGB", "context()"); */
+        debug_message("TODO: RGB", "context()");
         break;
     }
 
@@ -2278,37 +2202,6 @@ set_rubber_text_command(ScriptEnv* context)
     return script_null;
 }
 
-/* BUG: combine with other labels in libembroidery */
-const char *geometry_type_keys[] = {
-    "ARC",
-    "BLOCK",
-    "CIRCLE",
-    "DIMALIGNED",
-    "DIMANGULAR",
-    "DIMARCLENGTH",
-    "DIMDIAMETER",
-    "DIMLEADER",
-    "DIMLINEAR",
-    "DIMORDINATE",
-    "DIMRADIUS",
-    "ELLIPSE",
-    "ELLIPSEARC",
-    "HATCH",
-    "IMAGE",
-    "INFINITELINE",
-    "LINE",
-    "PATH",
-    "POINT",
-    "POLYGON",
-    "POLYLINE",
-    "RAY",
-    "RECTANGLE",
-    "SPLINE",
-    "TEXTMULTI",
-    "TEXTSINGLE",
-    "END"
-};
-
 /* . */
 ScriptValue
 add_rubber_command(ScriptEnv* context)
@@ -2323,8 +2216,9 @@ add_rubber_command(ScriptEnv* context)
     EmbReal my = run_command(context, "get mousey").r;
 
     int type = -1;
-    for (int i=0; !string_equal(geometry_type_keys[i], "END"); i++) {
-        if (string_equal(STR(0), geometry_type_keys[i])) {
+    int n = table_length(geometry_type_keys);
+    for (int i=0; i<n; i++) {
+        if (!strcmp(STR(0), geometry_type_keys[i])) {
             type = i;
             break;
         }
@@ -2356,7 +2250,7 @@ add_rubber_command(ScriptEnv* context)
         break;
     }
     default: {
-        todo("handle this type");
+        debug_message("TODO: handle this type");
         break;
     }
     case -1: {
@@ -2372,58 +2266,58 @@ add_rubber_command(ScriptEnv* context)
 ScriptValue
 set_rubber_mode_command(ScriptEnv* context)
 {
-    if (string_equal(STR(0),"CIRCLE_1P_RAD")) {
+    if (!strcmp(STR(0),"CIRCLE_1P_RAD")) {
         set_rubber_mode(RUBBER_CIRCLE_1P_RAD);
     }
-    else if (string_equal(STR(0),"CIRCLE_1P_DIA")) {
+    else if (!strcmp(STR(0),"CIRCLE_1P_DIA")) {
         set_rubber_mode(RUBBER_CIRCLE_1P_DIA);
     }
-    else if (string_equal(STR(0),"CIRCLE_2P")) {
+    else if (!strcmp(STR(0),"CIRCLE_2P")) {
         set_rubber_mode(RUBBER_CIRCLE_2P);
     }
-    else if (string_equal(STR(0),"CIRCLE_3P")) {
+    else if (!strcmp(STR(0),"CIRCLE_3P")) {
         set_rubber_mode(RUBBER_CIRCLE_3P);
     }
-    else if (string_equal(STR(0),"CIRCLE_TTR")) {
+    else if (!strcmp(STR(0),"CIRCLE_TTR")) {
         set_rubber_mode(RUBBER_CIRCLE_TTR);
     }
-    else if (string_equal(STR(0),"CIRCLE_TTT")) {
+    else if (!strcmp(STR(0),"CIRCLE_TTT")) {
         set_rubber_mode(RUBBER_CIRCLE_TTT);
     }
-    else if (string_equal(STR(0),"DIMLEADER_LINE")) {
+    else if (!strcmp(STR(0),"DIMLEADER_LINE")) {
         set_rubber_mode(RUBBER_DIMLEADER_LINE);
     }
-    else if (string_equal(STR(0),"ELLIPSE_LINE")) {
+    else if (!strcmp(STR(0),"ELLIPSE_LINE")) {
         set_rubber_mode(RUBBER_ELLIPSE_LINE);
     }
-    else if (string_equal(STR(0),"ELLIPSE_MAJDIA_MINRAD")) {
+    else if (!strcmp(STR(0),"ELLIPSE_MAJDIA_MINRAD")) {
         set_rubber_mode(RUBBER_ELLIPSE_MAJDIA_MINRAD);
     }
-    else if (string_equal(STR(0),"ELLIPSE_MAJRAD_MINRAD")) {
+    else if (!strcmp(STR(0),"ELLIPSE_MAJRAD_MINRAD")) {
         set_rubber_mode(RUBBER_ELLIPSE_MAJRAD_MINRAD);
     }
-    else if (string_equal(STR(0),"ELLIPSE_ROTATION")) {
+    else if (!strcmp(STR(0),"ELLIPSE_ROTATION")) {
         set_rubber_mode(RUBBER_ELLIPSE_ROTATION);
     }
-    else if (string_equal(STR(0),"LINE")) {
+    else if (!strcmp(STR(0),"LINE")) {
         set_rubber_mode(RUBBER_LINE);
     }
-    else if (string_equal(STR(0),"POLYGON")) {
+    else if (!strcmp(STR(0),"POLYGON")) {
         set_rubber_mode(RUBBER_POLYGON);
     }
-    else if (string_equal(STR(0),"POLYGON_INSCRIBE")) {
+    else if (!strcmp(STR(0),"POLYGON_INSCRIBE")) {
         set_rubber_mode(RUBBER_POLYGON_INSCRIBE);
     }
-    else if (string_equal(STR(0),"POLYGON_CIRCUMSCRIBE")) {
+    else if (!strcmp(STR(0),"POLYGON_CIRCUMSCRIBE")) {
         set_rubber_mode(RUBBER_POLYGON_CIRCUMSCRIBE);
     }
-    else if (string_equal(STR(0),"POLYLINE")) {
+    else if (!strcmp(STR(0),"POLYLINE")) {
         set_rubber_mode(RUBBER_POLYLINE);
     }
-    else if (string_equal(STR(0),"RECTANGLE")) {
+    else if (!strcmp(STR(0),"RECTANGLE")) {
         set_rubber_mode(RUBBER_RECTANGLE);
     }
-    else if (string_equal(STR(0),"TEXTSINGLE")) {
+    else if (!strcmp(STR(0),"TEXTSINGLE")) {
         set_rubber_mode(RUBBER_TEXTSINGLE);
     }
     else {
@@ -2447,13 +2341,13 @@ spare_rubber_command(ScriptEnv* context)
         return script_false;
     }
 
-    if (string_equal(STR(0), "PATH")) {
+    if (!strcmp(STR(0), "PATH")) {
         native_spare_rubber(SPARE_RUBBER_PATH);
     }
-    else if (string_equal(STR(0), "POLYGON")) {
+    else if (!strcmp(STR(0), "POLYGON")) {
         native_spare_rubber(SPARE_RUBBER_POLYGON);
     }
-    else if (string_equal(STR(0), "POLYLINE")) {
+    else if (!strcmp(STR(0), "POLYLINE")) {
         native_spare_rubber(SPARE_RUBBER_POLYLINE);
     }
     else {
@@ -2517,23 +2411,16 @@ locatepoint_command(ScriptEnv *context)
 ScriptValue
 messagebox_command(ScriptEnv* context)
 {
-    if (string_equal(STR(0), "critical")) {
-        critical_box(STR(1), STR(2));
-    }
-    else if (string_equal(STR(0), "information")) {
-        information_box(STR(1), STR(2));
-    }
-    else if (string_equal(STR(0), "question")) {
-        question_box(STR(1), STR(2));
-    }
-    else if (string_equal(STR(0), "warning")) {
-        warning_box(STR(1), STR(2));
-    }
-    else {
+    if (!( (!strcmp(STR(0), "critical"))
+        || (!strcmp(STR(0), "information"))
+        || (!strcmp(STR(0), "question"))
+        || (!strcmp(STR(0), "warning"))
+        )) {
         prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
         return script_false;
     }
 
+    messagebox(STR(0), STR(1), STR(2));
     return script_null;
 }
 
@@ -2559,9 +2446,7 @@ append_prompt_history(ScriptEnv* context)
 ScriptValue
 get_command(ScriptEnv* context)
 {
-    EmbString message;
-
-    if (string_equal(STR(0), "MOUSEX")) {
+    if (!strcmp(STR(0), "MOUSEX")) {
         /* TODO: detect error */
         int32_t doc = active_document();
         if (doc < 0) {
@@ -2569,11 +2454,10 @@ get_command(ScriptEnv* context)
         }
         DocumentData *data = doc_data(doc);
         ScriptValue r = script_real(data->sceneMousePoint.x);
-        sprintf(message, "mouseY: %.50f", r.r);
-        debug_message(message);
+        debug_message("mouseY: %.50f", r.r);
         return r;
     }
-    else if (string_equal(STR(0), "MOUSEY")) {
+    else if (!strcmp(STR(0), "MOUSEY")) {
         /* TODO: detect error */
         int32_t doc = active_document();
         if (doc < 0) {
@@ -2581,38 +2465,37 @@ get_command(ScriptEnv* context)
         }
         DocumentData *data = doc_data(doc);
         ScriptValue r = script_real(data->sceneMousePoint.y);
-        sprintf(message, "mouseY: %.50f", r.r);
-        debug_message(message);
+        debug_message("mouseY: %.50f", r.r);
         return r;
     }
-    else if (string_equal(STR(0), "TEXTANGLE")) {
+    else if (!strcmp(STR(0), "TEXTANGLE")) {
         return setting[TEXT_ANGLE].setting;
     }
-    else if (string_equal(STR(0), "TEXTBOLD")) {
+    else if (!strcmp(STR(0), "TEXTBOLD")) {
         return setting[TEXT_STYLE_BOLD].setting;
     }
-    else if (string_equal(STR(0), "TEXTITALIC")) {
+    else if (!strcmp(STR(0), "TEXTITALIC")) {
         return setting[TEXT_STYLE_ITALIC].setting;
     }
-    else if (string_equal(STR(0), "TEXTFONT")) {
+    else if (!strcmp(STR(0), "TEXTFONT")) {
         return setting[TEXT_FONT].setting;
     }
-    else if (string_equal(STR(0), "TEXTOVERLINE")) {
+    else if (!strcmp(STR(0), "TEXTOVERLINE")) {
         return setting[TEXT_STYLE_OVERLINE].setting;
     }
-    else if (string_equal(STR(0), "TEXTSIZE")) {
+    else if (!strcmp(STR(0), "TEXTSIZE")) {
         return setting[TEXT_SIZE].setting;
     }
-    else if (string_equal(STR(0), "TEXTSTRIKEOUT")) {
+    else if (!strcmp(STR(0), "TEXTSTRIKEOUT")) {
         return setting[TEXT_STYLE_STRIKEOUT].setting;
     }
-    else if (string_equal(STR(0), "TEXTUNDERLINE")) {
+    else if (!strcmp(STR(0), "TEXTUNDERLINE")) {
         return setting[TEXT_STYLE_UNDERLINE].setting;
     }
-    else if (string_equal(STR(0), "QSNAPX")) {
+    else if (!strcmp(STR(0), "QSNAPX")) {
         return script_bool(native_q_snap_x());
     }
-    else if (string_equal(STR(0), "QSNAPY")) {
+    else if (!strcmp(STR(0), "QSNAPY")) {
         return script_bool(native_q_snap_y());
     }
 
@@ -2624,7 +2507,7 @@ void
 native_scale_selected(EmbReal x, EmbReal y, EmbReal factor)
 {
     if (factor <= 0.0) {
-        critical_box(translate("ScaleFactor Error"),
+        messagebox("critical", translate("ScaleFactor Error"),
             translate("Hi there. If you are not a developer, report this as a bug. "
             "If you are a developer, your code needs examined, and possibly your head too."));
     }
@@ -2671,10 +2554,10 @@ ScriptValue
 previewon_command(ScriptEnv *context)
 {
     int clone = PREVIEW_CLONE_NULL;
-    if (string_equal(STR(0), "SELECTED")) {
+    if (!strcmp(STR(0), "SELECTED")) {
         clone = PREVIEW_CLONE_SELECTED;
     }
-    else if (string_equal(STR(0), "RUBBER")) {
+    else if (!strcmp(STR(0), "RUBBER")) {
         clone = PREVIEW_CLONE_RUBBER;
     }
     else {
@@ -2683,13 +2566,13 @@ previewon_command(ScriptEnv *context)
     }
 
     int mode = PREVIEW_NULL;
-    if (string_equal(STR(1), "MOVE")) {
+    if (!strcmp(STR(1), "MOVE")) {
         mode = PREVIEW_MOVE;
     }
-    else if (string_equal(STR(1), "ROTATE")) {
+    else if (!strcmp(STR(1), "ROTATE")) {
         mode = PREVIEW_ROTATE;
     }
-    else if (string_equal(STR(1), "SCALE")) {
+    else if (!strcmp(STR(1), "SCALE")) {
         mode = PREVIEW_SCALE;
     }
     else {
@@ -2711,9 +2594,7 @@ previewon_command(ScriptEnv *context)
 ScriptValue
 print_area_command(ScriptEnv* context)
 {
-    char message[MAX_STRING_LENGTH];
-    sprintf(message, "native_print_area(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
-    debug_message(message);
+    debug_message("native_print_area(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
     /* TODO: Print Setup Stuff
      * native_print_area(REAL(0), REAL(1), REAL(2), REAL(3));
      */
@@ -2728,7 +2609,7 @@ zoom_extents_all_sub_windows(void)
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
             doc_recalculate_limits(i);
-            doc_zoom_extents(i);
+            doc_nav("ZoomExtents", i);
         }
     }
 }
@@ -2771,20 +2652,13 @@ doc_scaleAction()
 
 /* . */
 void
-prompt_output(const EmbString txt)
-{
-    append_history((char*)txt);
-}
-
-/* . */
-void
 end_command(void)
 {
     int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_clear_rubber_room(doc_index);
         doc_preview_off(doc_index);
-        doc_disable_move_rapid_fire(doc_index);
+        doc_set_prop(doc_index, VIEW_RAPID_MOVING, false);
     }
     prompt_end_command();
 }
@@ -2798,19 +2672,19 @@ create_all_menus(void)
      */
     debug_message("create all menus");
 
-    add_to_menu(MENU_FILE, state.file_menu);
-    add_to_menu(MENU_EDIT, state.edit_menu);
-    add_to_menu(MENU_VIEW, state.view_menu);
-    add_to_menu(MENU_DRAW, state.draw_menu);
-    add_to_menu(MENU_TOOLS, state.tools_menu);
-    add_to_menu(MENU_MODIFY, state.modify_menu);
-    add_to_menu(MENU_DIMENSION, state.dimension_menu);
-    add_to_menu(MENU_SANDBOX, state.sandbox_menu);
-//    add_to_menu(MENU_WINDOW, state.window_menu);
-    add_to_menu(MENU_HELP, state.help_menu);
-//    add_to_menu(MENU_RECENT, state.recent_menu);
-    add_to_menu(MENU_ZOOM, state.zoom_menu);
-    add_to_menu(MENU_PAN, state.pan_menu);
+    add_to_menu(MENU_FILE, file_menu);
+    add_to_menu(MENU_EDIT, edit_menu);
+    add_to_menu(MENU_VIEW, view_menu);
+    add_to_menu(MENU_DRAW, draw_menu);
+    add_to_menu(MENU_TOOLS, tools_menu);
+    add_to_menu(MENU_MODIFY, modify_menu);
+    add_to_menu(MENU_DIMENSION, dimension_menu);
+    add_to_menu(MENU_SANDBOX, sandbox_menu);
+//    add_to_menu(MENU_WINDOW, window_menu);
+    add_to_menu(MENU_HELP, help_menu);
+//    add_to_menu(MENU_RECENT, recent_menu);
+    add_to_menu(MENU_ZOOM, zoom_menu);
+    add_to_menu(MENU_PAN, pan_menu);
 }
 
 /* . */
@@ -2819,12 +2693,12 @@ create_all_toolbars(void)
 {
     debug_message("create all toolbars");
 
-    add_to_toolbar(TOOLBAR_FILE, state.file_toolbar);
-    add_to_toolbar(TOOLBAR_EDIT, state.edit_toolbar);
-    add_to_toolbar(TOOLBAR_ZOOM, state.zoom_toolbar);
-    add_to_toolbar(TOOLBAR_PAN, state.pan_toolbar);
-    add_to_toolbar(TOOLBAR_VIEW, state.view_toolbar);
-    add_to_toolbar(TOOLBAR_ICON, state.icon_toolbar);
-    add_to_toolbar(TOOLBAR_HELP, state.help_toolbar);
+    add_to_toolbar(TOOLBAR_FILE, file_toolbar);
+    add_to_toolbar(TOOLBAR_EDIT, edit_toolbar);
+    add_to_toolbar(TOOLBAR_ZOOM, zoom_toolbar);
+    add_to_toolbar(TOOLBAR_PAN, pan_toolbar);
+    add_to_toolbar(TOOLBAR_VIEW, view_toolbar);
+    add_to_toolbar(TOOLBAR_ICON, icon_toolbar);
+    add_to_toolbar(TOOLBAR_HELP, help_toolbar);
 }
 

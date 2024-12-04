@@ -10,10 +10,12 @@
  * Script
  */
 
+#include <string.h>
+
 #include "core.h"
 
 /* TODO: << "Aligned" << "Fit" */
-EmbStringTable objectTextJustifyList = {
+char *objectTextJustifyList[] = {
     "Left",
     "Center",
     "Right",
@@ -113,11 +115,11 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_IMAGE: {
-        todo("load image data");
+        debug_message("TODO: load image data");
         break;
     }
     case OBJ_INFINITELINE: {
-        todo("load infinite line data");
+        debug_message("TODO: load infinite line data");
         break;
     }
     case EMB_LINE: {
@@ -135,7 +137,7 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_PATH: {
-        todo("load path data");
+        debug_message("TODO: load path data");
         break;
     }
     case EMB_POINT: {
@@ -144,15 +146,15 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_POLYGON: {
-        todo("load polygon data");
+        debug_message("TODO: load polygon data");
         break;
     }
     case EMB_POLYLINE: {
-        todo("load polyline data");
+        debug_message("TODO: load polyline data");
         break;
     }
     case OBJ_RAY: {
-        todo("load ray data");
+        debug_message("TODO: load ray data");
         break;
     }
     case EMB_RECT: {
@@ -175,7 +177,7 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_TEXT_MULTI: {
-        todo("load multiline text data");
+        debug_message("TODO: load multiline text data");
         break;
     }
     case EMB_TEXT_SINGLE: {
@@ -203,27 +205,27 @@ edit_field(int32_t id, const char *label, const char *text)
     EmbGeometry *g = core->geometry;
     switch(core->geometry->type) {
     case EMB_ARC: {
-        if (string_equal(label, "lineEditArcCenterX")) {
+        if (!strcmp(label, "lineEditArcCenterX")) {
             EmbVector arc = obj_center(core);
             EmbVector center;
             center.x = atof(text);
             center.y = arc.y;
             obj_set_center(core, center);
         }
-        if (string_equal(label, "lineEditArcCenterY")) {
+        if (!strcmp(label, "lineEditArcCenterY")) {
             EmbVector arc = obj_center(core);
             EmbVector center;
             center.x = arc.x;
             center.y = -atof(text);
             obj_set_center(core, center);
         }
-        if (string_equal(label, "lineEditArcRadius")) {
+        if (!strcmp(label, "lineEditArcRadius")) {
             emb_set_radius(g, atof(text));
         }
-        if (string_equal(label, "lineEditArcStartAngle")) {
+        if (!strcmp(label, "lineEditArcStartAngle")) {
             emb_set_start_angle(g, atof(text));
         }
-        if (string_equal(label, "lineEditArcEndAngle")) {
+        if (!strcmp(label, "lineEditArcEndAngle")) {
             emb_set_end_angle(g, atof(text));
         }
         break;
@@ -233,22 +235,22 @@ edit_field(int32_t id, const char *label, const char *text)
         break;
     }
     case EMB_CIRCLE: {
-        if (string_equal(label, "lineEditCircleCenterX")) {
+        if (!strcmp(label, "lineEditCircleCenterX")) {
             obj_set_center_x(core, atof(text));
         }
-        if (string_equal(label, "lineEditCircleCenterY")) {
+        if (!strcmp(label, "lineEditCircleCenterY")) {
             obj_set_center_y(core, -atof(text));
         }
-        if (string_equal(label, "lineEditCircleRadius")) {
+        if (!strcmp(label, "lineEditCircleRadius")) {
             emb_set_radius(core->geometry, atof(text));
         }
-        if (string_equal(label, "lineEditCircleDiameter")) {
+        if (!strcmp(label, "lineEditCircleDiameter")) {
             emb_set_diameter(core->geometry, atof(text));
         }
-        if (string_equal(label, "lineEditCircleArea")) {
+        if (!strcmp(label, "lineEditCircleArea")) {
             emb_set_area(core->geometry, atof(text));
         }
-        if (string_equal(label, "lineEditCircleCircumference")) {
+        if (!strcmp(label, "lineEditCircleCircumference")) {
             emb_set_circumference(core->geometry, atof(text));
         }
         break;
@@ -286,22 +288,22 @@ edit_field(int32_t id, const char *label, const char *text)
         break;
     }
     case OBJ_ELLIPSE: {
-        if (string_equal(label, "lineEditEllipseCenterX")) {
+        if (!strcmp(label, "lineEditEllipseCenterX")) {
             obj_set_center_x(core, atof(text));
         }
-        if (string_equal(label, "lineEditEllipseCenterY")) {
+        if (!strcmp(label, "lineEditEllipseCenterY")) {
             obj_set_center_y(core, -atof(text));
         }
-        if (string_equal(label, "lineEditEllipseRadiusMajor")) {
+        if (!strcmp(label, "lineEditEllipseRadiusMajor")) {
             emb_set_radius_major(g, atof(text));
         }
-        if (string_equal(label, "lineEditEllipseRadiusMinor")) {
+        if (!strcmp(label, "lineEditEllipseRadiusMinor")) {
             emb_set_radius_minor(g, atof(text));
         }
-        if (string_equal(label, "lineEditEllipseDiameterMajor")) {
+        if (!strcmp(label, "lineEditEllipseDiameterMajor")) {
             emb_set_diameter_major(g, atof(text));
         }
-        if (string_equal(label, "lineEditEllipseDiameterMinor")) {
+        if (!strcmp(label, "lineEditEllipseDiameterMinor")) {
             emb_set_diameter_minor(g, atof(text));
         }
         break;
@@ -315,16 +317,16 @@ edit_field(int32_t id, const char *label, const char *text)
         break;
     }
     case OBJ_LINE: { 
-        if (string_equal(label, "lineEditLineStartX")) {
+        if (!strcmp(label, "lineEditLineStartX")) {
             obj_set_x1(core, atof(text));
         }
-        if (string_equal(label, "lineEditLineStartY")) {
+        if (!strcmp(label, "lineEditLineStartY")) {
             obj_set_y1(core, -atof(text));
         }
-        if (string_equal(label, "lineEditLineEndX")) {
+        if (!strcmp(label, "lineEditLineEndX")) {
             obj_set_x2(core, atof(text));
         }
-        if (string_equal(label, "lineEditLineEndY")) {
+        if (!strcmp(label, "lineEditLineEndY")) {
             obj_set_y2(core, -atof(text));
         }
         break;
@@ -334,10 +336,10 @@ edit_field(int32_t id, const char *label, const char *text)
         break;
     }
     case OBJ_POINT: {
-        if (string_equal(label, "lineEditPointX")) {
+        if (!strcmp(label, "lineEditPointX")) {
             obj_set_x(core, atof(text));
         }
-        if (string_equal(label, "lineEditPointY")) {
+        if (!strcmp(label, "lineEditPointY")) {
             obj_set_y(core, -atof(text));
         }
         break;
@@ -364,23 +366,23 @@ edit_field(int32_t id, const char *label, const char *text)
     }
     case OBJ_TEXTSINGLE: {
         /* TODO: field editing */
-        if (string_equal(label, "lineEditTextSingleContents")) {
+        if (!strcmp(label, "lineEditTextSingleContents")) {
             obj_set_text(core, text);
             break;
         }
-        if (string_equal(label, "lineEditTextSingleHeight")) {
+        if (!strcmp(label, "lineEditTextSingleHeight")) {
             obj_set_text_size(core, atof(text));
             break;
         }
-        if (string_equal(label, "lineEditTextSingleRotation")) {
+        if (!strcmp(label, "lineEditTextSingleRotation")) {
             obj_set_rotation(core, atof(text));
             break;
         }
-        if (string_equal(label, "lineEditTextSingleX")) {
+        if (!strcmp(label, "lineEditTextSingleX")) {
             obj_set_x(core, atof(text));
             break;
         }
-        if (string_equal(label, "lineEditTextSingleY")) {
+        if (!strcmp(label, "lineEditTextSingleY")) {
             obj_set_y(core, atof(text));
             break;
         }
@@ -476,34 +478,6 @@ show_groups(int objType)
     }
 }
 
-/* . */
-void
-comboBoxLanguageCurrentIndexChanged(EmbString lang)
-{
-    string_copy(setting[GENERAL_LANGUAGE].dialog.s, lang);
-}
-
-/* . */
-void
-comboBoxIconThemeCurrentIndexChanged(EmbString theme)
-{
-    string_copy(setting[GENERAL_ICON_THEME].dialog.s, theme);
-}
-
-/* . */
-void
-spin_box_recent_max_files_changed(int value)
-{
-    setting[OPENSAVE_RECENT_MAX_FILES].dialog.i = value;
-}
-
-/* . */
-void
-spin_box_trim_dst_num_jumps_changed(int value)
-{
-    setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i = value;
-}
-
 void
 spin_box_display_select_box_alpha_changed(int value)
 {
@@ -542,66 +516,19 @@ spin_box_prompt_font_size_changed(int value)
 
 /* . */
 void
-spin_box_ruler_pixel_size_changed(EmbReal value)
-{
-    setting[RULER_PIXEL_SIZE].dialog.r = value;
-}
-
-/* . */
-void
-slider_qsnap_locator_size_changed(int value)
-{
-    setting[QSNAP_LOCATOR_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-slider_qsnap_aperture_size_changed(int value)
-{
-    setting[QSNAP_APERTURE_SIZE].dialog.i = value;
-}
-
-/* . */
-void
 check_box_lwt_real_render_changed(int checked)
 {
     setting[LWT_REAL_RENDER].preview.b = checked;
-    if (setting[LWT_REAL_RENDER].preview.b) {
-        enable_real();
-    }
-    else {
-        disable_real();
-    }
-}
-
-/* . */
-void
-slider_selection_grip_size_changed(int value)
-{
-    setting[SELECTION_GRIP_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-slider_selection_pick_box_size_changed(int value)
-{
-    setting[SELECTION_PICKBOX_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-combo_box_scroll_bar_widget_changed(int index)
-{
-    setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i = index;
+    statusbar_toggle("REAL", setting[LWT_REAL_RENDER].preview.b);
 }
 
 /* NOTE: General group will never be hidden. */
 void
 hide_all_groups(void)
 {
-    for (int i=0; group_box_list[i].id[0] != '.'; i++) {
-        if (string_equal(group_box_list[i].id, "GB_GENERAL")) {
-            hide_widget(group_box_list[i].id, WIDGET_GROUP_BOX);
+    for (int i=0; group_box_list[i].id >= 0; i++) {
+        if (group_box_list[i].id > GB_GENERAL) {
+            hide_widget(group_box_list[i].key, WIDGET_GROUP_BOX);
         }
     }
 }
@@ -610,11 +537,11 @@ hide_all_groups(void)
 void
 clear_all_fields(void)
 {
-    int n = string_array_length(editor_list);
+    int n = table_length(editor_list);
     for (int i=0; i<n; i++) {
         widget_clear(editor_list[i], WIDGET_LINEEDIT);
     }
-    n = string_array_length(combobox_list);
+    n = table_length(combobox_list);
     for (int i=0; i<n; i++) {
         widget_clear(combobox_list[i], WIDGET_COMBOBOX);
     }
@@ -627,7 +554,7 @@ checkBoxGridCenterOnOriginStateChanged(int checked)
 {
     setting[GRID_CENTER_ON_ORIGIN].dialog.b = checked;
 
-    set_enabled_group(state.center_on_origin_group, !checked);
+    set_enabled_group(center_on_origin_group, !checked);
 }
 
 /* . */
@@ -635,13 +562,7 @@ void
 checkBoxLwtShowLwtStateChanged(int checked)
 {
     setting[LWT_SHOW_LWT].preview.b = checked;
-    if (setting[LWT_SHOW_LWT].preview.b) {
-        enable_lwt();
-    }
-    else {
-        disable_lwt();
-    }
-
+    statusbar_toggle("LWT", setting[LWT_SHOW_LWT].preview.b);
     set_enabled("checkBoxRealRender", setting[LWT_SHOW_LWT].preview.b);
 }
 
@@ -653,12 +574,12 @@ accept_settings(void)
         setting[GRID_COLOR].dialog.i = setting[DISPLAY_CROSSHAIR_COLOR].accept.i;
     }
 
-    for (int i=0; state.preview_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
-        copy_setting(state.preview_to_dialog[i], SETTING_DIALOG, SETTING_PREVIEW);
+    for (int i=0; preview_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(preview_to_dialog[i], SETTING_DIALOG, SETTING_PREVIEW);
     }
 
-    for (int i=0; state.accept_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
-        copy_setting(state.accept_to_dialog[i], SETTING_DIALOG, SETTING_ACCEPT);
+    for (int i=0; accept_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(accept_to_dialog[i], SETTING_DIALOG, SETTING_ACCEPT);
     }
 
     for (int i=0; i < N_SETTINGS; i++) {
@@ -677,9 +598,9 @@ comboBoxGridTypeCurrentIndexChanged(const char *type)
 {
     string_copy(setting[GRID_TYPE].dialog.s, type);
 
-    bool visibility = string_equal(type, "Circular");
-    set_visibility_group(state.rectangular_grid_group, !visibility);
-    set_visibility_group(state.circular_grid_group, visibility);
+    bool visibility = !strcmp(type, "Circular");
+    set_visibility_group(rectangular_grid_group, !visibility);
+    set_visibility_group(circular_grid_group, visibility);
 }
 
 /* . */
@@ -705,10 +626,10 @@ checkBoxGridLoadFromFileStateChanged(int checked)
     setting[GRID_LOAD_FROM_FILE].dialog.b = checked;
 
     bool dont_load = !setting[GRID_LOAD_FROM_FILE].dialog.b;
-    set_enabled_group(state.grid_load_from_file_group, dont_load);
+    set_enabled_group(grid_load_from_file_group, dont_load);
 
     bool use_this_origin = !setting[GRID_LOAD_FROM_FILE].dialog.b && !setting[GRID_CENTER_ON_ORIGIN].dialog.b;
-    set_enabled_group(state.defined_origin_group, use_this_origin);
+    set_enabled_group(defined_origin_group, use_this_origin);
 }
 
 

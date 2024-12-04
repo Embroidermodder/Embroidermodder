@@ -40,16 +40,53 @@ endif()
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
+set(LIBEMB ${CMAKE_SOURCE_DIR}/extern/libembroidery/src)
 set(TRANSLATION ${CMAKE_SOURCE_DIR}/src/translations)
 
-add_subdirectory(extern/libembroidery)
+add_subdirectory(extern/glfw)
 
-include_directories(extern/glfw)
+set(LIBRARY_SRC
+	${LIBEMB}/pattern.c
+	${LIBEMB}/compress.c
+	${LIBEMB}/formats.c
+	${LIBEMB}/geometry.c
+	${LIBEMB}/script.c
+	${LIBEMB}/testing.c
+	${LIBEMB}/internal.h
+	${LIBEMB}/embroidery.h
+	${LIBEMB}/data/arc_polyester_colors.c
+	${LIBEMB}/data/arc_rayon_colors.c
+	${LIBEMB}/data/coats_and_clark_rayon_colors.c
+	${LIBEMB}/data/dxf_colors.c
+	${LIBEMB}/data/exquisite_polyester_colors.c
+	${LIBEMB}/data/fufu_polyester_colors.c
+	${LIBEMB}/data/fufu_rayon_colors.c
+	# ${LIBEMB}/data/hemingworth_polyester_colors.c
+	${LIBEMB}/data/hus_colors.c
+	# ${LIBEMB}/data/isacord_polyester_colors.c
+	# ${LIBEMB}/data/isafil_rayon_colors.c
+	${LIBEMB}/data/jef_colors.c
+	# ${LIBEMB}/data/madeira_polyester_colors.c
+	# ${LIBEMB}/data/madeira_rayon_colors.c
+	# ${LIBEMB}/data/marathon_polyester_colors.c
+	# ${LIBEMB}/data/marathon_rayon_colors.c
+	# ${LIBEMB}/data/metro_polyester_colors.c
+	# ${LIBEMB}/data/pantone_colors.c
+	${LIBEMB}/data/pcm_colors.c
+	${LIBEMB}/data/pec_colors.c
+	# ${LIBEMB}/data/robison_anton_polyester_colors.c
+	# ${LIBEMB}/data/robison_anton_rayon_colors.c
+	${LIBEMB}/data/shv_colors.c
+	# ${LIBEMB}/data/sigma_polyester_colors.c
+	# ${LIBEMB}/data/sulky_rayon_colors.c
+	${LIBEMB}/data/svg_colors.c
+	# ${LIBEMB}/data/thread_art_polyester_colors.c
+	# ${LIBEMB}/data/thread_art_rayon_colors.c
+	# ${LIBEMB}/data/threadelight_polyester_colors.c
+	# ${LIBEMB}/data/z102_isacord_polyester_colors.c
+)
 
 qt_add_executable(embroidermodder2
-	${SRC}/widgets.cpp
-	${SRC}/wrapper.cpp
-
 	${EXTERN}/nanovg/src/nanovg.c
 	${EXTERN}/nanovg/src/nanovg.h
 
@@ -78,10 +115,9 @@ qt_add_executable(embroidermodder2
 	${TRANSLATION}/swedish.c
 	${TRANSLATION}/turkish.c
 
-	${SRC}/commands_table.c
-	${SRC}/settings_table.c
-	${SRC}/editors_table.c
-	${SRC}/state.c
+	${LIBRARY_SRC}
+
+	${SRC}/widgets.cpp
 
 	${SRC}/commands.c
 	${SRC}/document.c
@@ -90,13 +126,12 @@ qt_add_executable(embroidermodder2
 	${SRC}/grip.c
 	${SRC}/objects.c
 	${SRC}/properties.c
-	${SRC}/prompt.c
-	${SRC}/settings.c
 	${SRC}/script.c
+	${SRC}/state.c
 	${SRC}/xpm.c
 
 	${SRC}/constants.h
-	${SRC}/wrapper.h
+	${SRC}/widgets.h
 	${SRC}/core.h
 )
 
@@ -112,7 +147,6 @@ include_directories(
 
 target_link_libraries(embroidermodder2 PRIVATE
 	glfw
-	embroidery_static
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport
