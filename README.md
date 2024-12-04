@@ -92,21 +92,9 @@ $(CC) -o embroidermodder2 \
 
 ## Help Files
 
-The help files for Embroidermodder 2 are part of the website and are maintained
-as a seperate repository. To get up-to date versions use the commands:
-
-```
-git submodule init
-git submodule update
-```
-
-If you downloaded a zip file of the Embroidermodder source rather than using git,
-you will need to:
-
-- Download the [help files](https://github.com/Embroidermodder/userman/archive/master.zip)
-- Unzip the archive
-- Rename the "Embroidermodder.github.io-master" directory to "help"
-- Copy the "help" directory to "Embroidermodder-master/embroidermodder2/help"
+A copy of the reference manual and user manual will be included in the source code in
+`docs/` folder. Currently these are works in progress and aren't usable. Some notes that
+may be helpful are in markdown files in this directory.
 
 ## Sample Files
 
