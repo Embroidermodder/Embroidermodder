@@ -43,8 +43,7 @@ set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(TRANSLATION ${CMAKE_SOURCE_DIR}/src/translations)
 
 add_subdirectory(extern/libembroidery)
-
-include_directories(extern/glfw)
+add_subdirectory(extern/glfw)
 
 qt_add_executable(embroidermodder2
 	${SRC}/widgets.cpp
@@ -81,8 +80,8 @@ qt_add_executable(embroidermodder2
 	${SRC}/commands_table.c
 	${SRC}/settings_table.c
 	${SRC}/editors_table.c
-	${SRC}/state.c
 
+	${SRC}/config.c
 	${SRC}/commands.c
 	${SRC}/document.c
 	${SRC}/interface.c
@@ -93,6 +92,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/prompt.c
 	${SRC}/settings.c
 	${SRC}/script.c
+	${SRC}/state.c
 	${SRC}/xpm.c
 
 	${SRC}/constants.h

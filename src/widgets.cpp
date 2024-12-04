@@ -666,7 +666,8 @@ tip_of_the_day(void)
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
     checkBoxTipOfTheDay->setChecked(get_bool(GENERAL_TIP_OF_THE_DAY));
-    QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main, SLOT(check_box_tip_of_the_day_changed(int)));
+    QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main,
+        SLOT([](int checked) { set_bool(GENERAL_TIP_OF_THE_DAY, checked); }));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
     layout->addWidget(imgBanner);
@@ -858,8 +859,6 @@ update_pick_add_mode(bool val)
 }
 
 /* Layer ToolBar */
-
-/* . */
 void
 layer_manager(void)
 {
@@ -1068,9 +1067,8 @@ set_cursor_shape(EmbString shape)
 /* Simple Commands (other commands, like circle_command are housed in their
  * own file with their associated functions)
  * ------------------------------------------------------------------------
- */
-
-/* TODO: QTabWidget for about dialog
+ *
+ * TODO: QTabWidget for about dialog
  */
 void
 about_dialog(void)
@@ -1321,29 +1319,19 @@ UndoableCommand::redo()
         else if (string_equal(data.navType, "ZoomOutToPoint")) {
             doc_zoom_to_point(data.doc, d->viewMousePoint, -1);
         }
-        else if (string_equal(data.navType, "ZoomExtents")) {
-            doc_zoom_extents(data.doc);
-        }
-        else if (string_equal(data.navType, "ZoomSelected")) {
-            doc_zoom_selected(data.doc);
-        }
         else if (string_equal(data.navType, "PanStart")) {
             /* Do Nothing. We are just recording the spot where the pan started. */
         }
         else if (string_equal(data.navType, "PanStop")) {
             /* Do Nothing. We are just recording the spot where the pan stopped. */
         }
-        else if (string_equal(data.navType, "PanLeft")) {
-            doc_pan_left(data.doc);
-        }
-        else if (string_equal(data.navType, "PanRight")) {
-            doc_pan_right(data.doc);
-        }
-        else if (string_equal(data.navType, "PanUp")) {
-            doc_pan_up(data.doc);
-        }
-        else if (string_equal(data.navType, "PanDown")) {
-            doc_pan_down(data.doc);
+        else if (string_equal(data.navType, "ZoomSelected")
+            || string_equal(data.navType, "ZoomExtents")
+            || string_equal(data.navType, "PanLeft")
+            || string_equal(data.navType, "PanRight")
+            || string_equal(data.navType, "PanUp")
+            || string_equal(data.navType, "PanDown")) {
+            doc_nav(data.navType, data.doc);
         }
         toTransform = documents[data.doc]->transform();
         data.toCenter = doc_center(data.doc);
@@ -2646,29 +2634,30 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
 {
     Document* doc = new Document(mw, theScene, parent);
     documents[numOfDocs] = doc;
-    doc->data = (DocumentData*)malloc(sizeof(DocumentData));
+    DocumentData* data = (DocumentData*)malloc(sizeof(DocumentData));
+    doc->data = data;
     doc_init(numOfDocs);
-    doc->data->id = numOfDocs;
+    data->id = numOfDocs;
     doc->gscene = theScene;
-    document_memory[doc->data->id] = true;
+    document_memory[data->id] = true;
 
-    doc_set_cross_hair_color(doc->data->id, get_int(DISPLAY_CROSSHAIR_COLOR));
-    doc_set_cross_hair_size(doc->data->id, get_int(DISPLAY_CROSSHAIR_PERCENT));
-    doc_set_grid_color(doc->data->id, get_int(GRID_COLOR));
+    doc_set_cross_hair_color(data->id, get_int(DISPLAY_CROSSHAIR_COLOR));
+    doc_set_cross_hair_size(data->id, get_int(DISPLAY_CROSSHAIR_PERCENT));
+    doc_set_grid_color(data->id, get_int(GRID_COLOR));
 
-    doc_toggle_ruler(doc->data->id, get_bool(RULER_SHOW_ON_LOAD));
-    doc_toggle_real(doc->data->id, true);
+    doc_toggle(data->id, "RULER", get_bool(RULER_SHOW_ON_LOAD));
+    doc_toggle(data->id, "REAL", true);
     /* TODO: load this from file, else settings with default being true. */
 
     if (get_bool(GRID_SHOW_ON_LOAD)) {
-        doc_create_grid(doc->data->id, get_str(GRID_TYPE));
+        doc_create_grid(data->id, get_str(GRID_TYPE));
     }
     else {
-        doc_create_grid(doc->data->id, "");
+        doc_create_grid(data->id, "");
     }
 
-    doc_show_scroll_bars(doc->data->id, get_bool(DISPLAY_SHOW_SCROLLBARS));
-    doc_set_corner_button(doc->data->id);
+    doc_show_scroll_bars(data->id, get_bool(DISPLAY_SHOW_SCROLLBARS));
+    doc_set_corner_button(data->id);
 
     doc->setFrameShape(QFrame::NoFrame);
 
@@ -3780,119 +3769,95 @@ doc_scale(int32_t doc_id, EmbReal s)
     doc->scale(s, s);
 }
 
-/* . */
+/* Covers navigation:
+ *     ZoomIn, ZoomOut, ZoomExtents, ZoomSelected
+ *     PanLeft, PanRight, PanUp, PanRight.
+ */
 void
-doc_zoom_selected(int32_t doc_id)
+doc_nav(char *label, int32_t doc_id)
 {
     Document *doc = documents[doc_id];
-    QUndoStack* stack = active_undo_stack();
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected",
-            doc->data->id, 0);
-        stack->push(cmd);
-    }
-
+    EmbString message;
+    sprintf(message, "doc_nav(%s, %d)", label, doc_id);
+    debug_message(message);
     wait_cursor();
-    EmbIdList *itemList = doc->data->selectedItems;
-    QPainterPath selectedRectPath;
-    for (int i=0; i<itemList->count; i++) {
-        Object *item = get_obj(itemList->data[i]);
-        selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
+
+    if (string_equal(label, "ZoomIn")) {
+        if (!doc_allow_zoom_in(doc_id)) {
+            return;
+        }
+        EmbVector cntr = doc_map_to_scene(doc_id, doc_center(doc_id));
+        EmbReal s = get_real(DISPLAY_ZOOMSCALE_IN);
+        doc_scale(doc_id, s);
+
+        doc_center_on(doc_id, cntr);
+        restore_cursor();
+        return;
     }
-    QRectF selectedRect = selectedRectPath.boundingRect();
-    if (selectedRect.isNull()) {
-        information_box(translate("ZoomSelected Preselect"),
-            translate("Preselect objects before invoking the zoomSelected command."));
-        /* TODO: Support Post selection of objects */
+    if (string_equal(label, "ZoomOut")) {
+        if (!doc_allow_zoom_out(doc_id)) {
+            return;
+        }
+        EmbVector cntr = doc_map_to_scene(doc_id, doc_center(doc_id));
+        EmbReal s = get_real(DISPLAY_ZOOMSCALE_OUT);
+        doc_scale(doc_id, s);
+
+        doc_center_on(doc_id, cntr);
+        restore_cursor();
+        return;
     }
-    doc->fitInView(selectedRect, Qt::KeepAspectRatio);
+
+    QUndoStack* stack = active_undo_stack();
+    DocumentData *data = doc_data(doc_id);
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, label, doc_id, 0);
+        stack->push(cmd);
+    }
+
+    if (string_equal(label, "ZoomSelected")) {
+        EmbIdList *itemList = data->selectedItems;
+        QPainterPath selectedRectPath;
+        for (int i=0; i<itemList->count; i++) {
+            Object *item = get_obj(itemList->data[i]);
+            selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
+        }
+        QRectF selectedRect = selectedRectPath.boundingRect();
+        if (selectedRect.isNull()) {
+            information_box(translate("ZoomSelected Preselect"),
+                translate("Preselect objects before invoking the zoomSelected command."));
+            /* TODO: Support Post selection of objects */
+        }
+        doc->fitInView(selectedRect, Qt::KeepAspectRatio);
+    }
+    if (string_equal(label, "ZoomExtents")) {
+        QRectF extents = doc->gscene->itemsBoundingRect();
+        if (extents.isNull()) {
+            extents.setWidth(get_real(GRID_SIZE_X));
+            extents.setHeight(get_real(GRID_SIZE_Y));
+            extents.moveCenter(QPointF(0,0));
+        }
+        doc->fitInView(extents, Qt::KeepAspectRatio);
+    }
+    if (string_equal(label, "PanLeft")) {
+        double value = doc->horizontalScrollBar()->value();
+        doc->horizontalScrollBar()->setValue(value + data->panDistance);
+    }
+    if (string_equal(label, "PanRight")) {
+        double value = doc->horizontalScrollBar()->value();
+        doc->horizontalScrollBar()->setValue(value - data->panDistance);
+    }
+    if (string_equal(label, "PanUp")) {
+        double value = doc->verticalScrollBar()->value();
+        doc->verticalScrollBar()->setValue(value + data->panDistance);
+    }
+    if (string_equal(label, "PanDown")) {
+        double value = doc->verticalScrollBar()->value();
+        doc->verticalScrollBar()->setValue(value - data->panDistance);
+    }
+
+    doc_update_mouse_coords(doc_id, data->viewMousePoint.x, data->viewMousePoint.y);
+    doc_update(doc_id);
     restore_cursor();
-}
-
-/* . */
-void
-doc_zoom_extents(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", doc, 0);
-        stack->push(cmd);
-    }
-
-    wait_cursor();
-    QRectF extents = documents[doc]->gscene->itemsBoundingRect();
-    if (extents.isNull()) {
-        extents.setWidth(get_real(GRID_SIZE_X));
-        extents.setHeight(get_real(GRID_SIZE_Y));
-        extents.moveCenter(QPointF(0,0));
-    }
-    documents[doc]->fitInView(extents, Qt::KeepAspectRatio);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_pan_left(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    DocumentData *data = doc_data(doc);
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", doc, 0);
-        stack->push(cmd);
-    }
-
-    documents[doc]->horizontalScrollBar()->setValue(documents[doc]->horizontalScrollBar()->value() + data->panDistance);
-    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
-    doc_update(doc);
-}
-
-/* . */
-void
-doc_pan_right(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    DocumentData *data = doc_data(doc);
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", doc, 0);
-        stack->push(cmd);
-    }
-
-    documents[doc]->horizontalScrollBar()->setValue(documents[doc]->horizontalScrollBar()->value() - data->panDistance);
-    doc_update_mouse_coords(doc, data->viewMousePoint.x,
-        data->viewMousePoint.y);
-    doc_update(doc);
-}
-
-/* . */
-void
-doc_pan_up(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    DocumentData *data = doc_data(doc);
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", doc, 0);
-        stack->push(cmd);
-    }
-
-    documents[doc]->verticalScrollBar()->setValue(documents[doc]->verticalScrollBar()->value() + data->panDistance);
-    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
-    doc_update(doc);
-}
-
-/* . */
-void
-doc_pan_down(int32_t doc)
-{
-    QUndoStack* stack = active_undo_stack();
-    DocumentData *data = doc_data(doc);
-    if (stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", doc, 0);
-        stack->push(cmd);
-    }
-
-    documents[doc]->verticalScrollBar()->setValue(documents[doc]->verticalScrollBar()->value() - data->panDistance);
-    doc_update_mouse_coords(doc, data->viewMousePoint.x, data->viewMousePoint.y);
-    doc_update(doc);
 }
 
 /* . */
@@ -4005,7 +3970,7 @@ Document::mousePressEvent(QMouseEvent* event)
             path.addPolygon(documents[doc]->mapToScene(documents[doc]->selectBox->geometry()));
             if (data->sceneReleasePoint.x > data->scenePressPoint.x) {
                 if (get_bool(SELECTION_MODE_PICKADD)) {
-                    if (is_shift_pressed()) {
+                    if (shiftKeyPressedState) {
                         QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList) {
                             item->setSelected(false);
@@ -4019,7 +3984,7 @@ Document::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (is_shift_pressed()) {
+                    if (shiftKeyPressedState) {
                         QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::ContainsItemShape);
                         if (!itemList.size()) {
                             doc_clear_selection(doc);
@@ -4040,7 +4005,7 @@ Document::mousePressEvent(QMouseEvent* event)
             }
             else {
                 if (get_bool(SELECTION_MODE_PICKADD)) {
-                    if (is_shift_pressed()) {
+                    if (shiftKeyPressedState) {
                         QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -4052,7 +4017,7 @@ Document::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (is_shift_pressed()) {
+                    if (shiftKeyPressedState) {
                         QList<QGraphicsItem*> itemList = documents[doc]->gscene->items(path, Qt::IntersectsItemShape);
                         if (!itemList.size())
                             doc_clear_selection(doc);
@@ -4812,12 +4777,14 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         if (doc >= 0) {
             QAction* enable_realAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
             enable_realAction->setEnabled(!documents[doc]->data->enable_real);
-            QObject::connect(enable_realAction, &QAction::triggered, _main, enable_real);
+            QObject::connect(enable_realAction, SIGNAL(triggered), _main,
+                SLOT([=](void) { statusbar_toggle("REAL", true); }));
             menu.addAction(enable_realAction);
 
             QAction* disable_realAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
             disable_realAction->setEnabled(documents[doc]->data->enable_real);
-            QObject::connect(disable_realAction, &QAction::triggered, _main, disable_real);
+            QObject::connect(disable_realAction, SIGNAL(triggered), _main,
+                SLOT([=](void) { statusbar_toggle("REAL", false); }));
             menu.addAction(disable_realAction);
         }
 
@@ -6262,8 +6229,10 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(undoPressed()), this, SLOT(undo()));
     connect(prompt, SIGNAL(redoPressed()), this, SLOT(redo()));
 
-    connect(prompt, SIGNAL(shiftPressed()), this, SLOT(set_shift_pressed()));
-    connect(prompt, SIGNAL(shiftReleased()), this, SLOT(set_shift_released()));
+    connect(prompt, SIGNAL(shiftPressed), this,
+        SLOT([=](void) { shiftKeyPressedState = true; }));
+    connect(prompt, SIGNAL(shiftReleased), this,
+        SLOT([=](void) { shiftKeyPressedState = false; }));
 
     connect(prompt, SIGNAL(showSettings()), this, SLOT(settings_prompt()));
 
@@ -6530,7 +6499,7 @@ new_file(void)
     int32_t doc_index = mdiWin->doc_index;
     if (doc_index) {
         doc_recalculate_limits(doc_index);
-        doc_zoom_extents(doc_index);
+        doc_nav("ZoomExtents", doc_index);
     }
 }
 
@@ -6632,7 +6601,7 @@ open_filesSelected(EmbStringTable filesToOpen)
             int32_t doc_index = mdiWin->doc_index;
             if (doc_index) {
                 doc_recalculate_limits(doc_index);
-                doc_zoom_extents(doc_index);
+                doc_nav("ZoomExtents", doc_index);
             }
         }
         else {
@@ -6824,7 +6793,6 @@ update_interface()
             statusBarButtons[i]->hide();
         }
     }
-    hide_unimplemented();
 }
 
 /* . */
@@ -6911,29 +6879,31 @@ void
 MainWindow::floatingChangedToolBar(bool isFloating)
 {
     QToolBar* tb = qobject_cast<QToolBar*>(sender());
-    if (tb) {
-        if (isFloating) {
-            /* TODO: Determine best suited close button on various platforms. */
-            /*
-            QStyle::SP_DockWidgetCloseButton
-            QStyle::SP_TitleBarCloseButton
-            QStyle::SP_DialogCloseButton
-            */
-            QAction *ACTION = new QAction(tb->style()->standardIcon(QStyle::SP_DialogCloseButton), "Close", this);
-            ACTION->setStatusTip("Close the " + tb->windowTitle() + " Toolbar");
-            ACTION->setObjectName("toolbarclose");
-            tb->addAction(ACTION);
-            connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
-        }
-        else {
-            QList<QAction*> actList = tb->actions();
-            for (int i = 0; i < actList.size(); ++i) {
-                QAction* ACTION = actList[i];
-                if (ACTION->objectName() == "toolbarclose") {
-                    tb->removeAction(ACTION);
-                    disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
-                    delete ACTION;
-                }
+    if (!tb) {
+        /* TODO: error report */
+        return;
+    }
+    if (isFloating) {
+        /* TODO: Determine best suited close button on various platforms. */
+        /*
+        QStyle::SP_DockWidgetCloseButton
+        QStyle::SP_TitleBarCloseButton
+        QStyle::SP_DialogCloseButton
+        */
+        QAction *ACTION = new QAction(tb->style()->standardIcon(QStyle::SP_DialogCloseButton), "Close", this);
+        ACTION->setStatusTip("Close the " + tb->windowTitle() + " Toolbar");
+        ACTION->setObjectName("toolbarclose");
+        tb->addAction(ACTION);
+        connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+    }
+    else {
+        QList<QAction*> actList = tb->actions();
+        for (int i = 0; i < actList.size(); ++i) {
+            QAction* ACTION = actList[i];
+            if (ACTION->objectName() == "toolbarclose") {
+                tb->removeAction(ACTION);
+                disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+                delete ACTION;
             }
         }
     }
@@ -6944,9 +6914,9 @@ QAction*
 get_action_by_icon(EmbString icon)
 {
     int i;
-    for (i=0; command_data[i].id != -2; i++) {
+    for (i=0; i < n_commands; i++) {
         if (string_equal(command_data[i].icon, icon)) {
-            return actionHash[command_data[i].id];
+            return actionHash[i];
         }
     }
     return actionHash[ACTION_DO_NOTHING];
@@ -7113,7 +7083,7 @@ void
 create_all_actions(void)
 {
     debug_message("Creating All Actions...");
-    for (int i=0; command_data[i].id != -2; i++) {
+    for (int i=0; i < n_commands; i++) {
         QString icon(command_data[i].icon);
         QString toolTip(command_data[i].tooltip);
         QString statusTip(command_data[i].statustip);
@@ -7141,7 +7111,8 @@ create_all_actions(void)
         string_copy(aliasHash[n_aliases].key, command_data[i].icon);
         string_copy(aliasHash[n_aliases].value, command_data[i].icon);
         n_aliases++;
-        actionHash[command_data[i].id] = ACTION;
+
+        actionHash[i] = ACTION;
         n_actions++;
 
         foreach (QString alias, aliases) {
@@ -7848,7 +7819,8 @@ Settings_Dialog::createTabGeneral()
     QString current = setting[GENERAL_LANGUAGE].dialog.s;
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
-    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxLanguageCurrentIndexChanged(QString )));
+    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString )), this,
+        DIALOG_STRING_SLOT(GENERAL_LANGUAGE));
 
     QVBoxLayout* vboxLayoutLanguage = new QVBoxLayout(groupBoxLanguage);
     vboxLayoutLanguage->addWidget(labelLanguage);
@@ -7866,7 +7838,8 @@ Settings_Dialog::createTabGeneral()
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/theme.png"), dirName);
     }
     comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(setting[GENERAL_ICON_THEME].dialog.s));
-    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxIconThemeCurrentIndexChanged(QString )));
+    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString)), this,
+        DIALOG_STRING_SLOT(GENERAL_ICON_THEME));
 
     QLabel* labelIconSize = new QLabel(translate("Icon Size"), groupBoxIcon);
     QComboBox* comboBoxIconSize = new QComboBox(groupBoxIcon);
@@ -7987,7 +7960,8 @@ Settings_Dialog::createTabDisplay()
         }
     }
     comboBoxScrollBarWidget->setCurrentIndex(setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i);
-    connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_box_scroll_bar_widget_changed(int)));
+    connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this,
+        DIALOG_INT_SLOT(DISPLAY_SCROLLBAR_WIDGET_NUM));
 
     QVBoxLayout* vboxLayoutScrollBars = new QVBoxLayout(groupBoxScrollBars);
     vboxLayoutScrollBars->addWidget(checkBoxShowScrollBars);
@@ -8173,7 +8147,8 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QSpinBox* spinBoxRecentMaxFiles = new QSpinBox(groupBoxOpening);
     spinBoxRecentMaxFiles->setRange(0, 10);
     spinBoxRecentMaxFiles->setValue(setting[OPENSAVE_RECENT_MAX_FILES].dialog.b);
-    connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), this, SLOT(spin_box_recent_max_files_changed(int)));
+    connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), this,
+        DIALOG_INT_SLOT(OPENSAVE_RECENT_MAX_FILES));
 
     QFrame* frameRecent = new QFrame(groupBoxOpening);
     QGridLayout* gridLayoutRecent = new QGridLayout(frameRecent);
@@ -8211,7 +8186,8 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QSpinBox* spinBoxTrimDstNumJumps = new QSpinBox(groupBoxTrim);
     spinBoxTrimDstNumJumps->setRange(1, 20);
     spinBoxTrimDstNumJumps->setValue(setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i);
-    connect(spinBoxTrimDstNumJumps, SIGNAL(valueChanged(int)), this, SLOT(spin_box_trim_dst_num_jumps_changed(int)));
+    connect(spinBoxTrimDstNumJumps, SIGNAL(valueChanged(int)), this,
+        DIALOG_INT_SLOT(OPENSAVE_TRIM_DST_NUM_JUMPS));
 
     QFrame* frameTrimDstNumJumps = new QFrame(groupBoxTrim);
     QGridLayout* gridLayoutTrimDstNumJumps = new QGridLayout(frameTrimDstNumJumps);
@@ -8518,7 +8494,8 @@ Settings_Dialog::createTabQuickSnap()
     QSlider* sliderQSnapLocSize = new QSlider(Qt::Horizontal, groupBoxQSnapVisual);
     sliderQSnapLocSize->setRange(1,20);
     sliderQSnapLocSize->setValue(setting[QSNAP_LOCATOR_SIZE].dialog.i);
-    connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this, SLOT(slider_qsnap_locator_size_changed(int)));
+    connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this,
+        DIALOG_INT_SLOT(QSNAP_LOCATOR_SIZE));
 
     QVBoxLayout* vboxLayoutQSnapVisual = new QVBoxLayout(groupBoxQSnapVisual);
     vboxLayoutQSnapVisual->addWidget(labelQSnapLocColor);
@@ -8534,7 +8511,8 @@ Settings_Dialog::createTabQuickSnap()
     QSlider* sliderQSnapApertureSize = new QSlider(Qt::Horizontal, groupBoxQSnapSensitivity);
     sliderQSnapApertureSize->setRange(1,20);
     sliderQSnapApertureSize->setValue(setting[QSNAP_APERTURE_SIZE].dialog.i);
-    connect(sliderQSnapApertureSize, SIGNAL(valueChanged(int)), this, SLOT(slider_qsnap_aperture_size_changed(int)));
+    connect(sliderQSnapApertureSize, SIGNAL(valueChanged(int)), this,
+        DIALOG_INT_SLOT(QSNAP_APERTURE_SIZE));
 
     QVBoxLayout* vboxLayoutQSnapSensitivity = new QVBoxLayout(groupBoxQSnapSensitivity);
     vboxLayoutQSnapSensitivity->addWidget(labelQSnapApertureSize);
@@ -8652,13 +8630,13 @@ Settings_Dialog::createTabSelection()
     QSlider* sliderSelectionGripSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionGripSize->setRange(1,20);
     sliderSelectionGripSize->setValue(setting[SELECTION_GRIP_SIZE].dialog.i);
-    connect(sliderSelectionGripSize, SIGNAL(valueChanged(int)), this, SLOT(slider_selection_grip_size_changed(int)));
+    connect(sliderSelectionGripSize, SIGNAL(valueChanged(int)), this, DIALOG_INT_SLOT(SELECTION_GRIP_SIZE));
 
     QLabel* labelSelectionPickBoxSize = new QLabel(translate("Pickbox Size"), groupBoxSelectionSizes);
     QSlider* sliderSelectionPickBoxSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionPickBoxSize->setRange(1,20);
     sliderSelectionPickBoxSize->setValue(setting[SELECTION_PICKBOX_SIZE].dialog.i);
-    connect(sliderSelectionPickBoxSize, SIGNAL(valueChanged(int)), this, SLOT(slider_selection_pick_box_size_changed(int)));
+    connect(sliderSelectionPickBoxSize, SIGNAL(valueChanged(int)), this, DIALOG_INT_SLOT(SELECTION_PICKBOX_SIZE));
 
     QVBoxLayout* vboxLayoutSelectionSizes = new QVBoxLayout(groupBoxSelectionSizes);
     vboxLayoutSelectionSizes->addWidget(labelSelectionGripSize);

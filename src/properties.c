@@ -476,34 +476,6 @@ show_groups(int objType)
     }
 }
 
-/* . */
-void
-comboBoxLanguageCurrentIndexChanged(EmbString lang)
-{
-    string_copy(setting[GENERAL_LANGUAGE].dialog.s, lang);
-}
-
-/* . */
-void
-comboBoxIconThemeCurrentIndexChanged(EmbString theme)
-{
-    string_copy(setting[GENERAL_ICON_THEME].dialog.s, theme);
-}
-
-/* . */
-void
-spin_box_recent_max_files_changed(int value)
-{
-    setting[OPENSAVE_RECENT_MAX_FILES].dialog.i = value;
-}
-
-/* . */
-void
-spin_box_trim_dst_num_jumps_changed(int value)
-{
-    setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i = value;
-}
-
 void
 spin_box_display_select_box_alpha_changed(int value)
 {
@@ -542,57 +514,10 @@ spin_box_prompt_font_size_changed(int value)
 
 /* . */
 void
-spin_box_ruler_pixel_size_changed(EmbReal value)
-{
-    setting[RULER_PIXEL_SIZE].dialog.r = value;
-}
-
-/* . */
-void
-slider_qsnap_locator_size_changed(int value)
-{
-    setting[QSNAP_LOCATOR_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-slider_qsnap_aperture_size_changed(int value)
-{
-    setting[QSNAP_APERTURE_SIZE].dialog.i = value;
-}
-
-/* . */
-void
 check_box_lwt_real_render_changed(int checked)
 {
     setting[LWT_REAL_RENDER].preview.b = checked;
-    if (setting[LWT_REAL_RENDER].preview.b) {
-        enable_real();
-    }
-    else {
-        disable_real();
-    }
-}
-
-/* . */
-void
-slider_selection_grip_size_changed(int value)
-{
-    setting[SELECTION_GRIP_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-slider_selection_pick_box_size_changed(int value)
-{
-    setting[SELECTION_PICKBOX_SIZE].dialog.i = value;
-}
-
-/* . */
-void
-combo_box_scroll_bar_widget_changed(int index)
-{
-    setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i = index;
+    statusbar_toggle("REAL", setting[LWT_REAL_RENDER].preview.b);
 }
 
 /* NOTE: General group will never be hidden. */
@@ -635,13 +560,7 @@ void
 checkBoxLwtShowLwtStateChanged(int checked)
 {
     setting[LWT_SHOW_LWT].preview.b = checked;
-    if (setting[LWT_SHOW_LWT].preview.b) {
-        enable_lwt();
-    }
-    else {
-        disable_lwt();
-    }
-
+    statusbar_toggle("LWT", setting[LWT_SHOW_LWT].preview.b);
     set_enabled("checkBoxRealRender", setting[LWT_SHOW_LWT].preview.b);
 }
 

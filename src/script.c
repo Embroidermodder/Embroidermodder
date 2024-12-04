@@ -34,6 +34,14 @@
 
 #include "core.h"
 
+extern const char *config_table[];
+
+/* This is a local variable because access is available elsewhere via
+ * config_str etc.
+ */
+static ScriptValue *config;
+static int n_variables = 0;
+
 char formatFilterOpen[MAX_LONG_STRING];
 char formatFilterSave[MAX_LONG_STRING];
 EmbString open_filesPath;
@@ -54,7 +62,7 @@ int numOfDocs = 0;
 int docIndex = 0;
 
 EmbString end_symbol = "END";
-EmbString settings_file = "settings.toml";
+EmbString settings_file = "settings.ini";
 bool key_state[N_KEY_SEQUENCES] = {
     false, false, false, false, false,
     false, false, false, false, false,
@@ -329,15 +337,21 @@ main(int argc, char* argv[])
         return 1;
     }
 
+    if (!load_data()) {
+        puts("Failed to load data.");
+        return 2;
+    }
+
     if (!init_glfw()) {
         puts("Failed to initialize.");
-        return 2;
+        return 3;
     }
 
     global = create_script_env();
     int result = make_application(n_files, files_to_open);
 
     free_script_env(global);
+    free(config);
 
     return result;
 }
@@ -759,7 +773,7 @@ string_array_length(EmbString s[])
 
 /* Replace strlen to reduce crashes. Has -1 as an error code. */
 int
-string_length(char *src)
+string_length(const char *src)
 {
     for (int i=0; i<MAX_LONG_STRING; i++) {
         if (src[i] == 0) {
@@ -785,7 +799,7 @@ load_file(char *fname)
     int read_bytes = fread(data, 1, length, f);
     fclose(f);
     if (read_bytes != length) {
-        printf("ERROR: Failed to read all the %d bytes in the file \"%s\".\n",
+        printf("ERROR: Failed to read all the %ld bytes in the file \"%s\".\n",
             length,
             fname);
         return NULL;
@@ -793,47 +807,128 @@ load_file(char *fname)
     return data;
 }
 
-void
-toml_load_file(const char *fname)
+/* . */
+int
+config_find(const char *key)
 {
-    char *data = load_file(fname);
-    /* FIXME:
     int i;
-    EmbString error_buffer;
-    toml_table_t *conf;
-
-    conf = toml_parse_file(file, error_buffer, sizeof(error_buffer));
-    fclose(file);
-
-    if (!conf) {
-        printf("ERROR: Failed to parse \"%s\".\n", fname);
-        printf("    %s\n", error_buffer);
-        return 0;
-    }
-
-    for (i=0; ; i++) {
-        const char *key = toml_key_in(conf, i);
-        if (!key) {
-            break;
-        }
-        if (!load_string_table(conf, key)) {
-            printf("ERROR: failed to load string table %s\n", key);
-            return 0;
+    for (i=0; i<n_variables; i++) {
+        if (string_equal(config[i].label, key)) {
+            return i;
         }
     }
-    toml_free(conf);
-    */
-    free(data);
+    return -1;
+}
+
+/* . */
+char *
+config_str(const char *key)
+{
+    int i = config_find(key);
+    if (i >= 0) {
+        return config[i].s;
+    }
+    return "ERROR: NOT FOUND";
+}
+
+int n_commands = 0;
+
+/* . */
+void
+load_command_data(char *label)
+{
+    EmbString key;
+    n_commands++;
+    sprintf(key, "%s.id", label);
+
+    int id = atoi(config_str(key));
+
+    sprintf(key, "%s.command", label);
+    string_copy(command_data[id].command, config_str(key));
+
+    sprintf(key, "%s.arguments", label);
+    string_copy(command_data[id].arguments, config_str(key));
+
+    sprintf(key, "%s.icon", label);
+    string_copy(command_data[id].icon, config_str(key));
+
+    sprintf(key, "%s.tooltip", label);
+    string_copy(command_data[id].tooltip, config_str(key));
+
+    sprintf(key, "%s.statustip", label);
+    string_copy(command_data[id].statustip, config_str(key));
+
+    sprintf(key, "%s.alias", label);
+    string_copy(command_data[id].alias, config_str(key));
+
+    sprintf(key, "%s.shortcut", label);
+    string_copy(command_data[id].shortcut, config_str(key));
+
+    sprintf(key, "%s.flags", label);
+    int flags = atoi(config_str(key));
+    command_data[id].flags = flags;
 }
 
 /* Rather than loading necessary configuration data from file at load, it is
  * compiled into the program. However, the ability to change the UI as a
  * user, without re-compiling the program, can be preserved by overriding the string
- * tables from a custom "overrides.toml" file in the configuration directory.
+ * tables from a custom "overrides.ini" file in the configuration directory.
  */
 int
 load_data(void)
 {
+    for (int i=0; i<MAX_COMMANDS; i++) {
+        command_data[i].command[0] = 0;
+        command_data[i].arguments[0] = 0;
+        command_data[i].icon[0] = 0;
+        command_data[i].tooltip[0] = 0;
+        command_data[i].statustip[0] = 0;
+        command_data[i].alias[0] = 0;
+        command_data[i].flags = 0;
+    }
+
+    /* Load config_table into config ScriptValues. */
+    for (n_variables=0; ; n_variables++) {
+        if (string_equal(config_table[n_variables], end_symbol)) {
+            break;
+        }
+    }
+    config = (ScriptValue*)malloc(n_variables * sizeof(ScriptValue));
+    for (int line_no=0; line_no<n_variables; line_no++) {
+        char line[200];
+        string_copy(line, config_table[line_no]);
+        int eq_pos = 0;
+        for (int i=0; i<200; i++) {
+            if (line[i] == '=') {
+                eq_pos = i;
+                break;
+            }
+        }
+        line[eq_pos] = 0;
+        string_copy(config[line_no].label, line);
+        string_copy(config[line_no].s, line+eq_pos+1);
+    }
+
+    /* Identify the labels of commands. */
+    for (int i=0; i<n_variables; i++) {
+        int offset = string_length(config[i].label) - 4;
+        if (string_equal(config[i].label + offset, "type")) {
+            if (string_equal(config[i].s, "command")) {
+                EmbString label;
+                snprintf(label, offset, "%s", config[i].label);
+                load_command_data(label);
+            }
+        }
+    }
+
+    /* If the overrides file exists, load it on top of the default data. */
+    FILE *file = fopen("overrides.ini", "r");
+    if (file) {
+        fclose(file);
+        char *data = malloc(n_variables*100);
+        data = load_file("overrides.ini");
+        free(data);
+    }
     return 1;
 }
 
@@ -881,10 +976,7 @@ save_settings(EmbString appDir, EmbString fname)
 int
 get_command_id(EmbString name)
 {
-    for (int i=0; i<MAX_COMMANDS; i++) {
-        if (command_data[i].id == -2) {
-            break;
-        }
+    for (int i=0; i < n_commands; i++) {
         if (string_equal(command_data[i].icon, name)) {
             return i;
         }
@@ -1023,15 +1115,6 @@ todo(const char *txt)
     sprintf(message, "TODO: %s", txt);
     debug_message(message);
 }
- 
-/* . */
-void
-fixme(const char *msg)
-{
-    char outmsg[MAX_STRING_LENGTH];
-    sprintf(outmsg, "FIXME: %s", msg);
-    debug_message(outmsg);
-}
 
 /* . */
 ScriptValue *
@@ -1153,13 +1236,6 @@ platform_string(void)
     sprintf(message, "Platform: %s", state.os);
     debug_message(message);
     return state.os;
-}
-
-/* . */
-void
-hide_unimplemented(void)
-{
-    debug_message("hide_unimplemented()");
 }
 
 /* . */

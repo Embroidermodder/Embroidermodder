@@ -78,11 +78,6 @@ int n_prompt_lines = 3;
 int
 init_glfw(void)
 {
-    if (!load_data()) {
-        puts("Failed to load data.");
-        return 0;
-    }
-
     if (!glfwInit()) {
         puts("Failed to run glfwInit.");
         return 0;
@@ -148,18 +143,8 @@ update_view(void)
     set_prompt_font_style(setting[PROMPT_FONT_STYLE].dialog.s);
     set_prompt_font_size(setting[PROMPT_FONT_SIZE].dialog.i);
 
-    if (setting[LWT_SHOW_LWT].dialog.b) {
-        enable_lwt();
-    }
-    else {
-        disable_lwt();
-    }
-    if (setting[LWT_REAL_RENDER].dialog.b) {
-        enable_real();
-    }
-    else {
-        disable_real();
-    }
+    statusbar_toggle("LWT", setting[LWT_SHOW_LWT].dialog.b);
+    statusbar_toggle("REAL", setting[LWT_REAL_RENDER].dialog.b);
 
     update_pick_add_mode(setting[SELECTION_MODE_PICKADD].dialog.b);
 }

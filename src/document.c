@@ -136,125 +136,6 @@ doc_clear_selection(int32_t doc)
     data->selectedItems->count = 0;
 }
 
-/* TODO: finish this */
-void
-doc_toggle_snap(int32_t doc, bool on)
-{
-    debug_message("View toggleSnap()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enableSnap = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* TODO: finish this */
-void
-doc_toggle_polar(int32_t doc, bool on)
-{
-    debug_message("View togglePolar()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enablePolar = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* TODO: finish this */
-void
-doc_toggle_ortho(int32_t doc, bool on)
-{
-    debug_message("View toggleOrtho()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enableOrtho = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* TODO: finish this */
-void
-doc_toggle_qtrack(int32_t doc, bool on)
-{
-    debug_message("View toggleQTrack()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enableQTrack = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_toggle_lwt(int32_t doc, bool on)
-{
-    debug_message("View toggle_lwt()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enable_lwt = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_toggle_real(int32_t doc, bool on)
-{
-    debug_message("View toggleReal()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->enable_real = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_toggle_qsnap(int32_t doc, bool on)
-{
-    debug_message("View toggleQSnap()");
-    wait_cursor();
-    DocumentData *data = doc_data(doc);
-    data->qSnapToggle = on;
-    data->enableQSnap = on;
-    doc_update(doc);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_zoom_in(int32_t doc)
-{
-    debug_message("View zoomIn()");
-    if (!doc_allow_zoom_in(doc)) {
-        return;
-    }
-    wait_cursor();
-    EmbVector cntr = doc_map_to_scene(doc, doc_center(doc));
-    EmbReal s = get_real(DISPLAY_ZOOMSCALE_IN);
-    doc_scale(s, s);
-
-    doc_center_on(doc, cntr);
-    restore_cursor();
-}
-
-/* . */
-void
-doc_zoom_out(int32_t doc)
-{
-    debug_message("View zoomOut()");
-    if (!doc_allow_zoom_out(doc)) {
-        return;
-    }
-    wait_cursor();
-    EmbVector cntr = doc_map_to_scene(doc, doc_center(doc));
-    EmbReal s = get_real(DISPLAY_ZOOMSCALE_OUT);
-    doc_scale(doc, s);
-
-    doc_center_on(doc, cntr);
-    restore_cursor();
-}
-
 /* . */
 void
 doc_zoom_window(int32_t doc)
@@ -398,34 +279,14 @@ open_recent_file(void)
 
 /* . */
 void
-statusbar_toggle(EmbString key, bool on)
+statusbar_toggle(const char *key, bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
     int32_t doc = active_document();
     if (doc < 0) {
         return;
     }
-    if (string_equal(key, "SNAP")) {
-        doc_toggle_snap(doc, on);
-    }
-    else if (string_equal(key, "GRID")) {
-        doc_toggle_grid(doc, on);
-    }
-    else if (string_equal(key, "RULER")) {
-        doc_toggle_ruler(doc, on);
-    }
-    else if (string_equal(key, "ORTHO")) {
-        doc_toggle_ortho(doc, on);
-    }
-    else if (string_equal(key, "POLAR")) {
-        doc_toggle_polar(doc, on);
-    }
-    else if (string_equal(key, "QSNAP")) {
-        doc_toggle_qsnap(doc, on);
-    }
-    else if (string_equal(key, "LWT")) {
-        doc_toggle_lwt(doc, on);
-    }
+    doc_toggle(doc, key, on);
 }
 
 /* . */
@@ -640,30 +501,55 @@ doc_set_cross_hair_color(int32_t doc, uint32_t color)
 
 /* . */
 void
-doc_toggle_grid(int32_t doc, bool on)
+doc_toggle(int32_t doc, const char *key, bool on)
 {
-    debug_message("View toggle_grid()");
-    wait_cursor();
-    if (on) {
-        doc_create_grid(doc, get_str(GRID_TYPE));
-    }
-    else {
-        doc_create_grid(doc, "");
-    }
-    restore_cursor();
-}
-
-/* . */
-void
-doc_toggle_ruler(int32_t doc, bool on)
-{
+    EmbString message;
+    sprintf(message, "doc_toggle(%d, %s, %d)", doc, key, on);
+    debug_message(message);
     DocumentData *data = doc_data(doc);
-    debug_message("View toggle_ruler()");
     wait_cursor();
-    data->enableRuler = on;
-    data->rulerMetric = get_bool(RULER_METRIC);
-    data->rulerColor = get_int(RULER_COLOR);
-    data->rulerPixelSize = get_int(RULER_PIXEL_SIZE);
+
+    if (string_equal(key, "GRID")) {
+        if (on) {
+            doc_create_grid(doc, get_str(GRID_TYPE));
+        }
+        else {
+            doc_create_grid(doc, "");
+        }
+    }
+    if (string_equal(key, "RULER")) {
+        data->enableRuler = on;
+        data->rulerMetric = get_bool(RULER_METRIC);
+        data->rulerColor = get_int(RULER_COLOR);
+        data->rulerPixelSize = get_int(RULER_PIXEL_SIZE);
+    }
+    if (string_equal(key, "SNAP")) {    
+        /* TODO: finish this */
+        data->enableSnap = on;
+    }
+    if (string_equal(key, "POLAR")) {    
+        /* TODO: finish this */
+        data->enablePolar = on;
+    }
+    if (string_equal(key, "ORTHO")) {
+        /* TODO: finish this */
+        data->enableOrtho = on;
+    }
+    if (string_equal(key, "QTRACK")) {
+        /* TODO: finish this */
+        data->enableQTrack = on;
+    }
+    if (string_equal(key, "LWT")) {
+        data->enable_lwt = on;
+    }
+    if (string_equal(key, "REAL")) {
+        data->enable_real = on;
+    }
+    if (string_equal(key, "QSNAP")) {
+        data->qSnapToggle = on;
+        data->enableQSnap = on;
+    }
+
     doc_update(doc);
     restore_cursor();
 }
@@ -755,7 +641,7 @@ doc_move_selected(int32_t doc, EmbVector delta)
 
 /* . */
 void
-doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot)
+doc_rotate_selected(int32_t doc, EmbVector v, EmbReal rot)
 {
     DocumentData *data = doc_data(doc);
     if (data->selectedItems->count > 1) {
@@ -767,7 +653,6 @@ doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot)
         ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
         EmbString msg;
         sprintf(msg, "%s 1 %s", translate("Rotate"), core->OBJ_NAME);
-        EmbVector v = emb_vector(x, y);
         undoable_rotate(doc, data->selectedItems->data[i], v, msg);
     }
     if (data->selectedItems->count > 1) {

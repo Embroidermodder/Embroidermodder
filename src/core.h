@@ -31,10 +31,16 @@ extern "C" {
 #define STR(arg)  context->argument[arg].s
 #define BOOL(arg) context->argument[arg].b
 
+#define DIALOG_INT_SLOT(A) \
+    SLOT([=](int value) { setting[A].dialog.i = value; } )
+#define DIALOG_REAL_SLOT(A) \
+    SLOT([=](EmbReal value) { setting[A].dialog.r = value; } )
+#define DIALOG_STRING_SLOT(A) \
+    SLOT([=](QString value) { string_copy(setting[A].dialog.s, qPrintable(value)); } )
+
 typedef char EmbStringTable[MAX_TABLE_LENGTH][MAX_STRING_LENGTH];
 
 typedef struct Command_ {
-    int32_t id;
     EmbString command;
     EmbString arguments;
     EmbString icon;
@@ -401,8 +407,6 @@ typedef struct State_ {
     EmbStringTable extensions;
 } State;
 
-char *load_file(char *fname);
-
 /* -------------------------------- Scripting ---------------------------- */
 
 ScriptEnv *create_script_env(void);
@@ -436,6 +440,8 @@ ScriptEnv *add_int_argument(ScriptEnv *context, int i);
 
 ScriptValue *setting_ptr(int key, int mode);
 void copy_setting(int key, int dst, int src);
+
+char *load_file(char *fname);
 
 void set_int(int key, int value);
 void set_real(int key, EmbReal value);
@@ -485,7 +491,7 @@ uint32_t get_current_color(void);
 const char *get_current_line_type(void);
 const char *get_current_line_weight(void);
 
-void statusbar_toggle(EmbString key, bool on);
+void statusbar_toggle(const char *key, bool on);
 void zoom_extents_all_sub_windows(void);
 bool loadFile(const char *fileName);
 
@@ -497,8 +503,8 @@ int find_int_map(IntMap *, int);
 
 /* ------------------------------ Widgets ------------------------------- */
 
-void set_visibility(EmbString key, bool visibility);
-void set_enabled(EmbString key, bool visibility);
+void set_visibility(const char *key, bool visibility);
+void set_enabled(const char *key, bool visibility);
 void set_visibility_group(EmbStringTable key, bool visibility);
 void set_enabled_group(EmbStringTable key, bool visibility);
 
@@ -586,10 +592,6 @@ void layer_previous(void);
 void delete_pressed(void);
 void escape_pressed(void);
 
-bool is_shift_pressed(void);
-void set_shift_pressed(void);
-void set_shift_released(void);
-
 void icon_resize(int iconSize);
 
 void read_settings(void);
@@ -614,18 +616,10 @@ void about_dialog(void);
 /* --------------------------------- Editors -------------------------------- */
 
 void check_box_lwt_real_render_changed(int);
-void combo_box_scroll_bar_widget_changed(int);
 void combo_box_prompt_font_family_changed(EmbString);
 void combo_box_prompt_font_style_changed(EmbString);
 void spin_box_display_select_box_alpha_changed(int);
 void spin_box_prompt_font_size_changed(int);
-void spin_box_recent_max_files_changed(int value);
-void spin_box_trim_dst_num_jumps_changed(int value);
-void spin_box_ruler_pixel_size_changed(EmbReal);
-void slider_qsnap_locator_size_changed(int);
-void slider_qsnap_aperture_size_changed(int);
-void slider_selection_grip_size_changed(int);
-void slider_selection_pick_box_size_changed(int);
 
 void checkBoxGridCenterOnOriginStateChanged(int);
 void comboBoxGridTypeCurrentIndexChanged(const char *);
@@ -650,7 +644,6 @@ void preview_update(void);
 
 void about_dialog(void);
 void todo(const char *txt);
-void fixme(const char *msg);
 void stub_testing(void);
 void run_testing(void);
 void exit_program(void);
@@ -661,7 +654,6 @@ void save_file(void);
 int save_as_file(void);
 void update_interface(void);
 void window_menu_about_to_show(void);
-void hide_unimplemented(void);
 void start_blinking(void);
 void stop_blinking(void);
 void repeat_action(void);
@@ -671,7 +663,6 @@ void nanosleep_(int);
 
 void native_blink_prompt(void);
 
-void check_box_tip_of_the_day_changed(int checked);
 void button_tip_of_the_day_clicked(int button);
 
 ScriptValue add_arc_command(ScriptEnv *context);
@@ -727,11 +718,6 @@ double native_perpendicular_distance(EmbReal px, EmbReal py, EmbReal x1, EmbReal
 
 double native_q_snap_x(void);
 double native_q_snap_y(void);
-
-void enable_lwt(void);
-void disable_lwt(void);
-void enable_real(void);
-void disable_real(void);
 
 void create_details_dialog(void);
 
@@ -792,19 +778,15 @@ void free_doc(int32_t doc);
 
 bool doc_allow_zoom_in(int32_t doc);
 bool doc_allow_zoom_out(int32_t doc);
-void doc_zoom_in(int32_t doc);
-void doc_zoom_out(int32_t doc);
 void doc_zoom_window(int32_t doc);
 void doc_zoom_selected(int32_t doc);
-void doc_zoom_extents(int32_t doc);
 void doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir);
+
+void doc_nav(char *label, int32_t doc);
+void doc_toggle(int32_t doc, const char *key, bool on);
 
 void doc_pan_real_time(int32_t doc);
 void doc_pan_point(int32_t doc);
-void doc_pan_left(int32_t doc);
-void doc_pan_right(int32_t doc);
-void doc_pan_up(int32_t doc);
-void doc_pan_down(int32_t doc);
 void doc_select_all(int32_t doc);
 void doc_selection_changed(int32_t doc);
 void doc_clear_selection(int32_t doc);
@@ -818,7 +800,7 @@ void doc_move_action(int32_t doc);
 void doc_scale_action(int32_t doc);
 void doc_scale_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal factor);
 void doc_rotate_action(int32_t doc);
-void doc_rotate_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal rot);
+void doc_rotate_selected(int32_t doc, EmbVector position, EmbReal rot);
 void doc_mirror_selected(int32_t doc, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 int doc_num_selected(int32_t doc);
 
@@ -852,15 +834,6 @@ void doc_set_cross_hair_size(int32_t doc, uint8_t percent);
 void doc_set_background_color(int32_t doc, uint32_t color);
 void doc_set_select_box_colors(int32_t doc, uint32_t colorL, uint32_t fillL,
     uint32_t colorR, uint32_t fillR, int alpha);
-void doc_toggle_snap(int32_t doc, bool on);
-void doc_toggle_grid(int32_t doc, bool on);
-void doc_toggle_ruler(int32_t doc, bool on);
-void doc_toggle_ortho(int32_t doc, bool on);
-void doc_toggle_polar(int32_t doc, bool on);
-void doc_toggle_qsnap(int32_t doc, bool on);
-void doc_toggle_qtrack(int32_t doc, bool on);
-void doc_toggle_lwt(int32_t doc, bool on);
-void doc_toggle_real(int32_t doc, bool on);
 
 void doc_enable_move_rapid_fire(int32_t doc);
 void doc_disable_move_rapid_fire(int32_t doc);
@@ -987,7 +960,7 @@ void emb_string(EmbString s, const char *str);
 bool string_equal(EmbString a, const char *b);
 int string_compare(EmbString a, const char *b);
 void string_copy(EmbString dst, const char *src);
-int string_length(char *src);
+int string_length(const char *src);
 void memory_copy(void *src, void *dst, size_t length);
 int string_array_length(EmbString s[]);
 int string_list_contains(EmbStringTable list, EmbString entry);
@@ -1176,6 +1149,7 @@ extern int precisionLength;
 
 extern int n_aliases;
 extern int n_objects;
+extern int n_commands;
 extern int n_widgets;
 extern int n_actions;
 

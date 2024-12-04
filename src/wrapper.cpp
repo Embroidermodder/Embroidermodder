@@ -179,7 +179,7 @@ get_button(const char *key)
 
 /* . */
 void
-set_visibility(EmbString key, bool visibility)
+set_visibility(const char *key, bool visibility)
 {
     int index = find_widget_list(key);
     if (index < 0) {
@@ -211,7 +211,7 @@ set_visibility(EmbString key, bool visibility)
 
 /* . */
 void
-set_enabled(EmbString key, bool enabled)
+set_enabled(const char *key, bool enabled)
 {
     int index = find_widget_list(key);
     if (index < 0) {

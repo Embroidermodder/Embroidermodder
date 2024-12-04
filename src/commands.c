@@ -24,33 +24,6 @@ check_for_updates(void)
     /* TODO: Check website for new versions, commands, etc... */
 }
 
-void
-check_box_tip_of_the_day_changed(int checked)
-{
-    set_bool(GENERAL_TIP_OF_THE_DAY, checked);
-}
-
-/* . */
-bool
-is_shift_pressed(void)
-{
-    return shiftKeyPressedState;
-}
-
-/* . */
-void
-set_shift_pressed(void)
-{
-    shiftKeyPressedState = true;
-}
-
-/* . */
-void
-set_shift_released(void)
-{
-    shiftKeyPressedState = false;
-}
-
 /* . */
 void
 set_visibility_group(EmbStringTable keylist, bool visibility)
@@ -236,7 +209,7 @@ update_all_view_ruler_colors(uint32_t color)
 ScriptValue
 run_command(ScriptEnv *context, const char *cmd)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     int id = get_command_id((char*)cmd);
     int doc_index = 0;
     ScriptValue value = script_true;
@@ -250,7 +223,7 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     if (!argument_checks(context, id)) {
-        /* TODO: error */
+        debug_message("Failed argument checks.");
         return script_false;
     }
 
@@ -269,7 +242,7 @@ run_command(ScriptEnv *context, const char *cmd)
         //doc_clear_selection(doc_index);
     }
 
-    switch (command_data[id].id) {
+    switch (id) {
     case ACTION_ABOUT:
         about_dialog();
         break;
@@ -496,17 +469,20 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_MAKE_LAYER_CURRENT:
+    case ACTION_MAKE_LAYER_CURRENT: {
         /* make_layer_active(); */
         break;
+    }
 
-    case ACTION_LAYERS:
+    case ACTION_LAYERS: {
         /* layer_manager(); */
         break;
+    }
 
-    case ACTION_LAYER_SELECTOR:
+    case ACTION_LAYER_SELECTOR: {
         /* TODO: layer_selector */
         break;
+    }
 
     case ACTION_LAYER_PREVIOUS:
         /* TODO: layer_previous */
@@ -643,7 +619,7 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_ROTATE: {
-        doc_rotate_selected(doc_index, REAL(0), -REAL(1), -REAL(2));
+        doc_rotate_selected(doc_index, unpack_vector(context, 0), -REAL(2));
         break;
     }
 
@@ -698,19 +674,19 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
     case ACTION_PAN_LEFT: {
-        doc_pan_left(doc_index);
+        doc_nav("PanLeft", doc_index);
         break;
     }
     case ACTION_PAN_RIGHT: {
-        doc_pan_right(doc_index);
+        doc_nav("PanRight", doc_index);
         break;
     }
     case ACTION_PAN_UP: {
-        doc_pan_up(doc_index);
+        doc_nav("PanUp", doc_index);
         break;
     }
     case ACTION_PAN_DOWN: {
-        doc_pan_down(doc_index);
+        doc_nav("PanDown", doc_index);
         break;
     }
 
@@ -756,15 +732,20 @@ run_command(ScriptEnv *context, const char *cmd)
     }
 
     case ACTION_ZOOM_EXTENTS: {
-        doc_zoom_extents(doc_index);
+        doc_nav("ZoomExtents", doc_index);
         break;
     }
+
     case ACTION_ZOOM_IN: {
-        doc_zoom_in(doc_index);
+        doc_nav("ZoomIn", doc_index);
         break;
     }
     case ACTION_ZOOM_OUT: {
-        doc_zoom_out(doc_index);
+        doc_nav("ZoomOut", doc_index);
+        break;
+    }
+    case ACTION_ZOOM_SELECTED: {
+        doc_nav("ZoomSelected", doc_index);
         break;
     }
     case ACTION_ZOOM_PREVIOUS: {
@@ -777,10 +758,6 @@ run_command(ScriptEnv *context, const char *cmd)
     }
     case ACTION_ZOOM_SCALE: {
         todo("Implement zoomScale.");
-        break;
-    }
-    case ACTION_ZOOM_SELECTED: {
-        doc_zoom_selected(doc_index);
         break;
     }
     case ACTION_ZOOM_WINDOW: {
@@ -1043,46 +1020,6 @@ native_q_snap_y(void)
     }
     DocumentData *data = doc_data(doc);
     return data->sceneQSnapPoint.y;
-}
-
-void
-enable_lwt(void)
-{
-    debug_message("StatusBarButton enable_lwt()");
-    int32_t doc = active_document();
-    if (doc >= 0) {
-        doc_toggle_lwt(doc, true);
-    }
-}
-
-void
-disable_lwt(void)
-{
-    debug_message("StatusBarButton disable_lwt()");
-    int32_t doc = active_document();
-    if (doc >= 0) {
-        doc_toggle_lwt(doc, false);
-    }
-}
-
-void
-enable_real(void)
-{
-    debug_message("StatusBarButton enable_real()");
-    int32_t doc = active_document();
-    if (doc >= 0) {
-        doc_toggle_real(doc, true);
-    }
-}
-
-void
-disable_real(void)
-{
-    debug_message("StatusBarButton disable_real()");
-    int32_t doc = active_document();
-    if (doc >= 0) {
-        doc_toggle_real(doc, false);
-    }
 }
 
 /* . */
@@ -1770,7 +1707,8 @@ sandbox_command(ScriptEnv * context)
         doc_mirror_selected(doc, 0, 0, 0, 1);
 
         doc_select_all(doc);
-        doc_rotate_selected(doc, 0, 0, 90);
+        EmbVector position = emb_vector(0.0, 0.0);
+        doc_rotate_selected(doc, position, 90.0);
 
         /* Polyline & Polygon Testing */
         EmbVector offset = emb_vector(0.0, 0.0);
@@ -2728,7 +2666,7 @@ zoom_extents_all_sub_windows(void)
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         if (document_memory[i]) {
             doc_recalculate_limits(i);
-            doc_zoom_extents(i);
+            doc_nav("ZoomExtents", i);
         }
     }
 }

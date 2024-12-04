@@ -25,6 +25,86 @@ EmbStringTable button_list = {
     "END"
 };
 
+char *ui_labels[] = {
+    "labelZoomInScale", "Zoom In Scale",
+    "labelZoomOutScale", "Zoom Out Scale",
+
+    "labelTextColor", "Text Color",
+    "labelBackgroundColor", "Background Color",
+
+    "labelGridCenterX", "Grid Center X",
+    "labelGridCenterY", "Grid Center Y",
+    "labelGridSizeX", "Grid Size X",
+    "labelGridSizeY", "Grid Size Y",
+    "labelGridSpacingX", "Grid Spacing X",
+    "labelGridSpacingY", "Grid Spacing Y",
+    "labelGridSizeRadius", "Grid Size Radius",
+    "labelGridSpacingRadius", "Grid Spacing Radius",
+    "labelGridSpacingAngle", "Grid Spacing Angle",
+
+    "labelTotalStitches", "Total Stitches:",
+    "labelRealStitches", "Real Stitches:",
+    "labelJumpStitches", "Jump Stitches:",
+    "labelTrimStitches", "Trim Stitches:",
+    "labelTotalColors", "Total Colors:",
+    "labelColorChanges", "Color Changes:",
+    "labelRectLeft", "Left:",
+    "labelRectTop", "Top:",
+    "labelRectRight", "Right:",
+    "labelRectBottom", "Bottom:",
+    "labelRectWidth", "Width:",
+    "labelRectHeight", "Height:",
+
+    "labelCrosshairColor", "Crosshair Color",
+    "labelBackgroundColor", "Background Color",
+    "labelSelectionColorCrossing", "Selection Box Color (Crossing)",
+    "labelSelectionFillCrossing", "Selection Box Fill (Crossing)",
+    "labelSelectionColorWindow", "Selection Box Color (Window)",
+    "labelSelectionFillWindow", "Selection Box Fill (Window)",
+    "labelSelectionFillAlpha", "Selection Box Fill Alpha",
+
+    "labelRulerPixelSize", "Ruler Pixel Size",
+    "END", "END"
+};
+
+char *patternDetailsBox[] = {
+    "labelTotalStitches", "fieldTotalStitches",
+    "labelRealStitches", "fieldRealStitches",
+    "labelJumpStitches", "fieldJumpStitches",
+    "labelTrimStitches", "fieldTrimStitches",
+    "labelTotalColors", "fieldTotalColors",
+    "labelColorChanges", "fieldColorChanges",
+    "labelRectLeft", "fieldRectLeft",
+    "labelRectTop", "fieldRectTop",
+    "labelRectRight", "fieldRectRight",
+    "labelRectBottom", "fieldRectBottom",
+    "labelRectWidth", "fieldRectWidth",
+    "labelRectHeight", "fieldRectHeight",
+    "END", "END"
+};
+
+char *selectionBoxLayout[] = {
+    "labelCrosshairColor", "buttonCrosshairColor",
+    "labelBackgroundColor", "buttonBackgroundColor",
+    "labelSelectionColorCrossing", "buttonSelectionColorCrossing",
+    "labelSelectionFillCrossing", "buttonSelectionFillCrossing",
+    "labelSelectionColorWindow", "buttonSelectionColorWindow",
+    "labelSelectionFillWindow", "buttonSelectionFillWindow",
+    "labelSelectionFillAlpha", "spinboxSelectionFillAlpha",
+    "END", "END"
+};
+
+char *promptColorLayout[] = {
+    "labelTextColor", "buttonTextColor",
+    "labelBackgroundColor", "buttonBackgroundColor",
+    "END", "END"
+};
+
+char *rulerLayout[] = {
+    "labelRulerPixelSize", "spinboxRulerPixelSize",
+    "END", "END"
+};
+
 Editor general_editor_data[] = {
     {
         .icon = "blank",

@@ -1,0 +1,45 @@
+#
+# Embroidermodder 2.
+#
+# Copyright 2011-2024 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
+# --------------------------------------------------------------------------------
+#
+# To allow for other programs to interact with the underlying UI data it's
+# presented here. The version used during runtime has been compiled in but
+# is literally just this file stored as a string table.
+#
+# Note that the program has to be relaunched if you use an "overrides.ini"
+# based on this file and make any changes as the first thing Embroidermodder
+# does on load is store these data in structures that can be loaded faster.
+#
+# In some places ids are supplied that have to match tables in "constants.h"
+# These are used at runtime to access the data without hashing or searching.
+#
+# All data more complex than the built-in types has to supply a type argument.
+# Like "command", "editor", "groupbox" or "table".
+#
+# UI Elements
+# -----------
+
+[prompt-color-layout]
+type = "layout"
+order = [
+    "labelTextColor",
+    "buttonTextColor",
+    "labelBackgroundColor",
+    "buttonBackgroundColor"
+]
+
+[label-text-color]
+type = "label"
+key = "labelTextColor"
+label = "Text Color"
+
+[button-text-color]
+type = "button"
+
