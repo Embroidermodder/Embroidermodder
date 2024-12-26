@@ -225,7 +225,7 @@ doc_cut(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
     if (data->selectedItems->count <= 0) {
-        information_box(translate("Cut Preselect"),
+        messagebox("information", translate("Cut Preselect"),
             translate("Preselect objects before invoking the cut command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
     }
@@ -295,7 +295,7 @@ doc_copy(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
     if (data->selectedItems->count <= 0) {
-        information_box(translate("Copy Preselect"),
+        messagebox("information", translate("Copy Preselect"),
             translate("Preselect objects before invoking the copy command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
     }

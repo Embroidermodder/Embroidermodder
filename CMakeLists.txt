@@ -77,7 +77,6 @@ qt_add_executable(embroidermodder2
 	${TRANSLATION}/swedish.c
 	${TRANSLATION}/turkish.c
 
-	${SRC}/commands_table.c
 	${SRC}/settings_table.c
 	${SRC}/editors_table.c
 
@@ -89,8 +88,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/grip.c
 	${SRC}/objects.c
 	${SRC}/properties.c
-	${SRC}/prompt.c
-	${SRC}/settings.c
 	${SRC}/script.c
 	${SRC}/state.c
 	${SRC}/xpm.c

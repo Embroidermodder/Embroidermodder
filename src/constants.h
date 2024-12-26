@@ -714,5 +714,42 @@
 #define PROP_ARC_RADIUS                2
 #define N_PROPS                        3
 
+/* View Properties */
+#define VIEW_SNAP                      0
+#define VIEW_GRID                      1
+#define VIEW_ORTHO                     2
+#define VIEW_POLAR                     3
+#define VIEW_QSNAP                     4
+#define VIEW_QTRACK                    5
+#define VIEW_LWT                       6
+#define VIEW_REAL                      7
+#define VIEW_RULER                     8
+#define VIEW_METRIC                    9
+#define N_VIEW_PROPS                  10
+
+/* Translations */
+#define UNFINISHED                     0
+#define DRAFT                          1
+#define FINISHED                       2
+
+#define ARABIC_SHORTCODE            "ar"
+#define AFRIKAANS_SHORTCODE         "af"
+#define CHINESE_SHORTCODE           "zh"
+#define CZECH_SHORTCODE             "cs"
+#define DANISH_SHORTCODE            "da"
+#define DUTCH_SHORTCODE             "nl"
+#define FINNISH_SHORTCODE           "fi"
+#define GERMAN_SHORTCODE            "de"
+#define GREEK_SHORTCODE             "el"
+#define ITALIAN_SHORTCODE           "it"
+#define JAPANESE_SHORTCODE          "ja"
+#define KOREAN_SHORTCODE            "ko"
+#define PORTUGUESE_SHORTCODE        "pt"
+#define ROMANIAN_SHORTCODE          "ro"
+#define RUSSIAN_SHORTCODE           "ru"
+#define SPANISH_SHORTCODE           "es"
+#define SWEDISH_SHORTCODE           "sv"
+#define TURKISH_SHORTCODE           "tr"
+
 #endif
 

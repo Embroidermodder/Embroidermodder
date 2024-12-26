@@ -2418,21 +2418,21 @@ obj_vulcanize(int32_t obj)
     switch (g->type) {
     case EMB_POLYLINE:
         if (g->object.polyline.pointList->length == 0) {
-            critical_box(
+            messagebox("critical",
                 translate("Empty Polyline Error"),
                 translate("The polyline added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_POLYGON:
         if (g->object.polygon.pointList->length == 0) {
-            critical_box(
+            messagebox("critical",
                 translate("Empty Polygon Error"),
                 translate("The polygon added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_PATH:
         if (g->object.path.pointList->length == 0) {
-            critical_box(
+            messagebox("critical",
                 translate("Empty Path Error"),
                 translate("The path added contains no points. The command that created this object has flawed logic."));
         }

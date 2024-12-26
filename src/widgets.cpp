@@ -882,12 +882,12 @@ MainWindow::colorSelectorIndexChanged(int index)
         /* TODO: Handle ByLayer and ByBlock and Other... */
         newColor = comboBox->itemData(index).toUInt(&ok);
         if (!ok) {
-            warning_box(translate("Color Selector Conversion Error"),
+            messagebox("warning", translate("Color Selector Conversion Error"),
                 translate("<b>An error has occured while changing colors.</b>"));
         }
     }
     else {
-        warning_box(translate("Color Selector Pointer Error"),
+        messagebox("warning", translate("Color Selector Pointer Error"),
             translate("<b>An error has occured while changing colors.</b>"));
     }
 
@@ -1182,7 +1182,7 @@ UndoableCommand::UndoableCommand(int type_, EmbVector pos, EmbReal scaleFactor,
         if (scaleFactor <= 0.0) {
             data.delta = emb_vector(0.0, 0.0);
             data.factor = 1.0;
-            critical_box(translate("ScaleFactor Error"),
+            messagebox("critical", translate("ScaleFactor Error"),
                 translate("Hi there. If you are not a developer, report this as a bug. "
                "If you are a developer, your code needs examined, and possibly your head too."));
         }
@@ -1996,7 +1996,7 @@ obj_set_line_weight(Object *obj, EmbReal lineWeight)
         else {
             char msg[MAX_STRING_LENGTH];
             sprintf(msg, "Lineweight: %f", lineWeight);
-            warning_box(translate("Error - Negative Lineweight"), msg);
+            messagebox("warning", translate("Error - Negative Lineweight"), msg);
             debug_message("Lineweight cannot be negative! Inverting sign.");
             obj->lwtPen.setWidthF(-lineWeight);
         }
@@ -2828,7 +2828,7 @@ doc_clear_rubber_room(int32_t doc)
             && id_list_contains(data->spareRubberList, SPARE_RUBBER_POLYLINE))
         || id_list_contains(data->spareRubberList, item)) {
             if (!obj_path(base).elementCount()) {
-                critical_box(translate("Empty Rubber Object Error"),
+                messagebox("critical", translate("Empty Rubber Object Error"),
                     translate("The rubber object added contains no points. "
                         "The command that created this object has flawed logic. "
                         "The object will be deleted."));
@@ -3734,7 +3734,7 @@ doc_set_corner_button(int32_t doc)
         QAction* act = actionHash[num];
         /* NOTE: Prevent crashing if the action is NULL. */
         if (!act) {
-            information_box(translate("Corner Widget Error"),
+            messagebox("information", translate("Corner Widget Error"),
                 translate("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
             documents[doc]->setCornerWidget(0);
         }
@@ -3823,7 +3823,7 @@ doc_nav(char *label, int32_t doc_id)
         }
         QRectF selectedRect = selectedRectPath.boundingRect();
         if (selectedRect.isNull()) {
-            information_box(translate("ZoomSelected Preselect"),
+            messagebox("information", translate("ZoomSelected Preselect"),
                 translate("Preselect objects before invoking the zoomSelected command."));
             /* TODO: Support Post selection of objects */
         }
@@ -5024,7 +5024,7 @@ create_details_dialog(void)
     EmbRect bounds = emb_pattern_bounds(pattern);
 
     if (pattern->stitch_list->count == 0) {
-        warning_box(
+        messagebox("warning", 
             translate("No Design Loaded"),
             translate("<b>A design needs to be loaded or created before details can be determined.</b>"));
         return;
@@ -5344,7 +5344,7 @@ MdiWindow::loadFile(const char *fileName)
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         const char *msg = qPrintable(tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
-        warning_box(translate("Error reading file"), msg);
+        messagebox("warning", translate("Error reading file"), msg);
         return false;
     }
 
@@ -5362,7 +5362,7 @@ MdiWindow::loadFile(const char *fileName)
         debug_message("Unsupported read file type: ");
         debug_message((char*)qPrintable(fileName));
         restore_cursor();
-        warning_box(translate("Error reading pattern"),
+        messagebox("warning", translate("Error reading pattern"),
             qPrintable(tr("Unsupported read file type: ") + fileName));
         return false;
     }
@@ -5372,7 +5372,7 @@ MdiWindow::loadFile(const char *fileName)
         debug_message("Reading file was unsuccessful:");
         debug_message(fileName);
         restore_cursor();
-        warning_box(translate("Error reading pattern"),
+        messagebox("warning", translate("Error reading pattern"),
             qPrintable(tr("Reading file was unsuccessful: ") + fileName));
         return false;
     }
@@ -6605,7 +6605,7 @@ open_filesSelected(EmbStringTable filesToOpen)
             }
         }
         else {
-            critical_box(translate("Failed to load file"),
+            messagebox("critical", translate("Failed to load file"),
                 translate("Failed to load file."));
             debug_message("Failed to load file.");
             mdiWin->close();

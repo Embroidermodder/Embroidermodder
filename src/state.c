@@ -15,6 +15,8 @@
 
 #include "core.h"
 
+Command command_data[MAX_COMMANDS];
+
 State state = {
 
 /* TODO: find a source for compiler flags for operating system detection.

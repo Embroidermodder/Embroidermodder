@@ -38,6 +38,21 @@ extern "C" {
 #define DIALOG_STRING_SLOT(A) \
     SLOT([=](QString value) { string_copy(setting[A].dialog.s, qPrintable(value)); } )
 
+#define set_int(key, value)                setting[key].setting.i = value
+#define set_real(key, value)               setting[key].setting.r = value
+#define set_str(key, value)    string_copy(setting[key].setting.s, value)
+#define set_bool(key, value)               setting[key].setting.b = value
+
+#define get_int(key)       setting[key].setting.i
+#define get_str(key)       setting[key].setting.s
+#define get_real(key)      setting[key].setting.r
+#define get_bool(key)      setting[key].setting.b
+
+/* For switch tables we can use this trick to use two character indices.
+ * For example: "case TWO_CHAR_INDEX(DUTCH_SHORTCODE):".
+ */
+#define TWO_CHAR_INDEX(A)             (0x100*A[0] + A[1])
+
 typedef char EmbStringTable[MAX_TABLE_LENGTH][MAX_STRING_LENGTH];
 
 typedef struct Command_ {
@@ -270,35 +285,6 @@ typedef struct Tab_ {
     int state;
 } Tab;
 
-/* Translations */
-#define UNFINISHED                     0
-#define DRAFT                          1
-#define FINISHED                       2
-
-#define ARABIC_SHORTCODE            "ar"
-#define AFRIKAANS_SHORTCODE         "af"
-#define CHINESE_SHORTCODE           "zh"
-#define CZECH_SHORTCODE             "cs"
-#define DANISH_SHORTCODE            "da"
-#define DUTCH_SHORTCODE             "nl"
-#define FINNISH_SHORTCODE           "fi"
-#define GERMAN_SHORTCODE            "de"
-#define GREEK_SHORTCODE             "el"
-#define ITALIAN_SHORTCODE           "it"
-#define JAPANESE_SHORTCODE          "ja"
-#define KOREAN_SHORTCODE            "ko"
-#define PORTUGUESE_SHORTCODE        "pt"
-#define ROMANIAN_SHORTCODE          "ro"
-#define RUSSIAN_SHORTCODE           "ru"
-#define SPANISH_SHORTCODE           "es"
-#define SWEDISH_SHORTCODE           "sv"
-#define TURKISH_SHORTCODE           "tr"
-
-/* For switch tables we can use this trick to use two character indices.
- * For example: "case TWO_CHAR_INDEX(DUTCH_SHORTCODE):".
- */
-#define TWO_CHAR_INDEX(A)             (0x100*A[0] + A[1])
-
 typedef struct Translation_ {
     EmbString source;
     EmbString target;
@@ -367,16 +353,16 @@ typedef struct State_ {
     EmbIntTable toolbar_horizontal;
 
     EmbStringTable file_toolbar;
-    EmbStringTable edit_toolbar; 
-    EmbStringTable view_toolbar; 
-    EmbStringTable zoom_toolbar; 
+    EmbStringTable edit_toolbar;
+    EmbStringTable view_toolbar;
+    EmbStringTable zoom_toolbar;
     EmbStringTable pan_toolbar;
-    EmbStringTable icon_toolbar; 
-    EmbStringTable help_toolbar; 
-    EmbStringTable draw_toolbar; 
-    EmbStringTable inquiry_toolbar; 
-    EmbStringTable modify_toolbar; 
-    EmbStringTable dimension_toolbar; 
+    EmbStringTable icon_toolbar;
+    EmbStringTable help_toolbar;
+    EmbStringTable draw_toolbar;
+    EmbStringTable inquiry_toolbar;
+    EmbStringTable modify_toolbar;
+    EmbStringTable dimension_toolbar;
     EmbStringTable sandbox_toolbar;
     EmbStringTable layer_toolbar;
     EmbStringTable properties_toolbar;
@@ -384,11 +370,11 @@ typedef struct State_ {
     EmbStringTable prompt_toolbar;
 
     /* Widget Groups */
-    EmbStringTable grid_load_from_file_group; 
-    EmbStringTable defined_origin_group; 
-    EmbStringTable rectangular_grid_group; 
-    EmbStringTable circular_grid_group; 
-    EmbStringTable center_on_origin_group; 
+    EmbStringTable grid_load_from_file_group;
+    EmbStringTable defined_origin_group;
+    EmbStringTable rectangular_grid_group;
+    EmbStringTable circular_grid_group;
+    EmbStringTable center_on_origin_group;
 
     /* Settings */
     EmbStringTable settings_tab_labels;
@@ -443,16 +429,6 @@ void copy_setting(int key, int dst, int src);
 
 char *load_file(char *fname);
 
-void set_int(int key, int value);
-void set_real(int key, EmbReal value);
-void set_str(int key, const char *value);
-void set_bool(int key, bool value);
-
-int get_int(int key);
-EmbReal get_real(int key);
-char *get_str(int key);
-bool get_bool(int key);
-
 void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, int id);
 char *translate(const char *msg);
@@ -481,10 +457,6 @@ bool int32_overflow(int64_t a, int64_t b);
 int round_to_multiple(bool roundUp, int numToRound, int multiple);
 
 void messagebox(const char* logo, const char *title, const char *text);
-void information_box(const char *title, const char *text);
-void warning_box(const char *title, const char *text);
-void critical_box(const char *title, const char *text);
-void question_box(const char *title, const char *text);
 
 const char *get_current_layer(void);
 uint32_t get_current_color(void);
@@ -1102,14 +1074,14 @@ extern EmbString _appName_;
 extern EmbString _appVer_;
 extern EmbString settings_file;
 
-extern EmbStringTable layer_list; 
-extern EmbStringTable color_list; 
-extern EmbStringTable line_type_list; 
-extern EmbStringTable line_weight_list; 
-extern EmbStringTable text_size_list; 
+extern EmbStringTable layer_list;
+extern EmbStringTable color_list;
+extern EmbStringTable line_type_list;
+extern EmbStringTable line_weight_list;
+extern EmbStringTable text_size_list;
 
-extern EmbStringTable editor_list; 
-extern EmbStringTable combobox_list; 
+extern EmbStringTable editor_list;
+extern EmbStringTable combobox_list;
 
 extern EmbStringTable grid_enabled_group;
 extern EmbStringTable rectangular_grid_visible_group;

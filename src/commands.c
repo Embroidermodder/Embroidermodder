@@ -546,7 +546,7 @@ run_command(ScriptEnv *context, const char *cmd)
             /* TODO: Prompt to select objects if nothing is preselected. */
             prompt_output(
             translate("Preselect objects before invoking the delete command."));
-            information_box(translate("Delete Preselect"),
+            messagebox("information", translate("Delete Preselect"),
                 translate("Preselect objects before invoking the delete command."));
         }
         else {
@@ -921,7 +921,7 @@ pick_add_mode_toggled(void)
 void
 stub_testing(void)
 {
-    warning_box(translate("Testing Feature"),
+    messagebox("warning", translate("Testing Feature"),
         translate("<b>This feature is in testing.</b>"));
 }
 
@@ -1327,7 +1327,7 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
-        information_box(translate("Move Preselect"),
+        messagebox("information", translate("Move Preselect"),
             translate("Preselect objects before invoking the move command."));
     }
     else {
@@ -1465,7 +1465,8 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected */
         alert(translate("Preselect objects before invoking the scale command."));
         end_command();
-        information_box(translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
+        messagebox("information", translate("Scale Preselect"),
+            translate("Preselect objects before invoking the scale command."));
     }
     else {
         prompt_output(translate("Specify base point: "));
@@ -1811,7 +1812,7 @@ main()
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the rotate command."));
         end_command();
-        information_box(translate("Rotate Preselect"),
+        messagebox("information", translate("Rotate Preselect"),
             translate("Preselect objects before invoking the rotate command."));
     }
     else {
@@ -2455,23 +2456,16 @@ locatepoint_command(ScriptEnv *context)
 ScriptValue
 messagebox_command(ScriptEnv* context)
 {
-    if (string_equal(STR(0), "critical")) {
-        critical_box(STR(1), STR(2));
-    }
-    else if (string_equal(STR(0), "information")) {
-        information_box(STR(1), STR(2));
-    }
-    else if (string_equal(STR(0), "question")) {
-        question_box(STR(1), STR(2));
-    }
-    else if (string_equal(STR(0), "warning")) {
-        warning_box(STR(1), STR(2));
-    }
-    else {
+    if (!(string_equal(STR(0), "critical")
+        || string_equal(STR(0), "information")
+        || string_equal(STR(0), "question")
+        || string_equal(STR(0), "warning")
+        )) {
         prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
         return script_false;
     }
 
+    messagebox(STR(0), STR(1), STR(2));
     return script_null;
 }
 
@@ -2562,7 +2556,7 @@ void
 native_scale_selected(EmbReal x, EmbReal y, EmbReal factor)
 {
     if (factor <= 0.0) {
-        critical_box(translate("ScaleFactor Error"),
+        messagebox("critical", translate("ScaleFactor Error"),
             translate("Hi there. If you are not a developer, report this as a bug. "
             "If you are a developer, your code needs examined, and possibly your head too."));
     }
