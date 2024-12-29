@@ -34,110 +34,15 @@
 
 #include "core.h"
 
-extern const char *config_table[];
-
-/* This is a local variable because access is available elsewhere via
- * config_str etc.
- */
-static ScriptValue *config;
-static int n_variables = 0;
-
-char formatFilterOpen[MAX_LONG_STRING];
-char formatFilterSave[MAX_LONG_STRING];
-EmbString open_filesPath;
-EmbString prompt_color_;
-EmbString prompt_selection_bg_color_;
-EmbString prompt_bg_color_;
-EmbString prompt_selection_color_;
-
-ScriptEnv *global;
-
-bool document_memory[MAX_OPEN_FILES];
-
-bool shiftKeyPressedState = false;
-bool cmdActive;
-bool rapidFireEnabled = false;
-bool isBlinking = false;
-int numOfDocs = 0;
-int docIndex = 0;
-
-EmbString end_symbol = "END";
-EmbString settings_file = "settings.ini";
-bool key_state[N_KEY_SEQUENCES] = {
-    false, false, false, false, false,
-    false, false, false, false, false,
-    false, false, false, false, false,
-    false, false, false, false, false,
-    false, false, false, false
-};
-Setting setting[N_SETTINGS];
-char recent_files[MAX_FILES][MAX_STRING_LENGTH] = {
-    "END"
-};
-
-const char *index_name[] = {
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven"
-};
-
-const char *index_th_name[] = {
-    "first",
-    "second",
-    "third",
-    "fourth",
-    "fifth",
-    "sixth",
-    "seventh"
-};
-
-const ScriptValue script_null = {
-    .r = 0.0F,
-    .i = 0,
-    .b = false,
-    .s = "",
-    .label = "NULL",
-    .type = SCRIPT_NULL
-};
-
-const ScriptValue script_true = {
-    .r = 0.0F,
-    .i = 1,
-    .b = true,
-    .s = "",
-    .label = "true",
-    .type = SCRIPT_BOOL
-};
-
-const ScriptValue script_false = {
-    .r = 0.0F,
-    .i = 0,
-    .b = false,
-    .s = "",
-    .label = "false",
-    .type = SCRIPT_BOOL
-};
-
-EmbString _appName_ = "Embroidermodder";
-EmbString _appVer_  = "v2.0 alpha";
-bool exitApp = false;
-int testing_mode = 0;
-
-int chunk_size = 100;
-
 /* EmbVectorList */
 EmbVectorList *
 create_vector_list(void)
 {
     EmbVectorList *list;
     list = (EmbVectorList*)malloc(sizeof(EmbVectorList));
-    list->data = (EmbVector*)malloc(chunk_size*sizeof(EmbVector));
+    list->data = (EmbVector*)malloc(CHUNK_SIZE*sizeof(EmbVector));
     list->count = 0;
-    list->size = chunk_size;
+    list->size = CHUNK_SIZE;
     return list;
 }
 
@@ -148,7 +53,7 @@ void
 append_vector_to_list(EmbVectorList *list, EmbVector v)
 {
     if (list->count >= list->size - 1) {
-        list->size += chunk_size;
+        list->size += CHUNK_SIZE;
         list->data = (EmbVector*)realloc(list->data,
             (list->size)*sizeof(EmbVector));
     }
@@ -182,9 +87,9 @@ create_id_list(void)
 {
     EmbIdList *list;
     list = (EmbIdList*)malloc(sizeof(EmbIdList));
-    list->data = (int32_t*)malloc(chunk_size*sizeof(int32_t));
+    list->data = (int32_t*)malloc(CHUNK_SIZE*sizeof(int32_t));
     list->count = 0;
-    list->size = chunk_size;
+    list->size = CHUNK_SIZE;
     return list;
 }
 
@@ -195,7 +100,7 @@ void
 append_id_to_list(EmbIdList *list, int32_t i)
 {
     if (list->count >= list->size - 1) {
-        list->size += chunk_size;
+        list->size += CHUNK_SIZE;
         list->data = (int32_t*)realloc(list->data,
             (list->size)*sizeof(EmbVector));
     }
@@ -362,9 +267,9 @@ run_testing(void)
 {
     int i;
     nanosleep_(2000);
-    int n = string_array_length(state.coverage_test);
+    int n = string_array_length(coverage_test);
     for (i=0; i<n; i++) {
-        run_command_main(state.coverage_test[i]);
+        run_command_main(coverage_test[i]);
         nanosleep_(1000);
     }        
 }
@@ -631,13 +536,15 @@ valid_rgb(float r, float g, float b)
 int
 string_array_length(EmbString s[])
 {
+    EmbString message;
     int i;
     for (i=0; i<MAX_TABLE_LENGTH; i++) {
-        if (string_equal(s[i], end_symbol)) {
+        if (string_equal(s[i], END_SYMBOL)) {
             return i;
         }
     }
-    printf("ERROR: string array has no end_symbol. %s %s\n", s[0], end_symbol);
+    sprintf(message, "ERROR: string array has no end_symbol. %s %s\n", s[0], END_SYMBOL);
+    debug_message(message);
     return MAX_TABLE_LENGTH - 1;
 }
 
@@ -701,14 +608,11 @@ config_str(const char *key)
     return "ERROR: NOT FOUND";
 }
 
-int n_commands = 0;
-
 /* . */
 void
 load_command_data(char *label)
 {
     EmbString key;
-    n_commands++;
     sprintf(key, "%s.id", label);
 
     int id = atoi(config_str(key));
@@ -739,6 +643,8 @@ load_command_data(char *label)
     command_data[id].flags = flags;
 }
 
+extern const char *config_table[];
+
 /* Rather than loading necessary configuration data from file at load, it is
  * compiled into the program. However, the ability to change the UI as a
  * user, without re-compiling the program, can be preserved by overriding the string
@@ -759,7 +665,7 @@ load_data(void)
 
     /* Load config_table into config ScriptValues. */
     for (n_variables=0; ; n_variables++) {
-        if (string_equal(config_table[n_variables], end_symbol)) {
+        if (string_equal(config_table[n_variables], END_SYMBOL)) {
             break;
         }
     }
@@ -846,7 +752,8 @@ save_settings(EmbString appDir, EmbString fname)
 int
 get_command_id(EmbString name)
 {
-    for (int i=0; i < n_commands; i++) {
+    int i;
+    for (i = 0; i < N_ACTIONS; i++) {
         if (string_equal(command_data[i].icon, name)) {
             return i;
         }
@@ -1103,9 +1010,9 @@ platform_string(void)
 {
     EmbString message;
     /* TODO: Append QSysInfo to string where applicable. */
-    sprintf(message, "Platform: %s", state.os);
+    sprintf(message, "Platform: %s", os);
     debug_message(message);
-    return state.os;
+    return os;
 }
 
 /* . */

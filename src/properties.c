@@ -552,7 +552,7 @@ checkBoxGridCenterOnOriginStateChanged(int checked)
 {
     setting[GRID_CENTER_ON_ORIGIN].dialog.b = checked;
 
-    set_enabled_group(state.center_on_origin_group, !checked);
+    set_enabled_group(center_on_origin_group, !checked);
 }
 
 /* . */
@@ -572,12 +572,12 @@ accept_settings(void)
         setting[GRID_COLOR].dialog.i = setting[DISPLAY_CROSSHAIR_COLOR].accept.i;
     }
 
-    for (int i=0; state.preview_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
-        copy_setting(state.preview_to_dialog[i], SETTING_DIALOG, SETTING_PREVIEW);
+    for (int i=0; preview_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(preview_to_dialog[i], SETTING_DIALOG, SETTING_PREVIEW);
     }
 
-    for (int i=0; state.accept_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
-        copy_setting(state.accept_to_dialog[i], SETTING_DIALOG, SETTING_ACCEPT);
+    for (int i=0; accept_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(accept_to_dialog[i], SETTING_DIALOG, SETTING_ACCEPT);
     }
 
     for (int i=0; i < N_SETTINGS; i++) {
@@ -597,8 +597,8 @@ comboBoxGridTypeCurrentIndexChanged(const char *type)
     string_copy(setting[GRID_TYPE].dialog.s, type);
 
     bool visibility = string_equal(type, "Circular");
-    set_visibility_group(state.rectangular_grid_group, !visibility);
-    set_visibility_group(state.circular_grid_group, visibility);
+    set_visibility_group(rectangular_grid_group, !visibility);
+    set_visibility_group(circular_grid_group, visibility);
 }
 
 /* . */
@@ -624,10 +624,10 @@ checkBoxGridLoadFromFileStateChanged(int checked)
     setting[GRID_LOAD_FROM_FILE].dialog.b = checked;
 
     bool dont_load = !setting[GRID_LOAD_FROM_FILE].dialog.b;
-    set_enabled_group(state.grid_load_from_file_group, dont_load);
+    set_enabled_group(grid_load_from_file_group, dont_load);
 
     bool use_this_origin = !setting[GRID_LOAD_FROM_FILE].dialog.b && !setting[GRID_CENTER_ON_ORIGIN].dialog.b;
-    set_enabled_group(state.defined_origin_group, use_this_origin);
+    set_enabled_group(defined_origin_group, use_this_origin);
 }
 
 

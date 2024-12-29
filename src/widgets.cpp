@@ -658,10 +658,10 @@ tip_of_the_day(void)
     ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
     // create_pixmap("did_you_know")
 
-    if (get_int(GENERAL_CURRENT_TIP) >= string_array_length(state.tips)) {
+    if (get_int(GENERAL_CURRENT_TIP) >= string_array_length(tips)) {
         set_int(GENERAL_CURRENT_TIP, 0);
     }
-    labelTipOfTheDay = new QLabel(state.tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
@@ -712,17 +712,17 @@ button_tip_of_the_day_clicked(int button)
             current--;
         }
         else {
-            current = string_array_length(state.tips)-1;
+            current = string_array_length(tips)-1;
         }
-        labelTipOfTheDay->setText(state.tips[current]);
+        labelTipOfTheDay->setText(tips[current]);
         set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton2) {
         current++;
-        if (current >= string_array_length(state.tips)) {
+        if (current >= string_array_length(tips)) {
             current = 0;
         }
-        labelTipOfTheDay->setText(state.tips[current]);
+        labelTipOfTheDay->setText(tips[current]);
         set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton3) {
@@ -1423,7 +1423,7 @@ create_object(int type_, uint32_t rgb)
     obj->core = (ObjectCore*)malloc(sizeof(ObjectCore));
 
     if (type_ < 30) {
-        string_copy(obj->core->OBJ_NAME, state.object_names[type_]);
+        string_copy(obj->core->OBJ_NAME, object_names[type_]);
     }
     else {
         string_copy(obj->core->OBJ_NAME, "Unknown");
@@ -2951,7 +2951,7 @@ doc_create_origin(int32_t doc)
 
     if (get_bool(GRID_SHOW_ORIGIN)) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */
-        svg_to_painterpath(&(documents[doc]->originPath), state.circle_origin_path,
+        svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path,
             emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
     }
 }
@@ -6066,7 +6066,7 @@ Application::event(QEvent *event)
             for (i=0; i < MAX_FILES && i < sl.size(); i++) {
                 string_copy(files[i], qPrintable(sl[i]));
             }
-            string_copy(files[i], end_symbol);
+            string_copy(files[i], END_SYMBOL);
             open_filesSelected(files);
             return true;
         }
@@ -6145,11 +6145,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     _main = this;
 
     for (int i=0; i<N_MENUS; i++) {
-        menu[i] = new QMenu(translate(state.menu_list[i]), this);
+        menu[i] = new QMenu(translate(menu_list[i]), this);
     }
 
     for (int i=0; i<N_TOOLBARS; i++) {
-        toolbar[i] = new QToolBar(translate(state.toolbar_list[i]), this);
+        toolbar[i] = new QToolBar(translate(toolbar_list[i]), this);
     }
 
     /* Selectors */
@@ -6260,7 +6260,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     create_all_actions();
     create_all_menus();
 
-    for (int i=0; state.menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+    for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
         menuBar()->addMenu(menu[i]);
     }
 
@@ -6361,14 +6361,14 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbar[TOOLBAR_PROMPT]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
     connect(toolbar[TOOLBAR_PROMPT], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 
-    add_to_toolbar(TOOLBAR_DRAW, state.draw_toolbar);
-    add_to_toolbar(TOOLBAR_MODIFY, state.modify_toolbar);
+    add_to_toolbar(TOOLBAR_DRAW, draw_toolbar);
+    add_to_toolbar(TOOLBAR_MODIFY, modify_toolbar);
 
-    set_toolbar_horizontal(state.toolbar_horizontal);
+    set_toolbar_horizontal(toolbar_horizontal);
 
-    add_toolbar_to_window(Qt::TopToolBarArea, state.top_toolbar);
-    add_toolbar_to_window(Qt::BottomToolBarArea, state.bottom_toolbar);
-    add_toolbar_to_window(Qt::LeftToolBarArea, state.left_toolbar);
+    add_toolbar_to_window(Qt::TopToolBarArea, top_toolbar);
+    add_toolbar_to_window(Qt::BottomToolBarArea, bottom_toolbar);
+    add_toolbar_to_window(Qt::LeftToolBarArea, left_toolbar);
 
     /* zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly); */
 
@@ -6519,7 +6519,7 @@ open_file(bool recent, EmbString recentFile)
     /* Check to see if this from the recent files list. */
     if (recent) {
         string_copy(files[0], (char*)qPrintable(recentFile));
-        string_copy(files[1], end_symbol);
+        string_copy(files[1], END_SYMBOL);
         open_filesSelected(files);
     }
     else if (!preview) {
@@ -6530,7 +6530,7 @@ open_file(bool recent, EmbString recentFile)
         for (i=0; i < MAX_FILES && i < sl.size(); i++) {
             string_copy(files[i], qPrintable(sl[i]));
         }
-        string_copy(files[i], end_symbol);
+        string_copy(files[i], END_SYMBOL);
         open_filesSelected(files);
     }
     else if (preview) {
@@ -6594,7 +6594,7 @@ open_filesSelected(EmbStringTable filesToOpen)
             /* Move the recent file to the top of the list */
             else {
                 string_copy(recent_files[0], filesToOpen[i]);
-                string_copy(recent_files[1], end_symbol);
+                string_copy(recent_files[1], END_SYMBOL);
             }
             set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(filesToOpen[i]).absolutePath()));
 
@@ -6747,8 +6747,8 @@ update_interface()
 
     if (numOfDocs) {
         /* Toolbars */
-        for (int i=0; state.toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
-            toolbar[state.toolbars_when_docs[i]]->show();
+        for (int i=0; toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
+            toolbar[toolbars_when_docs[i]]->show();
         }
 
         /* DockWidgets */
@@ -6757,8 +6757,8 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        for (int i=0; state.menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
-            menuBar()->addMenu(menu[state.menubar_full_list[i]]);
+        for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+            menuBar()->addMenu(menu[menubar_full_list[i]]);
         }
         menu[MENU_WINDOW]->setEnabled(true);
 
@@ -6771,8 +6771,8 @@ update_interface()
     }
     else {
         /* Toolbars */
-        for (int i=0; state.toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
-            toolbar[state.toolbars_when_docs[i]]->hide();
+        for (int i=0; toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
+            toolbar[toolbars_when_docs[i]]->hide();
         }
 
         /* DockWidgets */
@@ -6781,8 +6781,8 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        for (int i=0; state.menubar_no_docs[i] != TERMINATOR_SYMBOL; i++) {
-            menuBar()->addMenu(menu[state.menubar_no_docs[i]]);
+        for (int i=0; menubar_no_docs[i] != TERMINATOR_SYMBOL; i++) {
+            menuBar()->addMenu(menu[menubar_no_docs[i]]);
         }
         menu[MENU_WINDOW]->setEnabled(false);
 
@@ -6914,7 +6914,7 @@ QAction*
 get_action_by_icon(EmbString icon)
 {
     int i;
-    for (i=0; i < n_commands; i++) {
+    for (i=0; i < N_ACTIONS; i++) {
         if (string_equal(command_data[i].icon, icon)) {
             return actionHash[i];
         }
@@ -6933,7 +6933,7 @@ add_to_menu(int index, EmbStringTable menu_data)
             menu[index]->addSeparator();
         }
         else if (s[0] == '>') {
-            int id = get_id(state.menu_list, s+1);
+            int id = get_id(menu_list, s+1);
             if (id < 0) {
                 debug_message("Failed to identify submenu.");
                 continue;
@@ -7043,7 +7043,7 @@ settings_dialog(const char *showTab)
 void
 add_to_toolbar(int id, EmbStringTable toolbar_data)
 {
-    toolbar[id]->setObjectName(QString("toolbar") + state.toolbar_list[id]);
+    toolbar[id]->setObjectName(QString("toolbar") + toolbar_list[id]);
 
     int n = string_array_length(toolbar_data);
     for (int i=0; i<n; i++) {
@@ -7083,7 +7083,7 @@ void
 create_all_actions(void)
 {
     debug_message("Creating All Actions...");
-    for (int i=0; i < n_commands; i++) {
+    for (int i=0; i < N_ACTIONS; i++) {
         QString icon(command_data[i].icon);
         QString toolTip(command_data[i].tooltip);
         QString statusTip(command_data[i].statustip);
@@ -7331,7 +7331,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
     foreach (int objType, typeSet) {
         if ((objType > OBJ_BASE) && (objType <= OBJ_UNKNOWN)) {
             int index = objType - OBJ_ARC;
-            QString comboBoxStr = translate(state.object_names[index]);
+            QString comboBoxStr = translate(object_names[index]);
             comboBoxStr += " (" + QString().setNum(object_counts[index]) + ")";
             comboBoxSelected->addItem(comboBoxStr, objType);
         }
@@ -7747,9 +7747,9 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* paren
     tabWidget->addTab(createTabLineWeight(), translate("LineWeight"));
     tabWidget->addTab(createTabSelection(), translate("Selection"));
 
-    int n_tabs = string_array_length(state.settings_tab_labels);
+    int n_tabs = string_array_length(settings_tab_labels);
     for (int i=0; i<n_tabs; i++) {
-        if (showTab == state.settings_tab_labels[i]) {
+        if (showTab == settings_tab_labels[i]) {
             tabWidget->setCurrentIndex(i);
         }
     }
@@ -7939,8 +7939,8 @@ Settings_Dialog::createTabDisplay()
     /* Rendering */
     QGroupBox* groupBoxRender = new QGroupBox(translate("Rendering"), widget);
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
-    for (int i=0; state.render_hints[i] != TERMINATOR_SYMBOL; i++) {
-        QCheckBox* checkBox = create_checkbox(groupBoxRender, settings_data[state.render_hints[i]].id);
+    for (int i=0; render_hints[i] != TERMINATOR_SYMBOL; i++) {
+        QCheckBox* checkBox = create_checkbox(groupBoxRender, settings_data[render_hints[i]].id);
         vboxLayoutRender->addWidget(checkBox);
     }
     groupBoxRender->setLayout(vboxLayoutRender);
@@ -8097,9 +8097,9 @@ QWidget* Settings_Dialog::createTabOpenSave()
         SLOT(button_custom_filter_clear_all_clicked()));
 
     int i;
-    int n_extensions = string_array_length(state.extensions);
+    int n_extensions = string_array_length(extensions);
     for (i=0; i<n_extensions; i++) {
-        const char *extension = state.extensions[i];
+        const char *extension = extensions[i];
         custom_filter[i] = new QCheckBox(extension, groupbox_custom_filter);
         custom_filter[i]->setChecked(QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("*." + QString(extension), Qt::CaseInsensitive));
         connect(custom_filter[i], SIGNAL(stateChanged(int)), this,
@@ -8116,7 +8116,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     int row = 0;
     int column = 0;
     for (i=0; i<n_extensions; i++) {
-        const char *extension = state.extensions[i];
+        const char *extension = extensions[i];
         gridLayoutCustomFilter->addWidget(custom_filter[i], row, column, Qt::AlignLeft);
         row++;
         if (row == 10) {

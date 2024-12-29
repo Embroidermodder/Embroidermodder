@@ -273,6 +273,8 @@
 #define ACTION_PATTERN               128
 #define ACTION_DESIGN                129
 
+#define N_ACTIONS                    130
+
 /* UI Modes */
 #define CIRCLE_1P_RAD_ONE              0
 #define CIRCLE_1P_RAD_TWO              1
@@ -750,6 +752,8 @@
 #define SPANISH_SHORTCODE           "es"
 #define SWEDISH_SHORTCODE           "sv"
 #define TURKISH_SHORTCODE           "tr"
+
+#define END_SYMBOL                 "END"
 
 #endif
 

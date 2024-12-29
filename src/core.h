@@ -48,6 +48,8 @@ extern "C" {
 #define get_real(key)      setting[key].setting.r
 #define get_bool(key)      setting[key].setting.b
 
+#define MAX_LEAVES          10
+
 /* For switch tables we can use this trick to use two character indices.
  * For example: "case TWO_CHAR_INDEX(DUTCH_SHORTCODE):".
  */
@@ -256,8 +258,6 @@ typedef struct DocumentData_ {
     EmbString curLineWeight;
 } DocumentData;
 
-#define MAX_LEAVES          10
-
 /* For dialogs and tabs */
 typedef struct WidgetDesc_ {
     int id;
@@ -292,106 +292,6 @@ typedef struct Translation_ {
 } Translation;
 
 typedef int EmbIntTable[100];
-
-/* Global variables and constants we need to access anywhere in the program
- * with minimal overhead.
- *
- * These are all fixed-size allocations so if they are capable of being
- * replaced and makes the structure of the program in memory more interpretable.
- */
-typedef struct State_ {
-    EmbString os;
-
-    /* Versions */
-    EmbString embroidermodder_version;
-    EmbString libembroidery_version;
-    EmbString EmbroideryMobile_version;
-    EmbString PET_version;
-
-    /* Paths */
-    EmbString circle_origin_path;
-    EmbString one_path;
-    EmbString two_path;
-    EmbString three_path;
-    EmbString four_path;
-    EmbString five_path;
-    EmbString six_path;
-    EmbString seven_path;
-    EmbString eight_path;
-    EmbString nine_path;
-    EmbString zero_path;
-    EmbString minus_path;
-    EmbString apostrophe_path;
-    EmbString quote_path;
-
-    /* Menus */
-    EmbStringTable menu_list;
-    EmbIntTable menubar_full_list;
-    EmbIntTable menubar_no_docs;
-
-    EmbStringTable file_menu;
-    EmbStringTable edit_menu;
-    EmbStringTable view_menu;
-    EmbStringTable zoom_menu;
-    EmbStringTable pan_menu;
-    EmbStringTable help_menu;
-    EmbStringTable draw_menu;
-    EmbStringTable tools_menu;
-    EmbStringTable modify_menu;
-    EmbStringTable dimension_menu;
-    EmbStringTable sandbox_menu;
-    EmbStringTable recent_menu;
-    EmbStringTable window_menu;
-
-    /* Toolbars */
-    EmbStringTable toolbar_list;
-    EmbIntTable toolbars_when_docs;
-
-    EmbIntTable top_toolbar;
-    EmbIntTable left_toolbar;
-    EmbIntTable bottom_toolbar;
-    EmbIntTable toolbar_horizontal;
-
-    EmbStringTable file_toolbar;
-    EmbStringTable edit_toolbar;
-    EmbStringTable view_toolbar;
-    EmbStringTable zoom_toolbar;
-    EmbStringTable pan_toolbar;
-    EmbStringTable icon_toolbar;
-    EmbStringTable help_toolbar;
-    EmbStringTable draw_toolbar;
-    EmbStringTable inquiry_toolbar;
-    EmbStringTable modify_toolbar;
-    EmbStringTable dimension_toolbar;
-    EmbStringTable sandbox_toolbar;
-    EmbStringTable layer_toolbar;
-    EmbStringTable properties_toolbar;
-    EmbStringTable text_toolbar;
-    EmbStringTable prompt_toolbar;
-
-    /* Widget Groups */
-    EmbStringTable grid_load_from_file_group;
-    EmbStringTable defined_origin_group;
-    EmbStringTable rectangular_grid_group;
-    EmbStringTable circular_grid_group;
-    EmbStringTable center_on_origin_group;
-
-    /* Settings */
-    EmbStringTable settings_tab_labels;
-    EmbIntTable preview_to_dialog;
-    EmbIntTable accept_to_dialog;
-    EmbIntTable render_hints;
-
-    /* Objects */
-    EmbStringTable object_names;
-
-    /* Testing */
-    EmbStringTable coverage_test;
-
-    /* Misc */
-    EmbStringTable tips;
-    EmbStringTable extensions;
-} State;
 
 /* -------------------------------- Scripting ---------------------------- */
 
@@ -1038,12 +938,115 @@ EmbVectorList *all_grip_points(int32_t obj_id);
 EmbVector mouse_snap_point(int32_t obj_id, EmbVector mousePoint);
 
 /* ---------------------------- Global Variables --------------------------- */
+/* Global variables and constants we need to access anywhere in the program
+ * with minimal overhead.
+ *
+ * These are all fixed-size allocations so if they are capable of being
+ * replaced and makes the structure of the program in memory more interpretable.
+ */
 
 extern Command command_data[MAX_COMMANDS];
 extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
 extern SettingsData settings_data[N_SETTINGS];
 extern GroupBoxData group_box_list[];
+
+extern ScriptValue *config;
+extern int n_variables;
+
+extern const char *index_th_name[];
+extern const char *os;
+extern bool exitApp;
+
+/* Versions */
+extern const char *embroidermodder_version;
+extern const char *libembroidery_version;
+extern const char *EmbroideryMobile_version;
+extern const char *PET_version;
+
+/* Paths */
+extern const char *circle_origin_path;
+extern const char *one_path;
+extern const char *two_path;
+extern const char *three_path;
+extern const char *four_path;
+extern const char *five_path;
+extern const char *six_path;
+extern const char *seven_path;
+extern const char *eight_path;
+extern const char *nine_path;
+extern const char *zero_path;
+extern const char *minus_path;
+extern const char *apostrophe_path;
+extern const char *quote_path;
+
+/* Menus */
+extern EmbStringTable menu_list;
+extern EmbIntTable menubar_full_list;
+extern EmbIntTable menubar_no_docs;
+
+extern EmbStringTable file_menu;
+extern EmbStringTable edit_menu;
+extern EmbStringTable view_menu;
+extern EmbStringTable zoom_menu;
+extern EmbStringTable pan_menu;
+extern EmbStringTable help_menu;
+extern EmbStringTable draw_menu;
+extern EmbStringTable tools_menu;
+extern EmbStringTable modify_menu;
+extern EmbStringTable dimension_menu;
+extern EmbStringTable sandbox_menu;
+extern EmbStringTable recent_menu;
+extern EmbStringTable window_menu;
+
+/* Toolbars */
+extern EmbStringTable toolbar_list;
+extern EmbIntTable toolbars_when_docs;
+
+extern EmbIntTable top_toolbar;
+extern EmbIntTable left_toolbar;
+extern EmbIntTable bottom_toolbar;
+extern EmbIntTable toolbar_horizontal;
+
+extern EmbStringTable file_toolbar;
+extern EmbStringTable edit_toolbar;
+extern EmbStringTable view_toolbar;
+extern EmbStringTable zoom_toolbar;
+extern EmbStringTable pan_toolbar;
+extern EmbStringTable icon_toolbar;
+extern EmbStringTable help_toolbar;
+extern EmbStringTable draw_toolbar;
+extern EmbStringTable inquiry_toolbar;
+extern EmbStringTable modify_toolbar;
+extern EmbStringTable dimension_toolbar;
+extern EmbStringTable sandbox_toolbar;
+extern EmbStringTable layer_toolbar;
+extern EmbStringTable properties_toolbar;
+extern EmbStringTable text_toolbar;
+extern EmbStringTable prompt_toolbar;
+
+/* Widget Groups */
+extern EmbStringTable grid_load_from_file_group;
+extern EmbStringTable defined_origin_group;
+extern EmbStringTable rectangular_grid_group;
+extern EmbStringTable circular_grid_group;
+extern EmbStringTable center_on_origin_group;
+
+/* Settings */
+extern EmbStringTable settings_tab_labels;
+extern EmbIntTable preview_to_dialog;
+extern EmbIntTable accept_to_dialog;
+extern EmbIntTable render_hints;
+
+/* Objects */
+extern EmbStringTable object_names;
+
+/* Testing */
+extern EmbStringTable coverage_test;
+
+/* Misc */
+extern EmbStringTable tips;
+extern EmbStringTable extensions;
 
 extern bool document_memory[MAX_OPEN_FILES];
 
@@ -1067,8 +1070,6 @@ extern bool blinkState;
 
 extern int testing_mode;
 extern EmbStringTable button_list;
-
-extern EmbString end_symbol;
 
 extern EmbString _appName_;
 extern EmbString _appVer_;
@@ -1137,8 +1138,6 @@ extern EmbString fieldYesText;
 extern EmbString fieldNoText;
 extern EmbString fieldOnText;
 extern EmbString fieldOffText;
-
-extern State state;
 
 #ifdef __cplusplus
 }

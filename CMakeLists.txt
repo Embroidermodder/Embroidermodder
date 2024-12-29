@@ -77,10 +77,13 @@ qt_add_executable(embroidermodder2
 	${TRANSLATION}/swedish.c
 	${TRANSLATION}/turkish.c
 
-	${SRC}/settings_table.c
-	${SRC}/editors_table.c
-
 	${SRC}/config.c
+	${SRC}/commands_table.c
+	${SRC}/editors_table.c
+	${SRC}/settings_table.c
+	${SRC}/state.c
+	${SRC}/xpm.c
+
 	${SRC}/commands.c
 	${SRC}/document.c
 	${SRC}/interface.c
@@ -89,8 +92,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/objects.c
 	${SRC}/properties.c
 	${SRC}/script.c
-	${SRC}/state.c
-	${SRC}/xpm.c
 
 	${SRC}/constants.h
 	${SRC}/wrapper.h
