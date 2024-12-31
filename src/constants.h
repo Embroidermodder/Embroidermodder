@@ -755,5 +755,37 @@
 
 #define END_SYMBOL                 "END"
 
+#define GB_GENERAL                     0
+#define GB_GEOM_ARC                    1
+#define GB_MISC_ARC                    2
+#define GB_GEOM_BLOCK                  3
+#define GB_GEOM_CIRCLE                 4
+#define GB_GEOM_DIMALIGNED             5
+#define GB_GEOM_DIMANGULAR             6
+#define GB_GEOM_DIMARCLENGTH           7
+#define GB_GEOM_DIMDIAMETER            8
+#define GB_GEOM_DIMLEADER              9
+#define GB_GEOM_DIMLINEAR             10
+#define GB_GEOM_DIMORDINATE           11
+#define GB_GEOM_DIMRADIUS             12
+#define GB_GEOM_ELLIPSE               13
+#define GB_GEOM_IMAGE                 14
+#define GB_MISC_IMAGE                 15
+#define GB_GEOM_INFINITE_LINE         16
+#define GB_GEOM_LINE                  17
+#define GB_GEOM_PATH                  18
+#define GB_MISC_PATH                  19
+#define GB_GEOM_POINT                 20
+#define GB_GEOM_POLYGON               21
+#define GB_GEOM_POLYLINE              22
+#define GB_MISC_POLYLINE              23
+#define GB_GEOM_RAY                   24
+#define GB_GEOM_RECT                  25
+#define GB_GEOM_TEXT_MULTI            26
+#define GB_TEXT_TEXT_SINGLE           27
+#define GB_GEOM_TEXT_SINGLE           28
+#define GB_MISC_TEXT_SINGLE           29
+#define N_GROUPBOX                    30
+
 #endif
 

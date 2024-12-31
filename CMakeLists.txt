@@ -46,9 +46,6 @@ add_subdirectory(extern/libembroidery)
 add_subdirectory(extern/glfw)
 
 qt_add_executable(embroidermodder2
-	${SRC}/widgets.cpp
-	${SRC}/wrapper.cpp
-
 	${EXTERN}/nanovg/src/nanovg.c
 	${EXTERN}/nanovg/src/nanovg.h
 
@@ -77,14 +74,11 @@ qt_add_executable(embroidermodder2
 	${TRANSLATION}/swedish.c
 	${TRANSLATION}/turkish.c
 
-	${SRC}/config.c
-	${SRC}/commands_table.c
-	${SRC}/editors_table.c
-	${SRC}/settings_table.c
-	${SRC}/state.c
-	${SRC}/xpm.c
+	${SRC}/widgets.cpp
 
 	${SRC}/commands.c
+	${SRC}/commands_table.c
+	${SRC}/config.c
 	${SRC}/document.c
 	${SRC}/interface.c
 	${SRC}/geometry.c
@@ -92,9 +86,12 @@ qt_add_executable(embroidermodder2
 	${SRC}/objects.c
 	${SRC}/properties.c
 	${SRC}/script.c
+	${SRC}/state.c
+	${SRC}/ui.c
+	${SRC}/xpm.c
 
 	${SRC}/constants.h
-	${SRC}/wrapper.h
+	${SRC}/widgets.h
 	${SRC}/core.h
 )
 

@@ -524,9 +524,9 @@ check_box_lwt_real_render_changed(int checked)
 void
 hide_all_groups(void)
 {
-    for (int i=0; group_box_list[i].id[0] != '.'; i++) {
-        if (string_equal(group_box_list[i].id, "GB_GENERAL")) {
-            hide_widget(group_box_list[i].id, WIDGET_GROUP_BOX);
+    for (int i=0; group_box_list[i].id >= 0; i++) {
+        if (group_box_list[i].id > GB_GENERAL) {
+            hide_widget(group_box_list[i].key, WIDGET_GROUP_BOX);
         }
     }
 }

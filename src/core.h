@@ -85,7 +85,7 @@ typedef struct Editor_ {
 } Editor;
 
 typedef struct GroupBoxData_ {
-    const char *id;
+    int32_t id;
     const char *key;
     const char *label;
     Editor *data;
@@ -292,6 +292,13 @@ typedef struct Translation_ {
 } Translation;
 
 typedef int EmbIntTable[100];
+
+typedef struct WidgetData_ {
+    EmbString key;
+    EmbString label;
+    int id;
+    int type;
+} WidgetData;
 
 /* -------------------------------- Scripting ---------------------------- */
 
@@ -1138,6 +1145,9 @@ extern EmbString fieldYesText;
 extern EmbString fieldNoText;
 extern EmbString fieldOnText;
 extern EmbString fieldOffText;
+
+extern WidgetData grid_gb_data[];
+extern WidgetData zoom_gb_data[];
 
 #ifdef __cplusplus
 }
