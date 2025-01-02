@@ -13,7 +13,7 @@
  * TODO: Use proper icons for tool buttons.
  */
 
-#include "core.h"
+#include "core.h" 
 
 WidgetData zoom_gb_data[] = {
     {
@@ -27,8 +27,8 @@ WidgetData zoom_gb_data[] = {
         .id = DISPLAY_ZOOMSCALE_OUT
     },
     {
-        .key = "END",
-        .label = "END",
+        .key = END_SYMBOL,
+        .label = END_SYMBOL,
         .id = -1
     }
 };
@@ -80,8 +80,8 @@ WidgetData grid_gb_data[] = {
         .id = GRID_SPACING_ANGLE
     },
     {
-        .key = "END",
-        .label = "END",
+        .key = END_SYMBOL,
+        .label = END_SYMBOL,
         .id = -1
     }
 };
@@ -95,7 +95,7 @@ EmbStringTable button_list = {
     "QSNAP",
     "QTRACK",
     "LWT",
-    "END"
+    END_SYMBOL
 };
 
 char *ui_labels[] = {
@@ -124,7 +124,7 @@ char *ui_labels[] = {
     "labelSelectionFillAlpha", "Selection Box Fill Alpha",
 
     "labelRulerPixelSize", "Ruler Pixel Size",
-    "END", "END"
+    END_SYMBOL
 };
 
 char *patternDetailsBox[] = {
@@ -140,7 +140,7 @@ char *patternDetailsBox[] = {
     "labelRectBottom", "fieldRectBottom",
     "labelRectWidth", "fieldRectWidth",
     "labelRectHeight", "fieldRectHeight",
-    "END", "END"
+    END_SYMBOL
 };
 
 char *selectionBoxLayout[] = {
@@ -151,2329 +151,696 @@ char *selectionBoxLayout[] = {
     "labelSelectionColorWindow", "buttonSelectionColorWindow",
     "labelSelectionFillWindow", "buttonSelectionFillWindow",
     "labelSelectionFillAlpha", "spinboxSelectionFillAlpha",
-    "END", "END"
+    END_SYMBOL
 };
 
 char *promptColorLayout[] = {
     "labelTextColor", "buttonTextColor",
     "labelBackgroundColor", "buttonBackgroundColor",
-    "END", "END"
+    END_SYMBOL
 };
 
 char *rulerLayout[] = {
     "labelRulerPixelSize", "spinboxRulerPixelSize",
-    "END", "END"
+    END_SYMBOL
 };
 
-Editor general_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Layer",
-        .data_type = "combobox",
-        .signal = "GeneralLayer",
-        .object = 0
-    },
-    {
-        .icon = "blank",
-        .label = "Color",
-        .data_type = "combobox",
-        .signal = "GeneralColor",
-        .object = 0
-    },
-    {
-        .icon = "blank",
-        .label =  "LineType",
-        .data_type = "combobox",
-        .signal = "GeneralLineType",
-        .object = 0
-    },
-    {
-        .icon = "blank",
-        .label = "LineWeight",
-        .data_type = "combobox",
-        .signal = "GeneralLineWeight",
-        .object = 0
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_arc_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Center X",
-        .data_type = "double",
-        .signal = "ArcCenterX",
-        .object = OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Center Y",
-        .data_type = "double",
-        .signal = "ArcCenterY",
-        .object = OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Radius",
-        .data_type = "double",
-        .signal = "ArcRadius",
-        .object = OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Start Angle",
-        .data_type = "double",
-        .signal = "ArcStartAngle",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "End Angle",
-        .data_type = "double",
-        .signal = "ArcEndAngle",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Start X",
-        .data_type = "double",
-        .signal = "",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Start Y",
-        .data_type = "double",
-        .signal = "",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "End X",
-        .data_type = "double",
-        .signal = "",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "End Y",
-        .data_type = "double",
-        .signal = "",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Area",
-        .data_type = "double",
-        .signal = "",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Arc Length",
-        .data_type = "double",
-        .signal = "",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Chord",
-        .data_type = "double",
-        .signal = "",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "blank",
-        .label = "Included Angle",
-        .data_type = "double",
-        .signal = "",
-        .object =  OBJ_ARC
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor misc_arc_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Clockwise",
-        .data_type = "combobox",
-        .signal = "ArcClockwise",
-        .object = OBJ_ARC
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_block_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Position X",
-        .data_type = "double",
-        .signal = "BlockPositionX",
-        .object = OBJ_BLOCK
-    },
-    {
-        .icon = "blank",
-        .label = "Position Y",
-        .data_type = "double",
-        .signal = "BlockPositionY",
-        .object = OBJ_BLOCK
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_circle_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Center X",
-        .data_type = "double",
-        .signal = "CircleCenterX",
-        .object = OBJ_CIRCLE
-    },
-    {
-        .icon = "blank",
-        .label = "Center Y",
-        .data_type = "double",
-        .signal = "CircleCenterY",
-        .object = OBJ_CIRCLE
-    },
-    {
-        .icon = "blank",
-        .label = "Radius",
-        .data_type = "double",
-        .signal = "CircleRadius",
-        .object = OBJ_CIRCLE
-    },
-    {
-        .icon = "blank",
-        .label = "Diameter",
-        .data_type = "double",
-        .signal = "CircleDiameter",
-        .object = OBJ_CIRCLE
-    },
-    {
-        .icon = "blank",
-        .label = "Area",
-        .data_type = "double",
-        .signal = "CircleArea",
-        .object = OBJ_CIRCLE
-    },
-    {
-        .icon = "blank",
-        .label = "Circumference",
-        .data_type = "double",
-        .signal = "CircleCircumference",
-        .object = OBJ_CIRCLE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_dim_aligned_editor_data[] = {
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_dim_angular_editor_data[] = {
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_dim_arc_length_editor_data[] = {
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_dim_diameter_editor_data[] = {
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_dim_leader_editor_data[] = {
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_dim_linear_editor_data[] = {
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_dim_ordinate_editor_data[] = {
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_dim_radius_editor_data[] = {
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_ellipse_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Center X",
-        .data_type = "double",
-        .signal = "EllipseCenterX",
-        .object = OBJ_ELLIPSE
-    },
-    {
-        .icon = "blank",
-        .label = "Center Y",
-        .data_type = "double",
-        .signal = "EllipseCenterY",
-        .object = OBJ_ELLIPSE
-    },
-    {
-        .icon = "blank",
-        .label = "Major Radius",
-        .data_type = "double",
-        .signal = "EllipseRadiusMajor",
-        .object = OBJ_ELLIPSE
-    },
-    {
-        .icon = "blank",
-        .label = "Minor Radius",
-        .data_type = "double",
-        .signal = "EllipseRadiusMinor",
-        .object = OBJ_ELLIPSE
-    },
-    {
-        .icon = "blank",
-        .label = "Major Diameter",
-        .data_type = "double",
-        .signal = "EllipseDiameterMajor",
-        .object = OBJ_ELLIPSE
-    },
-    {
-        .icon = "blank",
-        .label = "Minor Diameter",
-        .data_type = "double",
-        .signal = "EllipseDiameterMinor",
-        .object = OBJ_ELLIPSE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_image_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Position X",
-        .data_type = "double",
-        .signal = "ImagePositionX",
-        .object = OBJ_IMAGE
-    },
-    {
-        .icon = "blank",
-        .label = "Position Y",
-        .data_type = "double",
-        .signal = "ImagePositionY",
-        .object = OBJ_IMAGE
-    },
-    {
-        .icon = "blank",
-        .label = "Width",
-        .data_type = "double",
-        .signal = "ImageWidth",
-        .object = OBJ_IMAGE
-    },
-    {
-        .icon = "blank",
-        .label = "Height",
-        .data_type = "double",
-        .signal = "ImageHeight",
-        .object = OBJ_IMAGE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor misc_image_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Name",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_IMAGE
-    },
-    {
-        .icon = "blank",
-        .label = "Path",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_IMAGE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_infinite_line_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Start X",
-        .data_type = "double",
-        .signal = "InfiniteLineX1",
-        .object = OBJ_INFINITELINE
-    },
-    {
-        .icon = "blank",
-        .label = "Start Y",
-        .data_type = "double",
-        .signal = "InfiniteLineY1",
-        .object = OBJ_INFINITELINE
-    },
-    {
-        .icon = "blank",
-        .label = "2nd X",
-        .data_type = "double",
-        .signal = "InfiniteLineX2",
-        .object = OBJ_INFINITELINE
-    },
-    {
-        .icon = "blank",
-        .label = "2nd Y",
-        .data_type = "double",
-        .signal = "InfiniteLineY2",
-        .object = OBJ_INFINITELINE
-    },
-    {
-        .icon = "blank",
-        .label = "Vector X",
-        .data_type = "double",
-        .signal = "InfiniteLineVectorX",
-        .object = OBJ_INFINITELINE
-    },
-    {
-        .icon = "blank",
-        .label = "Vector Y",
-        .data_type = "double",
-        .signal = "InfiniteLineVectorY",
-        .object = OBJ_INFINITELINE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_line_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Start X",
-        .data_type = "double",
-        .signal = "LineStartX",
-        .object = OBJ_LINE
-    },
-    {
-        .icon = "blank",
-        .label = "Start Y",
-        .data_type = "double",
-        .signal = "LineStartY",
-        .object = OBJ_LINE
-    },
-    {
-        .icon = "blank",
-        .label = "End X",
-        .data_type = "double",
-        .signal = "LineEndX",
-        .object = OBJ_LINE
-    },
-    {
-        .icon = "blank",
-        .label = "End Y",
-        .data_type = "double",
-        .signal = "LineEndY",
-        .object = OBJ_LINE
-    },
-    {
-        .icon = "blank",
-        .label = "Delta X",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_LINE
-    },
-    {
-        .icon = "blank",
-        .label = "Delta Y",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_LINE
-    },
-    {
-        .icon = "blank",
-        .label = "Angle",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_LINE
-    },
-    {
-        .icon = "blank",
-        .label = "Length",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_LINE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_path_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Vertex #",
-        .data_type = "combobox",
-        .signal = "PathVertexNumber",
-        .object = OBJ_PATH
-    },
-    {
-        .icon = "blank",
-        .label = "Vertex X",
-        .data_type = "double",
-        .signal = "PathVertexX",
-        .object = OBJ_PATH
-    },
-    {
-        .icon = "blank",
-        .label = "Vertex Y",
-        .data_type = "double",
-        .signal = "PathVertexY",
-        .object = OBJ_PATH
-    },
-    {
-        .icon = "blank",
-        .label = "Area",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_PATH
-    },
-    {
-        .icon = "blank",
-        .label = "Length",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_PATH
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor misc_path_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Closed", "combobox",
-        .signal = "PathClosed",
-        .object = OBJ_PATH
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_point_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Position X",
-        .data_type = "double",
-        .signal = "PointX",
-        .object = OBJ_POINT
-    },
-    {
-        .icon = "blank",
-        .label = "Position Y",
-        .data_type = "double",
-        .signal = "PointY",
-        .object = OBJ_POINT
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_polygon_editor_data[] = {
-    {
-        .icon = "blank",
-        .label ="Center X",
-        .data_type = "double",
-        .signal = "PolygonCenterX",
-        .object = OBJ_POLYGON
-    },
-    {
-        .icon = "blank",
-        .label ="Center Y",
-        .data_type = "double",
-        .signal = "PolygonCenterY",
-        .object = OBJ_POLYGON
-    },
-    {
-        .icon = "blank",
-        .label ="Vertex Radius",
-        .data_type = "double",
-        .signal = "PolygonVertexRadius",
-        .object = OBJ_POLYGON
-    },
-    {
-        .icon = "blank",
-        .label ="Side Radius",
-        .data_type = "double",
-        .signal = "PolygonSideRadius",
-        .object = OBJ_POLYGON
-    },
-    {
-        .icon = "blank",
-        .label ="Vertex Diameter",
-        .data_type = "double",
-        .signal ="PolygonVertexDiameter",
-        .object = OBJ_POLYGON
-    },
-    {
-        .icon = "blank",
-        .label = "Side Diameter",
-        .data_type = "double",
-        .signal = "PolygonSideDiameter",
-        .object = OBJ_POLYGON
-    },
-    {
-        .icon = "blank",
-        .label = "Interior Angle",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_POLYGON
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_polyline_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Vertex #",
-        .data_type = "combobox",
-        .signal = "PolylineVertexNum",
-        .object = OBJ_POLYLINE
-    },
-    {
-        .icon = "blank",
-        .label = "Vertex X",
-        .data_type = "double",
-        .signal = "PolylineVertexX",
-        .object = OBJ_POLYLINE
-    },
-    {
-        .icon = "blank",
-        .label = "Vertex Y",
-        .data_type = "double",
-        .signal = "PolylineVertexX",
-        .object = OBJ_POLYLINE
-    },
-    {
-        .icon = "blank",
-        .label = "Area",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_POLYLINE
-    },
-    {
-        .icon = "blank",
-        .label = "Length",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_POLYLINE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor misc_polyline_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Closed",
-        .data_type = "combobox",
-        .signal = "PolylineClosed",
-        .object = OBJ_POLYLINE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-/* . */
-Editor geometry_ray_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Start X",
-        .data_type = "double",
-        .signal = "RayStartX", OBJ_RAY
-    },
-    {
-        .icon = "blank",
-        .label = "Start Y",
-        .data_type = "double",
-        .signal = "RayStartY", OBJ_RAY
-    },
-    {
-        .icon = "blank",
-        .label = "2nd X",
-        .data_type = "double",
-        .signal = "RayEndX", OBJ_RAY
-    },
-    {
-        .icon = "blank",
-        .label = "2nd Y",
-        .data_type = "double",
-        .signal = "RayEndY", OBJ_RAY
-    },
-    {
-        .icon = "blank",
-        .label = "Vector X",
-        .data_type = "double",
-        .signal = "", OBJ_RAY
-    },
-    {
-        .icon = "blank",
-        .label = "Vector Y",
-        .data_type = "double",
-        .signal = "", OBJ_RAY
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_rectangle_editor_data[] = {
-    {
-        .icon = "blank",
-        .label ="Corner 1 X",
-        .data_type = "double",
-        .signal = "RectangleCorner1X",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Corner 1 Y",
-        .data_type = "double",
-        .signal = "RectangleCorner1Y",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Corner 2 X",
-        .data_type = "double",
-        .signal = "RectangleCorner2X",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Corner 2 Y",
-        .data_type = "double",
-        .signal = "RectangleCorner2Y",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Corner 3 X",
-        .data_type = "double",
-        .signal = "RectangleCorner3X",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Corner 3 Y",
-        .data_type = "double",
-        .signal = "RectangleCorner3Y",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Corner 4 X",
-        .data_type = "double",
-        .signal = "RectangleCorner4X",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Corner 4 Y",
-        .data_type = "double",
-        .signal = "RectangleCorner4Y",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Width",
-        .data_type = "double",
-        .signal = "RectangleWidth",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Height",
-        .data_type = "double",
-        .signal = "RectangleHeight",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Area",
-        .data_type = "double",
-        .signal = "",
-        .object = OBJ_RECTANGLE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_text_multi_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Position X",
-        .data_type = "double",
-        .signal = "TextPositionX",
-        .object = OBJ_TEXTMULTI
-    },
-    {
-        .icon = "blank",
-        .label = "Position Y",
-        .data_type = "double",
-        .signal = "TextPositionX",
-        .object = OBJ_TEXTMULTI
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor text_text_single_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Contents",
-        .data_type = "string",
-        .signal = "TextContents",
-        .object = OBJ_TEXTSINGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Font",
-        .data_type = "fontcombobox",
-        .signal = "TextFont",
-        .object = OBJ_TEXTSINGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Justify",
-        .data_type = "combobox",
-        .signal = "TextJustify",
-        .object = OBJ_TEXTSINGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Height",
-        .data_type = "double",
-        .signal = "TextHeight",
-        .object = OBJ_TEXTSINGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Rotation",
-        .data_type = "double",
-        .signal = "TextRotation",
-        .object = OBJ_TEXTSINGLE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor geometry_text_single_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Position X",
-        .data_type = "double",
-        .signal = "TextSingleX",
-        .object = OBJ_TEXTSINGLE
-    },
-    {
-        .icon = "blank",
-        .label = "Position Y",
-        .data_type = "double",
-        .signal = "TextSingleY",
-        .object = OBJ_TEXTSINGLE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-Editor misc_text_single_editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Backward",
-        .data_type = "combobox",
-        .signal = "TextSingleBackward",
-        .object = OBJ_POLYLINE
-    },
-    {
-        .icon = "blank",
-        .label = "Upside Down",
-        .data_type = "combobox",
-        .signal = "TextSingleUpsideDown",
-        .object = OBJ_POLYLINE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
-/* . */
+/* The data section is a 4 x n table of line editor data in the order:
+ *     (data_type, icon, label, signal_name).
+ */
 GroupBoxData group_box_list[] = {
     {
         .id = GB_GENERAL,
         .key = "General",
         .label = "General",
-        .data = general_editor_data
+        .data = {
+            "combobox", "blank", "Layer", "GeneralLayer",
+            "combobox", "blank", "Color", "GeneralColor",
+            "combobox", "blank", "Line Type", "GeneralLineType",
+            "combobox", "blank", "Line Weight", "GeneralLineWeight",
+            END_SYMBOL
+        },
+        .object = 0
     },
     {
         .id = GB_GEOM_ARC,
         .key = "GeometryArc",
         .label = "Geometry",
-        .data = geometry_arc_editor_data
+        .data = {
+            "double", "blank", "Center X", "ArcCenterX",
+            "double", "blank", "Center Y", "ArcCenterY",
+            "double", "blank", "Radius", "ArcRadius",
+            "double", "blank", "Start Angle", "ArcStartAngle",
+            "double", "blank", "End Angle", "ArcEndAngle",
+            "double", "blank", "Start X", "",
+            "double", "blank", "Start Y", "",
+            "double", "blank", "End X", "",
+            "double", "blank", "End Y", "",
+            "double", "blank", "Area", "",
+            "double", "blank", "Arc Length", "",
+            "double", "blank", "Chord", "",
+            "double", "blank", "Included Angle", "",
+            END_SYMBOL
+        },
+        .object =  OBJ_ARC
     },
     {
         .id = GB_MISC_ARC,
         .key = "MiscArc",
         .label = "Misc",
-        .data = misc_arc_editor_data
+        .data = {
+            "combobox", "blank", "Clockwise", "ArcClockwise",
+            END_SYMBOL
+        },
+        .object = OBJ_ARC
     },
     {
         .id = GB_GEOM_BLOCK,
         .key = "GeometryBlock",
         .label = "Geometry",
-        .data = geometry_block_editor_data
+        .data = {
+            "double", "blank", "Position X", "BlockPositionX",
+            "double", "blank", "Position Y", "BlockPositionY",
+            END_SYMBOL
+        },
+        .object = OBJ_BLOCK
     },
     {
         .id = GB_GEOM_CIRCLE,
         .key = "GeometryCircle",
         .label = "Geometry",
-        .data = geometry_circle_editor_data
+        .data = {
+             "double", "blank", "Center X", "CircleCenterX",
+             "double", "blank", "Center Y", "CircleCenterY",
+             "double", "blank", "Radius", "CircleRadius",
+             "double", "blank", "Diameter", "CircleDiameter",
+             "double", "blank", "Area", "CircleArea",
+             "double", "blank", "Circumference", "CircleCircumference",
+             END_SYMBOL
+        },
+        .object = OBJ_CIRCLE
     },
     {
         .id = GB_GEOM_DIMALIGNED,
         .key = "GeometryDimAligned",
         .label = "Geometry",
-        .data = geometry_dim_aligned_editor_data
+        .data = {
+            END_SYMBOL
+         },
+        .object = -1
     },
     {
         .id = GB_GEOM_DIMANGULAR,
         .key = "GeometryDimAngular",
         .label = "Geometry",
-        .data = geometry_dim_angular_editor_data
+        .data = {
+            END_SYMBOL
+         },
+        .object = -1
     },
     {
         .id = GB_GEOM_DIMARCLENGTH,
         .key = "GeometryDimArcLength",
         .label = "Geometry",
-        .data = geometry_dim_arc_length_editor_data
+        .data = {
+            END_SYMBOL
+         },
+        .object = -1
     },
     {
         .id = GB_GEOM_DIMDIAMETER,
         .key = "GeometryDiameter",
         .label = "Geometry",
-        .data = geometry_dim_diameter_editor_data
+        .data = {
+            END_SYMBOL
+         },
+        .object = -1
     },
     {
         .id = GB_GEOM_DIMLEADER,
         .key = "GeometryDimLeader",
         .label = "Geometry",
-        .data = geometry_dim_leader_editor_data
+        .data = {
+            END_SYMBOL
+         },
+        .object = -1
     },
     {
         .id = GB_GEOM_DIMLINEAR,
         .key = "GeometryDimLinear",
         .label = "Geometry",
-        .data = geometry_dim_linear_editor_data
+        .data = {
+            END_SYMBOL
+         },
+        .object = -1
     },
     {
         .id = GB_GEOM_DIMORDINATE,
         .key = "GeometryDimOrdinate",
         .label = "Geometry",
-        .data = geometry_dim_ordinate_editor_data
+        .data = {
+            END_SYMBOL
+         },
+        .object = -1
     },
     {
         .id = GB_GEOM_DIMRADIUS,
         .key = "GeometryDimRadius",
         .label = "Geometry",
-        .data = geometry_dim_radius_editor_data
+        .data = {
+            END_SYMBOL
+         },
+        .object = -1
     },
     {
         .id = GB_GEOM_ELLIPSE,
         .key = "GeometryEllipse",
         .label = "Geometry",
-        .data = geometry_ellipse_editor_data
+        .data = {
+            "double", "blank", "Center X", "EllipseCenterX",
+            "double", "blank", "Center Y", "EllipseCenterY",
+            "double", "blank", "Major Radius", "EllipseRadiusMajor",
+            "double", "blank", "Minor Radius", "EllipseRadiusMinor",
+            "double", "blank", "Major Diameter", "EllipseDiameterMajor",
+            "double", "blank", "Minor Diameter", "EllipseDiameterMinor",
+            END_SYMBOL
+        },
+        .object = OBJ_ELLIPSE
     },
     {
         .id = GB_GEOM_IMAGE,
         .key = "GeometryImage",
         .label = "Geometry",
-        .data = geometry_image_editor_data
+        .data = {
+            "double", "blank", "Position X", "ImagePositionX",
+            "double", "blank", "Position Y", "ImagePositionY",
+            "double", "blank", "Width", "ImageWidth",
+            "double", "blank", "Height", "ImageHeight",
+            END_SYMBOL
+         },
+        .object = OBJ_IMAGE
     },
     {
         .id = GB_MISC_IMAGE,
         .key = "MiscImage",
         .label = "Misc",
-        .data = misc_image_editor_data
+        .data = {
+            "double", "blank", "Name", "",
+            "double", "blank", "Path", "",
+            END_SYMBOL
+        },
+        .object = OBJ_IMAGE
     },
     {
         .id = GB_GEOM_INFINITE_LINE,
         .key = "GeometryInfiniteLine",
         .label = "Geometry",
-        .data = geometry_infinite_line_editor_data
+        .data = {
+            "double", "blank", "Start X", "InfiniteLineX1",
+            "double", "blank", "Start Y", "InfiniteLineY1",
+            "double", "blank", "2nd X", "InfiniteLineX2",
+            "double", "blank", "2nd Y", "InfiniteLineY2",
+            "double", "blank", "Vector X", "InfiniteLineVectorX",
+            "double", "blank", "Vector Y", "InfiniteLineVectorY",
+            END_SYMBOL
+        },
+        .object = OBJ_INFINITELINE
     },
     {
         .id = GB_GEOM_LINE,
         .key = "GeometryLine",
         .label = "Geometry",
-        .data = geometry_line_editor_data
+        .data = {
+            "double", "blank", "Start X", "LineStartX",
+            "double", "blank", "Start Y", "LineStartY",
+            "double", "blank", "End X", "LineEndX",
+            "double", "blank", "End Y", "LineEndY",
+            "double", "blank", "Delta X", "",
+            "double", "blank", "Delta Y", "",
+            "double", "blank", "Angle", "",
+            "double", "blank", "Length", "",
+            END_SYMBOL
+         },
+        .object = OBJ_LINE
     },
     {
         .id = GB_GEOM_PATH,
         .key = "GeometryPath",
         .label = "Geometry",
-        .data = geometry_path_editor_data
+        .data = {
+             "combobox", "blank", "Vertex #", "PathVertexNumber",
+             "double", "blank", "Vertex X", "PathVertexX",
+             "double", "blank", "Vertex Y", "PathVertexY",
+             "double", "blank", "Area", "",
+             "double", "blank", "Length", "",
+             END_SYMBOL
+         },
+        .object = OBJ_PATH
     },
     {
         .id = GB_MISC_PATH,
         .key = "MiscPath",
         .label = "Misc",
-        .data = misc_path_editor_data
+        .data = {
+            "combobox", "blank", "Closed", "PathClosed",
+            END_SYMBOL
+         },
+        .object = OBJ_PATH
     },
     {
         .id = GB_GEOM_POINT,
         .key = "GeometryPoint",
         .label = "Geometry",
-        .data = geometry_point_editor_data
+        .data = {
+            "double", "blank", "Position X", "PointX",
+            "double", "blank", "Position Y", "PointY",
+            END_SYMBOL
+        },
+        .object = OBJ_POINT
     },
     {
         .id = GB_GEOM_POLYGON,
         .key = "GeometryPolygon",
         .label = "Geometry",
-        .data = geometry_polygon_editor_data
+        .data = {
+            "double", "blank", "Center X", "PolygonCenterX",
+            "double", "blank", "Center Y", "PolygonCenterY",
+            "double", "blank", "Vertex Radius", "PolygonVertexRadius",
+            "double", "blank", "Side Radius", "PolygonSideRadius",
+            "double", "blank", "Vertex Diameter", "PolygonVertexDiameter",
+            "double", "blank", "Side Diameter", "PolygonSideDiameter",
+            "double", "blank", "Interior Angle", "",
+            END_SYMBOL
+        },
+        .object = OBJ_POLYGON
     },
     {
         .id = GB_GEOM_POLYLINE,
         .key = "GeometryPolyline",
         .label = "Geometry",
-        .data = geometry_polyline_editor_data
+        .data = {
+            "combobox", "blank", "Vertex #", "PolylineVertexNum",
+            "double", "blank", "Vertex X", "PolylineVertexX",
+            "double", "blank", "Vertex Y", "PolylineVertexX",
+            "double", "blank", "Area", "",
+            "double", "blank", "Length", "",
+            END_SYMBOL
+        },
+        .object = OBJ_POLYLINE
     },
     {
         .id = GB_MISC_POLYLINE,
         .key = "MiscPolyline",
         .label = "Geometry",
-        .data = misc_polyline_editor_data
+        .data = {
+            "combobox", "blank", "Closed", "PolylineClosed",
+            END_SYMBOL
+        },
+        .object = OBJ_POLYLINE
     },
     {
         .id = GB_GEOM_RAY,
         .key = "GeometryRay",
         .label = "Geometry",
-        .data = geometry_ray_editor_data
+        .data = {
+            "double", "blank", "Start X", "RayStartX",
+            "double", "blank", "Start Y", "RayStartY",
+            "double", "blank", "2nd X", "RayEndX",
+            "double", "blank", "2nd Y", "RayEndY",
+            "double", "blank", "Vector X", "",
+            "double", "blank", "Vector Y", "",
+            END_SYMBOL
+        },
+        .object = OBJ_RAY
     },
     {
         .id = GB_GEOM_RECT,
         .key = "GeometryRectangle",
         .label = "Geometry",
-        .data = geometry_rectangle_editor_data
+        .data = {
+            "double", "blank", "Corner 1 X", "RectangleCorner1X",
+            "double", "blank", "Corner 1 Y", "RectangleCorner1Y",
+            "double", "blank", "Corner 2 X", "RectangleCorner2X",
+            "double", "blank", "Corner 2 Y", "RectangleCorner2Y",
+            "double", "blank", "Corner 3 X", "RectangleCorner3X",
+            "double", "blank", "Corner 3 Y", "RectangleCorner3Y",
+            "double", "blank", "Corner 4 X", "RectangleCorner4X",
+            "double", "blank", "Corner 4 Y", "RectangleCorner4Y",
+            "double", "blank", "Width", "RectangleWidth",
+            "double", "blank", "Height", "RectangleHeight",
+            "double", "blank", "Area", "",
+            END_SYMBOL
+        },
+        .object = OBJ_RECTANGLE
     },
     {
         .id = GB_GEOM_TEXT_MULTI,
         .key = "GeometryTextMulti",
         .label = "Geometry",
-        .data = geometry_text_multi_editor_data
+        .data = {
+             "double", "blank", "Position X", "TextPositionX",
+             "double", "blank", "Position Y", "TextPositionX",
+             END_SYMBOL
+         },
+        .object = OBJ_TEXTMULTI
     },
     {
         .id = GB_TEXT_TEXT_SINGLE,
         .key = "TextTextSingle",
-        .label = "Geometry",
-        .data = text_text_single_editor_data
+        .label = "Text",
+        .data = {
+            "string", "blank", "Contents", "TextContents",
+            "fontcombobox", "blank", "Font", "TextFont",
+            "combobox", "blank", "Justify", "TextJustify",
+            "double", "blank", "Height", "TextHeight",
+            "double", "blank", "Rotation", "TextRotation",
+            END_SYMBOL
+        },
+        .object = OBJ_TEXTSINGLE
     },
     {
         .id = GB_GEOM_TEXT_SINGLE,
         .key = "GeometryTextSingle",
         .label = "Geometry",
-        .data = geometry_text_single_editor_data
+        .data = {
+            "double", "blank", "Position X", "TextSingleX",
+            "double", "blank", "Position Y", "TextSingleY",
+            END_SYMBOL
+        },
+        .object = OBJ_TEXTSINGLE
     },
     {
         .id = GB_MISC_TEXT_SINGLE,
         .key = "MiscTextSingle",
-        .label = "Geometry",
-        .data = misc_text_single_editor_data
+        .label = "Misc",
+        .data = {
+            "combobox", "blank", "Backward", "TextSingleBackward",
+            "combobox", "blank", "Upside Down", "TextSingleUpsideDown",
+            END_SYMBOL
+        },
+        .object = OBJ_POLYLINE
     },
     {
         .id = -1,
-        .key = "END",
-        .label = "END",
-        .data = NULL
+        .key = END_SYMBOL,
+        .label = END_SYMBOL,
+        .data = {
+            END_SYMBOL
+        },
+        .object = -1
     }
 };
 
-/* Matches the order of the settings constants table in constants.h. */
-SettingsData settings_data[] = {
-    {
-        /* 0 */
-        .id = GENERAL_LANGUAGE,
-        .label = "Language",
-        .key = "Language",
-        .icon = "",
-        .value = "default",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 1 */
-        .id = GENERAL_ICON_THEME,
-        .label = "Icon theme",
-        .key = "IconTheme",
-        .icon = "",
-        .value = "default",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 2 */
-        .id = GENERAL_ICON_SIZE,
-        .label = "Icon size",
-        .key = "IconSize",
-        .icon = "",
-        .value = "16",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 3 */
-        .id = GENERAL_MDI_BG_USE_LOGO,
-        .label = "Use Logo",
-        .key = "MdiBGUseLogo",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 4 */
-        .id = GENERAL_MDI_BG_USE_TEXTURE,
-        .label = "Use Texture",
-        .key = "MdiBGUseTexture",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 5 */
-        .id = GENERAL_MDI_BG_USE_COLOR,
-        .label = "Use Color",
-        .key = "MdiBGUseColor",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 6 */
-        .id = GENERAL_MDI_BG_LOGO,
-        .label = "MDI area background logo",
-        .key = "MdiBGLogo",
-        .icon = "",
-        .value = "logo_spirals",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 7 */
-        .id = GENERAL_MDI_BG_TEXTURE,
-        .label = "MDI area background texture",
-        .key = "MdiBGTexture",
-        .icon = "",
-        .value = "texture_spirals",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 8 */
-        .id = GENERAL_MDI_BG_COLOR,
-        .label = "MDI area background color",
-        .key = "MdiBGColor",
-        .icon = "",
-        .value = "12632256",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 9 */
-        .id = GENERAL_TIP_OF_THE_DAY,
-        .label = "Show Tip of the Day on startup",
-        .key = "TipOfTheDay",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 10 */
-        .id = GENERAL_CURRENT_TIP,
-        .label = "Current tip",
-        .key = "CurrentTip",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 11 */
-        .id = GENERAL_SYSTEM_HELP_BROWSER,
-        .label = "Help Browser",
-        .key = "SystemHelpBrowser",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 12 */
-        .id = GENERAL_CHECK_FOR_UPDATES,
-        .label = "Check for updates",
-        .key = "CheckForUpdates",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 13 */
-        .id = DISPLAY_USE_OPENGL,
-        .label = "Use OpenGL",
-        .key = "Display_UseOpenGL",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 14 */
-        .id = DISPLAY_RENDERHINT_AA,
-        .label = "Renderhint anti-alias",
-        .key = "Display_RenderHintAntiAlias",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 15 */
-        .id = DISPLAY_RENDERHINT_TEXT_AA,
-        .label = "Renderhint text anti-alias",
-        .key = "Display_RenderHintTextAntiAlias",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 16 */
-        .id = DISPLAY_RENDERHINT_SMOOTH_PIX,
-        .label = "Renderhint smooth pixmap",
-        .key = "Display_RenderHintSmoothPixmap",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 17 */
-        .id = DISPLAY_RENDERHINT_HIGH_AA,
-        .label = "Renderhint high quality anti-alias",
-        .key = "Display_RenderHintHighQualityAntiAlias",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 18 */
-        .id = DISPLAY_RENDERHINT_NONCOSMETIC,
-        .label = "Renderhint high non-cosmetic",
-        .key = "Display_RenderHintNonCosmetic",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 19 */
-        .id = DISPLAY_SHOW_SCROLLBARS,
-        .label = "Show Scrollbars",
-        .key = "Display_ShowScrollBars",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 20 */
-        .id = DISPLAY_SCROLLBAR_WIDGET_NUM,
-        .label = "Scrollbar widget number",
-        .key = "Display_ScrollBarWidgetNum",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 21 */
-        .id = DISPLAY_CROSSHAIR_COLOR,
-        .label = "Cross-hair color",
-        .key = "Display_CrossHairColor",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 22 */
-        .id = DISPLAY_BG_COLOR,
-        .label = "Background color",
-        .key = "Display_BackgroundColor",
-        .icon = "",
-        .value = "15461355",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 23 */
-        .id = DISPLAY_SELECTBOX_LEFT_COLOR,
-        .label = "Selection Box Color (Crossing)",
-        .key = "Display_SelectBoxLeftColor",
-        .icon = "",
-        .value = "32768",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 24 */
-        .id = DISPLAY_SELECTBOX_LEFT_FILL,
-        .label = "Selection Box Fill (Crossing)",
-        .key = "Display_SelectBoxLeftFill",
-        .icon = "",
-        .value = "65280",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 25 */
-        .id = DISPLAY_SELECTBOX_RIGHT_COLOR,
-        .label = "Selection Box Color (Window)",
-        .key = "Display_SelectBoxRightColor",
-        .icon = "",
-        .value = "128",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 26 */
-        .id = DISPLAY_SELECTBOX_RIGHT_FILL,
-        .label = "Selection Box Fill (Window)",
-        .key = "Display_SelectBoxRightFill",
-        .icon = "",
-        .value = "255",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 27 */
-        .id = DISPLAY_SELECTBOX_ALPHA,
-        .label = "Selection Box Transparency",
-        .key = "Display_SelectBoxAlpha",
-        .icon = "",
-        .value = "32",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 28 */
-        .id = DISPLAY_ZOOMSCALE_IN,
-        .label = "Zoom In Scale",
-        .key = "Display_ZoomScaleIn",
-        .icon = "",
-        .value = "2.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "0.01,1.01,10.00"
-    },
-    {
-        /* 29 */
-        .id = DISPLAY_ZOOMSCALE_OUT,
-        .label = "Zoom Out Scale",
-        .key = "Display_ZoomScaleOut",
-        .icon = "",
-        .value = "0.5",
-        .type = SCRIPT_REAL,
-        .editor_data = "0.01,0.01,0.99"
-    },
-    {
-        /* 30 */
-        .id = DISPLAY_CROSSHAIR_PERCENT,
-        .label = "Crosshair percent",
-        .key = "Display_CrossHairPercent",
-        .icon = "",
-        .value = "5",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 31 */
-        .id = DISPLAY_UNITS,
-        .label = "Units",
-        .key = "Display_Units",
-        .icon = "",
-        .value = "mm",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 32 */
-        .id = PROMPT_TEXT_COLOR,
-        .label = "Text color",
-        .key = "Prompt_TextColor",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 33 */
-        .id = PROMPT_BG_COLOR,
-        .label = "Background color",
-        .key = "Prompt_BackgroundColor",
-        .icon = "",
-        .value = "16777215",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 34 */
-        .id = PROMPT_FONT_FAMILY,
-        .label = "Font family",
-        .key = "Prompt_FontFamily",
-        .icon = "",
-        .value = "Monospace",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 35 */
-        .id = PROMPT_FONT_STYLE,
-        .label = "Font style",
-        .key = "Prompt_FontStyle",
-        .icon = "",
-        .value = "normal",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 36 */
-        .id = PROMPT_FONT_SIZE,
-        .label = "Font size",
-        .key = "Prompt_FontSize",
-        .icon = "",
-        .value = "12",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 37 */
-        .id = PROMPT_SAVE_HISTORY,
-        .label = "Save History",
-        .key = "Prompt_SaveHistory",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 38 */
-        .id = PROMPT_SAVE_HISTORY_AS_HTML,
-        .label = "Save As HTML",
-        .key = "Prompt_SaveHistoryAsHtml",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 39 */
-        .id = PROMPT_SAVE_HISTORY_FILENAME,
-        .label = "Save history filename",
-        .key = "Prompt_SaveHistoryFilename",
-        .icon = "",
-        .value = "prompt.log",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 40 */
-        .id = OPENSAVE_CUSTOM_FILTER,
-        .label = "Custom filter",
-        .key = "OpenSave_CustomFilter",
-        .icon = "",
-        .value = "supported",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 41 */
-        .id = OPENSAVE_OPEN_FORMAT,
-        .label = "Open format",
-        .key = "OpenSave_OpenFormat",
-        .icon = "",
-        .value = "*.*",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 42 */
-        .id = OPENSAVE_OPEN_THUMBNAIL,
-        .label = "Open thumbnail",
-        .key = "OpenSave_OpenThumbnail",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 43 */
-        .id = OPENSAVE_SAVE_FORMAT,
-        .label = "Save format",
-        .key = "OpenSave_SaveFormat",
-        .icon = "",
-        .value = "*.*",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 44 */
-        .id = OPENSAVE_SAVE_THUMBNAIL,
-        .label = "Save thumbnail",
-        .key = "OpenSave_SaveThumbnail",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 45 */
-        .id = OPENSAVE_RECENT_MAX_FILES,
-        .label = "Maximum recent files",
-        .key = "OpenSave_RecentMax",
-        .icon = "",
-        .value = "10",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 46 */
-        .id = OPENSAVE_RECENT_LIST_OF_FILES,
-        .label = "Recent files",
-        .key = "OpenSave_RecentFiles",
-        .icon = "",
-        .value = "",
-        .type = SCRIPT_TABLE
-    },
-    {
-        /* 47 */
-        .id = OPENSAVE_RECENT_DIRECTORY,
-        .label = "Recent directory",
-        .key = "OpenSave_RecentDirectory",
-        .icon = "",
-        .value = "",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 48 */
-        .id = OPENSAVE_TRIM_DST_NUM_JUMPS,
-        .label = "Number of jumps to become trim DST",
-        .key = "OpenSave_TrimDstNumJumps",
-        .icon = "",
-        .value = "5",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 49 */
-        .id = PRINTING_DEFAULT_DEVICE,
-        .label = "Default device",
-        .key = "Printing_DefaultDevice",
-        .icon = "",
-        .value = "",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 50 */
-        .id = PRINTING_USE_LAST_DEVICE,
-        .label = "Use last device",
-        .key = "Printing_UseLastDevice",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 51 */
-        .id = PRINTING_DISABLE_BG,
-        .label = "Disable Background",
-        .key = "Printing_DisableBG",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 52 */
-        .id = GRID_SHOW_ON_LOAD,
-        .label = "Initially show grid when loading a file",
-        .key = "Grid_ShowOnLoad",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 53 */
-        .id = GRID_SHOW_ORIGIN,
-        .label = "Show the origin when the grid is enabled",
-        .key = "Grid_ShowOrigin",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 54 */
-        .id = GRID_COLOR_MATCH_CROSSHAIR,
-        .label = "Grid color matches cross-hair color",
-        .key = "Grid_ColorMatchCrossHair",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 55 */
-        .id = GRID_COLOR,
-        .label = "Color",
-        .key = "Grid_Color",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 56 */
-        .id = GRID_LOAD_FROM_FILE,
-        .label = "Load from file",
-        .key = "Grid_LoadFromFile",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 57 */
-        .id = GRID_TYPE,
-        .label = "Type",
-        .key = "Grid_Type",
-        .icon = "",
-        .value = "Rectangular",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 58 */
-        .id = GRID_CENTER_ON_ORIGIN,
-        .label = "Center on origin",
-        .key = "Grid_CenterOnOrigin",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 59 */
-        .id = GRID_CENTER_X,
-        .label = "Grid Center X",
-        .key = "Grid_CenterX",
-        .icon = "",
-        .value = "0.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,-1000.000,1000.000"
-    },
-    {
-        /* 60 */
-        .id = GRID_CENTER_Y,
-        .label = "Grid Center Y",
-        .key = "Grid_CenterY",
-        .icon = "",
-        .value = "0.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,-1000.000,1000.000"
-    },
-    {
-        /* 61 */
-        .id = GRID_SIZE_X,
-        .label = "Grid Size X",
-        .key = "Grid_SizeX",
-        .icon = "",
-        .value = "100.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,1.000,1000.000"
-    },
-    {
-        /* 62 */
-        .id = GRID_SIZE_Y,
-        .label = "Grid Size Y",
-        .key = "Grid_SizeY",
-        .icon = "",
-        .value = "100.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,1.000,1000.000"
-    },
-    {
-        /* 63 */
-        .id = GRID_SPACING_X,
-        .label = "X spacing",
-        .key = "Grid_SpacingX",
-        .icon = "",
-        .value = "25.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,0.001,1000.000"
-    },
-    {
-        /* 64 */
-        .id = GRID_SPACING_Y,
-        .label = "Y spacing",
-        .key = "Grid_SpacingY",
-        .icon = "",
-        .value = "25.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,0.001,1000.000"
-    },
-    {
-        /* 65 */
-        .id = GRID_SIZE_RADIUS,
-        .label = "Size radius",
-        .key = "Grid_SizeRadius",
-        .icon = "",
-        .value = "50.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,1.000,1000.000"
-    },
-    {
-        /* 66 */
-        .id = GRID_SPACING_RADIUS,
-        .label = "Spacing radius",
-        .key = "Grid_SpacingRadius",
-        .icon = "",
-        .value = "25.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,0.001,1000.000"
-    },
-    {
-        /* 67 */
-        .id = GRID_SPACING_ANGLE,
-        .label = "Spacing angle",
-        .key = "Grid_SpacingAngle",
-        .icon = "",
-        .value = "45.0",
-        .type = SCRIPT_REAL,
-        .editor_data = "1.000,0.001,1000.000"
-    },
-    {
-        /* 68 */
-        .id = GRID_SHOW_ON_LOAD,
-        .label = "Initially show ruler when loading a file",
-        .key = "Ruler_ShowOnLoad",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 69 */
-        .id = RULER_METRIC,
-        .label = "Metric",
-        .key = "Ruler_Metric",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 70 */
-        .id = RULER_COLOR,
-        .label = "Color",
-        .key = "Ruler_Color",
-        .icon = "",
-        .value = "13816370",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 71 */
-        .id = RULER_PIXEL_SIZE,
-        .label = "Pixel size",
-        .key = "Ruler_PixelSize",
-        .icon = "",
-        .value = "20",
-        .type = SCRIPT_INT,
-        .editor_data = "1,20,100"
-    },
-    {
-        /* 72 */
-        .id = QSNAP_ENABLED,
-        .label = "Enabled",
-        .key = "QuickSnap_Enabled",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 73 */
-        .id = QSNAP_LOCATOR_COLOR,
-        .label = "Locator color",
-        .key = "QuickSnap_LocatorColor",
-        .icon = "",
-        .value = "16776960",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 74 */
-        .id = QSNAP_LOCATOR_SIZE,
-        .label = "Locator size",
-        .key = "QuickSnap_LocatorSize",
-        .icon = "",
-        .value = "4",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 75 */
-        .id = QSNAP_APERTURE_SIZE,
-        .label = "Aperture size",
-        .key = "QuickSnap_ApertureSize",
-        .icon = "",
-        .value = "10",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 76 */
-        .id = QSNAP_ENDPOINT,
-        .label = "End point",
-        .key = "QuickSnap_EndPoint",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 77 */
-        .id = QSNAP_MIDPOINT,
-        .label = "Mid point",
-        .key = "QuickSnap_MidPoint",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 78 */
-        .id = QSNAP_CENTER,
-        .label = "Center",
-        .key = "QuickSnap_Center",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 79 */
-        .id = QSNAP_NODE,
-        .label = "Node",
-        .key = "QuickSnap_Node",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 80 */
-        .id = QSNAP_QUADRANT,
-        .label = "Quadrant",
-        .key = "QuickSnap_Quadrant",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 81 */
-        .id = QSNAP_INTERSECTION,
-        .label = "Intersection",
-        .key = "QuickSnap_Intersection",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 82 */
-        .id = QSNAP_EXTENSION,
-        .label = "Extension",
-        .key = "QuickSnap_Extension",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 83 */
-        .id = QSNAP_INSERTION,
-        .label = "Insertion",
-        .key = "QuickSnap_Insertion",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 84 */
-        .id = QSNAP_PERPENDICULAR,
-        .label = "Perpendicular",
-        .key = "QuickSnap_Perpendicular",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 85 */
-        .id = QSNAP_TANGENT,
-        .label = "Tangent",
-        .key = "QuickSnap_Tangent",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 86 */
-        .id = QSNAP_NEAREST,
-        .label = "Nearest",
-        .key = "QuickSnap_Nearest",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 87 */
-        .id = QSNAP_APPARENT,
-        .label = "Apparent Intersection",
-        .key = "QuickSnap_Apparent",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 88 */
-        .id = QSNAP_PARALLEL,
-        .label = "Parallel",
-        .key = "QuickSnap_Parallel",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 89 */
-        .id = LWT_SHOW_LWT,
-        .label = "Show line weight",
-        .key = "LineWeight_ShowLineWeight",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 90 */
-        .id = LWT_REAL_RENDER,
-        .label = "Real render",
-        .key = "LineWeight_RealRender",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 91 */
-        .id = LWT_DEFAULT_LWT,
-        .label = "Default line weight",
-        .key = "LineWeight_DefaultLineWeight",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_REAL,
-        .editor_data = ""
-    },
-    {
-        /* 92 */
-        .id = SELECTION_MODE_PICKFIRST,
-        .label = "Allow Preselection (PickFirst)",
-        .key = "Selection_PickFirst",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 93 */
-        .id = SELECTION_MODE_PICKADD,
-        .label = "Add to Selection (PickAdd)",
-        .key = "Selection_PickAdd",
-        .icon = "",
-        .value = "1",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 94 */
-        .id = SELECTION_MODE_PICKDRAG,
-        .label = "Drag to Select (PickDrag)",
-        .key = "Selection_PickDrag",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 95 */
-        .id = SELECTION_COOLGRIP_COLOR,
-        .label = "Cool grip color",
-        .key = "Selection_CoolGripColor",
-        .icon = "",
-        .value = "255",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 96 */
-        .id = SELECTION_HOTGRIP_COLOR,
-        .label = "Hot grip color",
-        .key = "Selection_HotGripColor",
-        .icon = "",
-        .value = "16711680",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 97 */
-        .id = SELECTION_GRIP_SIZE,
-        .label = "Grip size",
-        .key = "Selection_GripSize",
-        .icon = "",
-        .value = "4",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 98 */
-        .id = SELECTION_PICKBOX_SIZE,
-        .label = "Pick box size",
-        .key = "Selection_PickBoxSize",
-        .icon = "",
-        .value = "4",
-        .type = SCRIPT_INT,
-        .editor_data = ""
-    },
-    {
-        /* 99 */
-        .id = TEXT_FONT,
-        .label = "Font",
-        .key = "Text_Font",
-        .icon = "",
-        .value = "Arial",
-        .type = SCRIPT_STRING,
-        .editor_data = ""
-    },
-    {
-        /* 100 */
-        .id = TEXT_SIZE,
-        .label = "Size",
-        .key = "Text_Size",
-        .icon = "",
-        .value = "12",
-        .type = SCRIPT_REAL,
-        .editor_data = ""
-    },
-    {
-        /* 101 */
-        .id = TEXT_ANGLE,
-        .label = "Angle",
-        .key = "Text_Angle",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_REAL,
-        .editor_data = ""
-    },
-    {
-        /* 102 */
-        .id = TEXT_STYLE_BOLD,
-        .label = "Bold",
-        .key = "Text_StyleBold",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 103 */
-        .id = TEXT_STYLE_ITALIC,
-        .label = "Italic",
-        .key = "Text_StyleItalic",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 104*/
-        .id = TEXT_STYLE_UNDERLINE,
-        .label = "Underline",
-        .key = "Text_StyleUnderline",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 105 */
-        .id = TEXT_STYLE_OVERLINE,
-        .label = "Overline",
-        .key = "Text_StyleOverline",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    },
-    {
-        /* 106 */
-        .id = TEXT_STYLE_STRIKEOUT,
-        .label = "Strikeout",
-        .key = "Text_StyleStrikeOut",
-        .icon = "",
-        .value = "0",
-        .type = SCRIPT_BOOL,
-        .editor_data = ""
-    }
+/* Matches the order of the settings constants table in constants.h.
+ *
+ * A 6 x n table in the order:
+ *     (key, data_type, label, icon, default_value, attributes)
+ *
+ * The row number is recorded as a comment so the constants table is easier
+ * to keep in line.
+ */
+char *settings_data[] = {
+    /* 0 */
+    "Language", "string", "Language", "blank", "default", "",
+    /* 1 */
+    "IconTheme", "string", "Icon theme", "blank", "default", "",
+    /* 2 */
+    "IconSize", "int", "Icon size", "blank", "16", "",
+    /* 3 */
+    "MdiBGUseLogo", "bool", "Use Logo", "blank", "1", "",
+    /* 4 */
+    "MdiBGUseTexture", "bool", "Use Texture", "blank", "1", "",
+    /* 5 */
+    "MdiBGUseColor", "bool", "Use Color", "blank", "1", "",
+    /* 6 */
+    "MdiBGLogo", "string", "MDI area background logo", "blank",
+    "logo_spirals", "",
+    /* 7 */
+    "MdiBGTexture", "string", "MDI area background texture",
+    "blank", "texture_spirals", "",
+    /* 8 */
+    "MdiBGColor", "int", "MDI area background color",
+    "blank", "12632256", "",
+    /* 9 */
+    "TipOfTheDay", "bool", "Show Tip of the Day on startup",
+    "blank", "1", "",
+    /* 10 */
+    "CurrentTip", "int", "Current tip", "blank", "0", "",
+    /* 11 */
+    "SystemHelpBrowser", "bool", "Help Browser", "blank", "1", "",
+    /* 12 */
+    "CheckForUpdates", "bool", "Check for updates", "blank", "0", "",
+    /* 13 */
+    "Display_UseOpenGL", "bool", "Use OpenGL", "0", "blank", "",
+    /* 14 */
+    "Display_RenderHintAntiAlias", "bool", "Renderhint anti-alias",
+    "blank", "0", "",
+    /* 15 */
+    "Display_RenderHintTextAntiAlias", "bool", "Renderhint text anti-alias",
+    "blank", "0", "",
+    /* 16 */
+    "Display_RenderHintSmoothPixmap", "bool", "Renderhint smooth pixmap",
+    "blank", "0", "",
+    /* 17 */
+    "Display_RenderHintHighQualityAntiAlias", "bool",
+    "Renderhint high quality anti-alias", "blank", "0", "",
+    /* 18 */
+    "Display_RenderHintNonCosmetic", "bool", "Renderhint high non-cosmetic",
+    "blank", "0", "",
+    /* 19 */
+    "Display_ShowScrollBars", "bool", "Show Scrollbars", "blank", "1", "",
+    /* 20 */
+    "Display_ScrollBarWidgetNum", "int", "Scrollbar widget number",
+    "blank", "0", "",
+    /* 21 */
+    "Display_CrossHairColor", "int", "Cross-hair color", "blank", "0", "",
+    /* 22 */
+    "Display_BackgroundColor", "int", "Background color",
+    "blank", "15461355", "",
+    /* 23 */
+    "Display_SelectBoxLeftColor", "int", "Selection Box Color (Crossing)",
+    "blank", "32768", "",
+    /* 24 */
+    "Display_SelectBoxLeftFill", "int", "Selection Box Fill (Crossing)",
+    "blank", "65280", "",
+    /* 25 */
+    "Display_SelectBoxRightColor", "int", "Selection Box Color (Window)",
+    "blank", "128", "",
+    /* 26 */
+    "Display_SelectBoxRightFill", "int", "Selection Box Fill (Window)",
+    "blank", "255", "",
+    /* 27 */
+    "Display_SelectBoxAlpha", "int", "Selection Box Transparency", "blank",
+    "32", "",
+    /* 28 */
+    "Display_ZoomScaleIn", "real", "Zoom In Scale", "blank", "2.0",
+    "0.01,1.01,10.00",
+    /* 29 */
+    "Display_ZoomScaleOut", "real", "Zoom Out Scale", "blank", "0.5",
+    "0.01,0.01,0.99",
+    /* 30 */
+    "Display_CrossHairPercent", "int", "Crosshair percent", "blank", "5", "",
+    /* 31 */
+    "Units", "string", "Display_Units", "blank", "mm", "",
+    /* 32 */
+    "Prompt_TextColor", "int", "Text color", "blank", "0", "",
+    /* 33 */
+    "Prompt_BackgroundColor", "int", "Background color", "blank",
+    "16777215", "",
+    /* 34 */
+    "Prompt_FontFamily", "string", "Font family", "blank", "Monospace", "",
+    /* 35 */
+    "Prompt_FontStyle", "string", "Font style", "blank", "normal", "",
+    /* 36 */
+    "Prompt_FontSize", "int", "Font size", "blank", "12", "",
+    /* 37 */
+    "Prompt_SaveHistory", "bool", "Save History", "blank", "1", "",
+    /* 38 */
+    "Prompt_SaveHistoryAsHtml", "bool", "Save As HTML", "blank", "0", "",
+    /* 39 */
+    "Prompt_SaveHistoryFilename", "string", "Save history filename",
+    "blank", "prompt.log", "",
+    /* 40 */
+    "OpenSave_CustomFilter", "string", "Custom filter", "blank", "supported", "",
+    /* 41 */
+    "OpenSave_OpenFormat", "string", "Open format", "blank", "*.*", "",
+    /* 42 */
+    "OpenSave_OpenThumbnail", "bool", "Open thumbnail", "blank", "0", "",
+    /* 43 */
+    "OpenSave_SaveFormat", "string", "Save format", "blank", "*.*", "",
+    /* 44 */
+    "OpenSave_SaveThumbnail", "bool", "Save thumbnail", "blank", "0", "",
+    /* 45 */
+    "OpenSave_RecentMax", "int", "Maximum recent files", "blank", "10", "",
+    /* 46: TODO should be a ; seperated table */
+    "OpenSave_RecentFiles", "string", "Recent files", "blank", "", "",
+    /* 47 */
+    "OpenSave_RecentDirectory", "string", "Recent directory", "blank", "", "",
+    /* 48 */
+    "OpenSave_TrimDstNumJumps", "int", "Number of jumps to become trim DST",
+    "blank", "5", "",
+    /* 49 */
+    "Printing_DefaultDevice", "string", "Default device", "blank", "", "",
+    /* 50 */
+    "Printing_UseLastDevice", "bool", "Use last device", "blank", "0", "",
+    /* 51 */
+    "Printing_DisableBG", "bool", "Disable Background", "blank", "1", "",
+    /* 52 */
+    "Grid_ShowOnLoad", "bool", "Initially show grid when loading a file",
+    "blank", "1", "",
+    /* 53 */
+    "Grid_ShowOrigin", "bool", "Show the origin when the grid is enabled",
+    "blank", "1", "",
+    /* 54 */
+    "Grid_ColorMatchCrossHair", "bool", "Grid color matches cross-hair color",
+    "blank", "1", "",
+    /* 55 */
+    "Grid_Color", "int", "Color", "blank", "0", "",
+    /* 56 */
+    "Grid_LoadFromFile", "bool", "Load from file", "blank", "1", "",
+    /* 57 */
+    "Grid_Type", "string", "Type", "blank", "Rectangular", "",
+    /* 58 */
+    "Grid_CenterOnOrigin", "bool", "Center on origin", "blank", "1", "",
+    /* 59 */
+    "Grid_CenterX", "real", "Grid Center X", "blank", "0.0",
+    "1.000,-1000.000,1000.000",
+    /* 60 */
+    "Grid_CenterY", "real", "Grid Center Y", "blank", "0.0",
+    "1.000,-1000.000,1000.000",
+    /* 61 */
+    "Grid_SizeX", "real", "Grid Size X", "blank", "100.0",
+    "1.000,1.000,1000.000",
+    /* 62 */
+    "Grid_SizeY", "real", "Grid Size Y", "blank", "100.0",
+    "1.000,1.000,1000.000",
+    /* 63 */
+    "Grid_SpacingX", "real", "X spacing", "blank", "25.0",
+    "1.000,0.001,1000.000",
+    /* 64 */
+    "Grid_SpacingY", "real", "Y spacing", "blank", "25.0",
+    "1.000,0.001,1000.000",
+    /* 65 */
+    "Grid_SizeRadius", "real", "Size radius", "blank", "50.0",
+    "1.000,1.000,1000.000",
+    /* 66 */
+    "Grid_SpacingRadius", "real", "Spacing radius", "blank", "25.0",
+    "1.000,0.001,1000.000",
+    /* 67 */
+    "Grid_SpacingAngle", "real", "Spacing angle", "blank", "45.0",
+    "1.000,0.001,1000.000",
+    /* 68 */
+    "Ruler_ShowOnLoad", "bool", "Initially show ruler when loading a file",
+    "blank", "1", "",
+    /* 69 */
+    "Ruler_Metric", "bool", "Metric", "blank", "1", "",
+    /* 70 */
+    "Ruler_Color", "int", "Color", "blank", "13816370", "",
+    /* 71 */
+    "Ruler_PixelSize", "int", "Pixel size", "blank", "20", "1,20,100",
+    /* 72 */
+    "QuickSnap_Enabled", "bool", "Enabled", "blank", "1", "",
+    /* 73 */
+    "QuickSnap_LocatorColor", "int", "Locator color", "blank", "16776960", "",
+    /* 74 */
+    "QuickSnap_LocatorSize", "int", "Locator size", "blank", "4", "",
+    /* 75 */
+    "QuickSnap_ApertureSize", "int", "Aperture size", "blank", "10", "",
+    /* 76 */
+    "QuickSnap_EndPoint", "bool", "End point", "blank", "1", "",
+    /* 77 */
+    "QuickSnap_MidPoint", "bool", "Mid point", "blank", "1", "",
+    /* 78 */
+    "QuickSnap_Center", "bool", "Center", "blank", "1", "",
+    /* 79 */
+    "QuickSnap_Node", "bool", "Node", "blank", "1", "",
+    /* 80 */
+    "QuickSnap_Quadrant", "bool", "Quadrant", "blank", "1", "",
+    /* 81 */
+    "QuickSnap_Intersection", "bool", "Intersection", "blank", "1", "",
+    /* 82 */
+    "QuickSnap_Extension", "bool", "Extension", "blank", "1", "",
+    /* 83 */
+    "QuickSnap_Insertion", "bool", "Insertion", "blank", "0", "",
+    /* 84 */
+    "QuickSnap_Perpendicular", "bool", "Perpendicular", "blank", "1", "",
+    /* 85 */
+    "QuickSnap_Tangent", "bool", "Tangent", "blank", "1", "",
+    /* 86 */
+    "QuickSnap_Nearest", "bool", "Nearest", "blank", "0", "",
+    /* 87 */
+    "QuickSnap_Apparent", "bool", "Apparent Intersection", "blank", "0", "",
+    /* 88 */
+    "QuickSnap_Parallel", "bool", "Parallel", "blank", "0", "",
+    /* 89 */
+    "LineWeight_ShowLineWeight", "bool", "Show line weight", "blank", "0", "",
+    /* 90 */
+    "LineWeight_RealRender", "bool", "Real render", "blank", "1", "",
+    /* 91 */
+    "LineWeight_DefaultLineWeight", "real", "Default line weight",
+    "blank", "0", "",
+    /* 92 */
+    "Selection_PickFirst", "bool", "Allow Preselection (PickFirst)", "blank",
+    "1", "",
+    /* 93 */
+    "Selection_PickAdd", "bool", "Add to Selection (PickAdd)", "blank", "1", "",
+    /* 94 */
+    "Selection_PickDrag", "bool", "Drag to Select (PickDrag)", "blank", "0", "",
+    /* 95 */
+    "Selection_CoolGripColor", "int", "Cool grip color", "blank", "255", "",
+    /* 96 */
+    "Selection_HotGripColor", "int", "Hot grip color", "blank", "16711680", "",
+    /* 97 */
+    "Selection_GripSize", "int", "Grip size", "blank", "4", "",
+    /* 98 */
+    "Selection_PickBoxSize", "int", "Pick box size", "blank", "4", "",
+    /* 99 */
+    "Text_Font", "string", "Font", "blank", "Arial", "",
+    /* 100 */
+    "Text_Size", "real", "Size", "blank", "12", "",
+    /* 101 */
+    "Text_Angle", "real", "Angle", "blank", "0", "",
+    /* 102 */
+    "Text_StyleBold", "bool", "Bold", "blank", "0", "",
+    /* 103 */
+    "Text_StyleItalic", "bool", "Italic", "blank", "0", "",
+    /* 104*/
+    "Text_StyleUnderline", "bool", "Underline", "blank", "0", "",
+    /* 105 */
+    "Text_StyleOverline", "bool", "Overline", "blank", "0", "",
+    /* 106 */
+    "Text_StyleStrikeOut", "bool", "Strikeout", "blank", "0", "",
+    END_SYMBOL
 };
 
-EmbStringTable grid_enabled_group = {
-    "labelGridType",
-    "comboBoxGridType",
+char *grid_enabled_group[] = {
+    "labelGridType", "comboBoxGridType",
     "checkBoxGridCenterOnOrigin",
-    "labelGridCenterX",
-    "spinBoxGridCenterX",
-    "labelGridCenterY",
-    "spinBoxGridCenterY",
-    "labelGridSizeX",
-    "spinBoxGridSizeX",
-    "labelGridSizeY",
-    "spinBoxGridSizeY",
-    "labelGridSpacingX",
-    "spinBoxGridSpacingX",
-    "labelGridSpacingY",
-    "spinBoxGridSpacingY",
-    "labelGridSizeRadius",
-    "spinBoxGridSizeRadius",
-    "labelGridSpacingRadius",
-    "spinBoxGridSpacingRadius",
-    "labelGridSpacingAngle",
-    "spinBoxGridSpacingAngle",
-    "END"
+    "labelGridCenterX", "spinBoxGridCenterX",
+    "labelGridCenterY", "spinBoxGridCenterY",
+    "labelGridSizeX", "spinBoxGridSizeX",
+    "labelGridSizeY", "spinBoxGridSizeY",
+    "labelGridSpacingX", "spinBoxGridSpacingX",
+    "labelGridSpacingY", "spinBoxGridSpacingY",
+    "labelGridSizeRadius", "spinBoxGridSizeRadius",
+    "labelGridSpacingRadius", "spinBoxGridSpacingRadius",
+    "labelGridSpacingAngle", "spinBoxGridSpacingAngle",
+    END_SYMBOL
 };
 
-EmbStringTable rectangular_grid_visible_group = {
-    "labelGridSizeX",
-    "spinBoxGridSizeX",
-    "labelGridSizeY",
-    "spinBoxGridSizeY",
-    "labelGridSpacingX",
-    "spinBoxGridSpacingX",
-    "labelGridSpacingY",
-    "spinBoxGridSpacingY",
-    "END"
+char *rectangular_grid_visible_group[] = {
+    "labelGridSizeX", "spinBoxGridSizeX",
+    "labelGridSizeY", "spinBoxGridSizeY",
+    "labelGridSpacingX", "spinBoxGridSpacingX",
+    "labelGridSpacingY", "spinBoxGridSpacingY",
+    END_SYMBOL
 };
 
-EmbStringTable circular_grid_visible_group = {
-    "labelGridSizeRadius",
-    "spinBoxGridSizeRadius",
-    "labelGridSpacingRadius",
-    "spinBoxGridSpacingRadius",
-    "labelGridSpacingAngle",
-    "spinBoxGridSpacingAngle",
-    "END"
+char *circular_grid_visible_group[] = {
+    "labelGridSizeRadius", "spinBoxGridSizeRadius",
+    "labelGridSpacingRadius", "spinBoxGridSpacingRadius",
+    "labelGridSpacingAngle", "spinBoxGridSpacingAngle",
+    END_SYMBOL
 };
 
 EmbStringTable grid_layout = {
@@ -2489,12 +856,12 @@ EmbStringTable grid_layout = {
     "labelGridSizeRadius", "spinBoxGridSizeRadius",
     "labelGridSpacingRadius", "spinBoxGridSpacingRadius",
     "labelGridSpacingAngle", "spinBoxGridSpacingAngle",
-    "END", "END"
+    END_SYMBOL
 };
 
 EmbStringTable zoom_layout = {
     "labelZoomInScale", "spinboxZoomInScale",
     "labelZoomOutScale", "spinboxZoomOutScale",
-    "END", "END"
+    END_SYMBOL
 };
 

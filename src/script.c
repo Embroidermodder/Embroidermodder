@@ -181,13 +181,46 @@ nanosleep_(int time)
 #endif
 }
 
-/* Print out version string and exit. */
-void
-version(void)
+/* . */
+int
+split_string(EmbStringTable table, const char *s)
 {
-    fprintf(stdout, "%s %s\n", _appName_, _appVer_);
-    exitApp = true;
+    char c;
+    int entries = 0;
+    int position = 0;
+    for (c=*s; *s; s++) {
+        if (c == ';') {
+            table[entries][position] = 0;
+            position = 0;
+            entries++;
+        }
+        else {
+            table[entries][position] = c;
+            position++;
+        }
+    }
+    table[entries][position] = 0;
+    entries++;
+    string_copy(table[entries], END_SYMBOL);
+    return entries;
 }
+
+const char *help_msg = \
+     " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ \n" \
+    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\\n" \
+    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/\n" \
+    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|\n" \
+    " _____________________________________________________________________________ \n" \
+    "|                                                                             |\n" \
+    "|                   https://www.libembroidery.org                             |\n" \
+    "|_____________________________________________________________________________|\n" \
+    "\n" \
+    "Usage: embroidermodder [options] files ...\n" \
+    "Options:\n" \
+    "  -d, --debug      Print lots of debugging information.\n" \
+    "  -h, --help       Print this message and exit.\n" \
+    "  -v, --version    Print the version number of embroidermodder and exit.\n" \
+    "\n";
 
 /* . */
 int
@@ -197,33 +230,21 @@ main(int argc, char* argv[])
     EmbStringTable files_to_open;
     
     for (int i = 1; i < argc; i++) {
-        if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")  ) {
+        if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")) {
             testing_mode = 1;
         }
-        else if (string_equal(argv[i], "-h") || string_equal(argv[i], "--help")   ) {
-
-    fprintf(stderr,
-    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"
-    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n"
-    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/"           "\n"
-    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
-    " _____________________________________________________________________________ "           "\n"
-    "|                                                                             | "          "\n"
-    "|                   https://www.libembroidery.org                             | "          "\n"
-    "|_____________________________________________________________________________| "          "\n"
-    "                                                                               "           "\n"
-    "Usage: embroidermodder [options] files ..."                                      "\n"
-/*   80CHARS======================================================================MAX */
-    "Options:"                                                                        "\n"
-    "  -d, --debug      Print lots of debugging information."                         "\n"
-    "  -h, --help       Print this message and exit."                                 "\n"
-    "  -v, --version    Print the version number of embroidermodder and exit."        "\n"
-    "\n"
-           );
-    exitApp = true;
-    }
+        else if (string_equal(argv[i], "-h") || string_equal(argv[i], "--help")) {
+            fprintf(stderr, help_msg);
+            exitApp = true;
+        }
         else if (string_equal(argv[i], "-v") || string_equal(argv[i], "--version")) {
-            version();
+            /* Print out version string and exit. */
+            fprintf(stdout, "%s %s\n", _appName_, _appVer_);
+            exitApp = true;
+        }
+        else if (argv[i][0] == '-') {
+            fprintf(stderr, "ERROR: unrecognised flag \"%s\".\n", argv[i]);            
+            exitApp = true;
         }
         else if (1 /* FIXME: QFile::exists(argv[i]) && emb_valid_file_format(argv[i])*/) {
             if (n_files >= MAX_FILES) {
@@ -234,7 +255,8 @@ main(int argc, char* argv[])
             n_files++;
         }
         else {
-            usage();
+            fprintf(stderr, "ERROR: file \"%s\" not found.", argv[i]);
+            exitApp = true;
         }
     }
 
@@ -548,6 +570,24 @@ string_array_length(EmbString s[])
     return MAX_TABLE_LENGTH - 1;
 }
 
+/* This version of string_array_length does not protect against the END_SYMBOL
+ * missing, because it is only to be used for compiled in constant tables.
+ */
+int
+table_length(char *s[])
+{
+    EmbString message;
+    int i;
+    for (i=0; ; i++) {
+        if (s[i][0] == END_SYMBOL[0])
+        if (s[i][1] == END_SYMBOL[1])
+        if (s[i][2] == END_SYMBOL[2]) {
+            break;
+        }
+    }
+    return i;
+}
+
 /* Replace strlen to reduce crashes. Has -1 as an error code. */
 int
 string_length(const char *src)
@@ -728,16 +768,16 @@ save_settings(EmbString appDir, EmbString fname)
     for (int i=0; i<N_SETTINGS; i++) {
         switch (setting[i].setting.type) {
         case SCRIPT_INT:
-            fprintf(file, "%s = %d\r\n", settings_data[i].label, setting[i].setting.i);
+            fprintf(file, "%s = %d\r\n", settings_data[6*i+0], setting[i].setting.i);
             break;
         case SCRIPT_REAL:
-            fprintf(file, "%s = %f\r\n", settings_data[i].label, setting[i].setting.r);
+            fprintf(file, "%s = %f\r\n", settings_data[6*i+0], setting[i].setting.r);
             break;
         case SCRIPT_STRING:
-            fprintf(file, "%s = \"%s\"\r\n", settings_data[i].label, setting[i].setting.s);
+            fprintf(file, "%s = \"%s\"\r\n", settings_data[6*i+0], setting[i].setting.s);
             break;
         case SCRIPT_BOOL:
-            fprintf(file, "%s = %d\r\n", settings_data[i].label, setting[i].setting.b);
+            fprintf(file, "%s = %d\r\n", settings_data[6*i+0], setting[i].setting.b);
             break;
         default:
             break;

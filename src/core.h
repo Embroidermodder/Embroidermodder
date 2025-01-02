@@ -76,30 +76,14 @@ typedef struct Setting_ {
     ScriptValue preview;
 } Setting;
 
-typedef struct Editor_ {
-    EmbString icon;
-    EmbString label;
-    EmbString data_type;
-    EmbString signal;
-    int object;
-} Editor;
-
 typedef struct GroupBoxData_ {
     int32_t id;
-    const char *key;
-    const char *label;
-    Editor *data;
+    char *key;
+    char *label;
+    int rows;
+    char *data[100];
+    int object;
 } GroupBoxData;
-
-typedef struct SettingsData_ {
-    int id;
-    EmbString label;
-    EmbString key;
-    EmbString icon;
-    EmbString value;
-    EmbString editor_data;
-    int type;
-} SettingsData;
 
 typedef struct ObjectCore_ {
     int32_t doc;
@@ -384,8 +368,8 @@ int find_int_map(IntMap *, int);
 
 void set_visibility(const char *key, bool visibility);
 void set_enabled(const char *key, bool visibility);
-void set_visibility_group(EmbStringTable key, bool visibility);
-void set_enabled_group(EmbStringTable key, bool visibility);
+void set_visibility_group(char *key[], bool visibility);
+void set_enabled_group(char *key[], bool visibility);
 
 /* ------------------------------ Prompt ------------------------------- */
 
@@ -844,6 +828,9 @@ void memory_copy(void *src, void *dst, size_t length);
 int string_array_length(EmbString s[]);
 int string_list_contains(EmbStringTable list, EmbString entry);
 int find_in_map(StringMap *hash, int length, const char *key);
+int split_string(EmbStringTable table, const char *s);
+
+int table_length(char *table[]);
 
 /* ----------------------------- Object Core ------------------------------- */
 
@@ -955,8 +942,9 @@ EmbVector mouse_snap_point(int32_t obj_id, EmbVector mousePoint);
 extern Command command_data[MAX_COMMANDS];
 extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
-extern SettingsData settings_data[N_SETTINGS];
 extern GroupBoxData group_box_list[];
+
+extern char *settings_data[];
 
 extern ScriptValue *config;
 extern int n_variables;
@@ -1033,11 +1021,14 @@ extern EmbStringTable text_toolbar;
 extern EmbStringTable prompt_toolbar;
 
 /* Widget Groups */
-extern EmbStringTable grid_load_from_file_group;
-extern EmbStringTable defined_origin_group;
-extern EmbStringTable rectangular_grid_group;
-extern EmbStringTable circular_grid_group;
-extern EmbStringTable center_on_origin_group;
+extern char *grid_load_from_file_group[];
+extern char *defined_origin_group[];
+extern char *rectangular_grid_group[];
+extern char *circular_grid_group[];
+extern char *center_on_origin_group[];
+extern char *grid_enabled_group[];
+extern char *rectangular_grid_visible_group[];
+extern char *circular_grid_visible_group[];
 
 /* Settings */
 extern EmbStringTable settings_tab_labels;
@@ -1046,14 +1037,14 @@ extern EmbIntTable accept_to_dialog;
 extern EmbIntTable render_hints;
 
 /* Objects */
-extern EmbStringTable object_names;
+extern char *object_names[];
 
 /* Testing */
-extern EmbStringTable coverage_test;
+extern char *coverage_test[];
 
 /* Misc */
-extern EmbStringTable tips;
-extern EmbStringTable extensions;
+extern char *tips[];
+extern char *extensions[];
 
 extern bool document_memory[MAX_OPEN_FILES];
 
@@ -1090,10 +1081,6 @@ extern EmbStringTable text_size_list;
 
 extern EmbStringTable editor_list;
 extern EmbStringTable combobox_list;
-
-extern EmbStringTable grid_enabled_group;
-extern EmbStringTable rectangular_grid_visible_group;
-extern EmbStringTable circular_grid_visible_group;
 
 extern EmbStringTable grid_layout;
 extern EmbStringTable zoom_layout;

@@ -159,9 +159,8 @@ QAction* getFileSeparator();
 
 QMdiSubWindow* findMdiWindow(EmbString fileName);
 
-QWidget* create_editor(QWidget *parent, EmbString icon, EmbString label,
-    EmbString type_label, EmbString signal_name, int obj_type);
-
+QWidget* create_editor(QWidget *parent, EmbString type_label,
+    EmbString signal_name, int obj_type);
 
 /* ----------------------------- Qt Wrapper ------------------------------ */
 
@@ -485,12 +484,14 @@ widget_clear(const char *key, int type)
 QCheckBox*
 create_checkbox(QGroupBox* groupbox, int key)
 {
-    QCheckBox* checkBox = new QCheckBox(translate(settings_data[key].label), groupbox);
+    char *label = settings_data[6*key + 2];
+    char *icon = settings_data[6*key + 3];
+    QCheckBox* checkBox = new QCheckBox(translate(label), groupbox);
     checkBox->setChecked(setting[key].dialog.b);
     QObject::connect(checkBox, &QCheckBox::stateChanged, statusbar,
         [=](int checked) { setting[key].dialog.b = checked; preview_update(); });
-    if (QString(settings_data[key].icon) != "") {
-        checkBox->setIcon(create_icon(settings_data[key].icon));
+    if (QString(icon) != "") {
+        checkBox->setIcon(create_icon(icon));
     }
     return checkBox;
 }
@@ -594,8 +595,10 @@ QSpinBox*
 create_int_spinbox(QGroupBox* groupbox, int key)
 {
     QSpinBox* spinbox = new QSpinBox(groupbox);
-    QStringList data = QString(settings_data[key].editor_data).split(',');
-    spinbox->setObjectName(settings_data[key].key);
+    char *name = settings_data[6*key + 0];
+    char *editor_data = settings_data[6*key + 5];
+    QStringList data = QString(editor_data).split(',');
+    spinbox->setObjectName(name);
     spinbox->setSingleStep(data[0].toInt());
     spinbox->setRange(data[1].toInt(), data[2].toInt());
     spinbox->setValue(setting[key].dialog.i);
@@ -609,15 +612,17 @@ void
 create_spinbox(QGroupBox* groupbox, int key)
 {
     QDoubleSpinBox* spinbox = new QDoubleSpinBox(groupbox);
-    QStringList data = QString(settings_data[key].editor_data).split(',');
-    spinbox->setObjectName(settings_data[key].key);
+    char *name = settings_data[6*key + 0];
+    char *editor_data = settings_data[6*key + 5];
+    QStringList data = QString(editor_data).split(',');
+    spinbox->setObjectName(name);
     spinbox->setSingleStep(data[0].toFloat());
     spinbox->setRange(data[1].toFloat(), data[2].toFloat());
     spinbox->setValue(setting[key].dialog.r);
     QObject::connect(spinbox, &QDoubleSpinBox::valueChanged, statusbar,
         [=](double value) { setting[key].dialog.r = value; });
 
-    string_copy(widget_list[n_widgets].key, settings_data[key].key);
+    string_copy(widget_list[n_widgets].key, name);
     widget_list[n_widgets].type = WIDGET_LABEL;
     widget_list[n_widgets].spinbox = spinbox;
 }
@@ -746,7 +751,7 @@ tip_of_the_day(void)
     ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
     // create_pixmap("did_you_know")
 
-    if (get_int(GENERAL_CURRENT_TIP) >= string_array_length(tips)) {
+    if (get_int(GENERAL_CURRENT_TIP) >= table_length(tips)) {
         set_int(GENERAL_CURRENT_TIP, 0);
     }
     labelTipOfTheDay = new QLabel(tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
@@ -800,14 +805,14 @@ button_tip_of_the_day_clicked(int button)
             current--;
         }
         else {
-            current = string_array_length(tips)-1;
+            current = table_length(tips)-1;
         }
         labelTipOfTheDay->setText(tips[current]);
         set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton2) {
         current++;
-        if (current >= string_array_length(tips)) {
+        if (current >= table_length(tips)) {
             current = 0;
         }
         labelTipOfTheDay->setText(tips[current]);
@@ -7060,28 +7065,28 @@ read_settings(void)
     }
 
     for (int i=0; i<N_SETTINGS; i++) {
-        char *label = settings_data[i].label;
-        char *value = settings_data[i].value;
-        switch (settings_data[i].type) {
-        case SCRIPT_INT: {
+        char *label = settings_data[6*i+2];
+        char *value = settings_data[6*i+4];
+        switch (settings_data[6*i+1][0]) {
+        case 'i': {
             int x = settings.value(label, atoi(value)).toInt();
             printf("%d %s %d %d\n", i, label, atoi(value), x);
             set_int(i, x);
             break;
         }
-        case SCRIPT_BOOL: {
+        case 'b': {
             bool x = settings.value(label, (bool)atoi(value)).toBool();
             printf("%d %s %d %d\n", i, label, (bool)atoi(value), x);
             set_bool(i, x);
             break;
         }
-        case SCRIPT_STRING: {
+        case 's': {
             char *x = (char *)qPrintable(settings.value(label, QString(value)).toString());
             printf("%d %s %s %s\n", i, label, value, x);
             set_str(i, x);
             break;
         }
-        case SCRIPT_REAL: {
+        case 'r': {
             float x = settings.value(label, atof(value)).toFloat();
             printf("%d %s %f %f\n", i, label, atof(value), x);
             set_real(i, x);
@@ -7242,19 +7247,21 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
     widgetSelection->setLayout(hboxLayoutSelection);
 
     for (int i=0; i < N_GROUPBOX; i++) {
+        printf("GB %d\n", i);
         todo("Use proper icons for tool buttons.");
         QGroupBox *group_box = create_group_box(dockPropEdit,
             (char*)group_box_list[i].key,
             translate((char*)group_box_list[i].label));
 
         QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-        Editor *editor_data = group_box_list[i].data;
-        for (int j=0; !string_equal(editor_data[j].icon, "END"); j++) {
-            Editor editor = editor_data[j];
-            QToolButton *toolButton = createToolButton(editor.icon,
-                translate((char*)editor.label));
-            QWidget *widget = create_editor(this, editor.icon, editor.label,
-                editor.data_type, editor.signal, editor.object);
+        char **table = group_box_list[i].data;
+        int n = table_length(group_box_list[i].data) / 4;
+        for (int j = 0; j < n; j ++) {
+            /* CSV table row in the order: (data_type, icon, label, signal_name) */
+            QToolButton *toolButton = createToolButton(table[4*j + 1],
+                translate((char*)table[4*j + 2]));
+            QWidget *widget = create_editor(this, table[4*j + 0], table[4*j + 3],
+                group_box_list[i].object);
             formLayout->addRow(toolButton, widget);
         }
         group_box->setLayout(formLayout);
@@ -7656,13 +7663,16 @@ add_lineedit(EmbString key, QLineEdit *lineedit)
     n_widgets++;
 }
 
-/* . */
+/* 
+ * Data order: (signal_name, icon, label, signal).
+ * TODO: icon not set here.
+ */
 QWidget*
-create_editor(QWidget *parent, EmbString icon, EmbString label,
-    EmbString type_label, EmbString signal_name, int obj_type)
+create_editor(QWidget *parent, EmbString type_label, EmbString signal_name,
+    int obj_type)
 {
     EmbString signal;
-    if (string_equal(signal_name, "combobox")) {
+    if (string_equal(type_label, "combobox")) {
         sprintf(signal, "comboBox%s", signal_name);
         QComboBox *combo_box = new QComboBox(parent);
         if (signal_name[0] == 0) {
@@ -7675,7 +7685,7 @@ create_editor(QWidget *parent, EmbString icon, EmbString label,
         add_combobox(signal, combo_box);
         return combo_box;
     }
-    if (string_equal(signal_name, "fontcombobox")) {
+    if (string_equal(type_label, "fontcombobox")) {
         comboBoxTextSingleFont = new QFontComboBox(parent);
         comboBoxTextSingleFont->setDisabled(false);
 
@@ -8025,7 +8035,7 @@ Settings_Dialog::createTabDisplay()
     QGroupBox* groupBoxRender = new QGroupBox(translate("Rendering"), widget);
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
     for (int i=0; render_hints[i] != TERMINATOR_SYMBOL; i++) {
-        QCheckBox* checkBox = create_checkbox(groupBoxRender, settings_data[render_hints[i]].id);
+        QCheckBox* checkBox = create_checkbox(groupBoxRender, render_hints[i]);
         vboxLayoutRender->addWidget(checkBox);
     }
     groupBoxRender->setLayout(vboxLayoutRender);
@@ -8181,7 +8191,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
         SLOT(button_custom_filter_clear_all_clicked()));
 
     int i;
-    int n_extensions = string_array_length(extensions);
+    int n_extensions = table_length(extensions);
     for (i=0; i<n_extensions; i++) {
         const char *extension = extensions[i];
         custom_filter[i] = new QCheckBox(extension, groupbox_custom_filter);

@@ -599,7 +599,7 @@ EmbStringTable prompt_toolbar = {
 
 /* ---------------------------- Groups ------------------------------- */
 
-EmbStringTable grid_load_from_file_group = {
+char *grid_load_from_file_group[] = {
     "labelGridType",
     "comboBoxGridType",
     "checkBoxGridCenterOnOrigin",
@@ -616,7 +616,7 @@ EmbStringTable grid_load_from_file_group = {
     END_SYMBOL
 };
 
-EmbStringTable defined_origin_group = {
+char *defined_origin_group[] = {
     "labelGridCenterX",
     "spinBoxGridCenterX",
     "labelGridCenterY",
@@ -628,7 +628,7 @@ EmbStringTable defined_origin_group = {
     END_SYMBOL
 };
 
-EmbStringTable rectangular_grid_group = {
+char *rectangular_grid_group[] = {
     "labelGridSizeX",
     "spinBoxGridSizeX",
     "labelGridSizeY",
@@ -640,7 +640,7 @@ EmbStringTable rectangular_grid_group = {
     END_SYMBOL
 };
 
-EmbStringTable circular_grid_group = {
+char *circular_grid_group[] = {
     "labelGridSizeRadius",
     "spinBoxGridSizeRadius",
     "labelGridSpacingRadius",
@@ -651,7 +651,7 @@ EmbStringTable circular_grid_group = {
 };
 
 /* FIXME:. */
-EmbStringTable center_on_origin_group = {
+char *center_on_origin_group[] = {
     END_SYMBOL
 };
 
@@ -716,7 +716,7 @@ EmbIntTable render_hints = {
 
 /* ---------------------------- Objects ------------------------------- */
 
-EmbStringTable object_names = {
+char *object_names[] = {
     "Base",
     "Arc",
     "Block",
@@ -747,12 +747,13 @@ EmbStringTable object_names = {
     "Spline",
     "Multi Line Text",
     "Single Line Text",
-    "Unknown"
+    "Unknown",
+    END_SYMBOL
 };
 
 /* ---------------------------- Testing ------------------------------- */
 
-EmbStringTable coverage_test = {
+char *coverage_test[] = {
     "new",
     "icon16",
     "icon24",
@@ -763,7 +764,7 @@ EmbStringTable coverage_test = {
 
 /* ---------------------------- Misc ---------------------------------- */
 
-EmbStringTable tips = {
+char *tips[] = {
     "we need more tips?",
     "you can change the color of the display through settings?",
     "you can hide the scrollbars to increase the viewable area through settings?",
@@ -782,7 +783,7 @@ EmbStringTable tips = {
     END_SYMBOL
 };
 
-EmbStringTable extensions = {
+char *extensions[] = {
     "100",
     "10o",
     "ART",

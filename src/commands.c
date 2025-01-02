@@ -26,10 +26,10 @@ check_for_updates(void)
 
 /* . */
 void
-set_visibility_group(EmbStringTable keylist, bool visibility)
+set_visibility_group(char *keylist[], bool visibility)
 {
     int i;
-    int n = string_array_length(keylist);
+    int n = table_length(keylist);
     for (i=0; i<n; i++) {
         set_visibility(keylist[i], visibility);
     }
@@ -37,10 +37,10 @@ set_visibility_group(EmbStringTable keylist, bool visibility)
 
 /* . */
 void
-set_enabled_group(EmbStringTable keylist, bool enabled)
+set_enabled_group(char *keylist[], bool enabled)
 {
     int i;
-    int n = string_array_length(keylist);
+    int n = table_length(keylist);
     for (i=0; i<n; i++) {
         set_enabled(keylist[i], enabled);
     }
