@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
-find_package(Qt6 COMPONENTS Core Widgets PrintSupport REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets PrintSupport Svg REQUIRED)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
@@ -128,6 +128,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/properties.c
 	${SRC}/script.c
 	${SRC}/state.c
+	${SRC}/icons.c
 	${SRC}/xpm.c
 
 	${SRC}/constants.h
@@ -150,6 +151,7 @@ target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport
+	Qt6::Svg
 	${OPENGL_LIBRARIES}
 )
 

@@ -10,6 +10,8 @@
  * MainWindow Commands
  */
 
+#include <QSvgRenderer>
+
 #include "widgets.h"
 
 /* Could initialise all documents to NULL rather than having a seperate memory
@@ -100,8 +102,8 @@ QLabel *create_int_label(uint32_t value, QDialog *dialog);
 QSpinBox* create_int_spinbox(QGroupBox* groupbox, int key);
 void create_spinbox(QGroupBox* groupbox, int key);
 QCheckBox* create_checkbox(QGroupBox* groupbox, int key);
-QIcon create_icon(QString icon);
-QPixmap create_pixmap(QString icon);
+QIcon create_icon(const char *icon);
+QPixmap create_pixmap(const char *icon);
 void create_label(QGroupBox *groupbox, const char *key, const char *text);
 QIcon create_swatch(int32_t color);
 
@@ -111,7 +113,7 @@ void add_to_selector(QComboBox* box, EmbStringTable list, EmbString type,
 
 QPushButton *get_button(const char *key);
 QWidget *get_widget(EmbString key);
-QAction *get_action_by_icon(EmbString icon);
+QAction *get_action_by_command(const char *command);
 
 QWidget *make_scrollable(QDialog *dialog, QVBoxLayout *layout, QWidget* widget);
 
@@ -226,7 +228,7 @@ int
 find_widget_list(const char *key)
 {
     for (int i=0; i<n_widgets; i++) {
-        if (string_equal(widget_list[i].key, key)) {
+        if (!strcmp(widget_list[i].key, key)) {
             return i;
         }
     }
@@ -400,7 +402,7 @@ void
 set_grid_layout(QGroupBox *groupbox, char *table[])
 {
     QGridLayout* layout = new QGridLayout(groupbox);
-    for (int i=0; !string_equal(table[2*i], "END"); i++) {
+    for (int i=0; strcmp(table[2*i], "END"); i++) {
         if (strlen(table[2*i]) > 0) {
             QWidget *widget = get_widget(table[2*i]);
             layout->addWidget(widget, i, 0, Qt::AlignLeft);
@@ -495,9 +497,9 @@ create_checkbox(QGroupBox* groupbox, int key)
 
 /* . */
 QIcon
-create_icon(QString icon)
+create_icon(const char *icon)
 {
-    return QIcon(create_pixmap(icon));
+    return QIcon(create_pixmap((char*)qPrintable(icon)));
 }
 
 /* . */
@@ -531,20 +533,20 @@ add_to_selector(QComboBox* box, char *list[], EmbString type, int use_icon)
     int n = table_length(list) / 3;
     for (int i=0; i<n; i++) {
         if (!use_icon) {
-            if (string_equal(type, "real")) {
+            if (!strcmp(type, "real")) {
                 box->addItem(list[3*i+0], atof(list[3*i+1]));
                 continue;
             }
-            if (string_equal(type, "int")) {
+            if (!strcmp(type, "int")) {
                 box->addItem(list[3*i+0], atoi(list[3*i+1]));
             }
             continue;
         }
-        if (string_equal(type, "string")) {
+        if (!strcmp(type, "string")) {
             box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
             continue;
         }
-        if (string_equal(type, "int")) {
+        if (!strcmp(type, "int")) {
             if (strlen(list[3*i+2]) > 0) {
                 box->addItem(create_icon(list[3*i+0]), list[3*i+1],
                     atoi(list[3*i+2]));
@@ -554,7 +556,7 @@ add_to_selector(QComboBox* box, char *list[], EmbString type, int use_icon)
             }
             continue;
         }
-        if (string_equal(type, "real")) {
+        if (!strcmp(type, "real")) {
             if (strlen(list[3*i+2]) > 0) {
                 box->addItem(create_icon(list[3*i+0]), list[3*i+1],
                     atof(list[3*i+2]));
@@ -1076,70 +1078,70 @@ set_cursor_shape(EmbString shape)
     if (!doc) {
         return;
     }
-    if (string_equal(shape, "arrow")) {
+    if (!strcmp(shape, "arrow")) {
         doc->setCursor(QCursor(Qt::ArrowCursor));
     }
-    else if (string_equal(shape, "uparrow")) {
+    else if (!strcmp(shape, "uparrow")) {
         doc->setCursor(QCursor(Qt::UpArrowCursor));
     }
-    else if (string_equal(shape, "cross")) {
+    else if (!strcmp(shape, "cross")) {
         doc->setCursor(QCursor(Qt::CrossCursor));
     }
-    else if (string_equal(shape, "wait")) {
+    else if (!strcmp(shape, "wait")) {
         doc->setCursor(QCursor(Qt::WaitCursor));
     }
-    else if (string_equal(shape, "ibeam")) {
+    else if (!strcmp(shape, "ibeam")) {
         doc->setCursor(QCursor(Qt::IBeamCursor));
     }
-    else if (string_equal(shape, "resizevert")) {
+    else if (!strcmp(shape, "resizevert")) {
         doc->setCursor(QCursor(Qt::SizeVerCursor));
     }
-    else if (string_equal(shape, "resizehoriz")) {
+    else if (!strcmp(shape, "resizehoriz")) {
         doc->setCursor(QCursor(Qt::SizeHorCursor));
     }
-    else if (string_equal(shape, "resizediagleft")) {
+    else if (!strcmp(shape, "resizediagleft")) {
         doc->setCursor(QCursor(Qt::SizeBDiagCursor));
     }
-    else if (string_equal(shape, "resizediagright")) {
+    else if (!strcmp(shape, "resizediagright")) {
         doc->setCursor(QCursor(Qt::SizeFDiagCursor));
     }
-    else if (string_equal(shape, "move")) {
+    else if (!strcmp(shape, "move")) {
         doc->setCursor(QCursor(Qt::SizeAllCursor));
     }
-    else if (string_equal(shape, "blank")) {
+    else if (!strcmp(shape, "blank")) {
         doc->setCursor(QCursor(Qt::BlankCursor));
     }
-    else if (string_equal(shape, "splitvert")) {
+    else if (!strcmp(shape, "splitvert")) {
         doc->setCursor(QCursor(Qt::SplitVCursor));
     }
-    else if (string_equal(shape, "splithoriz")) {
+    else if (!strcmp(shape, "splithoriz")) {
         doc->setCursor(QCursor(Qt::SplitHCursor));
     }
-    else if (string_equal(shape, "handpointing")) {
+    else if (!strcmp(shape, "handpointing")) {
         doc->setCursor(QCursor(Qt::PointingHandCursor));
     }
-    else if (string_equal(shape, "forbidden")) {
+    else if (!strcmp(shape, "forbidden")) {
         doc->setCursor(QCursor(Qt::ForbiddenCursor));
     }
-    else if (string_equal(shape, "handopen")) {
+    else if (!strcmp(shape, "handopen")) {
         doc->setCursor(QCursor(Qt::OpenHandCursor));
     }
-    else if (string_equal(shape, "handclosed")) {
+    else if (!strcmp(shape, "handclosed")) {
         doc->setCursor(QCursor(Qt::ClosedHandCursor));
     }
-    else if (string_equal(shape, "whatsthis")) {
+    else if (!strcmp(shape, "whatsthis")) {
         doc->setCursor(QCursor(Qt::WhatsThisCursor));
     }
-    else if (string_equal(shape, "busy")) {
+    else if (!strcmp(shape, "busy")) {
         doc->setCursor(QCursor(Qt::BusyCursor));
     }
-    else if (string_equal(shape, "dragmove")) {
+    else if (!strcmp(shape, "dragmove")) {
         doc->setCursor(QCursor(Qt::DragMoveCursor));
     }
-    else if (string_equal(shape, "dragcopy")) {
+    else if (!strcmp(shape, "dragcopy")) {
         doc->setCursor(QCursor(Qt::DragCopyCursor));
     }
-    else if (string_equal(shape, "draglink")) {
+    else if (!strcmp(shape, "draglink")) {
         doc->setCursor(QCursor(Qt::DragLinkCursor));
     }
 }
@@ -1393,24 +1395,24 @@ UndoableCommand::redo()
             break;
         }
         DocumentData *d = doc_data(data.doc);
-        if (string_equal(data.navType, "ZoomInToPoint")) {
+        if (!strcmp(data.navType, "ZoomInToPoint")) {
             doc_zoom_to_point(data.doc, d->viewMousePoint, +1);
         }
-        else if (string_equal(data.navType, "ZoomOutToPoint")) {
+        else if (!strcmp(data.navType, "ZoomOutToPoint")) {
             doc_zoom_to_point(data.doc, d->viewMousePoint, -1);
         }
-        else if (string_equal(data.navType, "PanStart")) {
+        else if (!strcmp(data.navType, "PanStart")) {
             /* Do Nothing. We are just recording the spot where the pan started. */
         }
-        else if (string_equal(data.navType, "PanStop")) {
+        else if (!strcmp(data.navType, "PanStop")) {
             /* Do Nothing. We are just recording the spot where the pan stopped. */
         }
-        else if (string_equal(data.navType, "ZoomSelected")
-            || string_equal(data.navType, "ZoomExtents")
-            || string_equal(data.navType, "PanLeft")
-            || string_equal(data.navType, "PanRight")
-            || string_equal(data.navType, "PanUp")
-            || string_equal(data.navType, "PanDown")) {
+        else if (!strcmp(data.navType, "ZoomSelected")
+            || !strcmp(data.navType, "ZoomExtents")
+            || !strcmp(data.navType, "PanLeft")
+            || !strcmp(data.navType, "PanRight")
+            || !strcmp(data.navType, "PanUp")
+            || !strcmp(data.navType, "PanDown")) {
             doc_nav(data.navType, data.doc);
         }
         toTransform = documents[data.doc]->transform();
@@ -1872,49 +1874,49 @@ obj_set_text(ObjectCore* obj, const char *str)
 
     /* Translate the path based on the justification. */
     QRectF jRect = textPath.boundingRect();
-    if (string_equal(obj->textJustify, "Left")) {
+    if (!strcmp(obj->textJustify, "Left")) {
         textPath.translate(-jRect.left(), 0);
     }
-    else if (string_equal(obj->textJustify, "Center")) {
+    else if (!strcmp(obj->textJustify, "Center")) {
         textPath.translate(-jRect.center().x(), 0);
     }
-    else if (string_equal(obj->textJustify, "Right")) {
+    else if (!strcmp(obj->textJustify, "Right")) {
         textPath.translate(-jRect.right(), 0);
     }
-    else if (string_equal(obj->textJustify, "Aligned")) {
+    else if (!strcmp(obj->textJustify, "Aligned")) {
         debug_message("TODO: TextSingleObject Aligned Justification.");
     }
-    else if (string_equal(obj->textJustify, "Middle")) {
+    else if (!strcmp(obj->textJustify, "Middle")) {
         textPath.translate(-jRect.center());
     }
-    else if (string_equal(obj->textJustify, "Fit")) {
+    else if (!strcmp(obj->textJustify, "Fit")) {
         debug_message("TODO: TextSingleObject Fit Justification.");
     }
-    else if (string_equal(obj->textJustify, "Top Left")) {
+    else if (!strcmp(obj->textJustify, "Top Left")) {
         textPath.translate(-jRect.topLeft());
     }
-    else if (string_equal(obj->textJustify, "Top Center")) {
+    else if (!strcmp(obj->textJustify, "Top Center")) {
         textPath.translate(-jRect.center().x(), -jRect.top());
     }
-    else if (string_equal(obj->textJustify, "Top Right")) {
+    else if (!strcmp(obj->textJustify, "Top Right")) {
         textPath.translate(-jRect.topRight());
     }
-    else if (string_equal(obj->textJustify, "Middle Left")) {
+    else if (!strcmp(obj->textJustify, "Middle Left")) {
         textPath.translate(-jRect.left(), -jRect.top()/2.0);
     }
-    else if (string_equal(obj->textJustify, "Middle Center")) {
+    else if (!strcmp(obj->textJustify, "Middle Center")) {
         textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
     }
-    else if (string_equal(obj->textJustify, "Middle Right")) {
+    else if (!strcmp(obj->textJustify, "Middle Right")) {
         textPath.translate(-jRect.right(), -jRect.top()/2.0);
     }
-    else if (string_equal(obj->textJustify, "Bottom Left")) {
+    else if (!strcmp(obj->textJustify, "Bottom Left")) {
         textPath.translate(-jRect.bottomLeft());
     }
-    else if (string_equal(obj->textJustify, "Bottom Center")) {
+    else if (!strcmp(obj->textJustify, "Bottom Center")) {
         textPath.translate(-jRect.center().x(), -jRect.bottom());
     }
-    else if (string_equal(obj->textJustify, "Bottom Right")) {
+    else if (!strcmp(obj->textJustify, "Bottom Right")) {
         textPath.translate(-jRect.bottomRight());
     }
 
@@ -3856,7 +3858,7 @@ doc_nav(char *label, int32_t doc_id)
     debug_message("doc_nav(%s, %d)", label, doc_id);
     wait_cursor();
 
-    if (string_equal(label, "ZoomIn")) {
+    if (!strcmp(label, "ZoomIn")) {
         if (!doc_allow_zoom_in(doc_id)) {
             return;
         }
@@ -3868,7 +3870,7 @@ doc_nav(char *label, int32_t doc_id)
         restore_cursor();
         return;
     }
-    if (string_equal(label, "ZoomOut")) {
+    if (!strcmp(label, "ZoomOut")) {
         if (!doc_allow_zoom_out(doc_id)) {
             return;
         }
@@ -3888,7 +3890,7 @@ doc_nav(char *label, int32_t doc_id)
         stack->push(cmd);
     }
 
-    if (string_equal(label, "ZoomSelected")) {
+    if (!strcmp(label, "ZoomSelected")) {
         EmbIdList *itemList = data->selectedItems;
         QPainterPath selectedRectPath;
         for (int i=0; i<itemList->count; i++) {
@@ -3903,7 +3905,7 @@ doc_nav(char *label, int32_t doc_id)
         }
         doc->fitInView(selectedRect, Qt::KeepAspectRatio);
     }
-    if (string_equal(label, "ZoomExtents")) {
+    if (!strcmp(label, "ZoomExtents")) {
         QRectF extents = doc->gscene->itemsBoundingRect();
         if (extents.isNull()) {
             extents.setWidth(get_real(GRID_SIZE_X));
@@ -3912,19 +3914,19 @@ doc_nav(char *label, int32_t doc_id)
         }
         doc->fitInView(extents, Qt::KeepAspectRatio);
     }
-    if (string_equal(label, "PanLeft")) {
+    if (!strcmp(label, "PanLeft")) {
         double value = doc->horizontalScrollBar()->value();
         doc->horizontalScrollBar()->setValue(value + data->panDistance);
     }
-    if (string_equal(label, "PanRight")) {
+    if (!strcmp(label, "PanRight")) {
         double value = doc->horizontalScrollBar()->value();
         doc->horizontalScrollBar()->setValue(value - data->panDistance);
     }
-    if (string_equal(label, "PanUp")) {
+    if (!strcmp(label, "PanUp")) {
         double value = doc->verticalScrollBar()->value();
         doc->verticalScrollBar()->setValue(value + data->panDistance);
     }
-    if (string_equal(label, "PanDown")) {
+    if (!strcmp(label, "PanDown")) {
         double value = doc->verticalScrollBar()->value();
         doc->verticalScrollBar()->setValue(value - data->panDistance);
     }
@@ -6002,19 +6004,52 @@ to_qpointf(EmbVector v)
     return p;
 }
 
-/* TODO: choose a default icon. */
+/* TODO: choose a better default icon. */
 QPixmap
-create_pixmap(QString icon)
+create_pixmap(const char *icon)
 {
-    int id = 0;
-    int n = table_length(xpm_icon_labels);
-    for (int i=0; i<n; i++) {
-        if (string_equal((char*)qPrintable(icon), xpm_icon_labels[i])) {
-            id = i;
-            break;
+    /* SVG icon by default */
+    int n = table_length((char**)svgs);
+    if (!strcmp(icon, "blank")) {
+        debug_message("    blank icon");
+        /* FIXME: this should be based on the global icon size variable */
+        QSize size(50, 50);
+        QPixmap pixmap(size);
+        pixmap.fill(Qt::transparent);
+        return pixmap;
+    }
+    debug_message("svg_table_length = %d.", n);
+    for (int i=0; i<n/2; i++) {
+        if (!strcmp(icon, svgs[2*i+0])) {
+            /* We're storing the SVGs as part of the code, so we need to convert
+             * the string to a ByteArray for QSvgRenderer to recognise it.
+             */
+            debug_message("    found svg %s", icon);
+            QString svg_s(svgs[2*i+1]);
+            QSvgRenderer renderer(svg_s.toUtf8());
+            /* FIXME: this should be based on the global icon size variable */
+            QSize size(50, 50);
+            QPixmap pixmap(size);
+            QPainter painter;
+            pixmap.fill(Qt::transparent);
+            painter.begin(&pixmap);
+            renderer.render(&painter);
+            painter.end();
+            return pixmap;
         }
     }
-    QPixmap pixmap(xpm_icons[id]);
+    /* Fallback to XPM. */
+    n = table_length(xpm_icon_labels);
+    for (int i=0; i<n; i++) {
+        if (!strcmp(icon, xpm_icon_labels[i])) {
+            debug_message("    fallback png %s", icon);
+            QPixmap pixmap(xpm_icons[i]);
+            return pixmap;
+        }
+    }
+    /* Use "about" to represent missing icon. */
+    QPixmap pixmap(xpm_icons[0]);
+    debug_message("    ERROR: failed to find icon %s", icon);
     return pixmap;
 }
 
@@ -6431,7 +6466,7 @@ MainWindow::recentMenuAboutToShow(void)
     debug_message("recentMenuAboutToShow()");
     menu[MENU_RECENT]->clear();
 
-    for (int i = 0; !string_equal(recent_files[i], END_SYMBOL); ++i) {
+    for (int i = 0; strcmp(recent_files[i], END_SYMBOL); ++i) {
         /* If less than the max amount of entries add to menu. */
         if (i < get_int(OPENSAVE_RECENT_MAX_FILES)) {
             QFileInfo recentFileInfo = QFileInfo(recent_files[i]);
@@ -6949,11 +6984,11 @@ MainWindow::floatingChangedToolBar(bool isFloating)
 
 /* . */
 QAction*
-get_action_by_icon(EmbString icon)
+get_action_by_command(const char *command)
 {
     int i;
     for (i=0; i < N_ACTIONS; i++) {
-        if (string_equal(command_data[i].icon, icon)) {
+        if (!strcmp(command_data[i].command, command)) {
             return actionHash[i];
         }
     }
@@ -6983,7 +7018,7 @@ add_to_menu(int index, char *menu_data[])
             menu[index]->setIcon(create_icon(s+1));
         }
         else {
-            menu[index]->addAction(get_action_by_icon(s));
+            menu[index]->addAction(get_action_by_command(s));
         }
     }
     menu[index]->setTearOffEnabled(false);
@@ -7089,7 +7124,7 @@ add_to_toolbar(int id, char *toolbar_data[])
             toolbar[id]->addSeparator();
         }
         else {
-            QAction *action = get_action_by_icon(toolbar_data[i]);
+            QAction *action = get_action_by_command(toolbar_data[i]);
             toolbar[id]->addAction(action);
         }
     }
@@ -7122,43 +7157,44 @@ create_all_actions(void)
 {
     debug_message("Creating All Actions...");
     for (int i=0; i < N_ACTIONS; i++) {
-        QString icon(command_data[i].icon);
-        QString toolTip(command_data[i].tooltip);
-        QString statusTip(command_data[i].statustip);
-        QString alias_string(command_data[i].alias);
-        QStringList aliases = alias_string.split(",");
+        debug_message("COMMAND: %s", command_data[i].command);
 
-        debug_message((char*)qPrintable("COMMAND: " + icon));
-
-        QAction *ACTION = new QAction(create_icon(icon), toolTip, _main);
-        ACTION->setStatusTip(statusTip);
-        ACTION->setObjectName(icon);
-        ACTION->setWhatsThis(statusTip);
+        QAction *action = new QAction(create_icon(command_data[i].icon),
+            command_data[i].tooltip, _main);
+        action->setStatusTip(command_data[i].statustip);
+        action->setObjectName(command_data[i].command);
+        action->setWhatsThis(command_data[i].statustip);
 
         if (strlen(command_data[i].shortcut) > 0) {
-            ACTION->setShortcut(QKeySequence(command_data[i].shortcut));
+            action->setShortcut(QKeySequence(command_data[i].shortcut));
         }
 
-        if (icon == "textbold" || icon == "textitalic" || icon == "textunderline"
-            || icon == "textstrikeout" || icon == "textoverline") {
-            ACTION->setCheckable(true);
+        const char *icon = command_data[i].icon;
+        if (!strcmp(icon, "textbold")
+            || !strcmp(icon, "textitalic")
+            || !strcmp(icon, "textunderline")
+            || !strcmp(icon, "textstrikeout")
+            || !strcmp(icon, "textoverline")) {
+            action->setCheckable(true);
         }
 
-        QObject::connect(ACTION, SIGNAL(triggered()), _main, SLOT(runCommand()));
+        QObject::connect(action, SIGNAL(triggered()), _main, SLOT(runCommand()));
 
-        string_copy(aliasHash[n_aliases].key, command_data[i].icon);
-        string_copy(aliasHash[n_aliases].value, command_data[i].icon);
+        string_copy(aliasHash[n_aliases].key, command_data[i].command);
+        string_copy(aliasHash[n_aliases].value, command_data[i].command);
         n_aliases++;
 
-        actionHash[i] = ACTION;
+        actionHash[i] = action;
         n_actions++;
 
+        QString alias_string(command_data[i].alias);
+        QStringList aliases = alias_string.split(",");
         foreach (QString alias, aliases) {
-            EmbString msg;
+            char msg[300];
             string_copy(aliasHash[n_aliases].key, qPrintable(alias));
-            string_copy(aliasHash[n_aliases].value, command_data[i].icon);
-            sprintf(msg, "Command Added: %s, %s", command_data[i].icon, command_data[i].icon);
-            debug_message(msg);
+            string_copy(aliasHash[n_aliases].value, command_data[i].command);
+            debug_message("Alias Added: %s -> %s", qPrintable(alias),
+                command_data[i].command);
             n_aliases++;
         }
     }
@@ -7420,7 +7456,7 @@ update_line_edit_str_if_varies(const char *key, const char *str)
     if (fieldOldText[0] == 0) {
         lineEdit->setText(fieldNewText);
     }
-    else if (!string_equal(fieldOldText, fieldNewText)) {
+    else if (strcmp(fieldOldText, fieldNewText)) {
         lineEdit->setText(fieldVariesText);
     }
 }
@@ -7451,7 +7487,7 @@ update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision)
     for (int i = 0; i < precision; ++i) {
         sprintf(negativeZero, "%s0", negativeZero);
     }
-    if (string_equal(fieldNewText, negativeZero)) {
+    if (!strcmp(fieldNewText, negativeZero)) {
         /* Trim the first character (the minus sign). */
         string_copy(fieldNewText, (char*)(fieldNewText + 1));
     }
@@ -7459,7 +7495,7 @@ update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision)
     if (fieldOldText[0] == 0) {
         lineEdit->setText(fieldNewText);
     }
-    else if (!string_equal(fieldOldText, fieldNewText)) {
+    else if (strcmp(fieldOldText, fieldNewText)) {
         lineEdit->setText(fieldVariesText);
     }
 }
@@ -7481,7 +7517,7 @@ update_font_combo_box_str_if_varies(const char *str)
         fontComboBox->setCurrentFont(QFont(fieldNewText));
         fontComboBox->setProperty("FontFamily", QString(fieldNewText));
     }
-    else if (!string_equal(fieldOldText, fieldNewText)) {
+    else if (strcmp(fieldOldText, fieldNewText)) {
         /* Prevent multiple entries */
         if (fontComboBox->findText(fieldVariesText) == -1) {
             fontComboBox->addItem(fieldVariesText);
@@ -7526,7 +7562,7 @@ update_lineedit_str(const char *key, const char *str, char *strList[])
         int current_index = combobox_find_text(index, qPrintable(fieldNewText));
         comboBox->setCurrentIndex(current_index);
     }
-    else if (!string_equal(fieldOldText, fieldNewText)) {
+    else if (strcmp(fieldOldText, fieldNewText)) {
         /* Prevent multiple entries */
         if (comboBox->findText(fieldVariesText) == -1) {
             comboBox->addItem(fieldVariesText);
@@ -7576,7 +7612,7 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
         int current_index = combobox_find_text(index, qPrintable(fieldNewText));
         comboBox->setCurrentIndex(current_index);
     }
-    else if (!string_equal(fieldOldText, fieldNewText)) {
+    else if (strcmp(fieldOldText, fieldNewText)) {
         /* Prevent multiple entries. */
         if (comboBox->findText(fieldVariesText) == -1) {
             comboBox->addItem(fieldVariesText);
@@ -7620,7 +7656,7 @@ create_editor(QWidget *parent, EmbString type_label, EmbString signal_name,
     int obj_type)
 {
     EmbString signal;
-    if (string_equal(type_label, "combobox")) {
+    if (!strcmp(type_label, "combobox")) {
         sprintf(signal, "comboBox%s", signal_name);
         QComboBox *combo_box = new QComboBox(parent);
         if (signal_name[0] == 0) {
@@ -7633,7 +7669,7 @@ create_editor(QWidget *parent, EmbString type_label, EmbString signal_name,
         add_combobox(signal, combo_box);
         return combo_box;
     }
-    if (string_equal(type_label, "fontcombobox")) {
+    if (!strcmp(type_label, "fontcombobox")) {
         comboBoxTextSingleFont = new QFontComboBox(parent);
         comboBoxTextSingleFont->setDisabled(false);
 
@@ -7644,13 +7680,13 @@ create_editor(QWidget *parent, EmbString type_label, EmbString signal_name,
     sprintf(signal, "lineEdit%s", signal_name);
 
     QLineEdit *line_edit = new QLineEdit(parent);
-    if (string_equal(type_label, "int")) {
+    if (!strcmp(type_label, "int")) {
         line_edit->setValidator(new QIntValidator(line_edit));
     }
-    else if (string_equal(type_label, "double")) {
+    else if (!strcmp(type_label, "double")) {
         line_edit->setValidator(new QDoubleValidator(line_edit));
     }
-    else if (string_equal(type_label, "string")) {
+    else if (!strcmp(type_label, "string")) {
     }
 
     if (signal_name[0] != 0) {
@@ -7695,24 +7731,24 @@ fieldEdited(QObject* fieldObj)
             if (widget_list[id].combobox->currentText() == fieldVariesText) {
                 continue;
             }
-            if (string_equal(label, "comboBoxTextSingleFont")) {
+            if (!strcmp(label, "comboBoxTextSingleFont")) {
                 obj_set_text_font(core,
                     qPrintable(comboBoxTextSingleFont->currentFont().family()));
                 continue;
             }
             const char *text = qPrintable(widget_list[id].combobox->currentText());
             int index = widget_list[id].combobox->currentIndex();
-            if (string_equal(label, "comboBoxTextSingleJustify")) {
+            if (!strcmp(label, "comboBoxTextSingleJustify")) {
                 obj_set_text_justify(core,
                     qPrintable(widget_list[id].combobox->itemData(index).toString()));
                 continue;
             }
-            if (string_equal(label, "comboBoxTextSingleBackward")) {
+            if (!strcmp(label, "comboBoxTextSingleBackward")) {
                 obj_set_text_backward(core,
                     widget_list[id].combobox->itemData(index).toBool());
                 continue;
             }
-            if (string_equal(label, "comboBoxTextSingleUpsideDown")) {
+            if (!strcmp(label, "comboBoxTextSingleUpsideDown")) {
                 obj_set_text_upside_down(core,
                     widget_list[id].combobox->itemData(index).toBool());
             }

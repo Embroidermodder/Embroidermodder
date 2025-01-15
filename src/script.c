@@ -706,7 +706,7 @@ get_command_id(char *name)
 {
     int i;
     for (i = 0; i < N_ACTIONS; i++) {
-        if (string_equal(command_data[i].icon, name)) {
+        if (string_equal(command_data[i].command, name)) {
             return i;
         }
     }

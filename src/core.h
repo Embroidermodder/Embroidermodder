@@ -1085,6 +1085,9 @@ extern char fieldOffText[MAX_STRING_LENGTH];
 extern WidgetData grid_gb_data[];
 extern WidgetData zoom_gb_data[];
 
+/* Icons */
+extern const char *svgs[];
+
 #ifdef __cplusplus
 }
 #endif

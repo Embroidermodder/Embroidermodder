@@ -19,38 +19,6 @@ build/
 debug/
 analysis/
 
-# Misc Dev Files
-#########################
-*.moc
-*.obj
-*Makefile*
-*_memleak*
-*callgrind.*
-*object_script.*
-*.pro.user*
-moc_*.cpp
-qrc_*.cpp
-*-build-*
-
-# Libraries
-#########################
-## Compiled Static libraries
-*.lai
-*.la
-*.lib
-*.a
-## Compiled Dynamic libraries
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-#########################
-*.exe
-*.out
-*.app
-
 # OS generated files
 #########################
 ## Macintosh
@@ -62,11 +30,3 @@ qrc_*.cpp
 ehthumbs.db
 Thumbs.db
 Desktop.ini
-
-# Python
-#########################
-## Byte-compiled / optimized / DLL files
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
