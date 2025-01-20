@@ -1998,7 +1998,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "save",
         .arguments = "",
-        .icon = "save",
+        .icon = "arrow_down_on_square",
         .tooltip = "&Save",
         .statustip = "Save the design to disk. Command: SAVE.",
         .alias = "SAVE",
@@ -2009,7 +2009,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "saveas",
         .arguments = "",
-        .icon = "saveas",
+        .icon = "arrow_down_on_square_stack",
         .tooltip = "Save &As",
         .statustip = "Save the design under a new name. Command: SAVEAS.",
         .alias = "SAVEAS",
@@ -2031,7 +2031,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "designdetails",
         .arguments = "",
-        .icon = "designdetails",
+        .icon = "chart_bar",
         .tooltip = "&Details",
         .statustip = "Details of the current design. Command: DETAILS",
         .alias = "details",
@@ -2112,7 +2112,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "windowclose",
         .arguments = "",
-        .icon = "windowclose",
+        .icon = "x_mark",
         .tooltip = "Cl&ose",
         .statustip = "Close the active window. Command: CLOSE.",
         .alias = "CLOSE",
@@ -2189,7 +2189,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "changelog",
         .arguments = "",
-        .icon = "changelog",
+        .icon = "queue_list",
         .tooltip = "&Changelog",
         .statustip = "Describes new features in this product. Command: CHANGELOG.",
         .alias = "CHANGELOG",
@@ -2211,7 +2211,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "about",
         .arguments = "",
-        .icon = "about",
+        .icon = "information_circle",
         .tooltip = "&About Embroidermodder 2",
         .statustip = "Displays information about this product. Command: ABOUT.",
         .alias = "ABOUT",
@@ -2497,7 +2497,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "textoverline",
         .arguments = "",
-        .icon = "textoverline",
+        .icon = "overline",
         .tooltip = "&Overline Text",
         .statustip = "Sets text to be overlined. Command: OVERLINE.",
         .alias = "OVERLINE",
