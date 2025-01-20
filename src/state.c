@@ -2431,7 +2431,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "lockalllayers",
         .arguments = "",
-        .icon = "lockalllayers",
+        .icon = "lock_closed",
         .tooltip = "&Lock All Layers",
         .statustip = "Locks all layers in the current drawing:  LOCKALL",
         .alias = "LOCKALL",
@@ -2442,7 +2442,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "unlockalllayers",
         .arguments = "",
-        .icon = "unlockalllayers",
+        .icon = "lock_open",
         .tooltip = "&Unlock All Layers",
         .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
         .alias = "UNLOCKALL",

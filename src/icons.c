@@ -2331,12 +2331,6 @@ const char lineweightsettings_svg[] = \
     "</svg>" \
 ;
 
-const char lockalllayers_svg[] = \
-    "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" \
-    "<rect x=\"0\" y=\"0\" width=\"24\" height=\"24\" fill=\"#0000ff\" stroke=\"#0000ff\" stroke-width=\"10\" />" \
-    "</svg>" \
-;
-
 const char obliquedimensions_svg[] = \
     "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" \
     "<rect x=\"0\" y=\"0\" width=\"24\" height=\"24\" fill=\"#ffff00\" stroke=\"#ffff00\" stroke-width=\"10\" />" \
@@ -2698,12 +2692,6 @@ const char tolerance_svg[] = \
 ;
 
 const char units_svg[] = \
-    "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" \
-    "<rect x=\"0\" y=\"0\" width=\"24\" height=\"24\" fill=\"#0000ff\" stroke=\"#0000ff\" stroke-width=\"10\" />" \
-    "</svg>" \
-;
-
-const char unlockalllayers_svg[] = \
     "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">" \
     "<rect x=\"0\" y=\"0\" width=\"24\" height=\"24\" fill=\"#0000ff\" stroke=\"#0000ff\" stroke-width=\"10\" />" \
     "</svg>" \
@@ -3095,7 +3083,6 @@ const char *svgs[] = {
     "lineweightdefault", lineweightdefault_svg,
     "lineweightselector", lineweightselector_svg,
     "lineweightsettings", lineweightsettings_svg,
-    "lockalllayers", lockalllayers_svg,
     "obliquedimensions", obliquedimensions_svg,
     "ordinatedimension", ordinatedimension_svg,
     "render", render_svg,
@@ -3157,7 +3144,6 @@ const char *svgs[] = {
     "thawalllayers", thawalllayers_svg,
     "tolerance", tolerance_svg,
     "units", units_svg,
-    "unlockalllayers", unlockalllayers_svg,
     "view", view_svg,
     "END"
 };

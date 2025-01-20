@@ -247,8 +247,12 @@ typedef struct Tab_ {
 } Tab;
 
 typedef struct Translation_ {
-    char *source;
-    char *target;
+    char *ar;
+    char *en;
+    char *es;
+    char *fr;
+    char *ru;
+    char *zh;
     int32_t status;
 } Translation;
 
@@ -1084,6 +1088,8 @@ extern char fieldOffText[MAX_STRING_LENGTH];
 
 extern WidgetData grid_gb_data[];
 extern WidgetData zoom_gb_data[];
+
+extern Translation translations[];
 
 /* Icons */
 extern const char *svgs[];

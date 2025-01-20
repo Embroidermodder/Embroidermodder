@@ -94,27 +94,6 @@ qt_add_executable(embroidermodder2
 	${EXTERN}/glad/include/glad/glad.h
 	${EXTERN}/glad/include/KHR/khrplatform.h
 
-	${TRANSLATION}/afrikaans.c
-	${TRANSLATION}/arabic.c
-	${TRANSLATION}/chinese.c
-	${TRANSLATION}/czech.c
-	${TRANSLATION}/danish.c
-	${TRANSLATION}/dutch.c
-	${TRANSLATION}/finnish.c
-	${TRANSLATION}/french.c
-	${TRANSLATION}/german.c
-	${TRANSLATION}/greek.c
-	${TRANSLATION}/korean.c
-	${TRANSLATION}/italian.c
-	${TRANSLATION}/japanese.c
-	${TRANSLATION}/portuguese.c
-	${TRANSLATION}/romanian.c
-	${TRANSLATION}/polish.c
-	${TRANSLATION}/russian.c
-	${TRANSLATION}/spanish.c
-	${TRANSLATION}/swedish.c
-	${TRANSLATION}/turkish.c
-
 	${LIBRARY_SRC}
 
 	${SRC}/widgets.cpp
@@ -128,6 +107,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/properties.c
 	${SRC}/script.c
 	${SRC}/state.c
+	${SRC}/translations.c
 	${SRC}/icons.c
 	${SRC}/xpm.c
 
