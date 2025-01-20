@@ -263,6 +263,20 @@ typedef struct WidgetData_ {
     int type;
 } WidgetData;
 
+typedef struct Design_ {
+    char *command;
+    float lower;
+    float upper;
+    int num_points;
+    int min_points;
+    int max_points;
+    float xscale;
+    float yscale;
+    char *parameter;
+    char *x;
+    char *y;
+} Design;
+
 /* -------------------------------- Scripting ---------------------------- */
 
 ScriptEnv *create_script_env(void);
@@ -893,6 +907,9 @@ extern Command command_data[MAX_COMMANDS];
 extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
 extern GroupBoxData group_box_list[];
+extern Translation translations[];
+extern Design designs[];
+extern const char *svgs[];
 
 extern const char *config_table[];
 extern char *settings_data[];
@@ -1088,11 +1105,6 @@ extern char fieldOffText[MAX_STRING_LENGTH];
 
 extern WidgetData grid_gb_data[];
 extern WidgetData zoom_gb_data[];
-
-extern Translation translations[];
-
-/* Icons */
-extern const char *svgs[];
 
 #ifdef __cplusplus
 }

@@ -572,7 +572,7 @@ add_to_selector(QComboBox* box, char *list[], EmbString type, int use_icon)
 void
 add_combobox(EmbString key, QComboBox *combobox)
 {
-    string_copy(widget_list[n_widgets].key, key);
+    strcpy(widget_list[n_widgets].key, key);
     widget_list[n_widgets].combobox = combobox;
     n_widgets++;
 }
@@ -621,7 +621,7 @@ create_spinbox(QGroupBox* groupbox, int key)
     QObject::connect(spinbox, &QDoubleSpinBox::valueChanged, statusbar,
         [=](double value) { setting[key].dialog.r = value; });
 
-    string_copy(widget_list[n_widgets].key, name);
+    strcpy(widget_list[n_widgets].key, name);
     widget_list[n_widgets].type = WIDGET_LABEL;
     widget_list[n_widgets].spinbox = spinbox;
 }
@@ -632,7 +632,7 @@ create_group_box(QWidget *parent, const char *key, const char *label)
 {
     QGroupBox *group_box = new QGroupBox(translate(label), parent);
 
-    string_copy(widget_list[n_widgets].key, key);
+    strcpy(widget_list[n_widgets].key, key);
     widget_list[n_widgets].type = WIDGET_GROUP_BOX;
     widget_list[n_widgets].groupbox = group_box;
     n_widgets++;
@@ -687,7 +687,7 @@ void
 create_label(QGroupBox *groupbox, const char *key, const char *text)
 {
     QLabel* label = new QLabel(translate(text), groupbox);
-    string_copy(widget_list[n_widgets].key, key);
+    strcpy(widget_list[n_widgets].key, key);
     widget_list[n_widgets].type = WIDGET_LABEL;
     widget_list[n_widgets].label = label;
 }
@@ -1294,7 +1294,7 @@ UndoableCommand::UndoableCommand(int type_, QString type_name, int32_t doc,
 {
     data.type = type_;
     data.doc = doc;
-    string_copy(data.navType, qPrintable(type_name));
+    strcpy(data.navType, qPrintable(type_name));
     setText(QObject::tr("Navigation"));
     data.done = false;
     // fromTransform = doc_transform(data.doc);
@@ -1505,10 +1505,10 @@ create_object(int type_, uint32_t rgb)
     obj->core = (ObjectCore*)malloc(sizeof(ObjectCore));
 
     if (type_ < 30) {
-        string_copy(obj->core->OBJ_NAME, object_names[type_]);
+        strcpy(obj->core->OBJ_NAME, object_names[type_]);
     }
     else {
-        string_copy(obj->core->OBJ_NAME, "Unknown");
+        strcpy(obj->core->OBJ_NAME, "Unknown");
     }
 
     obj->objPen.setCapStyle(Qt::RoundCap);
@@ -1860,7 +1860,7 @@ Object::subPathList() const {
 void
 obj_set_text(ObjectCore* obj, const char *str)
 {
-    string_copy(obj->text, str);
+    strcpy(obj->text, str);
     QPainterPath textPath;
     QFont font;
     font.setFamily(obj->textFont);
@@ -5527,7 +5527,7 @@ MdiWindow::saveBMC()
 void
 MdiWindow::setCurrentFile(QString fileName)
 {
-    string_copy(documents[doc_index]->data->curFile,
+    strcpy(documents[doc_index]->data->curFile,
         qPrintable(QFileInfo(fileName).canonicalFilePath()));
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
@@ -5642,8 +5642,8 @@ blink(void)
 void
 set_prompt_text_color(uint32_t color)
 {
-    string_copy(prompt_color_, (char*)qPrintable(QColor(color).name()));
-    string_copy(prompt_selection_bg_color_, (char*)qPrintable(QColor(color).name()));
+    strcpy(prompt_color_, (char*)qPrintable(QColor(color).name()));
+    strcpy(prompt_selection_bg_color_, (char*)qPrintable(QColor(color).name()));
     prompt_update_style();
 }
 
@@ -5651,8 +5651,8 @@ set_prompt_text_color(uint32_t color)
 void
 set_prompt_background_color(uint32_t color)
 {
-    string_copy(prompt_bg_color_, (char*)qPrintable(QColor(color).name()));
-    string_copy(prompt_selection_color_, (char*)qPrintable(QColor(color).name()));
+    strcpy(prompt_bg_color_, (char*)qPrintable(QColor(color).name()));
+    strcpy(prompt_selection_color_, (char*)qPrintable(QColor(color).name()));
     prompt_update_style();
 }
 
@@ -5687,7 +5687,7 @@ void
 set_prompt_prefix(QString txt)
 {
     prefix = txt;
-    string_copy(curText, qPrintable(txt));
+    strcpy(curText, qPrintable(txt));
     promptInput->setText(txt);
 }
 
@@ -5699,9 +5699,9 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
 
     defaultPrefix = tr("Command: ");
     prefix = defaultPrefix;
-    string_copy(curText, qPrintable(prefix));
+    strcpy(curText, qPrintable(prefix));
 
-    string_copy(lastCmd, "help");
+    strcpy(lastCmd, "help");
     curCmd = "help";
     cmdActive = false;
 
@@ -5729,7 +5729,7 @@ void
 prompt_end_command(void)
 {
     debug_message("prompt_end_command");
-    string_copy(lastCmd, qPrintable(curCmd));
+    strcpy(lastCmd, qPrintable(curCmd));
     cmdActive = false;
     rapidFireEnabled = false;
     stop_blinking();
@@ -5782,7 +5782,7 @@ process_input(char rapidChar)
         int index = find_in_map(aliasHash, n_aliases, qPrintable(cmdtxt));
         if (index >= 0) {
             cmdActive = true;
-            string_copy(lastCmd, qPrintable(curCmd));
+            strcpy(lastCmd, qPrintable(curCmd));
             curCmd = QString(aliasHash[index].value);
             prompt_output(qPrintable(curText));
             run_command_prompt(aliasHash[index].value);
@@ -5848,7 +5848,7 @@ CmdPromptInput::updateCurrentText(QString  txt)
     }
     else {
         /* input is okay so update curText */
-        string_copy(curText, qPrintable(txt));
+        strcpy(curText, qPrintable(txt));
         this->setText(curText);
     }
     setCursorPosition(cursorPos);
@@ -6073,10 +6073,10 @@ Application::event(QEvent *event)
             char files[MAX_FILES][MAX_STRING_LENGTH];
             int i;
             for (i=0; i < MAX_FILES && i < sl.size(); i++) {
-                string_copy(files[i], qPrintable(sl[i]));
+                strcpy(files[i], qPrintable(sl[i]));
                 files_ptrs[i] = (char*)files[i];
             }
-            string_copy(files[i], END_SYMBOL);
+            strcpy(files[i], END_SYMBOL);
             files_ptrs[i] = (char*)files[i];
             open_filesSelected(files_ptrs);
             return true;
@@ -6102,10 +6102,10 @@ make_application(int argc, char* argv[])
     char filesToOpen[MAX_FILES][MAX_STRING_LENGTH];
     int i;
     for (i=0; i<argc; i++) {
-        string_copy(filesToOpen[i], argv[i]);
+        strcpy(filesToOpen[i], argv[i]);
         files_ptrs[i] = (char*)filesToOpen[i];
     }
-    string_copy(filesToOpen[i], END_SYMBOL);
+    strcpy(filesToOpen[i], END_SYMBOL);
     files_ptrs[i] = (char*)filesToOpen[i];
     
     _main = new MainWindow();
@@ -6244,10 +6244,10 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     prompt->setLayout(promptVBoxLayout);
 
-    string_copy(prompt_color_, "#000000"); /* Match --------------------| */
-    string_copy(prompt_selection_bg_color_, "#000000"); /* Match -------| */
-    string_copy(prompt_bg_color_, "#FFFFFF");
-    string_copy(prompt_selection_color_, "#FFFFFF");
+    strcpy(prompt_color_, "#000000"); /* Match --------------------| */
+    strcpy(prompt_selection_bg_color_, "#000000"); /* Match -------| */
+    strcpy(prompt_bg_color_, "#FFFFFF");
+    strcpy(prompt_selection_color_, "#FFFFFF");
     set_str(PROMPT_FONT_FAMILY, "Monospace");
     set_str(PROMPT_FONT_STYLE, "normal");
     set_int(PROMPT_FONT_SIZE, 12);
@@ -6497,11 +6497,11 @@ MainWindow::recentMenuAboutToShow(void)
     }
     /* Ensure the list only has max amount of entries. */
     if (get_int(OPENSAVE_RECENT_MAX_FILES) < MAX_FILES) {
-        string_copy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], END_SYMBOL);
+        strcpy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], END_SYMBOL);
     }
     else {
         set_int(OPENSAVE_RECENT_MAX_FILES, MAX_FILES - 1);
-        string_copy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], END_SYMBOL);
+        strcpy(recent_files[get_int(OPENSAVE_RECENT_MAX_FILES)], END_SYMBOL);
     }
 }
 
@@ -6582,12 +6582,12 @@ open_file(bool recent, EmbString recentFile)
     char files[MAX_FILES][MAX_STRING_LENGTH];
     int n_files = 0;
     bool preview = get_bool(OPENSAVE_OPEN_THUMBNAIL);
-    string_copy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
+    strcpy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
 
     /* Check to see if this from the recent files list. */
     if (recent) {
-        string_copy(files[0], (char*)qPrintable(recentFile));
-        string_copy(files[1], END_SYMBOL);
+        strcpy(files[0], (char*)qPrintable(recentFile));
+        strcpy(files[1], END_SYMBOL);
         files_ptrs[0] = (char*)files[0];
         files_ptrs[1] = (char*)files[1];
         open_filesSelected(files_ptrs);
@@ -6598,10 +6598,10 @@ open_file(bool recent, EmbString recentFile)
             translate("Open"), QString(open_filesPath), formatFilterOpen);
         int i;
         for (i=0; i < MAX_FILES && i < sl.size(); i++) {
-            string_copy(files[i], qPrintable(sl[i]));
+            strcpy(files[i], qPrintable(sl[i]));
             files_ptrs[i] = (char*)files[i];
         }
-        string_copy(files[i], END_SYMBOL);
+        strcpy(files[i], END_SYMBOL);
         files_ptrs[i] = (char*)files[i];
         open_filesSelected(files_ptrs);
     }
@@ -6660,16 +6660,16 @@ open_filesSelected(char *filesToOpen[])
             if (!string_list_contains(recent_files, filesToOpen[i])) {
                 int j;
                 for (j=0; j<MAX_FILES-1; j++) {
-                    string_copy(recent_files[j], recent_files[j+1]);
+                    strcpy(recent_files[j], recent_files[j+1]);
                 }
-                string_copy(recent_files[0], filesToOpen[i]);
+                strcpy(recent_files[0], filesToOpen[i]);
             }
             /* Move the recent file to the top of the list */
             else
             #endif
              {
-                string_copy(recent_files[0], filesToOpen[i]);
-                string_copy(recent_files[1], END_SYMBOL);
+                strcpy(recent_files[0], filesToOpen[i]);
+                strcpy(recent_files[1], END_SYMBOL);
             }
             set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(filesToOpen[i]).absolutePath()));
 
@@ -6702,7 +6702,7 @@ save_as_file(void)
     }
 
     DocumentData *data = doc_data(doc);
-    string_copy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
+    strcpy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
     QString fileName = QFileDialog::getSaveFileName(_main,
         translate("Save As"), QString(open_filesPath), formatFilterSave);
     
@@ -7180,8 +7180,8 @@ create_all_actions(void)
 
         QObject::connect(action, SIGNAL(triggered()), _main, SLOT(runCommand()));
 
-        string_copy(aliasHash[n_aliases].key, command_data[i].command);
-        string_copy(aliasHash[n_aliases].value, command_data[i].command);
+        strcpy(aliasHash[n_aliases].key, command_data[i].command);
+        strcpy(aliasHash[n_aliases].value, command_data[i].command);
         n_aliases++;
 
         actionHash[i] = action;
@@ -7191,8 +7191,8 @@ create_all_actions(void)
         QStringList aliases = alias_string.split(",");
         foreach (QString alias, aliases) {
             char msg[300];
-            string_copy(aliasHash[n_aliases].key, qPrintable(alias));
-            string_copy(aliasHash[n_aliases].value, command_data[i].command);
+            strcpy(aliasHash[n_aliases].key, qPrintable(alias));
+            strcpy(aliasHash[n_aliases].value, command_data[i].command);
             debug_message("Alias Added: %s -> %s", qPrintable(alias),
                 command_data[i].command);
             n_aliases++;
@@ -7221,13 +7221,13 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
 
     signalMapper = new QSignalMapper(this);
 
-    string_copy(fieldOldText, "");
-    string_copy(fieldNewText, "");
-    string_copy(fieldVariesText, "*Varies*");
-    string_copy(fieldYesText, "Yes");
-    string_copy(fieldNoText, "No");
-    string_copy(fieldOnText, "On");
-    string_copy(fieldOffText, "Off");
+    strcpy(fieldOldText, "");
+    strcpy(fieldNewText, "");
+    strcpy(fieldVariesText, "*Varies*");
+    strcpy(fieldYesText, "Yes");
+    strcpy(fieldNoText, "No");
+    strcpy(fieldOnText, "On");
+    strcpy(fieldOffText, "Off");
 
     QWidget* widgetMain = new QWidget(this);
 
@@ -7450,8 +7450,8 @@ update_line_edit_str_if_varies(const char *key, const char *str)
         return;
     }
     QLineEdit* lineEdit = widget_list[index].lineedit;
-    string_copy(fieldOldText, qPrintable(lineEdit->text()));
-    string_copy(fieldNewText, str);
+    strcpy(fieldOldText, qPrintable(lineEdit->text()));
+    strcpy(fieldNewText, str);
 
     if (fieldOldText[0] == 0) {
         lineEdit->setText(fieldNewText);
@@ -7479,7 +7479,7 @@ update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision)
         precision = precisionLength;
     }
 
-    string_copy(fieldOldText, qPrintable(lineEdit->text()));
+    strcpy(fieldOldText, qPrintable(lineEdit->text()));
     sprintf(fieldNewText, "%*f", precision, num);
 
     /* Prevent negative zero :D */
@@ -7489,7 +7489,7 @@ update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision)
     }
     if (!strcmp(fieldNewText, negativeZero)) {
         /* Trim the first character (the minus sign). */
-        string_copy(fieldNewText, (char*)(fieldNewText + 1));
+        strcpy(fieldNewText, (char*)(fieldNewText + 1));
     }
 
     if (fieldOldText[0] == 0) {
@@ -7506,9 +7506,9 @@ update_font_combo_box_str_if_varies(const char *str)
 {
     QFontComboBox* fontComboBox = comboBoxTextSingleFont;
     EmbString message;
-    string_copy(fieldOldText,
+    strcpy(fieldOldText,
         qPrintable(fontComboBox->property("FontFamily").toString()));
-    string_copy(fieldNewText, str);
+    strcpy(fieldNewText, str);
     /*
     debug_message("old: %d %s, new: %d %s",
         oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str));
@@ -7550,8 +7550,8 @@ update_lineedit_str(const char *key, const char *str, char *strList[])
         return;
     }
     QComboBox *comboBox = widget_list[index].combobox;
-    string_copy(fieldOldText, combobox_text(index));
-    string_copy(fieldNewText, str);
+    strcpy(fieldOldText, combobox_text(index));
+    strcpy(fieldNewText, str);
 
     if (fieldOldText[0] == 0) {
         int n = table_length(strList);
@@ -7582,21 +7582,21 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
         return;
     }
     QComboBox *comboBox = widget_list[index].combobox;
-    string_copy(fieldOldText, combobox_text(index));
+    strcpy(fieldOldText, combobox_text(index));
     if (yesOrNoText) {
         if (val) {
-            string_copy(fieldNewText, fieldYesText);
+            strcpy(fieldNewText, fieldYesText);
         }
         else {
-            string_copy(fieldNewText, fieldNoText);
+            strcpy(fieldNewText, fieldNoText);
         }
     }
     else {
         if (val) {
-            string_copy(fieldNewText, fieldOnText);
+            strcpy(fieldNewText, fieldOnText);
         }
         else {
-            string_copy(fieldNewText, fieldOffText);
+            strcpy(fieldNewText, fieldOffText);
         }
     }
 
@@ -7642,7 +7642,7 @@ clear_font_combobox(void)
 void
 add_lineedit(EmbString key, QLineEdit *lineedit)
 {
-    string_copy(widget_list[n_widgets].key, key);
+    strcpy(widget_list[n_widgets].key, key);
     widget_list[n_widgets].lineedit = lineedit;
     n_widgets++;
 }
@@ -7721,7 +7721,7 @@ fieldEdited(QObject* fieldObj)
 
         Object* tempObj = static_cast<Object*>(item);
         EmbString label;
-        string_copy(label, qPrintable(objName));
+        strcpy(label, qPrintable(objName));
 
         int id = find_widget_list(label);
 
@@ -7868,7 +7868,7 @@ Settings_Dialog::createTabGeneral()
 
     QLabel* labelLanguage = new QLabel(translate("Language (Requires Restart)"), groupBoxLanguage);
     QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
-    string_copy(setting[GENERAL_LANGUAGE].dialog.s,
+    strcpy(setting[GENERAL_LANGUAGE].dialog.s,
         qPrintable(QString(get_str(GENERAL_LANGUAGE)).toLower()));
     comboBoxLanguage->addItem("Default");
     comboBoxLanguage->addItem("System");
@@ -8761,7 +8761,7 @@ choose_mdi_bg_logo(void)
         translate("Images (*.bmp *.png *.jpg)"));
 
     if (!selectedImage.isNull()) {
-        string_copy(setting[GENERAL_MDI_BG_LOGO].accept.s, qPrintable(selectedImage));
+        strcpy(setting[GENERAL_MDI_BG_LOGO].accept.s, qPrintable(selectedImage));
     }
 
     /* Update immediately so it can be previewed */
@@ -8782,7 +8782,7 @@ choose_mdi_bg_texture(void)
         translate("Images (*.bmp *.png *.jpg)"));
 
     if (!selectedImage.isNull()) {
-        string_copy(setting[GENERAL_MDI_BG_TEXTURE].accept.s, qPrintable(selectedImage));
+        strcpy(setting[GENERAL_MDI_BG_TEXTURE].accept.s, qPrintable(selectedImage));
     }
 
     /* Update immediately so it can be previewed */
@@ -8826,7 +8826,7 @@ Settings_Dialog::check_custom_filter_changed(int checked)
     else {
         QString s;
         s = QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).remove("*." + format, Qt::CaseInsensitive);
-        string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, qPrintable(s));
+        strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, qPrintable(s));
     }
     /* TODO */
     /* setting[OPENSAVE_USE_CUSTOM_FILTER].dialog.s = checked; */
@@ -8836,14 +8836,14 @@ void
 Settings_Dialog::button_custom_filter_select_all_clicked()
 {
     emit button_custom_filter_select_all(true);
-    string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "supported");
+    strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "supported");
 }
 
 void
 Settings_Dialog::button_custom_filter_clear_all_clicked()
 {
     emit button_custom_filter_clear_all(false);
-    string_copy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "");
+    strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "");
 }
 
 /* FIXME: widget key. */

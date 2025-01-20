@@ -41,7 +41,6 @@ endif()
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(LIBEMB ${CMAKE_SOURCE_DIR}/extern/libembroidery/src)
-set(TRANSLATION ${CMAKE_SOURCE_DIR}/src/translations)
 
 add_subdirectory(extern/glfw)
 
@@ -99,6 +98,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/widgets.cpp
 
 	${SRC}/commands.c
+	${SRC}/designs.c
 	${SRC}/document.c
 	${SRC}/interface.c
 	${SRC}/geometry.c
