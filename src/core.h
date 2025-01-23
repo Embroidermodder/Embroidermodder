@@ -64,6 +64,19 @@ typedef struct Command_ {
     int32_t flags;
 } Command;
 
+#define MAX_LAYERS 20
+
+typedef struct LayerData_ {
+    char name[200];
+    bool visible;
+    bool frozen;
+    EmbReal zValue;
+    int32_t color;
+    char *lineType;
+    char *lineWeight;
+    bool print;
+} LayerData;
+
 typedef struct Setting_ {
     char key[MAX_STRING_LENGTH];
     ScriptValue setting;
@@ -358,6 +371,8 @@ int glfw_application(int argc, char *argv[]);
 
 int find_int_map(IntMap *, int);
 
+char *file_extension(char *fileName);
+
 /* ------------------------------ Widgets ------------------------------- */
 
 void set_visibility(const char *key, bool visibility);
@@ -410,7 +425,7 @@ void prompt_history_appended(char *txt);
 void log_prompt_input(char *txt);
 
 void open_file(bool recent, char *recentFile);
-void open_filesSelected(char *table[]);
+void open_selected_files(char *table[]);
 
 void settings_dialog(const char *showTab);
 
@@ -777,6 +792,9 @@ void show_one_type(int index);
 void hide_all_groups(void);
 void clear_all_fields(void);
 
+const char *combobox_text(const char *key);
+int32_t combobox_find_text(const char *key, const char *text);
+
 void update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision);
 void update_line_edit_str_if_varies(const char *key, const char *str);
 void update_lineedit_str(const char *key, const char *str, char *strList[]);
@@ -1020,7 +1038,7 @@ extern bool document_memory[MAX_OPEN_FILES];
 
 extern char formatFilterOpen[MAX_LONG_STRING];
 extern char formatFilterSave[MAX_LONG_STRING];
-extern char open_filesPath[MAX_STRING_LENGTH];
+extern char open_files_path[MAX_STRING_LENGTH];
 extern char prompt_color_[MAX_STRING_LENGTH];
 extern char prompt_selection_bg_color_[MAX_STRING_LENGTH];
 extern char prompt_bg_color_[MAX_STRING_LENGTH];
@@ -1093,6 +1111,10 @@ extern int n_actions;
 extern char curText[MAX_STRING_LENGTH];
 
 extern char promptHistoryData[MAX_LONG_STRING];
+
+extern char defaultPrefix[200];
+extern char prefix[200];
+extern char curCmd[200];
 
 /* Used when checking if fields vary. */
 extern char fieldOldText[MAX_STRING_LENGTH];

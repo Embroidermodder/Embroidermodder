@@ -34,7 +34,7 @@ int n_variables = 0;
 
 char formatFilterOpen[MAX_LONG_STRING];
 char formatFilterSave[MAX_LONG_STRING];
-char open_filesPath[MAX_STRING_LENGTH];
+char open_files_path[MAX_STRING_LENGTH];
 char prompt_color_[MAX_STRING_LENGTH];
 char prompt_selection_bg_color_[MAX_STRING_LENGTH];
 char prompt_bg_color_[MAX_STRING_LENGTH];
@@ -113,6 +113,10 @@ char *_appName_ = "Embroidermodder";
 char *_appVer_  = "v2.0 alpha";
 bool exitApp = false;
 int testing_mode = 0;
+
+char defaultPrefix[200];
+char prefix[200];
+char curCmd[200];
 
 /* TODO: find a source for compiler flags for operating system detection.
  */

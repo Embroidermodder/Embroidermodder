@@ -20,21 +20,6 @@
 
 #include "core.h"
 
-/* Generic widget pointer for a widget map. */
-typedef struct Widget_ {
-    EmbString key;
-    int type;
-    QLabel *label;
-    QGroupBox *groupbox;
-    QToolButton *toolbutton;
-    QPushButton *button;
-    QLineEdit *lineedit;
-    QComboBox *combobox;
-    QCheckBox *checkbox;
-    QDoubleSpinBox *spinbox;
-    QSpinBox *int_spinbox;
-} Widget;
-
 class Object: public QGraphicsPathItem
 {
 public:
@@ -104,24 +89,6 @@ private:
     void forceRepaint();
 };
 
-class ImageWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    ImageWidget(QString filename, QWidget* parent = 0);
-    ~ImageWidget() { debug_message("imageWidget destructor"); }
-
-    bool load(QString fileName);
-    bool save(QString fileName);
-
-protected:
-    void paintEvent(QPaintEvent* event);
-
-private:
-    QImage img;
-};
-
 class LayerManager: public QDialog
 {
     Q_OBJECT
@@ -129,15 +96,10 @@ class LayerManager: public QDialog
 public:
     LayerManager(QWidget *parent = 0);
     ~LayerManager() { restore_cursor(); }
+    LayerData data[MAX_LAYERS];
 
-    void addLayer(QString name,
-        const bool visible,
-        const bool frozen,
-        const EmbReal zValue,
-        const QRgb color,
-        QString lineType,
-        QString lineWeight,
-        const bool print);
+    void addLayer(char *name, bool visible, bool frozen, EmbReal zValue,
+        QRgb color, char *lineType, char *lineWeight, bool print);
 
     QStandardItemModel* layerModel;
     QSortFilterProxyModel* layerModelSorted;
@@ -241,7 +203,8 @@ class UndoEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    UndoEditor(QString iconDirectory = "", QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
+    UndoEditor(QString iconDirectory = "", QWidget* widgetToFocus = 0,
+        QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
     ~UndoEditor() {}
 
     void addStack(QUndoStack* stack);
@@ -251,7 +214,6 @@ public:
 
     QString undoText() const;
     QString redoText() const;
-protected:
 
 public slots:
     void undo();
@@ -267,19 +229,6 @@ private:
 
     QUndoGroup* undoGroup;
     QUndoView*  undoView;
-};
-
-class PreviewDialog : public QFileDialog
-{
-    Q_OBJECT
-
-public:
-    PreviewDialog(QWidget* parent = 0, QString caption = "",
-        QString directory = "", QString filter = "");
-    ~PreviewDialog() { debug_message("PreviewDialog Destructor"); }
-
-private:
-    ImageWidget* imgWidget;
 };
 
 class PropertyEditor: public QDockWidget
@@ -305,55 +254,6 @@ public slots:
     void update_pick_add_modeButton(bool pickAddMode);
 };
 
-class Settings_Dialog: public QDialog
-{
-    Q_OBJECT
-
-public:
-    Settings_Dialog(QString showTab = "", QWidget *parent = 0);
-    ~Settings_Dialog() { restore_cursor(); }
-
-    void color_dialog(QPushButton *button, int key);
-
-private:
-    QTabWidget* tabWidget;
-
-    QWidget* createTab(WidgetDesc desc);
-
-    QWidget* createTabGeneral();
-    QWidget* createTabDisplay();
-    QWidget* createTabPrompt();
-    QWidget* createTabOpenSave();
-    QWidget* createTabPrinting();
-    QWidget* createTabGridRuler();
-    QWidget* createTabQuickSnap();
-    QWidget* createTabLineWeight();
-    QWidget* createTabSelection();
-
-    QDialogButtonBox* buttonBox;
-
-    void addColorsToComboBox(QComboBox* comboBox);
-
-private slots:
-
-    void check_custom_filter_changed(int);
-    void combo_icon_size_index_changed(int);
-    void button_custom_filter_select_all_clicked(void);
-    void button_custom_filter_clear_all_clicked(void);
-    void buttonQSnapSelectAllClicked(void);
-    void buttonQSnapClearAllClicked(void);
-
-    void acceptChanges(void);
-    void rejectChanges(void);
-
-signals:
-    void button_custom_filter_select_all(bool);
-    void button_custom_filter_clear_all(bool);
-    void buttonQSnapSelectAll(bool);
-    void buttonQSnapClearAll(bool);
-};
-
-
 class MdiWindow: public QMdiSubWindow
 {
     Q_OBJECT
@@ -373,7 +273,7 @@ public:
 
     virtual QSize sizeHint() const;
     QString getShortCurrentFile();
-    bool loadFile(const char *fileName);
+    bool loadFile(char *fileName);
 signals:
     void sendCloseMdiWin(MdiWindow*);
 
@@ -385,8 +285,7 @@ public slots:
     void saveBMC();
 
 private:
-    void setCurrentFile(QString fileName);
-    QString fileExtension(QString fileName);
+    void setCurrentFile(char *fileName);
 };
 
 /* On Mac, if the user drops a file on the app's Dock icon, or uses Open As,

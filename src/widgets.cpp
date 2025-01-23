@@ -14,6 +14,12 @@
 
 #include "widgets.h"
 
+/* Generic widget pointer for a widget map. */
+typedef struct Widget_ {
+    EmbString key;
+    QWidget *widget;
+} Widget;
+
 /* Could initialise all documents to NULL rather than having a seperate memory
  * usage array?
  */
@@ -62,6 +68,9 @@ IntMap key_map[] = {
     {-1, -1}
 };
 
+QFileDialog *preview_dialog;
+void create_preview_dialog(char *caption, char *dir, char *filter);
+
 EmbVector map_from_scene(Object *obj, EmbVector v);
 void create_statusbar(MainWindow* mw);
 QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
@@ -95,7 +104,25 @@ void doc_stop_gripping(int32_t doc, bool accept = false);
 QAction* createAction(Command command);
 void onCloseMdiWin(MdiWindow*);
 
-QGroupBox* make_groupbox(QWidget *parent, const char *title, WidgetData data[], char *layout[]);
+void check_custom_filter_changed(int);
+void combo_icon_size_index_changed(int);
+
+void acceptChanges(void);
+void rejectChanges(void);
+/*
+void button_custom_filter_select_all(bool);
+void button_custom_filter_clear_all(bool);
+*/
+void buttonQSnapSelectAll(bool);
+void buttonQSnapClearAll(bool);
+
+QGroupBox* make_groupbox(QWidget *parent, const char *title, WidgetData data[],
+    char *layout[]);
+
+/* Dialogs */
+QDialog *about_d;
+QDialog *details_dialog;
+QDialog *set_dialog;
 
 QLabel *create_tr_label(const char *label, QDialog *dialog);
 QLabel *create_int_label(uint32_t value, QDialog *dialog);
@@ -112,6 +139,9 @@ void add_to_selector(QComboBox* box, EmbStringTable list, EmbString type,
     int use_icon);
 
 QPushButton *get_button(const char *key);
+QComboBox *get_combobox(const char *key);
+QGroupBox *get_groupbox(const char *key);
+QLineEdit *get_lineedit(const char *key);
 QWidget *get_widget(EmbString key);
 QAction *get_action_by_command(const char *command);
 
@@ -165,7 +195,20 @@ QMdiSubWindow* findMdiWindow(EmbString fileName);
 QWidget* create_editor(QWidget *parent, EmbString type_label,
     EmbString signal_name, int obj_type);
 
-/* ----------------------------- Qt Wrapper ------------------------------ */
+QWidget* createTab(WidgetDesc desc);
+QWidget* createTabGeneral(void);
+QWidget* createTabDisplay(void);
+QWidget* createTabPrompt(void);
+QWidget* createTabOpenSave(void);
+QWidget* createTabPrinting(void);
+QWidget* createTabGridRuler(void);
+QWidget* createTabQuickSnap(void);
+QWidget* createTabLineWeight(void);
+QWidget* createTabSelection(void);
+void addColorsToComboBox(QComboBox* comboBox);
+
+QTabWidget* tabWidget;
+QDialogButtonBox* buttonBox;
 
 Object *get_obj(int key);
 void labelled_button(QWidget* parent, QGridLayout *layout,
@@ -192,11 +235,6 @@ QFontComboBox* textFontSelector;
 QComboBox* textSizeSelector;
 
 QByteArray layoutState;
-
-QString defaultPrefix;
-QString prefix;
-
-QString curCmd;
 
 QTextBrowser* promptHistory;
 
@@ -305,34 +343,55 @@ get_widget(EmbString key)
         debug_message("Failed to find widget with key %s.", key);
         return NULL;
     }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        return widget_list[index].label;
-    case WIDGET_SPINBOX:
-        return widget_list[index].spinbox;
-    case WIDGET_CHECKBOX:
-        return widget_list[index].checkbox;
-    case WIDGET_COMBOBOX:
-        return widget_list[index].combobox;
-    case WIDGET_GROUP_BOX:
-        return widget_list[index].groupbox;
-    default:
-        break;
-    }
-    debug_message("Failed to find widget with key %s.", key);
-    return NULL;
+    return widget_list[index].widget;
 }
 
 /* . */
 QPushButton *
 get_button(const char *key)
 {
-    int widget = find_widget_list(key);
-    if (widget < 0) {
+    int index = find_widget_list(key);
+    if (index < 0) {
         debug_message("get_button: Widget not found.");
         return NULL;
     }
-    return widget_list[widget].button;
+    return qobject_cast<QPushButton*>(widget_list[index].widget);
+}
+
+/* . */
+QComboBox *
+get_combobox(const char *key)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Widget %s not found.", key);
+        return NULL;
+    }
+    return qobject_cast<QComboBox*>(widget_list[index].widget);
+}
+
+/* . */
+QGroupBox *
+get_groupbox(const char *key)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Widget %s not found.", key);
+        return NULL;
+    }
+    return qobject_cast<QGroupBox*>(widget_list[index].widget);
+}
+
+/* . */
+QLineEdit *
+get_lineedit(const char *key)
+{
+    int index = find_widget_list(key);
+    if (index < 0) {
+        debug_message("Widget %s not found.", key);
+        return NULL;
+    }
+    return qobject_cast<QLineEdit*>(widget_list[index].widget);
 }
 
 /* . */
@@ -344,26 +403,7 @@ set_visibility(const char *key, bool visibility)
         debug_message("Failed to find widget_list with key %s.", key);
         return;
     }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        widget_list[index].label->setVisible(visibility);
-        break;
-    case WIDGET_SPINBOX:
-        widget_list[index].spinbox->setVisible(visibility);
-        break;
-    case WIDGET_CHECKBOX:
-        widget_list[index].checkbox->setVisible(visibility);
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->setVisible(visibility);
-        break;
-    case WIDGET_GROUP_BOX:
-        widget_list[index].groupbox->setVisible(visibility);
-        break;
-    default:
-        debug_message("Failed to set widget's visibility with key %s at index.", key, index);
-        break;
-    }
+    widget_list[index].widget->setVisible(visibility);
 }
 
 /* . */
@@ -375,26 +415,7 @@ set_enabled(const char *key, bool enabled)
         debug_message("Failed to find widget_list with key %s.", key);
         return;
     }
-    switch (widget_list[index].type) {
-    case WIDGET_LABEL:
-        widget_list[index].label->setEnabled(enabled);
-        break;
-    case WIDGET_SPINBOX:
-        widget_list[index].spinbox->setEnabled(enabled);
-        break;
-    case WIDGET_CHECKBOX:
-        widget_list[index].checkbox->setEnabled(enabled);
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->setEnabled(enabled);
-        break;
-    case WIDGET_GROUP_BOX:
-        widget_list[index].groupbox->setEnabled(enabled);
-        break;
-    default:
-        debug_message("Failed to set widget's enabled state with key %s at index.", key, index);
-        break;
-    }
+    widget_list[index].widget->setEnabled(enabled);
 }
 
 /* . */
@@ -424,17 +445,7 @@ show_widget(const char *key, int type)
         debug_message("show_widget: Widget not found.");
         return;
     }
-    switch (type) {
-    case WIDGET_LINEEDIT:
-        widget_list[index].lineedit->show();
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->show();
-        break;
-    default:
-        debug_message("widget type unknown");
-        break;
-    }
+    widget_list[index].widget->show();
 }
 
 /* . */
@@ -446,37 +457,18 @@ hide_widget(const char *key, int type)
         debug_message("hide_widget: Widget not found.");
         return;
     }
-    switch (type) {
-    case WIDGET_LINEEDIT:
-        widget_list[index].lineedit->hide();
-        break;
-    case WIDGET_COMBOBOX:
-        widget_list[index].combobox->hide();
-        break;
-    default:
-        debug_message("widget type unknown");
-        break;
-    }
+    widget_list[index].widget->hide();
 }
 
 /* TODO: type should come from widget_list. */
 void
 widget_clear(const char *key, int type)
 {
-    int index = find_widget_list(key);
-    if (index >= 0) {
-        switch (type) {
-        case WIDGET_LINEEDIT:
-            widget_list[index].lineedit->clear();
-            break;
-        case WIDGET_GROUP_BOX:
-        default:
-            break;        
-        }
+    QLineEdit *lineEdit = get_lineedit(key);
+    if (!lineEdit) {
+        return;
     }
-    else {
-        debug_message("Failed to find widget by key");
-    }
+    lineEdit->clear();
 }
 
 /* HACK: using statusbar as a proxy for global scope function calls. */
@@ -573,7 +565,7 @@ void
 add_combobox(EmbString key, QComboBox *combobox)
 {
     strcpy(widget_list[n_widgets].key, key);
-    widget_list[n_widgets].combobox = combobox;
+    widget_list[n_widgets].widget = combobox;
     n_widgets++;
 }
 
@@ -622,8 +614,7 @@ create_spinbox(QGroupBox* groupbox, int key)
         [=](double value) { setting[key].dialog.r = value; });
 
     strcpy(widget_list[n_widgets].key, name);
-    widget_list[n_widgets].type = WIDGET_LABEL;
-    widget_list[n_widgets].spinbox = spinbox;
+    widget_list[n_widgets].widget = spinbox;
 }
 
 /* . */
@@ -633,8 +624,7 @@ create_group_box(QWidget *parent, const char *key, const char *label)
     QGroupBox *group_box = new QGroupBox(translate(label), parent);
 
     strcpy(widget_list[n_widgets].key, key);
-    widget_list[n_widgets].type = WIDGET_GROUP_BOX;
-    widget_list[n_widgets].groupbox = group_box;
+    widget_list[n_widgets].widget = group_box;
     n_widgets++;
     return group_box;
 }
@@ -688,8 +678,7 @@ create_label(QGroupBox *groupbox, const char *key, const char *text)
 {
     QLabel* label = new QLabel(translate(text), groupbox);
     strcpy(widget_list[n_widgets].key, key);
-    widget_list[n_widgets].type = WIDGET_LABEL;
-    widget_list[n_widgets].label = label;
+    widget_list[n_widgets].widget = label;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -749,8 +738,15 @@ tip_of_the_day(void)
 
     QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
 
-    ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
-    // create_pixmap("did_you_know")
+    QWidget *imgBanner = new QWidget(wizardTipOfTheDay);
+    QImage *img = new QImage();
+
+    img->load(QString("icons/default/did_you_know.png"));
+
+    imgBanner->setMinimumWidth(img->width());
+    imgBanner->setMinimumHeight(img->height());
+    imgBanner->setMaximumWidth(img->width());
+    imgBanner->setMaximumHeight(img->height());
 
     if (get_int(GENERAL_CURRENT_TIP) >= table_length(tips)) {
         set_int(GENERAL_CURRENT_TIP, 0);
@@ -1209,7 +1205,7 @@ about_dialog(void)
 ScriptValue
 set_prompt_prefix_command(ScriptEnv* context)
 {
-    set_prompt_prefix(QString(STR(0)));
+    set_prompt_prefix(STR(0));
     return script_null;
 }
 
@@ -4248,8 +4244,8 @@ Document::mouseMoveEvent(QMouseEvent* event)
 
             if (scaleFactor <= 0.0) {
                 /* FIXME: messagebox("critical",
-                    tr("ScaleFactor Error"),
-                    tr("Hi there. If you are not a developer, report this as a bug. "
+                    translate("ScaleFactor Error"),
+                    translate("Hi there. If you are not a developer, report this as a bug. "
                         "If you are a developer, your code needs examined, and possibly your head too."));
                         */
             }
@@ -4429,13 +4425,13 @@ Document::contextMenuEvent(QContextMenuEvent* event)
     if (!cmdActive) {
         QAction* repeatAction = new QAction(create_icon(lastCmd), "Repeat " + QString(lastCmd), this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
-        connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
+        QObject::connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
     if (data->properties[VIEW_ZOOMING]) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
-        connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escape_pressed()));
+        QObject::connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escape_pressed()));
         menu.addAction(cancelZoomWinAction);
     }
 
@@ -4449,30 +4445,30 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         /* FIXME:
         QAction* deleteAction = new QAction(create_icon("erase"), "D&elete", this);
         deleteAction->setStatusTip("Removes objects from a drawing.");
-        connect(deleteAction, SIGNAL(triggered()), this,
+        QObject::connect(deleteAction, SIGNAL(triggered()), this,
             [=]() { doc_delete_selected(doc); });
         menu.addAction(deleteAction);
 
         QAction* moveAction = new QAction(create_icon("move"), "&Move", this);
         moveAction->setStatusTip("Displaces objects a specified distance in a specified direction.");
-        connect(moveAction, SIGNAL(triggered()), this, SLOT(move_action()));
+        QObject::connect(moveAction, SIGNAL(triggered()), this, SLOT(move_action()));
         menu.addAction(moveAction);
 
         QAction* scaleAction = new QAction(create_icon("scale"), "Sca&le", this);
         scaleAction->setStatusTip("Enlarges or reduces objects proportionally in the X, Y, and Z directions.");
-        connect(scaleAction, SIGNAL(triggered()), this, SLOT(scale_action()));
+        QObject::connect(scaleAction, SIGNAL(triggered()), this, SLOT(scale_action()));
         menu.addAction(scaleAction);
 
         QAction* rotateAction = new QAction(create_icon("rotate"), "R&otate", this);
         rotateAction->setStatusTip("Rotates objects about a base point.");
-        connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotate_action()));
+        QObject::connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotate_action()));
         menu.addAction(rotateAction);
 
         menu.addSeparator();
 
         QAction* clearAction = new QAction("Cle&ar Selection", this);
         clearAction->setStatusTip("Removes all objects from the selection set.");
-        connect(clearAction, SIGNAL(triggered()), this, [=]() { doc_clear_selection(this); });
+        QObject::connect(clearAction, SIGNAL(triggered()), this, [=]() { doc_clear_selection(this); });
         menu.addAction(clearAction);
         */
     }
@@ -4747,47 +4743,6 @@ UndoEditor::redo()
 }
 
 /* . */
-ImageWidget::ImageWidget(QString filename, QWidget* parent) : QWidget(parent)
-{
-    debug_message("ImageWidget Constructor");
-
-    img.load(filename);
-
-    setMinimumWidth(img.width());
-    setMinimumHeight(img.height());
-    setMaximumWidth(img.width());
-    setMaximumHeight(img.height());
-
-    this->show();
-}
-
-/* . */
-bool
-ImageWidget::load(QString fileName)
-{
-    img.load(fileName);
-    return true;
-}
-
-/* . */
-bool
-ImageWidget::save(QString fileName)
-{
-    img.save(fileName, "PNG");
-    return true;
-}
-
-/* . */
-void
-ImageWidget::paintEvent(QPaintEvent*)
-{
-    QPainter painter(this);
-    painter.setViewport(0, 0, width(), height());
-    painter.setWindow(0, 0, width(), height());
-    painter.drawImage(0, 0, img);
-}
-
-/* . */
 void
 contextMenuEvent(QObject* object, QContextMenuEvent *event)
 {
@@ -5004,14 +4959,14 @@ LayerManager::LayerManager(QWidget* parent) : QDialog(parent)
     setWindowTitle(tr("Layer Manager"));
     setMinimumSize(750, 550);
 
-    layerModel->setHeaderData(0, Qt::Horizontal, tr("Name"));
-    layerModel->setHeaderData(1, Qt::Horizontal, tr("Visible"));
-    layerModel->setHeaderData(2, Qt::Horizontal, tr("Frozen"));
-    layerModel->setHeaderData(3, Qt::Horizontal, tr("Z Value"));
-    layerModel->setHeaderData(4, Qt::Horizontal, tr("Color"));
-    layerModel->setHeaderData(5, Qt::Horizontal, tr("Linetype"));
-    layerModel->setHeaderData(6, Qt::Horizontal, tr("Lineweight"));
-    layerModel->setHeaderData(7, Qt::Horizontal, tr("Print"));
+    layerModel->setHeaderData(0, Qt::Horizontal, QString(translate("Name")));
+    layerModel->setHeaderData(1, Qt::Horizontal, QString(translate("Visible")));
+    layerModel->setHeaderData(2, Qt::Horizontal, QString(translate("Frozen")));
+    layerModel->setHeaderData(3, Qt::Horizontal, QString(translate("Z Value")));
+    layerModel->setHeaderData(4, Qt::Horizontal, QString(translate("Color")));
+    layerModel->setHeaderData(5, Qt::Horizontal, QString(translate("Linetype")));
+    layerModel->setHeaderData(6, Qt::Horizontal, QString(translate("Lineweight")));
+    layerModel->setHeaderData(7, Qt::Horizontal, QString(translate("Print")));
 
     for (int i=0; i<10; i++) {
         EmbString layer_name;
@@ -5029,24 +4984,24 @@ LayerManager::LayerManager(QWidget* parent) : QDialog(parent)
 
 /* . */
 void
-LayerManager::addLayer(QString name, const bool visible, const bool frozen,
-    const EmbReal zValue, const QRgb color, QString lineType,
-    QString lineWeight, const bool print)
+LayerManager::addLayer(char *name, bool visible, bool frozen, EmbReal zValue,
+    QRgb color, char *lineType, char *lineWeight, bool print)
 {
+    int n_layers = 0;
     layerModel->insertRow(0);
-    layerModel->setData(layerModel->index(0, 0), name);
-    layerModel->setData(layerModel->index(0, 1), visible);
-    layerModel->setData(layerModel->index(0, 2), frozen);
-    layerModel->setData(layerModel->index(0, 3), zValue);
+    strcpy(data[n_layers].name, name);
+    data[n_layers].visible = visible;
+    data[n_layers].frozen = frozen;
+    data[n_layers].zValue = zValue;
 
     QPixmap colorPix(QSize(16,16));
     colorPix.fill(QColor(color));
     layerModel->itemFromIndex(layerModel->index(0, 4))->setIcon(QIcon(colorPix));
     layerModel->setData(layerModel->index(0, 4), QColor(color));
 
-    layerModel->setData(layerModel->index(0, 5), lineType);
-    layerModel->setData(layerModel->index(0, 6), lineWeight);
-    layerModel->setData(layerModel->index(0, 7), print);
+    data[n_layers].lineType = lineType;
+    data[n_layers].lineWeight = lineWeight;
+    data[n_layers].print = print;
 }
 
 /* TODO: Move majority of this code into libembroidery.
@@ -5130,7 +5085,7 @@ create_details_dialog(void)
 
     boundingRect.setRect(bounds.x, bounds.y, bounds.x + bounds.w, bounds.y + bounds.h);
 
-    QWidget* widget = new QWidget(dialog);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* Misc */
     QGroupBox* groupBoxMisc = new QGroupBox(translate("General Information"), widget);
@@ -5183,7 +5138,7 @@ create_details_dialog(void)
     scrollArea->setWidget(widget); */
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
-    QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+    QObject::connect(buttonBox, SIGNAL(accepted()), set_dialog, SLOT(accept()));
 
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
     vboxLayoutMain->addWidget(groupBoxMisc);
@@ -5199,27 +5154,36 @@ create_details_dialog(void)
     arrow_cursor();
 }
 
+
 /* TODO: get actual thumbnail image from file, lets also use a size of 128x128 for now...
  * TODO: make thumbnail size adjustable thru settings dialog
  */
-PreviewDialog::PreviewDialog(QWidget* parent, QString caption,
-    QString dir, QString filter): QFileDialog(parent, caption, dir, filter)
+void
+create_preview_dialog(char *caption, char *dir, char *filter)
 {
-    debug_message("PreviewDialog Constructor");
+    debug_message("preview_dialog Constructor");
 
-    imgWidget = new ImageWidget("icons/default/nopreview.png", this);
+    preview_dialog = new QFileDialog(_main, caption, dir, filter);
+    QWidget *imgWidget = new QWidget(preview_dialog);
+    QImage *img = new QImage();
 
-    QLayout* lay = layout();
-    if (qobject_cast<QGridLayout*>(lay))
-    {
+    img->load(QString("icons/default/nopreview.png"));
+
+    imgWidget->setMinimumWidth(img->width());
+    imgWidget->setMinimumHeight(img->height());
+    imgWidget->setMaximumWidth(img->width());
+    imgWidget->setMaximumHeight(img->height());
+
+    QLayout* lay = preview_dialog->layout();
+    if (qobject_cast<QGridLayout*>(lay)) {
         QGridLayout* grid = qobject_cast<QGridLayout*>(lay);
         grid->addWidget(imgWidget, 0, grid->columnCount(), grid->rowCount(), 1);
     }
 
-    setModal(true);
-    setOption(QFileDialog::DontUseNativeDialog);
-    setViewMode(QFileDialog::Detail);
-    setFileMode(QFileDialog::ExistingFiles);
+    preview_dialog->setModal(true);
+    preview_dialog->setOption(QFileDialog::DontUseNativeDialog);
+    preview_dialog->setViewMode(QFileDialog::Detail);
+    preview_dialog->setFileMode(QFileDialog::ExistingFiles);
 
     /* TODO: connect the currentChanged signal to update the preview imgWidget. */
 }
@@ -5394,7 +5358,7 @@ MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflag
 }
 
 bool
-MdiWindow::loadFile(const char *fileName)
+MdiWindow::loadFile(char *fileName)
 {
     debug_message("MdiWindow loadFile()");
     DocumentData *data = documents[doc_index]->data;
@@ -5410,15 +5374,15 @@ MdiWindow::loadFile(const char *fileName)
 
     wait_cursor();
 
-    QString ext = fileExtension(fileName);
-    debug_message("ext: %s", (char*)qPrintable(ext));
+    char *ext = file_extension(fileName);
+    debug_message("ext: %s", ext);
 
     EmbPattern *pattern = data->pattern;
 
     /* Read */
-    int format = EMB_FORMAT_CSV; /* emb_identify_format(qPrintable(fileName)); */
+    int format = EMB_FORMAT_CSV; /* emb_identify_format(fileName); */
     if (format <= 0) {
-        debug_message("Unsupported read file type: %s", (char*)qPrintable(fileName));
+        debug_message("Unsupported read file type: %s", fileName);
         restore_cursor();
         messagebox("warning", translate("Error reading pattern"),
             qPrintable(tr("Unsupported read file type: ") + fileName));
@@ -5525,10 +5489,10 @@ MdiWindow::saveBMC()
 }
 
 void
-MdiWindow::setCurrentFile(QString fileName)
+MdiWindow::setCurrentFile(char *fileName)
 {
     strcpy(documents[doc_index]->data->curFile,
-        qPrintable(QFileInfo(fileName).canonicalFilePath()));
+        qPrintable(QFileInfo(QString(fileName)).canonicalFilePath()));
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
 }
@@ -5539,9 +5503,10 @@ MdiWindow::getShortCurrentFile()
     return QFileInfo(documents[doc_index]->data->curFile).fileName();
 }
 
-QString MdiWindow::fileExtension(QString  fileName)
+char *
+file_extension(char *fileName)
 {
-    return QFileInfo(fileName).suffix().toLower();
+    return (char *)qPrintable(QFileInfo(QString(fileName)).suffix().toLower());
 }
 
 void MdiWindow::closeEvent(QCloseEvent* /*e*/)
@@ -5585,7 +5550,7 @@ setHistory(const char *txt)
 void
 prompt_set_current_text(const char *txt)
 {
-    sprintf(curText, "%s%s", qPrintable(prefix), txt);
+    sprintf(curText, "%s%s", prefix, txt);
     promptInput->setText(curText);
 }
 
@@ -5671,10 +5636,10 @@ prompt_update_style(void)
         "    font-style:%s;" \
         "    font-size:%dpx;" \
         "}",
-        qPrintable(prompt_color_),
-        qPrintable(prompt_bg_color_),
-        qPrintable(prompt_selection_color_),
-        qPrintable(prompt_selection_bg_color_),
+        prompt_color_,
+        prompt_bg_color_,
+        prompt_selection_color_,
+        prompt_selection_bg_color_,
         get_str(PROMPT_FONT_FAMILY),
         get_str(PROMPT_FONT_STYLE),
         get_int(PROMPT_FONT_SIZE));
@@ -5684,10 +5649,10 @@ prompt_update_style(void)
 
 /* . */
 void
-set_prompt_prefix(QString txt)
+set_prompt_prefix(char *txt)
 {
-    prefix = txt;
-    strcpy(curText, qPrintable(txt));
+    strcpy(prefix, txt);
+    strcpy(curText, txt);
     promptInput->setText(txt);
 }
 
@@ -5697,12 +5662,12 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     debug_message("CmdPromptInput Constructor");
     setObjectName("Command Prompt Input");
 
-    defaultPrefix = tr("Command: ");
-    prefix = defaultPrefix;
-    strcpy(curText, qPrintable(prefix));
+    strcpy(defaultPrefix, translate("Command: "));
+    strcpy(prefix, defaultPrefix);
+    strcpy(curText, prefix);
 
     strcpy(lastCmd, "help");
-    curCmd = "help";
+    strcpy(curCmd, "help");
     cmdActive = false;
 
     rapidFireEnabled = false;
@@ -5715,10 +5680,10 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     this->setMaximumSize(5000, 25);
     this->setDragEnabled(false);
 
-    connect(this, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(checkCursorPosition(int, int)));
-    connect(this, SIGNAL(textEdited(QString )), this, SLOT(checkEditedText(QString )));
-    connect(this, SIGNAL(textChanged(QString )), this, SLOT(checkChangedText(QString )));
-    connect(this, SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
+    QObject::connect(this, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(checkCursorPosition(int, int)));
+    QObject::connect(this, SIGNAL(textEdited(QString )), this, SLOT(checkEditedText(QString )));
+    QObject::connect(this, SIGNAL(textChanged(QString )), this, SLOT(checkChangedText(QString )));
+    QObject::connect(this, SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
 
     this->installEventFilter(this);
     this->setFocus(Qt::OtherFocusReason);
@@ -5729,12 +5694,12 @@ void
 prompt_end_command(void)
 {
     debug_message("prompt_end_command");
-    strcpy(lastCmd, qPrintable(curCmd));
+    strcpy(lastCmd, curCmd);
     cmdActive = false;
     rapidFireEnabled = false;
     stop_blinking();
 
-    prefix = defaultPrefix;
+    strcpy(prefix, defaultPrefix);
     promptInput->clear();
 }
 
@@ -5748,7 +5713,7 @@ process_input(char rapidChar)
     promptInput->updateCurrentText(curText);
 
     QString cmdtxt(curText);
-    cmdtxt.replace(0, prefix.length(), "");
+    cmdtxt.replace(0, strlen(prefix), "");
     if (!rapidFireEnabled) {
         cmdtxt = cmdtxt.toLower();
     }
@@ -5782,8 +5747,8 @@ process_input(char rapidChar)
         int index = find_in_map(aliasHash, n_aliases, qPrintable(cmdtxt));
         if (index >= 0) {
             cmdActive = true;
-            strcpy(lastCmd, qPrintable(curCmd));
-            curCmd = QString(aliasHash[index].value);
+            strcpy(lastCmd, curCmd);
+            strcpy(curCmd, aliasHash[index].value);
             prompt_output(qPrintable(curText));
             run_command_prompt(aliasHash[index].value);
         }
@@ -5825,21 +5790,21 @@ CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
     if (this->hasSelectedText()) {
         this->deselect();
     }
-    if (newpos < prefix.length()) {
-        this->setCursorPosition(prefix.length());
+    if (newpos < strlen(prefix)) {
+        this->setCursorPosition(strlen(prefix));
     }
 }
 
 /* . */
 void
-CmdPromptInput::updateCurrentText(QString  txt)
+CmdPromptInput::updateCurrentText(QString txt)
 {
     int cursorPos = cursorPosition();
     if (!txt.startsWith(prefix)) {
-        if (txt.length() < prefix.length()) {
+        if (txt.length() < strlen(prefix)) {
             this->setText(prefix);
         }
-        else if (txt.length() != prefix.length()) {
+        else if (txt.length() != strlen(prefix)) {
             this->setText(prefix + txt);
         }
         else {
@@ -5876,7 +5841,7 @@ CmdPromptInput::checkChangedText(QString txt)
 void
 CmdPromptInput::copyClip()
 {
-    QString copyText = QString(curText).remove(0, prefix.length());
+    QString copyText = QString(curText).remove(0, strlen(prefix));
     qApp->clipboard()->setText(copyText);
 }
 
@@ -5895,19 +5860,19 @@ CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
 
     QAction* copyAction = new QAction("&Copy", this);
     copyAction->setStatusTip("Copies the command prompt text to the clipboard.");
-    connect(copyAction, SIGNAL(triggered()), this, SLOT(copyClip()));
+    QObject::connect(copyAction, SIGNAL(triggered()), this, SLOT(copyClip()));
     menu.addAction(copyAction);
 
     QAction* pasteAction = new QAction("&Paste", this);
     pasteAction->setStatusTip("Inserts the clipboard's text into the command prompt at the cursor position.");
-    connect(pasteAction, SIGNAL(triggered()), this, SLOT(pasteClip()));
+    QObject::connect(pasteAction, SIGNAL(triggered()), this, SLOT(pasteClip()));
     menu.addAction(pasteAction);
 
     menu.addSeparator();
 
     QAction* settingsAction = new QAction("&Settings...", this);
     settingsAction->setStatusTip("Opens settings for the command prompt.");
-    connect(settingsAction, SIGNAL(triggered()), this, SIGNAL(showSettings()));
+    QObject::connect(settingsAction, SIGNAL(triggered()), this, SIGNAL(showSettings()));
     menu.addAction(settingsAction);
 
     menu.exec(event->globalPos());
@@ -5949,7 +5914,7 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         }
         case Qt::Key_Escape: {
             EmbString msg;
-            prefix = defaultPrefix;
+            strcpy(prefix, defaultPrefix);
             clear();
             sprintf(msg, "%s%s", curText, translate("*Cancel*"));
             prompt_output(msg);
@@ -6078,7 +6043,7 @@ Application::event(QEvent *event)
             }
             strcpy(files[i], END_SYMBOL);
             files_ptrs[i] = (char*)files[i];
-            open_filesSelected(files_ptrs);
+            open_selected_files(files_ptrs);
             return true;
         }
         /* Fall through */
@@ -6099,14 +6064,14 @@ make_application(int argc, char* argv[])
     app.setApplicationVersion(_appVer_);
 
     char *files_ptrs[MAX_FILES];
-    char filesToOpen[MAX_FILES][MAX_STRING_LENGTH];
+    char files[MAX_FILES][MAX_STRING_LENGTH];
     int i;
     for (i=0; i<argc; i++) {
-        strcpy(filesToOpen[i], argv[i]);
-        files_ptrs[i] = (char*)filesToOpen[i];
+        strcpy(files[i], argv[i]);
+        files_ptrs[i] = (char*)files[i];
     }
-    strcpy(filesToOpen[i], END_SYMBOL);
-    files_ptrs[i] = (char*)filesToOpen[i];
+    strcpy(files[i], END_SYMBOL);
+    files_ptrs[i] = (char*)files[i];
     
     _main = new MainWindow();
     QObject::connect(&app, SIGNAL(lastWindowClosed()), _main, SLOT(quit()));
@@ -6114,11 +6079,11 @@ make_application(int argc, char* argv[])
     _main->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
     _main->show();
 
-    /* NOTE: If open_filesSelected() is called from within the _main constructor,
+    /* NOTE: If open_selected_files() is called from within the _main constructor,
      * slot commands wont work and the window menu will be screwed
      */
     if (argc > 1) {
-        open_filesSelected(files_ptrs);
+        open_selected_files(files_ptrs);
     }
 
     return app.exec();
@@ -6254,11 +6219,11 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     blinkState = false;
     blinkTimer = new QTimer(prompt);
-    connect(blinkTimer, SIGNAL(timeout()), prompt, SLOT(blink()));
+    QObject::connect(blinkTimer, SIGNAL(timeout()), prompt, SLOT(blink()));
 
     prompt->show();
 
-    connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
+    QObject::connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
 
     prompt_update_style();
     prompt->setFocus(Qt::OtherFocusReason);
@@ -6268,43 +6233,43 @@ MainWindow::MainWindow() : QMainWindow(0)
     set_prompt_text_color(get_int(PROMPT_TEXT_COLOR));
     set_prompt_background_color(get_int(PROMPT_BG_COLOR));
 
-    connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(log_prompt_input(QString)));
+    QObject::connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(log_prompt_input(QString)));
 
-    connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(run_command_main(char *)));
-    connect(prompt, SIGNAL(runCommand(QString, QString)), this, SLOT(run_command_prompt(QString, QString)));
+    QObject::connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(run_command_main(char *)));
+    QObject::connect(prompt, SIGNAL(runCommand(QString, QString)), this, SLOT(run_command_prompt(QString, QString)));
 
-    connect(prompt, SIGNAL(delete_pressed()), this, SLOT(delete_pressed()));
+    QObject::connect(prompt, SIGNAL(delete_pressed()), this, SLOT(delete_pressed()));
     /* TODO: connect(prompt, SIGNAL(tabPressed()), this, SLOT(someUnknownSlot())); */
-    connect(prompt, SIGNAL(escape_pressed()), this, SLOT(escape_pressed()));
-    connect(prompt, SIGNAL(upPressed()), this, SLOT(prompt_input_previous()));
-    connect(prompt, SIGNAL(downPressed()), this, SLOT(prompt_input_next()));
-    connect(prompt, SIGNAL(F1Pressed()), this, SLOT(help()));
+    QObject::connect(prompt, SIGNAL(escape_pressed()), this, SLOT(escape_pressed()));
+    QObject::connect(prompt, SIGNAL(upPressed()), this, SLOT(prompt_input_previous()));
+    QObject::connect(prompt, SIGNAL(downPressed()), this, SLOT(prompt_input_next()));
+    QObject::connect(prompt, SIGNAL(F1Pressed()), this, SLOT(help()));
     /* TODO: connect(prompt, SIGNAL(F2Pressed()), this, SLOT(floatHistory())); */
     /* TODO: connect(prompt, SIGNAL(F3Pressed()), this, SLOT(toggleQSNAP())); */
-    connect(prompt, SIGNAL(F4Pressed()), this, SLOT(toggle_lwt())); /* TODO: typically this is toggleTablet(), make F-Keys customizable thru settings */
+    QObject::connect(prompt, SIGNAL(F4Pressed()), this, SLOT(toggle_lwt())); /* TODO: typically this is toggleTablet(), make F-Keys customizable thru settings */
     /* TODO: connect(prompt, SIGNAL(F5Pressed()), this, SLOT(toggleISO())); */
     /* TODO: connect(prompt, SIGNAL(F6Pressed()), this, SLOT(toggleCoords())); */
-    connect(prompt, SIGNAL(F7Pressed()), this, SLOT(toggle_grid()));
+    QObject::connect(prompt, SIGNAL(F7Pressed()), this, SLOT(toggle_grid()));
     /* TODO: connect(prompt, SIGNAL(F8Pressed()), this, SLOT(toggleORTHO())); */
     /* TODO: connect(prompt, SIGNAL(F9Pressed()), this, SLOT(toggleSNAP())); */
     /* TODO: connect(prompt, SIGNAL(F10Pressed()), this, SLOT(togglePOLAR())); */
     /* TODO: connect(prompt, SIGNAL(F11Pressed()), this, SLOT(toggleQTRACK())); */
-    connect(prompt, SIGNAL(F12Pressed()), this, SLOT(toggle_ruler()));
-    connect(prompt, SIGNAL(cutPressed()), this, SLOT(cut()));
-    connect(prompt, SIGNAL(copyPressed()), this, SLOT(copy()));
-    connect(prompt, SIGNAL(pastePressed()), this, SLOT(paste()));
-    connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
-    connect(prompt, SIGNAL(undoPressed()), this, SLOT(undo()));
-    connect(prompt, SIGNAL(redoPressed()), this, SLOT(redo()));
+    QObject::connect(prompt, SIGNAL(F12Pressed()), this, SLOT(toggle_ruler()));
+    QObject::connect(prompt, SIGNAL(cutPressed()), this, SLOT(cut()));
+    QObject::connect(prompt, SIGNAL(copyPressed()), this, SLOT(copy()));
+    QObject::connect(prompt, SIGNAL(pastePressed()), this, SLOT(paste()));
+    QObject::connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
+    QObject::connect(prompt, SIGNAL(undoPressed()), this, SLOT(undo()));
+    QObject::connect(prompt, SIGNAL(redoPressed()), this, SLOT(redo()));
 
-    connect(prompt, SIGNAL(shiftPressed), this,
+    QObject::connect(prompt, SIGNAL(shiftPressed), this,
         SLOT([=](void) { shiftKeyPressedState = true; }));
-    connect(prompt, SIGNAL(shiftReleased), this,
+    QObject::connect(prompt, SIGNAL(shiftReleased), this,
         SLOT([=](void) { shiftKeyPressedState = false; }));
 
-    connect(prompt, SIGNAL(showSettings()), this, SLOT(settings_prompt()));
+    QObject::connect(prompt, SIGNAL(showSettings()), this, SLOT(settings_prompt()));
 
-    connect(prompt, SIGNAL(historyAppended(QString)), this, SLOT(prompt_history_appended(QString)));
+    QObject::connect(prompt, SIGNAL(historyAppended(QString)), this, SLOT(prompt_history_appended(QString)));
 
     /* create the Object Property Editor */
     dockPropEdit = new PropertyEditor(
@@ -6313,7 +6278,7 @@ MainWindow::MainWindow() : QMainWindow(0)
         prompt,
         this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
-    connect(dockPropEdit, SIGNAL(pick_add_mode_toggled()), this, SLOT(pick_add_mode_toggled()));
+    QObject::connect(dockPropEdit, SIGNAL(pick_add_mode_toggled()), this, SLOT(pick_add_mode_toggled()));
 
     /* create the Command History Undo Editor */
     dockUndoEdit = new UndoEditor(get_str(GENERAL_ICON_THEME), prompt, this);
@@ -6354,11 +6319,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* TODO: Create layer pixmaps by concatenating several icons. */
     add_to_selector(layerSelector, layer_list, "string", true);
     toolbar[TOOLBAR_LAYER]->addWidget(layerSelector);
-    connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layer_selector_changed(int)));
+    QObject::connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layer_selector_changed(int)));
 
     toolbar[TOOLBAR_LAYER]->addAction(actionHash[ACTION_LAYER_PREVIOUS]);
 
-    connect(toolbar[TOOLBAR_LAYER], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    QObject::connect(toolbar[TOOLBAR_LAYER], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     debug_message("createPropertiesToolbar()");
 
@@ -6376,13 +6341,13 @@ MainWindow::MainWindow() : QMainWindow(0)
     colorSelector->addItem(create_icon("colorwhite"), translate("White"), qRgb(255,255,255));
     colorSelector->addItem(create_icon("colorother"), translate("Other..."));
     toolbar[TOOLBAR_PROPERTIES]->addWidget(colorSelector);
-    connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
+    QObject::connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
 
     toolbar[TOOLBAR_PROPERTIES]->addSeparator();
     linetypeSelector->setFocusProxy(prompt);
     add_to_selector(linetypeSelector, line_type_list, "string", true);
     toolbar[TOOLBAR_PROPERTIES]->addWidget(linetypeSelector);
-    connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetype_selector_changed(int)));
+    QObject::connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetype_selector_changed(int)));
 
     toolbar[TOOLBAR_PROPERTIES]->addSeparator();
     lineweightSelector->setFocusProxy(prompt);
@@ -6390,9 +6355,9 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* Prevent dropdown text readability being squish...d. */
     lineweightSelector->setMinimumContentsLength(8);
     toolbar[TOOLBAR_PROPERTIES]->addWidget(lineweightSelector);
-    connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweight_selector_changed(int)));
+    QObject::connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweight_selector_changed(int)));
 
-    connect(toolbar[TOOLBAR_PROPERTIES], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    QObject::connect(toolbar[TOOLBAR_PROPERTIES], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     debug_message("createTextToolbar()");
 
@@ -6400,7 +6365,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     toolbar[TOOLBAR_TEXT]->addWidget(textFontSelector);
     textFontSelector->setCurrentFont(QFont(get_str(TEXT_FONT)));
-    connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
+    QObject::connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
     toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_BOLD]);
     toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_ITALIC]);
@@ -6418,16 +6383,16 @@ MainWindow::MainWindow() : QMainWindow(0)
     add_to_selector(textSizeSelector, text_size_list, "int", false);
     set_text_size(1.0*get_int(TEXT_SIZE));
     toolbar[TOOLBAR_TEXT]->addWidget(textSizeSelector);
-    connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(text_size_selector_index_changed(int)));
+    QObject::connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(text_size_selector_index_changed(int)));
 
-    connect(toolbar[TOOLBAR_TEXT], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    QObject::connect(toolbar[TOOLBAR_TEXT], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     debug_message("createPromptToolbar()");
 
     toolbar[TOOLBAR_PROMPT]->setObjectName("toolbarPrompt");
     toolbar[TOOLBAR_PROMPT]->addWidget(prompt);
     toolbar[TOOLBAR_PROMPT]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
-    connect(toolbar[TOOLBAR_PROMPT], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
+    QObject::connect(toolbar[TOOLBAR_PROMPT], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 
     add_to_toolbar(TOOLBAR_DRAW, draw_toolbar);
     add_to_toolbar(TOOLBAR_MODIFY, modify_toolbar);
@@ -6582,7 +6547,7 @@ open_file(bool recent, EmbString recentFile)
     char files[MAX_FILES][MAX_STRING_LENGTH];
     int n_files = 0;
     bool preview = get_bool(OPENSAVE_OPEN_THUMBNAIL);
-    strcpy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
+    strcpy(open_files_path, get_str(OPENSAVE_RECENT_DIRECTORY));
 
     /* Check to see if this from the recent files list. */
     if (recent) {
@@ -6590,12 +6555,12 @@ open_file(bool recent, EmbString recentFile)
         strcpy(files[1], END_SYMBOL);
         files_ptrs[0] = (char*)files[0];
         files_ptrs[1] = (char*)files[1];
-        open_filesSelected(files_ptrs);
+        open_selected_files(files_ptrs);
     }
     else if (!preview) {
         /* TODO: set getOpenFileNames' selectedFilter parameter from opensave_open_format.setting */
         QStringList sl = QFileDialog::getOpenFileNames(_main,
-            translate("Open"), QString(open_filesPath), formatFilterOpen);
+            translate("Open"), open_files_path, formatFilterOpen);
         int i;
         for (i=0; i < MAX_FILES && i < sl.size(); i++) {
             strcpy(files[i], qPrintable(sl[i]));
@@ -6603,16 +6568,18 @@ open_file(bool recent, EmbString recentFile)
         }
         strcpy(files[i], END_SYMBOL);
         files_ptrs[i] = (char*)files[i];
-        open_filesSelected(files_ptrs);
+        open_selected_files(files_ptrs);
     }
     else if (preview) {
-        PreviewDialog* openDialog = new PreviewDialog(_main,
-            translate("Open w/Preview"),
-            QString(open_filesPath), formatFilterOpen);
-        /* TODO: set openDialog->selectNameFilter(QString filter) from opensave_open_format.setting */
-        QObject::connect(openDialog, SIGNAL(filesSelected(const QStringList&)), _main,
-            SLOT(open_filesSelected(const QStringList&)));
-        openDialog->exec();
+        create_preview_dialog(
+            translate("Open w/Preview"), open_files_path, formatFilterOpen);
+        /* TODO: set
+         * openDialog->selectNameFilter(QString filter) from opensave_open_format.setting 
+         */
+        QObject::connect(preview_dialog,
+            SIGNAL(filesSelected(const QStringList&)), _main,
+            SLOT(open_selected_files(const QStringList&)));
+        preview_dialog->exec();
     }
 
     restore_cursor();
@@ -6620,16 +6587,16 @@ open_file(bool recent, EmbString recentFile)
 
 /* . */
 void
-open_filesSelected(char *filesToOpen[])
+open_selected_files(char *files[])
 {
     debug_message("open_fileSelected()");
     bool doOnce = true;
 
-    int n = table_length(filesToOpen);
+    int n = table_length(files);
     for (int i = 0; i < n; i++) {
-        debug_message("opening %s...", qPrintable(filesToOpen[i]));
+        debug_message("opening %s...", files[i]);
 
-        QMdiSubWindow* existing = findMdiWindow((char*)qPrintable(filesToOpen[i]));
+        QMdiSubWindow* existing = findMdiWindow(files[i]);
         if (existing) {
             debug_message("File already exists, switching to it.");
             mdiArea->setActiveSubWindow(existing);
@@ -6650,28 +6617,28 @@ open_filesSelected(char *filesToOpen[])
             doOnce = false;
         }
 
-        if (mdiWin->loadFile(filesToOpen[i])) {
+        if (mdiWin->loadFile(files[i])) {
             statusbar->showMessage(translate("File(s) loaded"), 2000);
             mdiWin->show();
             mdiWin->showMaximized();
             /* Prevent duplicate entries in the recent files list. */
             #if 0
             // FIXME
-            if (!string_list_contains(recent_files, filesToOpen[i])) {
+            if (!string_list_contains(recent_files, files[i])) {
                 int j;
                 for (j=0; j<MAX_FILES-1; j++) {
                     strcpy(recent_files[j], recent_files[j+1]);
                 }
-                strcpy(recent_files[0], filesToOpen[i]);
+                strcpy(recent_files[0], files[i]);
             }
             /* Move the recent file to the top of the list */
             else
             #endif
              {
-                strcpy(recent_files[0], filesToOpen[i]);
+                strcpy(recent_files[0], files[i]);
                 strcpy(recent_files[1], END_SYMBOL);
             }
-            set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(filesToOpen[i]).absolutePath()));
+            set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(files[i]).absolutePath()));
 
             int32_t doc_index = mdiWin->doc_index;
             if (doc_index) {
@@ -6702,9 +6669,9 @@ save_as_file(void)
     }
 
     DocumentData *data = doc_data(doc);
-    strcpy(open_filesPath, get_str(OPENSAVE_RECENT_DIRECTORY));
+    strcpy(open_files_path, get_str(OPENSAVE_RECENT_DIRECTORY));
     QString fileName = QFileDialog::getSaveFileName(_main,
-        translate("Save As"), QString(open_filesPath), formatFilterSave);
+        translate("Save As"), QString(open_files_path), formatFilterSave);
     
     return pattern_save(data->pattern, (char*)qPrintable(fileName));
 }
@@ -6930,7 +6897,7 @@ load_formats()
         custom = "Custom Filter(" + custom + ");;";
     }
 
-    return tr(qPrintable(custom + supported + all));
+    return translate(qPrintable(custom + supported + all));
     */
 }
 
@@ -6967,7 +6934,7 @@ MainWindow::floatingChangedToolBar(bool isFloating)
         ACTION->setStatusTip("Close the " + tb->windowTitle() + " Toolbar");
         ACTION->setObjectName("toolbarclose");
         tb->addAction(ACTION);
-        connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+        QObject::connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
     }
     else {
         QList<QAction*> actList = tb->actions();
@@ -7108,8 +7075,54 @@ write_settings(void)
 void
 settings_dialog(const char *showTab)
 {
-    Settings_Dialog dialog(showTab, _main);
-    dialog.exec();
+    set_dialog = new QDialog(_main);
+    set_dialog->setMinimumSize(750,550);
+
+    tabWidget = new QTabWidget(set_dialog);
+
+    for (int i=0; i<N_SETTINGS; i++) {
+        copy_setting(i, SETTING_DIALOG, SETTING_SETTING);
+        copy_setting(i, SETTING_PREVIEW, SETTING_SETTING);
+        copy_setting(i, SETTING_ACCEPT, SETTING_SETTING);
+    }
+
+    /* TODO: Add icons to tabs */
+    WidgetDesc desc;
+    tabWidget->addTab(createTabGeneral(), translate("General"));
+    tabWidget->addTab(createTab(desc), translate("Files/Paths"));
+    tabWidget->addTab(createTabDisplay(), translate("Display"));
+    tabWidget->addTab(createTabPrompt(), translate("Prompt"));
+    tabWidget->addTab(createTabOpenSave(), translate("Open/Save"));
+    tabWidget->addTab(createTabPrinting(), translate("Printing"));
+    tabWidget->addTab(createTab(desc), translate("Snap"));
+    tabWidget->addTab(createTabGridRuler(), translate("Grid/Ruler"));
+    tabWidget->addTab(createTab(desc), translate("Ortho/Polar"));
+    tabWidget->addTab(createTabQuickSnap(), translate("QuickSnap"));
+    tabWidget->addTab(createTab(desc), translate("QuickTrack"));
+    tabWidget->addTab(createTabLineWeight(), translate("LineWeight"));
+    tabWidget->addTab(createTabSelection(), translate("Selection"));
+
+    int n_tabs = table_length(settings_tab_labels);
+    for (int i=0; i<n_tabs; i++) {
+        if (showTab == settings_tab_labels[i]) {
+            tabWidget->setCurrentIndex(i);
+        }
+    }
+
+    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+    QObject::connect(buttonBox, SIGNAL(accepted()), set_dialog, SLOT(acceptChanges()));
+    QObject::connect(buttonBox, SIGNAL(rejected()), set_dialog, SLOT(rejectChanges()));
+
+    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(set_dialog);
+    vboxLayoutMain->addWidget(tabWidget);
+    vboxLayoutMain->addWidget(buttonBox);
+    set_dialog->setLayout(vboxLayoutMain);
+
+    set_dialog->setWindowTitle(translate("Settings"));
+
+    arrow_cursor();
+    set_dialog->exec();
 }
 
 /* . */
@@ -7289,11 +7302,8 @@ PropertyEditor::PropertyEditor(QString iconDirectory, bool pickAddMode, QWidget*
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
     for (int i=0; i < N_GROUPBOX; i++) {
-        int id = find_widget_list(group_box_list[i].key);
-        if (id < 0) {
-            continue;
-        }
-        vboxLayoutProperties->addWidget(widget_list[id].groupbox);
+        QGroupBox *gb = get_groupbox(group_box_list[i].key);
+        vboxLayoutProperties->addWidget(gb);
     }
     vboxLayoutProperties->addStretch(1);
     widgetProperties->setLayout(vboxLayoutProperties);
@@ -7444,12 +7454,10 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
 void
 update_line_edit_str_if_varies(const char *key, const char *str)
 {
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("update_line_edit_str_if_varies: Widget not found.");
+    QLineEdit* lineEdit = get_lineedit(key);
+    if (!lineEdit) {
         return;
     }
-    QLineEdit* lineEdit = widget_list[index].lineedit;
     strcpy(fieldOldText, qPrintable(lineEdit->text()));
     strcpy(fieldNewText, str);
 
@@ -7465,12 +7473,10 @@ update_line_edit_str_if_varies(const char *key, const char *str)
 void
 update_lineedit_num(const char *key, EmbReal num, bool useAnglePrecision)
 {
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("update_line_edit_str_if_varies: Widget not found.");
+    QLineEdit* lineEdit = get_lineedit(key);
+    if (!lineEdit) {
         return;
     }
-    QLineEdit* lineEdit = widget_list[index].lineedit;
     int precision = 0;
     if (useAnglePrecision) {
         precision = precisionAngle;
@@ -7527,16 +7533,22 @@ update_font_combo_box_str_if_varies(const char *str)
 }
 
 const char *
-combobox_text(int32_t index)
+combobox_text(const char *key)
 {
-    QComboBox *comboBox = widget_list[index].combobox;
+    QComboBox *comboBox = get_combobox(key);
+    if (!comboBox) {
+        return "ERROR: NOT FOUND";
+    }
     return qPrintable(comboBox->currentText());
 }
 
 int32_t
-combobox_find_text(int32_t index, const char *text)
+combobox_find_text(const char *key, const char *text)
 {
-    QComboBox *comboBox = widget_list[index].combobox;
+    QComboBox *comboBox = get_combobox(key);
+    if (!comboBox) {
+        return -1;
+    }
     return comboBox->findText(QString(text));
 }
 
@@ -7544,13 +7556,11 @@ combobox_find_text(int32_t index, const char *text)
 void
 update_lineedit_str(const char *key, const char *str, char *strList[])
 {
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("update_line_edit_str_if_varies: Widget not found.");
+    QComboBox *comboBox = get_combobox(key);
+    if (!comboBox) {
         return;
     }
-    QComboBox *comboBox = widget_list[index].combobox;
-    strcpy(fieldOldText, combobox_text(index));
+    strcpy(fieldOldText, combobox_text(key));
     strcpy(fieldNewText, str);
 
     if (fieldOldText[0] == 0) {
@@ -7559,7 +7569,7 @@ update_lineedit_str(const char *key, const char *str, char *strList[])
             QString s(strList[i]);
             comboBox->addItem(s, s);
         }
-        int current_index = combobox_find_text(index, qPrintable(fieldNewText));
+        int current_index = combobox_find_text(key, fieldNewText);
         comboBox->setCurrentIndex(current_index);
     }
     else if (strcmp(fieldOldText, fieldNewText)) {
@@ -7567,7 +7577,7 @@ update_lineedit_str(const char *key, const char *str, char *strList[])
         if (comboBox->findText(fieldVariesText) == -1) {
             comboBox->addItem(fieldVariesText);
         }
-        int current_index = combobox_find_text(index, qPrintable(fieldVariesText));
+        int current_index = combobox_find_text(key, fieldVariesText);
         comboBox->setCurrentIndex(current_index);
     }
 }
@@ -7576,13 +7586,11 @@ update_lineedit_str(const char *key, const char *str, char *strList[])
 void
 update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
 {
-    int index = find_widget_list(key);
-    if (index < 0) {
-        debug_message("update_line_edit_str_if_varies: Widget not found.");
+    QComboBox *comboBox = get_combobox(key);
+    if (!comboBox) {
         return;
     }
-    QComboBox *comboBox = widget_list[index].combobox;
-    strcpy(fieldOldText, combobox_text(index));
+    strcpy(fieldOldText, combobox_text(key));
     if (yesOrNoText) {
         if (val) {
             strcpy(fieldNewText, fieldYesText);
@@ -7609,7 +7617,7 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
             comboBox->addItem(fieldOnText, true);
             comboBox->addItem(fieldOffText, false);
         }
-        int current_index = combobox_find_text(index, qPrintable(fieldNewText));
+        int current_index = combobox_find_text(key, fieldNewText);
         comboBox->setCurrentIndex(current_index);
     }
     else if (strcmp(fieldOldText, fieldNewText)) {
@@ -7617,7 +7625,7 @@ update_lineedit_bool(const char *key, bool val, bool yesOrNoText)
         if (comboBox->findText(fieldVariesText) == -1) {
             comboBox->addItem(fieldVariesText);
         }
-        int current_index = combobox_find_text(index, qPrintable(fieldVariesText));
+        int current_index = combobox_find_text(key, fieldVariesText);
         comboBox->setCurrentIndex(current_index);
     }
 }
@@ -7643,7 +7651,7 @@ void
 add_lineedit(EmbString key, QLineEdit *lineedit)
 {
     strcpy(widget_list[n_widgets].key, key);
-    widget_list[n_widgets].lineedit = lineedit;
+    widget_list[n_widgets].widget = lineedit;
     n_widgets++;
 }
 
@@ -7705,7 +7713,7 @@ create_editor(QWidget *parent, EmbString type_label, EmbString signal_name,
 void
 fieldEdited(QObject* fieldObj)
 {
-    static bool blockSignals = false;
+    bool blockSignals = false;
     if (blockSignals) {
         return;
     }
@@ -7723,44 +7731,49 @@ fieldEdited(QObject* fieldObj)
         EmbString label;
         strcpy(label, qPrintable(objName));
 
-        int id = find_widget_list(label);
-
+        if (!strcmp(label, "comboBoxTextSingleFont")) {
+            ObjectCore *core = tempObj->core;
+            obj_set_text_font(core,
+                qPrintable(comboBoxTextSingleFont->currentFont().family()));
+            continue;
+        }
         if (strncmp(label, "comboBox", strlen("comboBox")) == 0) {
             ObjectCore *core = tempObj->core;
-            const char *key = label + strlen("comboBox");
-            if (widget_list[id].combobox->currentText() == fieldVariesText) {
+            QComboBox *comboBox = get_combobox(label);
+            if (!comboBox) {
+                return;
+            }
+
+            if (comboBox->currentText() == fieldVariesText) {
                 continue;
             }
-            if (!strcmp(label, "comboBoxTextSingleFont")) {
-                obj_set_text_font(core,
-                    qPrintable(comboBoxTextSingleFont->currentFont().family()));
-                continue;
-            }
-            const char *text = qPrintable(widget_list[id].combobox->currentText());
-            int index = widget_list[id].combobox->currentIndex();
+            const char *text = qPrintable(comboBox->currentText());
+            int index = comboBox->currentIndex();
             if (!strcmp(label, "comboBoxTextSingleJustify")) {
                 obj_set_text_justify(core,
-                    qPrintable(widget_list[id].combobox->itemData(index).toString()));
+                    qPrintable(comboBox->itemData(index).toString()));
                 continue;
             }
             if (!strcmp(label, "comboBoxTextSingleBackward")) {
                 obj_set_text_backward(core,
-                    widget_list[id].combobox->itemData(index).toBool());
+                    comboBox->itemData(index).toBool());
                 continue;
             }
             if (!strcmp(label, "comboBoxTextSingleUpsideDown")) {
                 obj_set_text_upside_down(core,
-                    widget_list[id].combobox->itemData(index).toBool());
+                    comboBox->itemData(index).toBool());
             }
         }
         else {
-            const char *key = label + strlen("lineEdit");
-            const char *text = qPrintable(widget_list[id].lineedit->text());
+            QLineEdit *lineEdit = get_lineedit(label);
+            const char *text = qPrintable(lineEdit->text());
             edit_field(tempObj->core->objID, label, text);
         }
     }
 
-    /* Block this slot from running twice since calling setSelectedItems will trigger it. */
+    /* Block this slot from running twice since calling setSelectedItems
+     * will trigger it.
+     */
     blockSignals = true;
 
     QWidget* widget = QApplication::focusWidget();
@@ -7774,57 +7787,6 @@ fieldEdited(QObject* fieldObj)
     }
 
     blockSignals = false;
-}
-
-/* . */
-Settings_Dialog::Settings_Dialog(QString showTab, QWidget* parent) : QDialog(parent)
-{
-    setMinimumSize(750,550);
-
-    tabWidget = new QTabWidget(this);
-
-    for (int i=0; i<N_SETTINGS; i++) {
-        copy_setting(i, SETTING_DIALOG, SETTING_SETTING);
-        copy_setting(i, SETTING_PREVIEW, SETTING_SETTING);
-        copy_setting(i, SETTING_ACCEPT, SETTING_SETTING);
-    }
-
-    /* TODO: Add icons to tabs */
-    WidgetDesc desc;
-    tabWidget->addTab(createTabGeneral(), translate("General"));
-    tabWidget->addTab(createTab(desc), translate("Files/Paths"));
-    tabWidget->addTab(createTabDisplay(), translate("Display"));
-    tabWidget->addTab(createTabPrompt(), translate("Prompt"));
-    tabWidget->addTab(createTabOpenSave(), translate("Open/Save"));
-    tabWidget->addTab(createTabPrinting(), translate("Printing"));
-    tabWidget->addTab(createTab(desc), translate("Snap"));
-    tabWidget->addTab(createTabGridRuler(), translate("Grid/Ruler"));
-    tabWidget->addTab(createTab(desc), translate("Ortho/Polar"));
-    tabWidget->addTab(createTabQuickSnap(), translate("QuickSnap"));
-    tabWidget->addTab(createTab(desc), translate("QuickTrack"));
-    tabWidget->addTab(createTabLineWeight(), translate("LineWeight"));
-    tabWidget->addTab(createTabSelection(), translate("Selection"));
-
-    int n_tabs = table_length(settings_tab_labels);
-    for (int i=0; i<n_tabs; i++) {
-        if (showTab == settings_tab_labels[i]) {
-            tabWidget->setCurrentIndex(i);
-        }
-    }
-
-    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(acceptChanges()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(rejectChanges()));
-
-    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(this);
-    vboxLayoutMain->addWidget(tabWidget);
-    vboxLayoutMain->addWidget(buttonBox);
-    setLayout(vboxLayoutMain);
-
-    setWindowTitle(translate("Settings"));
-
-    arrow_cursor();
 }
 
 QPushButton*
@@ -7849,19 +7811,19 @@ labelled_button(QWidget* parent, QGridLayout *layout,
 
 /* . */
 QWidget*
-Settings_Dialog::createTab(WidgetDesc desc)
+createTab(WidgetDesc desc)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 /* . */
 QWidget*
-Settings_Dialog::createTabGeneral()
+createTabGeneral(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* Language */
     QGroupBox* groupBoxLanguage = new QGroupBox(translate("Language"), widget);
@@ -7883,7 +7845,7 @@ Settings_Dialog::createTabGeneral()
     QString current = setting[GENERAL_LANGUAGE].dialog.s;
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
-    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString )), this,
+    QObject::connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString )), set_dialog,
         DIALOG_STRING_SLOT(GENERAL_LANGUAGE));
 
     QVBoxLayout* vboxLayoutLanguage = new QVBoxLayout(groupBoxLanguage);
@@ -7902,7 +7864,7 @@ Settings_Dialog::createTabGeneral()
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/theme.png"), dirName);
     }
     comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(setting[GENERAL_ICON_THEME].dialog.s));
-    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString)), this,
+    QObject::connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString)), set_dialog,
         DIALOG_STRING_SLOT(GENERAL_ICON_THEME));
 
     QLabel* labelIconSize = new QLabel(translate("Icon Size"), groupBoxIcon);
@@ -7918,7 +7880,7 @@ Settings_Dialog::createTabGeneral()
     comboBoxIconSize->addItem(QIcon(dialog_icon + "icon128.png"), "I'm Blind", 128);
     setting[GENERAL_ICON_SIZE].dialog.i = get_int(GENERAL_ICON_SIZE);
     comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(setting[GENERAL_ICON_SIZE].dialog.i));
-    connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_icon_size_index_changed(int)));
+    QObject::connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), set_dialog, SLOT(combo_icon_size_index_changed(int)));
 
     QVBoxLayout* vboxLayoutIcon = new QVBoxLayout(groupBoxIcon);
     vboxLayoutIcon->addWidget(labelIconTheme);
@@ -7936,20 +7898,20 @@ Settings_Dialog::createTabGeneral()
 
     QPushButton* buttonMdiBGLogo = new QPushButton(translate("Choose"), groupBoxMdiBG);
     buttonMdiBGLogo->setEnabled(setting[GENERAL_MDI_BG_USE_LOGO].dialog.b);
-    connect(buttonMdiBGLogo, SIGNAL(clicked()), this, SLOT(choose_mdi_bg_logo()));
-    connect(checkBoxMdiBGUseLogo, SIGNAL(toggled(bool)), buttonMdiBGLogo, SLOT(setEnabled(bool)));
+    QObject::connect(buttonMdiBGLogo, SIGNAL(clicked()), set_dialog, SLOT(choose_mdi_bg_logo()));
+    QObject::connect(checkBoxMdiBGUseLogo, SIGNAL(toggled(bool)), buttonMdiBGLogo, SLOT(setEnabled(bool)));
 
     QPushButton* buttonMdiBGTexture = new QPushButton(translate("Choose"), groupBoxMdiBG);
     buttonMdiBGTexture->setEnabled(setting[GENERAL_MDI_BG_USE_TEXTURE].dialog.b);
-    connect(buttonMdiBGTexture, SIGNAL(clicked()), this, SLOT(choose_mdi_bg_texture()));
-    connect(checkBoxMdiBGUseTexture, SIGNAL(toggled(bool)), buttonMdiBGTexture, SLOT(setEnabled(bool)));
+    QObject::connect(buttonMdiBGTexture, SIGNAL(clicked()), set_dialog, SLOT(choose_mdi_bg_texture()));
+    QObject::connect(checkBoxMdiBGUseTexture, SIGNAL(toggled(bool)), buttonMdiBGTexture, SLOT(setEnabled(bool)));
 
     QPushButton* buttonMdiBGColor = new QPushButton(translate("Choose"), groupBoxMdiBG);
     buttonMdiBGColor->setIcon(create_swatch(setting[GENERAL_MDI_BG_COLOR].preview.i));
-    connect(buttonMdiBGColor, &QPushButton::clicked, this,
-        [=] () { chooseColor(this, buttonMdiBGColor, GENERAL_MDI_BG_COLOR); });
+    QObject::connect(buttonMdiBGColor, &QPushButton::clicked, set_dialog,
+        [=] () { chooseColor(set_dialog, buttonMdiBGColor, GENERAL_MDI_BG_COLOR); });
     buttonMdiBGColor->setEnabled(setting[GENERAL_MDI_BG_USE_COLOR].dialog.b);
-    connect(checkBoxMdiBGUseColor, SIGNAL(toggled(bool)), buttonMdiBGColor, SLOT(setEnabled(bool)));
+    QObject::connect(checkBoxMdiBGUseColor, SIGNAL(toggled(bool)), buttonMdiBGColor, SLOT(setEnabled(bool)));
 
     QGridLayout* gridLayoutMdiBG = new QGridLayout(widget);
     gridLayoutMdiBG->addWidget(checkBoxMdiBGUseLogo, 0, 0, Qt::AlignLeft);
@@ -7991,7 +7953,7 @@ Settings_Dialog::createTabGeneral()
     vboxLayoutMain->addWidget(groupBoxTips);
     vboxLayoutMain->addWidget(groupBoxHelpBrowser);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 /* . */
@@ -8011,9 +7973,9 @@ make_groupbox(QWidget *parent, const char *title, WidgetData data[], char *layou
 
 /* TODO: Review OpenGL and Rendering settings for future inclusion */
 QWidget*
-Settings_Dialog::createTabDisplay()
+createTabDisplay(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* Rendering */
     QGroupBox* groupBoxRender = new QGroupBox(translate("Rendering"), widget);
@@ -8039,7 +8001,7 @@ Settings_Dialog::createTabDisplay()
         }
     }
     comboBoxScrollBarWidget->setCurrentIndex(setting[DISPLAY_SCROLLBAR_WIDGET_NUM].dialog.i);
-    connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this,
+    QObject::connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), set_dialog,
         DIALOG_INT_SLOT(DISPLAY_SCROLLBAR_WIDGET_NUM));
 
     QVBoxLayout* vboxLayoutScrollBars = new QVBoxLayout(groupBoxScrollBars);
@@ -8069,7 +8031,7 @@ Settings_Dialog::createTabDisplay()
     QSpinBox* spinBoxSelectBoxAlpha = new QSpinBox(groupBoxColor);
     spinBoxSelectBoxAlpha->setRange(0, 255);
     spinBoxSelectBoxAlpha->setValue(setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
-    connect(spinBoxSelectBoxAlpha, SIGNAL(valueChanged(int)), this, SLOT(spin_box_display_select_box_alpha_changed(int)));
+    QObject::connect(spinBoxSelectBoxAlpha, SIGNAL(valueChanged(int)), set_dialog, SLOT(spin_box_display_select_box_alpha_changed(int)));
 
     gridLayoutColor->addWidget(labelSelectBoxAlpha, 6, 0, Qt::AlignLeft);
     gridLayoutColor->addWidget(spinBoxSelectBoxAlpha, 6, 1, Qt::AlignRight);
@@ -8085,14 +8047,14 @@ Settings_Dialog::createTabDisplay()
     vboxLayoutMain->addWidget(groupBoxColor);
     vboxLayoutMain->addWidget(groupBoxZoom);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 /* TODO: finish prompt options */
 QWidget*
-Settings_Dialog::createTabPrompt()
+createTabPrompt(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* Colors */
     QGroupBox* groupBoxColor = new QGroupBox(translate("Colors"), widget);
@@ -8109,20 +8071,23 @@ Settings_Dialog::createTabPrompt()
     QLabel* labelFontFamily = new QLabel(translate("Font Family"), groupBoxFont);
     QFontComboBox* comboBoxFontFamily = new QFontComboBox(groupBoxFont);
     comboBoxFontFamily->setCurrentFont(QFont(setting[PROMPT_FONT_FAMILY].preview.s));
-    connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(QString)), this, SLOT(combo_box_prompt_font_family_changed(QString)));
+    QObject::connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(QString)), set_dialog,
+        SLOT(combo_box_prompt_font_family_changed(QString)));
 
     QLabel* labelFontStyle = new QLabel(translate("Font Style"), groupBoxFont);
     QComboBox* comboBoxFontStyle = new QComboBox(groupBoxFont);
     comboBoxFontStyle->addItem("Normal");
     comboBoxFontStyle->addItem("Italic");
     comboBoxFontStyle->setEditText(setting[PROMPT_FONT_STYLE].preview.s);
-    connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(QString)), this, SLOT(combo_box_prompt_font_style_changed(QString)));
+    QObject::connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(QString)), set_dialog,
+        SLOT(combo_box_prompt_font_style_changed(QString)));
 
     QLabel* labelFontSize = new QLabel(translate("Font Size"), groupBoxFont);
     QSpinBox* spinBoxFontSize = new QSpinBox(groupBoxFont);
     spinBoxFontSize->setRange(4, 64);
     spinBoxFontSize->setValue(setting[PROMPT_FONT_SIZE].preview.i);
-    connect(spinBoxFontSize, SIGNAL(valueChanged(int)), this, SLOT(spin_box_prompt_font_size_changed(int)));
+    QObject::connect(spinBoxFontSize, SIGNAL(valueChanged(int)), set_dialog,
+        SLOT(spin_box_prompt_font_size_changed(int)));
 
     /*
     "labelFontFamily", "comboBoxFontFamily",
@@ -8153,13 +8118,14 @@ Settings_Dialog::createTabPrompt()
     vboxLayoutMain->addWidget(groupBoxFont);
     vboxLayoutMain->addWidget(groupBoxHistory);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 /* TODO: finish open/save options */
-QWidget* Settings_Dialog::createTabOpenSave()
+QWidget*
+createTabOpenSave(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* Custom Filter */
     QGroupBox* groupbox_custom_filter = new QGroupBox(translate("Custom Filter"), widget);
@@ -8168,11 +8134,21 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QCheckBox* custom_filter[100];
 
     QPushButton* button_custom_filter_select_all = new QPushButton(translate("Select All"), widget);
-    connect(button_custom_filter_select_all, SIGNAL(clicked()), this,
-        SLOT(button_custom_filter_select_all_clicked()));
+    QObject::connect(button_custom_filter_select_all, SIGNAL(clicked()), set_dialog,
+        SLOT(
+        [=](void) {
+            /* FIXME: button_custom_filter_select_all(true); */
+            strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "supported");
+        }
+        ));
     QPushButton* button_custom_filter_clear_all = new QPushButton("Clear All", widget);
-    connect(button_custom_filter_clear_all, SIGNAL(clicked()), this,
-        SLOT(button_custom_filter_clear_all_clicked()));
+    QObject::connect(button_custom_filter_clear_all, SIGNAL(clicked()), set_dialog,
+        SLOT(
+        [=](void) {
+            /* FIXME: button_custom_filter_clear_all(false); */
+            strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "");
+        }
+        ));
 
     int i;
     int n_extensions = table_length(extensions);
@@ -8180,13 +8156,13 @@ QWidget* Settings_Dialog::createTabOpenSave()
         const char *extension = extensions[i];
         custom_filter[i] = new QCheckBox(extension, groupbox_custom_filter);
         custom_filter[i]->setChecked(QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("*." + QString(extension), Qt::CaseInsensitive));
-        connect(custom_filter[i], SIGNAL(stateChanged(int)), this,
+        QObject::connect(custom_filter[i], SIGNAL(stateChanged(int)), set_dialog,
             SLOT(check_custom_filter_changed(int)));
 
-        connect(this, SIGNAL(button_custom_filter_select_all(bool)),
+        QObject::connect(set_dialog, SIGNAL(button_custom_filter_select_all(bool)),
             custom_filter[i], SLOT(setChecked(bool)));
 
-        connect(this, SIGNAL(button_custom_filter_clear_all(bool)),
+        QObject::connect(set_dialog, SIGNAL(button_custom_filter_clear_all(bool)),
             custom_filter[i], SLOT(setChecked(bool)));
     }
 
@@ -8208,7 +8184,8 @@ QWidget* Settings_Dialog::createTabOpenSave()
     groupbox_custom_filter->setLayout(gridLayoutCustomFilter);
 
     if (QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("supported", Qt::CaseInsensitive)) {
-        button_custom_filter_select_all_clicked();
+        /* button_custom_filter_select_all(true); */
+        strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "supported");
     }
 
     /* Opening */
@@ -8225,7 +8202,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QSpinBox* spinBoxRecentMaxFiles = new QSpinBox(groupBoxOpening);
     spinBoxRecentMaxFiles->setRange(0, 10);
     spinBoxRecentMaxFiles->setValue(setting[OPENSAVE_RECENT_MAX_FILES].dialog.b);
-    connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), this,
+    QObject::connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), set_dialog,
         DIALOG_INT_SLOT(OPENSAVE_RECENT_MAX_FILES));
 
     QFrame* frameRecent = new QFrame(groupBoxOpening);
@@ -8264,7 +8241,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QSpinBox* spinBoxTrimDstNumJumps = new QSpinBox(groupBoxTrim);
     spinBoxTrimDstNumJumps->setRange(1, 20);
     spinBoxTrimDstNumJumps->setValue(setting[OPENSAVE_TRIM_DST_NUM_JUMPS].dialog.i);
-    connect(spinBoxTrimDstNumJumps, SIGNAL(valueChanged(int)), this,
+    QObject::connect(spinBoxTrimDstNumJumps, SIGNAL(valueChanged(int)), set_dialog,
         DIALOG_INT_SLOT(OPENSAVE_TRIM_DST_NUM_JUMPS));
 
     QFrame* frameTrimDstNumJumps = new QFrame(groupBoxTrim);
@@ -8284,21 +8261,24 @@ QWidget* Settings_Dialog::createTabOpenSave()
     vboxLayoutMain->addWidget(groupBoxSaving);
     vboxLayoutMain->addWidget(groupBoxTrim);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 /* . */
 QWidget*
-Settings_Dialog::createTabPrinting()
+createTabPrinting(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* Default Printer */
-    QGroupBox* groupBoxDefaultPrinter = new QGroupBox(translate("Default Printer"), widget);
+    QGroupBox* groupBoxDefaultPrinter = new QGroupBox(
+        translate("Default Printer"), widget);
 
-    QRadioButton* radioButtonUseSame = new QRadioButton(translate("Use as default device"), groupBoxDefaultPrinter);
+    QRadioButton* radioButtonUseSame = new QRadioButton(
+        translate("Use as default device"), groupBoxDefaultPrinter);
     radioButtonUseSame->setChecked(!get_bool(PRINTING_USE_LAST_DEVICE));
-    QRadioButton* radioButtonUseLast = new QRadioButton(translate("Use last used device"), groupBoxDefaultPrinter);
+    QRadioButton* radioButtonUseLast = new QRadioButton(
+        translate("Use last used device"), groupBoxDefaultPrinter);
     radioButtonUseLast->setChecked(get_bool(PRINTING_USE_LAST_DEVICE));
 
     QComboBox* comboBoxDefaultDevice = new QComboBox(groupBoxDefaultPrinter);
@@ -8325,13 +8305,13 @@ Settings_Dialog::createTabPrinting()
     vboxLayoutMain->addWidget(groupBoxDefaultPrinter);
     vboxLayoutMain->addWidget(groupBoxSaveInk);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 QWidget*
-Settings_Dialog::createTabGridRuler()
+createTabGridRuler(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* Grid Misc */
     QGroupBox* groupBoxGridMisc = new QGroupBox(translate("Grid Misc"), widget);
@@ -8350,7 +8330,8 @@ Settings_Dialog::createTabGridRuler()
     QCheckBox* checkBoxGridColorMatchCrossHair = new QCheckBox(
         translate("Match grid color to crosshair color"), groupBoxGridColor);
     checkBoxGridColorMatchCrossHair->setChecked(setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b);
-    connect(checkBoxGridColorMatchCrossHair, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridColorMatchCrossHairStateChanged(int)));
+    QObject::connect(checkBoxGridColorMatchCrossHair, SIGNAL(stateChanged(int)),
+        set_dialog, SLOT(checkBoxGridColorMatchCrossHairStateChanged(int)));
 
     QLabel* labelGridColor = new QLabel(translate("Grid Color"), groupBoxGridColor);
     labelGridColor->setObjectName("labelGridColor");
@@ -8362,8 +8343,8 @@ Settings_Dialog::createTabGridRuler()
         setting[GRID_COLOR].accept.i = setting[GRID_COLOR].dialog.i;
     }
     buttonGridColor->setIcon(QIcon(create_swatch(setting[GRID_COLOR].preview.i)));
-    connect(buttonGridColor, &QPushButton::clicked, this,
-        [=] () { chooseColor(this, buttonGridColor, GRID_COLOR); });
+    QObject::connect(buttonGridColor, &QPushButton::clicked, set_dialog,
+        [=] () { chooseColor(set_dialog, buttonGridColor, GRID_COLOR); });
 
     labelGridColor->setEnabled(!setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b);
     buttonGridColor->setEnabled(!setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b);
@@ -8378,7 +8359,8 @@ Settings_Dialog::createTabGridRuler()
     QGroupBox* groupBoxGridGeom = new QGroupBox(translate("Grid Geometry"), widget);
     QCheckBox* checkBoxGridLoadFromFile = new QCheckBox(translate("Set grid size from opened file"), groupBoxGridGeom);
     checkBoxGridLoadFromFile->setChecked(setting[GRID_LOAD_FROM_FILE].dialog.b);
-    connect(checkBoxGridLoadFromFile, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridLoadFromFileStateChanged(int)));
+    QObject::connect(checkBoxGridLoadFromFile, SIGNAL(stateChanged(int)),
+        set_dialog, SLOT(checkBoxGridLoadFromFileStateChanged(int)));
 
     QLabel* labelGridType = new QLabel(translate("Grid Type"), groupBoxGridGeom);
     labelGridType->setObjectName("labelGridType");
@@ -8388,12 +8370,14 @@ Settings_Dialog::createTabGridRuler()
     comboBoxGridType->addItem("Circular");
     comboBoxGridType->addItem("Isometric");
     comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(setting[GRID_TYPE].dialog.s));
-    connect(comboBoxGridType, SIGNAL(currentIndexChanged(const char *)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(const char *)));
+    QObject::connect(comboBoxGridType, SIGNAL(currentIndexChanged(const char *)),
+        set_dialog, SLOT(comboBoxGridTypeCurrentIndexChanged(const char *)));
 
     QCheckBox* checkBoxGridCenterOnOrigin = new QCheckBox(translate("Center the grid on the origin"), groupBoxGridGeom);
     checkBoxGridCenterOnOrigin->setObjectName("checkBoxGridCenterOnOrigin");
     checkBoxGridCenterOnOrigin->setChecked(setting[GRID_CENTER_ON_ORIGIN].dialog.b);
-    connect(checkBoxGridCenterOnOrigin, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridCenterOnOriginStateChanged(int)));
+    QObject::connect(checkBoxGridCenterOnOrigin, SIGNAL(stateChanged(int)),
+        set_dialog, SLOT(checkBoxGridCenterOnOriginStateChanged(int)));
 
     for (int i=0; grid_gb_data[i].id >= 0; i++) {
         create_label(groupBoxGridGeom, grid_gb_data[i].label, grid_gb_data[i].key);
@@ -8424,7 +8408,8 @@ Settings_Dialog::createTabGridRuler()
     comboBoxRulerMetric->addItem("Imperial", false);
     comboBoxRulerMetric->addItem("Metric", true);
     comboBoxRulerMetric->setCurrentIndex(comboBoxRulerMetric->findData(setting[RULER_METRIC].dialog.i));
-    connect(comboBoxRulerMetric, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_ruler_metric_index_changed(int)));
+    QObject::connect(comboBoxRulerMetric, SIGNAL(currentIndexChanged(int)),
+        set_dialog, SLOT(combo_ruler_metric_index_changed(int)));
 
     QGridLayout* gridLayoutRulerMisc = new QGridLayout(widget);
     gridLayoutRulerMisc->addWidget(checkBoxRulerShowOnLoad, 0, 0, Qt::AlignLeft);
@@ -8440,8 +8425,8 @@ Settings_Dialog::createTabGridRuler()
     QPushButton* buttonRulerColor = new QPushButton(translate("Choose"), groupBoxRulerColor);
     buttonRulerColor->setObjectName("buttonRulerColor");
     buttonRulerColor->setIcon(create_swatch(setting[RULER_COLOR].preview.i));
-    connect(buttonRulerColor, &QPushButton::clicked, this,
-        [=] () { chooseColor(this, buttonRulerColor, RULER_COLOR); });
+    QObject::connect(buttonRulerColor, &QPushButton::clicked, set_dialog,
+        [=] () { chooseColor(set_dialog, buttonRulerColor, RULER_COLOR); });
 
     QGridLayout* gridLayoutRulerColor = new QGridLayout(widget);
     gridLayoutRulerColor->addWidget(labelRulerColor, 1, 0, Qt::AlignLeft);
@@ -8469,13 +8454,13 @@ Settings_Dialog::createTabGridRuler()
     vboxLayoutMain->addWidget(groupBoxRulerColor);
     vboxLayoutMain->addWidget(groupBoxRulerGeom);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 QWidget*
-Settings_Dialog::createTabQuickSnap()
+createTabQuickSnap(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* QSnap Locators */
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(translate("Locators Used"), widget);
@@ -8494,37 +8479,67 @@ Settings_Dialog::createTabQuickSnap()
     QCheckBox* checkBoxQSnapApparent = create_checkbox(groupBoxQSnapLoc, QSNAP_APPARENT);
     QCheckBox* checkBoxQSnapParallel = create_checkbox(groupBoxQSnapLoc, QSNAP_PARALLEL);
 
-    QPushButton* buttonQSnapSelectAll = new QPushButton(translate("Select All"), groupBoxQSnapLoc);
-    connect(buttonQSnapSelectAll, SIGNAL(clicked()), this, SLOT(buttonQSnapSelectAllClicked()));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapEndPoint, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapMidPoint, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapCenter, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapNode, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapQuadrant, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapIntersection, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapExtension, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapInsertion, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapPerpendicular, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapTangent, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapNearest, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapApparent, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapSelectAll(bool)), checkBoxQSnapParallel, SLOT(setChecked(bool)));
+    QPushButton* buttonQSnapSelectAll = new QPushButton(translate("Select All"),
+        groupBoxQSnapLoc);
+    QObject::connect(buttonQSnapSelectAll, SIGNAL(clicked()), set_dialog,
+        SLOT([=]() { buttonQSnapSelectAll(true); }));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapEndPoint, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapMidPoint, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapCenter, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapNode, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapQuadrant, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapIntersection, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapExtension, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapInsertion, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapPerpendicular, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapTangent, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapNearest, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapApparent, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapSelectAll(bool)),
+        checkBoxQSnapParallel, SLOT(setChecked(bool)));
 
-    QPushButton* buttonQSnapClearAll = new QPushButton(translate("Clear All"), groupBoxQSnapLoc);
-    connect(buttonQSnapClearAll, SIGNAL(clicked()), this, SLOT(buttonQSnapClearAllClicked()));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapEndPoint, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapMidPoint, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapCenter, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapNode, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapQuadrant, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapIntersection, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapExtension, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapInsertion, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapPerpendicular, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapTangent, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapNearest, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapApparent, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(buttonQSnapClearAll(bool)), checkBoxQSnapParallel, SLOT(setChecked(bool)));
+    QPushButton* buttonQSnapClearAll = new QPushButton(translate("Clear All"),
+        groupBoxQSnapLoc);
+    QObject::connect(buttonQSnapClearAll, SIGNAL(clicked()), set_dialog,
+        SLOT([=]() { buttonQSnapClearAll(false); }));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapEndPoint, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapMidPoint, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapCenter, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapNode, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapQuadrant, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapIntersection, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapExtension, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapInsertion, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapPerpendicular, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapTangent, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapNearest, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapApparent, SLOT(setChecked(bool)));
+    QObject::connect(set_dialog, SIGNAL(buttonQSnapClearAll(bool)),
+        checkBoxQSnapParallel, SLOT(setChecked(bool)));
 
     QGridLayout* gridLayoutQSnap = new QGridLayout(groupBoxQSnapLoc);
     gridLayoutQSnap->addWidget(checkBoxQSnapEndPoint, 0, 0, Qt::AlignLeft);
@@ -8552,13 +8567,14 @@ Settings_Dialog::createTabQuickSnap()
     QComboBox* comboBoxQSnapLocColor = new QComboBox(groupBoxQSnapVisual);
     addColorsToComboBox(comboBoxQSnapLocColor);
     comboBoxQSnapLocColor->setCurrentIndex(comboBoxQSnapLocColor->findData(setting[QSNAP_LOCATOR_COLOR].dialog.i));
-    connect(comboBoxQSnapLocColor, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_qsnap_locator_color_changed(int)));
+    QObject::connect(comboBoxQSnapLocColor, SIGNAL(currentIndexChanged(int)),
+        set_dialog, SLOT(combo_qsnap_locator_color_changed(int)));
 
     QLabel* labelQSnapLocSize = new QLabel(translate("Locator Size"), groupBoxQSnapVisual);
     QSlider* sliderQSnapLocSize = new QSlider(Qt::Horizontal, groupBoxQSnapVisual);
     sliderQSnapLocSize->setRange(1,20);
     sliderQSnapLocSize->setValue(setting[QSNAP_LOCATOR_SIZE].dialog.i);
-    connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this,
+    QObject::connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), set_dialog,
         DIALOG_INT_SLOT(QSNAP_LOCATOR_SIZE));
 
     QVBoxLayout* vboxLayoutQSnapVisual = new QVBoxLayout(groupBoxQSnapVisual);
@@ -8575,7 +8591,7 @@ Settings_Dialog::createTabQuickSnap()
     QSlider* sliderQSnapApertureSize = new QSlider(Qt::Horizontal, groupBoxQSnapSensitivity);
     sliderQSnapApertureSize->setRange(1,20);
     sliderQSnapApertureSize->setValue(setting[QSNAP_APERTURE_SIZE].dialog.i);
-    connect(sliderQSnapApertureSize, SIGNAL(valueChanged(int)), this,
+    QObject::connect(sliderQSnapApertureSize, SIGNAL(valueChanged(int)), set_dialog,
         DIALOG_INT_SLOT(QSNAP_APERTURE_SIZE));
 
     QVBoxLayout* vboxLayoutQSnapSensitivity = new QVBoxLayout(groupBoxQSnapSensitivity);
@@ -8589,14 +8605,14 @@ Settings_Dialog::createTabQuickSnap()
     vboxLayoutMain->addWidget(groupBoxQSnapVisual);
     vboxLayoutMain->addWidget(groupBoxQSnapSensitivity);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 /* TODO: finish this */
 QWidget*
-Settings_Dialog::createTabLineWeight()
+createTabLineWeight(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     QGroupBox* groupBoxLwtMisc = new QGroupBox(translate("LineWeight Misc"), widget);
 
@@ -8607,14 +8623,16 @@ Settings_Dialog::createTabLineWeight()
     setting[LWT_SHOW_LWT].dialog.b = setting[LWT_SHOW_LWT].setting.b;
     setting[LWT_SHOW_LWT].preview.b = setting[LWT_SHOW_LWT].dialog.b;
     checkBoxShowLwt->setChecked(setting[LWT_SHOW_LWT].preview.b);
-    connect(checkBoxShowLwt, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtShowLwtStateChanged(int)));
+    QObject::connect(checkBoxShowLwt, SIGNAL(stateChanged(int)),
+        set_dialog, SLOT(checkBoxLwtShowLwtStateChanged(int)));
 
     QCheckBox* checkBoxRealRender = new QCheckBox(translate("RealRender"), groupBoxLwtMisc);
     checkBoxRealRender->setObjectName("checkBoxRealRender");
     setting[LWT_REAL_RENDER].dialog.b = setting[LWT_REAL_RENDER].setting.b;
     setting[LWT_REAL_RENDER].preview.b = setting[LWT_REAL_RENDER].dialog.b;
     checkBoxRealRender->setChecked(setting[LWT_REAL_RENDER].preview.b);
-    connect(checkBoxRealRender, SIGNAL(stateChanged(int)), this, SLOT(check_box_lwt_real_render_changed(int)));
+    QObject::connect(checkBoxRealRender, SIGNAL(stateChanged(int)),
+        set_dialog, SLOT(check_box_lwt_real_render_changed(int)));
     checkBoxRealRender->setEnabled(setting[LWT_SHOW_LWT].dialog.b);
 
     QLabel* labelDefaultLwt = new QLabel(translate("Default weight"), groupBoxLwtMisc);
@@ -8635,13 +8653,13 @@ Settings_Dialog::createTabLineWeight()
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
     vboxLayoutMain->addWidget(groupBoxLwtMisc);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 QWidget*
-Settings_Dialog::createTabSelection()
+createTabSelection(void)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(set_dialog);
 
     /* Selection Modes */
     QGroupBox* groupBoxSelectionModes = new QGroupBox(translate("Modes"), widget);
@@ -8672,13 +8690,15 @@ Settings_Dialog::createTabSelection()
     QComboBox* comboBoxCoolGripColor = new QComboBox(groupBoxSelectionColors);
     addColorsToComboBox(comboBoxCoolGripColor);
     comboBoxCoolGripColor->setCurrentIndex(comboBoxCoolGripColor->findData(setting[SELECTION_COOLGRIP_COLOR].dialog.i));
-    connect(comboBoxCoolGripColor, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_cool_grip_color_changed(int)));
+    QObject::connect(comboBoxCoolGripColor, SIGNAL(currentIndexChanged(int)),
+        set_dialog, SLOT(combo_cool_grip_color_changed(int)));
 
     QLabel* labelHotGripColor = new QLabel(translate("Hot Grip (Selected)"), groupBoxSelectionColors);
     QComboBox* comboBoxHotGripColor = new QComboBox(groupBoxSelectionColors);
     addColorsToComboBox(comboBoxHotGripColor);
     comboBoxHotGripColor->setCurrentIndex(comboBoxHotGripColor->findData(setting[SELECTION_HOTGRIP_COLOR].dialog.i));
-    connect(comboBoxHotGripColor, SIGNAL(currentIndexChanged(int)), this, SLOT(combobox_hot_grip_color_index_changed(int)));
+    QObject::connect(comboBoxHotGripColor, SIGNAL(currentIndexChanged(int)),
+        set_dialog, SLOT(combobox_hot_grip_color_index_changed(int)));
 
     QVBoxLayout* vboxLayoutSelectionColors = new QVBoxLayout(groupBoxSelectionColors);
     vboxLayoutSelectionColors->addWidget(labelCoolGripColor);
@@ -8694,13 +8714,14 @@ Settings_Dialog::createTabSelection()
     QSlider* sliderSelectionGripSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionGripSize->setRange(1,20);
     sliderSelectionGripSize->setValue(setting[SELECTION_GRIP_SIZE].dialog.i);
-    connect(sliderSelectionGripSize, SIGNAL(valueChanged(int)), this, DIALOG_INT_SLOT(SELECTION_GRIP_SIZE));
+    QObject::connect(sliderSelectionGripSize, SIGNAL(valueChanged(int)),
+        set_dialog, DIALOG_INT_SLOT(SELECTION_GRIP_SIZE));
 
     QLabel* labelSelectionPickBoxSize = new QLabel(translate("Pickbox Size"), groupBoxSelectionSizes);
     QSlider* sliderSelectionPickBoxSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionPickBoxSize->setRange(1,20);
     sliderSelectionPickBoxSize->setValue(setting[SELECTION_PICKBOX_SIZE].dialog.i);
-    connect(sliderSelectionPickBoxSize, SIGNAL(valueChanged(int)), this, DIALOG_INT_SLOT(SELECTION_PICKBOX_SIZE));
+    QObject::connect(sliderSelectionPickBoxSize, SIGNAL(valueChanged(int)), set_dialog, DIALOG_INT_SLOT(SELECTION_PICKBOX_SIZE));
 
     QVBoxLayout* vboxLayoutSelectionSizes = new QVBoxLayout(groupBoxSelectionSizes);
     vboxLayoutSelectionSizes->addWidget(labelSelectionGripSize);
@@ -8715,12 +8736,12 @@ Settings_Dialog::createTabSelection()
     vboxLayoutMain->addWidget(groupBoxSelectionColors);
     vboxLayoutMain->addWidget(groupBoxSelectionSizes);
 
-    return make_scrollable(this, vboxLayoutMain, widget);
+    return make_scrollable(set_dialog, vboxLayoutMain, widget);
 }
 
 /* TODO: Add Other... so the user can select custom colors */
 void
-Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
+addColorsToComboBox(QComboBox* comboBox)
 {
     comboBox->addItem(create_icon("colorred"), translate("Red"), qRgb(255, 0, 0));
     comboBox->addItem(create_icon("coloryellow"), translate("Yellow"), qRgb(255, 255, 0));
@@ -8732,8 +8753,9 @@ Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 }
 
 void
-Settings_Dialog::combo_icon_size_index_changed(int index)
+combo_icon_size_index_changed(int index)
 {
+    /* FIXME:
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     if (comboBox) {
         bool ok = 0;
@@ -8745,6 +8767,7 @@ Settings_Dialog::combo_icon_size_index_changed(int index)
     else {
         setting[GENERAL_ICON_SIZE].dialog.i = 16;
     }
+    */
 }
 
 /* . */
@@ -8811,8 +8834,9 @@ chooseColor(QWidget *parent, QPushButton *button, int key)
 
 /* . */
 void
-Settings_Dialog::check_custom_filter_changed(int checked)
+check_custom_filter_changed(int checked)
 {
+    /* FIXME:
     QCheckBox* checkBox = qobject_cast<QCheckBox*>(sender());
     if (!checkBox) {
         return;
@@ -8828,22 +8852,9 @@ Settings_Dialog::check_custom_filter_changed(int checked)
         s = QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).remove("*." + format, Qt::CaseInsensitive);
         strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, qPrintable(s));
     }
+    */
     /* TODO */
     /* setting[OPENSAVE_USE_CUSTOM_FILTER].dialog.s = checked; */
-}
-
-void
-Settings_Dialog::button_custom_filter_select_all_clicked()
-{
-    emit button_custom_filter_select_all(true);
-    strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "supported");
-}
-
-void
-Settings_Dialog::button_custom_filter_clear_all_clicked()
-{
-    emit button_custom_filter_clear_all(false);
-    strcpy(setting[OPENSAVE_CUSTOM_FILTER].dialog.s, "");
 }
 
 /* FIXME: widget key. */
@@ -8855,27 +8866,13 @@ combo_ruler_metric_index_changed(int32_t index)
         debug_message("combo_ruler_metric_index_changed: Widget not found.");
         return;
     }
-    QComboBox* comboBox = widget_list[widget].combobox;
+    QComboBox *comboBox = qobject_cast<QComboBox*>(widget_list[index].widget);
     if (comboBox) {
         setting[RULER_METRIC].dialog.i = comboBox->itemData(index).toBool();
     }
     else {
         setting[RULER_METRIC].dialog.i = true;
     }
-}
-
-/* . */
-void
-Settings_Dialog::buttonQSnapSelectAllClicked()
-{
-    emit buttonQSnapSelectAll(true);
-}
-
-/* . */
-void
-Settings_Dialog::buttonQSnapClearAllClicked()
-{
-    emit buttonQSnapClearAll(false);
 }
 
 /* TODO: Alert user if color matched the display bg color. */
@@ -8895,7 +8892,7 @@ combobox_selection_index_changed(const char *key, int32_t setting_,
         debug_message("combobox_selection_index_changed: Widget not found.");
         return;
     }
-    QComboBox* comboBox = widget_list[widget].combobox;
+    QComboBox *comboBox = qobject_cast<QComboBox*>(widget_list[index].widget);
     if (comboBox) {
         bool ok = 0;
         setting[setting_].dialog.i = comboBox->itemData(index).toUInt(&ok);
@@ -8926,18 +8923,18 @@ combobox_hot_grip_color_index_changed(int index)
 
 /* . */
 void
-Settings_Dialog::acceptChanges()
+acceptChanges()
 {
     accept_settings();
-    accept();
+    set_dialog->accept();
 }
 
 /* TODO: inform the user if they have changed settings */
 void
-Settings_Dialog::rejectChanges()
+rejectChanges()
 {
     /* Update the view since the user must accept the preview */
     update_view();
-    reject();
+    set_dialog->reject();
 }
 
