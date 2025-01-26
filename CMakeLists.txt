@@ -5,6 +5,11 @@ project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 find_package(OpenGL REQUIRED)
 find_package(Qt6 COMPONENTS Core Widgets PrintSupport Svg REQUIRED)
 
+if(WIN32)
+else(WIN32)
+find_package(X11 REQUIRED)
+endif(WIN32)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
@@ -116,6 +121,14 @@ qt_add_executable(embroidermodder2
 	${SRC}/core.h
 )
 
+add_executable(embroidermodder2_x11
+	${SRC}/wrapper.c
+	${SRC}/state.c
+
+	${SRC}/constants.h
+	${SRC}/core.h
+)
+
 include_directories(
 	${EXTERN}/libembroidery/src
 	${EXTERN}/glfw/include
@@ -142,5 +155,9 @@ set_target_properties(embroidermodder2 PROPERTIES
 
 if (WIN32)
 else(WIN32)
-target_link_libraries(embroidermodder2 PRIVATE m)
+target_link_libraries(embroidermodder2_x11 PRIVATE
+	${OPENGL_LIBRARIES}
+	${X11_LIBRARIES}
+	m
+)
 endif()

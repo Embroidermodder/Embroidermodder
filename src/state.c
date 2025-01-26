@@ -110,7 +110,7 @@ const ScriptValue script_false = {
 };
 
 char *_appName_ = "Embroidermodder";
-char *_appVer_  = "v2.0 alpha";
+char *_appVer_ = "v2.0 alpha";
 bool exitApp = false;
 int testing_mode = 0;
 
