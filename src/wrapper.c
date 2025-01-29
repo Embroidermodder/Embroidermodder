@@ -18,6 +18,19 @@
 #include <GL/glx.h>
 #include <GL/glu.h>
 
+#if __WIN32__
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+#else
+
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+
+#endif
+
 #include "core.h"
 
 void
@@ -36,9 +49,6 @@ draw_frame(void)
 
 #ifdef __WIN32__
 /* Warning: this is untested boilerplate. */
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 
 int APIENTRY
 wWinMain(_In_     HINSTANCE hInstance,
@@ -64,10 +74,6 @@ wWinMain(_In_     HINSTANCE hInstance,
  * MacOS still supports X11: GIMP and Inkscape still use it.
  * In future we may have Wayland support.
  */
- 
-#include <X11/X.h>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
 
 int
 main(int argc, char *argv[])

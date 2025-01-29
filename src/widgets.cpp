@@ -3298,30 +3298,18 @@ void
 Document::draw_rulers(QPainter* painter, const QRectF& rect)
 {
     int32_t doc = data->id;
-    DocumentData *data = doc_data(doc);
-
     int vw = width(); /* View Width */
     int vh = height(); /* View Height */
+    DocumentData *data = doc_data(doc);
+
     EmbVector origin = doc_map_to_scene(doc, emb_vector(0.0, 0.0));
     EmbVector rulerHoriz = doc_map_to_scene(doc, emb_vector(vw, data->rulerPixelSize));
     EmbVector rulerVert = doc_map_to_scene(doc, emb_vector(data->rulerPixelSize, vh));
 
-    EmbRect ruler_h, ruler_v;
-
-    ruler_h.x = rulerHoriz.x;
-    ruler_h.y = rulerHoriz.y;
-    ruler_h.w = rulerHoriz.x - origin.x;
-    ruler_h.h = rulerHoriz.y - origin.y;
-
-    ruler_v.x = rulerVert.x;
-    ruler_v.y = rulerVert.y;
-    ruler_v.w = ruler_v.x - origin.x;
-    ruler_v.h = ruler_v.y - origin.y;
-
     /* NOTE: Drawing ruler if zoomed out too far will cause an assertion failure. */
     /* We will limit the maximum size the ruler can be shown at. */
     uint16_t maxSize = -1; /* Intentional underflow */
-    if (ruler_h.w >= maxSize || ruler_v.h >= maxSize) {
+    if (rulerHoriz.x >= maxSize || rulerVert.y >= maxSize) {
         return;
     }
 
@@ -3346,182 +3334,84 @@ Document::draw_rulers(QPainter* painter, const QRectF& rect)
         distStr.replace(i, 1, '0');
     }
     int unit = distStr.toInt();
-    EmbReal fraction;
-    bool feet = true;
-    if (data->rulerMetric) {
-        if (unit < 10) {
-            unit = 10;
-        }
-        fraction = unit/10;
+
+    ViewData *vdata = create_view_data(doc, vw, vh, unit);
+    if (!vdata) {
+        debug_message("ERROR: Failed to create ViewData.");
+        return;
     }
-    else {
-        if (unit <= 1) {
-            unit = 1;
-            feet = false;
-            fraction = (double)(unit/16);
-        }
-        else {
-            unit = round_to_multiple(true, unit, 12);
-            fraction = unit/12;
-        }
-    }
-
-    EmbReal little  = 0.20;
-    EmbReal medium = 0.40;
-    EmbReal rhTextOffset = documents[doc]->mapToScene(3, 0).x() - origin.x;
-    EmbReal rvTextOffset = documents[doc]->mapToScene(0, 3).y() - origin.y;
-    EmbReal textHeight = ruler_h.h*medium;
-
-    int n_lines = 0;
-    QLineF lines[1000];
-    lines[n_lines++] = QLineF(origin.x, ruler_h.y, ruler_h.x, ruler_h.y);
-    lines[n_lines++] = QLineF(ruler_v.x, origin.y, ruler_v.x, ruler_v.y);
-
-    lines[n_lines++] = QLineF(data->sceneMousePoint.x, ruler_h.y,
-        data->sceneMousePoint.x, origin.y);
-    lines[n_lines++] = QLineF(ruler_v.x, data->sceneMousePoint.y,
-        origin.x, data->sceneMousePoint.y);
+    EmbVector textOffset = doc_map_to_scene(doc, emb_vector(3, 3));
+    textOffset = emb_vector_subtract(textOffset, origin);
+    EmbReal textHeight = (rulerHoriz.y - origin.y) * vdata->medium;
 
     QTransform transform;
 
     QPen rulerPen(QColor(0, 0, 0));
     rulerPen.setCosmetic(true);
     painter->setPen(rulerPen);
-    painter->fillRect(QRectF(origin.x, origin.y, ruler_h.w, ruler_h.h),
+    painter->fillRect(QRectF(origin.x, origin.y,
+        rulerHoriz.x - origin.x, rulerHoriz.y - origin.y),
         documents[doc]->data->rulerColor);
-    painter->fillRect(QRectF(origin.x, origin.y, ruler_v.w, ruler_v.h),
+    painter->fillRect(QRectF(origin.x, origin.y,
+        rulerVert.x - origin.x, rulerVert.y - origin.y),
         documents[doc]->data->rulerColor);
 
-    int xFlow, xStart, yFlow, yStart;
-    if (int32_underflow(origin.x, unit)) {
-        return;
-    }
-    xFlow = round_to_multiple(false, origin.x, unit);
-    if (int32_underflow(xFlow, unit)) {
-        return;
-    }
-    xStart = xFlow - unit;
-    if (int32_underflow(origin.y, unit)) {
-        return;
-    }
-    yFlow = round_to_multiple(false, origin.y, unit);
-    if (int32_underflow(yFlow, unit)) {
-        return;
-    }
-    yStart = yFlow - unit;
-
-    for (int x = xStart; x < ruler_h.x; x += unit) {
+    for (int x = vdata->xStart; x < rulerHoriz.x; x += vdata->unit) {
         char label[MAX_STRING_LENGTH];
-        transform.translate(x+rhTextOffset, ruler_h.y-ruler_h.h/2);
-        QPainterPath rulerTextPath;
         if (data->rulerMetric) {
             sprintf(label, "%d", x);
-            rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
         }
         else {
-            if (feet) {
+            if (vdata->feet) {
                 sprintf(label, "%d'", x/12);
-                rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
             }
             else {
                 sprintf(label, "%d\"", x);
-                rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
             }
         }
+        transform.translate(x + textOffset.y, (rulerHoriz.y + origin.y)/2);
+        QPainterPath rulerTextPath = transform.map(
+            doc_create_ruler_text_path(label, textHeight));
         transform.reset();
         painter->drawPath(rulerTextPath);
-
-        lines[n_lines++] = (QLineF(x, ruler_h.y, x, origin.y));
-        if (data->rulerMetric) {
-            for (int i=1; i<10; i++) {
-                EmbReal xf = x + fraction*i;
-                EmbReal tick = ruler_h.y - ruler_h.h * little;
-                if (i == 5) {
-                    tick = ruler_h.y - ruler_h.h * medium;
-                }
-                lines[n_lines++] = QLineF(xf, ruler_h.y, xf, tick);
-            }
-        }
-        else {
-            if (feet) {
-                for (int i = 0; i < 12; ++i) {
-                    EmbReal xf = x + fraction*i;
-                    EmbReal tick = ruler_h.y - ruler_h.h * medium;
-                    lines[n_lines++] = QLineF(xf, ruler_h.y, xf, tick);
-                }
-            }
-            else {
-                for (int i=1; i<16; i++) {
-                    EmbReal xf = x + fraction*i;
-                    EmbReal tick = ruler_h.y - ruler_h.h * little;
-                    if (i % 4 == 0) {
-                        tick = ruler_h.y - ruler_h.h * medium;
-                    }
-                    lines[n_lines++] = QLineF(xf, ruler_h.y, xf, tick);
-                }
-            }
-        }
     }
-    for (int y = yStart; y < ruler_v.y; y += unit) {
+    for (int y = vdata->yStart; y < rulerVert.y; y += vdata->unit) {
         char label[MAX_STRING_LENGTH];
-        transform.translate(ruler_v.x-ruler_v.w/2, y-rvTextOffset);
-        transform.rotate(-90);
-        QPainterPath rulerTextPath;
         if (data->rulerMetric) {
             sprintf(label, "%d", -y);
-            rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
         }
         else {
-            if (feet) {
+            if (vdata->feet) {
                 sprintf(label, "%d'", -y/12);
-                rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
             }
             else {
                 sprintf(label, "%d", -y);
-                rulerTextPath = transform.map(doc_create_ruler_text_path(label, textHeight));
             }
         }
+        transform.translate((rulerVert.x + origin.x)/2, y - textOffset.x);
+        transform.rotate(-90);
+        QPainterPath rulerTextPath = transform.map(
+            doc_create_ruler_text_path(label, textHeight));
         transform.reset();
         painter->drawPath(rulerTextPath);
-
-        lines[n_lines++] = (QLineF(ruler_v.x, y, origin.x, y));
-        if (data->rulerMetric) {
-            for (int i=1; i<10; i++) {
-                EmbReal yf = y + fraction*i;
-                EmbReal tick = ruler_v.x - ruler_v.w * little;
-                if (i == 5) {
-                    tick = ruler_v.x - ruler_v.w * medium;
-                }
-                lines[n_lines++] = (QLineF(ruler_v.x, yf, tick, yf));
-            }
-        }
-        else {
-            if (feet) {
-                for (int i = 0; i < 12; ++i) {
-                    lines[n_lines++] = (QLineF(ruler_v.x, y+fraction*i, ruler_v.x-ruler_v.w*medium, y+fraction*i));
-                }
-            }
-            else {
-                for (int i=1; i<16; i++) {
-                    EmbReal yf = y + fraction*i;
-                    EmbReal tick = ruler_v.x - ruler_v.w * little;
-                    if (i % 4 == 0) {
-                        tick = ruler_v.x - ruler_v.w * medium;
-                    }
-                    lines[n_lines++] = (QLineF(ruler_v.x, yf, tick, yf));
-                }
-            }
-        }
     }
 
+    if (!create_ruler_lines(vdata)) {
+        return;
+    }
     QVector<QLineF> qlines;
-    for (int i=0; i<n_lines; i++) {
-        qlines.append(lines[i]);
+    for (int i=0; i<vdata->n_lines; i++) {
+        EmbLine li = vdata->lines[i];
+        qlines.append(QLineF(li.start.x, li.start.y, li.end.x, li.end.y));
     }
-
     painter->drawLines(qlines);
-    painter->fillRect(QRectF(origin.x, origin.y, ruler_v.w, ruler_h.h),
+
+    painter->fillRect(
+        QRectF(origin.x, origin.y,
+        rulerVert.x - origin.x, rulerHoriz.y - origin.y),
         documents[doc]->data->rulerColor);
+
+    free_view_data(vdata);
 }
 
 /* . */

@@ -114,6 +114,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/state.c
 	${SRC}/translations.c
 	${SRC}/icons.c
+	${SRC}/view.c
 	${SRC}/xpm.c
 
 	${SRC}/constants.h
@@ -121,13 +122,13 @@ qt_add_executable(embroidermodder2
 	${SRC}/core.h
 )
 
-add_executable(embroidermodder2_x11
-	${SRC}/wrapper.c
-	${SRC}/state.c
-
-	${SRC}/constants.h
-	${SRC}/core.h
-)
+#add_executable(embroidermodder2_x11
+#	${SRC}/wrapper.c
+#	${SRC}/state.c
+#
+#	${SRC}/constants.h
+#	${SRC}/core.h
+#)
 
 include_directories(
 	${EXTERN}/libembroidery/src
@@ -155,9 +156,9 @@ set_target_properties(embroidermodder2 PROPERTIES
 
 if (WIN32)
 else(WIN32)
-target_link_libraries(embroidermodder2_x11 PRIVATE
-	${OPENGL_LIBRARIES}
-	${X11_LIBRARIES}
-	m
-)
+#target_link_libraries(embroidermodder2_x11 PRIVATE
+#	${OPENGL_LIBRARIES}
+#	${X11_LIBRARIES}
+#	m
+#)
 endif()

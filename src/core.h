@@ -290,6 +290,23 @@ typedef struct Design_ {
     char *y;
 } Design;
 
+typedef struct ViewData_ {
+    int32_t doc;
+    double little;
+    double medium;
+    EmbLine *lines;
+    int n_lines;
+    EmbGeometry *geometry;
+    int n_geometry;
+    int width;
+    int height;
+    int unit;
+    bool feet;
+    double fraction;
+    int xStart;
+    int yStart;
+} ViewData;
+
 /* -------------------------------- Scripting ---------------------------- */
 
 ScriptEnv *create_script_env(void);
@@ -304,6 +321,10 @@ ScriptValue script_string(char *s);
 ScriptValue command_prompt(ScriptEnv *context, const char *line);
 
 EmbVector find_mouse_snap_point(EmbVectorList *snap_points, EmbVector mouse_point);
+
+ViewData *create_view_data(int32_t doc, int width, int height, int unit);
+void free_view_data(ViewData *vdata);
+int create_ruler_lines(ViewData *data);
 
 bool string_equal(char *a, const char *b);
 void string_copy(char *dst, const char *src);
