@@ -104,20 +104,13 @@ qt_add_executable(embroidermodder2
 
 	${SRC}/commands.c
 	${SRC}/designs.c
-	${SRC}/document.c
 	${SRC}/interface.c
-	${SRC}/geometry.c
-	${SRC}/grip.c
 	${SRC}/objects.c
-	${SRC}/properties.c
-	${SRC}/script.c
 	${SRC}/state.c
 	${SRC}/translations.c
 	${SRC}/icons.c
-	${SRC}/view.c
 	${SRC}/xpm.c
 
-	${SRC}/constants.h
 	${SRC}/widgets.h
 	${SRC}/core.h
 )

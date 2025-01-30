@@ -48,6 +48,26 @@ const char *geometry_type_keys[] = {
     END_SYMBOL
 };
 
+void native_blink_prompt(void);
+double native_q_snap_x(void);
+double native_q_snap_y(void);
+
+void native_print_area(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+
+void native_clear_rubber(void);
+bool native_allow_rubber(void);
+void native_spare_rubber(int64_t id);
+
+void native_delete_selected(void);
+void native_cut_selected(EmbReal x, EmbReal y);
+void native_copy_selected(EmbReal x, EmbReal y);
+void native_paste_selected(EmbReal x, EmbReal y);
+void native_move_selected(EmbReal dx, EmbReal dy);
+void native_scale_selected(EmbReal x, EmbReal y, EmbReal factor);
+void native_rotate_selected(EmbReal x, EmbReal y, EmbReal rot);
+void native_mirror_selected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+double native_calculate_distance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+
 /* . */
 void
 check_for_updates(void)
@@ -409,7 +429,7 @@ run_command(ScriptEnv *context, const char *cmd)
         /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
         break;
     case ACTION_REDO:
-        redo_command();
+        value = redo_command(context);
         break;
 
     case ACTION_SAVE:

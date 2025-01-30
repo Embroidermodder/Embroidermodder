@@ -1,7 +1,7 @@
 /*
  * Embroidermodder 2.
  *
- * Copyright 2011-2024 The Embroidermodder Team
+ * Copyright 2011-2025 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
  *
  * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
@@ -863,8 +863,8 @@ undo_command(void)
 }
 
 /* . */
-void
-redo_command(void)
+ScriptValue
+redo_command(ScriptEnv *)
 {
     debug_message("redo_command()");
     if (dockUndoEdit->canRedo()) {
@@ -875,6 +875,7 @@ redo_command(void)
     else {
         alert("Nothing to redo");
     }
+    return script_true;
 }
 
 /* Icons */
@@ -3505,24 +3506,27 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 
     /* Draw the crosshair */
     if (!data->properties[VIEW_SELECTING]) {
+        EmbVector crosshair[6];
         /* painter->setBrush(Qt::NoBrush); */
         QPen crosshairPen(data->crosshairColor);
         crosshairPen.setCosmetic(true);
         painter->setPen(crosshairPen);
 
-        QPointF p1 = documents[doc]->mapToScene(data->viewMousePoint.x, data->viewMousePoint.y - data->crosshairSize);
-        QPointF p2 = documents[doc]->mapToScene(data->viewMousePoint.x, data->viewMousePoint.y + data->crosshairSize);
-        painter->drawLine(QLineF(p1, p2));
+        EmbVector p = data->viewMousePoint;
+        EmbVector q1 = emb_vector(0, data->crosshairSize);
+        EmbVector q2 = emb_vector(data->crosshairSize, 0);
+        EmbVector q3 = emb_vector(data->pickBoxSize, data->pickBoxSize);
 
-        QPointF p3 = documents[doc]->mapToScene(data->viewMousePoint.x - data->crosshairSize, data->viewMousePoint.y);
-        QPointF p4 = documents[doc]->mapToScene(data->viewMousePoint.x + data->crosshairSize, data->viewMousePoint.y);
-        painter->drawLine(QLineF(p3, p4));
+        crosshair[0] = doc_map_to_scene(doc, emb_vector_subtract(p, q1));
+        crosshair[1] = doc_map_to_scene(doc, emb_vector_add(p, q1));
+        crosshair[2] = doc_map_to_scene(doc, emb_vector_subtract(p, q2));
+        crosshair[3] = doc_map_to_scene(doc, emb_vector_add(p, q2));
+        crosshair[4] = doc_map_to_scene(doc, emb_vector_subtract(p, q3));
+        crosshair[5] = doc_map_to_scene(doc, emb_vector_add(p, q3));
 
-        QPointF p5 = documents[doc]->mapToScene(data->viewMousePoint.x - data->pickBoxSize,
-            data->viewMousePoint.y - data->pickBoxSize);
-        QPointF p6 = documents[doc]->mapToScene(data->viewMousePoint.x + data->pickBoxSize,
-            data->viewMousePoint.y + data->pickBoxSize);
-        painter->drawRect(QRectF(p5, p6));
+        painter->drawLine(QLineF(to_qpointf(crosshair[0]), to_qpointf(crosshair[1])));
+        painter->drawLine(QLineF(to_qpointf(crosshair[2]), to_qpointf(crosshair[3])));
+        painter->drawRect(QRectF(to_qpointf(crosshair[4]), to_qpointf(crosshair[5])));
     }
 }
 
@@ -4227,7 +4231,7 @@ Document::mouseReleaseEvent(QMouseEvent* event)
     }
     if (event->button() == Qt::XButton2) {
         debug_message("XButton2");
-        redo_command(); /* TODO: Make this customizable */
+        redo_command(NULL); /* TODO: Make this customizable */
         event->accept();
     }
     doc_update(data->id);
