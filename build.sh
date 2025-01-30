@@ -116,6 +116,15 @@ function analysis () {
     python3 -m clang_html $REPORT -o analysis/clang-report.html
 }
 
+function file_as_c_string () {
+	stub=`basename $1`
+	varname=`echo ${stub::-4} | tr - _`
+	echo "const char ${varname}_svg[] = \\" >> $2
+	sed 's/\"/\\\"/g;s/^/    "/;s/$/" \\/' $1 >> $2
+	echo ";" >> $2
+	echo "" >> $2
+}
+
 function embed_svgs () {
 
 	files=`ls extern/heroicons/src/24/outline/*.svg images/*.svg`
@@ -132,12 +141,7 @@ function embed_svgs () {
 EOF
 	for file in extern/heroicons/src/24/outline/*.svg
 	do
-		stub=`basename $file`
-		varname=`echo ${stub::-4} | tr - _`
-		echo "const char ${varname}_svg[] = \\" >> $outf
-		sed -f escape.sed $file >> $outf
-		echo ";" >> $outf
-		echo "" >> $outf
+		file_as_c_string $file $outf
 	done
 
 	cat <<EOF>>$outf
@@ -150,12 +154,7 @@ EOF
 
 	for file in images/*.svg
 	do
-		stub=`basename $file`
-		varname=`echo ${stub::-4} | tr - _`
-		echo "const char ${varname}_svg[] = \\" >> $outf
-		sed -f escape.sed $file >> $outf
-		echo ";" >> $outf
-		echo "" >> $outf
+		file_as_c_string $file $outf
 	done
 
 	echo "const char *svgs[] = {" >> $outf
@@ -170,7 +169,21 @@ EOF
 
 }
 
+function reduce_colors () {
+
+	for i in images/*.png
+	do
+		echo "Reducing colors of \"$i\"."
+	        convert $i +dither -colors 16 -depth 4 a.png
+        	mv a.png $i
+	done
+
+}
+
+
 function convert_to_xpm () {
+
+	# reduce_colors
 
 	files=`ls images/*.png`
 	cat docs/copyright_message.txt > src/xpm.c

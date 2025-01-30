@@ -1404,7 +1404,8 @@ Translation translations[] = {
     {
         .en = "&amp;Help",
         .fr = "&amp;Aide",
-        .fr = "&amp;Справка",
+        .ru = "&amp;Справка",
+        .status = UNFINISHED
     },
     {
         .en = "Displays help.",
@@ -1430,7 +1431,8 @@ Translation translations[] = {
     {
         .en = "&amp;About ",
         .fr = "&amp;À propos de ",
-        .fr = "&amp;О программе ",
+        .ru = "&amp;О программе ",
+        .status = UNFINISHED
     },
     {
         .en = "Displays information about this product.",

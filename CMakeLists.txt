@@ -100,25 +100,16 @@ qt_add_executable(embroidermodder2
 
 	${LIBRARY_SRC}
 
-	${SRC}/widgets.cpp
+	${SRC}/commands.cpp
 
-	${SRC}/commands.c
 	${SRC}/designs.c
-	${SRC}/document.c
 	${SRC}/interface.c
-	${SRC}/geometry.c
-	${SRC}/grip.c
 	${SRC}/objects.c
-	${SRC}/properties.c
-	${SRC}/script.c
 	${SRC}/state.c
 	${SRC}/translations.c
 	${SRC}/icons.c
-	${SRC}/view.c
 	${SRC}/xpm.c
 
-	${SRC}/constants.h
-	${SRC}/widgets.h
 	${SRC}/core.h
 )
 
@@ -156,9 +147,8 @@ set_target_properties(embroidermodder2 PROPERTIES
 
 if (WIN32)
 else(WIN32)
-#target_link_libraries(embroidermodder2_x11 PRIVATE
-#	${OPENGL_LIBRARIES}
-#	${X11_LIBRARIES}
-#	m
-#)
+target_link_libraries(embroidermodder2 PRIVATE
+	${X11_LIBRARIES}
+	m
+)
 endif()
