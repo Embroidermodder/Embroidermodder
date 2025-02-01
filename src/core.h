@@ -847,6 +847,7 @@ typedef struct Command_ {
     char *alias;
     char *shortcut;
     int32_t flags;
+    ScriptValue (*action)(ScriptEnv *context);
 } Command;
 
 #define MAX_LAYERS 20
@@ -1097,6 +1098,7 @@ typedef struct ViewData_ {
 ScriptEnv *create_script_env(void);
 void free_script_env(ScriptEnv *);
 ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
+ScriptValue call(ScriptEnv *context, char *function, ...);
 ScriptValue run_command(ScriptEnv *context, const char *cmd);
 
 ScriptValue script_bool(bool b);
@@ -1247,16 +1249,11 @@ void preview_interface_color(int32_t key, uint32_t color);
 void dialog_interface_color(int32_t key, uint32_t color);
 
 void current_layer_changed(char *layer);
-void current_color_changed(uint32_t color);
 void current_linetype_changed(char *type);
 void current_lineweight_changed(char *weight);
 
 void prompt_input_previous(void);
 void prompt_input_next(void);
-
-void print_command(void);
-void undo_command(void);
-void redo(void);
 
 void layer_selector_changed(int index);
 void linetype_selector_changed(int index);
@@ -1320,7 +1317,6 @@ void preview_update(void);
 
 /* -------------------------------- Commands -------------------------------- */
 
-void about_dialog(void);
 void stub_testing(void);
 void run_testing(void);
 void exit_program(void);
@@ -1340,30 +1336,48 @@ void nanosleep_(int);
 
 void button_tip_of_the_day_clicked(int button);
 
-ScriptValue add_arc_command(ScriptEnv *context);
-ScriptValue add_circle_command(ScriptEnv *context);
-ScriptValue add_dimleader_command(ScriptEnv *context);
-ScriptValue add_ellipse_command(ScriptEnv *context);
-ScriptValue add_horizontal_dimension_command(ScriptEnv *context);
-ScriptValue add_image_command(ScriptEnv *context);
-ScriptValue add_infinite_line_command(ScriptEnv *context);
-ScriptValue add_line_command(ScriptEnv *context);
-ScriptValue add_ray_command(ScriptEnv *context);
-ScriptValue add_triangle_command(ScriptEnv *context);
-ScriptValue add_rectangle_command(ScriptEnv *context);
-ScriptValue add_rounded_rectangle_command(ScriptEnv *context);
-ScriptValue add_slot_command(ScriptEnv *context);
-ScriptValue add_point_command(ScriptEnv *context);
-ScriptValue add_regular_polygon_command(ScriptEnv *context);
-ScriptValue add_vertical_dimension_command(ScriptEnv *context);
-ScriptValue add_textmulti_command(ScriptEnv *context);
-ScriptValue add_textsingle_command(ScriptEnv *context);
-ScriptValue get_command(ScriptEnv *context);
-ScriptValue move_command(ScriptEnv *context);
-ScriptValue previewon_command(ScriptEnv *context);
-ScriptValue redo_command(ScriptEnv *context);
-ScriptValue sandbox_command(ScriptEnv *context);
-ScriptValue set_command(ScriptEnv *context);
+#define CMD(A) ScriptValue A##_command(ScriptEnv *context)
+
+CMD(about);
+CMD(add_arc);
+CMD(add_circle);
+CMD(add_dimleader);
+CMD(add_ellipse);
+CMD(add_horizontal_dimension);
+CMD(add_image);
+CMD(add_infinite_line);
+CMD(add_line);
+CMD(add_ray);
+CMD(add_triangle);
+CMD(add_rectangle);
+CMD(add_rounded_rectangle);
+CMD(add_slot);
+CMD(add_point);
+CMD(add_regular_polygon);
+CMD(add_vertical_dimension);
+CMD(add_textmulti);
+CMD(add_textsingle);
+CMD(alert);
+CMD(angle);
+CMD(current_color_changed);
+CMD(details);
+CMD(do_nothing);
+CMD(exit);
+CMD(get);
+CMD(new);
+CMD(move);
+CMD(open);
+CMD(paste);
+CMD(previewon);
+CMD(print);
+CMD(redo);
+CMD(sandbox);
+CMD(save);
+CMD(saveas);
+CMD(set);
+CMD(undo);
+
+#undef CMD
 
 void set_mouse_coord(EmbReal x, EmbReal y);
 
@@ -1845,6 +1859,8 @@ extern char *color_list[];
 extern char *line_type_list[];
 extern char *line_weight_list[];
 extern char *text_size_list[];
+
+extern char *geometry_type_keys[];
 
 extern char *editor_list[];
 extern char *combobox_list[];

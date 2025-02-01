@@ -848,8 +848,8 @@ changelog(void)
 }
 
 /* Standard Slots */
-void
-undo_command(void)
+ScriptValue
+undo_command(ScriptEnv *)
 {
     debug_message("undo_command()");
     if (dockUndoEdit->canUndo()) {
@@ -976,7 +976,7 @@ MainWindow::colorSelectorIndexChanged(int index)
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        current_color_changed(newColor);
+        current_color_changed_command(pack(global, "i", newColor));
     }
 }
 
@@ -1149,8 +1149,8 @@ set_cursor_shape(EmbString shape)
  *
  * TODO: QTabWidget for about dialog
  */
-void
-about_dialog(void)
+ScriptValue
+about_command(ScriptEnv *context)
 {
     arrow_cursor();
     debug_message("about()");
@@ -1200,6 +1200,7 @@ about_dialog(void)
     dialog.exec();
 
     restore_cursor();
+    return script_true;
 }
 
 /* . */
@@ -4226,7 +4227,7 @@ Document::mouseReleaseEvent(QMouseEvent* event)
     }
     if (event->button() == Qt::XButton1) {
         debug_message("XButton1");
-        undo_command(); /* TODO: Make this customizable */
+        undo_command(NULL); /* TODO: Make this customizable */
         event->accept();
     }
     if (event->button() == Qt::XButton2) {

@@ -15,65 +15,94 @@
 
 #include "core.h"
 
-char lastCmd[MAX_STRING_LENGTH] = "help";
+/* TODO: spellcheck_command, */
+/* TODO: quickselect_command, */
 
-/* BUG: combine with other labels in libembroidery */
-const char *geometry_type_keys[] = {
-    "ARC",
-    "BLOCK",
-    "CIRCLE",
-    "DIMALIGNED",
-    "DIMANGULAR",
-    "DIMARCLENGTH",
-    "DIMDIAMETER",
-    "DIMLEADER",
-    "DIMLINEAR",
-    "DIMORDINATE",
-    "DIMRADIUS",
-    "ELLIPSE",
-    "ELLIPSEARC",
-    "HATCH",
-    "IMAGE",
-    "INFINITELINE",
-    "LINE",
-    "PATH",
-    "POINT",
-    "POLYGON",
-    "POLYLINE",
-    "RAY",
-    "RECTANGLE",
-    "SPLINE",
-    "TEXTMULTI",
-    "TEXTSINGLE",
-    END_SYMBOL
-};
-
-void native_blink_prompt(void);
-double native_q_snap_x(void);
-double native_q_snap_y(void);
-
-void native_print_area(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-
-void native_clear_rubber(void);
-bool native_allow_rubber(void);
-void native_spare_rubber(int64_t id);
-
-void native_delete_selected(void);
-void native_cut_selected(EmbReal x, EmbReal y);
-void native_copy_selected(EmbReal x, EmbReal y);
-void native_paste_selected(EmbReal x, EmbReal y);
-void native_move_selected(EmbReal dx, EmbReal dy);
-void native_scale_selected(EmbReal x, EmbReal y, EmbReal factor);
-void native_rotate_selected(EmbReal x, EmbReal y, EmbReal rot);
-void native_mirror_selected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-double native_calculate_distance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+/* */
+ScriptValue
+paste_command(ScriptEnv *context)
+{
+    debug_message("TODO: paste command");
+    return script_true;
+}
 
 /* . */
-void
-check_for_updates(void)
+ScriptValue
+alert_command(ScriptEnv *context)
+{
+    EmbString s;
+    sprintf(s, "ALERT: %s", STR(0));
+    prompt_output(s);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+allow_rubber_command(ScriptEnv *context)
+{
+    int32_t doc_index = active_document();
+    if (doc_index >= 0) {
+        return script_bool(doc_allow_rubber(doc_index));
+    }
+    return script_false;
+}
+
+/* . */
+ScriptValue
+angle_command(ScriptEnv *context)
+{
+    EmbVector start = unpack_vector(context, 0);
+    EmbVector end = unpack_vector(context, 2);
+    EmbVector delta = emb_vector_subtract(end, start);
+    return script_real(emb_vector_angle(delta));
+}
+
+/* . */
+ScriptValue
+append_prompt_history_command(ScriptEnv* context)
+{
+    int args = context->argumentCount;
+    if (args == 0) {
+        prompt_output("");
+    }
+    else if (args == 1) {
+        prompt_output(STR(0));
+    }
+    else {
+        prompt_output("appendPromptHistory() requires one or zero arguments");
+        return script_false;
+    }
+    return script_true;
+}
+
+/* . */
+ScriptValue
+check_for_updates_command(ScriptEnv *context)
 {
     debug_message("checkForUpdates()");
     /* TODO: Check website for new versions, commands, etc... */
+    return script_true;
+}
+
+/* . */
+ScriptValue
+copy_selected_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+cut_selected_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+do_nothing_command(ScriptEnv *context)
+{
+    return script_true;
 }
 
 /* . */
@@ -99,76 +128,87 @@ set_enabled_group(char *keylist[], bool enabled)
 }
 
 /* . */
-void
-make_layer_active(void)
+ScriptValue
+make_layer_active_command(ScriptEnv *context)
 {
     debug_message("make_layer_active()");
     debug_message("TODO: Implement make_layer_active.");
+    return script_true;
 }
 
 /* . */
-void
-layer_previous(void)
+ScriptValue
+layer_previous_command(ScriptEnv *context)
 {
     debug_message("layer_previous()");
     debug_message("TODO: Implement layer_previous.");
+    return script_true;
 }
 
 /* . */
-void
-layer_selector_changed(int index)
+ScriptValue
+layer_selector_changed_command(ScriptEnv *context)
 {
+    int index = INT(0);
     debug_message("layer_selector_changed(%d)", index);
+    return script_true;
 }
 
 /* . */
-void
-linetype_selector_changed(int index)
+ScriptValue
+linetype_selector_changed_command(ScriptEnv *context)
 {
+    int index = INT(0);
     debug_message("linetype_selector_changed(%d)", index);
+    return script_true;
 }
 
 /* . */
-void
-lineweight_selector_changed(int index)
+ScriptValue
+lineweight_selector_changed_command(ScriptEnv *context)
 {
+    int index = INT(0);
     debug_message("lineweight_selector_changed(%d)", index);
+    return script_true;
 }
 
 /* . */
-void
-current_layer_changed(char *layer)
+ScriptValue
+current_layer_changed_command(ScriptEnv *context)
 {
     int doc = active_document();
     if (doc < 0) {
-        return;
+        return script_false;
     }
     DocumentData *data = doc_data(doc);
-    string_copy(data->curLayer, layer);
+    string_copy(data->curLayer, STR(0));
+    return script_true;
 }
 
 /* . */
-void
-current_color_changed(uint32_t color)
+ScriptValue
+current_color_changed_command(ScriptEnv *context)
 {
     int doc = active_document();
     if (doc < 0) {
-        return;
+        return script_false;
     }
     DocumentData *data = doc_data(doc);
-    data->curColor = color;
+    data->curColor = INT(0);
+    return script_true;
 }
 
 /* . */
-void
-current_linetype_changed(char *type)
+ScriptValue
+current_linetype_changed_command(ScriptEnv *context)
 {
     int doc = active_document();
     if (doc < 0) {
-        return;
+        return script_false;
     }
     DocumentData *data = doc_data(doc);
-    string_copy(data->curLineType, type);
+    string_copy(data->curLineType, STR(0));
+    return script_true;
 }
 
 /* . */
@@ -285,15 +325,11 @@ run_command(ScriptEnv *context, const char *cmd)
         //doc_clear_selection(doc_index);
     }
 
+    /* ACTION_CLEAR is covered by the flags, so the function pointer is
+     * do_nothing_command. */
     switch (id) {
-    case ACTION_ABOUT:
-        about_dialog();
-        break;
-
-    case ACTION_ALERT: {
-        EmbString s;
-        sprintf(s, "ALERT: %s", STR(0));
-        prompt_output(s);
+    default: {
+        value = command_data[id].action(context);
         break;
     }
 
@@ -309,17 +345,13 @@ run_command(ScriptEnv *context, const char *cmd)
         prompt_output("TODO: CHANGELOG");
         break;
 
-    case ACTION_CLEAR:
-        /* This is covered by the flags. */
-        break;
-
     case ACTION_COPY: {
         doc_copy(doc_index);
         break;
     }
 
     case ACTION_COPY_SELECTED: {
-        /* native_copy_selected(REAL(0), REAL(1)); */
+        copy_selected_command(context);
         break;
     }
 
@@ -328,7 +360,7 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
 
     case ACTION_CUT:
-        native_cut_selected(REAL(0), REAL(1));
+        value = cut_selected_command(context);
         break;
 
     case ACTION_DEBUG:
@@ -353,9 +385,6 @@ run_command(ScriptEnv *context, const char *cmd)
         }
         break;
     }
-
-    case ACTION_DO_NOTHING:
-        break;
 
     case ACTION_ENABLE: {
         if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
@@ -405,8 +434,8 @@ run_command(ScriptEnv *context, const char *cmd)
 
 /*
     case ACTION_NUM_SELECTED: {
-        
-        break;
+
+            break;
     }
  */
 
@@ -478,10 +507,6 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_UNDO:
-        undo_command();
-        break;
-
     case ACTION_VULCANIZE: {
         doc_vulcanize_rubber_room(doc_index);
         break;
@@ -489,7 +514,7 @@ run_command(ScriptEnv *context, const char *cmd)
 
     case ACTION_DAY: {
         /* TODO: Make day vision color settings. */
-        doc_set_background_color(doc_index, 0xFFFFFF); 
+        doc_set_background_color(doc_index, 0xFFFFFF);
         doc_set_cross_hair_color(doc_index, 0x000000);
         // FIXME: doc_set_grid_color(doc_index, 0x000000);
         break;
@@ -499,11 +524,6 @@ run_command(ScriptEnv *context, const char *cmd)
         doc_set_background_color(doc_index, 0x000000);
         doc_set_cross_hair_color(doc_index, 0xFFFFFF);
         // FIXME: doc_set_grid_color(doc_index, 0xFFFFFF);
-        break;
-    }
-
-    case ACTION_PRINT: {
-        /* TODO: print action */
         break;
     }
 
@@ -572,12 +592,6 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_DISTANCE:
-        break;
-
-    case ACTION_DOLPHIN:
-        break;
-
     case ACTION_ELLIPSE: {
         value = add_ellipse_command(context);
         break;
@@ -603,17 +617,10 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_HEART: {
-        break;
-    }
-
     case ACTION_LINE: {
         value = add_line_command(context);
         break;
     }
-
-    case ACTION_LOCATE_POINT:
-        break;
 
     case ACTION_MOVE:
         move_command(context);
@@ -621,19 +628,6 @@ run_command(ScriptEnv *context, const char *cmd)
 
     case ACTION_MOVE_SELECTED: {
         doc_move_selected(doc_index, unpack_vector(context, 0));
-        break;
-    }
-
-    case ACTION_PATH: {
-        break;
-    }
-    case ACTION_POINT: {
-        break;
-    }
-    case ACTION_POLYGON: {
-        break;
-    }
-    case ACTION_POLYLINE: {
         break;
     }
 
@@ -656,15 +650,8 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_RGB:
-        break;
-
     case ACTION_ROTATE: {
         doc_rotate_selected(doc_index, unpack_vector(context, 0), -REAL(2));
-        break;
-    }
-
-    case ACTION_SCALE: {
         break;
     }
 
@@ -673,38 +660,11 @@ run_command(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_SINGLE_LINE_TEXT:
-        break;
-
-    case ACTION_SNOWFLAKE:
-        break;
-
-    case ACTION_STAR:
-        break;
-
-    case ACTION_SYSWINDOWS:
-        break;
-
-    case ACTION_ADD:
-        break;
-
     /* ACTION_DELETE_SELECTED? */
     case ACTION_DELETE: {
         doc_delete_selected(doc_index);
         break;
     }
-
-    case ACTION_GRIP_EDIT:
-        break;
-
-    case ACTION_NAV:
-        break;
-
-    case ACTION_MIRROR:
-        break;
-
-    case ACTION_TEST:
-        break;
 
     case ACTION_PAN_REAL_TIME: {
         doc_set_prop(doc_index, VIEW_PANNING_RT, true);
@@ -810,40 +770,7 @@ run_command(ScriptEnv *context, const char *cmd)
         glfw_application(0, NULL);
         break;
     }
-    case ACTION_PLAY: {
-        break;
-    }
-    case ACTION_PAUSE: {
-        break;
-    }
-    case ACTION_STOP: {
-        break;
-    }
-    case ACTION_FAST_FORWARD: {
-        break;
-    }
-    case ACTION_REWIND: {
-        break;
-    }
-    case ACTION_EXPORT_VIDEO: {
-        break;
-    }
 
-    case ACTION_QR: {
-        break;
-    }
-    case ACTION_LETTERING: {
-        break;
-    }
-    case ACTION_PATTERN: {
-        break;
-    }
-    case ACTION_DESIGN: {
-        break;
-    }
-
-    default:
-        break;
     }
 
     if (!(command_data[id].flags & DONT_END_COMMAND)) {
@@ -949,21 +876,23 @@ pick_add_mode_toggled(void)
 }
 
 /* . */
-void
-stub_testing(void)
+ScriptValue
+stub_testing_command(ScriptEnv *context)
 {
     messagebox("warning", translate("Testing Feature"),
         translate("<b>This feature is in testing.</b>"));
+    return script_true;
 }
 
 /* . */
-void
-cut(void)
+ScriptValue
+cut_command(ScriptEnv *context)
 {
     int32_t doc_index = active_document();
     if (doc_index >= 0) {
         doc_cut(doc_index);
     }
+    return script_true;
 }
 
 /* . */
@@ -974,28 +903,7 @@ clear_rubber_command(ScriptEnv* context)
     if (doc_index >= 0) {
         doc_clear_rubber_room(doc_index);
     }
-    return script_null;
-}
-
-/* . */
-bool
-native_allow_rubber()
-{
-    int32_t doc_index = active_document();
-    if (doc_index >= 0) {
-        return doc_allow_rubber(doc_index);
-    }
-    return false;
-}
-
-/* . */
-void
-native_spare_rubber(int64_t id)
-{
-    int32_t doc_index = active_document();
-    if (doc_index >= 0) {
-        doc_spare_rubber(doc_index, id);
-    }
+    return script_true;
 }
 
 /* . */
@@ -1030,40 +938,17 @@ set_rubber_text(const char *key, char *txt)
 }
 
 /* . */
-double
-native_q_snap_x(void)
-{
-    int32_t doc = active_document();
-    if (doc < 0) {
-        return 0.0;
-    }
-    DocumentData *data = doc_data(doc);
-    return data->sceneQSnapPoint.x;
-}
-
-/* . */
-double
-native_q_snap_y(void)
-{
-    int32_t doc = active_document();
-    if (doc < 0) {
-        return 0.0;
-    }
-    DocumentData *data = doc_data(doc);
-    return data->sceneQSnapPoint.y;
-}
-
-/* . */
-void
-toggle(int mode)
+ScriptValue
+toggle_command(int mode)
 {
     debug_message("toggle()");
     int doc = active_document();
     if (doc < 0) {
-        return;
+        return script_false;
     }
     DocumentData *data = doc_data(doc);
     data->properties[mode] = !data->properties[mode];
+    return script_true;
 }
 
 /* . */
@@ -1097,15 +982,15 @@ escape_pressed(void)
 }
 
 /* . */
-const char *
-get_current_layer(void)
+ScriptValue
+get_current_layer_command(ScriptEnv *context)
 {
     int doc = active_document();
     if (doc < 0) {
-        return "0";
+        return script_string("0");
     }
     DocumentData *data = doc_data(doc);
-    return data->curLayer;
+    return script_string(data->curLayer);
 }
 
 /* TODO: return color ByLayer */
@@ -1719,8 +1604,8 @@ sandbox_command(ScriptEnv * context)
         /* Polyline & Polygon Testing */
         EmbVector offset = emb_vector(0.0, 0.0);
 
-        /*    
-        var polylineArray = [];
+        /*
+          var polylineArray = [];
         polylineArray.push(1.0 + offsetX);
         polylineArray.push(1.0 + offsetY);
         polylineArray.push(1.0 + offsetX);
@@ -1739,10 +1624,10 @@ sandbox_command(ScriptEnv * context)
         polylineArray.push(1.0 + offsetY);
         addPolyline(polylineArray);
         */
-    
-        offset = emb_vector(5.0, 0.0);
-    
-        /*
+
+          offset = emb_vector(5.0, 0.0);
+
+          /*
         var polygonArray = [];
         polygonArray.push(1.0 + offsetX);
         polygonArray.push(1.0 + offsetY);
@@ -2226,7 +2111,7 @@ set_rubber_text_command(ScriptEnv* context)
 ScriptValue
 add_rubber_command(ScriptEnv* context)
 {
-    if (!native_allow_rubber()) {
+    if (!allow_rubber_command(context).b) {
         prompt_output("UNKNOWN_ERROR addRubber(): You must use vulcanize() before you can add another rubber object.");
         return script_false;
     }
@@ -2246,27 +2131,27 @@ add_rubber_command(ScriptEnv* context)
 
     switch (type) {
     case EMB_CIRCLE: {
-        add_circle_command(pack(global, "rriii", mx, my, 0, false, RUBBER_ON));
+        call(context, "add-circle", mx, my, 0, false, RUBBER_ON);
         break;
     }
     case EMB_DIM_LEADER: {
-        add_dimleader_command(pack(global, "rrrrii", mx, my, mx, my, 0, RUBBER_ON));
+        call(context, "add-dim-leader", mx, my, mx, my, 0, RUBBER_ON);
         break;
     }
     case EMB_ELLIPSE: {
-        add_ellipse_command(pack(global, "rriiiii",mx, my, 0, 0, 0, 0, RUBBER_ON));
+        call(context, "add-ellipse", mx, my, 0, 0, 0, 0, RUBBER_ON);
         break;
     }
     case EMB_LINE: {
-        add_line_command(pack(global, "rrrrii", mx, my, mx, my, 0, RUBBER_ON));
+        call(context, "add-line", mx, my, mx, my, 0, RUBBER_ON);
         break;
     }
     case EMB_RECT: {
-        add_rectangle_command(pack(global, "rrrriii", mx, my, mx, my, 0, 0, RUBBER_ON));
+        call(context, "add-rectangle", mx, my, mx, my, 0, 0, RUBBER_ON);
         break;
     }
     case EMB_TEXT_SINGLE: {
-        add_textsingle_command(pack(global, "srriii", "", mx, my, 0, false, RUBBER_ON));
+        call(context, "add-text-single", "", mx, my, 0, false, RUBBER_ON);
         break;
     }
     default: {
@@ -2361,14 +2246,18 @@ spare_rubber_command(ScriptEnv* context)
         return script_false;
     }
 
+    int32_t doc_index = active_document();
+    if (doc_index < 0) {
+        return script_false;
+    }
     if (!strcmp(STR(0), "PATH")) {
-        native_spare_rubber(SPARE_RUBBER_PATH);
+        doc_spare_rubber(doc_index, SPARE_RUBBER_PATH);
     }
     else if (!strcmp(STR(0), "POLYGON")) {
-        native_spare_rubber(SPARE_RUBBER_POLYGON);
+        doc_spare_rubber(doc_index, SPARE_RUBBER_POLYGON);
     }
     else if (!strcmp(STR(0), "POLYLINE")) {
-        native_spare_rubber(SPARE_RUBBER_POLYLINE);
+        doc_spare_rubber(doc_index, SPARE_RUBBER_POLYLINE);
     }
     else {
         /* FIXME:
@@ -2376,14 +2265,7 @@ spare_rubber_command(ScriptEnv* context)
         */
     }
 
-    return script_null;
-}
-
-/* . */
-ScriptValue
-allow_rubber_command(ScriptEnv* context)
-{
-    return script_bool(native_allow_rubber());
+    return script_true;
 }
 
 /* LOCATEPOINT */
@@ -2444,24 +2326,6 @@ messagebox_command(ScriptEnv* context)
     return script_null;
 }
 
-/* . */
-ScriptValue
-append_prompt_history(ScriptEnv* context)
-{
-    int args = context->argumentCount;
-    if (args == 0) {
-        prompt_output("");
-    }
-    else if (args == 1) {
-        prompt_output(STR(0));
-    }
-    else {
-        prompt_output("appendPromptHistory() requires one or zero arguments");
-        return script_false;
-    }
-    return script_null;
-}
-
 /* GET is a prompt-only Command. */
 ScriptValue
 get_command(ScriptEnv* context)
@@ -2513,10 +2377,20 @@ get_command(ScriptEnv* context)
         return setting[TEXT_STYLE_UNDERLINE].setting;
     }
     else if (!strcmp(STR(0), "QSNAPX")) {
-        return script_bool(native_q_snap_x());
+        int32_t doc = active_document();
+        if (doc < 0) {
+           return script_real(0.0);
+        }
+        DocumentData *data = doc_data(doc);
+        return script_real(data->sceneQSnapPoint.x);
     }
     else if (!strcmp(STR(0), "QSNAPY")) {
-        return script_bool(native_q_snap_y());
+        int32_t doc = active_document();
+        if (doc < 0) {
+           return script_real(0.0);
+        }
+        DocumentData *data = doc_data(doc);
+        return script_real(data->sceneQSnapPoint.y);
     }
 
     return script_null;
@@ -2610,6 +2484,48 @@ previewon_command(ScriptEnv *context)
     return script_null;
 }
 
+ScriptValue
+new_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+ScriptValue
+open_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+ScriptValue
+save_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+ScriptValue
+saveas_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+ScriptValue
+print_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+ScriptValue
+details_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+ScriptValue
+exit_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
 /* . */
 ScriptValue
 print_area_command(ScriptEnv* context)
@@ -2618,8 +2534,7 @@ print_area_command(ScriptEnv* context)
     /* TODO: Print Setup Stuff
      * native_print_area(REAL(0), REAL(1), REAL(2), REAL(3));
      */
-    print_command();
-    return script_null;
+    return print_command(context);
 }
 
 /* . */

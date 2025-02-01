@@ -1927,27 +1927,58 @@ char *zoom_layout[] = {
     END_SYMBOL
 };
 
+char lastCmd[MAX_STRING_LENGTH] = "help";
+
+/* BUG: combine with other labels in libembroidery */
+char *geometry_type_keys[] = {
+    "ARC",
+    "BLOCK",
+    "CIRCLE",
+    "DIMALIGNED",
+    "DIMANGULAR",
+    "DIMARCLENGTH",
+    "DIMDIAMETER",
+    "DIMLEADER",
+    "DIMLINEAR",
+    "DIMORDINATE",
+    "DIMRADIUS",
+    "ELLIPSE",
+    "ELLIPSEARC",
+    "HATCH",
+    "IMAGE",
+    "INFINITELINE",
+    "LINE",
+    "PATH",
+    "POINT",
+    "POLYGON",
+    "POLYLINE",
+    "RAY",
+    "RECTANGLE",
+    "SPLINE",
+    "TEXTMULTI",
+    "TEXTSINGLE",
+    END_SYMBOL
+};
+
 /*
  *
  * Shortcuts should match: https://doc.qt.io/qt-6/qkeysequence.html#standard-shortcuts
  * Apple platforms may need an additional argument like .apple_shortcut
  */
 
-#define PLACEHOLDER_ACTION \
-    { \
-        .command = "donothing", \
-        .arguments = "", \
-        .icon = "no-symbol", \
-        .tooltip = "This action is unfinished.", \
-        .statustip = "This action is unfinished.", \
-        .alias = "", \
-        .shortcut = "", \
-        .flags = CONTEXT_FREE \
-    }
-
 Command command_data[MAX_COMMANDS] = {
     /* ACTION_NULL                    0 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* 1 */
     {
         .command = "donothing",
@@ -1957,7 +1988,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Does Nothing. Command: DONOTHING.",
         .alias = "DONOTHING",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 2 */
     {
@@ -1968,7 +2000,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Create a new file. Command: NEW.",
         .alias = "NEW",
         .shortcut = "Ctrl+N",
-        .flags = CONTEXT_FREE | CLEAR_SELECTION
+        .flags = CONTEXT_FREE | CLEAR_SELECTION,
+        .action = new_command
     },
     /* 3 */
     {
@@ -1979,7 +2012,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Open an existing file. Command: OPEN.",
         .alias = "OPEN",
         .shortcut = "Ctrl+O",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = open_command
     },
     /* 4 */
     {
@@ -1990,7 +2024,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Save the design to disk. Command: SAVE.",
         .alias = "SAVE",
         .shortcut = "Ctrl+S",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = save_command
     },
     /* 5 */
     {
@@ -2001,7 +2036,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Save the design under a new name. Command: SAVEAS.",
         .alias = "SAVEAS",
         .shortcut = "Ctrl+Shift+S",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = saveas_command
     },
     /* 6 */
     {
@@ -2012,7 +2048,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Print the design. Command: PRINT.",
         .alias = "PRINT",
         .shortcut = "Ctrl+P",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = print_command
     },
     /* 7 */
     {
@@ -2023,7 +2060,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Details of the current design. Command: DETAILS",
         .alias = "details",
         .shortcut = "Ctrl+D",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = details_command
     },
     /* 8 */
     {
@@ -2034,7 +2072,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Exit the application:  EXIT",
         .alias = "quit",
         .shortcut = "Ctrl+Q",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = exit_command
     },
     /* 9 */
     {
@@ -2045,7 +2084,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Cut the current selection's contents to the clipboard. Command: CUT.",
         .alias = "CUT",
         .shortcut = "Ctrl+X",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 10 */
     {
@@ -2056,10 +2096,21 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Copy the current selection's contents to the clipboard. Command: COPY.",
         .alias = "",
         .shortcut = "Ctrl+C",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* ACTION_COPY_SELECTED          11 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* 12 */
     {
         .command = "paste",
@@ -2069,10 +2120,21 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Paste the clipboard's contents into the current selection. Command: PASTE.",
         .alias = "PASTE",
         .shortcut = "Ctrl+V",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = paste_command
     },
     /* ACTION_PASTE_SELECTED         13 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* 14 */
     {
         .command = "undo",
@@ -2082,7 +2144,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Reverses the most recent action. Command: UNDO.",
         .alias = "U",
         .shortcut = "Ctrl+Z",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = undo_command
     },
     /* 15 */
     {
@@ -2093,7 +2156,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Reverses the effects of the previous undo action. Command: REDO.",
         .alias = "REDO",
         .shortcut = "Ctrl+Shift+Z",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 16 */
     {
@@ -2104,7 +2168,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Close the active window. Command: CLOSE.",
         .alias = "CLOSE",
         .shortcut = "Ctrl+W",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 17 */
     {
@@ -2115,7 +2180,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Close all the windows. Command: CLOSEALL",
         .alias = "CLOSEALL",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 18 */
     {
@@ -2126,7 +2192,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Cascade the windows. Command: CASCADE.",
         .alias = "CASCADE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 19 */
     {
@@ -2137,7 +2204,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Tile the windows:  TILE",
         .alias = "TILE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 20 */
     {
@@ -2148,7 +2216,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Move the focus to the next window:  NEXT",
         .alias = "NEXT",
         .shortcut = "Ctrl+Tab",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 21 */
     {
@@ -2159,7 +2228,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Move the focus to the previous window:  PREVIOUS",
         .alias = "PREV,PREVIOUS",
         .shortcut = "Ctrl+Shift+Tab",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 22 */
     {
@@ -2170,7 +2240,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Displays help. Command: HELP",
         .alias = "?,HELP",
         .shortcut = "F1",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 23 */
     {
@@ -2181,7 +2252,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Describes new features in this product. Command: CHANGELOG.",
         .alias = "CHANGELOG",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 24 */
     {
@@ -2192,7 +2264,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Displays a dialog with useful tips:  TIPS",
         .alias = "TIPS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 25 */
     {
@@ -2203,7 +2276,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Displays information about this product. Command: ABOUT.",
         .alias = "ABOUT",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = about_command
     },
     /* 26 */
     {
@@ -2214,7 +2288,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "What's This? Context Help! Command: WHATSTHIS.",
         .alias = "WHATSTHIS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 27 */
     {
@@ -2225,7 +2300,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets the toolbar icon size to 16x16:  ICON16",
         .alias = "ICON16",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 28 */
     {
@@ -2236,7 +2312,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
         .alias = "ICON24",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 29 */
     {
@@ -2247,7 +2324,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets the toolbar icon size to 32x32:  ICON32",
         .alias = "ICON32",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 30 */
     {
@@ -2258,7 +2336,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets the toolbar icon size to 48x48:  ICON48",
         .alias = "ICON48",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 31 */
     {
@@ -2269,7 +2348,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets the toolbar icon size to 64x64:  ICON64",
         .alias = "ICON64",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 32 */
     {
@@ -2280,7 +2360,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets the toolbar icon size to 128x128:  ICON128",
         .alias = "ICON128",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 33 */
     {
@@ -2291,7 +2372,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Configure settings specific to this product. Command: SETTINGS.",
         .alias = "SETTINGS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 34 */
     {
@@ -2302,7 +2384,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Makes the layer of a selected object the active layer",
         .alias = "MAKELAYERCURRENT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 35 */
     {
@@ -2313,7 +2396,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Manages layers and layer properties:  LAYER",
         .alias = "LAYER",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 36 */
     {
@@ -2324,7 +2408,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Dropdown selector for changing the current layer",
         .alias = "LAYERSELECTOR",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 37 */
     {
@@ -2335,7 +2420,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Restores the previous layer settings:  LAYERP",
         .alias = "LAYERP",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 38 */
     {
@@ -2346,7 +2432,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Dropdown selector for changing the current thread color",
         .alias = "COLORSELECTOR",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 39 */
     {
@@ -2357,7 +2444,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Dropdown selector for changing the current stitch type",
         .alias = "LINETYPESELECTOR",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 40 */
     {
@@ -2368,7 +2456,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Dropdown selector for changing the current thread weight",
         .alias = "LINEWEIGHTSELECTOR",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 41 */
     {
@@ -2379,7 +2468,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Turns the visibility off for all layers in the current drawing:  HIDEALL",
         .alias = "HIDEALLLAYERS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 42 */
     {
@@ -2390,7 +2480,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL",
         .alias = "SHOWALLLAYERS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 43 */
     {
@@ -2401,7 +2492,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Freezes all layers in the current drawing:  FREEZEALL",
         .alias = "FREEZEALLLAYERS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 44 */
     {
@@ -2412,7 +2504,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Thaws all layers in the current drawing:  THAWALL",
         .alias = "THAWALL",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 45 */
     {
@@ -2423,7 +2516,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Locks all layers in the current drawing:  LOCKALL",
         .alias = "LOCKALL",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 46 */
     {
@@ -2434,7 +2528,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
         .alias = "UNLOCKALL",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 47 */
     {
@@ -2445,7 +2540,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets text to be bold. Command: BOLD.",
         .alias = "BOLD",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 48 */
     {
@@ -2456,7 +2552,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets text to be italic. Command: ITALIC.",
         .alias = "ITALIC",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 49 */
     {
@@ -2467,7 +2564,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets text to be underlined. Command: UNDERLINE.",
         .alias = "UNDERLINE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 50 */
     {
@@ -2478,7 +2576,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets text to be striked out. Command: STRIKEOUT.",
         .alias = "STRIKEOUT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 51 */
     {
@@ -2489,7 +2588,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets text to be overlined. Command: OVERLINE.",
         .alias = "OVERLINE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 52 */
     {
@@ -2500,7 +2600,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport. Command: ZOOMREALTIME",
         .alias = "ZOOMREALTIME",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 53 */
     {
@@ -2511,7 +2612,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to display the previous view. Command: ZOOMPREVIOUS.",
         .alias = "ZOOMPREVIOUS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 54 */
     {
@@ -2522,7 +2624,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to display an area specified by a rectangular window. Command: ZOOMIN",
         .alias = "ZOOMWINDOW",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 55 */
     {
@@ -2533,7 +2636,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to display the generated portion of the drawing. Command: ZOOMDYNAMIC.",
         .alias = "ZOOMDYNAMIC",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 56 */
     {
@@ -2544,7 +2648,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms the display using a specified scale factor. Command: ZOOMSCALE.",
         .alias = "ZOOMSCALE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 57 */
     {
@@ -2555,7 +2660,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to display a view specified by a center point and magnification or height. Command: ZOOMCENTER.",
         .alias = "ZOOMCENTER",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 58 */
     {
@@ -2566,7 +2672,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to increase the apparent size of objects. Command: zoomin.",
         .alias = "zoomin",
         .shortcut = "Ctrl+Plus",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 59 */
     {
@@ -2577,7 +2684,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to decrease the apparent size of objects. Command: ZOOMOUT",
         .alias = "ZOOMOUT",
         .shortcut = "Ctrl+Minus",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 60 */
     {
@@ -2588,7 +2696,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to display the selected objects. Command: ZOOMSELECTED.",
         .alias = "ZOOMSELECTED",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 61 */
     {
@@ -2599,7 +2708,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to display the drawing extents or the grid limits. Command: ZOOMALL.",
         .alias = "ZOOMALL",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 62 */
     {
@@ -2610,7 +2720,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Zooms to display the drawing extents. Command: ZOOMEXTENTS",
         .alias = "ZOOMEXTENTS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 63 */
     {
@@ -2621,7 +2732,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Moves the view in the current viewport. Command: PANREALTIME",
         .alias = "PANREALTIME",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 64 */
     {
@@ -2632,7 +2744,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Moves the view by the specified distance.",
         .alias = "PANPOINT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 65 */
     {
@@ -2643,7 +2756,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Moves the view to the left:  PANLEFT",
         .alias = "PANLEFT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 66 */
     {
@@ -2654,7 +2768,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Moves the view to the right:  PANRIGHT",
         .alias = "PANRIGHT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 67 */
     {
@@ -2665,7 +2780,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Moves the view up:  PANUP",
         .alias = "PANUP",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 68 */
     {
@@ -2676,7 +2792,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Moves the view down:  PANDOWN",
         .alias = "PANDOWN",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 69 */
     {
@@ -2687,7 +2804,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Updates the current view using day vision settings. Command: DAY",
         .alias = "DAY",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 70 */
     {
@@ -2698,7 +2816,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Updates the current view using night vision settings. Command: NIGHT.",
         .alias = "NIGHT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 71 */
     {
@@ -2709,7 +2828,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a dialog to alert the user. Command: ALERT.",
         .alias = "ALERT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = alert_command
     },
     /* 72 */
     {
@@ -2720,7 +2840,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Print a value to one of the pre-defined global variables.",
         .alias = "GET",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 73 */
     {
@@ -2731,7 +2852,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Assign a value to one of the pre-defined global variables.",
         .alias = "SET",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 74 */
     {
@@ -2742,7 +2864,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Does Nothing. Command: DONOTHING.",
         .alias = "DONOTHING",
         .shortcut = "",
-        .flags = REQUIRED_VIEW | CLEAR_SELECTION
+        .flags = REQUIRED_VIEW | CLEAR_SELECTION,
+        .action = do_nothing_command
     },
     /* 75 */
     {
@@ -2753,7 +2876,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Calculate the angle between two lines and display it. Command: ANGLE, CALCANGLE",
         .alias = "CALCANGLE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW | CLEAR_SELECTION
+        .flags = REQUIRED_VIEW | CLEAR_SELECTION,
+        .action = do_nothing_command
     },
     /* 76 */
     {
@@ -2764,7 +2888,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a circle. Command: CIRCLE.",
         .alias = "C",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 77 */
     {
@@ -2775,10 +2900,21 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Displays information about this product:  ABOUT",
         .alias = "DEBUG",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* ACTION_DIM_LEADER             78 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* 79 */
     {
         .command = "disable",
@@ -2788,7 +2924,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Disable one of the pre-defined global boolean variables.",
         .alias = "DISABLE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 80 */
     {
@@ -2799,7 +2936,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Measures the distance and angle between two points. Command: DIST",
         .alias = "DI,DIST",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 81 */
     {
@@ -2810,7 +2948,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a dolphin. Command: DOLPHIN.",
         .alias = "DOLPHIN",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 82 */
     {
@@ -2821,7 +2960,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates an ellipse. Command: ELLIPSE.",
         .alias = "EL",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 83 */
     {
@@ -2832,7 +2972,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Enable a pre-defined global variables.",
         .alias = "ENABLE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 84 */
     {
@@ -2843,7 +2984,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Removes objects from a drawing. Command: DELETE.",
         .alias = "e,erase,del,delete",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 85 */
     {
@@ -2854,7 +2996,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sends an error message to the user. Command: ERROR",
         .alias = "ERROR",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 86 */
     {
@@ -2865,7 +3008,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a heart:  HEART",
         .alias = "HEART",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 87 */
     {
@@ -2876,7 +3020,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates straight line segments:  LINE",
         .alias = "L,LINE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 88 */
     {
@@ -2887,7 +3032,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Displays the coordinate values of a location:  ID",
         .alias = "ID",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 89 */
     {
@@ -2898,7 +3044,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Command: MIRRORSELECTED.",
         .alias = "MIRRORSELECTED",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 90 */
     {
@@ -2909,7 +3056,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Displaces objects a specified distance in a specified direction:  MOVE",
         .alias = "M,MOVE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 91 */
     {
@@ -2920,7 +3068,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Does Nothing.",
         .alias = "DONOTHING",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 92 */
     {
@@ -2931,7 +3080,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a 2D path:  PATH",
         .alias = "PA,PATH",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 93 */
     {
@@ -2942,7 +3092,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "List which platform is in use. Command: PLATFORM.",
         .alias = "PLATFORM",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 94 */
     {
@@ -2953,7 +3104,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates multiple points:  POINT",
         .alias = "PO,POINT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 95 */
     {
@@ -2964,7 +3116,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a regular polygon. Command: POLYGON.",
         .alias = "POL,POLYGON",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 96 */
     {
@@ -2975,7 +3128,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a 2D polyline:  PLINE",
         .alias = "PL,PLINE,POLYLINE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 97 */
     {
@@ -2986,7 +3140,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Does Nothing.",
         .alias = "DONOTHING",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 98 */
     {
@@ -2997,7 +3152,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Preview on.",
         .alias = "PREVIEWON",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 99 */
     {
@@ -3008,7 +3164,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a leader and annotation:  QUICKLEADER",
         .alias = "LE,LEADER,QLEADER",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 100 */
     {
@@ -3019,7 +3176,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a rectangular polyline. Command: RECTANGLE.",
         .alias = "REC,RECT,RECTANG,RECTANGLE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 101 */
     {
@@ -3030,7 +3188,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
         .alias = "ICON24",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 102 */
     {
@@ -3041,10 +3200,21 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Rotates objects about a base point:  ROTATE",
         .alias = "RO,ROTATE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 103 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* 104 */
     {
         .command = "scale",
@@ -3054,7 +3224,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions:  SCALE",
         .alias = "SC,SCALE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 105 */
     {
@@ -3065,7 +3236,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Does Nothing.",
         .alias = "SCALESELECTED",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 106 */
     {
@@ -3076,7 +3248,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Selects all objects:  SELECTALL",
         .alias = "AI_SELALL,SELALL,SELECTALL",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 107 */
     {
@@ -3087,7 +3260,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates single-line text objects:  TEXT",
         .alias = "DT,DTEXT,TEXT,SINGLELINETEXT",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 108 */
     {
@@ -3098,7 +3272,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a snowflake:  SNOWFLAKE",
         .alias = "SNOWFLAKE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 109 */
     {
@@ -3109,7 +3284,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Creates a star:  STAR",
         .alias = "STAR",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 110 */
     {
@@ -3120,7 +3296,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Arrange the windows. Command: SYSWINDOWS",
         .alias = "WINDOWS",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 111 */
     {
@@ -3131,7 +3308,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Displays information about this product:  ABOUT",
         .alias = "TODO",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 112 */
     {
@@ -3142,18 +3320,69 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Reverses the most recent action:  UNDO",
         .alias = "VULCANIZE",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* ACTION_ADD                   113 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* ACTION_DELETE                114 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* ACTION_GRIP_EDIT             115 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* ACTION_NAV                   116 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* ACTION_MIRROR                117 */
-    PLACEHOLDER_ACTION,
+    {
+        .command = "donothing",
+        .arguments = "",
+        .icon = "no-symbol",
+        .tooltip = "This action is unfinished.",
+        .statustip = "This action is unfinished.",
+        .alias = "",
+        .shortcut = "",
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
+    },
     /* 118 */
     {
         .command = "test",
@@ -3163,7 +3392,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Run a sequence of commands for QA. Command: TEST.",
         .alias = "TEST",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 119 */
     {
@@ -3174,7 +3404,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Show simulation controls.",
         .alias = "SIMULATE,SIM",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 120 */
     {
@@ -3185,7 +3416,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Start/resume the simulation.",
         .alias = "PLAY",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 121 */
     {
@@ -3196,7 +3428,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Stop the active simulation.",
         .alias = "STOP",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 122 */
     {
@@ -3207,7 +3440,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Simulate the current pattern.",
         .alias = "PAUSE",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 123 */
     {
@@ -3218,7 +3452,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Simulate the current pattern.",
         .alias = "FAST_FORWARD,FF",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 124 */
     {
@@ -3229,7 +3464,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Rewind the active simulation.",
         .alias = "REWIND,REW",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 125 */
     {
@@ -3240,7 +3476,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Export the simulation as a *.gif or *.mp4 file.",
         .alias = "export-video",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     },
     /* 126 */
     {
@@ -3251,7 +3488,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Generate a QR code.",
         .alias = "QR",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 127 */
     {
@@ -3262,7 +3500,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Generate a lettering as stitches for machines without fonts.",
         .alias = "LETTERING",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 128 */
     {
@@ -3273,7 +3512,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Paste one of the included designs to the stitch layer.",
         .alias = "PATTERN",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 129 */
     {
@@ -3284,7 +3524,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Paste one of the included designs to the vector layer.",
         .alias = "DESIGN",
         .shortcut = "",
-        .flags = CONTEXT_FREE
+        .flags = CONTEXT_FREE,
+        .action = do_nothing_command
     },
     /* 130 */
     {
@@ -3294,7 +3535,8 @@ Command command_data[MAX_COMMANDS] = {
         .statustip = "Displays information about this product:  ARC",
         .alias = "ARC",
         .shortcut = "",
-        .flags = REQUIRED_VIEW
+        .flags = REQUIRED_VIEW,
+        .action = do_nothing_command
     }
 };
 

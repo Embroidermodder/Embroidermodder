@@ -1162,6 +1162,56 @@ pack(ScriptEnv *context, const char *fmt, ...)
     return context;
 }
 
+/* Using a similar approach to pack we can now create a caller that also packs
+ * the arguments.
+ */
+ScriptValue
+call(ScriptEnv *context, char *cmd, ...)
+{
+    int id = get_command_id((char*)cmd);
+    if (id < 0) {
+        debug_message("ERROR: failed to find function %s", cmd);
+        return script_false;
+    }
+    va_list a;
+    int argno;
+    context->argumentCount = 0;
+    const char *fmt = command_data[id].arguments;
+    va_start(a, fmt);
+    for (argno = 0; fmt[argno]; argno++) {
+        switch (fmt[argno]) {
+        case 's': {
+            const char *s = va_arg(a, const char *);
+            strncpy(context->argument[context->argumentCount].s, s, MAX_STRING_LENGTH);
+            context->argument[context->argumentCount].type = SCRIPT_STRING;
+            break;
+        }
+        case 'i': {
+            int i = va_arg(a, int);
+            context->argument[context->argumentCount].i = i;
+            context->argument[context->argumentCount].type = SCRIPT_INT;
+            break;
+        }
+        case 'r': {
+            EmbReal r = va_arg(a, double);
+            context->argument[context->argumentCount].r = r;
+            context->argument[context->argumentCount].type = SCRIPT_REAL;
+            break;
+        }
+        default:
+            break;
+        }
+        context->argumentCount++;
+    }
+    va_end(a);
+    if (!argument_checks(context, id)) {
+        debug_message("Failed argument checks.");
+        return script_false;
+    }
+    return command_data[id].action(context);
+}
+
+
 /* . */
 int
 parse_floats(const char *line, float result[], int n)
