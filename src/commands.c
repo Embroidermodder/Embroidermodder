@@ -2630,8 +2630,6 @@ create_all_toolbars(void)
 
     add_to_toolbar(TOOLBAR_FILE, file_toolbar);
     add_to_toolbar(TOOLBAR_EDIT, edit_toolbar);
-    add_to_toolbar(TOOLBAR_ZOOM, zoom_toolbar);
-    add_to_toolbar(TOOLBAR_PAN, pan_toolbar);
     add_to_toolbar(TOOLBAR_VIEW, view_toolbar);
     add_to_toolbar(TOOLBAR_ICON, icon_toolbar);
     add_to_toolbar(TOOLBAR_HELP, help_toolbar);

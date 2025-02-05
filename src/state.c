@@ -392,8 +392,6 @@ char *toolbar_list[] = {
     "File",
     "Edit",
     "View",
-    "Zoom",
-    "Pan",
     "Icon",
     "Help",
     "Layer",
@@ -414,9 +412,6 @@ int top_toolbar[] = {
     TOOLBAR_EDIT,
     TOOLBAR_HELP,
     TOOLBAR_ICON,
-    TOOLBAR_BREAK,
-    TOOLBAR_ZOOM,
-    TOOLBAR_PAN,
     TOOLBAR_VIEW,
     TOOLBAR_BREAK,
     TOOLBAR_LAYER,
@@ -440,7 +435,6 @@ int bottom_toolbar[] = {
 
 int toolbar_horizontal[] = {
     TOOLBAR_VIEW,
-    TOOLBAR_ZOOM,
     TOOLBAR_LAYER,
     TOOLBAR_PROPERTIES,
     TOOLBAR_TEXT,
@@ -450,8 +444,6 @@ int toolbar_horizontal[] = {
 
 int toolbars_when_docs[] = {
     TOOLBAR_VIEW,
-    TOOLBAR_ZOOM,
-    TOOLBAR_PAN,
     TOOLBAR_ICON,
     TOOLBAR_HELP,
     TOOLBAR_LAYER,
@@ -468,15 +460,13 @@ char *file_toolbar[] = {
     "saveas",
     "print",
     "designdetails",
-    "---",
-    "undo",
-    "redo",
-    "---",
-    "help",
     END_SYMBOL
 };
 
 char *edit_toolbar[] = {
+    "undo",
+    "redo",
+    "---",
     "cut",
     "copy",
     "paste",
@@ -484,34 +474,19 @@ char *edit_toolbar[] = {
 };
 
 char *view_toolbar[] = {
-    "day",
-    "night",
-    END_SYMBOL
-};
-
-char *zoom_toolbar[] = {
-    "zoomwindow",
-    "zoomdynamic",
-    "zoomscale",
-    "---",
-    "zoomcenter",
     "zoomin",
     "zoomout",
-    "---",
-    "zoomselected",
-    "zoomall",
     "zoomextents",
-    END_SYMBOL
-};
-
-char *pan_toolbar[] = {
+    "---",
     "panrealtime",
     "panpoint",
-    "---",
     "panleft",
     "panright",
     "panup",
     "pandown",
+    "---",
+    "day",
+    "night",
     END_SYMBOL
 };
 
@@ -527,11 +502,8 @@ char *icon_toolbar[] = {
 
 char *help_toolbar[] = {
     "help",
-    "---",
     "changelog",
-    "---",
     "about",
-    "---",
     "whatsthis",
     END_SYMBOL
 };
@@ -2595,7 +2567,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomrealtime",
         .arguments = "",
-        .icon = "zoomrealtime",
+        .icon = "magnifying_glass",
         .tooltip = "Zoom &Real Time",
         .statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport. Command: ZOOMREALTIME",
         .alias = "ZOOMREALTIME",
@@ -2607,7 +2579,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomprevious",
         .arguments = "",
-        .icon = "zoomprevious",
+        .icon = "magnifying_glass",
         .tooltip = "Zoom &Previous",
         .statustip = "Zooms to display the previous view. Command: ZOOMPREVIOUS.",
         .alias = "ZOOMPREVIOUS",
@@ -2619,7 +2591,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomwindow",
         .arguments = "",
-        .icon = "zoomwindow",
+        .icon = "magnifying_glass",
         .tooltip = "Zoom &Window",
         .statustip = "Zooms to display an area specified by a rectangular window. Command: ZOOMIN",
         .alias = "ZOOMWINDOW",
@@ -2631,7 +2603,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomdynamic",
         .arguments = "",
-        .icon = "zoomdynamic",
+        .icon = "magnifying_glass",
         .tooltip = "Zoom &Dynamic",
         .statustip = "Zooms to display the generated portion of the drawing. Command: ZOOMDYNAMIC.",
         .alias = "ZOOMDYNAMIC",
@@ -2643,7 +2615,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomscale",
         .arguments = "",
-        .icon = "zoomscale",
+        .icon = "magnifying_glass",
         .tooltip = "Zoom &Scale",
         .statustip = "Zooms the display using a specified scale factor. Command: ZOOMSCALE.",
         .alias = "ZOOMSCALE",
@@ -2655,7 +2627,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomcenter",
         .arguments = "",
-        .icon = "zoomcenter",
+        .icon = "magnifying_glass",
         .tooltip = "Zoom &Center",
         .statustip = "Zooms to display a view specified by a center point and magnification or height. Command: ZOOMCENTER.",
         .alias = "ZOOMCENTER",
@@ -2691,7 +2663,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomselected",
         .arguments = "",
-        .icon = "zoomselected",
+        .icon = "magnifying_glass",
         .tooltip = "Zoom Selec&ted",
         .statustip = "Zooms to display the selected objects. Command: ZOOMSELECTED.",
         .alias = "ZOOMSELECTED",
@@ -2703,7 +2675,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomall",
         .arguments = "",
-        .icon = "zoomall",
+        .icon = "magnifying_glass",
         .tooltip = "Zoom &All",
         .statustip = "Zooms to display the drawing extents or the grid limits. Command: ZOOMALL.",
         .alias = "ZOOMALL",
@@ -2715,7 +2687,7 @@ Command command_data[MAX_COMMANDS] = {
     {
         .command = "zoomextents",
         .arguments = "",
-        .icon = "zoomextents",
+        .icon = "zoom",
         .tooltip = "Zoom &Extents",
         .statustip = "Zooms to display the drawing extents. Command: ZOOMEXTENTS",
         .alias = "ZOOMEXTENTS",

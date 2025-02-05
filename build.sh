@@ -170,7 +170,21 @@ EOF
 
 }
 
+function reduce_colors () {
+
+	for i in images/*.png
+	do
+		echo "Reducing colors of \"$i\"."
+	        convert $i +dither -colors 16 -depth 4 a.png
+        	mv a.png $i
+	done
+
+}
+
+
 function convert_to_xpm () {
+
+	# reduce_colors
 
 	files=`ls images/*.png`
 	cat docs/copyright_message.txt > src/xpm.c
