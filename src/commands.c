@@ -1,13 +1,16 @@
 /*
  * Embroidermodder 2.
  *
- * Copyright 2011-2024 The Embroidermodder Team
+ * Copyright 2011-2025 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
  *
  * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
  * for advice on altering this file.
  *
- * Command Core: C core to the run_command interface.
+ * Command Core: C core to the run_cmd interface.
+ *
+ * All functions in this file are of the form of a Command and are ordered
+ * alphabetically (TODO). The command_data table is stored in "state.c".
  */
 
 #include <stdio.h>
@@ -15,8 +18,35 @@
 
 #include "core.h"
 
-/* TODO: spellcheck_command, */
-/* TODO: quickselect_command, */
+/* TODO */
+ScriptValue
+spellcheck_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+/* TODO */
+ScriptValue
+quickselect_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+about_command(ScriptEnv* context)
+{
+    about_dialog();
+    return script_true;
+}
+
+/* . */
+ScriptValue
+set_prompt_prefix_command(ScriptEnv* context)
+{
+    set_prompt_prefix(STR(0));
+    return script_null;
+}
 
 /* */
 ScriptValue
@@ -98,33 +128,11 @@ cut_selected_command(ScriptEnv *context)
     return script_true;
 }
 
-/* . */
+/* This action intentionally does nothing. */
 ScriptValue
 do_nothing_command(ScriptEnv *context)
 {
     return script_true;
-}
-
-/* . */
-void
-set_visibility_group(char *keylist[], bool visibility)
-{
-    int i;
-    int n = table_length(keylist);
-    for (i=0; i<n; i++) {
-        set_visibility(keylist[i], visibility);
-    }
-}
-
-/* . */
-void
-set_enabled_group(char *keylist[], bool enabled)
-{
-    int i;
-    int n = table_length(keylist);
-    for (i=0; i<n; i++) {
-        set_enabled(keylist[i], enabled);
-    }
 }
 
 /* . */
@@ -289,571 +297,6 @@ update_all_view_ruler_colors(uint32_t color)
     }
 }
 
-/*
- * BUG: pan commands broke
- */
-ScriptValue
-run_command(ScriptEnv *context, const char *cmd)
-{
-    int id = get_command_id((char*)cmd);
-    int doc_index = 0;
-    ScriptValue value = script_true;
-    debug_message("run_command(%s) %d", cmd, id);
-
-    if (id < 0) {
-        debug_message("ERROR: %s not found in command_data.", cmd);
-        return script_false;
-    }
-
-    if (!argument_checks(context, id)) {
-        debug_message("Failed argument checks.");
-        return script_false;
-    }
-
-    if (command_data[id].flags & REQUIRED_VIEW) {
-        doc_index = active_document();
-        if (doc_index < 0) {
-            return script_false;
-        }
-    }
-    /* If initialization is needed, a view is required implicitly. */
-    if (!(command_data[id].flags & DONT_INITIALIZE)) {
-        doc_clear_rubber_room(doc_index);
-    }
-    /* Selection only exists when the view exists. */
-    if (command_data[id].flags & CLEAR_SELECTION) {
-        //doc_clear_selection(doc_index);
-    }
-
-    /* ACTION_CLEAR is covered by the flags, so the function pointer is
-     * do_nothing_command. */
-    switch (id) {
-    default: {
-        value = command_data[id].action(context);
-        break;
-    }
-
-    case ACTION_ANGLE: {
-        EmbVector start = unpack_vector(context, 0);
-        EmbVector end = unpack_vector(context, 2);
-        EmbVector delta = emb_vector_subtract(end, start);
-        value = script_real(emb_vector_angle(delta));
-        break;
-    }
-
-    case ACTION_CHANGELOG:
-        prompt_output("TODO: CHANGELOG");
-        break;
-
-    case ACTION_COPY: {
-        doc_copy(doc_index);
-        break;
-    }
-
-    case ACTION_COPY_SELECTED: {
-        copy_selected_command(context);
-        break;
-    }
-
-    case ACTION_COLOR_SELECTOR:
-        prompt_output("TODO: COLORSELECTOR");
-        break;
-
-    case ACTION_CUT:
-        value = cut_selected_command(context);
-        break;
-
-    case ACTION_DEBUG:
-        prompt_output(STR(0));
-        break;
-
-    case ACTION_DESIGN_DETAILS:
-        create_details_dialog();
-        break;
-
-    case ACTION_DIM_LEADER: {
-        value = add_dimleader_command(context);
-        break;
-    }
-
-    case ACTION_DISABLE: {
-        if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
-            doc_set_prop(doc_index, VIEW_RAPID_MOVING, false);
-        }
-        if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
-            disable_rapid_fire();
-        }
-        break;
-    }
-
-    case ACTION_ENABLE: {
-        if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
-            doc_set_prop(doc_index, VIEW_RAPID_MOVING, true);
-        }
-        if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
-            enable_rapid_fire();
-        }
-        break;
-    }
-
-    case ACTION_EXIT:
-        exit_program();
-        break;
-
-    case ACTION_HELP:
-        help();
-        break;
-
-    case ACTION_ICON_128:
-        icon_resize(128);
-        break;
-    case ACTION_ICON_16:
-        icon_resize(16);
-        break;
-    case ACTION_ICON_24:
-        icon_resize(24);
-        break;
-    case ACTION_ICON_32:
-        icon_resize(32);
-        break;
-    case ACTION_ICON_48:
-        icon_resize(48);
-        break;
-    case ACTION_ICON_64:
-        icon_resize(64);
-        break;
-
-    case ACTION_MIRROR_SELECTED: {
-        doc_mirror_selected(doc_index, REAL(0), -REAL(1), REAL(2), -REAL(3));
-        break;
-    }
-
-    case ACTION_NEW:
-        new_file();
-        break;
-
-/*
-    case ACTION_NUM_SELECTED: {
-
-            break;
-    }
- */
-
-    case ACTION_OPEN:
-        open_file(false, "");
-        break;
-
-    case ACTION_PASTE: {
-        doc_paste(doc_index);
-        break;
-    }
-
-    case ACTION_PASTE_SELECTED: {
-        /* Paste with location x,y */
-        /* native_paste_selected(REAL(0), REAL(1)); */
-        break;
-    }
-    case ACTION_PLATFORM:
-        /* Should this display in the command prompt or just return like GET? */
-        /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
-        break;
-    case ACTION_REDO:
-        value = redo_command(context);
-        break;
-
-    case ACTION_SAVE:
-        save_file();
-        break;
-
-    case ACTION_SAVE_AS:
-        /* save(); */
-        break;
-
-    case ACTION_SCALE_SELECTED:
-        /*  */
-        break;
-
-    case ACTION_SETTINGS_DIALOG: {
-        settings_dialog("");
-        break;
-    }
-
-    case ACTION_TEXT_BOLD:
-        set_bool(TEXT_STYLE_BOLD, !get_bool(TEXT_STYLE_BOLD));
-        break;
-
-    case ACTION_TEXT_ITALIC:
-        set_bool(TEXT_STYLE_ITALIC, !get_bool(TEXT_STYLE_ITALIC));
-        break;
-
-    case ACTION_TEXT_UNDERLINE:
-        set_bool(TEXT_STYLE_UNDERLINE, !get_bool(TEXT_STYLE_UNDERLINE));
-        break;
-
-    case ACTION_TEXT_STRIKEOUT:
-        set_bool(TEXT_STYLE_STRIKEOUT, !get_bool(TEXT_STYLE_STRIKEOUT));
-        break;
-
-    case ACTION_TEXT_OVERLINE:
-        set_bool(TEXT_STYLE_OVERLINE, !get_bool(TEXT_STYLE_OVERLINE));
-        break;
-
-    case ACTION_TIP_OF_THE_DAY:
-        tip_of_the_day();
-        break;
-
-    case ACTION_TODO: {
-        debug_message("TODO: %s", STR(0));
-        break;
-    }
-
-    case ACTION_VULCANIZE: {
-        doc_vulcanize_rubber_room(doc_index);
-        break;
-    }
-
-    case ACTION_DAY: {
-        /* TODO: Make day vision color settings. */
-        doc_set_background_color(doc_index, 0xFFFFFF);
-        doc_set_cross_hair_color(doc_index, 0x000000);
-        // FIXME: doc_set_grid_color(doc_index, 0x000000);
-        break;
-    }
-    case ACTION_NIGHT: {
-        /* TODO: Make night vision color settings. */
-        doc_set_background_color(doc_index, 0x000000);
-        doc_set_cross_hair_color(doc_index, 0xFFFFFF);
-        // FIXME: doc_set_grid_color(doc_index, 0xFFFFFF);
-        break;
-    }
-
-    case ACTION_WHATS_THIS: {
-        whats_this_mode();
-        break;
-    }
-
-    case ACTION_MAKE_LAYER_CURRENT: {
-        /* make_layer_active(); */
-        break;
-    }
-
-    case ACTION_LAYERS: {
-        /* layer_manager(); */
-        break;
-    }
-
-    case ACTION_LAYER_SELECTOR: {
-        /* TODO: layer_selector */
-        break;
-    }
-
-    case ACTION_LAYER_PREVIOUS:
-        /* TODO: layer_previous */
-        break;
-
-    case ACTION_LINE_TYPE_SELECTOR:
-        /* TODO: line_type_selector */
-        break;
-
-    case ACTION_LINE_WEIGHT_SELECTOR:
-        /* TODO: line_weight_selector */
-        break;
-    case ACTION_HIDE_ALL_LAYERS:
-        /* TODO: hide_all_layers */
-        break;
-    case ACTION_SHOW_ALL_LAYERS:
-        /* TODO: show_all_layers */
-        break;
-    case ACTION_FREEZE_ALL_LAYERS:
-        /* TODO: freeze_all_layers */
-        break;
-    case ACTION_THAW_ALL_LAYERS:
-        /* TODO: thaw_all_layers */
-        break;
-    case ACTION_LOCK_ALL_LAYERS:
-        /* TODO: lock_all_layers */
-        break;
-    case ACTION_UNLOCK_ALL_LAYERS:
-        /* TODO: unlock_all_layers */
-        break;
-
-    case ACTION_GET: {
-        value = get_command(context);
-        break;
-    }
-
-    case ACTION_SET: {
-        set_command(context);
-        break;
-    }
-
-    case ACTION_CIRCLE: {
-        value = add_circle_command(context);
-        break;
-    }
-
-    case ACTION_ELLIPSE: {
-        value = add_ellipse_command(context);
-        break;
-    }
-
-    case ACTION_ERASE: {
-        DocumentData *data = doc_data(doc_index);
-        if (data->selectedItems->count <= 0) {
-            /* TODO: Prompt to select objects if nothing is preselected. */
-            prompt_output(
-            translate("Preselect objects before invoking the delete command."));
-            messagebox("information", translate("Delete Preselect"),
-                translate("Preselect objects before invoking the delete command."));
-        }
-        else {
-            doc_delete_selected(doc_index);
-        }
-        break;
-    }
-
-    case ACTION_ERROR: {
-        debug_message("ERROR: (%s) %s", STR(0), STR(1));
-        break;
-    }
-
-    case ACTION_LINE: {
-        value = add_line_command(context);
-        break;
-    }
-
-    case ACTION_MOVE:
-        move_command(context);
-        break;
-
-    case ACTION_MOVE_SELECTED: {
-        doc_move_selected(doc_index, unpack_vector(context, 0));
-        break;
-    }
-
-    case ACTION_PREVIEW_OFF: {
-        doc_preview_off(doc_index);
-        break;
-    }
-
-    case ACTION_PREVIEW_ON: {
-        value = previewon_command(context);
-        break;
-    }
-
-    case ACTION_QUICKLEADER: {
-        break;
-    }
-
-    case ACTION_RECTANGLE: {
-        value = add_rectangle_command(context);
-        break;
-    }
-
-    case ACTION_ROTATE: {
-        doc_rotate_selected(doc_index, unpack_vector(context, 0), -REAL(2));
-        break;
-    }
-
-    case ACTION_SELECT_ALL: {
-        doc_select_all(doc_index);
-        break;
-    }
-
-    /* ACTION_DELETE_SELECTED? */
-    case ACTION_DELETE: {
-        doc_delete_selected(doc_index);
-        break;
-    }
-
-    case ACTION_PAN_REAL_TIME: {
-        doc_set_prop(doc_index, VIEW_PANNING_RT, true);
-        break;
-    }
-    case ACTION_PAN_POINT: {
-        doc_set_prop(doc_index, VIEW_PANNING_POINT, true);
-        break;
-    }
-    case ACTION_PAN_LEFT: {
-        doc_nav("PanLeft", doc_index);
-        break;
-    }
-    case ACTION_PAN_RIGHT: {
-        doc_nav("PanRight", doc_index);
-        break;
-    }
-    case ACTION_PAN_UP: {
-        doc_nav("PanUp", doc_index);
-        break;
-    }
-    case ACTION_PAN_DOWN: {
-        doc_nav("PanDown", doc_index);
-        break;
-    }
-
-    case ACTION_WINDOW_CLOSE: {
-        on_close_window();
-        break;
-    }
-
-    case ACTION_WINDOW_CLOSE_ALL:
-        window_close_all();
-        break;
-
-    case ACTION_WINDOW_CASCADE:
-        window_cascade();
-        break;
-
-    case ACTION_WINDOW_TILE:
-        window_tile();
-        break;
-
-    case ACTION_WINDOW_NEXT:
-        window_next();
-        break;
-
-    case ACTION_WINDOW_PREVIOUS: {
-        window_previous();
-        break;
-    }
-
-    case ACTION_ZOOM_ALL: {
-        debug_message("TODO: Implement zoomAll.");
-        break;
-    }
-
-    case ACTION_ZOOM_CENTER: {
-        debug_message("TODO: Implement zoomCenter.");
-        break;
-    }
-
-    case ACTION_ZOOM_DYNAMIC: {
-        debug_message("TODO: Implement zoomDynamic.");
-        break;
-    }
-
-    case ACTION_ZOOM_EXTENTS: {
-        doc_nav("ZoomExtents", doc_index);
-        break;
-    }
-
-    case ACTION_ZOOM_IN: {
-        doc_nav("ZoomIn", doc_index);
-        break;
-    }
-    case ACTION_ZOOM_OUT: {
-        doc_nav("ZoomOut", doc_index);
-        break;
-    }
-    case ACTION_ZOOM_SELECTED: {
-        doc_nav("ZoomSelected", doc_index);
-        break;
-    }
-    case ACTION_ZOOM_PREVIOUS: {
-        debug_message("TODO: Implement zoomPrevious.");
-        break;
-    }
-    case ACTION_ZOOM_REAL_TIME: {
-        debug_message("TODO: Implement zoomRealtime.");
-        break;
-    }
-    case ACTION_ZOOM_SCALE: {
-        debug_message("TODO: Implement zoomScale.");
-        break;
-    }
-    case ACTION_ZOOM_WINDOW: {
-        doc_zoom_window(doc_index);
-        break;
-    }
-
-    case ACTION_SIMULATE: {
-        glfw_application(0, NULL);
-        break;
-    }
-
-    }
-
-    if (!(command_data[id].flags & DONT_END_COMMAND)) {
-        end_command();
-    }
-    return value;
-}
-
-/* FIXME: reconnect to new command system.
- */
-void
-run_command_main(const char *cmd)
-{
-    ScriptEnv *context = create_script_env();
-    context->context = CONTEXT_MAIN;
-    debug_message("run_command_main(%s)", cmd);
-    /* TODO: Uncomment this when post-selection is available. */
-    /*
-    if (!get_bool(SELECTION_MODE_PICKFIRST)) {
-        clear_selection();
-    }
-    */
-    run_command(context, cmd);
-    free_script_env(context);
-}
-
-/* FIXME: reconnect to new command system.
- */
-void
-run_command_click(const char *cmd, EmbReal x, EmbReal y)
-{
-    ScriptEnv *context = create_script_env();
-    context->context = CONTEXT_CLICK;
-    debug_message("run_command_click(%s, %.2f, %.2f)", cmd, x, y);
-    /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
-    run_command(context, cmd);
-    free_script_env(context);
-}
-
-/* FIXME: reconnect to new command system.
- */
-void
-run_command_move(const char *cmd, EmbReal x, EmbReal y)
-{
-    ScriptEnv *context = create_script_env();
-    context->context = CONTEXT_MOVE;
-    debug_message("run_command_move(%s, %.2f, %.2f)", cmd, x, y);
-    /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
-    run_command(context, cmd);
-    free_script_env(context);
-}
-
-/* FIXME: reconnect to new command system.
- */
-void
-run_command_context(const char *cmd, const char *str)
-{
-    ScriptEnv *context = create_script_env();
-    context->context = CONTEXT_CONTEXT;
-    debug_message("run_command_context(%s, %s)", cmd, str);
-    /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
-    run_command(context, cmd);
-    free_script_env(context);
-}
-
-/* FIXME: reconnect to new command system.
- * NOTE: Replace any special characters that will cause a syntax error
- */
-void
-run_command_prompt(const char *cmd)
-{
-    ScriptEnv *context = create_script_env();
-    debug_message("run_command_prompt(%s)", cmd);
-    context->context = CONTEXT_PROMPT;
-    if (rapidFireEnabled) {
-        run_command(context, cmd);
-    }
-    else {
-        /* Both branches run the same. */
-        run_command(context, cmd);
-    }
-    free_script_env(context);
-}
 
 void
 disable_rapid_fire(void)
@@ -2117,8 +1560,8 @@ add_rubber_command(ScriptEnv* context)
     }
 
     /* FIXME: ERROR CHECKING */
-    EmbReal mx = run_command(context, "get mousex").r;
-    EmbReal my = run_command(context, "get mousey").r;
+    EmbReal mx = run_cmd(context, "get mousex").r;
+    EmbReal my = run_cmd(context, "get mousey").r;
 
     int type = -1;
     int n = table_length(geometry_type_keys);
@@ -2286,7 +1729,7 @@ locatepoint_command(ScriptEnv *context)
         break;
     }
     case CONTEXT_CONTEXT:
-        run_command(context, "todo LOCATEPOINT context()");
+        run_cmd(context, "todo LOCATEPOINT context()");
         break;
     case CONTEXT_PROMPT: {
         EmbVector v;
@@ -2522,6 +1965,12 @@ details_command(ScriptEnv* context)
 
 ScriptValue
 exit_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+ScriptValue
+undo_command(ScriptEnv* context)
 {
     return script_true;
 }

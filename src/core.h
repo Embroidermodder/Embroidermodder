@@ -757,23 +757,11 @@ extern "C" {
 #define FINISHED                       2
 
 #define ARABIC_SHORTCODE            "ar"
-#define AFRIKAANS_SHORTCODE         "af"
 #define CHINESE_SHORTCODE           "zh"
-#define CZECH_SHORTCODE             "cs"
-#define DANISH_SHORTCODE            "da"
-#define DUTCH_SHORTCODE             "nl"
-#define FINNISH_SHORTCODE           "fi"
-#define GERMAN_SHORTCODE            "de"
-#define GREEK_SHORTCODE             "el"
-#define ITALIAN_SHORTCODE           "it"
-#define JAPANESE_SHORTCODE          "ja"
-#define KOREAN_SHORTCODE            "ko"
-#define PORTUGUESE_SHORTCODE        "pt"
-#define ROMANIAN_SHORTCODE          "ro"
+#define ENGLISH_SHORTCODE           "en"
+#define FRENCH_SHORTCODE            "fr"
 #define RUSSIAN_SHORTCODE           "ru"
 #define SPANISH_SHORTCODE           "es"
-#define SWEDISH_SHORTCODE           "sv"
-#define TURKISH_SHORTCODE           "tr"
 
 #define END_SYMBOL                 "END"
 
@@ -836,7 +824,9 @@ extern "C" {
  */
 #define TWO_CHAR_INDEX(A)             (0x100*A[0] + A[1])
 
-typedef struct Command_ {
+typedef ScriptValue (*Command)(ScriptEnv *context);
+
+typedef struct CommandData_ {
     char *command;
     char *arguments;
     char *icon;
@@ -845,8 +835,8 @@ typedef struct Command_ {
     char *alias;
     char *shortcut;
     int32_t flags;
-    ScriptValue (*action)(ScriptEnv *context);
-} Command;
+    Command action;
+} CommandData;
 
 #define MAX_LAYERS 20
 
@@ -1097,7 +1087,7 @@ ScriptEnv *create_script_env(void);
 void free_script_env(ScriptEnv *);
 ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
 ScriptValue call(ScriptEnv *context, char *function, ...);
-ScriptValue run_command(ScriptEnv *context, const char *cmd);
+ScriptValue run_cmd(ScriptEnv *context, const char *line);
 
 ScriptValue script_bool(bool b);
 ScriptValue script_int(int i);
@@ -1334,49 +1324,6 @@ void nanosleep_(int);
 
 void button_tip_of_the_day_clicked(int button);
 
-#define CMD(A) ScriptValue A##_command(ScriptEnv *context)
-
-CMD(about);
-CMD(add_arc);
-CMD(add_circle);
-CMD(add_dimleader);
-CMD(add_ellipse);
-CMD(add_horizontal_dimension);
-CMD(add_image);
-CMD(add_infinite_line);
-CMD(add_line);
-CMD(add_ray);
-CMD(add_triangle);
-CMD(add_rectangle);
-CMD(add_rounded_rectangle);
-CMD(add_slot);
-CMD(add_point);
-CMD(add_regular_polygon);
-CMD(add_vertical_dimension);
-CMD(add_textmulti);
-CMD(add_textsingle);
-CMD(alert);
-CMD(angle);
-CMD(current_color_changed);
-CMD(details);
-CMD(do_nothing);
-CMD(exit);
-CMD(get);
-CMD(new);
-CMD(move);
-CMD(open);
-CMD(paste);
-CMD(previewon);
-CMD(print);
-CMD(redo);
-CMD(sandbox);
-CMD(save);
-CMD(saveas);
-CMD(set);
-CMD(undo);
-
-#undef CMD
-
 void set_mouse_coord(EmbReal x, EmbReal y);
 
 void set_background_color(uint8_t r, uint8_t g, uint8_t b);
@@ -1434,6 +1381,8 @@ const char *platform_string(void);
 
 void button_tip_of_the_day_clicked(int button);
 void free_objects(EmbIdList *);
+
+void about_dialog(void);
 
 /* ------------------------------- Document -------------------------------- */
 
@@ -1714,7 +1663,7 @@ EmbVector mouse_snap_point(int32_t obj_id, EmbVector mousePoint);
  * with minimal overhead.
  */
 
-extern Command command_data[MAX_COMMANDS];
+extern CommandData command_data[MAX_COMMANDS];
 extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
 extern GroupBoxData group_box_list[];

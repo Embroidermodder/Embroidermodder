@@ -26,14 +26,31 @@
  * https://github.com/cpredef/predef
  */
 #if defined(linux) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+
 #elif defined(WINDOWS)
+
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+
 #endif
 
+#if !defined(WINDOWS)
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#endif
+
+/* Needed by nanovg_gl. */
 #include "glad/glad.h"
+
+/* These have to follow "glad". */
+#include <GL/gl.h>
+#include <GL/glx.h>
+#include <GL/glu.h>
 
 #include <GLFW/glfw3.h>
 
@@ -268,8 +285,8 @@ make_menubar_button(NVGcontext *vg, int x, int y, char *text, float *bounds)
     button.rect = emb_rect(x, y, w, 30);
     button.color = toolbar_button_color;
     button.text_color = toolbar_text;
-    string_copy(button.text, text);
-    string_copy(button.font, "sans");
+    strcpy(button.text, text);
+    strcpy(button.font, "sans");
     button.state = 0;
     return button;
 }
@@ -282,8 +299,8 @@ make_toolbar_button(int x, int y, char *text)
     button.rect = emb_rect(x, y, icon_size, icon_size);
     button.color = toolbar_button_color;
     button.text_color = toolbar_text;
-    string_copy(button.text, text);
-    string_copy(button.font, "icons");
+    strcpy(button.text, text);
+    strcpy(button.font, "icons");
     button.state = 0;
     return button;
 }
@@ -702,14 +719,14 @@ dialog_interface_color(int32_t key, uint32_t color)
 
 /* . */
 void
-prompt_history_appended(EmbString txt)
+prompt_history_appended(char *txt)
 {
     sprintf(promptHistoryData, "%s<br/>%s", promptHistoryData, txt);
 }
 
 /* . */
 void
-log_prompt_input(EmbString txt)
+log_prompt_input(char *txt)
 {
     string_copy(prompt_input_list[prompt_history_size], txt);
     prompt_history_size++;
@@ -1177,7 +1194,7 @@ call(ScriptEnv *context, char *cmd, ...)
     int argno;
     context->argumentCount = 0;
     const char *fmt = command_data[id].arguments;
-    va_start(a, fmt);
+    va_start(a, cmd);
     for (argno = 0; fmt[argno]; argno++) {
         switch (fmt[argno]) {
         case 's': {
@@ -2897,7 +2914,7 @@ doc_move_selected(int32_t doc, EmbVector delta)
     }
     for (int i = 0; i < data->selectedItems->count; i++) {
         ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
-        EmbString msg;
+        char msg[400];
         sprintf(msg, "%s 1 %s", translate("Move"), core->OBJ_NAME);
         undoable_move(doc, data->selectedItems->data[i], delta, msg);
     }
@@ -2921,7 +2938,7 @@ doc_rotate_selected(int32_t doc, EmbVector v, EmbReal rot)
     }
     for (int i = 0; i < data->selectedItems->count; i++) {
         ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
-        EmbString msg;
+        char msg[300];
         sprintf(msg, "%s 1 %s", translate("Rotate"), core->OBJ_NAME);
         undoable_rotate(doc, data->selectedItems->data[i], v, msg);
     }
@@ -2945,7 +2962,7 @@ doc_mirror_selected(int32_t doc, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
     }
     for (int i = 0; i < data->selectedItems->count; i++) {
         ObjectCore* core = obj_get_core(data->selectedItems->data[i]);
-        EmbString msg;
+        char msg[300];
         sprintf(msg, "%s 1 %s", translate("Mirror"), core->OBJ_NAME);
         EmbVector start, end;
         start = emb_vector(x1, y1);
@@ -2985,7 +3002,7 @@ doc_scale_selected(int32_t doc, EmbReal x, EmbReal y, EmbReal factor)
     doc_clear_selection(doc);
 }
 
-/* LALR Parsing? */
+/* LALR Parsing? Check the Dragon book. */
 int
 string_replace(char *result, char *base, char *from, char *to)
 {
@@ -3009,6 +3026,7 @@ string_replace(char *result, char *base, char *from, char *to)
     return replacements;
 }
 
+/* . */
 ViewData *
 create_view_data(int32_t doc, int width, int height, int unit)
 {
@@ -3081,6 +3099,7 @@ add_line(ViewData *vdata, EmbVector start, EmbVector end)
     vdata->n_lines++;
 }
 
+/* . */
 int
 create_ruler_lines(ViewData *vdata)
 {
@@ -3193,4 +3212,658 @@ create_ruler_lines(ViewData *vdata)
 
     return 1;
 }
+
+/* . */
+void
+set_visibility_group(char *keylist[], bool visibility)
+{
+    int i;
+    int n = table_length(keylist);
+    for (i=0; i<n; i++) {
+        set_visibility(keylist[i], visibility);
+    }
+}
+
+/* . */
+void
+set_enabled_group(char *keylist[], bool enabled)
+{
+    int i;
+    int n = table_length(keylist);
+    for (i=0; i<n; i++) {
+        set_enabled(keylist[i], enabled);
+    }
+}
+
+/* FIXME: reconnect to new command system.
+ */
+void
+run_command_main(const char *cmd)
+{
+    ScriptEnv *context = create_script_env();
+    context->context = CONTEXT_MAIN;
+    debug_message("run_command_main(%s)", cmd);
+    /* TODO: Uncomment this when post-selection is available. */
+    /*
+    if (!get_bool(SELECTION_MODE_PICKFIRST)) {
+        clear_selection();
+    }
+    */
+    run_cmd(context, cmd);
+    free_script_env(context);
+}
+
+/* FIXME: reconnect to new command system.
+ */
+void
+run_command_click(const char *cmd, EmbReal x, EmbReal y)
+{
+    ScriptEnv *context = create_script_env();
+    context->context = CONTEXT_CLICK;
+    debug_message("run_command_click(%s, %.2f, %.2f)", cmd, x, y);
+    /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
+    run_cmd(context, cmd);
+    free_script_env(context);
+}
+
+/* FIXME: reconnect to new command system.
+ */
+void
+run_command_move(const char *cmd, EmbReal x, EmbReal y)
+{
+    ScriptEnv *context = create_script_env();
+    context->context = CONTEXT_MOVE;
+    debug_message("run_command_move(%s, %.2f, %.2f)", cmd, x, y);
+    /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
+    run_cmd(context, cmd);
+    free_script_env(context);
+}
+
+/* FIXME: reconnect to new command system.
+ */
+void
+run_command_context(const char *cmd, const char *str)
+{
+    ScriptEnv *context = create_script_env();
+    context->context = CONTEXT_CONTEXT;
+    debug_message("run_command_context(%s, %s)", cmd, str);
+    /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
+    run_cmd(context, cmd);
+    free_script_env(context);
+}
+
+/* FIXME: reconnect to new command system.
+ * NOTE: Replace any special characters that will cause a syntax error
+ */
+void
+run_command_prompt(const char *cmd)
+{
+    ScriptEnv *context = create_script_env();
+    debug_message("run_command_prompt(%s)", cmd);
+    context->context = CONTEXT_PROMPT;
+    if (rapidFireEnabled) {
+        run_cmd(context, cmd);
+    }
+    else {
+        /* FIXME: Both branches run the same. */
+        run_cmd(context, cmd);
+    }
+    free_script_env(context);
+}
+
+/*
+ * BUG: pan commands broke
+ *
+ * This is called when a command is issued.
+ */
+ScriptValue
+run_cmd(ScriptEnv *context, const char *cmd)
+{
+    int id = get_command_id((char*)cmd);
+    int doc_index = 0;
+    ScriptValue value = script_true;
+    debug_message("run_cmd(%s) %d", cmd, id);
+
+    if (id < 0) {
+        debug_message("ERROR: %s not found in command_data.", cmd);
+        return script_false;
+    }
+
+    if (!argument_checks(context, id)) {
+        debug_message("Failed argument checks.");
+        return script_false;
+    }
+
+    if (command_data[id].flags & REQUIRED_VIEW) {
+        doc_index = active_document();
+        if (doc_index < 0) {
+            return script_false;
+        }
+    }
+    /* If initialization is needed, a view is required implicitly. */
+    if (!(command_data[id].flags & DONT_INITIALIZE)) {
+        doc_clear_rubber_room(doc_index);
+    }
+    /* Selection only exists when the view exists. */
+    if (command_data[id].flags & CLEAR_SELECTION) {
+        //doc_clear_selection(doc_index);
+    }
+
+    /* ACTION_CLEAR is covered by the flags, so the function pointer is
+     * do_nothing_command. */
+    switch (id) {
+    default: {
+        value = command_data[id].action(context);
+        break;
+    }
+
+    case ACTION_CIRCLE:
+    case ACTION_COPY_SELECTED:
+    case ACTION_CUT:
+    case ACTION_ELLIPSE:
+    case ACTION_DIM_LEADER:
+    case ACTION_GET:
+    case ACTION_LINE:
+    case ACTION_MOVE:
+    case ACTION_SET:
+    case ACTION_RECTANGLE:
+    case ACTION_REDO:
+        value = call(context, command_data[id].command);
+        break;
+
+    case ACTION_ANGLE: {
+        EmbVector start = unpack_vector(context, 0);
+        EmbVector end = unpack_vector(context, 2);
+        EmbVector delta = emb_vector_subtract(end, start);
+        value = script_real(emb_vector_angle(delta));
+        break;
+    }
+
+    case ACTION_CHANGELOG:
+        prompt_output("TODO: CHANGELOG");
+        break;
+
+    case ACTION_COPY: {
+        doc_copy(doc_index);
+        break;
+    }
+
+    case ACTION_COLOR_SELECTOR:
+        prompt_output("TODO: COLORSELECTOR");
+        break;
+
+    case ACTION_DEBUG:
+        prompt_output(STR(0));
+        break;
+
+    case ACTION_DESIGN_DETAILS:
+        create_details_dialog();
+        break;
+
+    case ACTION_DISABLE: {
+        if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
+            doc_set_prop(doc_index, VIEW_RAPID_MOVING, false);
+        }
+        if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
+            disable_rapid_fire();
+        }
+        break;
+    }
+
+    case ACTION_ENABLE: {
+        if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
+            doc_set_prop(doc_index, VIEW_RAPID_MOVING, true);
+        }
+        if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
+            enable_rapid_fire();
+        }
+        break;
+    }
+
+    case ACTION_EXIT:
+        exit_program();
+        break;
+
+    case ACTION_HELP:
+        help();
+        break;
+
+    case ACTION_ICON_128:
+        icon_resize(128);
+        break;
+    case ACTION_ICON_16:
+        icon_resize(16);
+        break;
+    case ACTION_ICON_24:
+        icon_resize(24);
+        break;
+    case ACTION_ICON_32:
+        icon_resize(32);
+        break;
+    case ACTION_ICON_48:
+        icon_resize(48);
+        break;
+    case ACTION_ICON_64:
+        icon_resize(64);
+        break;
+
+    case ACTION_MIRROR_SELECTED: {
+        doc_mirror_selected(doc_index, REAL(0), -REAL(1), REAL(2), -REAL(3));
+        break;
+    }
+
+    case ACTION_NEW:
+        new_file();
+        break;
+
+/*
+    case ACTION_NUM_SELECTED: {
+
+            break;
+    }
+ */
+
+    case ACTION_OPEN:
+        open_file(false, "");
+        break;
+
+    case ACTION_PASTE: {
+        doc_paste(doc_index);
+        break;
+    }
+
+    case ACTION_PASTE_SELECTED: {
+        /* Paste with location x,y */
+        /* native_paste_selected(REAL(0), REAL(1)); */
+        break;
+    }
+    case ACTION_PLATFORM:
+        /* Should this display in the command prompt or just return like GET? */
+        /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
+        break;
+
+    case ACTION_SAVE:
+        save_file();
+        break;
+
+    case ACTION_SAVE_AS:
+        /* save(); */
+        break;
+
+    case ACTION_SCALE_SELECTED:
+        /*  */
+        break;
+
+    case ACTION_SETTINGS_DIALOG: {
+        settings_dialog("");
+        break;
+    }
+
+    case ACTION_TEXT_BOLD:
+        set_bool(TEXT_STYLE_BOLD, !get_bool(TEXT_STYLE_BOLD));
+        break;
+
+    case ACTION_TEXT_ITALIC:
+        set_bool(TEXT_STYLE_ITALIC, !get_bool(TEXT_STYLE_ITALIC));
+        break;
+
+    case ACTION_TEXT_UNDERLINE:
+        set_bool(TEXT_STYLE_UNDERLINE, !get_bool(TEXT_STYLE_UNDERLINE));
+        break;
+
+    case ACTION_TEXT_STRIKEOUT:
+        set_bool(TEXT_STYLE_STRIKEOUT, !get_bool(TEXT_STYLE_STRIKEOUT));
+        break;
+
+    case ACTION_TEXT_OVERLINE:
+        set_bool(TEXT_STYLE_OVERLINE, !get_bool(TEXT_STYLE_OVERLINE));
+        break;
+
+    case ACTION_TIP_OF_THE_DAY:
+        tip_of_the_day();
+        break;
+
+    case ACTION_TODO: {
+        debug_message("TODO: %s", STR(0));
+        break;
+    }
+
+    case ACTION_VULCANIZE: {
+        doc_vulcanize_rubber_room(doc_index);
+        break;
+    }
+
+    case ACTION_DAY: {
+        /* TODO: Make day vision color settings. */
+        doc_set_background_color(doc_index, 0xFFFFFF);
+        doc_set_cross_hair_color(doc_index, 0x000000);
+        // FIXME: doc_set_grid_color(doc_index, 0x000000);
+        break;
+    }
+    case ACTION_NIGHT: {
+        /* TODO: Make night vision color settings. */
+        doc_set_background_color(doc_index, 0x000000);
+        doc_set_cross_hair_color(doc_index, 0xFFFFFF);
+        // FIXME: doc_set_grid_color(doc_index, 0xFFFFFF);
+        break;
+    }
+
+    case ACTION_WHATS_THIS: {
+        whats_this_mode();
+        break;
+    }
+
+    case ACTION_MAKE_LAYER_CURRENT: {
+        /* make_layer_active(); */
+        break;
+    }
+
+    case ACTION_LAYERS: {
+        /* layer_manager(); */
+        break;
+    }
+
+    case ACTION_LAYER_SELECTOR: {
+        /* TODO: layer_selector */
+        break;
+    }
+
+    case ACTION_LAYER_PREVIOUS:
+        /* TODO: layer_previous */
+        break;
+
+    case ACTION_LINE_TYPE_SELECTOR:
+        /* TODO: line_type_selector */
+        break;
+
+    case ACTION_LINE_WEIGHT_SELECTOR:
+        /* TODO: line_weight_selector */
+        break;
+    case ACTION_HIDE_ALL_LAYERS:
+        /* TODO: hide_all_layers */
+        break;
+    case ACTION_SHOW_ALL_LAYERS:
+        /* TODO: show_all_layers */
+        break;
+    case ACTION_FREEZE_ALL_LAYERS:
+        /* TODO: freeze_all_layers */
+        break;
+    case ACTION_THAW_ALL_LAYERS:
+        /* TODO: thaw_all_layers */
+        break;
+    case ACTION_LOCK_ALL_LAYERS:
+        /* TODO: lock_all_layers */
+        break;
+    case ACTION_UNLOCK_ALL_LAYERS:
+        /* TODO: unlock_all_layers */
+        break;
+
+    case ACTION_ERASE: {
+        DocumentData *data = doc_data(doc_index);
+        if (data->selectedItems->count <= 0) {
+            /* TODO: Prompt to select objects if nothing is preselected. */
+            prompt_output(
+            translate("Preselect objects before invoking the delete command."));
+            messagebox("information", translate("Delete Preselect"),
+                translate("Preselect objects before invoking the delete command."));
+        }
+        else {
+            doc_delete_selected(doc_index);
+        }
+        break;
+    }
+
+    case ACTION_ERROR: {
+        debug_message("ERROR: (%s) %s", STR(0), STR(1));
+        break;
+    }
+
+    case ACTION_MOVE_SELECTED: {
+        doc_move_selected(doc_index, unpack_vector(context, 0));
+        break;
+    }
+
+    case ACTION_PREVIEW_OFF: {
+        doc_preview_off(doc_index);
+        break;
+    }
+
+    case ACTION_PREVIEW_ON: {
+        value = call(context, "previewon");
+        break;
+    }
+
+    case ACTION_QUICKLEADER: {
+        break;
+    }
+
+    case ACTION_ROTATE: {
+        doc_rotate_selected(doc_index, unpack_vector(context, 0), -REAL(2));
+        break;
+    }
+
+    case ACTION_SELECT_ALL: {
+        doc_select_all(doc_index);
+        break;
+    }
+
+    /* ACTION_DELETE_SELECTED? */
+    case ACTION_DELETE: {
+        doc_delete_selected(doc_index);
+        break;
+    }
+
+    case ACTION_PAN_REAL_TIME: {
+        doc_set_prop(doc_index, VIEW_PANNING_RT, true);
+        break;
+    }
+    case ACTION_PAN_POINT: {
+        doc_set_prop(doc_index, VIEW_PANNING_POINT, true);
+        break;
+    }
+    case ACTION_PAN_LEFT: {
+        doc_nav("PanLeft", doc_index);
+        break;
+    }
+    case ACTION_PAN_RIGHT: {
+        doc_nav("PanRight", doc_index);
+        break;
+    }
+    case ACTION_PAN_UP: {
+        doc_nav("PanUp", doc_index);
+        break;
+    }
+    case ACTION_PAN_DOWN: {
+        doc_nav("PanDown", doc_index);
+        break;
+    }
+
+    case ACTION_WINDOW_CLOSE: {
+        on_close_window();
+        break;
+    }
+
+    case ACTION_WINDOW_CLOSE_ALL:
+        window_close_all();
+        break;
+
+    case ACTION_WINDOW_CASCADE:
+        window_cascade();
+        break;
+
+    case ACTION_WINDOW_TILE:
+        window_tile();
+        break;
+
+    case ACTION_WINDOW_NEXT:
+        window_next();
+        break;
+
+    case ACTION_WINDOW_PREVIOUS: {
+        window_previous();
+        break;
+    }
+
+    case ACTION_ZOOM_ALL: {
+        debug_message("TODO: Implement zoomAll.");
+        break;
+    }
+
+    case ACTION_ZOOM_CENTER: {
+        debug_message("TODO: Implement zoomCenter.");
+        break;
+    }
+
+    case ACTION_ZOOM_DYNAMIC: {
+        debug_message("TODO: Implement zoomDynamic.");
+        break;
+    }
+
+    case ACTION_ZOOM_EXTENTS: {
+        doc_nav("ZoomExtents", doc_index);
+        break;
+    }
+
+    case ACTION_ZOOM_IN: {
+        doc_nav("ZoomIn", doc_index);
+        break;
+    }
+    case ACTION_ZOOM_OUT: {
+        doc_nav("ZoomOut", doc_index);
+        break;
+    }
+    case ACTION_ZOOM_SELECTED: {
+        doc_nav("ZoomSelected", doc_index);
+        break;
+    }
+    case ACTION_ZOOM_PREVIOUS: {
+        debug_message("TODO: Implement zoomPrevious.");
+        break;
+    }
+    case ACTION_ZOOM_REAL_TIME: {
+        debug_message("TODO: Implement zoomRealtime.");
+        break;
+    }
+    case ACTION_ZOOM_SCALE: {
+        debug_message("TODO: Implement zoomScale.");
+        break;
+    }
+    case ACTION_ZOOM_WINDOW: {
+        doc_zoom_window(doc_index);
+        break;
+    }
+
+    case ACTION_SIMULATE: {
+        glfw_application(0, NULL);
+        break;
+    }
+
+    }
+
+    if (!(command_data[id].flags & DONT_END_COMMAND)) {
+        end_command();
+    }
+    return value;
+}
+
+/*
+ * Wrapper for system-specific UI features.
+ * This is an alternative approach to using GLFW.
+ */
+
+void
+draw_frame(void)
+{
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1.0, 0.0, 0.0);
+    glBegin(GL_QUADS);
+    glVertex2f(1.0, 0.0);
+    glVertex2f(1.0, 1.0);
+    glVertex2f(0.0, 1.0);
+    glVertex2f(0.0, 0.0);
+    glEnd();
+}
+
+#ifdef __WIN32__
+/* Warning: this is untested boilerplate. */
+
+int APIENTRY
+wWinMain(_In_     HINSTANCE hInstance,
+         _In_opt_ HINSTANCE hPrevInstance,
+         _In_     LPWSTR    lpCmdLine,
+         _In_     int       nCmdShow)
+{
+    char title[200];
+    sprintf(title, "%s %s", _appName_, _appVer_);
+    createWindowW(title, title, 0, 0, 640, 480, nullptr, nullptr, hInstance, nullptr);
+
+    MSG msg;
+    while (GetMessage(&msg, nullptr, 0, 0)) {
+        TranslateMessage(&msg);
+        DisplatchMessage(&msg);
+    }
+
+    return 0;
+}
+
+#else
+/* All systems other than __WIN32__ are assumed to be X11.
+ * MacOS still supports X11: GIMP and Inkscape still use it.
+ * In future we may have Wayland support.
+ */
+
+int
+x11_main(int argc, char *argv[])
+{
+    Display *display = XOpenDisplay(NULL);
+    if (!display) {
+        printf("ERROR: failed to open an X11-compatible display.");
+        return 0;
+    }
+
+    Window root = DefaultRootWindow(display);
+
+    glEnable(GL_DEPTH_TEST);
+
+    XSetWindowAttributes attributes;
+    GLint att[] = {GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None};
+    XVisualInfo *visual = glXChooseVisual(display, 0, att);
+
+    attributes.colormap = XCreateColormap(display, root, visual->visual, AllocNone);
+    attributes.event_mask = ExposureMask | ButtonPressMask | PointerMotionMask;
+
+    Window win = XCreateWindow(display, root, 100, 100, 640, 480, 0,
+        visual->depth, InputOutput, visual->visual, CWColormap | CWEventMask,
+        &attributes);
+    XMapWindow(display, win);
+    char title[200];
+    sprintf(title, "%s %s", _appName_, _appVer_);
+    XStoreName(display, win, title);
+
+    GLXContext context = glXCreateContext(display, visual, NULL, GL_TRUE);
+    glXMakeCurrent(display, win, context);
+
+    int running = 1;
+    while (running) {
+        XWindowAttributes attr;
+        XEvent event;
+        XNextEvent(display, &event);
+        XGetWindowAttributes(display, win, &attr);
+        switch (event.type) {
+        default:
+            break;
+        }
+        draw_frame();
+        glXSwapBuffers(display, win);
+    }
+
+    glXMakeCurrent(display, None, NULL);
+    glXDestroyContext(display, context);
+    XDestroyWindow(display, win);
+    XCloseDisplay(display);
+    return 0;
+}
+
+#endif
 

@@ -1932,13 +1932,58 @@ char *geometry_type_keys[] = {
     END_SYMBOL
 };
 
-/*
+/* All of the pointers used by command_data.
  *
- * Shortcuts should match: https://doc.qt.io/qt-6/qkeysequence.html#standard-shortcuts
- * Apple platforms may need an additional argument like .apple_shortcut
+ * Note that these are not global scope functions because they are only needed
+ * for this table.
  */
+ScriptValue about_command(ScriptEnv *context);
+ScriptValue add_arc_command(ScriptEnv *context);
+ScriptValue add_circle_command(ScriptEnv *context);
+ScriptValue add_dimleader_command(ScriptEnv *context);
+ScriptValue add_ellipse_command(ScriptEnv *context);
+ScriptValue add_horizontal_dimension_command(ScriptEnv *context);
+ScriptValue add_image_command(ScriptEnv *context);
+ScriptValue add_infinite_line_command(ScriptEnv *context);
+ScriptValue add_line_command(ScriptEnv *context);
+ScriptValue add_ray_command(ScriptEnv *context);
+ScriptValue add_triangle_command(ScriptEnv *context);
+ScriptValue add_rectangle_command(ScriptEnv *context);
+ScriptValue add_rounded_rectangle_command(ScriptEnv *context);
+ScriptValue add_slot_command(ScriptEnv *context);
+ScriptValue add_point_command(ScriptEnv *context);
+ScriptValue add_regular_polygon_command(ScriptEnv *context);
+ScriptValue add_vertical_dimension_command(ScriptEnv *context);
+ScriptValue add_textmulti_command(ScriptEnv *context);
+ScriptValue add_textsingle_command(ScriptEnv *context);
+ScriptValue alert_command(ScriptEnv *context);
+ScriptValue angle_command(ScriptEnv *context);
+ScriptValue current_color_changed_command(ScriptEnv *context);
+ScriptValue details_command(ScriptEnv *context);
+ScriptValue do_nothing_command(ScriptEnv *context);
+ScriptValue exit_command(ScriptEnv *context);
+ScriptValue get_command(ScriptEnv *context);
+ScriptValue new_command(ScriptEnv *context);
+ScriptValue move_command(ScriptEnv *context);
+ScriptValue open_command(ScriptEnv *context);
+ScriptValue paste_command(ScriptEnv *context);
+ScriptValue previewon_command(ScriptEnv *context);
+ScriptValue print_command(ScriptEnv *context);
+ScriptValue redo_command(ScriptEnv *context);
+ScriptValue sandbox_command(ScriptEnv *context);
+ScriptValue save_command(ScriptEnv *context);
+ScriptValue saveas_command(ScriptEnv *context);
+ScriptValue set_command(ScriptEnv *context);
+ScriptValue undo_command(ScriptEnv *context);
 
-Command command_data[MAX_COMMANDS] = {
+/* Command Data: interface to command function pointers and necessary data
+ * for the menu and toolbar presentation of the commands.
+ *
+ * Shortcuts should match:
+ *     https://doc.qt.io/qt-6/qkeysequence.html#standard-shortcuts
+ * Apple platforms may need an additional argument like ".apple_shortcut".
+ */
+CommandData command_data[MAX_COMMANDS] = {
     /* ACTION_NULL                    0 */
     {
         .command = "donothing",
@@ -2071,9 +2116,9 @@ Command command_data[MAX_COMMANDS] = {
         .flags = REQUIRED_VIEW,
         .action = do_nothing_command
     },
-    /* ACTION_COPY_SELECTED          11 */
+    /* 11 */
     {
-        .command = "donothing",
+        .command = "copy-selected",
         .arguments = "",
         .icon = "no-symbol",
         .tooltip = "This action is unfinished.",
@@ -2095,9 +2140,9 @@ Command command_data[MAX_COMMANDS] = {
         .flags = REQUIRED_VIEW,
         .action = paste_command
     },
-    /* ACTION_PASTE_SELECTED         13 */
+    /* 13 */
     {
-        .command = "donothing",
+        .command = "paste-selected",
         .arguments = "",
         .icon = "no-symbol",
         .tooltip = "This action is unfinished.",
@@ -3307,9 +3352,9 @@ Command command_data[MAX_COMMANDS] = {
         .flags = CONTEXT_FREE,
         .action = do_nothing_command
     },
-    /* ACTION_DELETE                114 */
+    /* 114 */
     {
-        .command = "donothing",
+        .command = "delete",
         .arguments = "",
         .icon = "no-symbol",
         .tooltip = "This action is unfinished.",
@@ -3509,6 +3554,17 @@ Command command_data[MAX_COMMANDS] = {
         .shortcut = "",
         .flags = REQUIRED_VIEW,
         .action = do_nothing_command
+    },
+    /* Terminator symbol. */
+    {
+        .command = "--END--",
+        .icon = "END",
+        .tooltip = "END",
+        .statustip = "END",
+        .alias = "END",
+        .shortcut = "END",
+        .flags = -1,
+        .action = NULL
     }
 };
 

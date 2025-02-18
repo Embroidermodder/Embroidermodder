@@ -976,7 +976,7 @@ MainWindow::colorSelectorIndexChanged(int index)
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        current_color_changed_command(pack(global, "i", newColor));
+        call(global, "current_color_changed", "i", newColor);
     }
 }
 
@@ -1149,8 +1149,8 @@ set_cursor_shape(EmbString shape)
  *
  * TODO: QTabWidget for about dialog
  */
-ScriptValue
-about_command(ScriptEnv *context)
+void
+about_dialog(void)
 {
     arrow_cursor();
     debug_message("about()");
@@ -1200,15 +1200,6 @@ about_command(ScriptEnv *context)
     dialog.exec();
 
     restore_cursor();
-    return script_true;
-}
-
-/* . */
-ScriptValue
-set_prompt_prefix_command(ScriptEnv* context)
-{
-    set_prompt_prefix(STR(0));
-    return script_null;
 }
 
 /* . */

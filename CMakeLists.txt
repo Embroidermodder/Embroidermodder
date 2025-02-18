@@ -149,9 +149,8 @@ set_target_properties(embroidermodder2 PROPERTIES
 
 if (WIN32)
 else(WIN32)
-#target_link_libraries(embroidermodder2_x11 PRIVATE
-#	${OPENGL_LIBRARIES}
-#	${X11_LIBRARIES}
-#	m
-#)
+target_link_libraries(embroidermodder2 PRIVATE
+	${X11_LIBRARIES}
+	m
+)
 endif()
