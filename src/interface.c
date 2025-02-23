@@ -1396,6 +1396,10 @@ load_command_data(char *label)
     command_data[id].flags = flags;
 }
 
+const char *config_table[] = {
+    END_SYMBOL
+};
+
 /* Rather than loading necessary configuration data from file at load, it is
  * compiled into the program. However, the ability to change the UI as a
  * user, without re-compiling the program, can be preserved by overriding the string
@@ -1404,23 +1408,13 @@ load_command_data(char *label)
 int
 load_data(void)
 {
-    return 1;
-    for (int i=0; i<MAX_COMMANDS; i++) {
-        command_data[i].command[0] = 0;
-        command_data[i].arguments[0] = 0;
-        command_data[i].icon[0] = 0;
-        command_data[i].tooltip[0] = 0;
-        command_data[i].statustip[0] = 0;
-        command_data[i].alias[0] = 0;
-        command_data[i].flags = 0;
-    }
-
     /* Load config_table into config ScriptValues. */
     for (n_variables=0; ; n_variables++) {
         if (string_equal(config_table[n_variables], END_SYMBOL)) {
             break;
         }
     }
+    return 1;
     config = (ScriptValue*)malloc(n_variables * sizeof(ScriptValue));
     for (int line_no=0; line_no<n_variables; line_no++) {
         char line[200];
@@ -3357,20 +3351,6 @@ run_cmd(ScriptEnv *context, const char *cmd)
         break;
     }
 
-    case ACTION_CIRCLE:
-    case ACTION_COPY_SELECTED:
-    case ACTION_CUT:
-    case ACTION_ELLIPSE:
-    case ACTION_DIM_LEADER:
-    case ACTION_GET:
-    case ACTION_LINE:
-    case ACTION_MOVE:
-    case ACTION_SET:
-    case ACTION_RECTANGLE:
-    case ACTION_REDO:
-        value = call(context, command_data[id].command);
-        break;
-
     case ACTION_ANGLE: {
         EmbVector start = unpack_vector(context, 0);
         EmbVector end = unpack_vector(context, 2);
@@ -3419,10 +3399,6 @@ run_cmd(ScriptEnv *context, const char *cmd)
         }
         break;
     }
-
-    case ACTION_EXIT:
-        exit_program();
-        break;
 
     case ACTION_HELP:
         help();
@@ -3784,86 +3760,4 @@ draw_frame(void)
     glVertex2f(0.0, 0.0);
     glEnd();
 }
-
-#ifdef __WIN32__
-/* Warning: this is untested boilerplate. */
-
-int APIENTRY
-wWinMain(_In_     HINSTANCE hInstance,
-         _In_opt_ HINSTANCE hPrevInstance,
-         _In_     LPWSTR    lpCmdLine,
-         _In_     int       nCmdShow)
-{
-    char title[200];
-    sprintf(title, "%s %s", _appName_, _appVer_);
-    createWindowW(title, title, 0, 0, 640, 480, nullptr, nullptr, hInstance, nullptr);
-
-    MSG msg;
-    while (GetMessage(&msg, nullptr, 0, 0)) {
-        TranslateMessage(&msg);
-        DisplatchMessage(&msg);
-    }
-
-    return 0;
-}
-
-#else
-/* All systems other than __WIN32__ are assumed to be X11.
- * MacOS still supports X11: GIMP and Inkscape still use it.
- * In future we may have Wayland support.
- */
-
-int
-x11_main(int argc, char *argv[])
-{
-    Display *display = XOpenDisplay(NULL);
-    if (!display) {
-        printf("ERROR: failed to open an X11-compatible display.");
-        return 0;
-    }
-
-    Window root = DefaultRootWindow(display);
-
-    glEnable(GL_DEPTH_TEST);
-
-    XSetWindowAttributes attributes;
-    GLint att[] = {GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None};
-    XVisualInfo *visual = glXChooseVisual(display, 0, att);
-
-    attributes.colormap = XCreateColormap(display, root, visual->visual, AllocNone);
-    attributes.event_mask = ExposureMask | ButtonPressMask | PointerMotionMask;
-
-    Window win = XCreateWindow(display, root, 100, 100, 640, 480, 0,
-        visual->depth, InputOutput, visual->visual, CWColormap | CWEventMask,
-        &attributes);
-    XMapWindow(display, win);
-    char title[200];
-    sprintf(title, "%s %s", _appName_, _appVer_);
-    XStoreName(display, win, title);
-
-    GLXContext context = glXCreateContext(display, visual, NULL, GL_TRUE);
-    glXMakeCurrent(display, win, context);
-
-    int running = 1;
-    while (running) {
-        XWindowAttributes attr;
-        XEvent event;
-        XNextEvent(display, &event);
-        XGetWindowAttributes(display, win, &attr);
-        switch (event.type) {
-        default:
-            break;
-        }
-        draw_frame();
-        glXSwapBuffers(display, win);
-    }
-
-    glXMakeCurrent(display, None, NULL);
-    glXDestroyContext(display, context);
-    XDestroyWindow(display, win);
-    XCloseDisplay(display);
-    return 0;
-}
-
-#endif
 

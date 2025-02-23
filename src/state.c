@@ -1932,50 +1932,6 @@ char *geometry_type_keys[] = {
     END_SYMBOL
 };
 
-/* All of the pointers used by command_data.
- *
- * Note that these are not global scope functions because they are only needed
- * for this table.
- */
-ScriptValue about_command(ScriptEnv *context);
-ScriptValue add_arc_command(ScriptEnv *context);
-ScriptValue add_circle_command(ScriptEnv *context);
-ScriptValue add_dimleader_command(ScriptEnv *context);
-ScriptValue add_ellipse_command(ScriptEnv *context);
-ScriptValue add_horizontal_dimension_command(ScriptEnv *context);
-ScriptValue add_image_command(ScriptEnv *context);
-ScriptValue add_infinite_line_command(ScriptEnv *context);
-ScriptValue add_line_command(ScriptEnv *context);
-ScriptValue add_ray_command(ScriptEnv *context);
-ScriptValue add_triangle_command(ScriptEnv *context);
-ScriptValue add_rectangle_command(ScriptEnv *context);
-ScriptValue add_rounded_rectangle_command(ScriptEnv *context);
-ScriptValue add_slot_command(ScriptEnv *context);
-ScriptValue add_point_command(ScriptEnv *context);
-ScriptValue add_regular_polygon_command(ScriptEnv *context);
-ScriptValue add_vertical_dimension_command(ScriptEnv *context);
-ScriptValue add_textmulti_command(ScriptEnv *context);
-ScriptValue add_textsingle_command(ScriptEnv *context);
-ScriptValue alert_command(ScriptEnv *context);
-ScriptValue angle_command(ScriptEnv *context);
-ScriptValue current_color_changed_command(ScriptEnv *context);
-ScriptValue details_command(ScriptEnv *context);
-ScriptValue do_nothing_command(ScriptEnv *context);
-ScriptValue exit_command(ScriptEnv *context);
-ScriptValue get_command(ScriptEnv *context);
-ScriptValue new_command(ScriptEnv *context);
-ScriptValue move_command(ScriptEnv *context);
-ScriptValue open_command(ScriptEnv *context);
-ScriptValue paste_command(ScriptEnv *context);
-ScriptValue previewon_command(ScriptEnv *context);
-ScriptValue print_command(ScriptEnv *context);
-ScriptValue redo_command(ScriptEnv *context);
-ScriptValue sandbox_command(ScriptEnv *context);
-ScriptValue save_command(ScriptEnv *context);
-ScriptValue saveas_command(ScriptEnv *context);
-ScriptValue set_command(ScriptEnv *context);
-ScriptValue undo_command(ScriptEnv *context);
-
 /* Command Data: interface to command function pointers and necessary data
  * for the menu and toolbar presentation of the commands.
  *

@@ -100,9 +100,8 @@ qt_add_executable(embroidermodder2
 
 	${LIBRARY_SRC}
 
-	${SRC}/widgets.cpp
+	${SRC}/commands.cpp
 
-	${SRC}/commands.c
 	${SRC}/designs.c
 	${SRC}/interface.c
 	${SRC}/objects.c
@@ -111,7 +110,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/icons.c
 	${SRC}/xpm.c
 
-	${SRC}/widgets.h
 	${SRC}/core.h
 )
 
