@@ -7,7 +7,7 @@
  * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
  * for advice on altering this file.
  *
- * Command Core: 
+ * Command Core:
  *
  * All functions in this file are of the form of a Command and are ordered
  * alphabetically (TODO). The command_data table is stored in "state.c".
@@ -19,6 +19,8 @@
 #include <string.h>
 
 #include "core.h"
+
+void native_scale_selected(EmbReal x, EmbReal y, EmbReal factor);
 
 /* Generic widget pointer for a widget map. */
 typedef struct Widget_ {
@@ -302,15 +304,6 @@ restore_cursor(void)
 }
 
 /* . */
-void
-whats_this_mode(void)
-{
-    debug_message("whats_this_context_help()");
-    QWhatsThis::enterWhatsThisMode();
-}
-
-
-/* . */
 QLabel *
 create_tr_label(const char *label, QDialog *dialog)
 {
@@ -507,7 +500,7 @@ create_swatch(int32_t color)
 {
     QPixmap pixmap(16, 16);
     pixmap.fill(QColor(color));
-    return QIcon(pixmap); 
+    return QIcon(pixmap);
 }
 
 /* . */
@@ -707,70 +700,6 @@ prompt_output(const char *txt)
 
 /* . */
 void
-tip_of_the_day(void)
-{
-    debug_message("tip_of_the_day()");
-
-    wizardTipOfTheDay = new QWizard(_main);
-    wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
-    wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
-    wizardTipOfTheDay->setMinimumSize(550, 400);
-
-    QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
-
-    QWidget *imgBanner = new QWidget(wizardTipOfTheDay);
-    QImage *img = new QImage();
-
-    img->load(QString("icons/default/did_you_know.png"));
-
-    imgBanner->setMinimumWidth(img->width());
-    imgBanner->setMinimumHeight(img->height());
-    imgBanner->setMaximumWidth(img->width());
-    imgBanner->setMaximumHeight(img->height());
-
-    if (get_int(GENERAL_CURRENT_TIP) >= table_length(tips)) {
-        set_int(GENERAL_CURRENT_TIP, 0);
-    }
-    labelTipOfTheDay = new QLabel(tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
-    labelTipOfTheDay->setWordWrap(true);
-
-    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
-    checkBoxTipOfTheDay->setChecked(get_bool(GENERAL_TIP_OF_THE_DAY));
-    QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main,
-        SLOT([](int checked) { set_bool(GENERAL_TIP_OF_THE_DAY, checked); }));
-
-    QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
-    layout->addWidget(imgBanner);
-    layout->addStrut(1);
-    layout->addWidget(labelTipOfTheDay);
-    layout->addStretch(1);
-    layout->addWidget(checkBoxTipOfTheDay);
-    page->setLayout(layout);
-    wizardTipOfTheDay->addPage(page);
-
-    wizardTipOfTheDay->setWindowTitle("Tip of the Day");
-
-    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious) */
-    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext) */
-    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose) */
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, translate("&Previous"));
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, translate("&Next"));
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, translate("&Close"));
-    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton1, true);
-    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton2, true);
-    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
-    QObject::connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), _main, SLOT(button_tip_of_the_day_clicked(int)));
-
-    QList<QWizard::WizardButton> listTipOfTheDayButtons;
-    listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1
-        << QWizard::CustomButton2 << QWizard::CustomButton3;
-    wizardTipOfTheDay->setButtonLayout(listTipOfTheDayButtons);
-
-    wizardTipOfTheDay->exec();
-}
-
-/* . */
-void
 button_tip_of_the_day_clicked(int button)
 {
     debug_message("button_tip_of_the_day_clicked(%d)", button);
@@ -799,8 +728,8 @@ button_tip_of_the_day_clicked(int button)
 }
 
 /* . */
-void
-help(void)
+ScriptValue
+help_command(ScriptEnv *context)
 {
     debug_message("help()");
 
@@ -815,17 +744,9 @@ help(void)
      * QProcess *myProcess = new QProcess(this);
      * myProcess->start(program, arguments);
      */
+     return script_true;
 }
 
-/* . */
-void
-changelog(void)
-{
-    debug_message("changelog()");
-
-    QUrl changelogURL("help/changelog.html");
-    QDesktopServices::openUrl(changelogURL);
-}
 
 /* Standard Slots */
 ScriptValue
@@ -863,35 +784,6 @@ icon_resize(int iconSize)
     set_int(GENERAL_ICON_SIZE, iconSize);
 }
 
-void
-window_close_all(void)
-{
-    mdiArea->closeAllSubWindows();
-}
-
-void
-window_cascade(void)
-{
-    mdiArea->cascade();
-}
-
-void
-window_tile(void)
-{
-    mdiArea->tile();
-}
-
-void
-window_next(void)
-{
-    mdiArea->activateNextSubWindow();
-}
-
-void
-window_previous(void)
-{
-    mdiArea->activatePreviousSubWindow();
-}
 
 /* . */
 void
@@ -1106,65 +998,6 @@ set_cursor_shape(EmbString shape)
     else if (!strcmp(shape, "draglink")) {
         doc->setCursor(QCursor(Qt::DragLinkCursor));
     }
-}
-
-/* Simple Commands (other commands, like circle_command are housed in their
- * own file with their associated functions)
- * ------------------------------------------------------------------------
- *
- * TODO: QTabWidget for about dialog
- */
-void
-about_dialog(void)
-{
-    arrow_cursor();
-    debug_message("about()");
-
-    QString title = "About Embroidermodder 2";
-
-    QDialog dialog(_main);
-    QLabel image_label;
-    QPixmap img = create_pixmap("logo_small");
-    image_label.setPixmap(img);
-    QString body_text = "Embroidermodder 2\n\n";
-    /* add version here */
-    body_text += translate("http://www.libembroidery.org");
-    body_text += "\n\n";
-    body_text += translate("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi");
-    body_text += "\n\n";
-    body_text += translate("Embroidery formats by Josh Varga.");
-    body_text += "\n\n";
-    body_text += translate("User Interface by Jonathan Greig.");
-    body_text += "\n\n";
-    body_text += translate("Free under the zlib/libpng license.");
-#if defined(BUILD_GIT_HASH)
-    body_text += "\n\n";
-    body_text += translate("Build Hash: ");
-    body_text += qPrintable(BUILD_GIT_HASH);
-#endif
-    QLabel text(body_text);
-    text.setWordWrap(true);
-
-    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
-    QPushButton button(&dialog);
-    button.setText("Oh, Yeah!");
-    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
-    buttonbox.setCenterButtons(true);
-    _main->connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-
-    QVBoxLayout layout;
-    layout.setAlignment(Qt::AlignCenter);
-    layout.addWidget(&image_label);
-    layout.addWidget(&text);
-    layout.addWidget(&buttonbox);
-
-    dialog.setWindowTitle(title);
-    dialog.setMinimumWidth(image_label.minimumWidth()+30);
-    dialog.setMinimumHeight(image_label.minimumHeight()+50);
-    dialog.setLayout(&layout);
-    dialog.exec();
-
-    restore_cursor();
 }
 
 /* . */
@@ -4894,7 +4727,7 @@ create_details_dialog(void)
     EmbRect bounds = emb_pattern_bounds(pattern);
 
     if (pattern->stitch_list->count == 0) {
-        messagebox("warning", 
+        messagebox("warning",
             translate("No Design Loaded"),
             translate("<b>A design needs to be loaded or created before details can be determined.</b>"));
         return;
@@ -5923,7 +5756,7 @@ make_application(int argc, char* argv[])
     }
     strcpy(files[i], END_SYMBOL);
     files_ptrs[i] = (char*)files[i];
-    
+
     _main = new MainWindow();
     QObject::connect(&app, SIGNAL(lastWindowClosed()), _main, SLOT(quit()));
 
@@ -5958,7 +5791,7 @@ MainWindow::add_toolbar_to_window(Qt::ToolBarArea area, int data[])
 MainWindow::MainWindow() : QMainWindow(0)
 {
     read_settings();
-    
+
     for (int i=0; i<MAX_OPEN_FILES; i++) {
         document_memory[i] = false;
     }
@@ -6269,7 +6102,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbar[TOOLBAR_PROMPT]->show();
 
     if (get_bool(GENERAL_TIP_OF_THE_DAY) && (!testing_mode)) {
-        tip_of_the_day();
+        tip_of_the_day_command(NULL);
     }
 
     debug_message("Finished creating window.");
@@ -6364,8 +6197,8 @@ MainWindow::windowMenuActivated(bool checked)
 }
 
 /* . */
-void
-new_file(void)
+ScriptValue
+new_command(ScriptEnv * /* context */)
 {
     debug_message("new_file()");
     docIndex++;
@@ -6384,6 +6217,7 @@ new_file(void)
         doc_recalculate_limits(doc_index);
         doc_nav("ZoomExtents", doc_index);
     }
+    return script_true;
 }
 
 /* . */
@@ -6425,7 +6259,7 @@ open_file(bool recent, EmbString recentFile)
         create_preview_dialog(
             translate("Open w/Preview"), open_files_path, formatFilterOpen);
         /* TODO: set
-         * openDialog->selectNameFilter(QString filter) from opensave_open_format.setting 
+         * openDialog->selectNameFilter(QString filter) from opensave_open_format.setting
          */
         QObject::connect(preview_dialog,
             SIGNAL(filesSelected(const QStringList&)), _main,
@@ -6523,7 +6357,7 @@ save_as_file(void)
     strcpy(open_files_path, get_str(OPENSAVE_RECENT_DIRECTORY));
     QString fileName = QFileDialog::getSaveFileName(_main,
         translate("Save As"), QString(open_files_path), formatFilterSave);
-    
+
     return pattern_save(data->pattern, (char*)qPrintable(fileName));
 }
 
@@ -6552,17 +6386,6 @@ MainWindow::closeEvent(QCloseEvent* event)
     mdiArea->closeAllSubWindows();
     write_settings();
     event->accept();
-}
-
-/* . */
-void
-on_close_window(void)
-{
-    debug_message("on_close_window()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        onCloseMdiWin(mdiWin);
-    }
 }
 
 /* . */
@@ -7506,7 +7329,7 @@ add_lineedit(EmbString key, QLineEdit *lineedit)
     n_widgets++;
 }
 
-/* 
+/*
  * Data order: (signal_name, icon, label, signal).
  * TODO: icon not set here.
  */
@@ -7945,7 +7768,7 @@ createTabPrompt(void)
     "labelFontStyle", "comboBoxFontStyle",
     "labelFontSize", "spinBoxFontSize"
     */
-    
+
     QGridLayout* gridLayoutFont = new QGridLayout(groupBoxFont);
     gridLayoutFont->addWidget(labelFontFamily, 0, 0, Qt::AlignLeft);
     gridLayoutFont->addWidget(comboBoxFontFamily, 0, 1, Qt::AlignRight);
@@ -8789,14 +8612,59 @@ rejectChanges()
     set_dialog->reject();
 }
 
-
-void native_scale_selected(EmbReal x, EmbReal y, EmbReal factor);
-
-/* . */
+/* TODO: QTabWidget for about dialog */
 ScriptValue
 about_command(ScriptEnv* context)
 {
-    about_dialog();
+    arrow_cursor();
+    debug_message("about()");
+
+    QString title = "About Embroidermodder 2";
+
+    QDialog dialog(_main);
+    QLabel image_label;
+    QPixmap img = create_pixmap("logo_small");
+    image_label.setPixmap(img);
+    QString body_text = "Embroidermodder 2\n\n";
+    /* add version here */
+    body_text += translate("http://www.libembroidery.org");
+    body_text += "\n\n";
+    body_text += translate("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi");
+    body_text += "\n\n";
+    body_text += translate("Embroidery formats by Josh Varga.");
+    body_text += "\n\n";
+    body_text += translate("User Interface by Jonathan Greig.");
+    body_text += "\n\n";
+    body_text += translate("Free under the zlib/libpng license.");
+#if defined(BUILD_GIT_HASH)
+    body_text += "\n\n";
+    body_text += translate("Build Hash: ");
+    body_text += qPrintable(BUILD_GIT_HASH);
+#endif
+    QLabel text(body_text);
+    text.setWordWrap(true);
+
+    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
+    QPushButton button(&dialog);
+    button.setText("Oh, Yeah!");
+    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
+    buttonbox.setCenterButtons(true);
+    _main->connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+
+    QVBoxLayout layout;
+    layout.setAlignment(Qt::AlignCenter);
+    layout.addWidget(&image_label);
+    layout.addWidget(&text);
+    layout.addWidget(&buttonbox);
+
+    dialog.setWindowTitle(title);
+    dialog.setMinimumWidth(image_label.minimumWidth()+30);
+    dialog.setMinimumHeight(image_label.minimumHeight()+50);
+    dialog.setLayout(&layout);
+    dialog.exec();
+
+    restore_cursor();
+
     return script_true;
 }
 
@@ -8812,7 +8680,8 @@ set_prompt_prefix_command(ScriptEnv* context)
 ScriptValue
 paste_command(ScriptEnv *context)
 {
-    debug_message("TODO: paste command");
+    int doc_index = active_document();
+    doc_paste(doc_index);
     return script_true;
 }
 
@@ -8888,12 +8757,6 @@ cut_selected_command(ScriptEnv *context)
     return script_true;
 }
 
-ScriptValue
-details_command(ScriptEnv* context)
-{
-    return script_true;
-}
-
 /* This action intentionally does nothing. */
 ScriptValue
 do_nothing_command(ScriptEnv *context)
@@ -8925,7 +8788,8 @@ layer_selector_changed_command(ScriptEnv *context)
 {
     int index = INT(0);
     debug_message("layer_selector_changed(%d)", index);
-    return script_true;
+    /* FIXME: */
+    return layer_selector_command(context);
 }
 
 /* . */
@@ -8943,6 +8807,608 @@ lineweight_selector_changed_command(ScriptEnv *context)
 {
     int index = INT(0);
     debug_message("lineweight_selector_changed(%d)", index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+paste_selected_command(ScriptEnv *context)
+{
+    /* Paste with location x,y */
+    /* native_paste_selected(REAL(0), REAL(1)); */
+    return script_true;
+}
+
+/* . */
+ScriptValue
+whats_this_command(ScriptEnv *context)
+{
+    debug_message("whats_this_context_help()");
+    QWhatsThis::enterWhatsThisMode();
+    return script_true;
+}
+
+/* . */
+ScriptValue
+icon16_command(ScriptEnv *context)
+{
+    icon_resize(16);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+icon24_command(ScriptEnv *context)
+{
+    icon_resize(24);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+icon32_command(ScriptEnv *context)
+{
+    icon_resize(32);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+icon48_command(ScriptEnv *context)
+{
+    icon_resize(48);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+icon64_command(ScriptEnv *context)
+{
+    icon_resize(64);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+icon128_command(ScriptEnv *context)
+{
+    icon_resize(128);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+settings_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+layers_command(ScriptEnv *context)
+{
+    layer_manager();
+    return script_true;
+}
+
+/* . */
+ScriptValue
+layer_selector_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+line_type_selector_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+line_weight_selector_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+hide_all_layers_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+show_all_layers_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+freeze_all_layers_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+thaw_all_layers_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+lock_all_layers_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+unlock_all_layers_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* Toggle the current interface state for text enboldening. */
+ScriptValue
+text_bold_command(ScriptEnv *context)
+{
+    set_bool(TEXT_STYLE_BOLD, !get_bool(TEXT_STYLE_BOLD));
+    return script_true;
+}
+
+/* Toggle the current interface state for text italicising. */
+ScriptValue
+text_italic_command(ScriptEnv *context)
+{
+    set_bool(TEXT_STYLE_ITALIC, !get_bool(TEXT_STYLE_ITALIC));
+    return script_true;
+}
+
+/* Toggle the current interface state for text underlining. */
+ScriptValue
+text_underline_command(ScriptEnv *context)
+{
+    set_bool(TEXT_STYLE_UNDERLINE, !get_bool(TEXT_STYLE_UNDERLINE));
+    return script_true;
+}
+
+/* Toggle the current interface state for text striking. */
+ScriptValue
+text_strikeout_command(ScriptEnv *context)
+{
+    set_bool(TEXT_STYLE_STRIKEOUT, !get_bool(TEXT_STYLE_STRIKEOUT));
+    return script_true;
+}
+
+/* Toggle the current interface state for text overlining. */
+ScriptValue
+text_overline_command(ScriptEnv *context)
+{
+    set_bool(TEXT_STYLE_OVERLINE, !get_bool(TEXT_STYLE_OVERLINE));
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_real_time_command(ScriptEnv *context)
+{
+    debug_message("TODO: Implement zoomRealtime.");
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_previous_command(ScriptEnv *context)
+{
+    debug_message("TODO: Implement zoomPrevious.");
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_window_command(ScriptEnv *context)
+{
+    /* fixme */
+    int doc_index = 0;
+    doc_zoom_window(doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_dynamic_command(ScriptEnv *context)
+{
+    debug_message("TODO: Implement zoomDynamic.");
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_scale_command(ScriptEnv *context)
+{
+    debug_message("TODO: Implement zoomScale.");
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_center_command(ScriptEnv *context)
+{
+    debug_message("TODO: Implement zoomCenter.");
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_in_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_nav("ZoomIn", doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_out_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_nav("ZoomOut", doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_selected_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_nav("ZoomSelected", doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_all_command(ScriptEnv *context)
+{
+    debug_message("TODO: Implement zoomAll.");
+    return script_true;
+}
+
+/* . */
+ScriptValue
+zoom_extents_command(ScriptEnv *context)
+{
+    /* fixme */
+    int doc_index = 0;
+    doc_nav("ZoomExtents", doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+panrealtime_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_set_prop(doc_index, VIEW_PANNING_RT, true);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+panpoint_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_set_prop(doc_index, VIEW_PANNING_POINT, true);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+panleft_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_nav("PanLeft", doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+panright_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_nav("PanRight", doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+panup_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_nav("PanUp", doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+pandown_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_nav("PanDown", doc_index);
+    return script_true;
+}
+
+/* TODO: Make day vision color setting user definable. */
+ScriptValue
+day_command(ScriptEnv *context)
+{
+    /* FIXME: */
+    int doc_index = active_document();
+    doc_set_background_color(doc_index, 0xFFFFFF);
+    doc_set_cross_hair_color(doc_index, 0x000000);
+    // FIXME: doc_set_grid_color(doc_index, 0x000000);
+    return script_true;
+}
+
+/* TODO: Make night vision color setting user definable. */
+ScriptValue
+night_command(ScriptEnv *context)
+{
+    /* FIXME: */
+    int doc_index = active_document();
+    doc_set_background_color(doc_index, 0x000000);
+    doc_set_cross_hair_color(doc_index, 0xFFFFFF);
+    // FIXME: doc_set_grid_color(doc_index, 0xFFFFFF);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+dimleader_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+dolphin_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+erase_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    DocumentData *data = doc_data(doc_index);
+    if (data->selectedItems->count <= 0) {
+        /* TODO: Prompt to select objects if nothing is preselected. */
+        prompt_output(
+        translate("Preselect objects before invoking the delete command."));
+        messagebox("information", translate("Delete Preselect"),
+            translate("Preselect objects before invoking the delete command."));
+    }
+    else {
+        doc_delete_selected(doc_index);
+    }
+    return script_true;
+}
+
+/* . */
+ScriptValue
+error_command(ScriptEnv *context)
+{
+    debug_message("ERROR: (%s) %s", STR(0), STR(1));
+    return script_true;
+}
+
+/* . */
+ScriptValue
+heart_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+located_point_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+mirror_selected_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_mirror_selected(doc_index, REAL(0), -REAL(1), REAL(2), -REAL(3));
+    return script_true;
+}
+
+/* . */
+ScriptValue
+move_selected_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_move_selected(doc_index, unpack_vector(context, 0));
+    return script_true;
+}
+
+/* Should this display in the command prompt or just return like GET? */
+ScriptValue
+platform_command(ScriptEnv *context)
+{
+    /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
+    return script_true;
+}
+
+/* . */
+ScriptValue
+previewoff_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_preview_off(doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+select_all_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_select_all(doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+single_line_text_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+snowflake_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+star_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+todo_command(ScriptEnv *context)
+{
+    debug_message("TODO: %s", STR(0));
+    return script_true;
+}
+
+/* . */
+ScriptValue
+vulcanize_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_vulcanize_rubber_room(doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+add_geometry_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+delete_command(ScriptEnv *context)
+{
+    int doc_index = active_document();
+    doc_delete_selected(doc_index);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+grip_edit_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+nav_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+mirror_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+simulate_command(ScriptEnv *context)
+{
+    glfw_application(0, NULL);
+    return script_true;
+}
+
+/* . */
+ScriptValue
+play_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+stop_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+pause_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+fast_forward_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+export_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+qr_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+lettering_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+pattern_command(ScriptEnv *context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+design_command(ScriptEnv *context)
+{
     return script_true;
 }
 
@@ -9257,6 +9723,17 @@ get_current_line_weight(void)
 void
 native_cut_selected(EmbReal x, EmbReal y)
 {
+}
+
+/* . */
+ScriptValue
+changelog_command(ScriptEnv *context)
+{
+    debug_message("changelog()");
+
+    QUrl changelogURL("help/changelog.html");
+    QDesktopServices::openUrl(changelogURL);
+    return script_true;
 }
 
 /* SET is a prompt-only Command.
@@ -9912,6 +10389,8 @@ sandbox_command(ScriptEnv * context)
 ScriptValue
 rotate_command(ScriptEnv * context)
 {
+    int doc_index = active_document();
+    doc_rotate_selected(doc_index, unpack_vector(context, 0), -REAL(2));
     switch (context->context) {
     case CONTEXT_MAIN: {
         break;
@@ -10731,27 +11210,11 @@ previewon_command(ScriptEnv *context)
     return script_null;
 }
 
-ScriptValue
-new_command(ScriptEnv* context)
-{
-    return script_true;
-}
-
+/* . */
 ScriptValue
 open_command(ScriptEnv* context)
 {
-    return script_true;
-}
-
-ScriptValue
-save_command(ScriptEnv* context)
-{
-    return script_true;
-}
-
-ScriptValue
-saveas_command(ScriptEnv* context)
-{
+    open_file(false, "");
     return script_true;
 }
 
@@ -10765,6 +11228,21 @@ print_command(ScriptEnv* context)
         mdiWin->print();
     }
     return script_true;
+}
+
+/* . */
+ScriptValue
+save_command(ScriptEnv* context)
+{
+    debug_message("MainWindow::savefile()");
+    return script_true;
+}
+
+/* . */
+ScriptValue
+save_as_command(ScriptEnv *context)
+{
+    return save_command(context);
 }
 
 /* . */
@@ -10853,6 +11331,195 @@ end_command(void)
         doc_set_prop(doc_index, VIEW_RAPID_MOVING, false);
     }
     prompt_end_command();
+}
+
+/* . */
+ScriptValue
+copy_command(ScriptEnv *context)
+{
+    /* doc_copy(doc_index); */
+    return script_true;
+}
+
+ScriptValue
+color_selector_command(ScriptEnv *context)
+{
+    prompt_output("TODO: COLORSELECTOR");
+    return script_true;
+}
+
+ScriptValue
+debug_command(ScriptEnv *context)
+{
+    prompt_output(STR(0));
+    return script_true;
+}
+
+ScriptValue
+details_command(ScriptEnv *context)
+{
+    create_details_dialog();
+    return script_true;
+}
+
+ScriptValue
+disable_command(ScriptEnv *context)
+{
+    /* FIXME */
+    int doc_index = 0;
+    if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
+        doc_set_prop(doc_index, VIEW_RAPID_MOVING, false);
+    }
+    if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
+        disable_rapid_fire();
+    }
+    return script_true;
+}
+
+ScriptValue
+enable_command(ScriptEnv *context)
+{
+    /* FIXME */
+    int doc_index = 0;
+    if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
+        doc_set_prop(doc_index, VIEW_RAPID_MOVING, true);
+    }
+    if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
+        enable_rapid_fire();
+    }
+    return script_true;
+}
+
+/* . */
+ScriptValue
+num_selected_command(ScriptEnv * /* context */)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+settings_dialog_command(ScriptEnv * /* context */)
+{
+    settings_dialog("");
+    return script_true;
+}
+
+/* Create and show the "Tip of the Day" dialog. */
+ScriptValue
+tip_of_the_day_command(ScriptEnv * /* context */)
+{
+    debug_message("tip_of_the_day()");
+
+    wizardTipOfTheDay = new QWizard(_main);
+    wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
+    wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
+    wizardTipOfTheDay->setMinimumSize(550, 400);
+
+    QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
+
+    QWidget *imgBanner = new QWidget(wizardTipOfTheDay);
+    QImage *img = new QImage();
+
+    img->load(QString("icons/default/did_you_know.png"));
+
+    imgBanner->setMinimumWidth(img->width());
+    imgBanner->setMinimumHeight(img->height());
+    imgBanner->setMaximumWidth(img->width());
+    imgBanner->setMaximumHeight(img->height());
+
+    if (get_int(GENERAL_CURRENT_TIP) >= table_length(tips)) {
+        set_int(GENERAL_CURRENT_TIP, 0);
+    }
+    labelTipOfTheDay = new QLabel(tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
+    labelTipOfTheDay->setWordWrap(true);
+
+    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
+    checkBoxTipOfTheDay->setChecked(get_bool(GENERAL_TIP_OF_THE_DAY));
+    QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main,
+        SLOT([](int checked) { set_bool(GENERAL_TIP_OF_THE_DAY, checked); }));
+
+    QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
+    layout->addWidget(imgBanner);
+    layout->addStrut(1);
+    layout->addWidget(labelTipOfTheDay);
+    layout->addStretch(1);
+    layout->addWidget(checkBoxTipOfTheDay);
+    page->setLayout(layout);
+    wizardTipOfTheDay->addPage(page);
+
+    wizardTipOfTheDay->setWindowTitle("Tip of the Day");
+
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious) */
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext) */
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose) */
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, translate("&Previous"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, translate("&Next"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, translate("&Close"));
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton1, true);
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton2, true);
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
+    QObject::connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), _main, SLOT(button_tip_of_the_day_clicked(int)));
+
+    QList<QWizard::WizardButton> listTipOfTheDayButtons;
+    listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1
+        << QWizard::CustomButton2 << QWizard::CustomButton3;
+    wizardTipOfTheDay->setButtonLayout(listTipOfTheDayButtons);
+
+    wizardTipOfTheDay->exec();
+    return script_true;
+}
+
+/* Cascade the subwindows in the MDI. */
+ScriptValue
+window_cascade_command(ScriptEnv * /* context */)
+{
+    mdiArea->cascade();
+    return script_true;
+}
+
+/* Close the focussed subwindow in the MDI. */
+ScriptValue
+window_close_command(ScriptEnv * /* context */)
+{
+    debug_message("on_close_window()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        onCloseMdiWin(mdiWin);
+    }
+    return script_true;
+}
+
+/* Close all the subwindows in the MDI. */
+ScriptValue
+window_close_all_command(ScriptEnv * /* context */)
+{
+    mdiArea->closeAllSubWindows();
+    return script_true;
+}
+
+/* Focus the next subwindow in the MDI. */
+ScriptValue
+window_next_command(ScriptEnv * /* context */)
+{
+    mdiArea->activateNextSubWindow();
+    return script_true;
+}
+
+/* Focus the previous subwindow in the MDI. */
+ScriptValue
+window_previous_command(ScriptEnv * /* context */)
+{
+    mdiArea->activatePreviousSubWindow();
+    return script_true;
+}
+
+/* Tile all the subwindows in the MDI into the available space. */
+ScriptValue
+window_tile_command(ScriptEnv * /* context */)
+{
+    mdiArea->tile();
+    return script_true;
 }
 
 /* . */

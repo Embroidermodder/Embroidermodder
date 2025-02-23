@@ -2010,7 +2010,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "SAVEAS",
         .shortcut = "Ctrl+Shift+S",
         .flags = REQUIRED_VIEW,
-        .action = saveas_command
+        .action = save_as_command
     },
     /* 6 */
     {
@@ -2058,7 +2058,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "CUT",
         .shortcut = "Ctrl+X",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = cut_command
     },
     /* 10 */
     {
@@ -2070,7 +2070,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "Ctrl+C",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = copy_command
     },
     /* 11 */
     {
@@ -2082,7 +2082,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = copy_selected_command
     },
     /* 12 */
     {
@@ -2106,7 +2106,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = paste_selected_command
     },
     /* 14 */
     {
@@ -2130,7 +2130,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "REDO",
         .shortcut = "Ctrl+Shift+Z",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = redo_command
     },
     /* 16 */
     {
@@ -2142,7 +2142,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "CLOSE",
         .shortcut = "Ctrl+W",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = window_close_command
     },
     /* 17 */
     {
@@ -2154,7 +2154,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "CLOSEALL",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = window_close_all_command
     },
     /* 18 */
     {
@@ -2166,7 +2166,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "CASCADE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = window_cascade_command
     },
     /* 19 */
     {
@@ -2178,7 +2178,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "TILE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = window_tile_command
     },
     /* 20 */
     {
@@ -2190,7 +2190,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "NEXT",
         .shortcut = "Ctrl+Tab",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = window_next_command
     },
     /* 21 */
     {
@@ -2202,7 +2202,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PREV,PREVIOUS",
         .shortcut = "Ctrl+Shift+Tab",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = window_previous_command
     },
     /* 22 */
     {
@@ -2214,7 +2214,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "?,HELP",
         .shortcut = "F1",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = help_command
     },
     /* 23 */
     {
@@ -2226,7 +2226,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "CHANGELOG",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = changelog_command
     },
     /* 24 */
     {
@@ -2238,7 +2238,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "TIPS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = tip_of_the_day_command
     },
     /* 25 */
     {
@@ -2262,7 +2262,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "WHATSTHIS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = whats_this_command
     },
     /* 27 */
     {
@@ -2274,7 +2274,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ICON16",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = icon16_command
     },
     /* 28 */
     {
@@ -2286,7 +2286,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ICON24",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = icon24_command
     },
     /* 29 */
     {
@@ -2298,7 +2298,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ICON32",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = icon32_command
     },
     /* 30 */
     {
@@ -2310,7 +2310,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ICON48",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = icon48_command
     },
     /* 31 */
     {
@@ -2322,7 +2322,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ICON64",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = icon64_command
     },
     /* 32 */
     {
@@ -2334,7 +2334,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ICON128",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = icon128_command
     },
     /* 33 */
     {
@@ -2346,7 +2346,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "SETTINGS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = settings_command
     },
     /* 34 */
     {
@@ -2358,7 +2358,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "MAKELAYERCURRENT",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = make_layer_active_command
     },
     /* 35 */
     {
@@ -2370,7 +2370,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "LAYER",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = layers_command
     },
     /* 36 */
     {
@@ -2382,7 +2382,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "LAYERSELECTOR",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = layer_selector_command
     },
     /* 37 */
     {
@@ -2394,7 +2394,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "LAYERP",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = layer_previous_command
     },
     /* 38 */
     {
@@ -2406,7 +2406,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "COLORSELECTOR",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = color_selector_command
     },
     /* 39 */
     {
@@ -2418,7 +2418,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "LINETYPESELECTOR",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = line_type_selector_command
     },
     /* 40 */
     {
@@ -2430,7 +2430,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "LINEWEIGHTSELECTOR",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = line_weight_selector_command
     },
     /* 41 */
     {
@@ -2442,7 +2442,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "HIDEALLLAYERS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = hide_all_layers_command
     },
     /* 42 */
     {
@@ -2454,7 +2454,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "SHOWALLLAYERS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = show_all_layers_command
     },
     /* 43 */
     {
@@ -2466,7 +2466,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "FREEZEALLLAYERS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = freeze_all_layers_command
     },
     /* 44 */
     {
@@ -2478,7 +2478,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "THAWALL",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = thaw_all_layers_command
     },
     /* 45 */
     {
@@ -2490,7 +2490,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "LOCKALL",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = lock_all_layers_command
     },
     /* 46 */
     {
@@ -2502,7 +2502,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "UNLOCKALL",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = unlock_all_layers_command
     },
     /* 47 */
     {
@@ -2514,7 +2514,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "BOLD",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = text_bold_command
     },
     /* 48 */
     {
@@ -2526,7 +2526,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ITALIC",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = text_italic_command
     },
     /* 49 */
     {
@@ -2538,7 +2538,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "UNDERLINE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = text_underline_command
     },
     /* 50 */
     {
@@ -2550,7 +2550,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "STRIKEOUT",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = text_strikeout_command
     },
     /* 51 */
     {
@@ -2562,7 +2562,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "OVERLINE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = text_overline_command
     },
     /* 52 */
     {
@@ -2574,7 +2574,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMREALTIME",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_real_time_command
     },
     /* 53 */
     {
@@ -2586,7 +2586,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMPREVIOUS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_previous_command
     },
     /* 54 */
     {
@@ -2598,7 +2598,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMWINDOW",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_window_command
     },
     /* 55 */
     {
@@ -2610,7 +2610,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMDYNAMIC",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_dynamic_command
     },
     /* 56 */
     {
@@ -2622,7 +2622,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMSCALE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_scale_command
     },
     /* 57 */
     {
@@ -2634,7 +2634,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMCENTER",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_center_command
     },
     /* 58 */
     {
@@ -2646,7 +2646,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "zoomin",
         .shortcut = "Ctrl+Plus",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_in_command
     },
     /* 59 */
     {
@@ -2658,7 +2658,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMOUT",
         .shortcut = "Ctrl+Minus",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_out_command
     },
     /* 60 */
     {
@@ -2670,7 +2670,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMSELECTED",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_selected_command
     },
     /* 61 */
     {
@@ -2682,7 +2682,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMALL",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_all_command
     },
     /* 62 */
     {
@@ -2694,7 +2694,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ZOOMEXTENTS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = zoom_extents_command
     },
     /* 63 */
     {
@@ -2706,7 +2706,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PANREALTIME",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = panrealtime_command
     },
     /* 64 */
     {
@@ -2718,7 +2718,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PANPOINT",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = panpoint_command
     },
     /* 65 */
     {
@@ -2730,7 +2730,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PANLEFT",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = panleft_command
     },
     /* 66 */
     {
@@ -2742,7 +2742,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PANRIGHT",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = panright_command
     },
     /* 67 */
     {
@@ -2754,7 +2754,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PANUP",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = panup_command
     },
     /* 68 */
     {
@@ -2766,7 +2766,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PANDOWN",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = pandown_command
     },
     /* 69 */
     {
@@ -2778,7 +2778,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DAY",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = day_command
     },
     /* 70 */
     {
@@ -2790,7 +2790,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "NIGHT",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = night_command
     },
     /* 71 */
     {
@@ -2814,7 +2814,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "GET",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = get_command
     },
     /* 73 */
     {
@@ -2826,9 +2826,11 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "SET",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = set_command
     },
-    /* 74 */
+    /* 74: ACTION_CLEAR is covered by the flags, so the function pointer is
+     * do_nothing_command.
+     */
     {
         .command = "clear",
         .arguments = "",
@@ -2850,7 +2852,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "CALCANGLE",
         .shortcut = "",
         .flags = REQUIRED_VIEW | CLEAR_SELECTION,
-        .action = do_nothing_command
+        .action = angle_command
     },
     /* 76 */
     {
@@ -2862,7 +2864,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "C",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = circle_command
     },
     /* 77 */
     {
@@ -2874,7 +2876,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DEBUG",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = debug_command
     },
     /* ACTION_DIM_LEADER             78 */
     {
@@ -2886,7 +2888,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = dimleader_command
     },
     /* 79 */
     {
@@ -2898,7 +2900,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DISABLE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = disable_command
     },
     /* 80 */
     {
@@ -2910,7 +2912,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DI,DIST",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = distance_command
     },
     /* 81 */
     {
@@ -2922,7 +2924,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DOLPHIN",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = dolphin_command
     },
     /* 82 */
     {
@@ -2934,7 +2936,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "EL",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = ellipse_command
     },
     /* 83 */
     {
@@ -2946,7 +2948,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ENABLE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = enable_command
     },
     /* 84 */
     {
@@ -2958,7 +2960,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "e,erase,del,delete",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = erase_command
     },
     /* 85 */
     {
@@ -2970,7 +2972,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ERROR",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = error_command
     },
     /* 86 */
     {
@@ -2982,7 +2984,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "HEART",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = heart_command
     },
     /* 87 */
     {
@@ -2994,7 +2996,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "L,LINE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = line_command
     },
     /* 88 */
     {
@@ -3006,7 +3008,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ID",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = located_point_command
     },
     /* 89 */
     {
@@ -3018,7 +3020,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "MIRRORSELECTED",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = mirror_selected_command
     },
     /* 90 */
     {
@@ -3030,7 +3032,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "M,MOVE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = move_command
     },
     /* 91 */
     {
@@ -3042,7 +3044,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DONOTHING",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = move_selected_command
     },
     /* 92 */
     {
@@ -3054,7 +3056,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PA,PATH",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = path_command
     },
     /* 93 */
     {
@@ -3066,7 +3068,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PLATFORM",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = platform_command
     },
     /* 94 */
     {
@@ -3078,7 +3080,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PO,POINT",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = point_command
     },
     /* 95 */
     {
@@ -3090,7 +3092,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "POL,POLYGON",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = polygon_command
     },
     /* 96 */
     {
@@ -3102,7 +3104,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PL,PLINE,POLYLINE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = polyline_command
     },
     /* 97 */
     {
@@ -3114,7 +3116,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DONOTHING",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = previewoff_command
     },
     /* 98 */
     {
@@ -3126,7 +3128,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PREVIEWON",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = previewon_command
     },
     /* 99 */
     {
@@ -3138,7 +3140,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "LE,LEADER,QLEADER",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = quickleader_command
     },
     /* 100 */
     {
@@ -3150,7 +3152,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "REC,RECT,RECTANG,RECTANGLE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = rectangle_command
     },
     /* 101 */
     {
@@ -3162,7 +3164,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "ICON24",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = rgb_command
     },
     /* 102 */
     {
@@ -3174,7 +3176,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "RO,ROTATE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = rotate_command
     },
     /* 103 */
     {
@@ -3198,7 +3200,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "SC,SCALE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = scale_command
     },
     /* 105 */
     {
@@ -3210,7 +3212,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "SCALESELECTED",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = scale_selected_command
     },
     /* 106 */
     {
@@ -3222,7 +3224,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "AI_SELALL,SELALL,SELECTALL",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = select_all_command
     },
     /* 107 */
     {
@@ -3234,7 +3236,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DT,DTEXT,TEXT,SINGLELINETEXT",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = single_line_text_command
     },
     /* 108 */
     {
@@ -3246,7 +3248,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "SNOWFLAKE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = snowflake_command
     },
     /* 109 */
     {
@@ -3258,7 +3260,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "STAR",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = star_command
     },
     /* 110 */
     {
@@ -3270,7 +3272,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "WINDOWS",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = syswindows_command
     },
     /* 111 */
     {
@@ -3282,7 +3284,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "TODO",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = todo_command
     },
     /* 112 */
     {
@@ -3294,11 +3296,11 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "VULCANIZE",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = vulcanize_command
     },
-    /* ACTION_ADD                   113 */
+    /* 113 */
     {
-        .command = "donothing",
+        .command = "add",
         .arguments = "",
         .icon = "no-symbol",
         .tooltip = "This action is unfinished.",
@@ -3306,7 +3308,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = add_geometry_command
     },
     /* 114 */
     {
@@ -3318,7 +3320,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = delete_command
     },
     /* ACTION_GRIP_EDIT             115 */
     {
@@ -3330,7 +3332,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = grip_edit_command
     },
     /* ACTION_NAV                   116 */
     {
@@ -3342,7 +3344,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = nav_command
     },
     /* ACTION_MIRROR                117 */
     {
@@ -3354,7 +3356,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = mirror_command
     },
     /* 118 */
     {
@@ -3366,7 +3368,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "TEST",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = test_command
     },
     /* 119 */
     {
@@ -3378,7 +3380,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "SIMULATE,SIM",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = simulate_command
     },
     /* 120 */
     {
@@ -3390,7 +3392,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PLAY",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = play_command
     },
     /* 121 */
     {
@@ -3402,7 +3404,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "STOP",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = stop_command
     },
     /* 122 */
     {
@@ -3414,7 +3416,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PAUSE",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = pause_command
     },
     /* 123 */
     {
@@ -3426,7 +3428,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "FAST_FORWARD,FF",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = fast_forward_command
     },
     /* 124 */
     {
@@ -3438,7 +3440,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "REWIND,REW",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = simulate_command
     },
     /* 125 */
     {
@@ -3450,7 +3452,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "export-video",
         .shortcut = "",
         .flags = REQUIRED_VIEW,
-        .action = do_nothing_command
+        .action = export_command
     },
     /* 126 */
     {
@@ -3462,7 +3464,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "QR",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = qr_command
     },
     /* 127 */
     {
@@ -3474,7 +3476,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "LETTERING",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = lettering_command
     },
     /* 128 */
     {
@@ -3486,7 +3488,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "PATTERN",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = pattern_command
     },
     /* 129 */
     {
@@ -3498,7 +3500,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "DESIGN",
         .shortcut = "",
         .flags = CONTEXT_FREE,
-        .action = do_nothing_command
+        .action = design_command
     },
     /* 130 */
     {
@@ -3520,7 +3522,7 @@ CommandData command_data[MAX_COMMANDS] = {
         .alias = "END",
         .shortcut = "END",
         .flags = -1,
-        .action = NULL
+        .action = do_nothing_command
     }
 };
 

@@ -1227,8 +1227,6 @@ void settings_dialog(const char *showTab);
 
 bool valid_file_format(char *fileName);
 
-void on_close_window(void);
-
 void set_undo_clean_icon(bool opened);
 
 void mdiarea_set_bg(uint32_t color);
@@ -1307,11 +1305,8 @@ void preview_update(void);
 
 void stub_testing(void);
 void run_testing(void);
-void exit_program(void);
 void check_for_updates(void);
-void new_file(void);
 void open_recent_file(void);
-void save_file(void);
 int save_as_file(void);
 void update_interface(void);
 void window_menu_about_to_show(void);
@@ -1344,11 +1339,8 @@ void set_rubber_text(const char *key, char *txt);
 void toggle(int mode);
 
 /* Help Menu */
-void tip_of_the_day(void);
 void button_tip_of_the_day_clicked(int);
 void check_box_tip_of_the_day_changed(int);
-void help(void);
-void changelog(void);
 void whats_this_context_help(void);
 
 int make_application(int argc, char* argv[]);
@@ -1382,7 +1374,159 @@ const char *platform_string(void);
 void button_tip_of_the_day_clicked(int button);
 void free_objects(EmbIdList *);
 
-void about_dialog(void);
+/* All of the pointers used by command_data.
+ *
+ * Note that these are not global scope functions because they are only needed
+ * for this table.
+ */
+ScriptValue about_command(ScriptEnv *context);
+ScriptValue add_arc_command(ScriptEnv *context);
+ScriptValue add_circle_command(ScriptEnv *context);
+ScriptValue add_dimleader_command(ScriptEnv *context);
+ScriptValue add_ellipse_command(ScriptEnv *context);
+ScriptValue add_horizontal_dimension_command(ScriptEnv *context);
+ScriptValue add_image_command(ScriptEnv *context);
+ScriptValue add_infinite_line_command(ScriptEnv *context);
+ScriptValue add_line_command(ScriptEnv *context);
+ScriptValue add_ray_command(ScriptEnv *context);
+ScriptValue add_triangle_command(ScriptEnv *context);
+ScriptValue add_rectangle_command(ScriptEnv *context);
+ScriptValue add_rounded_rectangle_command(ScriptEnv *context);
+ScriptValue add_slot_command(ScriptEnv *context);
+ScriptValue add_point_command(ScriptEnv *context);
+ScriptValue add_regular_polygon_command(ScriptEnv *context);
+ScriptValue add_vertical_dimension_command(ScriptEnv *context);
+ScriptValue add_textmulti_command(ScriptEnv *context);
+ScriptValue add_textsingle_command(ScriptEnv *context);
+ScriptValue alert_command(ScriptEnv *context);
+ScriptValue angle_command(ScriptEnv *context);
+ScriptValue changelog_command(ScriptEnv *context);
+ScriptValue copy_command(ScriptEnv *context);
+ScriptValue color_selector_command(ScriptEnv *context);
+ScriptValue current_color_changed_command(ScriptEnv *context);
+ScriptValue debug_command(ScriptEnv *context);
+ScriptValue details_command(ScriptEnv *context);
+ScriptValue disable_command(ScriptEnv *context);
+ScriptValue do_nothing_command(ScriptEnv *context);
+ScriptValue enable_command(ScriptEnv *context);
+ScriptValue exit_command(ScriptEnv *context);
+ScriptValue get_command(ScriptEnv *context);
+ScriptValue help_command(ScriptEnv *context);
+ScriptValue layer_previous_command(ScriptEnv *context);
+ScriptValue make_layer_active_command(ScriptEnv *context);
+ScriptValue move_command(ScriptEnv *context);
+ScriptValue new_command(ScriptEnv *context);
+ScriptValue open_command(ScriptEnv *context);
+ScriptValue paste_command(ScriptEnv *context);
+ScriptValue previewon_command(ScriptEnv *context);
+ScriptValue print_command(ScriptEnv *context);
+ScriptValue redo_command(ScriptEnv *context);
+ScriptValue sandbox_command(ScriptEnv *context);
+ScriptValue save_command(ScriptEnv *context);
+ScriptValue save_as_command(ScriptEnv *context);
+ScriptValue set_command(ScriptEnv *context);
+ScriptValue tip_of_the_day_command(ScriptEnv *context);
+ScriptValue undo_command(ScriptEnv *context);
+ScriptValue window_cascade_command(ScriptEnv *context);
+ScriptValue window_close_command(ScriptEnv *context);
+ScriptValue window_close_all_command(ScriptEnv *context);
+ScriptValue window_next_command(ScriptEnv *context);
+ScriptValue window_previous_command(ScriptEnv *context);
+ScriptValue window_tile_command(ScriptEnv *context);
+
+ScriptValue cut_command(ScriptEnv *context);
+ScriptValue copy_selected_command(ScriptEnv *context);
+ScriptValue paste_selected_command(ScriptEnv *context);
+ScriptValue whats_this_command(ScriptEnv *context);
+ScriptValue icon16_command(ScriptEnv *context);
+ScriptValue icon24_command(ScriptEnv *context);
+ScriptValue icon32_command(ScriptEnv *context);
+ScriptValue icon48_command(ScriptEnv *context);
+ScriptValue icon64_command(ScriptEnv *context);
+ScriptValue icon128_command(ScriptEnv *context);
+ScriptValue settings_command(ScriptEnv *context);
+ScriptValue layers_command(ScriptEnv *context);
+ScriptValue layer_selector_command(ScriptEnv *context);
+ScriptValue line_type_selector_command(ScriptEnv *context);
+ScriptValue line_weight_selector_command(ScriptEnv *context);
+ScriptValue hide_all_layers_command(ScriptEnv *context);
+ScriptValue show_all_layers_command(ScriptEnv *context);
+ScriptValue freeze_all_layers_command(ScriptEnv *context);
+ScriptValue thaw_all_layers_command(ScriptEnv *context);
+ScriptValue lock_all_layers_command(ScriptEnv *context);
+ScriptValue unlock_all_layers_command(ScriptEnv *context);
+ScriptValue text_bold_command(ScriptEnv *context);
+ScriptValue text_italic_command(ScriptEnv *context);
+ScriptValue text_underline_command(ScriptEnv *context);
+ScriptValue text_strikeout_command(ScriptEnv *context);
+ScriptValue text_overline_command(ScriptEnv *context);
+ScriptValue zoom_real_time_command(ScriptEnv *context);
+ScriptValue zoom_previous_command(ScriptEnv *context);
+ScriptValue zoom_window_command(ScriptEnv *context);
+ScriptValue zoom_dynamic_command(ScriptEnv *context);
+ScriptValue zoom_scale_command(ScriptEnv *context);
+ScriptValue zoom_center_command(ScriptEnv *context);
+ScriptValue zoom_in_command(ScriptEnv *context);
+ScriptValue zoom_out_command(ScriptEnv *context);
+ScriptValue zoom_selected_command(ScriptEnv *context);
+ScriptValue zoom_all_command(ScriptEnv *context);
+ScriptValue zoom_extents_command(ScriptEnv *context);
+ScriptValue panrealtime_command(ScriptEnv *context);
+ScriptValue panpoint_command(ScriptEnv *context);
+ScriptValue panleft_command(ScriptEnv *context);
+ScriptValue panright_command(ScriptEnv *context);
+ScriptValue panup_command(ScriptEnv *context);
+ScriptValue pandown_command(ScriptEnv *context);
+ScriptValue day_command(ScriptEnv *context);
+ScriptValue night_command(ScriptEnv *context);
+ScriptValue circle_command(ScriptEnv *context);
+ScriptValue dimleader_command(ScriptEnv *context);
+ScriptValue distance_command(ScriptEnv *context);
+ScriptValue dolphin_command(ScriptEnv *context);
+ScriptValue ellipse_command(ScriptEnv *context);
+ScriptValue erase_command(ScriptEnv *context);
+ScriptValue error_command(ScriptEnv *context);
+ScriptValue heart_command(ScriptEnv *context);
+ScriptValue line_command(ScriptEnv *context);
+ScriptValue located_point_command(ScriptEnv *context);
+ScriptValue mirror_selected_command(ScriptEnv *context);
+ScriptValue move_selected_command(ScriptEnv *context);
+ScriptValue path_command(ScriptEnv *context);
+ScriptValue platform_command(ScriptEnv *context);
+ScriptValue point_command(ScriptEnv *context);
+ScriptValue polygon_command(ScriptEnv *context);
+ScriptValue polyline_command(ScriptEnv *context);
+ScriptValue previewoff_command(ScriptEnv *context);
+ScriptValue quickleader_command(ScriptEnv *context);
+ScriptValue rectangle_command(ScriptEnv *context);
+ScriptValue rgb_command(ScriptEnv *context);
+ScriptValue rotate_command(ScriptEnv *context);
+ScriptValue scale_command(ScriptEnv *context);
+ScriptValue scale_selected_command(ScriptEnv *context);
+ScriptValue select_all_command(ScriptEnv *context);
+ScriptValue single_line_text_command(ScriptEnv *context);
+ScriptValue snowflake_command(ScriptEnv *context);
+ScriptValue star_command(ScriptEnv *context);
+ScriptValue syswindows_command(ScriptEnv *context);
+ScriptValue todo_command(ScriptEnv *context);
+ScriptValue vulcanize_command(ScriptEnv *context);
+ScriptValue add_geometry_command(ScriptEnv *context);
+ScriptValue delete_command(ScriptEnv *context);
+ScriptValue grip_edit_command(ScriptEnv *context);
+ScriptValue nav_command(ScriptEnv *context);
+ScriptValue mirror_command(ScriptEnv *context);
+ScriptValue test_command(ScriptEnv *context);
+ScriptValue simulate_command(ScriptEnv *context);
+ScriptValue play_command(ScriptEnv *context);
+ScriptValue stop_command(ScriptEnv *context);
+ScriptValue pause_command(ScriptEnv *context);
+ScriptValue fast_forward_command(ScriptEnv *context);
+ScriptValue export_command(ScriptEnv *context);
+ScriptValue qr_command(ScriptEnv *context);
+ScriptValue lettering_command(ScriptEnv *context);
+ScriptValue pattern_command(ScriptEnv *context);
+ScriptValue design_command(ScriptEnv *context);
+
 
 /* ------------------------------- Document -------------------------------- */
 
@@ -1657,50 +1801,6 @@ void obj_update_rubber_grip(uint32_t obj);
 
 EmbVectorList *all_grip_points(int32_t obj_id);
 EmbVector mouse_snap_point(int32_t obj_id, EmbVector mousePoint);
-
-/* All of the pointers used by command_data.
- *
- * Note that these are not global scope functions because they are only needed
- * for this table.
- */
-ScriptValue about_command(ScriptEnv *context);
-ScriptValue add_arc_command(ScriptEnv *context);
-ScriptValue add_circle_command(ScriptEnv *context);
-ScriptValue add_dimleader_command(ScriptEnv *context);
-ScriptValue add_ellipse_command(ScriptEnv *context);
-ScriptValue add_horizontal_dimension_command(ScriptEnv *context);
-ScriptValue add_image_command(ScriptEnv *context);
-ScriptValue add_infinite_line_command(ScriptEnv *context);
-ScriptValue add_line_command(ScriptEnv *context);
-ScriptValue add_ray_command(ScriptEnv *context);
-ScriptValue add_triangle_command(ScriptEnv *context);
-ScriptValue add_rectangle_command(ScriptEnv *context);
-ScriptValue add_rounded_rectangle_command(ScriptEnv *context);
-ScriptValue add_slot_command(ScriptEnv *context);
-ScriptValue add_point_command(ScriptEnv *context);
-ScriptValue add_regular_polygon_command(ScriptEnv *context);
-ScriptValue add_vertical_dimension_command(ScriptEnv *context);
-ScriptValue add_textmulti_command(ScriptEnv *context);
-ScriptValue add_textsingle_command(ScriptEnv *context);
-ScriptValue alert_command(ScriptEnv *context);
-ScriptValue angle_command(ScriptEnv *context);
-ScriptValue current_color_changed_command(ScriptEnv *context);
-ScriptValue details_command(ScriptEnv *context);
-ScriptValue do_nothing_command(ScriptEnv *context);
-ScriptValue exit_command(ScriptEnv *context);
-ScriptValue get_command(ScriptEnv *context);
-ScriptValue new_command(ScriptEnv *context);
-ScriptValue move_command(ScriptEnv *context);
-ScriptValue open_command(ScriptEnv *context);
-ScriptValue paste_command(ScriptEnv *context);
-ScriptValue previewon_command(ScriptEnv *context);
-ScriptValue print_command(ScriptEnv *context);
-ScriptValue redo_command(ScriptEnv *context);
-ScriptValue sandbox_command(ScriptEnv *context);
-ScriptValue save_command(ScriptEnv *context);
-ScriptValue saveas_command(ScriptEnv *context);
-ScriptValue set_command(ScriptEnv *context);
-ScriptValue undo_command(ScriptEnv *context);
 
 /* ---------------------------- Global Variables --------------------------- */
 /* Global variables and constants we need to access anywhere in the program
