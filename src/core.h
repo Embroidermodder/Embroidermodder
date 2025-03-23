@@ -1812,7 +1812,7 @@ extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
 extern GroupBoxData group_box_list[];
 extern Translation translations[];
-extern Design designs[];
+extern const Design designs[];
 extern const char *svgs[];
 
 extern const char *config_table[];

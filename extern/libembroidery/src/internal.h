@@ -535,5 +535,19 @@ void decode_tajima_ternary(unsigned char b[3], int *x, int *y);
 
 extern const char imageWithFrame[38][48];
 
+// Forward declarations needed to satisfy clang on mac
+char emb_fwrite(void *b, int bytes, FILE *file);
+unsigned char char_to_lower(unsigned char a);
+void emb_write_i16be(FILE *file, short val);
+char memory_set(void *dst, char value, int n);
+
+struct EmbStack;
+
+// Stack processing
+int process_stack_head(EmbStack *stack);
+int stack_push(EmbStack *stack, char token[200]);
+void emb_arc_print(EmbArc arc);
+void emb_vector_print(EmbVector v, char *label);
+
 #endif
 

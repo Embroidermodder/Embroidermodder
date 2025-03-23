@@ -27,6 +27,7 @@
 #include <math.h>
 
 #include "embroidery.h"
+#include "internal.h"
 
 static EmbPattern *focussed_pattern = NULL;
 
@@ -379,7 +380,7 @@ stack_push(EmbStack *stack, char token[200])
     int all_digits = 1;
     int decimal_place_present = 0;
     if (token[0] == 0) {
-        return;
+        return 0;
     }
     string_copy(stack->stack[stack->position].s, token);
     stack->position++;    
@@ -544,7 +545,7 @@ process_stack_head(EmbStack *stack)
     EmbStackElement element = stack->stack[stack->position-1];
     EmbStackElement args[10];
     if (!element.attribute) {
-        return;
+        return 0;
     }
     switch (element.i) {
     /* 3.6.1 Stack */

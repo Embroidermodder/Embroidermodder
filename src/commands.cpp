@@ -5354,7 +5354,7 @@ process_input(char rapidChar)
             EmbString msg;
             sprintf(msg,
                 "%s<br/><font color=\"red\">Unknown command \"%s\". Press F1 for help.</font>",
-                curText, cmdtxt);
+                curText, qPrintable(cmdtxt));
             prompt_output(msg);
         }
     }

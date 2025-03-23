@@ -8,6 +8,13 @@ find_package(Qt6 COMPONENTS Core Widgets PrintSupport Svg REQUIRED)
 if(WIN32)
 else(WIN32)
 find_package(X11 REQUIRED)
+
+if(APPLE)
+    set(X11_INCLUDE_DIR "/opt/X11/include")
+    set(X11_LIBRARIES "/opt/X11/lib/libX11.dylib")
+    include_directories(${X11_INCLUDE_DIR})
+    link_directories("/opt/X11/lib")
+endif()
 endif(WIN32)
 
 set(CMAKE_C_STANDARD 99)

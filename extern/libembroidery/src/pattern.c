@@ -446,6 +446,7 @@ memory_cmp(void *dst, const void *src, int n)
  * "string.h" entirely. 
  */
 char
+
 memory_set(void *dst, char value, int n)
 {
     int i;
@@ -4885,7 +4886,7 @@ EmbReal
 emb_pattern_longest_stitch(EmbPattern *pattern)
 {
     if (pattern->stitch_list->count < 2) {
-        return;
+        return 0.0;
     }
 
     int i;
@@ -4909,7 +4910,7 @@ EmbReal
 emb_pattern_shortest_stitch(EmbPattern *pattern)
 {
     if (pattern->stitch_list->count < 2) {
-        return;
+        return 0.0;
     }
 
     int i;

@@ -1716,11 +1716,13 @@ function updateClef(numPts, xScale, yScale)
 
 #endif
 
-Design designs[] = {
+/*
+const Design designs[] = {
     heart4,
     heart5,
     {
         .command = END_SYMBOL
     }
 };
+*/
 
