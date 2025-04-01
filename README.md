@@ -70,7 +70,7 @@ cd embroidermodder
 mkdir build
 cd build
 cmake ..
-cmake -build .
+cmake --build .
 ```
 
 Then run with
