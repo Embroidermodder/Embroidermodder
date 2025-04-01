@@ -21,6 +21,9 @@ function run_cmake () {
 
 function get_dependancies () {
 
+	git submodule init
+	git submodule update
+
 	if [[ $1 = "windows" ]]; then
 		python -m pip install -U pip --upgrade pip
 	 	pip install aqtinstall
@@ -220,6 +223,8 @@ function convert_to_xpm () {
 
 function full_build () {
 
+	git submodule init
+	git submodule update
 	convert_to_xpm
 	embed_svgs
 	run_cmake
