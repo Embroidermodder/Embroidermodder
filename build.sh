@@ -12,9 +12,9 @@ VERSION="$MAJOR_$MINOR_$PATCH-$TAG"
 
 function run_cmake () {
 
-	cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  || exit 1
 	cd $BUILD_DIR
-	cmake --build .
+	cmake --build . || exit 1
 	cd ..
 
 }
