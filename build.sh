@@ -23,6 +23,9 @@ function get_dependancies () {
 
 	git submodule init
 	git submodule update
+	cd extern/libembroidery
+	git checkout em2
+	cd ../..
 
 	if [[ $1 = "windows" ]]; then
 		python -m pip install -U pip --upgrade pip
