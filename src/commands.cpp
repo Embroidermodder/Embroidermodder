@@ -9015,7 +9015,7 @@ current_layer_changed_command(ScriptEnv *context)
         return script_false;
     }
     DocumentData *data = doc_data(doc);
-    string_copy(data->curLayer, STR(0));
+    strcpy(data->curLayer, STR(0));
     return script_true;
 }
 
@@ -9041,7 +9041,7 @@ current_linetype_changed_command(ScriptEnv *context)
         return script_false;
     }
     DocumentData *data = doc_data(doc);
-    string_copy(data->curLineType, STR(0));
+    strcpy(data->curLineType, STR(0));
     return script_true;
 }
 
@@ -9054,7 +9054,7 @@ current_lineweight_changed(char *weight)
         return;
     }
     DocumentData *data = doc_data(doc);
-    string_copy(data->curLineWeight, weight);
+    strcpy(data->curLineWeight, weight);
 }
 
 /* . */

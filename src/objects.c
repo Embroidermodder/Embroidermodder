@@ -250,7 +250,7 @@ create_text_single(EmbString str, EmbVector v, uint32_t rgb)
     uint32_t obj = create_object(EMB_TEXT_SINGLE, rgb);
     ObjectCore *core = obj_get_core(obj);
 
-    string_copy(core->textJustify, "Left");
+    strcpy(core->textJustify, "Left");
     /* TODO: set the justification properly */
 
     obj_set_text(core, str);
@@ -1922,7 +1922,7 @@ function prompt(str)
     if (context->mode == TEXTSINGLE_MODE_JUSTIFY) {
         if (str == "C" || str == "CENTER") {
             context->mode = TEXTSINGLE_MODE_SETGEOM;
-            string_copy(context->textJustify, "Center");
+            strcpy(context->textJustify, "Center");
             obj_add_rubber_text(obj, "TEXT_JUSTIFY", context->textJustify);
             prompt_output(translate("Specify center point of text or [Justify/Setfont]: "));
         }
@@ -2281,7 +2281,7 @@ obj_bottom_right(ObjectCore *obj)
 void
 obj_set_text_font(ObjectCore* obj, const char *font)
 {
-    string_copy(obj->textFont, font);
+    strcpy(obj->textFont, font);
     obj_set_text(obj, obj->text);
 }
 
@@ -2309,12 +2309,12 @@ void
 obj_set_text_justify(ObjectCore* obj, const char *justify)
 {
     /* Default */
-    string_copy(obj->textJustify, "Left");
+    strcpy(obj->textJustify, "Left");
     /* See if a valid justify option has been passed in, then set it if it is. */
     int n = table_length(justify_options);
     for (int i=0; i<n; i++) {
         if (string_equal(justify, justify_options[i])) {
-            string_copy(obj->textJustify, "Left");
+            strcpy(obj->textJustify, "Left");
             break;
         }
     }
@@ -2454,7 +2454,7 @@ void
 obj_set_rubber_point(uint32_t id, EmbString key, EmbVector point)
 {
     ObjectCore *core = obj_get_core(id);
-    string_copy(core->rubber_points[core->n_rubber_points].key, key);
+    strcpy(core->rubber_points[core->n_rubber_points].key, key);
     core->rubber_points[core->n_rubber_points].vector = point;
     core->n_rubber_points++;
 }
@@ -2464,8 +2464,8 @@ void
 obj_set_rubber_text(uint32_t id, EmbString key, EmbString txt)
 {
     ObjectCore *core = obj_get_core(id);
-    string_copy(core->rubber_texts[core->n_rubber_texts].key, key);
-    string_copy(core->rubber_texts[core->n_rubber_texts].value, txt);
+    strcpy(core->rubber_texts[core->n_rubber_texts].key, key);
+    strcpy(core->rubber_texts[core->n_rubber_texts].value, txt);
     core->n_rubber_texts++;
 }
 

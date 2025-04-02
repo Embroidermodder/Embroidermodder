@@ -728,7 +728,7 @@ prompt_history_appended(char *txt)
 void
 log_prompt_input(char *txt)
 {
-    string_copy(prompt_input_list[prompt_history_size], txt);
+    strcpy(prompt_input_list[prompt_history_size], txt);
     prompt_history_size++;
     prompt_history_position = prompt_history_size;
 }
@@ -962,7 +962,7 @@ main(int argc, char* argv[])
                 printf("ERROR: More files to open than MAX_FILES.");
                 continue;
             }
-            string_copy(files_to_open[n_files], argv[i]);
+            strcpy(files_to_open[n_files], argv[i]);
             n_files++;
         }
         else {
@@ -1371,25 +1371,25 @@ load_command_data(char *label)
     int id = atoi(config_str(key));
 
     sprintf(key, "%s.command", label);
-    string_copy(command_data[id].command, config_str(key));
+    strcpy(command_data[id].command, config_str(key));
 
     sprintf(key, "%s.arguments", label);
-    string_copy(command_data[id].arguments, config_str(key));
+    strcpy(command_data[id].arguments, config_str(key));
 
     sprintf(key, "%s.icon", label);
-    string_copy(command_data[id].icon, config_str(key));
+    strcpy(command_data[id].icon, config_str(key));
 
     sprintf(key, "%s.tooltip", label);
-    string_copy(command_data[id].tooltip, config_str(key));
+    strcpy(command_data[id].tooltip, config_str(key));
 
     sprintf(key, "%s.statustip", label);
-    string_copy(command_data[id].statustip, config_str(key));
+    strcpy(command_data[id].statustip, config_str(key));
 
     sprintf(key, "%s.alias", label);
-    string_copy(command_data[id].alias, config_str(key));
+    strcpy(command_data[id].alias, config_str(key));
 
     sprintf(key, "%s.shortcut", label);
-    string_copy(command_data[id].shortcut, config_str(key));
+    strcpy(command_data[id].shortcut, config_str(key));
 
     sprintf(key, "%s.flags", label);
     int flags = atoi(config_str(key));
@@ -1418,7 +1418,7 @@ load_data(void)
     config = (ScriptValue*)malloc(n_variables * sizeof(ScriptValue));
     for (int line_no=0; line_no<n_variables; line_no++) {
         char line[200];
-        string_copy(line, config_table[line_no]);
+        strcpy(line, config_table[line_no]);
         int eq_pos = 0;
         for (int i=0; i<200; i++) {
             if (line[i] == '=') {
@@ -1427,8 +1427,8 @@ load_data(void)
             }
         }
         line[eq_pos] = 0;
-        string_copy(config[line_no].label, line);
-        string_copy(config[line_no].s, line+eq_pos+1);
+        strcpy(config[line_no].label, line);
+        strcpy(config[line_no].s, line+eq_pos+1);
     }
 
     /* Identify the labels of commands. */
@@ -1672,7 +1672,7 @@ copy_setting(int key, int dst, int src)
         dst_set->r = src_set->r;
         break;
     case SCRIPT_STRING:
-        string_copy(dst_set->s, src_set->s);
+        strcpy(dst_set->s, src_set->s);
         break;
     case SCRIPT_BOOL:
         dst_set->b = src_set->b;
@@ -2187,7 +2187,7 @@ spin_box_display_select_box_alpha_changed(int value)
 void
 combo_box_prompt_font_family_changed(EmbString family)
 {
-    string_copy(setting[PROMPT_FONT_FAMILY].preview.s, family);
+    strcpy(setting[PROMPT_FONT_FAMILY].preview.s, family);
     set_prompt_font_family(setting[PROMPT_FONT_FAMILY].preview.s);
 }
 
@@ -2195,7 +2195,7 @@ combo_box_prompt_font_family_changed(EmbString family)
 void
 combo_box_prompt_font_style_changed(EmbString style)
 {
-    string_copy(setting[PROMPT_FONT_STYLE].preview.s, style);
+    strcpy(setting[PROMPT_FONT_STYLE].preview.s, style);
     set_prompt_font_style(setting[PROMPT_FONT_STYLE].preview.s);
 }
 
@@ -2289,7 +2289,7 @@ accept_settings(void)
 void
 comboBoxGridTypeCurrentIndexChanged(const char *type)
 {
-    string_copy(setting[GRID_TYPE].dialog.s, type);
+    strcpy(setting[GRID_TYPE].dialog.s, type);
 
     bool visibility = !strcmp(type, "Circular");
     set_visibility_group(rectangular_grid_group, !visibility);
@@ -2396,10 +2396,10 @@ doc_init(int32_t doc)
     srand(time(NULL));
     data->sceneGripPoint = emb_vector(rand()*1000, rand()*1000);
 
-    string_copy(data->curLayer, "0");
+    strcpy(data->curLayer, "0");
     data->curColor = 0; /* TODO: color ByLayer */
-    string_copy(data->curLineType, "ByLayer");
-    string_copy(data->curLineWeight, "ByLayer");
+    strcpy(data->curLineType, "ByLayer");
+    strcpy(data->curLineWeight, "ByLayer");
 
     data->pattern = emb_pattern_create();
     if (!data->pattern) {

@@ -48,47 +48,7 @@ set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(LIBEMB ${CMAKE_SOURCE_DIR}/extern/libembroidery/src)
 
 add_subdirectory(extern/glfw)
-
-set(LIBRARY_SRC
-	${LIBEMB}/pattern.c
-	${LIBEMB}/compress.c
-	${LIBEMB}/formats.c
-	${LIBEMB}/geometry.c
-	${LIBEMB}/script.c
-	${LIBEMB}/testing.c
-	${LIBEMB}/internal.h
-	${LIBEMB}/embroidery.h
-	${LIBEMB}/data/arc_polyester_colors.c
-	${LIBEMB}/data/arc_rayon_colors.c
-	${LIBEMB}/data/coats_and_clark_rayon_colors.c
-	${LIBEMB}/data/dxf_colors.c
-	${LIBEMB}/data/exquisite_polyester_colors.c
-	${LIBEMB}/data/fufu_polyester_colors.c
-	${LIBEMB}/data/fufu_rayon_colors.c
-	# ${LIBEMB}/data/hemingworth_polyester_colors.c
-	${LIBEMB}/data/hus_colors.c
-	# ${LIBEMB}/data/isacord_polyester_colors.c
-	# ${LIBEMB}/data/isafil_rayon_colors.c
-	${LIBEMB}/data/jef_colors.c
-	# ${LIBEMB}/data/madeira_polyester_colors.c
-	# ${LIBEMB}/data/madeira_rayon_colors.c
-	# ${LIBEMB}/data/marathon_polyester_colors.c
-	# ${LIBEMB}/data/marathon_rayon_colors.c
-	# ${LIBEMB}/data/metro_polyester_colors.c
-	# ${LIBEMB}/data/pantone_colors.c
-	${LIBEMB}/data/pcm_colors.c
-	${LIBEMB}/data/pec_colors.c
-	# ${LIBEMB}/data/robison_anton_polyester_colors.c
-	# ${LIBEMB}/data/robison_anton_rayon_colors.c
-	${LIBEMB}/data/shv_colors.c
-	# ${LIBEMB}/data/sigma_polyester_colors.c
-	# ${LIBEMB}/data/sulky_rayon_colors.c
-	${LIBEMB}/data/svg_colors.c
-	# ${LIBEMB}/data/thread_art_polyester_colors.c
-	# ${LIBEMB}/data/thread_art_rayon_colors.c
-	# ${LIBEMB}/data/threadelight_polyester_colors.c
-	# ${LIBEMB}/data/z102_isacord_polyester_colors.c
-)
+add_subdirectory(extern/libembroidery)
 
 qt_add_executable(embroidermodder2
 	${EXTERN}/nanovg/src/nanovg.c
@@ -97,8 +57,6 @@ qt_add_executable(embroidermodder2
 	${EXTERN}/glad/src/glad.c
 	${EXTERN}/glad/include/glad/glad.h
 	${EXTERN}/glad/include/KHR/khrplatform.h
-
-	${LIBRARY_SRC}
 
 	${SRC}/commands.cpp
 
@@ -112,14 +70,6 @@ qt_add_executable(embroidermodder2
 
 	${SRC}/core.h
 )
-
-#add_executable(embroidermodder2_x11
-#	${SRC}/wrapper.c
-#	${SRC}/state.c
-#
-#	${SRC}/constants.h
-#	${SRC}/core.h
-#)
 
 include_directories(
 	${EXTERN}/libembroidery/src
@@ -137,6 +87,7 @@ target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Widgets
 	Qt6::PrintSupport
 	Qt6::Svg
+	embroidery_static
 	${OPENGL_LIBRARIES}
 )
 
