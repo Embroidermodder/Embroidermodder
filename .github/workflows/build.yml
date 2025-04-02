@@ -1,11 +1,9 @@
-name: Test building on major systems
+name: Test build
 
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
-  schedule:
-    - cron: "15 3 * * 2"
 
 jobs:
   os_matrix:
