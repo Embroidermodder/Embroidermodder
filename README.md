@@ -85,12 +85,28 @@ Then run with
 
 We're working on a one-liner for systems without cmake.
 
-```
+```sh
 # FIXME:
 $(CC) -o embroidermodder2 \
     src/*.c src/*/*.c src/*.h src/*/*.h \
     -lglfw -lGL -lm
 ```
+
+### Testing One-liner (Bash-only)
+
+Sometimes an issue you're having is fixed in the current version: it is recommended that you use a fresh build to ensure that the problem is still present before reporting this. This one-liner helps with this: place it in your `.bashrc` for future use.
+
+```sh
+alias run_current_em2="rm -f build.sh && wget https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/refs/heads/main/build.sh && bash build.sh --current"
+```
+
+Then, if you have issues, you can capture the terminal output like this.
+
+```sh
+run_current_em2 &> build.log
+```
+
+If there is a new issue arising from this test script itself, this is also valuable to create an [issue](https://github.com/embroidermodder/embroidermodder/issues) for.
 
 ## Help Files
 
