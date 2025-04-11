@@ -2,6 +2,7 @@
 
 BUILD_DIR="build"
 BUILD_TYPE="Release"
+WORKDIR="em2_workdir"
 GENERATOR="Unix Makefiles"
 SYSTEM="linux"
 MAJOR="2"
@@ -19,10 +20,27 @@ function run_cmake () {
 
 }
 
+function run_current_build () {
+
+	echo "Build current version to see if a build problem has been fixed in the current main."
+ 	echo "To run this without first installing use:"
+  	echo "    $ wget https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/refs/heads/main/build.sh"
+  	echo "    $ bash build.sh --current"
+   	echo ""
+
+	rm -fr $WORKDIR
+	git clone https://github.com/embroidermodder/embroidermodder $WORKDIR
+	cd $WORKDIR
+	git submodule update --init
+	run_cmake
+ 	cd $BUILD_DIR
+	./embroidermodder2
+
+}
+
 function get_dependancies () {
 
-	git submodule init
-	git submodule update
+	git submodule update --init
 	cd extern/libembroidery
 	git checkout em2
 	cd ../..
@@ -41,11 +59,8 @@ function get_dependancies () {
 
 	if [[ $1 = "linux" ]]; then
 		sudo apt-get update
-		sudo apt-get install \
-     git build-essential cmake \
-     qt6-base-dev libqt6widgets6 \
-			libqt6printsupport6 libqt6core6 libgl-dev libgl1-mesa-dev libglx-dev \
-    wayland-scanner
+		sudo apt-get install git build-essential cmake qt6-base-dev libqt6widgets6 \
+			libqt6printsupport6 libqt6core6 libgl-dev libgl1-mesa-dev libglx-dev wayland-scanner
 		sudo apt upgrade
 	fi
 
@@ -56,12 +71,11 @@ function get_dependancies () {
 
 function assemble_release () {
 
-	rm -fr em2
-
+	rm -fr $WORKDIR
 	get_dependancies $1
 
 	run_cmake
-	mkdir em2
+	mkdir $WORKDIR
 	cp $BUILD_DIR/embroidermodder2 em2
 	cp LICENSE.md em2
 	cp -r docs/ em2
@@ -112,23 +126,26 @@ function analysis () {
 	BUILD_DIR="debug"
 	BUILD_TYPE="Debug"
 
-    run_cmake
+	run_cmake
 
-    echo "Producing clang-tidy report."
-    FNAME_TIME="`date -Iseconds`"
-    REPORT="clang-tidy-report-$FNAME_TIME.txt"
-    clang-tidy --config-file=clang-tidy.txt -p debug src/* &> $REPORT
+	echo "Producing clang-tidy report."
+	FNAME_TIME="`date -Iseconds`"
+	REPORT="clang-tidy-report-$FNAME_TIME.txt"
+	clang-tidy --config-file=clang-tidy.txt -p debug src/* &> $REPORT
 
-    python3 -m clang_html $REPORT -o analysis/clang-report.html
+	python3 -m clang_html $REPORT -o analysis/clang-report.html
+
 }
 
 function file_as_c_string () {
+
 	stub=`basename $1`
 	varname=`echo ${stub::-4} | tr - _`
 	echo "const char ${varname}_svg[] = \\" >> $2
 	sed 's/\"/\\\"/g;s/^/    "/;s/$/" \\/' $1 >> $2
 	echo ";" >> $2
 	echo "" >> $2
+
 }
 
 function embed_svgs () {
@@ -226,8 +243,7 @@ function convert_to_xpm () {
 
 function full_build () {
 
-	git submodule init
-	git submodule update
+	git submodule update --init
 	convert_to_xpm
 	embed_svgs
 	run_cmake
@@ -241,9 +257,14 @@ fi
 for arg in $@
 do
 	case "$1" in
-	--convert-xpm) convert_to_xpm;;
-	-a) analysis;;
-	-s | --style) code_style;;
+ 	--current)
+  		run_current_build;;
+	--convert-xpm)
+ 		convert_to_xpm;;
+	-a)
+ 		analysis;;
+	-s | --style)
+ 		code_style;;
 	--svg) embed_svgs;;
 	-G | --generator)
 		# GENERATOR="$OPTARG"
@@ -252,13 +273,18 @@ do
 	-b | --build) run_cmake;;
 	-f | --full) full_build;;
 	-d | --debug) build_debug;;
-	--gnu-linux | --linux | --ubuntu | --ubuntu-latest | --package-linux) assemble_release "linux";;
-	--macos | --macos-latest | --package-macos) assemble_release "macos";;
-	--windows | --windows-latest | --package-windows) assemble_release "linux";;
-	--package) assemble_release "linux";;
-	-h | --help) cat docs/help.txt | less;;
-	-c | --clean) rm -fr ${BUILD_DIR};;
-	*) cat docs/short_help.txt;;
+	--gnu-linux | --linux | --ubuntu | --ubuntu-latest | --package-linux)
+ 		assemble_release "linux";;
+	--macos | --macos-latest | --package-macos)
+ 		assemble_release "macos";;
+	--windows | --windows-latest | --package-windows)
+ 		assemble_release "windows";;
+	-h | --help)
+ 		cat docs/help.txt | less;;
+	-c | --clean)
+ 		rm -fr ${BUILD_DIR};;
+	*)
+ 		cat docs/short_help.txt;;
 	esac
 done
 
