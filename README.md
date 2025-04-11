@@ -3,7 +3,7 @@ What is Embroidermodder?
 
 _IN ALPHA: VERY EXPERIMENTAL_
 
-[![Test build](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build.yml)
+[![Build Windows](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/windows.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/windows.yml) [![Build MacOS](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/macos.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/macos.yml) [![Build Linux](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/linux.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/linux.yml)
 
 Embroidermodder is a free machine embroidery software program.
 The newest version, Embroidermodder 2 can:

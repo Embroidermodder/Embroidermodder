@@ -1,4 +1,4 @@
-name: Test build
+name: GNU/Linux
 
 on:
   push:
@@ -6,14 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  os_matrix:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Build
         run: |
           git clone https://github.com/embroidermodder/embroidermodder
           cd embroidermodder
-          bash build.sh --${{ matrix.os }}
+          bash build.sh --linux
