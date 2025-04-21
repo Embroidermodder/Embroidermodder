@@ -809,16 +809,6 @@ extern "C" {
 #define DIALOG_STRING_SLOT(A) \
     SLOT([=](QString value) { strncpy(setting[A].dialog.s, qPrintable(value), MAX_STRING_LENGTH); } )
 
-#define set_int(key, value)                setting[key].setting.i = value
-#define set_real(key, value)               setting[key].setting.r = value
-#define set_str(key, value) strncpy(setting[key].setting.s, value, MAX_STRING_LENGTH)
-#define set_bool(key, value)               setting[key].setting.b = value
-
-#define get_int(key)       setting[key].setting.i
-#define get_str(key)       setting[key].setting.s
-#define get_real(key)      setting[key].setting.r
-#define get_bool(key)      setting[key].setting.b
-
 /* For switch tables we can use this trick to use two character indices.
  * For example: "case TWO_CHAR_INDEX(DUTCH_SHORTCODE):".
  */
@@ -1043,6 +1033,12 @@ typedef struct Translation_ {
     int32_t status;
 } Translation;
 
+/* Generic widget pointer for a widget map. */
+typedef struct Widget_ {
+    EmbString key;
+    void *widget;
+} Widget;
+
 typedef struct WidgetData_ {
     char *key;
     char *label;
@@ -1094,6 +1090,16 @@ ScriptValue script_int(int i);
 ScriptValue script_real(EmbReal r);
 ScriptValue script_string(char *s);
 ScriptValue command_prompt(ScriptEnv *context, const char *line);
+
+void set_bool(int32_t key, bool value);
+void set_int(int32_t key, int32_t value);
+void set_real(int32_t key, EmbReal value);
+void set_str(int32_t key, const char *value);
+
+bool get_bool(int32_t key);
+int32_t get_int(int32_t key);
+EmbReal get_real(int32_t key);
+const char *get_str(int32_t key);
 
 EmbVector find_mouse_snap_point(EmbVectorList *snap_points, EmbVector mouse_point);
 
@@ -1294,8 +1300,8 @@ void useBackgroundLogo(bool use);
 void useBackgroundTexture(bool use);
 void useBackgroundColor(bool use);
 
-void setBackgroundLogo(char *fileName);
-void setBackgroundTexture(char *fileName);
+void setBackgroundLogo(const char *fileName);
+void setBackgroundTexture(const char *fileName);
 void setBackgroundColor(uint32_t color);
 
 void update_view(void);
@@ -1579,7 +1585,7 @@ void doc_delete_pressed(int32_t doc);
 void doc_escape_pressed(int32_t doc);
 
 void doc_corner_button_clicked(int32_t doc);
-void doc_create_grid(int32_t doc, char *gridType);
+void doc_create_grid(int32_t doc, const char *gridType);
 void doc_copy_selected(int32_t doc);
 
 void doc_show_scroll_bars(int32_t doc, bool val);
@@ -1802,11 +1808,16 @@ void obj_update_rubber_grip(uint32_t obj);
 EmbVectorList *all_grip_points(int32_t obj_id);
 EmbVector mouse_snap_point(int32_t obj_id, EmbVector mousePoint);
 
+int find_widget_list(const char *key);
+char *qcolor_from_uint32_t(uint32_t color);
+ScriptValue allow_rubber_command(ScriptEnv *context);
+
 /* ---------------------------- Global Variables --------------------------- */
 /* Global variables and constants we need to access anywhere in the program
  * with minimal overhead.
  */
 
+extern Widget widget_list[MAX_WIDGETS];
 extern CommandData command_data[MAX_COMMANDS];
 extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];

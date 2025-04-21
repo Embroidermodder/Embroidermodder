@@ -279,15 +279,16 @@ draw_text(NVGcontext *vg, int x, int y, char *font, char *txt, EmbColor text_col
 Button
 make_menubar_button(NVGcontext *vg, int x, int y, char *text, float *bounds)
 {
-    Button button;
     nvgTextBounds(vg, x, y, text, NULL, bounds);
     EmbReal w = bounds[2] - bounds[0] + button_padding;
-    button.rect = emb_rect(x, y, w, 30);
-    button.color = toolbar_button_color;
-    button.text_color = toolbar_text;
-    strcpy(button.text, text);
-    strcpy(button.font, "sans");
-    button.state = 0;
+    Button button = {
+        .rect = emb_rect(x, y, w, 30),
+        .text_color = toolbar_text,
+        .color = toolbar_button_color,
+        .text = text,
+        .font = "sans",
+        .state = 0
+    };
     return button;
 }
 
@@ -295,13 +296,14 @@ make_menubar_button(NVGcontext *vg, int x, int y, char *text, float *bounds)
 Button
 make_toolbar_button(int x, int y, char *text)
 {
-    Button button;
-    button.rect = emb_rect(x, y, icon_size, icon_size);
-    button.color = toolbar_button_color;
-    button.text_color = toolbar_text;
-    strcpy(button.text, text);
-    strcpy(button.font, "icons");
-    button.state = 0;
+    Button button = {
+        .text = text,
+        .font = "icons",
+        .rect = emb_rect(x, y, icon_size, icon_size),
+        .color = toolbar_button_color,
+        .text_color = toolbar_text,
+        .state = 0
+    };
     return button;
 }
 
@@ -2544,7 +2546,7 @@ doc_cut(int32_t doc)
 
 /* . */
 void
-doc_create_grid(int32_t doc, EmbString gridType)
+doc_create_grid(int32_t doc, const char *gridType)
 {
     DocumentData *data = doc_data(doc);
     if (!strcmp(gridType, "Rectangular")) {

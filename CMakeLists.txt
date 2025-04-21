@@ -70,6 +70,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/state.c
 	${SRC}/translations.c
 	${SRC}/icons.c
+	${SRC}/widgets.c
 	${SRC}/xpm.c
 
 	${SRC}/core.h
