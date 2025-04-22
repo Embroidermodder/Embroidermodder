@@ -432,7 +432,8 @@ create_checkbox(QGroupBox* groupbox, int key)
 QIcon
 create_icon(const char *icon)
 {
-    return QIcon(create_pixmap((char*)qPrintable(icon)));
+    printf("creating icon: %s\n", icon);
+    return QIcon(create_pixmap(icon));
 }
 
 /* . */
@@ -1676,7 +1677,7 @@ void
 obj_calculate_data(uint32_t obj_id)
 {
     Object *obj = get_obj(obj_id);
-    EmbVector center = emb_arc_center(*(obj->core->geometry));
+    EmbVector center = emb_gget(obj->core->geometry, EMB_CENTER).v;
 
     EmbReal radius = emb_vector_distance(center, obj->core->geometry->object.arc.mid);
     obj_update_arc_rect(obj, radius);
@@ -1920,7 +1921,7 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         g.object.arc.mid = obj_rubber_point(obj_id, "CIRCLE_TAN2");
         g.object.arc.end = obj_rubber_point(obj_id, "CIRCLE_TAN3");
         g.type = EMB_ARC;
-        EmbVector center = emb_arc_center(g);
+        EmbVector center = emb_gget(&g, EMB_CENTER).v;
         obj_set_center(core, center);
         EmbReal radius = emb_vector_distance(center, g.object.arc.end);
         emb_set_radius(core->geometry, radius);

@@ -1101,46 +1101,6 @@ free_script_env(ScriptEnv* context)
     free(context);
 }
 
-/* . */
-ScriptValue
-script_bool(bool b)
-{
-    ScriptValue value;
-    value.type = SCRIPT_BOOL;
-    value.b = b;
-    return value;
-}
-
-/* . */
-ScriptValue
-script_int(int i)
-{
-    ScriptValue value;
-    value.type = SCRIPT_INT;
-    value.i = i;
-    return value;
-}
-
-/* . */
-ScriptValue
-script_real(EmbReal r)
-{
-    ScriptValue value;
-    value.type = SCRIPT_REAL;
-    value.r = r;
-    return value;
-}
-
-/* . */
-ScriptValue
-script_string(char *s)
-{
-    ScriptValue value;
-    value.type = SCRIPT_STRING;
-    strncpy(value.s, s, MAX_STRING_LENGTH);
-    return value;
-}
-
 /* Using stdarg we can pack arguments into the context using the above functions.
  *
  * https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdarg.h.html
@@ -1305,12 +1265,16 @@ int
 table_length(char *s[])
 {
     int i;
-    for (i=0; ; i++) {
-        if (s[i][0] == END_SYMBOL[0])
-        if (s[i][1] == END_SYMBOL[1])
-        if (s[i][2] == END_SYMBOL[2]) {
-            break;
+    for (i=0; i<1000; i++) {
+        if (s[i][0] == END_SYMBOL[0]) {
+            if (!strncmp(s[i], END_SYMBOL, MAX_STRING_LENGTH)) {
+                break;
+            }
         }
+    }
+    if (i == 1000) {
+        puts("ERROR: Table is missing END_SYMBOL.");
+        return 1000;
     }
     return i;
 }

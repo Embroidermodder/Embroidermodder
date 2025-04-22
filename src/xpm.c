@@ -7,6 +7,9 @@
  * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
  * for advice on altering this file.
  */
+
+#include "embroidery.h"
+ 
 /* XPM */
 static char *about_embroidermodder_png[] = {
 /* columns rows colors chars-per-pixel */
@@ -28862,5 +28865,6 @@ char *xpm_icon_labels[] = {
     "windowprevious",
     "windowtile",
     "world",
-    "END"
+    END_SYMBOL
 };
+

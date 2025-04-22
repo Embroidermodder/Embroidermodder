@@ -64,7 +64,6 @@ qt_add_executable(embroidermodder2
 
 	${SRC}/commands.cpp
 
-	${SRC}/designs.c
 	${SRC}/interface.c
 	${SRC}/objects.c
 	${SRC}/state.c

@@ -41,9 +41,6 @@ function run_current_build () {
 function get_dependancies () {
 
 	git submodule update --init
-	cd extern/libembroidery
-	git checkout em2
-	cd ../..
 
 	if [[ $1 = "windows" ]]; then
 		python -m pip install -U pip --upgrade pip

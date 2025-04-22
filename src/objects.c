@@ -2507,7 +2507,7 @@ emb_arc_set_radius(EmbArc arc, EmbReal radius)
     EmbGeometry geometry;
     geometry.object.arc = arc;
     radius = EMB_MAX(radius, 0.0000001);
-    EmbVector center = emb_arc_center(geometry);
+    EmbVector center = emb_gget(&geometry, EMB_CENTER).v;
 
     EmbVector start = emb_vector_subtract(center, arc.start);
     start = emb_vector_scale(start, radius/emb_vector_length(start));

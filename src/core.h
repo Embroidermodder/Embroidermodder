@@ -57,14 +57,6 @@ extern "C" {
 #define WIDGET_LABEL                   5
 #define WIDGET_UNKNOWN                 6
 
-#define SCRIPT_NULL                    0
-#define SCRIPT_INT                     1
-#define SCRIPT_REAL                    2
-#define SCRIPT_COMMAND                 3
-#define SCRIPT_STRING                  4
-#define SCRIPT_BOOL                    5
-#define SCRIPT_TABLE                   6
-
 /* main() is run every time the command is started.
  * Use it to reset variables so they are ready to go.
  */
@@ -763,8 +755,6 @@ extern "C" {
 #define RUSSIAN_SHORTCODE           "ru"
 #define SPANISH_SHORTCODE           "es"
 
-#define END_SYMBOL                 "END"
-
 #define GB_GENERAL                     0
 #define GB_GEOM_ARC                    1
 #define GB_MISC_ARC                    2
@@ -1046,20 +1036,6 @@ typedef struct WidgetData_ {
     int type;
 } WidgetData;
 
-typedef struct Design_ {
-    char *command;
-    float lower;
-    float upper;
-    int num_points;
-    int min_points;
-    int max_points;
-    float xscale;
-    float yscale;
-    char *parameter;
-    char *x;
-    char *y;
-} Design;
-
 typedef struct ViewData_ {
     int32_t doc;
     double little;
@@ -1085,10 +1061,6 @@ ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
 ScriptValue call(ScriptEnv *context, char *function, ...);
 ScriptValue run_cmd(ScriptEnv *context, const char *line);
 
-ScriptValue script_bool(bool b);
-ScriptValue script_int(int i);
-ScriptValue script_real(EmbReal r);
-ScriptValue script_string(char *s);
 ScriptValue command_prompt(ScriptEnv *context, const char *line);
 
 void set_bool(int32_t key, bool value);
