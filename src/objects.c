@@ -21,6 +21,8 @@
 
 #include "core.h"
 
+extern const char *justify_options[];
+
 /* . */
 uint32_t
 copy_object(uint32_t obj)
@@ -2285,25 +2287,6 @@ obj_set_text_font(ObjectCore* obj, const char *font)
     strcpy(obj->textFont, font);
     obj_set_text(obj, obj->text);
 }
-
-EmbStringTable justify_options = {
-    "Left",
-    "Center",
-    "Right",
-    "Aligned",
-    "Middle",
-    "Fit",
-    "Top Left",
-    "Top Center",
-    "Top Right",
-    "Middle Left",
-    "Middle Center",
-    "Middle Right",
-    "Bottom Left",
-    "Bottom Center",
-    "Bottom Right",
-    "END"
-};
 
 /* Verify the string is a valid option. */
 void
