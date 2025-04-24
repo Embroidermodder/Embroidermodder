@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "core.h"
+#include "qt.h"
 
 QPushButton* choose_button(QWidget *parent, int key);
 void create_preview_dialog(char *caption, char *dir, char *filter);
@@ -432,7 +432,9 @@ create_checkbox(QGroupBox* groupbox, int key)
 QIcon
 create_icon(const char *icon)
 {
-    printf("creating icon: %s\n", icon);
+    if (emb_verbose > 0) {
+        printf("creating icon: %s\n", icon);
+    }
     return QIcon(create_pixmap(icon));
 }
 
@@ -653,11 +655,11 @@ create_all_toolbars(void)
 {
     debug_message("create all toolbars");
 
-    add_to_toolbar(TOOLBAR_FILE, file_toolbar);
-    add_to_toolbar(TOOLBAR_EDIT, edit_toolbar);
-    add_to_toolbar(TOOLBAR_VIEW, view_toolbar);
-    add_to_toolbar(TOOLBAR_ICON, icon_toolbar);
-    add_to_toolbar(TOOLBAR_HELP, help_toolbar);
+    add_to_toolbar(TOOLBAR_FILE, "file_toolbar");
+    add_to_toolbar(TOOLBAR_EDIT, "edit_toolbar");
+    add_to_toolbar(TOOLBAR_VIEW, "view_toolbar");
+    add_to_toolbar(TOOLBAR_ICON, "icon_toolbar");
+    add_to_toolbar(TOOLBAR_HELP, "help_toolbar");
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1294,6 +1296,7 @@ void
 obj_update_rubber_grip(uint32_t obj_id)
 {
     Object *obj = get_obj(obj_id);
+    EmbGeometry *g = obj->core->geometry;
     QPainter *painter = obj->obj_painter;
     if (!painter) {
         return;
@@ -1318,13 +1321,13 @@ obj_update_rubber_grip(uint32_t obj_id)
     }
     case EMB_LINE: {
         QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
-        if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
+        if (emb_approx(gripPoint, emb_gget(g, EMB_START).v)) {
             painter->drawLine(obj_line(obj_id).p2(), p);
         }
-        else if (emb_approx(gripPoint, obj_end_point_2(obj->core))) {
+        else if (emb_approx(gripPoint, emb_gget(g, EMB_END).v)) {
             painter->drawLine(obj_line(obj_id).p1(), p);
         }
-        else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
+        else if (emb_approx(gripPoint, emb_gget(g, EMB_MID).v)) {
             QPointF point = p - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
             QLineF line = obj_line(obj_id).translated(point);
             painter->drawLine(line);
@@ -1334,14 +1337,14 @@ obj_update_rubber_grip(uint32_t obj_id)
         break;
     }
     case EMB_CIRCLE: {
-        if (emb_approx(gripPoint, obj_center(obj->core))) {
+        if (emb_approx(gripPoint, emb_gget(obj->core->geometry, EMB_CENTER).v)) {
             QPointF point = to_qpointf(obj_map_rubber(obj_id, ""))
                 - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
             QRectF r = to_qrectf(obj_rect(obj->core));
             painter->drawEllipse(r.translated(point));
         }
         else {
-            EmbReal gripRadius = emb_vector_distance(obj_center(obj->core), obj_rubber_point(obj_id, ""));
+            EmbReal gripRadius = emb_vector_distance(emb_gget(obj->core->geometry, EMB_CENTER).v, obj_rubber_point(obj_id, ""));
             painter->drawEllipse(QPointF(), gripRadius, gripRadius);
         }
 
@@ -1350,19 +1353,19 @@ obj_update_rubber_grip(uint32_t obj_id)
     }
     case EMB_DIM_LEADER: {
         QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
-        if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
+        if (emb_approx(gripPoint, emb_gget(g, EMB_START).v)) {
             painter->drawLine(obj_line(obj_id).p2(), p);
         }
-        else if (emb_approx(gripPoint, obj_end_point_2(obj->core))) {
+        else if (emb_approx(gripPoint, emb_gget(g, EMB_END).v)) {
             painter->drawLine(obj_line(obj_id).p1(), p);
         }
-        else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
+        else if (emb_approx(gripPoint, emb_gget(g, EMB_MID).v)) {
             obj_draw_rubber_grip(obj_id, painter);
         }
         break;
     }
     case EMB_POINT: {
-        if (emb_approx(gripPoint, obj_pos(obj->core))) {
+        if (emb_approx(gripPoint, emb_gget(obj->core->geometry, EMB_CENTER).v)) {
             obj_draw_rubber_grip(obj_id, painter);
         }
         break;
@@ -1474,7 +1477,8 @@ obj_update_rubber_grip(uint32_t obj_id)
         break;
     }
     case EMB_TEXT_SINGLE: {
-        if (emb_approx(gripPoint, obj_pos(obj->core))) {
+        /* EMB_POS ? */
+        if (emb_approx(gripPoint, emb_gget(obj->core->geometry, EMB_CENTER).v)) {
            // painter->drawPath(obj_path(obj).translated(obj->mapFromScene(obj_rubber_point(obj_id, ""))- obj_map_rubber(obj_id, "GRIP_POINT"));
         }
 
@@ -1488,7 +1492,8 @@ obj_update_rubber_grip(uint32_t obj_id)
 
 /* FIXME: */
 QList<QPainterPath>
-Object::subPathList() const {
+Object::subPathList() const
+{
     QList<QPainterPath> p;
     return p;
 }
@@ -1932,8 +1937,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneStartPoint = obj_rubber_point(obj_id, "DIMLEADER_LINE_START");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "DIMLEADER_LINE_END");
 
-        obj_set_end_point_1(core, sceneStartPoint);
-        obj_set_end_point_2(core, sceneQSnapPoint);
+        emb_gset(core->geometry, EMB_START, script_vector(sceneStartPoint));
+        emb_gset(core->geometry, EMB_END, script_vector(sceneQSnapPoint));
         break;
     }
     case RUBBER_ELLIPSE_LINE: {
@@ -2011,8 +2016,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneStartPoint = obj_rubber_point(obj_id, "LINE_START");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "LINE_END");
 
-        obj_set_end_point_1(core, sceneStartPoint);
-        obj_set_end_point_2(core, sceneQSnapPoint);
+        emb_gset(core->geometry, EMB_START, script_vector(sceneStartPoint));
+        emb_gset(core->geometry, EMB_END, script_vector(sceneQSnapPoint));
 
         obj_draw_rubber_line(obj, obj_line(obj_id), "VIEW_COLOR_CROSSHAIR");
         break;
@@ -2181,7 +2186,8 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
         paintPen.setStyle(Qt::DashLine);
     }
     DocumentData *data = doc_data(core->doc);
-    if (data->properties[VIEW_LWT]) {
+    int doc = data->id;
+    if (doc_get_bool(doc, VIEW_LWT)) {
         paintPen = lwtPen;
     }
     painter->setPen(paintPen);
@@ -2195,7 +2201,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
             spanAngle = -spanAngle;
         }
 
-        EmbReal rad = obj_radius(this->core);
+        EmbReal rad = emb_gget(this->core->geometry, EMB_RADIUS).r;
         QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
         painter->drawArc(paintRect, startAngle, spanAngle);
         break;
@@ -2219,7 +2225,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
             painter->drawLine(obj_line(core->objID));
         }
 
-        if (data->properties[VIEW_LWT] && data->properties[VIEW_REAL]) {
+        if (doc_get_bool(doc, VIEW_LWT) && doc_get_bool(doc, VIEW_REAL)) {
             obj_real_render(this, painter, path());
         }
         break;
@@ -2245,7 +2251,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
     case EMB_POLYLINE: {
         painter->drawPath(normalPath);
 
-        if (data->properties[VIEW_LWT] && data->properties[VIEW_REAL]) {
+        if (doc_get_bool(doc, VIEW_LWT) && doc_get_bool(doc, VIEW_REAL)) {
             obj_real_render(this, painter, normalPath);
         }
         break;
@@ -2288,7 +2294,9 @@ Object::objectSavePath() const
     case EMB_DIM_LEADER:
     case EMB_LINE: {
         QPainterPath path;
-        EmbVector delta = obj_delta(this->core);
+        EmbVector start = emb_gget(this->core->geometry, EMB_START).v;
+        EmbVector end = emb_gget(this->core->geometry, EMB_END).v;
+        EmbVector delta = emb_vector_subtract(end, start);
         path.lineTo(delta.x, delta.y);
         return path;
     }
@@ -2661,7 +2669,11 @@ svg_to_painterpath(QPainterPath *path, const char *svg, EmbVector pos, EmbVector
     }
 }
 
-/* TODO: Make Origin Customizable */
+/*! \brief Create the path object for the origin if the GRID_SHOW_ORIGIN flag is
+ *         true.
+ *
+ * \todo Make Origin Customizable
+ */
 void
 doc_create_origin(int32_t doc)
 {
@@ -2669,12 +2681,16 @@ doc_create_origin(int32_t doc)
 
     if (get_bool(GRID_SHOW_ORIGIN)) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */
-        svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path,
-            emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
+        //! /todo
+        //const char *circle_origin_path = emb_get_str(root, "path_circle_origin");
+        //svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path,
+        //    emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
     }
 }
 
-/* . */
+/*! \brief 
+ * .
+ */
 void
 doc_create_grid_rect(int32_t doc)
 {
@@ -2881,7 +2897,7 @@ Document::drawBackground(QPainter* painter, const QRectF& rect)
     DocumentData *data = doc_data(doc);
     painter->fillRect(rect, backgroundBrush());
 
-    if (data->properties[VIEW_GRID]
+    if (doc_get_bool(doc, VIEW_GRID)
         && rect.intersects(documents[doc]->gridPath.controlPointRect())) {
         QPen gridPen(QColor(data->gridColor));
         gridPen.setJoinStyle(Qt::MiterJoin);
@@ -3082,8 +3098,8 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                 }
 
                 EmbVector offset = to_emb_vector(gripOffset);
-                for (int i=0; i<data->selectedGripPoints->count; i++) {
-                    EmbVector ssp = data->selectedGripPoints->data[i];
+                for (int i=0; i<data->selectedGripPoints.size(); i++) {
+                    EmbVector ssp = data->selectedGripPoints[i];
                     EmbVector p1 = emb_vector_subtract(doc_map_from_scene(doc, ssp), offset);
                     EmbVector q1 = emb_vector_add(doc_map_from_scene(doc, ssp), offset);
                     EmbVector p2 = doc_map_to_scene(doc, p1);
@@ -3103,7 +3119,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
     /* Draw the closest qsnap point */
 
     /* TODO: && findClosestSnapPoint == true */
-    if (!data->properties[VIEW_SELECTING]) {
+    if (!doc_get_bool(doc, VIEW_SELECTING)) {
         QPen qsnapPen(data->qsnapLocatorColor);
         qsnapPen.setWidth(2);
         qsnapPen.setJoinStyle(Qt::MiterJoin);
@@ -3140,12 +3156,12 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 
     /* Draw horizontal and vertical rulers */
 
-    if (data->properties[VIEW_RULER]) {
+    if (doc_get_bool(doc, VIEW_RULER)) {
         draw_rulers(painter, rect);
     }
 
     /* Draw the crosshair */
-    if (!data->properties[VIEW_SELECTING]) {
+    if (!doc_get_bool(doc, VIEW_SELECTING)) {
         EmbVector crosshair[6];
         /* painter->setBrush(Qt::NoBrush); */
         QPen crosshairPen(data->crosshairColor);
@@ -3572,7 +3588,7 @@ Document::mousePressEvent(QMouseEvent* event)
         QList<QGraphicsItem*> pickList = documents[doc]->gscene->items(pickRect);
 
         bool itemsInPickBox = pickList.size();
-        if (itemsInPickBox && !data->properties[VIEW_SELECTING] && !data->properties[VIEW_GRIPPING]) {
+        if (itemsInPickBox && !doc_get_bool(doc, VIEW_SELECTING) && !doc_get_bool(doc, VIEW_GRIPPING)) {
             bool itemsAlreadySelected = pickList.at(0)->isSelected();
             if (!itemsAlreadySelected) {
                 pickList.at(0)->setSelected(true);
@@ -3601,17 +3617,17 @@ Document::mousePressEvent(QMouseEvent* event)
                 }
                 else {
                     /* start moving */
-                    doc_set_prop(doc, VIEW_MOVING, true);
+                    doc_set_bool(doc, VIEW_MOVING, true);
                     data->pressPoint = to_emb_vector(event->pos());
                     data->scenePressPoint = doc_map_to_scene(doc, data->pressPoint);
                 }
             }
         }
-        else if (data->properties[VIEW_GRIPPING]) {
+        else if (doc_get_bool(doc, VIEW_GRIPPING)) {
             doc_stop_gripping(doc, true);
         }
-        else if (!data->properties[VIEW_SELECTING]) {
-            doc_set_prop(doc, VIEW_SELECTING, true);
+        else if (!doc_get_bool(doc, VIEW_SELECTING)) {
+            doc_set_bool(doc, VIEW_SELECTING, true);
             data->pressPoint = to_emb_vector(event->pos());
             data->scenePressPoint = doc_map_to_scene(doc, data->pressPoint);
 
@@ -3623,7 +3639,7 @@ Document::mousePressEvent(QMouseEvent* event)
             documents[doc]->selectBox->show();
         }
         else {
-            data->properties[VIEW_SELECTING] = false;
+            doc_set_bool(doc, VIEW_SELECTING, false);
             documents[doc]->selectBox->hide();
             data->releasePoint = to_emb_vector(event->pos());
             data->sceneReleasePoint = doc_map_to_scene(doc, data->releasePoint);
@@ -3631,7 +3647,7 @@ Document::mousePressEvent(QMouseEvent* event)
             set_selection(doc);
         }
 
-        if (data->properties[VIEW_PASTING]) {
+        if (doc_get_bool(doc, VIEW_PASTING)) {
             QList<QGraphicsItem*> itemList = documents[doc]->pasteObjectItemGroup->childItems();
             documents[doc]->gscene->destroyItemGroup(documents[doc]->pasteObjectItemGroup);
             foreach(QGraphicsItem* item, itemList) {
@@ -3651,10 +3667,10 @@ Document::mousePressEvent(QMouseEvent* event)
             }
             documents[doc]->undoStack->endMacro();
 
-            data->properties[VIEW_PASTING] = false;
-            data->properties[VIEW_SELECTING] = false;
+            doc_set_bool(doc, VIEW_PASTING, false);
+            doc_set_bool(doc, VIEW_SELECTING, false);
         }
-        if (data->properties[VIEW_ZOOMING]) {
+        if (doc_get_bool(doc, VIEW_ZOOMING)) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
             doc_clear_selection(doc);
         }
@@ -3678,7 +3694,7 @@ doc_pan_start(int32_t doc, const QPoint& point)
 
     doc_align_scene_point_with_view_point(doc, doc_map_to_scene(doc, to_emb_vector(point)), to_emb_vector(point));
 
-    doc_set_prop(doc, VIEW_PANNING, true);
+    doc_set_bool(doc, VIEW_PANNING, true);
     data->panStartX = point.x();
     data->panStartY = point.y();
 }
@@ -3732,12 +3748,12 @@ Document::mouseMoveEvent(QMouseEvent* event)
     data->sceneMovePoint = doc_map_to_scene(doc, data->movePoint);
 
     if (cmdActive) {
-        if (data->properties[VIEW_RAPID_MOVING]) {
+        if (doc_get_bool(doc, VIEW_RAPID_MOVING)) {
             run_command_move((char*)qPrintable(curCmd), data->sceneMovePoint.x,
                 data->sceneMovePoint.y);
         }
     }
-    if (data->properties[VIEW_PREVIEWING]) {
+    if (doc_get_bool(doc, VIEW_PREVIEWING)) {
     #if 0
     //FIXME:
         if (data->previewMode == PREVIEW_MOVE) {
@@ -3802,18 +3818,19 @@ Document::mouseMoveEvent(QMouseEvent* event)
         }
     #endif
     }
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         EmbVector p = emb_vector_subtract(data->sceneMousePoint,
             data->pasteDelta);
         documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
     }
-    if (data->properties[VIEW_MOVING]) {
+    if (doc_get_bool(doc, VIEW_MOVING)) {
         /* Ensure that the preview is only shown if the mouse has moved. */
-        if (!data->properties[VIEW_PREVIEWING])
+        if (!doc_get_bool(doc, VIEW_PREVIEWING)) {
             doc_preview_on(doc, PREVIEW_CLONE_SELECTED, PREVIEW_MOVE,
                 data->scenePressPoint.x, data->scenePressPoint.y, 0);
+        }
     }
-    if (data->properties[VIEW_SELECTING]) {
+    if (doc_get_bool(doc, VIEW_SELECTING)) {
         if ((data->sceneMovePoint.x >= data->scenePressPoint.x)
             && (data->sceneMovePoint.y >= data->scenePressPoint.y)) {
             documents[doc]->selectBox->setDirection(1);
@@ -3828,7 +3845,7 @@ Document::mouseMoveEvent(QMouseEvent* event)
         // FIXME: .normalized();
         event->accept();
     }
-    if (data->properties[VIEW_PANNING]) {
+    if (doc_get_bool(doc, VIEW_PANNING)) {
         documents[doc]->horizontalScrollBar()->setValue(
             documents[doc]->horizontalScrollBar()->value() - (event->position().x() - data->panStartX));
         documents[doc]->verticalScrollBar()->setValue(
@@ -3843,9 +3860,10 @@ Document::mouseMoveEvent(QMouseEvent* event)
 void
 Document::mouseReleaseEvent(QMouseEvent* event)
 {
+    int32_t doc = data->id;
     doc_update_mouse_coords(data->id, event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
-        if (data->properties[VIEW_MOVING]) {
+        if (doc_get_bool(doc, VIEW_MOVING)) {
             doc_preview_off(data->id);
             EmbVector delta = emb_vector_subtract(data->sceneMousePoint,
                 data->scenePressPoint);
@@ -3853,12 +3871,12 @@ Document::mouseReleaseEvent(QMouseEvent* event)
             if (emb_vector_distance(delta, emb_vector(0.0, 0.0)) >= 1) {
                 doc_move_selected(data->id, delta);
             }
-            data->properties[VIEW_MOVING] = false;
+            doc_set_bool(doc, VIEW_MOVING, false);
         }
         event->accept();
     }
     if (event->button() == Qt::MiddleButton) {
-        data->properties[VIEW_PANNING] = false;
+        doc_set_bool(doc, VIEW_PANNING, false);
         /* The Undo command will record the spot where the pan completed. */
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", data->id, 0);
         documents[data->id]->undoStack->push(cmd);
@@ -3925,12 +3943,12 @@ doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
     doc_align_scene_point_with_view_point(doc, pointBeforeScale, mousePoint);
 
     doc_update_mouse_coords(doc, mousePoint.x, mousePoint.y);
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         EmbVector p = emb_vector_subtract(data->sceneMousePoint,
             data->pasteDelta);
         documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
     }
-    if (data->properties[VIEW_SELECTING]) {
+    if (doc_get_bool(doc, VIEW_SELECTING)) {
         QPointF v1 = documents[doc]->mapFromScene(to_qpointf(data->scenePressPoint));
         QPointF v2 = to_qpointf(mousePoint);
         QRectF r(v1, v2);
@@ -3942,6 +3960,7 @@ doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
 void
 Document::contextMenuEvent(QContextMenuEvent* event)
 {
+    int doc = data->id;
     QMenu menu;
     bool selectionEmpty = (data->selectedItems->count == 0);
 
@@ -3953,7 +3972,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         }
     }
 
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         return;
     }
     if (!cmdActive) {
@@ -3962,7 +3981,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         QObject::connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if (data->properties[VIEW_ZOOMING]) {
+    if (doc_get_bool(doc, VIEW_ZOOMING)) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         QObject::connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escape_pressed()));
@@ -4031,9 +4050,9 @@ doc_start_gripping(int32_t doc, Object* obj)
     if (!obj) {
         return;
     }
-    DocumentData *data = doc_data(doc);
-    data->properties[VIEW_GRIPPING] = true;
+    doc_set_bool(doc, VIEW_GRIPPING, true);
     documents[doc]->gripBaseObj = obj;
+    DocumentData *data = doc_data(doc);
     data->sceneGripPoint = mouse_snap_point(documents[doc]->gripBaseObj->core->objID, data->sceneMousePoint);
     obj_set_rubber_point(doc, "GRIP_POINT", data->sceneGripPoint);
     obj_set_rubber_mode(doc, RUBBER_GRIP);
@@ -4044,7 +4063,7 @@ void
 doc_stop_gripping(int32_t doc, bool accept)
 {
     DocumentData *data = doc_data(doc);
-    data->properties[VIEW_GRIPPING] = false;
+    doc_set_bool(doc, VIEW_GRIPPING, false);
     if (documents[doc]->gripBaseObj) {
         obj_vulcanize(documents[doc]->gripBaseObj->core->objID);
         if (accept) {
@@ -4126,7 +4145,7 @@ void
 doc_paste(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
         delete documents[doc]->pasteObjectItemGroup;
     }
@@ -4135,7 +4154,7 @@ doc_paste(int32_t doc)
     data->pasteDelta = to_emb_vector(documents[doc]->pasteObjectItemGroup->boundingRect().bottomLeft());
     EmbVector p = emb_vector_subtract(data->sceneMousePoint, data->pasteDelta);
     documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
-    data->properties[VIEW_PASTING] = true;
+    doc_set_bool(doc, VIEW_PASTING, true);
 }
 
 /* . */
@@ -4329,13 +4348,13 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         if (doc >= 0) {
             DocumentData *data = doc_data(doc);
             QAction* enable_realAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
-            enable_realAction->setEnabled(!data->properties[VIEW_REAL]);
+            enable_realAction->setEnabled(!doc_get_bool(doc, VIEW_REAL));
             QObject::connect(enable_realAction, SIGNAL(triggered), _main,
                 SLOT([=](void) { statusbar_toggle("REAL", true); }));
             menu.addAction(enable_realAction);
 
             QAction* disable_realAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
-            disable_realAction->setEnabled(data->properties[VIEW_REAL]);
+            disable_realAction->setEnabled(doc_get_bool(doc, VIEW_REAL));
             QObject::connect(disable_realAction, SIGNAL(triggered), _main,
                 SLOT([=](void) { statusbar_toggle("REAL", false); }));
             menu.addAction(disable_realAction);
@@ -5056,14 +5075,14 @@ MdiWindow::onWindowActivated()
     // FIXME: documents[doc]->undoStack->setActive(true);
     DocumentData *data = doc_data(doc_index);
     set_undo_clean_icon(data->fileWasLoaded);
-    statusBarButtons[SB_SNAP]->setChecked(data->properties[VIEW_SNAP]);
-    statusBarButtons[SB_GRID]->setChecked(data->properties[VIEW_GRID]);
-    statusBarButtons[SB_RULER]->setChecked(data->properties[VIEW_RULER]);
-    statusBarButtons[SB_ORTHO]->setChecked(data->properties[VIEW_ORTHO]);
-    statusBarButtons[SB_POLAR]->setChecked(data->properties[VIEW_POLAR]);
-    statusBarButtons[SB_QSNAP]->setChecked(data->properties[VIEW_QSNAP]);
-    statusBarButtons[SB_QTRACK]->setChecked(data->properties[VIEW_QTRACK]);
-    statusBarButtons[SB_LWT]->setChecked(data->properties[VIEW_LWT]);
+    statusBarButtons[SB_SNAP]->setChecked(doc_get_bool(doc_index, VIEW_SNAP));
+    statusBarButtons[SB_GRID]->setChecked(doc_get_bool(doc_index, VIEW_GRID));
+    statusBarButtons[SB_RULER]->setChecked(doc_get_bool(doc_index, VIEW_RULER));
+    statusBarButtons[SB_ORTHO]->setChecked(doc_get_bool(doc_index, VIEW_ORTHO));
+    statusBarButtons[SB_POLAR]->setChecked(doc_get_bool(doc_index, VIEW_POLAR));
+    statusBarButtons[SB_QSNAP]->setChecked(doc_get_bool(doc_index, VIEW_QSNAP));
+    statusBarButtons[SB_QTRACK]->setChecked(doc_get_bool(doc_index, VIEW_QTRACK));
+    statusBarButtons[SB_LWT]->setChecked(doc_get_bool(doc_index, VIEW_LWT));
     setHistory(promptHistoryData);
 }
 
@@ -5476,52 +5495,83 @@ to_qpointf(EmbVector v)
     return p;
 }
 
-/* TODO: choose a better default icon. */
+/*! TODO: choose a better default icon.
+ *
+ * Loads in the preference order:
+ * 1. Our PNG.
+ * 2. Our SVG.
+ * 3. Heroicon SVG.
+ * 4. Default blank icon.
+ */
 QPixmap
 create_pixmap(const char *icon)
 {
+    EmbString fname;
+    char *buffer = (char*)malloc(1000*1000);
+    size_t loaded;
+    /* \todo this should be based on the global icon size variable */
+    QSize size(50, 50);
+
     /* SVG icon by default */
-    int n = table_length((char**)svgs);
     if (!strcmp(icon, "blank")) {
-        debug_message("    blank icon");
-        /* FIXME: this should be based on the global icon size variable */
-        QSize size(50, 50);
         QPixmap pixmap(size);
         pixmap.fill(Qt::transparent);
         return pixmap;
     }
-    debug_message("svg_table_length = %d.", n);
-    for (int i=0; i<n/2; i++) {
-        if (!strcmp(icon, svgs[2*i+0])) {
-            /* We're storing the SVGs as part of the code, so we need to convert
-             * the string to a ByteArray for QSvgRenderer to recognise it.
-             */
-            debug_message("    found svg %s", icon);
-            QString svg_s(svgs[2*i+1]);
-            QSvgRenderer renderer(svg_s.toUtf8());
-            /* FIXME: this should be based on the global icon size variable */
-            QSize size(50, 50);
-            QPixmap pixmap(size);
-            QPainter painter;
-            pixmap.fill(Qt::transparent);
-            painter.begin(&pixmap);
-            renderer.render(&painter);
-            painter.end();
-            return pixmap;
-        }
+
+    /* 1. Our PNG icon (as XPM). */
+    sprintf(fname, "assets/images/%s.png", icon);
+    loaded = load_file_to_buffer(fname, buffer);
+    if (loaded) {
+        QImage *image = new QImage(fname);
+        QPainter painter;
+        QPixmap pixmap(size);
+        QRect rect(0, 0, 50, 50);
+        pixmap.fill(Qt::transparent);
+        painter.begin(&pixmap);
+        painter.drawImage(rect, *image);
+        painter.end();
+        free(buffer);
+        return pixmap;
     }
-    /* Fallback to XPM. */
-    n = table_length(xpm_icon_labels);
-    for (int i=0; i<n; i++) {
-        if (!strcmp(icon, xpm_icon_labels[i])) {
-            debug_message("    fallback png %s", icon);
-            QPixmap pixmap(xpm_icons[i]);
-            return pixmap;
+
+    /* 2. Our SVG icon. */
+    sprintf(fname, "assets/images/%s.svg", icon);
+    loaded = load_file_to_buffer(fname, buffer);
+    if (!loaded) {
+        /* 3. Heroicon SVG icon. */
+        int i;
+        sprintf(fname, "assets/icons/heroicons/optimized/24/outline/%s.svg", icon);
+        for (i=0; i<200; i++) {
+            if (fname[i] == '_') {
+                fname[i] = '-';
+            }
         }
+        loaded = load_file_to_buffer(fname, buffer);
     }
-    /* Use "about" to represent missing icon. */
-    QPixmap pixmap(xpm_icons[0]);
-    debug_message("    ERROR: failed to find icon %s", icon);
+    if (loaded) {
+        /* We're storing the SVGs as part of the code, so we need to convert
+         * the string to a ByteArray for QSvgRenderer to recognise it.
+         */
+        debug_message("    found svg %s", icon);
+        QPixmap pixmap(size);
+        pixmap.fill(Qt::transparent);
+        QString svg_s(buffer);
+        QSvgRenderer renderer(svg_s.toUtf8());
+        /* FIXME: this should be based on the global icon size variable */
+        QPainter painter;
+        pixmap.fill(Qt::transparent);
+        painter.begin(&pixmap);
+        renderer.render(&painter);
+        painter.end();
+        free(buffer);
+        return pixmap;
+    }
+
+    printf("Failed to load any version of the image %s.\n", icon);
+    QPixmap pixmap(size);
+    pixmap.fill(Qt::red);
+    free(buffer);
     return pixmap;
 }
 
@@ -5560,12 +5610,14 @@ Application::event(QEvent *event)
 }
 
 int
-make_application(int argc, char* argv[])
+make_application(int argc, std::vector<std::string> argv)
 {
 #if defined(Q_OS_MAC)
-    Application app(argc, argv);
+//FIXME:
+    Application app(argc, {});
 #else
-    QApplication app(argc, argv);
+//FIXME:
+    QApplication app(argc, {});
 #endif
     app.setApplicationName(_appName_);
     app.setApplicationVersion(_appVer_);
@@ -5574,8 +5626,10 @@ make_application(int argc, char* argv[])
     char files[MAX_FILES][MAX_STRING_LENGTH];
     int i;
     for (i=0; i<argc; i++) {
+    /*FIXME:
         strcpy(files[i], argv[i]);
         files_ptrs[i] = (char*)files[i];
+    */
     }
     strcpy(files[i], END_SYMBOL);
     files_ptrs[i] = (char*)files[i];
@@ -5901,8 +5955,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbar[TOOLBAR_PROMPT]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
     QObject::connect(toolbar[TOOLBAR_PROMPT], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 
-    add_to_toolbar(TOOLBAR_DRAW, draw_toolbar);
-    add_to_toolbar(TOOLBAR_MODIFY, modify_toolbar);
+    add_to_toolbar(TOOLBAR_DRAW, "draw_toolbar");
+    add_to_toolbar(TOOLBAR_MODIFY, "modify_toolbar");
 
     set_toolbar_horizontal(toolbar_horizontal);
 
@@ -6600,17 +6654,17 @@ settings_dialog(const char *showTab)
 
 /* . */
 void
-add_to_toolbar(int id, char *toolbar_data[])
+add_to_toolbar(int id, std::string toolbar_key)
 {
     toolbar[id]->setObjectName(QString("toolbar") + toolbar_list[id]);
 
-    int n = table_length(toolbar_data);
-    for (int i=0; i<n; i++) {
-        if (toolbar_data[i][0] == '-') {
+    std::vector<std::string> toolbar_data = get_sl(toolbar_key);
+    for (int i=0; i<toolbar_data.size(); i++) {
+        if (toolbar_data[i].c_str()[0] == '-') {
             toolbar[id]->addSeparator();
         }
         else {
-            QAction *action = get_action_by_command(toolbar_data[i]);
+            QAction *action = get_action_by_command(toolbar_data[i].c_str());
             toolbar[id]->addAction(action);
         }
     }

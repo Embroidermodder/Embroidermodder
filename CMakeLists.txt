@@ -20,6 +20,9 @@ set(GLFW_BUILD_EXAMPLES OFF)
 set(GLFW_BUILD_TESTS OFF)
 set(GLFW_BUILD_DOCS OFF)
 
+set(EMBROIDERY_BUILD_SHARED_LIBS OFF)
+set(EMBROIDERY_BUILD_CLI OFF)
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -48,6 +51,7 @@ add_compile_options(
 endif()
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
+set(TEST ${CMAKE_SOURCE_DIR}/test)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(LIBEMB ${CMAKE_SOURCE_DIR}/extern/libembroidery/src)
 
@@ -63,17 +67,20 @@ qt_add_executable(embroidermodder2
 	${EXTERN}/glad/include/KHR/khrplatform.h
 
 	${SRC}/commands.cpp
-
-	${SRC}/interface.c
-	${SRC}/objects.c
-	${SRC}/state.c
-	${SRC}/translations.c
-	${SRC}/icons.c
-	${SRC}/widgets.c
-	${SRC}/xpm.c
+	${SRC}/data.cpp
+	${SRC}/interface.cpp
+	${SRC}/objects.cpp
+	${SRC}/state.cpp
+	${SRC}/widgets.cpp
 
 	${SRC}/core.h
+	${SRC}/qt.h
 )
+
+# WARNING: This does NOT regenerate when the assets change, so you have to
+# make a new build folder to ensure that this retriggers.
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(
 	${EXTERN}/libembroidery/src
@@ -81,6 +88,7 @@ include_directories(
 	${EXTERN}/glad/include
 	${EXTERN}/nanovg/src
 	${EXTERN}/nanosvg/src
+	${EXTERN}/tomlc99
 	${OPENGL_INCLUDE_DIRS}
 	${SRC}
 )

@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# This file is part of Embroidermodder.
+# Copyright 2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
+# --------------------------------------------------------------------------------
+#
+# This is not intended to be portable and the requirements are whatever is
+# necessary since the program builds and ships without this function.
+#
+# Current requirements: GNU time, clang-tidy, bash,
+# standard UNIX tools, python3 and the module: clang_html
+#
+# https://www.gnu.org/software/complexity/manual/complexity.html
+# https://coccinelle.gitlabpages.inria.fr/website/documentation.html
+# https://clang.llvm.org/extra/clang-tidy/
+
+TEST_FILES="samples/spiral/spiral5.csv samples/spiral/spiral6.csv"
+TEST_FILES="$TEST_FILES samples/embroidermodder_logo/conflicts/Embroidermodder.DST"
+TEST_FILES="$TEST_FILES samples/shamrockin/shamrockin.dst"
+
+BUILD_DIR="debug"
+BUILD_TYPE="Debug"
+
+rm -fr $BUILD_DIR
+mkdir $BUILD_DIR
+cd $BUILD_DIR
+cmake ..
+cmake --build -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  . || exit 1
+
+echo "Producing clang-tidy report."
+FNAME_TIME="`date -Iseconds`"
+REPORT="clang-tidy-report-$FNAME_TIME.txt"
+clang-tidy --config-file=clang-tidy.txt -p debug src/* &> $REPORT
+
+python3 -m clang_html $REPORT -o analysis/clang-report.html
+
+echo "Producing coverage report."
+lcov --directory . --capture --output-file em2.info
+# Needs timeout mechanism for automated testing.
+gdb -ex=run --ex=quit --args ./embroidermodder2 --cov $TEST_FILES
+genhtml em2.info
+
+cd ..

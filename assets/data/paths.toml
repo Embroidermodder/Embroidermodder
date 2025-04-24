@@ -1,0 +1,25 @@
+#
+# Embroidermodder 2.
+#
+# Copyright 2011-2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
+
+path_one = "m 0.05 0.00 l 0.45 0.00 m 0.00 -0.75 m 0.25 -1.00 l 0.25 0.00"
+path_two = "m 0.00 -0.75 a 0.00 -1.00 0.50 0.50 1 180.00 -216.87 l 0.00 0.00 l 0.50 0.00"
+path_three = "arc m 0.00 -0.50 0.50 0.50 195.00 a 0.00 -0.50 0.50 0.50 195.00, 255.00 a 0.00 -1.00 0.50 0.50 270.00, 255.00"
+path_four = "m 0.50 -0.00 l 0.50 -1.00 l 0.00 -0.50 l 0.50 -0.50"
+path_five = "m 0.50 -1.00 l 0.00 -1.00 l 0.00 -0.50 l 0.25 -0.50 a 0.00 -0.50 0.50 0.50 90.00 -180.00 l 0.00 0.00"
+path_six = "E 0.25 -0.25 0.25 0.25  m 0.00 -0.25 l 0.00 -0.75 a 0.00 -1.00 0.50 0.50 180.00, -140.00"
+path_seven = "m 0.00 -1.00 l 0.50 -1.00 l 0.25 -0.25 l 0.25 -0.00"
+path_eight = "E 0.25 -0.25 0.25 0.25 E 0.25 -0.75 0.25 0.25"
+path_nine = "E 0.25 -0.75 0.25 0.25 m 0.50 -0.75 l 0.50 -0.25 a 0.00 -0.50 0.50 0.50 0.00, -140.00"
+path_zero = "m 0.00 -0.75 l 0.00 -0.25 a 0.00 -0.50 0.50 0.50 180.00, 180.00 l 0.50 -0.75 a 0.00 -1.00 0.50 0.50 0.00, 180.00"
+path_minus = "m 0.00 -0.50 l 0.50 -0.50"
+path_apostrophe = "m 0.25 -1.00 l 0.25 -0.75"
+path_quote = "m 0.10 -1.00 l 0.10 -0.75 m 0.40 -1.00 l 0.40 -0.75"
+path_circle_origin = "M 0.0 1.0 A -1.0 -1.0 2.0 2.0 1 90.0 360.0 A -1.0 -1.0 2.0 2.0 1 90.0 -360.0 L 0.0 -1.0 A -1.0 -1.0 2.0 2.0 1 270.0 90.0 L -1.0 0.0 A -1.0 -1.0 2.0 2.0 1 180.0 -90.0"
+## TODO: close circle origin with "Z".

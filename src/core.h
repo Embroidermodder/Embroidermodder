@@ -1,4 +1,7 @@
 /*
+ * \file core.h
+ * \brief The C compatible parts of the header. Generally the non-Qt parts.
+ *
  * Embroidermodder 2.
  *
  * Copyright 2011-2025 The Embroidermodder Team
@@ -13,9 +16,9 @@
 #ifndef EMBROIDERMODDER_C_CORE_HEADER
 #define EMBROIDERMODDER_C_CORE_HEADER
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <unordered_map>
+#include <vector>
+#include <string>
 
 #include <inttypes.h>
 #include <stdlib.h>
@@ -23,6 +26,30 @@ extern "C" {
 #include <stdarg.h>
 
 #include "embroidery.h"
+
+/* OS string loads seperately because it's determined by compiler flags
+ * above.
+ *
+ * TODO: find a source for compiler flags for operating system detection so
+ * we know this works across compilers.
+ */
+#if defined(_WIN32)
+#define OS_STR__           "Windows"
+#elif defined(__CYGWIN__)
+#define OS_STR__           "Cygwin"
+#elif defined(__linux__)
+#define OS_STR__           "Linux"
+#elif defined(__unix__)
+#define OS_STR__           "Unix"
+#elif defined(__APPLE__) || defined(__MACH__)
+#define OS_STR__           "Mac OS"
+#elif defined(__FREEBSD__)
+#define OS_STR__           "FreeBSD"
+#elif defined(__ANDROID__)
+#define OS_STR__           "Android"
+#else
+#define OS_STR__           "Unknown Operating System"
+#endif
 
 /*
  * Integer Constants
@@ -741,7 +768,10 @@ extern "C" {
 #define VIEW_PANNING_RT               17
 #define VIEW_PANNING_POINT            18
 #define VIEW_PANNING                  19
-#define N_VIEW_PROPS                  20
+#define VIEW_GRID_COLOR               20
+#define VIEW_RULER_COLOR              21
+#define VIEW_CROSSHAIR_COLOR          22
+#define N_VIEW_ATTR                   23
 
 /* Translations */
 #define UNFINISHED                     0
@@ -803,6 +833,68 @@ extern "C" {
  * For example: "case TWO_CHAR_INDEX(DUTCH_SHORTCODE):".
  */
 #define TWO_CHAR_INDEX(A)             (0x100*A[0] + A[1])
+
+/*!
+ *
+ */
+class Variable {
+public:
+    std::string s;
+    int i;
+    EmbReal r;
+    EmbVector v;
+    std::vector<std::string> sl;
+    std::vector<int> il;
+    std::vector<EmbReal> rl;
+    std::vector<EmbVector> vl;
+    unsigned char type;
+
+    Variable(void) {
+        type = '0';
+    }
+
+    Variable(std::string s_) {
+        s = s_;
+        type = 's';
+    }
+
+    Variable(int i_) {
+        i = i_;
+        type = 'i';
+    }
+
+    Variable(EmbReal r_) {
+        r = r_;
+        type = 'r';
+    }
+
+    Variable(EmbVector v_) {
+        v = v_;
+        type = 'v';
+    }
+
+    Variable(std::vector<std::string> sl_) {
+        sl = sl_;
+        type = 'S';
+    }
+
+    Variable(std::vector<int> il_) {
+        il = il_;
+        type = 'I';
+    }
+
+    Variable(std::vector<EmbReal> rl_) {
+        rl = rl_;
+        type = 'R';
+    }
+
+    Variable(std::vector<EmbVector> vl_) {
+        vl = vl_;
+        type = 'V';
+    }
+};
+
+typedef std::unordered_map<std::string, Variable> Dictionary;
 
 typedef ScriptValue (*Command)(ScriptEnv *context);
 
@@ -912,11 +1004,10 @@ typedef struct UndoData_ {
 
 /* . */
 typedef struct DocumentData_ {
-    EmbPattern *pattern;
-
-    UndoData undo_stack[MAX_UNDO];
-
     int32_t id;
+    EmbPattern *pattern;
+    ScriptValue attributes[N_VIEW_ATTR];
+    UndoData undo_stack[MAX_UNDO];
 
     EmbIdList *selectedItems;
     EmbIdList *rubberRoomList;
@@ -927,7 +1018,7 @@ typedef struct DocumentData_ {
     EmbIdList *hashDeletedObjects;
     EmbIdList *pasteObjectItemGroup;
 
-    EmbVectorList *selectedGripPoints;
+    std::vector<EmbVector> selectedGripPoints;
 
     /* UI State */
     bool qSnapActive;
@@ -968,8 +1059,6 @@ typedef struct DocumentData_ {
     int panDistance;
     int panStartX;
     int panStartY;
-
-    bool properties[N_VIEW_PROPS];
 
     uint32_t rulerColor;
     bool rulerMetric;
@@ -1023,23 +1112,26 @@ typedef struct Translation_ {
     int32_t status;
 } Translation;
 
-/* Generic widget pointer for a widget map. */
+/*! Generic widget pointer for a widget map. */
 typedef struct Widget_ {
-    EmbString key;
-    void *widget;
+    EmbString key; /*!< Used for identifying the element */
+    void *widget; /*!< A void pointer to represent a structure not in the C part of the source code. */
 } Widget;
 
+/*! Generic widget data. */
 typedef struct WidgetData_ {
-    char *key;
-    char *label;
-    int id;
-    int type;
+    char *key;   /** The key used by Qt to deal with signals and slots. */
+    char *label; /** The label presented to the user in overlays. */
+    int id;      /** Used for identifying the element, if less than 0 then this is the terminator symbol for the list. */
+    int type;    /** What type of widget out of spinbox, button, etc. */
 } WidgetData;
 
+/*! Data necessary to create a view of the EmbPattern (pointer to this pattern
+ * is available via the doc index). */
 typedef struct ViewData_ {
-    int32_t doc;
-    double little;
-    double medium;
+    int32_t doc;             /** Index to the document in the list of open files. */ 
+    double little;           /** The size of the small ticks on the rulers. */
+    double medium;           /** The size of the medium ticks on the rulers. */
     EmbLine *lines;
     int n_lines;
     EmbGeometry *geometry;
@@ -1053,8 +1145,10 @@ typedef struct ViewData_ {
     int yStart;
 } ViewData;
 
-/* -------------------------------- Scripting ---------------------------- */
-
+/* -------------------------------- Scripting ----------------------------
+ * This is gradually growing to incorporate our full data structure so
+ * no global data is stored as externs.
+ */
 ScriptEnv *create_script_env(void);
 void free_script_env(ScriptEnv *);
 ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
@@ -1084,11 +1178,6 @@ void string_copy(char *dst, const char *src);
 int find_in_map(StringMap *hash, int length, const char *key);
 int table_length(char *table[]);
 
-EmbVectorList *create_vector_list(void);
-void append_vector_to_list(EmbVectorList *, EmbVector);
-void remove_vector_from_list(EmbVectorList *, int32_t);
-void free_vector_list(EmbVectorList *);
-
 EmbIdList *create_id_list(void);
 void append_id_to_list(EmbIdList *list, int32_t);
 void remove_id_from_list(EmbIdList *list, int32_t);
@@ -1098,8 +1187,6 @@ void free_id_list(EmbIdList *);
 
 ScriptValue *setting_ptr(int key, int mode);
 void copy_setting(int key, int dst, int src);
-
-char *load_file(char *fname);
 
 void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, int id);
@@ -1113,7 +1200,7 @@ bool valid_rgb(float r, float g, float b);
 void report_distance(EmbVector a, EmbVector b);
 
 void add_to_menu(int id, char *menu_data[]);
-void add_to_toolbar(int id, char *toolbar_data[]);
+void add_to_toolbar(int id, std::string toolbar_key);
 
 int load_data(void);
 
@@ -1146,6 +1233,9 @@ int glfw_application(int argc, char *argv[]);
 int find_int_map(IntMap *, int);
 
 char *file_extension(char *fileName);
+
+std::string get_s(std::string key);
+std::vector<std::string> get_sl(std::string key);
 
 /* ------------------------------ Widgets ------------------------------- */
 
@@ -1243,7 +1333,6 @@ void load_formats(void);
 void settings_prompt(void);
 
 void end_command(void);
-void debug_message(const char *msg, ...);
 void wait_cursor(void);
 void arrow_cursor(void);
 void restore_cursor(void);
@@ -1321,7 +1410,7 @@ void button_tip_of_the_day_clicked(int);
 void check_box_tip_of_the_day_changed(int);
 void whats_this_context_help(void);
 
-int make_application(int argc, char* argv[]);
+int make_application(int argc, std::vector<std::string> argv);
 
 void set_object_rubber_mode(ObjectCore *core, int mode);
 
@@ -1411,7 +1500,6 @@ ScriptValue window_close_all_command(ScriptEnv *context);
 ScriptValue window_next_command(ScriptEnv *context);
 ScriptValue window_previous_command(ScriptEnv *context);
 ScriptValue window_tile_command(ScriptEnv *context);
-
 ScriptValue cut_command(ScriptEnv *context);
 ScriptValue copy_selected_command(ScriptEnv *context);
 ScriptValue paste_selected_command(ScriptEnv *context);
@@ -1542,6 +1630,13 @@ void doc_add_to_rubber_room(int32_t doc, int32_t item);
 void doc_stop_gripping(int32_t, bool);
 void hide_selectbox(int32_t);
 
+ScriptValue *doc_get_attr(int32_t doc, uint32_t key);
+bool doc_get_bool(int32_t doc, uint32_t key);
+int32_t doc_get_int(int32_t doc, uint32_t key);
+void doc_set_attr(int32_t doc, uint32_t key, ScriptValue value);
+void doc_set_bool(int32_t doc, uint32_t key, bool value);
+void doc_set_int(int32_t doc, uint32_t key, int32_t value);
+
 void remove_paste_object_item_group(int32_t doc);
 void doc_empty_grid(int32_t doc);
 void doc_set_grid_color(int32_t doc, uint32_t color);
@@ -1561,7 +1656,6 @@ void doc_create_grid(int32_t doc, const char *gridType);
 void doc_copy_selected(int32_t doc);
 
 void doc_show_scroll_bars(int32_t doc, bool val);
-void doc_set_prop(int32_t doc, int key, bool value);
 void doc_set_corner_button(int32_t doc);
 void doc_set_cross_hair_color(int32_t doc, uint32_t color);
 void doc_set_cross_hair_size(int32_t doc, uint8_t percent);
@@ -1626,12 +1720,6 @@ void doc_vulcanize_object(int32_t doc, uint32_t obj);
 int32_t active_document(void);
 
 void whats_this_mode(void);
-
-void window_close_all(void);
-void window_cascade(void);
-void window_tile(void);
-void window_next(void);
-void window_previous(void);
 
 void enable_rapid_fire(void);
 void disable_rapid_fire(void);
@@ -1709,23 +1797,6 @@ EmbVector obj_rubber_point(int32_t id, const char *key);
 const char *obj_rubber_text(int32_t id, const char *key);
 EmbVector obj_map_rubber(int32_t obj, const char *key);
 
-EmbVector obj_pos(ObjectCore *obj);
-double obj_x(ObjectCore *obj);
-double obj_y(ObjectCore *obj);
-EmbVector obj_center(ObjectCore *obj);
-double obj_center_x(ObjectCore *obj);
-double obj_center_y(ObjectCore *obj);
-double obj_radius(ObjectCore *obj);
-double obj_diameter(ObjectCore *obj);
-double obj_circumference(ObjectCore *obj);
-EmbVector obj_delta(ObjectCore *obj);
-
-EmbVector obj_end_point_1(ObjectCore *obj);
-EmbVector obj_end_point_2(ObjectCore *obj);
-EmbVector obj_start_point(ObjectCore *obj);
-EmbVector obj_mid_point(ObjectCore *obj);
-EmbVector obj_end_point(ObjectCore *obj);
-
 double obj_length(ObjectCore *obj);
 
 void obj_set_pos(ObjectCore *obj, EmbVector point);
@@ -1777,12 +1848,24 @@ void obj_move_by(int32_t id, EmbVector delta);
 int32_t obj_find_index(int32_t id, EmbVector delta);
 void obj_update_rubber_grip(uint32_t obj);
 
-EmbVectorList *all_grip_points(int32_t obj_id);
+std::vector<EmbVector> all_grip_points(int32_t obj_id);
 EmbVector mouse_snap_point(int32_t obj_id, EmbVector mousePoint);
 
 int find_widget_list(const char *key);
 char *qcolor_from_uint32_t(uint32_t color);
 ScriptValue allow_rubber_command(ScriptEnv *context);
+
+size_t load_file_to_buffer(char *fname, char *buffer);
+
+/* ---------------------- Script Environment management -------------------- */
+int load_global_state(ScriptValue *root, char *asset_dir);
+
+ScriptValue *emb_create_root(void);
+int emb_create_leaf(ScriptValue *branch, int type, char *label, char *data);
+ScriptValue *emb_get_var(ScriptValue *node, const char *key);
+const char *emb_get_str(ScriptValue *node, const char *key);
+void emb_free_root(ScriptValue *root);
+void emb_print_tree(ScriptValue *tree, int indent);
 
 /* ---------------------------- Global Variables --------------------------- */
 /* Global variables and constants we need to access anywhere in the program
@@ -1796,39 +1879,15 @@ extern Setting setting[N_SETTINGS];
 extern GroupBoxData group_box_list[];
 extern Translation translations[];
 extern Design designs[];
-extern const char *svgs[];
+extern ScriptValue *root;
 
-extern const char *config_table[];
 extern char *settings_data[];
 
 extern ScriptValue *config;
 extern int n_variables;
 
 extern const char *index_th_name[];
-extern const char *os;
 extern bool exitApp;
-
-/* Versions */
-extern const char *embroidermodder_version;
-extern const char *libembroidery_version;
-extern const char *EmbroideryMobile_version;
-extern const char *PET_version;
-
-/* Paths */
-extern const char *circle_origin_path;
-extern const char *one_path;
-extern const char *two_path;
-extern const char *three_path;
-extern const char *four_path;
-extern const char *five_path;
-extern const char *six_path;
-extern const char *seven_path;
-extern const char *eight_path;
-extern const char *nine_path;
-extern const char *zero_path;
-extern const char *minus_path;
-extern const char *apostrophe_path;
-extern const char *quote_path;
 
 /* Menus */
 extern char *menu_list[];
@@ -1857,23 +1916,6 @@ extern int top_toolbar[];
 extern int left_toolbar[];
 extern int bottom_toolbar[];
 extern int toolbar_horizontal[];
-
-extern char *file_toolbar[];
-extern char *edit_toolbar[];
-extern char *view_toolbar[];
-extern char *zoom_toolbar[];
-extern char *pan_toolbar[];
-extern char *icon_toolbar[];
-extern char *help_toolbar[];
-extern char *draw_toolbar[];
-extern char *inquiry_toolbar[];
-extern char *modify_toolbar[];
-extern char *dimension_toolbar[];
-extern char *sandbox_toolbar[];
-extern char *layer_toolbar[];
-extern char *properties_toolbar[];
-extern char *text_toolbar[];
-extern char *prompt_toolbar[];
 
 /* Widget Groups */
 extern char *grid_load_from_file_group[];
@@ -1942,9 +1984,6 @@ extern char *combobox_list[];
 extern char *grid_layout[];
 extern char *zoom_layout[];
 
-extern char **xpm_icons[];
-extern char *xpm_icon_labels[];
-
 extern char recent_files[MAX_FILES][MAX_STRING_LENGTH];
 
 extern int numOfDocs;
@@ -1996,353 +2035,6 @@ extern char fieldOffText[MAX_STRING_LENGTH];
 
 extern WidgetData grid_gb_data[];
 extern WidgetData zoom_gb_data[];
-
-#ifdef __cplusplus
-}
-
-/* Qt wrapper */
-
-#include <QAction>
-#include <QApplication>
-#include <QGraphicsPathItem>
-#include <QtPrintSupport>
-
-class Object: public QGraphicsPathItem
-{
-public:
-    ObjectCore *core;
-
-    QGraphicsPathItem path_;
-    QPen objPen;
-    QPen lwtPen;
-    QLineF objLine;
-    QPainter* obj_painter;
-
-    QPainterPath textPath;
-    QPainterPath lineStylePath;
-    QPainterPath arrowStylePath;
-    QPainterPath normalPath;
-
-    Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);
-    ~Object() { free_object(core); }
-
-    void gripEdit(EmbVector before, EmbVector after);
-    QPainterPath shape() const { return path(); }
-
-    void drawRubberLine(QLineF rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
-
-    void setObjectSize(double width, EmbReal height);
-
-    QPainterPath objectCopyPath() const;
-    QPainterPath objectSavePath() const;
-    QList<QPainterPath> objectSavePathList() const { return subPathList(); }
-    QList<QPainterPath> subPathList() const;
-
-protected:
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-class SelectBox: public QRubberBand
-{
-    Q_OBJECT
-
-public:
-    SelectBox(Shape s, QWidget* parent = 0);
-
-public slots:
-    void setDirection(int dir);
-    void setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha);
-
-protected:
-    void paintEvent(QPaintEvent*);
-
-private:
-    QColor leftBrushColor;
-    QColor rightBrushColor;
-    QColor leftPenColor;
-    QColor rightPenColor;
-    uint8_t alpha;
-
-    QBrush dirBrush;
-    QBrush leftBrush;
-    QBrush rightBrush;
-
-    QPen dirPen;
-    QPen leftPen;
-    QPen rightPen;
-
-    bool boxDir;
-
-    void forceRepaint();
-};
-
-class LayerManager: public QDialog
-{
-    Q_OBJECT
-
-public:
-    LayerManager(QWidget *parent = 0);
-    ~LayerManager() { restore_cursor(); }
-    LayerData data[MAX_LAYERS];
-
-    void addLayer(char *name, bool visible, bool frozen, EmbReal zValue,
-        QRgb color, char *lineType, char *lineWeight, bool print);
-
-    QStandardItemModel* layerModel;
-    QSortFilterProxyModel* layerModelSorted;
-    QTreeView* treeView;
-};
-
-class MdiArea: public QMdiArea
-{
-    Q_OBJECT
-
-public:
-    MdiArea(QWidget* parent = 0);
-    ~MdiArea() {}
-
-    bool useLogo;
-    bool useTexture;
-    bool useColor;
-
-    QPixmap bgLogo;
-    QPixmap bgTexture;
-    QColor bgColor;
-
-    void forceRepaint();
-
-public slots:
-    void cascade();
-    void tile();
-protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent* e);
-    virtual void paintEvent(QPaintEvent* e);
-};
-
-/* . */
-class Document: public QGraphicsView
-{
-    Q_OBJECT
-
-public:
-    Document(QGraphicsScene* theScene, QWidget* parent);
-    ~Document() { free_doc(data->id); }
-
-    DocumentData *data;
-
-    QVector<int64_t> hashDeletedObjects;
-    QPainterPath gridPath;
-    QPainterPath originPath;
-
-    QPainter* scene_painter;
-
-    Object* gripBaseObj;
-
-    QGraphicsScene* gscene;
-    QUndoStack* undoStack;
-
-    SelectBox* selectBox;
-    QGraphicsItemGroup* pasteObjectItemGroup;
-
-protected:
-    void mouseDoubleClickEvent(QMouseEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void wheelEvent(QWheelEvent* event);
-    void contextMenuEvent(QContextMenuEvent* event);
-    void drawBackground(QPainter* painter, const QRectF& rect);
-    void draw_rulers(QPainter* painter, const QRectF& rect);
-    void drawForeground(QPainter* painter, const QRectF& rect);
-    void enterEvent(QEvent* event);
-};
-
-extern Document *documents[MAX_OPEN_FILES];
-
-class UndoableCommand : public QUndoCommand
-{
-public:
-    UndoableCommand(int type_, QString text, Object* obj, int32_t v,
-        QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector delta, QString text, Object* obj,
-        int32_t v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector pivot, EmbReal rotAngle, QString text,
-        Object* obj, int32_t v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, QString type, int32_t v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector start, EmbVector end, QString text,
-        Object* obj, int32_t v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-    void rotate(double x, EmbReal y, EmbReal rot);
-    int id() const { return 1234; }
-    bool mergeWith(const QUndoCommand* command);
-    void mirror();
-
-    UndoData data;
-    Object *object;
-    QTransform toTransform;
-    QTransform fromTransform;
-};
-
-class UndoEditor : public QDockWidget
-{
-    Q_OBJECT
-
-public:
-    UndoEditor(QString iconDirectory = "", QWidget* widgetToFocus = 0,
-        QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
-    ~UndoEditor() {}
-
-    void addStack(QUndoStack* stack);
-
-    bool canUndo() const;
-    bool canRedo() const;
-
-    QString undoText() const;
-    QString redoText() const;
-
-public slots:
-    void undo();
-    void redo();
-
-    void updateCleanIcon(bool opened);
-
-private:
-    QWidget* focusWidget;
-
-    QString iconDir;
-    int iconSize;
-
-    QUndoGroup* undoGroup;
-    QUndoView*  undoView;
-};
-
-class PropertyEditor: public QDockWidget
-{
-    Q_OBJECT
-
-public:
-    PropertyEditor(QString iconDirectory = "", bool pickAddMode = true,
-        QWidget* widgetToFocus = 0, QWidget* parent = 0);
-        /*, Qt::WindowFlags flags = 0); */
-    ~PropertyEditor() {}
-
-    void togglePickAddMode();
-
-protected:
-    bool eventFilter(QObject *obj, QEvent *event);
-
-signals:
-    void pick_add_mode_toggled();
-
-public slots:
-    void setSelectedItems(QList<QGraphicsItem*> itemList);
-    void update_pick_add_modeButton(bool pickAddMode);
-};
-
-class MdiWindow: public QMdiSubWindow
-{
-    Q_OBJECT
-
-public:
-    MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags);
-    ~MdiWindow() {
-        debug_message("MdiWindow Destructor()");
-        emb_pattern_free(documents[doc_index]->data->pattern);
-    }
-
-    QMdiArea* mdiArea;
-    QGraphicsScene* gscene;
-    int32_t doc_index;
-
-    QPrinter printer;
-
-    virtual QSize sizeHint() const;
-    QString getShortCurrentFile();
-    bool loadFile(char *fileName);
-signals:
-    void sendCloseMdiWin(MdiWindow*);
-
-public slots:
-    void closeEvent(QCloseEvent* e);
-    void onWindowActivated();
-
-    void print();
-    void saveBMC();
-
-private:
-    void setCurrentFile(char *fileName);
-};
-
-/* On Mac, if the user drops a file on the app's Dock icon, or uses Open As,
- * then this is how the app actually opens the file.
- */
-class Application : public QApplication
-{
-    Q_OBJECT
-public:
-    Application(int argc, char **argv);
-protected:
-    virtual bool event(QEvent *e);
-};
-
-class CmdPromptInput: public QLineEdit
-{
-    Q_OBJECT
-
-public:
-    CmdPromptInput(QWidget* parent = 0);
-    ~CmdPromptInput() {}
-
-protected:
-    void contextMenuEvent(QContextMenuEvent *event);
-    bool eventFilter(QObject *obj, QEvent *event);
-
-public slots:
-    void checkSelection();
-    void updateCurrentText(QString txt);
-    void checkEditedText(QString txt);
-    void checkChangedText(QString txt);
-    void checkCursorPosition(int oldpos, int newpos);
-private slots:
-    void copyClip();
-    void pasteClip();
-};
-
-class MainWindow: public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    MainWindow();
-    ~MainWindow() {
-        debug_message("Destructor()");
-
-        /* Prevent memory leaks by deleting any unpasted objects. */
-        free_objects(cutCopyObjectList);
-        free_id_list(cutCopyObjectList);
-    }
-
-    void add_toolbar_to_window(Qt::ToolBarArea area, int data[]);
-
-public slots:
-    void recentMenuAboutToShow();
-    void windowMenuActivated(bool checked /*, int id*/);
-
-    void closeToolBar(QAction*);
-    void floatingChangedToolBar(bool);
-
-    void runCommand();
-
-    void colorSelectorIndexChanged(int index);
-
-protected:
-    virtual void resizeEvent(QResizeEvent*);
-    void closeEvent(QCloseEvent *event);
-};
-
-#endif
 
 #endif
 
