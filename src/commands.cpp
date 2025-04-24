@@ -432,7 +432,9 @@ create_checkbox(QGroupBox* groupbox, int key)
 QIcon
 create_icon(const char *icon)
 {
-    printf("creating icon: %s\n", icon);
+    if (emb_verbose > 0) {
+        printf("creating icon: %s\n", icon);
+    }
     return QIcon(create_pixmap(icon));
 }
 
@@ -1294,6 +1296,7 @@ void
 obj_update_rubber_grip(uint32_t obj_id)
 {
     Object *obj = get_obj(obj_id);
+    EmbGeometry *g = obj->core->geometry;
     QPainter *painter = obj->obj_painter;
     if (!painter) {
         return;
@@ -1318,13 +1321,13 @@ obj_update_rubber_grip(uint32_t obj_id)
     }
     case EMB_LINE: {
         QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
-        if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
+        if (emb_approx(gripPoint, emb_gget(g, EMB_START).v)) {
             painter->drawLine(obj_line(obj_id).p2(), p);
         }
-        else if (emb_approx(gripPoint, obj_end_point_2(obj->core))) {
+        else if (emb_approx(gripPoint, emb_gget(g, EMB_END).v)) {
             painter->drawLine(obj_line(obj_id).p1(), p);
         }
-        else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
+        else if (emb_approx(gripPoint, emb_gget(g, EMB_MID).v)) {
             QPointF point = p - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
             QLineF line = obj_line(obj_id).translated(point);
             painter->drawLine(line);
@@ -1334,14 +1337,14 @@ obj_update_rubber_grip(uint32_t obj_id)
         break;
     }
     case EMB_CIRCLE: {
-        if (emb_approx(gripPoint, obj_center(obj->core))) {
+        if (emb_approx(gripPoint, emb_gget(obj->core->geometry, EMB_CENTER).v)) {
             QPointF point = to_qpointf(obj_map_rubber(obj_id, ""))
                 - to_qpointf(obj_map_rubber(obj_id, "GRIP_POINT"));
             QRectF r = to_qrectf(obj_rect(obj->core));
             painter->drawEllipse(r.translated(point));
         }
         else {
-            EmbReal gripRadius = emb_vector_distance(obj_center(obj->core), obj_rubber_point(obj_id, ""));
+            EmbReal gripRadius = emb_vector_distance(emb_gget(obj->core->geometry, EMB_CENTER).v, obj_rubber_point(obj_id, ""));
             painter->drawEllipse(QPointF(), gripRadius, gripRadius);
         }
 
@@ -1350,19 +1353,19 @@ obj_update_rubber_grip(uint32_t obj_id)
     }
     case EMB_DIM_LEADER: {
         QPointF p = to_qpointf(obj_map_rubber(obj_id, ""));
-        if (emb_approx(gripPoint, obj_end_point_1(obj->core))) {
+        if (emb_approx(gripPoint, emb_gget(g, EMB_START).v)) {
             painter->drawLine(obj_line(obj_id).p2(), p);
         }
-        else if (emb_approx(gripPoint, obj_end_point_2(obj->core))) {
+        else if (emb_approx(gripPoint, emb_gget(g, EMB_END).v)) {
             painter->drawLine(obj_line(obj_id).p1(), p);
         }
-        else if (emb_approx(gripPoint, obj_mid_point(obj->core))) {
+        else if (emb_approx(gripPoint, emb_gget(g, EMB_MID).v)) {
             obj_draw_rubber_grip(obj_id, painter);
         }
         break;
     }
     case EMB_POINT: {
-        if (emb_approx(gripPoint, obj_pos(obj->core))) {
+        if (emb_approx(gripPoint, emb_gget(obj->core->geometry, EMB_CENTER).v)) {
             obj_draw_rubber_grip(obj_id, painter);
         }
         break;
@@ -1474,7 +1477,8 @@ obj_update_rubber_grip(uint32_t obj_id)
         break;
     }
     case EMB_TEXT_SINGLE: {
-        if (emb_approx(gripPoint, obj_pos(obj->core))) {
+        /* EMB_POS ? */
+        if (emb_approx(gripPoint, emb_gget(obj->core->geometry, EMB_CENTER).v)) {
            // painter->drawPath(obj_path(obj).translated(obj->mapFromScene(obj_rubber_point(obj_id, ""))- obj_map_rubber(obj_id, "GRIP_POINT"));
         }
 
@@ -1488,7 +1492,8 @@ obj_update_rubber_grip(uint32_t obj_id)
 
 /* FIXME: */
 QList<QPainterPath>
-Object::subPathList() const {
+Object::subPathList() const
+{
     QList<QPainterPath> p;
     return p;
 }
@@ -1932,8 +1937,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneStartPoint = obj_rubber_point(obj_id, "DIMLEADER_LINE_START");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "DIMLEADER_LINE_END");
 
-        obj_set_end_point_1(core, sceneStartPoint);
-        obj_set_end_point_2(core, sceneQSnapPoint);
+        emb_gset(core->geometry, EMB_START, script_vector(sceneStartPoint));
+        emb_gset(core->geometry, EMB_END, script_vector(sceneQSnapPoint));
         break;
     }
     case RUBBER_ELLIPSE_LINE: {
@@ -2011,8 +2016,8 @@ obj_update_rubber(uint32_t obj_id, QPainter* painter)
         EmbVector sceneStartPoint = obj_rubber_point(obj_id, "LINE_START");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj_id, "LINE_END");
 
-        obj_set_end_point_1(core, sceneStartPoint);
-        obj_set_end_point_2(core, sceneQSnapPoint);
+        emb_gset(core->geometry, EMB_START, script_vector(sceneStartPoint));
+        emb_gset(core->geometry, EMB_END, script_vector(sceneQSnapPoint));
 
         obj_draw_rubber_line(obj, obj_line(obj_id), "VIEW_COLOR_CROSSHAIR");
         break;
@@ -2195,7 +2200,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
             spanAngle = -spanAngle;
         }
 
-        EmbReal rad = obj_radius(this->core);
+        EmbReal rad = emb_gget(this->core->geometry, EMB_RADIUS).r;
         QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
         painter->drawArc(paintRect, startAngle, spanAngle);
         break;
@@ -2288,7 +2293,9 @@ Object::objectSavePath() const
     case EMB_DIM_LEADER:
     case EMB_LINE: {
         QPainterPath path;
-        EmbVector delta = obj_delta(this->core);
+        EmbVector start = emb_gget(this->core->geometry, EMB_START).v;
+        EmbVector end = emb_gget(this->core->geometry, EMB_END).v;
+        EmbVector delta = emb_vector_subtract(end, start);
         path.lineTo(delta.x, delta.y);
         return path;
     }

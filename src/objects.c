@@ -143,8 +143,8 @@ create_dimleader(EmbLine line, uint32_t rgb)
 
     core->curved = false;
     core->filled = true;
-    obj_set_end_point_1(core, line.start);
-    obj_set_end_point_2(core, line.end);
+    emb_gset(core->geometry, EMB_START, script_vector(line.start));
+    emb_gset(core->geometry, EMB_END, script_vector(line.end));
     return obj;
 }
 
@@ -184,8 +184,8 @@ create_line(EmbLine line, uint32_t rgb)
     uint32_t obj = create_object(EMB_LINE, rgb);
     ObjectCore *core = obj_get_core(obj);
     debug_message("TODO: get_current_line_type");
-    obj_set_end_point_1(core, line.start);
-    obj_set_end_point_2(core, line.end);
+    emb_gset(core->geometry, EMB_START, script_vector(line.start));
+    emb_gset(core->geometry, EMB_END, script_vector(line.end));
     return obj;
 }
 
@@ -280,145 +280,11 @@ find_mouse_snap_point(EmbVectorList *snap_points, EmbVector mouse_point)
 
 /* . */
 EmbVector
-obj_pos(ObjectCore *obj)
-{
-    return obj->position;
-}
-
-/* . */
-double
-obj_x(ObjectCore *obj)
-{
-    return obj->position.x;
-}
-
-/* . */
-double
-obj_y(ObjectCore *obj)
-{
-    return obj->position.y;
-}
-
-/* . */
-double
-obj_center_x(ObjectCore *obj)
-{
-    return obj_pos(obj).x;
-}
-
-/* . */
-double
-obj_center_y(ObjectCore *obj)
-{
-    return obj_pos(obj).y;
-}
-
-/* . */
-double
-obj_radius(ObjectCore *obj)
-{
-    return emb_radius(obj->geometry);
-}
-
-/* . */
-double
-obj_diameter(ObjectCore *obj)
-{
-    return emb_diameter(obj->geometry);
-}
-
-/* . */
-double
-obj_circumference(ObjectCore *obj)
-{
-    return embConstantPi * emb_diameter(obj->geometry);
-}
-
-/* . */
-EmbVector
 obj_delta(ObjectCore *obj)
 {
-    return emb_vector_subtract(obj_end_point_2(obj), obj_end_point_1(obj));
+    return emb_vector_subtract(emb_gget(obj->geometry, EMB_END).v,
+        emb_gget(obj->geometry, EMB_START).v);
 }
-
-/* . */
-EmbVector
-obj_center(ObjectCore *obj)
-{
-    return obj_pos(obj);
-}
-
-/* . */
-EmbVector
-obj_start_point(ObjectCore *obj)
-{
-    switch (obj->geometry->type) {
-    case EMB_ARC: {
-        return obj->geometry->object.arc.start;
-    }
-    default:
-        break;
-    }
-    return obj_pos(obj);
-}
-
-/* . */
-EmbVector
-obj_end_point(ObjectCore *obj)
-{
-    switch (obj->geometry->type) {
-    case EMB_ARC: {
-        return obj->geometry->object.arc.end;
-    }
-    default:
-        break;
-    }
-    return obj_pos(obj);
-}
-
-/* . */
-EmbVector
-obj_end_point_1(ObjectCore *obj)
-{
-    return obj_pos(obj);
-}
-
-/* . */
-EmbVector
-obj_end_point_2(ObjectCore *obj)
-{
-    /* FIXME:
-    QLineF lyne = obj_line(obj);
-    EmbVector endPoint2;
-    endPoint2.x = lyne.x2();
-    endPoint2.y = lyne.y2();
-    return emb_vector_add(obj_pos(obj->core), scale_and_rotate(endPoint2, obj->scale(), obj->rotation()));
-    */
-    return emb_vector(0.0, 0.0);
-}
-
-/* . */
-EmbVector
-obj_mid_point(ObjectCore *obj)
-{
-    switch (obj->geometry->type) {
-    case EMB_ARC: {
-        return obj->geometry->object.arc.mid;
-    }
-    case EMB_LINE:
-    case EMB_DIM_LEADER: {
-        /* FIXME:
-        QLineF lyne = obj_line(obj);
-        EmbVector mp = to_emb_vector(lyne.pointAt(0.5));
-        return emb_vector_add(obj_pos(obj->core), scale_and_rotate(mp, obj->scale(), obj->rotation()));
-        */
-    }
-    default:
-        break;
-    }
-    return obj_pos(obj);
-}
-
 
 /* . */
 void
@@ -460,7 +326,7 @@ obj_set_center(ObjectCore *obj, EmbVector center)
 void
 obj_set_center_x(ObjectCore *obj, EmbReal centerX)
 {
-    EmbVector center = obj_center(obj);
+    EmbVector center = emb_gget(obj->geometry, EMB_CENTER).v;
     center.x = centerX;
     obj_set_center(obj, center);
 }
@@ -469,7 +335,7 @@ obj_set_center_x(ObjectCore *obj, EmbReal centerX)
 void
 obj_set_center_y(ObjectCore *obj, EmbReal centerY)
 {
-    EmbVector center = obj_center(obj);
+    EmbVector center = emb_gget(obj->geometry, EMB_CENTER).v;
     center.y = centerY;
     obj_set_center(obj, center);
 }
@@ -486,50 +352,36 @@ obj_length(ObjectCore *obj)
 void
 obj_set_x1(ObjectCore *obj, EmbReal x)
 {
-    EmbVector v = obj_end_point_1(obj);
+    EmbVector v = emb_gget(obj->geometry, EMB_START).v;
     v.x = x;
-    obj_set_end_point_1(obj, v);
+    emb_gset(obj->geometry, EMB_START, script_vector(v));
 }
 
 /* . */
 void
 obj_set_y1(ObjectCore *obj, EmbReal y)
 {
-    EmbVector v = obj_end_point_1(obj);
+    EmbVector v = emb_gget(obj->geometry, EMB_START).v;
     v.y = y;
-    obj_set_end_point_1(obj, v);
+    emb_gset(obj->geometry, EMB_START, script_vector(v));
 }
 
 /* . */
 void
 obj_set_x2(ObjectCore *obj, EmbReal x)
 {
-    EmbVector v = obj_end_point_2(obj);
+    EmbVector v = emb_gget(obj->geometry, EMB_END).v;
     v.x = x;
-    obj_set_end_point_2(obj, v);
+    emb_gset(obj->geometry, EMB_END, script_vector(v));
 }
 
 /* . */
 void
 obj_set_y2(ObjectCore *obj, EmbReal y)
 {
-    EmbVector v = obj_end_point_2(obj);
+    EmbVector v = emb_gget(obj->geometry, EMB_END).v;
     v.y = y;
-    obj_set_end_point_2(obj, v);
-}
-
-/* . */
-void
-obj_set_end_point_2(ObjectCore *obj, EmbVector endPt2)
-{
-    EmbVector endPt1 = obj_pos(obj);
-    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
-    /*
-    obj->setRotation(0);
-    obj->setScale(1);
-    obj_set_line(obj, 0, 0, delta.x, delta.y);
-    obj->setPos(endPt1.x, endPt1.y);
-    */
+    emb_gset(obj->geometry, EMB_END, script_vector(v));
 }
 
 /* . */
@@ -2247,7 +2099,9 @@ obj_top_left(ObjectCore *obj)
     EmbRect rect = obj_rect(obj);
     EmbVector p = emb_vector(rect.x, rect.y);
     p = scale_and_rotate(p, obj->scale, obj->rotation);
-    return emb_vector_add(obj_pos(obj), p);
+    /* EMB_POS? */
+    EmbVector v = emb_gget(obj->geometry, EMB_CENTER).v;
+    return emb_vector_add(v, p);
 }
 
 /* . */
@@ -2257,7 +2111,9 @@ obj_top_right(ObjectCore *obj)
     EmbRect rect = obj_rect(obj);
     EmbVector p = emb_vector(rect.x + rect.w, rect.y);
     p = scale_and_rotate(p, obj->scale, obj->rotation);
-    return emb_vector_add(obj_pos(obj), p);
+    /* EMB_POS? */
+    EmbVector v = emb_gget(obj->geometry, EMB_CENTER).v;
+    return emb_vector_add(v, p);
 }
 
 /* . */
@@ -2267,7 +2123,9 @@ obj_bottom_left(ObjectCore *obj)
     EmbRect rect = obj_rect(obj);
     EmbVector p = emb_vector(rect.x, rect.y + rect.h);
     p = scale_and_rotate(p, obj->scale, obj->rotation);
-    return emb_vector_add(obj_pos(obj), p);
+    /* EMB_POS? */
+    EmbVector v = emb_gget(obj->geometry, EMB_CENTER).v;
+    return emb_vector_add(v, p);
 }
 
 /* . */
@@ -2277,7 +2135,9 @@ obj_bottom_right(ObjectCore *obj)
     EmbRect rect = obj_rect(obj);
     EmbVector p = emb_vector(rect.x + rect.w, rect.y + rect.h);
     p = scale_and_rotate(p, obj->scale, obj->rotation);
-    return emb_vector_add(obj_pos(obj), p);
+    /* EMB_POS? */
+    EmbVector v = emb_gget(obj->geometry, EMB_CENTER).v;
+    return emb_vector_add(v, p);
 }
 
 /* . */
@@ -2379,20 +2239,6 @@ obj_set_text_upside_down(ObjectCore* obj, bool val)
 {
     obj->textUpsideDown = val;
     obj_set_text(obj, obj->text);
-}
-
-/* . */
-void
-obj_set_end_point_1(ObjectCore *obj, EmbVector endPt1)
-{
-    EmbVector endPt2 = obj_end_point_2(obj);
-    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
-    /*
-    obj->setRotation(0);
-    obj->setScale(1);
-    obj_set_line(obj, 0, 0, delta.x, delta.y);
-    obj->setPos(endPt1.x, endPt1.y);
-    */
 }
 
 /* . */
@@ -2507,8 +2353,6 @@ emb_arc_set_radius(EmbArc arc, EmbReal radius)
     return arc;
 }
 
-
-
 /* . */
 void
 obj_grip_edit(int32_t obj_id, EmbVector before, EmbVector after)
@@ -2521,24 +2365,24 @@ obj_grip_edit(int32_t obj_id, EmbVector before, EmbVector after)
         break;
     }
     case EMB_CIRCLE: {
-        if (emb_approx(before, obj_center(core))) {
+        if (emb_approx(before, emb_gget(core->geometry, EMB_CENTER).v)) {
             obj_move_by(obj_id, delta);
         }
         else {
-            EmbReal length = emb_vector_distance(obj_center(core), after);
+            EmbReal length = emb_vector_distance(emb_gget(core->geometry, EMB_CENTER).v, after);
             emb_set_radius(core->geometry, length);
         }
         break;
     }
     case EMB_DIM_LEADER:
     case EMB_LINE: {
-        if (emb_approx(before, obj_end_point_1(core))) {
-            obj_set_end_point_1(core, after);
+        if (emb_approx(before, emb_gget(core->geometry, EMB_START).v)) {
+            emb_gset(core->geometry, EMB_START, script_vector(after));
         }
-        else if (emb_approx(before, obj_end_point_2(core))) {
-            obj_set_end_point_2(core, after);
+        else if (emb_approx(before, emb_gget(core->geometry, EMB_END).v)) {
+            emb_gset(core->geometry, EMB_END, script_vector(after));
         }
-        else if (emb_approx(before, obj_mid_point(core))) {
+        else if (emb_approx(before, emb_gget(core->geometry, EMB_MID).v)) {
             obj_move_by(obj_id, delta);
         }
         break;
@@ -2592,7 +2436,8 @@ obj_grip_edit(int32_t obj_id, EmbVector before, EmbVector after)
     case EMB_TEXT_SINGLE:
     case EMB_POINT:
     default: {
-        if (emb_approx(before, obj_pos(core))) {
+        EmbVector v = emb_gget(core->geometry, EMB_CENTER).v;
+        if (emb_approx(before, v)) {
             obj_move_by(obj_id, delta);
         }
         break;
@@ -2605,18 +2450,19 @@ EmbVectorList *
 all_grip_points(int32_t obj_id)
 {
     ObjectCore *core = obj_get_core(obj_id);
+    EmbGeometry *g = core->geometry;
     EmbVectorList *gripPoints = create_vector_list();
     switch (core->geometry->type) {
     case EMB_ARC: {
-        append_vector_to_list(gripPoints, obj_center(core));
-        append_vector_to_list(gripPoints, obj_start_point(core));
-        append_vector_to_list(gripPoints, obj_mid_point(core));
-        append_vector_to_list(gripPoints, obj_end_point(core));
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_CENTER).v);
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_START).v);
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_MID).v);
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_END).v);
         break;
     }
     case EMB_CIRCLE:
     case EMB_ELLIPSE: {
-        append_vector_to_list(gripPoints, obj_center(core));
+        append_vector_to_list(gripPoints, emb_gget(core->geometry, EMB_CENTER).v);
         append_vector_to_list(gripPoints, emb_quadrant(core->geometry, 0));
         append_vector_to_list(gripPoints, emb_quadrant(core->geometry, 90));
         append_vector_to_list(gripPoints, emb_quadrant(core->geometry, 180));
@@ -2624,10 +2470,10 @@ all_grip_points(int32_t obj_id)
         break;
     }
     case EMB_DIM_LEADER: {
-        append_vector_to_list(gripPoints, obj_end_point_1(core));
-        append_vector_to_list(gripPoints, obj_end_point_2(core));
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_START).v);
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_END).v);
         if (core->curved) {
-            append_vector_to_list(gripPoints, obj_mid_point(core));
+            append_vector_to_list(gripPoints, emb_gget(g, EMB_MID).v);
         }
         break;
     }
@@ -2639,13 +2485,14 @@ all_grip_points(int32_t obj_id)
         break;
     }
     case EMB_LINE: {
-        append_vector_to_list(gripPoints, obj_end_point_1(core));
-        append_vector_to_list(gripPoints, obj_end_point_2(core));
-        append_vector_to_list(gripPoints, obj_mid_point(core));
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_START).v);
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_END).v);
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_MID).v);
         break;
     }
     case EMB_PATH: {
-        append_vector_to_list(gripPoints, obj_pos(core));
+        /* EMB_POS? */
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_CENTER).v);
         debug_message("TODO: loop thru all path Elements and return their points.");
         break;
     }
@@ -2663,7 +2510,7 @@ all_grip_points(int32_t obj_id)
     case EMB_TEXT_SINGLE:
     case EMB_POINT:
     default:
-        append_vector_to_list(gripPoints, obj_pos(core));
+        append_vector_to_list(gripPoints, emb_gget(g, EMB_CENTER).v);
         break;
     }
     return gripPoints;

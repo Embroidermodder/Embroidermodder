@@ -987,7 +987,9 @@ main(int argc, char* argv[])
         return 3;
     }
 
-    global = create_script_env();
+    global = load_global_state();
+    print_env(global);
+    printf("os: %s\n", get_env_var(global, "os").s);
     int result = make_application(n_files, files_to_open);
 
     free_script_env(global);
@@ -1462,8 +1464,21 @@ const char *
 platform_string(void)
 {
     /* TODO: Append QSysInfo to string where applicable. */
-    debug_message("Platform: %s", os);
-    return os;
+    ScriptValue value = get_env_var(global, "os");
+    debug_message("Platform: %s", value.s);
+    return value.s;
+}
+
+/* . */
+void
+update_lineedit_vector(EmbGeometry *g, const char *key, int id, bool editable)
+{
+    char x_key[200], y_key[200];
+    sprintf(x_key, "%sX", key);
+    sprintf(y_key, "%sY", key);
+    EmbVector v = emb_gget(g, id).v;
+    update_lineedit_num(x_key, v.x, editable);
+    update_lineedit_num(y_key, -v.y, editable);
 }
 
 /* . */
@@ -1474,18 +1489,12 @@ update_editors(int32_t obj)
     EmbGeometry *g = core->geometry;
     switch (g->type) {
     case EMB_ARC: {
-        EmbVector center = obj_center(core);
-        EmbVector start = g->object.arc.start;
-        EmbVector end = g->object.arc.end;
-        update_lineedit_num("ArcCenterX", center.x, false);
-        update_lineedit_num("ArcCenterY", -center.y, false);
-        update_lineedit_num("ArcRadius", obj_radius(core), false);
+        update_lineedit_vector(g, "ArcCenter", EMB_CENTER, false);
+        update_lineedit_num("ArcRadius", emb_gget(g, EMB_RADIUS).r, false);
         update_lineedit_num("ArcStartAngle", emb_start_angle(g), true);
         update_lineedit_num("ArcEndAngle", emb_end_angle(g), true);
-        update_lineedit_num("ArcStartX", start.x, false);
-        update_lineedit_num("ArcStartY", -start.y, false);
-        update_lineedit_num("ArcEndX", end.x, false);
-        update_lineedit_num("ArcEndY", -end.y, false);
+        update_lineedit_vector(g, "ArcStart", EMB_START, false);
+        update_lineedit_vector(g, "ArcEnd", EMB_END, false);
         update_lineedit_num("ArcArea", emb_area(g), false);
         update_lineedit_num("ArcLength", emb_arc_length(g), false);
         update_lineedit_num("ArcChord", emb_chord(g), false);
@@ -1498,13 +1507,11 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_CIRCLE: {
-        EmbVector center = obj_center(core);
-        update_lineedit_num("CircleCenterX", center.x, false);
-        update_lineedit_num("CircleCenterY", -center.y, false);
-        update_lineedit_num("CircleRadius", obj_radius(core), false);
-        update_lineedit_num("CircleDiameter", obj_diameter(core), false);
+        update_lineedit_vector(g, "CircleCenter", EMB_CENTER, false);
+        update_lineedit_num("CircleRadius", emb_gget(g, EMB_RADIUS).r, false);
+        update_lineedit_num("CircleDiameter", emb_gget(g, EMB_DIAMETER).r, false);
         update_lineedit_num("CircleArea", emb_area(g), false);
-        update_lineedit_num("CircleCircumference", obj_circumference(core), false);
+        update_lineedit_num("CircleCircumference",  emb_gget(g, EMB_CIRCUMFERENCE).r, false);
         break;
     }
     case OBJ_DIMALIGNED: {
@@ -1540,9 +1547,7 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_ELLIPSE: {
-        EmbVector center = obj_center(core);
-        update_lineedit_num("EllipseCenterX", center.x, false);
-        update_lineedit_num("EllipseCenterY", -center.y, false);
+        update_lineedit_vector(g, "EllipseCenter", EMB_CENTER, false);
         update_lineedit_num("EllipseRadiusMajor", emb_radius_major(g), false);
         update_lineedit_num("EllipseRadiusMinor", emb_radius_minor(g), false);
         update_lineedit_num("EllipseDiameterMajor", emb_diameter_major(g), false);
@@ -1558,15 +1563,9 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_LINE: {
-        EmbVector point1 = obj_end_point_1(core);
-        EmbVector point2 = obj_end_point_2(core);
-        EmbVector delta = emb_vector_subtract(point2, point1);
-        update_lineedit_num("LineStartX", point1.x, false);
-        update_lineedit_num("LineStartY", -point1.y, false);
-        update_lineedit_num("LineEndX", point2.x, false);
-        update_lineedit_num("LineEndY", -point2.y, false);
-        update_lineedit_num("LineDeltaX", delta.x, false);
-        update_lineedit_num("LineDeltaY", -delta.y, false);
+        update_lineedit_vector(g, "LineStart", EMB_START, false);
+        update_lineedit_vector(g, "LineEnd", EMB_END, false);
+        // FIXME: update_lineedit_vector(g, "LineDelta", EMB_DELTA, false);
         update_lineedit_num("LineAngle", emb_angle(g), true);
         update_lineedit_num("LineLength", obj_length(core), false);
         break;
@@ -1576,8 +1575,7 @@ update_editors(int32_t obj)
         break;
     }
     case EMB_POINT: {
-        update_lineedit_num("PointX", obj_x(core), false);
-        update_lineedit_num("PointY", -obj_y(core), false);
+        update_lineedit_vector(g, "Point", EMB_POSITION, false);
         break;
     }
     case EMB_POLYGON: {
@@ -1598,6 +1596,10 @@ update_editors(int32_t obj)
         EmbVector corn3 = obj_bottom_left(core);
         EmbVector corn4 = obj_bottom_right(core);
 
+        //update_lineedit_vector(g, "RectanglePoint1", EMB_TOPLEFT, false);
+        //update_lineedit_vector(g, "RectanglePoint2", EMB_TOPRIGHT, false);
+        //update_lineedit_vector(g, "RectanglePoint3", EMB_BOTLEFT, false);
+        //update_lineedit_vector(g, "RectanglePoint4", EMB_BOTRIGHT, false);
         update_lineedit_num("RectangleCorner1X", corn1.x, false);
         update_lineedit_num("RectangleCorner1Y", -corn1.y, false);
         update_lineedit_num("RectangleCorner2X", corn2.x, false);
@@ -1622,8 +1624,7 @@ update_editors(int32_t obj)
             objectTextJustifyList);
         update_lineedit_num("TextSingleHeight", core->textSize, false);
         update_lineedit_num("TextSingleRotation", -core->rotation, true);
-        update_lineedit_num("TextSingleX", obj_x(core), false);
-        update_lineedit_num("TextSingleY", -obj_y(core), false);
+        update_lineedit_vector(g, "TextSingle", EMB_START, false);
         update_lineedit_bool("TextSingleBackward", core->textBackward, true);
         update_lineedit_bool("TextSingleUpsideDown", core->textUpsideDown, true);
         break;
@@ -1641,14 +1642,14 @@ edit_field(int32_t id, const char *label, const char *text)
     switch(core->geometry->type) {
     case EMB_ARC: {
         if (!strcmp(label, "lineEditArcCenterX")) {
-            EmbVector arc = obj_center(core);
+            EmbVector arc = emb_gget(g, EMB_CENTER).v;
             EmbVector center;
             center.x = atof(text);
             center.y = arc.y;
             obj_set_center(core, center);
         }
         if (!strcmp(label, "lineEditArcCenterY")) {
-            EmbVector arc = obj_center(core);
+            EmbVector arc = emb_gget(g, EMB_CENTER).v;
             EmbVector center;
             center.x = arc.x;
             center.y = -atof(text);
@@ -1927,7 +1928,7 @@ spin_box_display_select_box_alpha_changed(int value)
 
 /* . */
 void
-combo_box_prompt_font_family_changed(EmbString family)
+combo_box_prompt_font_family_changed(char *family)
 {
     strcpy(setting[PROMPT_FONT_FAMILY].preview.s, family);
     set_prompt_font_family(setting[PROMPT_FONT_FAMILY].preview.s);
@@ -1935,7 +1936,7 @@ combo_box_prompt_font_family_changed(EmbString family)
 
 /* . */
 void
-combo_box_prompt_font_style_changed(EmbString style)
+combo_box_prompt_font_style_changed(char *style)
 {
     strcpy(setting[PROMPT_FONT_STYLE].preview.s, style);
     set_prompt_font_style(setting[PROMPT_FONT_STYLE].preview.s);
@@ -2365,7 +2366,7 @@ doc_set_rubber_mode(int32_t doc, int mode)
 
 /* . */
 void
-doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point)
+doc_set_rubber_point(int32_t doc, char *key, EmbVector point)
 {
     DocumentData *data = doc_data(doc);
     for (int i=0; i<data->rubberRoomList->count; i++) {
@@ -2377,7 +2378,7 @@ doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point)
 
 /* . */
 void
-doc_set_rubber_text(int32_t doc, EmbString key, EmbString txt)
+doc_set_rubber_text(int32_t doc, char *key, EmbString txt)
 {
     DocumentData *data = doc_data(doc);
     for (int i=0; i<data->rubberRoomList->count; i++) {

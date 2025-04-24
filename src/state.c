@@ -11,6 +11,8 @@
 
 #include "core.h"
 
+#include <string.h>
+
 ScriptEnv *global;
 ScriptValue *config;
 int n_variables = 0;
@@ -101,32 +103,33 @@ char defaultPrefix[200];
 char prefix[200];
 char curCmd[200];
 
-/* TODO: find a source for compiler flags for operating system detection.
+/* TODO: find a source for compiler flags for operating system detection so
+ * we know this works across compilers.
  */
 #if defined(_WIN32)
-const char *os = "Windows";
+static const char *os = "Windows";
 #elif defined(__CYGWIN__)
-const char *os = "Cygwin";
+static const char *os = "Cygwin";
 #elif defined(__linux__)
-const char *os = "Linux";
+static const char *os = "Linux";
 #elif defined(__unix__)
-const char *os = "Unix";
+static const char *os = "Unix";
 #elif defined(__APPLE__) || defined(__MACH__)
-const char *os = "Mac OS";
+static const char *os = "Mac OS";
 #elif defined(__FREEBSD__)
-const char *os = "FreeBSD";
+static const char *os = "FreeBSD";
 #elif defined(__ANDROID__)
-const char *os = "Android";
+static const char *os = "Android";
 #else
-const char *os = "Unknown Operating System";
+static const char *os = "Unknown Operating System";
 #endif
 
 /* -------------------------- Versions ------------------------------ */
 
-const char *embroidermodder_version = "2.0.0-alpha4";
-const char *libembroidery_version = "1.0.0-alpha";
-const char *EmbroideryMobile_version = "1.0.0-alpha";
-const char *PET_version = "1.0.0-alpha";
+static const char *embroidermodder_version = "2.0.0-alpha4";
+static const char *libembroidery_version = "1.0.0-alpha";
+static const char *EmbroideryMobile_version = "1.0.0-alpha";
+static const char *PET_version = "1.0.0-alpha";
 
 /* ---------------------------- Paths ------------------------------ */
 
@@ -139,64 +142,64 @@ const char *circle_origin_path = "M 0.0 1.0 " \
     "A -1.0 -1.0 2.0 2.0 1 180.0 -90.0 ";
 //  "Z";
 
-const char *one_path = "m 0.05 0.00 " \
+static const char *one_path = "m 0.05 0.00 " \
     "l 0.45 0.00 " \
     "m 0.00 -0.75 " \
     "m 0.25 -1.00 " \
     "l 0.25 0.00";
 
-const char *two_path = "m 0.00 -0.75 " \
+static const char *two_path = "m 0.00 -0.75 " \
     "a 0.00 -1.00 0.50 0.50 1 180.00 -216.87 " \
     "l 0.00 0.00 " \
     "l 0.50 0.00";
 
-const char *three_path = "arc m 0.00 -0.50 0.50 0.50 195.00 " \
+static const char *three_path = "arc m 0.00 -0.50 0.50 0.50 195.00 " \
     "a 0.00 -0.50 0.50 0.50 195.00, 255.00 " \
     "a 0.00 -1.00 0.50 0.50 270.00, 255.00";
 
-const char *four_path = "m 0.50 -0.00 " \
+static const char *four_path = "m 0.50 -0.00 " \
     "l 0.50 -1.00 " \
     "l 0.00 -0.50 " \
     "l 0.50 -0.50";
 
-const char *five_path = "m 0.50 -1.00 " \
+static const char *five_path = "m 0.50 -1.00 " \
     "l 0.00 -1.00 " \
     "l 0.00 -0.50 " \
     "l 0.25 -0.50 " \
     "a 0.00 -0.50 0.50 0.50 90.00 -180.00 " \
     "l 0.00 0.00";
 
-const char *six_path = "E 0.25 -0.25 0.25 0.25 " \
+static const char *six_path = "E 0.25 -0.25 0.25 0.25 " \
     " m 0.00 -0.25 " \
     "l 0.00 -0.75 " \
     "a 0.00 -1.00 0.50 0.50 180.00, -140.00";
 
-const char *seven_path = "m 0.00 -1.00 " \
+static const char *seven_path = "m 0.00 -1.00 " \
     "l 0.50 -1.00 " \
     "l 0.25 -0.25 " \
     "l 0.25 -0.00";
 
-const char *eight_path = "E 0.25 -0.25 0.25 0.25 " \
+static const char *eight_path = "E 0.25 -0.25 0.25 0.25 " \
     "E 0.25 -0.75 0.25 0.25";
 
-const char *nine_path = "E 0.25 -0.75 0.25 0.25 " \
+static const char *nine_path = "E 0.25 -0.75 0.25 0.25 " \
     "m 0.50 -0.75 " \
     "l 0.50 -0.25 " \
     "a 0.00 -0.50 0.50 0.50 0.00, -140.00";
 
-const char *zero_path = "m 0.00 -0.75 " \
+static const char *zero_path = "m 0.00 -0.75 " \
     "l 0.00 -0.25 " \
     "a 0.00 -0.50 0.50 0.50 180.00, 180.00 " \
     "l 0.50 -0.75 " \
     "a 0.00 -1.00 0.50 0.50 0.00, 180.00";
 
-const char *minus_path = "m 0.00 -0.50 " \
+static const char *minus_path = "m 0.00 -0.50 " \
     "l 0.50 -0.50";
 
-const char *apostrophe_path = "m 0.25 -1.00 " \
+static const char *apostrophe_path = "m 0.25 -1.00 " \
     "l 0.25 -0.75";
 
-const char *quote_path = "m 0.10 -1.00 " \
+static const char *quote_path = "m 0.10 -1.00 " \
     "l 0.10 -0.75 " \
     "m 0.40 -1.00 " \
     "l 0.40 -0.75";
@@ -3525,4 +3528,97 @@ CommandData command_data[MAX_COMMANDS] = {
         .action = do_nothing_command
     }
 };
+
+/* -------------------- State Management Functions ------------------------- */
+
+/* Print out all of the global variables to ensure that they're loaded
+ * correctly. This will be recursive.
+ */
+int
+print_env(ScriptEnv *env)
+{
+    printf("environment\n");
+    for (int i=0; i<env->n_variables; i++) {
+        printf("   %s: ", env->variables[i].label);
+        if (env->variables[i].type == SCRIPT_STRING) {
+            printf("%s\n", env->variables[i].s);
+        }
+        else {
+            printf("NOT LOADED\n");
+        }
+    }
+    return 0;
+}
+
+/* WARNING: key overrides whatever label the ScriptValue has, this is an
+ *     an intended feature to allow for use of the script_* functions
+ *     for constructing ScriptValues.
+ * FIXME: doesn't account for running out of memory: hard capped at 10000.
+ */
+int
+add_env_var(ScriptEnv *env, const char *key, ScriptValue value)
+{
+    env->variables[env->n_variables] = value;
+    strcpy(env->variables[env->n_variables].label, key);
+    env->n_variables++;
+    if (env->n_variables >= 10000-1) {
+        puts("ERROR: ran out of memory for environment variables.");
+    }
+    return 0;
+}
+
+/* Load a ScriptValue from the environment using the key supplied. */
+ScriptValue
+get_env_var(ScriptEnv *env, const char *key)
+{
+    printf("%d\n", env->n_variables);
+    fflush(stdout);
+    for (int i=0; i<env->n_variables; i++) {
+        printf("%s\n", env->variables[i].label);
+        fflush(stdout);
+        if (!strncmp(env->variables[i].label, key, 200)) {
+            return env->variables[i];
+        }
+    }
+    /* This shows we failed to find the variable. */
+    return script_null;
+}
+
+/* Load our basic tree structure of data for all of our data structures above.
+ *
+ * EXAMPLE
+ * We want access to the `os` string, it is a static in this file.
+ * The command would be `get_env_var(global, "os").s`.
+ */
+ScriptEnv *
+load_global_state(void)
+{
+    global = create_script_env();
+    global->n_variables = 0;
+    global->variables = malloc(10000*sizeof(ScriptValue));
+
+    #define ADD_STR(A) add_env_var(global, #A, script_string((char*)A))
+    ADD_STR(os);
+    ADD_STR(embroidermodder_version);
+    ADD_STR(libembroidery_version);
+    ADD_STR(EmbroideryMobile_version);
+    ADD_STR(PET_version);
+    ADD_STR(circle_origin_path);
+    ADD_STR(one_path);
+    ADD_STR(two_path);
+    ADD_STR(three_path);
+    ADD_STR(four_path);
+    ADD_STR(five_path);
+    ADD_STR(six_path);
+    ADD_STR(seven_path);
+    ADD_STR(eight_path);
+    ADD_STR(nine_path);
+    ADD_STR(zero_path);
+    ADD_STR(minus_path);
+    ADD_STR(apostrophe_path);
+    ADD_STR(quote_path);
+    #undef ADD_STR
+    
+    return global;
+}
 

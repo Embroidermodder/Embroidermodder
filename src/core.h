@@ -1053,8 +1053,10 @@ typedef struct ViewData_ {
     int yStart;
 } ViewData;
 
-/* -------------------------------- Scripting ---------------------------- */
-
+/* -------------------------------- Scripting ----------------------------
+ * This is gradually growing to incorporate our full data structure so
+ * no global data is stored as externs.
+ */
 ScriptEnv *create_script_env(void);
 void free_script_env(ScriptEnv *);
 ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
@@ -1098,8 +1100,6 @@ void free_id_list(EmbIdList *);
 
 ScriptValue *setting_ptr(int key, int mode);
 void copy_setting(int key, int dst, int src);
-
-char *load_file(char *fname);
 
 void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, int id);
@@ -1243,7 +1243,6 @@ void load_formats(void);
 void settings_prompt(void);
 
 void end_command(void);
-void debug_message(const char *msg, ...);
 void wait_cursor(void);
 void arrow_cursor(void);
 void restore_cursor(void);
@@ -1411,7 +1410,6 @@ ScriptValue window_close_all_command(ScriptEnv *context);
 ScriptValue window_next_command(ScriptEnv *context);
 ScriptValue window_previous_command(ScriptEnv *context);
 ScriptValue window_tile_command(ScriptEnv *context);
-
 ScriptValue cut_command(ScriptEnv *context);
 ScriptValue copy_selected_command(ScriptEnv *context);
 ScriptValue paste_selected_command(ScriptEnv *context);
@@ -1627,12 +1625,6 @@ int32_t active_document(void);
 
 void whats_this_mode(void);
 
-void window_close_all(void);
-void window_cascade(void);
-void window_tile(void);
-void window_next(void);
-void window_previous(void);
-
 void enable_rapid_fire(void);
 void disable_rapid_fire(void);
 
@@ -1709,23 +1701,6 @@ EmbVector obj_rubber_point(int32_t id, const char *key);
 const char *obj_rubber_text(int32_t id, const char *key);
 EmbVector obj_map_rubber(int32_t obj, const char *key);
 
-EmbVector obj_pos(ObjectCore *obj);
-double obj_x(ObjectCore *obj);
-double obj_y(ObjectCore *obj);
-EmbVector obj_center(ObjectCore *obj);
-double obj_center_x(ObjectCore *obj);
-double obj_center_y(ObjectCore *obj);
-double obj_radius(ObjectCore *obj);
-double obj_diameter(ObjectCore *obj);
-double obj_circumference(ObjectCore *obj);
-EmbVector obj_delta(ObjectCore *obj);
-
-EmbVector obj_end_point_1(ObjectCore *obj);
-EmbVector obj_end_point_2(ObjectCore *obj);
-EmbVector obj_start_point(ObjectCore *obj);
-EmbVector obj_mid_point(ObjectCore *obj);
-EmbVector obj_end_point(ObjectCore *obj);
-
 double obj_length(ObjectCore *obj);
 
 void obj_set_pos(ObjectCore *obj, EmbVector point);
@@ -1784,6 +1759,11 @@ int find_widget_list(const char *key);
 char *qcolor_from_uint32_t(uint32_t color);
 ScriptValue allow_rubber_command(ScriptEnv *context);
 
+/* ---------------------- Script Environment management -------------------- */
+int print_env(ScriptEnv *env);
+ScriptValue get_env_var(ScriptEnv *env, const char *key);
+ScriptEnv *load_global_state(void);
+
 /* ---------------------------- Global Variables --------------------------- */
 /* Global variables and constants we need to access anywhere in the program
  * with minimal overhead.
@@ -1805,30 +1785,9 @@ extern ScriptValue *config;
 extern int n_variables;
 
 extern const char *index_th_name[];
-extern const char *os;
 extern bool exitApp;
 
-/* Versions */
-extern const char *embroidermodder_version;
-extern const char *libembroidery_version;
-extern const char *EmbroideryMobile_version;
-extern const char *PET_version;
-
-/* Paths */
 extern const char *circle_origin_path;
-extern const char *one_path;
-extern const char *two_path;
-extern const char *three_path;
-extern const char *four_path;
-extern const char *five_path;
-extern const char *six_path;
-extern const char *seven_path;
-extern const char *eight_path;
-extern const char *nine_path;
-extern const char *zero_path;
-extern const char *minus_path;
-extern const char *apostrophe_path;
-extern const char *quote_path;
 
 /* Menus */
 extern char *menu_list[];
