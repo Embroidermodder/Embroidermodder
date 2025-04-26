@@ -20,6 +20,26 @@ function run_cmake () {
 
 }
 
+function create_init () {
+
+	outf=src/init_script.c
+	cat docs/copyright_message.txt > $outf
+	echo "" >> $outf
+	echo "#include \"core.h\"" >> $outf
+	echo "" >> $outf
+
+	echo "const char *init_script[] = {" >> $outf
+	for file in data/*
+	do
+		# Removes comments, escapes quotes, prepends quote and appends \n",
+		sed '/^#/d;s/\"/\\\"/g;s/^/    "/;s/$/\\n",/' $file >> $outf
+	done
+	echo "    END_SYMBOL" >> $outf
+	echo "};" >> $outf
+	echo "" >> $outf
+
+}
+
 function run_current_build () {
 
 	echo "Build current version to see if a build problem has been fixed in the current main."
@@ -262,6 +282,8 @@ do
  		analysis;;
 	-s | --style)
  		code_style;;
+	--init)
+		create_init;;
 	--svg) embed_svgs;;
 	-G | --generator)
 		# GENERATOR="$OPTARG"

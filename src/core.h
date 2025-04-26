@@ -1760,9 +1760,14 @@ char *qcolor_from_uint32_t(uint32_t color);
 ScriptValue allow_rubber_command(ScriptEnv *context);
 
 /* ---------------------- Script Environment management -------------------- */
-int print_env(ScriptEnv *env);
-ScriptValue get_env_var(ScriptEnv *env, const char *key);
-ScriptEnv *load_global_state(void);
+void load_global_state(ScriptValue *root);
+
+ScriptValue *emb_create_root(void);
+int emb_create_leaf(ScriptValue *branch, int type, char *label, char *data);
+ScriptValue *emb_get_var(ScriptValue *node, const char *key);
+const char *emb_get_str(ScriptValue *node, const char *key);
+void emb_free_root(ScriptValue *root);
+void emb_print_tree(ScriptValue *tree, int indent);
 
 /* ---------------------------- Global Variables --------------------------- */
 /* Global variables and constants we need to access anywhere in the program
@@ -1777,6 +1782,7 @@ extern GroupBoxData group_box_list[];
 extern Translation translations[];
 extern Design designs[];
 extern const char *svgs[];
+extern ScriptValue *root;
 
 extern const char *config_table[];
 extern char *settings_data[];

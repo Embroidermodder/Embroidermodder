@@ -164,6 +164,69 @@ char prompt_text[50][MAX_STRING_LENGTH] = {
 
 int n_prompt_lines = 3;
 
+/* . */
+int
+main(int argc, char* argv[])
+{
+    int i;
+    int n_files = 0;
+    char files_to_open[MAX_FILES][MAX_STRING_LENGTH];
+
+    for (i = 1; i < argc; i++) {
+        if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")) {
+            testing_mode = 1;
+        }
+        else if (string_equal(argv[i], "-h") || string_equal(argv[i], "--help")) {
+            fprintf(stderr, help_msg);
+            exitApp = true;
+        }
+        else if (string_equal(argv[i], "-v") || string_equal(argv[i], "--version")) {
+            /* Print out version string and exit. */
+            fprintf(stdout, "%s %s\n", _appName_, _appVer_);
+            exitApp = true;
+        }
+        else if (argv[i][0] == '-') {
+            fprintf(stderr, "ERROR: unrecognised flag \"%s\".\n", argv[i]);            
+            exitApp = true;
+        }
+        else if (1 /* FIXME: QFile::exists(argv[i]) && emb_valid_file_format(argv[i])*/) {
+            if (n_files >= MAX_FILES) {
+                printf("ERROR: More files to open than MAX_FILES.");
+                continue;
+            }
+            strcpy(files_to_open[n_files], argv[i]);
+            n_files++;
+        }
+        else {
+            fprintf(stderr, "ERROR: file \"%s\" not found.", argv[i]);
+            exitApp = true;
+        }
+    }
+
+    if (exitApp) {
+        return 1;
+    }
+
+    if (!load_data()) {
+        puts("Failed to load data.");
+        return 2;
+    }
+
+    if (!glfwInit()) {
+        puts("Failed to run glfwInit.");
+        return 3;
+    }
+
+    root = emb_create_root();
+    load_global_state(root);
+    int result = make_application(n_files, files_to_open);
+    emb_free_root(root);
+    free_script_env(global);
+    free(config);
+
+    return result;
+}
+
 /* Check this. */
 uint32_t
 RGB(uint8_t r, uint8_t g, uint8_t b)
@@ -935,70 +998,6 @@ nanosleep_(int time)
 }
 
 /* . */
-int
-main(int argc, char* argv[])
-{
-    int i;
-    int n_files = 0;
-    char files_to_open[MAX_FILES][MAX_STRING_LENGTH];
-
-    for (i = 1; i < argc; i++) {
-        if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")) {
-            testing_mode = 1;
-        }
-        else if (string_equal(argv[i], "-h") || string_equal(argv[i], "--help")) {
-            fprintf(stderr, help_msg);
-            exitApp = true;
-        }
-        else if (string_equal(argv[i], "-v") || string_equal(argv[i], "--version")) {
-            /* Print out version string and exit. */
-            fprintf(stdout, "%s %s\n", _appName_, _appVer_);
-            exitApp = true;
-        }
-        else if (argv[i][0] == '-') {
-            fprintf(stderr, "ERROR: unrecognised flag \"%s\".\n", argv[i]);            
-            exitApp = true;
-        }
-        else if (1 /* FIXME: QFile::exists(argv[i]) && emb_valid_file_format(argv[i])*/) {
-            if (n_files >= MAX_FILES) {
-                printf("ERROR: More files to open than MAX_FILES.");
-                continue;
-            }
-            strcpy(files_to_open[n_files], argv[i]);
-            n_files++;
-        }
-        else {
-            fprintf(stderr, "ERROR: file \"%s\" not found.", argv[i]);
-            exitApp = true;
-        }
-    }
-
-    if (exitApp) {
-        return 1;
-    }
-
-    if (!load_data()) {
-        puts("Failed to load data.");
-        return 2;
-    }
-
-    if (!glfwInit()) {
-        puts("Failed to run glfwInit.");
-        return 3;
-    }
-
-    global = load_global_state();
-    print_env(global);
-    printf("os: %s\n", get_env_var(global, "os").s);
-    int result = make_application(n_files, files_to_open);
-
-    free_script_env(global);
-    free(config);
-
-    return result;
-}
-
-/* . */
 void
 run_testing(void)
 {
@@ -1464,9 +1463,9 @@ const char *
 platform_string(void)
 {
     /* TODO: Append QSysInfo to string where applicable. */
-    ScriptValue value = get_env_var(global, "os");
-    debug_message("Platform: %s", value.s);
-    return value.s;
+    const char *value = emb_get_str(root, "os");
+    debug_message("Platform: %s", value);
+    return value;
 }
 
 /* . */

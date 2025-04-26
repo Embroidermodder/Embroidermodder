@@ -65,11 +65,14 @@ qt_add_executable(embroidermodder2
 	${EXTERN}/glad/include/glad/glad.h
 	${EXTERN}/glad/include/KHR/khrplatform.h
 
+	${EXTERN}/tomlc99/toml.c
+
 	${SRC}/commands.cpp
 
 	${SRC}/interface.c
 	${SRC}/objects.c
 	${SRC}/state.c
+	${SRC}/init_script.c
 	${SRC}/translations.c
 	${SRC}/icons.c
 	${SRC}/widgets.c
@@ -84,6 +87,7 @@ include_directories(
 	${EXTERN}/glad/include
 	${EXTERN}/nanovg/src
 	${EXTERN}/nanosvg/src
+	${EXTERN}/tomlc99
 	${OPENGL_INCLUDE_DIRS}
 	${SRC}
 )

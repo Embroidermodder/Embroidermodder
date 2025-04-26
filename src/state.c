@@ -10,9 +10,13 @@
  */
 
 #include "core.h"
+#include "toml.h"
 
 #include <string.h>
 
+extern const char *init_script[];
+
+ScriptValue *root;
 ScriptEnv *global;
 ScriptValue *config;
 int n_variables = 0;
@@ -124,13 +128,6 @@ static const char *os = "Android";
 static const char *os = "Unknown Operating System";
 #endif
 
-/* -------------------------- Versions ------------------------------ */
-
-static const char *embroidermodder_version = "2.0.0-alpha4";
-static const char *libembroidery_version = "1.0.0-alpha";
-static const char *EmbroideryMobile_version = "1.0.0-alpha";
-static const char *PET_version = "1.0.0-alpha";
-
 /* ---------------------------- Paths ------------------------------ */
 
 const char *circle_origin_path = "M 0.0 1.0 " \
@@ -141,68 +138,6 @@ const char *circle_origin_path = "M 0.0 1.0 " \
     "L -1.0 0.0 " \
     "A -1.0 -1.0 2.0 2.0 1 180.0 -90.0 ";
 //  "Z";
-
-static const char *one_path = "m 0.05 0.00 " \
-    "l 0.45 0.00 " \
-    "m 0.00 -0.75 " \
-    "m 0.25 -1.00 " \
-    "l 0.25 0.00";
-
-static const char *two_path = "m 0.00 -0.75 " \
-    "a 0.00 -1.00 0.50 0.50 1 180.00 -216.87 " \
-    "l 0.00 0.00 " \
-    "l 0.50 0.00";
-
-static const char *three_path = "arc m 0.00 -0.50 0.50 0.50 195.00 " \
-    "a 0.00 -0.50 0.50 0.50 195.00, 255.00 " \
-    "a 0.00 -1.00 0.50 0.50 270.00, 255.00";
-
-static const char *four_path = "m 0.50 -0.00 " \
-    "l 0.50 -1.00 " \
-    "l 0.00 -0.50 " \
-    "l 0.50 -0.50";
-
-static const char *five_path = "m 0.50 -1.00 " \
-    "l 0.00 -1.00 " \
-    "l 0.00 -0.50 " \
-    "l 0.25 -0.50 " \
-    "a 0.00 -0.50 0.50 0.50 90.00 -180.00 " \
-    "l 0.00 0.00";
-
-static const char *six_path = "E 0.25 -0.25 0.25 0.25 " \
-    " m 0.00 -0.25 " \
-    "l 0.00 -0.75 " \
-    "a 0.00 -1.00 0.50 0.50 180.00, -140.00";
-
-static const char *seven_path = "m 0.00 -1.00 " \
-    "l 0.50 -1.00 " \
-    "l 0.25 -0.25 " \
-    "l 0.25 -0.00";
-
-static const char *eight_path = "E 0.25 -0.25 0.25 0.25 " \
-    "E 0.25 -0.75 0.25 0.25";
-
-static const char *nine_path = "E 0.25 -0.75 0.25 0.25 " \
-    "m 0.50 -0.75 " \
-    "l 0.50 -0.25 " \
-    "a 0.00 -0.50 0.50 0.50 0.00, -140.00";
-
-static const char *zero_path = "m 0.00 -0.75 " \
-    "l 0.00 -0.25 " \
-    "a 0.00 -0.50 0.50 0.50 180.00, 180.00 " \
-    "l 0.50 -0.75 " \
-    "a 0.00 -1.00 0.50 0.50 0.00, 180.00";
-
-static const char *minus_path = "m 0.00 -0.50 " \
-    "l 0.50 -0.50";
-
-static const char *apostrophe_path = "m 0.25 -1.00 " \
-    "l 0.25 -0.75";
-
-static const char *quote_path = "m 0.10 -1.00 " \
-    "l 0.10 -0.75 " \
-    "m 0.40 -1.00 " \
-    "l 0.40 -0.75";
 
 /* ---------------------------- Menus ------------------------------ */
 
@@ -3531,57 +3466,63 @@ CommandData command_data[MAX_COMMANDS] = {
 
 /* -------------------- State Management Functions ------------------------- */
 
-/* Print out all of the global variables to ensure that they're loaded
- * correctly. This will be recursive.
- */
-int
-print_env(ScriptEnv *env)
-{
-    printf("environment\n");
-    for (int i=0; i<env->n_variables; i++) {
-        printf("   %s: ", env->variables[i].label);
-        if (env->variables[i].type == SCRIPT_STRING) {
-            printf("%s\n", env->variables[i].s);
-        }
-        else {
-            printf("NOT LOADED\n");
-        }
-    }
-    return 0;
-}
-
 /* WARNING: key overrides whatever label the ScriptValue has, this is an
  *     an intended feature to allow for use of the script_* functions
  *     for constructing ScriptValues.
- * FIXME: doesn't account for running out of memory: hard capped at 10000.
  */
 int
-add_env_var(ScriptEnv *env, const char *key, ScriptValue value)
+emb_set_var(ScriptValue *node, const char *key, ScriptValue value)
 {
-    env->variables[env->n_variables] = value;
-    strcpy(env->variables[env->n_variables].label, key);
-    env->n_variables++;
-    if (env->n_variables >= 10000-1) {
-        puts("ERROR: ran out of memory for environment variables.");
+    for (int i=0; i<node->n_leaves; i++) {
+        if (!strncmp(node->leaves[i].label, key, MAX_STRING_LENGTH)) {
+            memcpy(node->leaves + i, &value, sizeof(value));
+            return 1;
+        }
     }
     return 0;
 }
 
 /* Load a ScriptValue from the environment using the key supplied. */
-ScriptValue
-get_env_var(ScriptEnv *env, const char *key)
+ScriptValue *
+emb_get_var(ScriptValue *node, const char *key)
 {
-    printf("%d\n", env->n_variables);
-    fflush(stdout);
-    for (int i=0; i<env->n_variables; i++) {
-        printf("%s\n", env->variables[i].label);
-        fflush(stdout);
-        if (!strncmp(env->variables[i].label, key, 200)) {
-            return env->variables[i];
+    for (int i=0; i<node->n_leaves; i++) {
+        if (!strncmp(node->leaves[i].label, key, MAX_STRING_LENGTH)) {
+            return node->leaves + i;
         }
     }
     /* This shows we failed to find the variable. */
-    return script_null;
+    return &script_null;
+}
+
+/* Load a char array from the environment using the key supplied. */
+const char*
+emb_get_str(ScriptValue *node, const char *key)
+{
+    return emb_get_var(node, key)->s;
+}
+
+/* Loads init_script 1 Mb buffer to chain together all of the
+ * strings in the init_script string table.
+ */
+toml_table_t *
+load_script(void)
+{
+    char *buffer = malloc(1000*1000);
+    char error_buffer[200];
+    buffer[0] = 0;
+    for (int i=0; i<10000; i++) {
+        if (!strncmp(init_script[i], END_SYMBOL, MAX_STRING_LENGTH)) {
+            break;
+        }
+        strcat(buffer, init_script[i]);
+    }
+    toml_table_t *table = toml_parse(buffer, error_buffer, 200);
+    if (!table) {
+        printf("ERROR: %s\n", error_buffer);
+    }
+    free(buffer);
+    return table;
 }
 
 /* Load our basic tree structure of data for all of our data structures above.
@@ -3589,36 +3530,47 @@ get_env_var(ScriptEnv *env, const char *key)
  * EXAMPLE
  * We want access to the `os` string, it is a static in this file.
  * The command would be `get_env_var(global, "os").s`.
+ *
+ * To access something deeper in the tree we use the dot operator, which
+ * allows searches to run faster by encapsulating data into structures.
+ * Like "file_menu.4" to give the 4th element in the file_menu array.
+ *
+ * For accessing data at speed we can keep the parent node pointer available,
+ * so for example:
+ *
+ *     ScriptValue *file_menu = get_var(root, "file_menu");
+ *     for (int i=0; i<file_menu->n_leaves; i++) {
+ *         printf("%s\n", file_menu->leaves[i].s);
+ *     }
+ *
+ * To get the length of an array we .
  */
-ScriptEnv *
-load_global_state(void)
+void
+load_global_state(ScriptValue *root)
 {
-    global = create_script_env();
-    global->n_variables = 0;
-    global->variables = malloc(10000*sizeof(ScriptValue));
+    /* OS string loads seperately because it's determined by compiler flags
+     * above.
+     */
+    emb_create_leaf(root, EMB_DATATYPE_STR, "os", os);
 
-    #define ADD_STR(A) add_env_var(global, #A, script_string((char*)A))
-    ADD_STR(os);
-    ADD_STR(embroidermodder_version);
-    ADD_STR(libembroidery_version);
-    ADD_STR(EmbroideryMobile_version);
-    ADD_STR(PET_version);
-    ADD_STR(circle_origin_path);
-    ADD_STR(one_path);
-    ADD_STR(two_path);
-    ADD_STR(three_path);
-    ADD_STR(four_path);
-    ADD_STR(five_path);
-    ADD_STR(six_path);
-    ADD_STR(seven_path);
-    ADD_STR(eight_path);
-    ADD_STR(nine_path);
-    ADD_STR(zero_path);
-    ADD_STR(minus_path);
-    ADD_STR(apostrophe_path);
-    ADD_STR(quote_path);
-    #undef ADD_STR
-    
-    return global;
+    toml_table_t *table = load_script();
+    if (!table) {
+        toml_free(table);
+    }
+    for (int i=0; ; i++) {
+        const char *key = toml_key_in(table, i);
+        if (!key) {
+            break;
+        }
+        toml_datum_t s = toml_string_in(table, key);
+        if (s.ok) {
+            emb_create_leaf(root, EMB_DATATYPE_STR, key, s.u.s);
+        }
+        else {
+            printf("ERROR: failed to load %s\n", key);
+        }
+        free(s.u.s);
+    }
+    toml_free(table);
 }
 
