@@ -1,0 +1,120 @@
+{\itshape IN ALPHA\+: VERY EXPERIMENTAL}
+
+\href{https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build-windows.yml}{\texttt{ }} \href{https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build-macos.yml}{\texttt{ }} \href{https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build-linux.yml}{\texttt{ }}
+
+Embroidermodder is a free machine embroidery software program. The newest version, Embroidermodder 2 can\+:
+
+
+\begin{DoxyItemize}
+\item edit and create embroidery designs
+\item estimate the amount of thread and machine time needed to stitch a design
+\item convert embroidery files to a variety of formats
+\item upscale or downscale designs
+\item run on Windows, Mac and Linux
+\end{DoxyItemize}
+
+For more information, see \href{http://www.libembroidery.org}{\texttt{ our website}}.\hypertarget{md_README_autotoc_md0}{}\doxysection{Dependencies}\label{md_README_autotoc_md0}
+To build Embroidermodder 2 from source you will need at least\+:
+
+
+\begin{DoxyItemize}
+\item The \href{https://github.com/Embroidermodder/Embroidermodder}{\texttt{ Embroidermodder 2}} source code.
+\item \href{http://www.qt-project.org}{\texttt{ Qt}} (version \texorpdfstring{$>$}{>}= 6.\+0).
+\item \href{http://www.opengl.org}{\texttt{ Open\+GL}} (version \texorpdfstring{$>$}{>}= 2.\+0).
+\end{DoxyItemize}
+
+Optionally, you may want to add\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://www.kde.org}{\texttt{ KDE}} for thumbnailer.
+\item \href{http://www.valgrind.org}{\texttt{ Valgrind}} for debugging.
+\item \href{http://cmake.org}{\texttt{ CMake}} (version \texorpdfstring{$>$}{>}= 2.\+0) for build (see Building Without CMake below if this is an issue).
+\end{DoxyItemize}
+
+Ubuntu repository packages\+: The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sudo apt-\/get install git build-\/essential qt6-\/dev-\/tools libqt6-\/opengl-\/dev \(\backslash\) }
+\DoxyCodeLine{    valgrind cmake}
+
+\end{DoxyCode}
+
+
+Fedora repository packages\+: The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sudo yum install git gdb gcc-\/c++ qt-\/devel kdelibs-\/devel valgrind}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md1}{}\doxysubsection{Included}\label{md_README_autotoc_md1}
+Some of the dependencies have been included and CMake will default to these versions.
+
+
+\begin{DoxyItemize}
+\item \href{http://www.glfw.org}{\texttt{ GLFW}}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md2}{}\doxysection{Building}\label{md_README_autotoc_md2}
+Various methods of building can be found in the project-\/files subfolder. For most builds, it is as simple as opening a terminal in the project folder and typing\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./needle -\/b}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md3}{}\doxysubsection{Building Without Bash}\label{md_README_autotoc_md3}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{git clone https://github.com/embroidermodder/embroidermodder}
+\DoxyCodeLine{cd embroidermodder}
+\DoxyCodeLine{}
+\DoxyCodeLine{mkdir build}
+\DoxyCodeLine{cd build}
+\DoxyCodeLine{cmake ..}
+\DoxyCodeLine{cmake -\/-\/build .}
+
+\end{DoxyCode}
+
+
+Then run with
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./embroidermodder2}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md4}{}\doxysubsection{Building Without Cmake}\label{md_README_autotoc_md4}
+We\textquotesingle{}re working on a one-\/liner for systems without cmake.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\# FIXME:}
+\DoxyCodeLine{\$(CC) -\/o embroidermodder2 \(\backslash\)}
+\DoxyCodeLine{    src/*.c src/*/*.c src/*.h src/*/*.h \(\backslash\)}
+\DoxyCodeLine{    -\/lglfw -\/lGL -\/lm}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md5}{}\doxysubsection{Testing One-\/liner (\+Bash-\/only)}\label{md_README_autotoc_md5}
+Sometimes an issue you\textquotesingle{}re having is fixed in the current version\+: it is recommended that you use a fresh build to ensure that the problem is still present before reporting this. This one-\/liner helps with this\+: place it in your {\ttfamily .bashrc} for future use.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{alias run\_current\_em2="{}rm -\/f build.sh \&\& wget https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/refs/heads/main/build.sh \&\& bash build.sh -\/-\/current"{}}
+
+\end{DoxyCode}
+
+
+Then, if you have issues, you can capture the terminal output like this.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{run\_current\_em2 \&> build.log}
+
+\end{DoxyCode}
+
+
+If there is a new issue arising from this test script itself, this is also valuable to create an \href{https://github.com/embroidermodder/embroidermodder/issues}{\texttt{ issue}} for.\hypertarget{md_README_autotoc_md6}{}\doxysection{Help Files}\label{md_README_autotoc_md6}
+A copy of the reference manual and user manual will be included in the source code in {\ttfamily docs/} folder. Currently these are works in progress and aren\textquotesingle{}t usable. Some notes that may be helpful are in markdown files in this directory.\hypertarget{md_README_autotoc_md7}{}\doxysection{Sample Files}\label{md_README_autotoc_md7}
+Various sample embroidery design files can be found in the {\ttfamily embroidermodder2/docs/samples} folder.\hypertarget{md_README_autotoc_md8}{}\doxysection{Install/\+Uninstall}\label{md_README_autotoc_md8}
+Embroidermodder 2 is self contained, so it does not need to be installed. If you move the {\ttfamily embroidermodder2} executable to any other folder it should run exactly the same. 

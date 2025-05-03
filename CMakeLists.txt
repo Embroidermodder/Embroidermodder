@@ -51,6 +51,7 @@ add_compile_options(
 endif()
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
+set(TEST ${CMAKE_SOURCE_DIR}/test)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(LIBEMB ${CMAKE_SOURCE_DIR}/extern/libembroidery/src)
 
@@ -79,6 +80,14 @@ qt_add_executable(embroidermodder2
 	${SRC}/xpm.c
 
 	${SRC}/core.h
+	${SRC}/qt.h
+)
+
+add_executable(test_translations
+	${SRC}/translations.c
+	${SRC}/core.h
+
+	${TEST}/translations.c
 )
 
 include_directories(

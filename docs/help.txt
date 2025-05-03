@@ -6,9 +6,9 @@ Overview
 If you're building the alpha of Embroidermodder in order to try it before the
 beta release use:
 
-    ./build.sh --windows
-    ./build.sh --macos
-    ./build.sh --gnu-linux
+    ./needle --windows
+    ./needle --macos
+    ./needle --gnu-linux
 
 depending on your system. Then run without installing using:
 
@@ -19,9 +19,9 @@ or, on Windows double-click the executable in the embroidermodder2 directory.
 If you're building as part of an effort to improve the software, build in the
 debug mode then read the gcov output:
 
-    ./build.sh --debug
+    ./needle --debug
     # do some user interactions
-    ./build.sh --gcov
+    ./needle --gcov
 
 Then read the .gcov files and debug.txt for information about how your changes
 have altered the performance of the software. Note that --debug works without

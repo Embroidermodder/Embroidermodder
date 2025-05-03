@@ -1,0 +1,10 @@
+@afourpaper
+
+@c @latex
+@c @afourlatex
+@c @endlatex
+
+@title Embroidermodder User Manual
+@author The Embroidermodder Team
+
+

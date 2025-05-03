@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "core.h"
+#include "qt.h"
 
 QPushButton* choose_button(QWidget *parent, int key);
 void create_preview_dialog(char *caption, char *dir, char *filter);
