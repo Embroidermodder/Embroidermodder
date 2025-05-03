@@ -284,26 +284,30 @@ do
  		code_style;;
 	--init)
 		create_init;;
-	--svg) embed_svgs;;
+	--svg)
+		embed_svgs;;
 	-G | --generator)
 		# GENERATOR="$OPTARG"
 		echo "This is currently broken: please change the script variable directly."
 		;;
-	-b | --build) run_cmake;;
-	-f | --full) full_build;;
-	-d | --debug) build_debug;;
-	--gnu-linux | --linux | --ubuntu | --ubuntu-latest | --package-linux)
- 		assemble_release "linux";;
-	--macos | --macos-latest | --package-macos)
- 		assemble_release "macos";;
-	--windows | --windows-latest | --package-windows)
- 		assemble_release "windows";;
+	-b | --build)
+		run_cmake;;
+	-f | --full)
+		full_build;;
+	-d | --debug)
+		build_debug;;
+	--gnu-linux | --linux | --ubuntu | --build-linux)
+		assemble_release "linux";;
+	--macos | --build-macos)
+		assemble_release "macos";;
+	--windows | --build-windows)
+		assemble_release "windows";;
 	-h | --help)
- 		cat docs/help.txt | less;;
+		cat docs/help.txt | less;;
 	-c | --clean)
- 		rm -fr ${BUILD_DIR};;
+		rm -fr ${BUILD_DIR};;
 	*)
- 		cat docs/short_help.txt;;
+		cat docs/short_help.txt;;
 	esac
 done
 

@@ -107,27 +107,6 @@ char defaultPrefix[200];
 char prefix[200];
 char curCmd[200];
 
-/* TODO: find a source for compiler flags for operating system detection so
- * we know this works across compilers.
- */
-#if defined(_WIN32)
-static const char *os = "Windows";
-#elif defined(__CYGWIN__)
-static const char *os = "Cygwin";
-#elif defined(__linux__)
-static const char *os = "Linux";
-#elif defined(__unix__)
-static const char *os = "Unix";
-#elif defined(__APPLE__) || defined(__MACH__)
-static const char *os = "Mac OS";
-#elif defined(__FREEBSD__)
-static const char *os = "FreeBSD";
-#elif defined(__ANDROID__)
-static const char *os = "Android";
-#else
-static const char *os = "Unknown Operating System";
-#endif
-
 /* ---------------------------- Paths ------------------------------ */
 
 const char *circle_origin_path = "M 0.0 1.0 " \
@@ -3550,7 +3529,27 @@ load_global_state(ScriptValue *root)
 {
     /* OS string loads seperately because it's determined by compiler flags
      * above.
+     *
+     * TODO: find a source for compiler flags for operating system detection so
+     * we know this works across compilers.
      */
+    #if defined(_WIN32)
+    char *os = "Windows";
+    #elif defined(__CYGWIN__)
+    char *os = "Cygwin";
+    #elif defined(__linux__)
+    char *os = "Linux";
+    #elif defined(__unix__)
+    char *os = "Unix";
+    #elif defined(__APPLE__) || defined(__MACH__)
+    char *os = "Mac OS";
+    #elif defined(__FREEBSD__)
+    char *os = "FreeBSD";
+    #elif defined(__ANDROID__)
+    char *os = "Android";
+    #else
+    char *os = "Unknown Operating System";
+    #endif
     emb_create_leaf(root, EMB_DATATYPE_STR, "os", os);
 
     toml_table_t *table = load_script();
