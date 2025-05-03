@@ -2,7 +2,6 @@
 
 BUILD_DIR="build"
 BUILD_TYPE="Release"
-WORKDIR="em2_workdir"
 GENERATOR="Unix Makefiles"
 SYSTEM="linux"
 MAJOR="2"
@@ -37,24 +36,6 @@ function create_init () {
 	echo "    END_SYMBOL" >> $outf
 	echo "};" >> $outf
 	echo "" >> $outf
-
-}
-
-function run_current_build () {
-
-	echo "Build current version to see if a build problem has been fixed in the current main."
- 	echo "To run this without first installing use:"
-  	echo "    $ wget https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/refs/heads/main/build.sh"
-  	echo "    $ bash build.sh --current"
-   	echo ""
-
-	rm -fr $WORKDIR
-	git clone https://github.com/embroidermodder/embroidermodder $WORKDIR
-	cd $WORKDIR
-	git submodule update --init
-	run_cmake
- 	cd $BUILD_DIR
-	./embroidermodder2
 
 }
 
@@ -209,18 +190,6 @@ EOF
 
 }
 
-function reduce_colors () {
-
-	for i in images/*.png
-	do
-		echo "Reducing colors of \"$i\"."
-	        convert $i +dither -colors 16 -depth 4 a.png
-        	mv a.png $i
-	done
-
-}
-
-
 function convert_to_xpm () {
 
 	# reduce_colors
@@ -274,8 +243,6 @@ fi
 for arg in $@
 do
 	case "$1" in
- 	--current)
-  		run_current_build;;
 	--convert-xpm)
  		convert_to_xpm;;
 	-a)
