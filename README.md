@@ -60,7 +60,7 @@ For most builds, it is as simple as opening a terminal in the
 project folder and typing:
 
 ```
-bash build.sh -b
+./needle -b
 ```
 
 ### Building Without Bash

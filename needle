@@ -1,4 +1,22 @@
 #!/bin/bash
+#
+# Embroidermodder 2.
+#
+# Copyright 2011-2024 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
+# -----------------------------------------------------------------------------------
+#
+# Built around the matrix strategy method:
+#     https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/running-variations-of-jobs-in-a-workflow
+#
+# On *nix we assume the FreeDesktop specification as described here:
+#	https://www.freedesktop.org/software/systemd/man/latest/file-hierarchy.html
+#
+# On other systems this is overridden when this script is installed and called.
 
 BUILD_DIR="build"
 BUILD_TYPE="Release"
@@ -8,7 +26,197 @@ MAJOR="2"
 MINOR="0"
 PATCH="0"
 TAG="alpha"
-VERSION="$MAJOR_$MINOR_$PATCH-$TAG"
+EMB_VERSION="$MAJOR_$MINOR_$PATCH-$TAG"
+BINDIR="$HOME/.local/bin"
+WORKDIR="$HOME/.local/share/embroidermodder2"
+NEEDLE_VERSION="1.0.0-alpha1"
+
+function help_msg () {
+
+	cat <<EOF
+needle
+
+This script is part of Embroidermodder 2 under the zlib license.
+
+Usage: ./needle [options]
+A script to build, debug and package Embroidermodder 2 and its documentation.
+
+This is the parent script that is responsible for running all builds, tests,
+coverage and static analysis. It produces a collection of JSON files representing.
+
+Options:
+  -a                      Produce an analysis report using clang's AST output
+                          and static analysis tools.
+     --convert-xpm        Convert the icons and images into xpm encoded C strings
+                          so they can be compiled into the executable.
+  -b,--build              Build embroidermodder without debug information.
+                          This matches the packaged version.
+  -c,--clean              Remove object files and other build cruft.
+  -d,--debug              Build embroidermodder with warnings as errors
+                          and run in a debugger.
+  -b,--dependencies-brew  Install dependencies for Mac OS.
+  -a,--dependencies-apt   Install dependencies for systems with the
+                          aptitude package manager.
+  -h,--help               Describe how to use this script with paging.
+     --windows-latest     Prepare GitHub artifact for Windows release.
+     --macos-latest       Prepare GitHub artifact for MacOS release.
+     --linux-latest       Prepare GitHub artifact for GNU/Linux release.
+  -G,--generator          Accepts argument to override the GENERATOR variable.
+  -s,--style              Fix basic style problems in the code.
+
+EOF
+
+}
+
+function update_needle () {
+
+	rm -f $BINDIR/needle
+        wget https://raw.githubusercontent.com/Embroidermodder/website/refs/heads/main/needle -O $BINDIR/needle
+	chmod +x $BINDIR/needle
+
+	echo "Installed new version of needle:"
+	needle --version
+
+}
+
+function badge () {
+
+	COLOR="red"
+	if [ "$2" = "passed" ]; then
+		COLOR="green"
+	elif [ "$2" = "MIT" ]; then
+		COLOR="yellow"
+	elif [ "$2" = "zlib" ]; then
+		COLOR="yellow"
+	elif [ "$1" = "version" ]; then
+		COLOR="purple"
+	fi
+
+	wget https://img.shields.io/badge/$1-$2-$COLOR -O docs/images/$3.svg
+
+}
+
+function build_test () {
+
+	BUILD_MESSAGE="failed"
+	TEST_MESSAGE="failed"
+	PROJECT="$1"
+	OS="$2"
+
+#	update_needle
+
+	FROM=`pwd`
+	mkdir -p $WORKDIR
+	cd $WORKDIR
+
+	git clone https://github.com/embroidermodder/$PROJECT
+	cd $PROJECT
+	git submodule update --init
+	mkdir -p build
+	cd build
+	cmake ..
+
+	cmake --build .
+	BUILD_RESULT=$?
+	if [ $BUILD_RESULT -eq 0 ]; then
+		BUILD_MESSAGE="passed"
+	fi
+
+	cmake --test .
+	TEST_RESULT=$?
+	if [ $TEST_RESULT -eq 0 ]; then
+		TEST_MESSAGE="passed"
+	fi
+
+	cd $FROM
+
+	badge "build--$OS" $BUILD_MESSAGE "build-$PROJECT-$OS"
+	badge "test--$OS" $TEST_MESSAGE "test-$PROJECT-$OS"
+
+}
+
+function install_current_em2 () {
+
+	build_test embroidermodder
+	cp embroidermodder/build/embroidermodder2 $BINDIR
+
+}
+
+function reduce_colors () {
+
+        for i in images/*.png
+        do
+                echo "Reducing colors of \"$i\"."
+                convert $i +dither -colors 16 -depth 4 a.png
+                mv a.png $i
+        done
+
+}
+
+function clean () {
+
+	rm -fr $WORKDIR/embroidermodder $WORKDIR/libembroidery $WORKDIR/embroideryMobile
+
+}
+
+function update () {
+
+	git config --global user.email github-actions@github.com
+	git config --global user.name github-actions
+	git add -A status/*
+	git commit -a -m "AUTOMATED: updating status"
+	git fetch
+	git merge
+	git push
+
+}
+
+function build_website () {
+
+	git clone https://github.com/embroidermodder/embroidermodder
+
+	python3 -m pip install --upgrade pip
+	python3 -m venv .
+
+	source bin/activate
+
+	./bin/pip install mkdocs
+	./bin/pip install mkdocs-bibtex
+	./bin/pip install mkdocs-with-pdf
+	./bin/pip install mkdocs-material
+	./bin/pip install mkdocs-table-reader-plugin
+	./bin/pip install markdown-grid-tables
+
+	rm -fr _site
+
+	./bin/mkdocs build
+
+	mv site _site
+
+}
+
+function linux_full () {
+
+	build_test libembroidery linux
+	build_test embroidermodder linux
+	build_test embroideryMobile android
+
+}
+
+function macos_full () {
+
+	build_test libembroidery macos
+	build_test embroidermodder macos
+	build_test embroideryMobile ios
+
+}
+
+function windows_full () {
+
+	build_test libembroidery windows
+	build_test embroidermodder windows
+
+}
 
 function run_cmake () {
 
@@ -237,12 +445,31 @@ function full_build () {
 }
 
 if [[ "$#" -eq 0 ]]; then
-	cat docs/short_help.txt
+	help_msg
+	exit
 fi
 
 for arg in $@
 do
 	case "$1" in
+	--website)
+		build_website;;
+#	--ubuntu-latest | --linux)
+#		linux_full;;
+#	--macos-latest)
+#		macos_full;;
+#	--windows-latest)
+#		windows_full;;
+#	--update)
+#		update;;
+#	--sharpen)
+#		update_needle;;
+#	--clean)
+#		clean;;
+	--version)
+		echo $NEEDLE_VERSION;;
+	--install-latest)
+		install_current_em2;;
 	--convert-xpm)
  		convert_to_xpm;;
 	-a)
@@ -274,7 +501,7 @@ do
 	-c | --clean)
 		rm -fr ${BUILD_DIR};;
 	*)
-		cat docs/short_help.txt;;
+		help_msg;;
 	esac
 done
 
