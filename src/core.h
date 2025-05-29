@@ -741,7 +741,10 @@ extern "C" {
 #define VIEW_PANNING_RT               17
 #define VIEW_PANNING_POINT            18
 #define VIEW_PANNING                  19
-#define N_VIEW_PROPS                  20
+#define VIEW_GRID_COLOR               20
+#define VIEW_RULER_COLOR              21
+#define VIEW_CROSSHAIR_COLOR          22
+#define N_VIEW_ATTR                   23
 
 /* Translations */
 #define UNFINISHED                     0
@@ -912,11 +915,10 @@ typedef struct UndoData_ {
 
 /* . */
 typedef struct DocumentData_ {
-    EmbPattern *pattern;
-
-    UndoData undo_stack[MAX_UNDO];
-
     int32_t id;
+    EmbPattern *pattern;
+    ScriptValue attributes[N_VIEW_ATTR];
+    UndoData undo_stack[MAX_UNDO];
 
     EmbIdList *selectedItems;
     EmbIdList *rubberRoomList;
@@ -968,8 +970,6 @@ typedef struct DocumentData_ {
     int panDistance;
     int panStartX;
     int panStartY;
-
-    bool properties[N_VIEW_PROPS];
 
     uint32_t rulerColor;
     bool rulerMetric;
@@ -1540,6 +1540,13 @@ void doc_add_to_rubber_room(int32_t doc, int32_t item);
 void doc_stop_gripping(int32_t, bool);
 void hide_selectbox(int32_t);
 
+ScriptValue *doc_get_attr(int32_t doc, uint32_t key);
+bool doc_get_bool(int32_t doc, uint32_t key);
+int32_t doc_get_int(int32_t doc, uint32_t key);
+void doc_set_attr(int32_t doc, uint32_t key, ScriptValue value);
+void doc_set_bool(int32_t doc, uint32_t key, bool value);
+void doc_set_int(int32_t doc, uint32_t key, int32_t value);
+
 void remove_paste_object_item_group(int32_t doc);
 void doc_empty_grid(int32_t doc);
 void doc_set_grid_color(int32_t doc, uint32_t color);
@@ -1559,7 +1566,6 @@ void doc_create_grid(int32_t doc, const char *gridType);
 void doc_copy_selected(int32_t doc);
 
 void doc_show_scroll_bars(int32_t doc, bool val);
-void doc_set_prop(int32_t doc, int key, bool value);
 void doc_set_corner_button(int32_t doc);
 void doc_set_cross_hair_color(int32_t doc, uint32_t color);
 void doc_set_cross_hair_size(int32_t doc, uint8_t percent);

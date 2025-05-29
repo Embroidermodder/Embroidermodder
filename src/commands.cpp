@@ -2186,7 +2186,8 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
         paintPen.setStyle(Qt::DashLine);
     }
     DocumentData *data = doc_data(core->doc);
-    if (data->properties[VIEW_LWT]) {
+    int doc = data->id;
+    if (doc_get_bool(doc, VIEW_LWT)) {
         paintPen = lwtPen;
     }
     painter->setPen(paintPen);
@@ -2224,7 +2225,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
             painter->drawLine(obj_line(core->objID));
         }
 
-        if (data->properties[VIEW_LWT] && data->properties[VIEW_REAL]) {
+        if (doc_get_bool(doc, VIEW_LWT) && doc_get_bool(doc, VIEW_REAL)) {
             obj_real_render(this, painter, path());
         }
         break;
@@ -2250,7 +2251,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
     case EMB_POLYLINE: {
         painter->drawPath(normalPath);
 
-        if (data->properties[VIEW_LWT] && data->properties[VIEW_REAL]) {
+        if (doc_get_bool(doc, VIEW_LWT) && doc_get_bool(doc, VIEW_REAL)) {
             obj_real_render(this, painter, normalPath);
         }
         break;
@@ -2888,7 +2889,7 @@ Document::drawBackground(QPainter* painter, const QRectF& rect)
     DocumentData *data = doc_data(doc);
     painter->fillRect(rect, backgroundBrush());
 
-    if (data->properties[VIEW_GRID]
+    if (doc_get_bool(doc, VIEW_GRID)
         && rect.intersects(documents[doc]->gridPath.controlPointRect())) {
         QPen gridPen(QColor(data->gridColor));
         gridPen.setJoinStyle(Qt::MiterJoin);
@@ -3110,7 +3111,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
     /* Draw the closest qsnap point */
 
     /* TODO: && findClosestSnapPoint == true */
-    if (!data->properties[VIEW_SELECTING]) {
+    if (!doc_get_bool(doc, VIEW_SELECTING)) {
         QPen qsnapPen(data->qsnapLocatorColor);
         qsnapPen.setWidth(2);
         qsnapPen.setJoinStyle(Qt::MiterJoin);
@@ -3147,12 +3148,12 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 
     /* Draw horizontal and vertical rulers */
 
-    if (data->properties[VIEW_RULER]) {
+    if (doc_get_bool(doc, VIEW_RULER)) {
         draw_rulers(painter, rect);
     }
 
     /* Draw the crosshair */
-    if (!data->properties[VIEW_SELECTING]) {
+    if (!doc_get_bool(doc, VIEW_SELECTING)) {
         EmbVector crosshair[6];
         /* painter->setBrush(Qt::NoBrush); */
         QPen crosshairPen(data->crosshairColor);
@@ -3579,7 +3580,7 @@ Document::mousePressEvent(QMouseEvent* event)
         QList<QGraphicsItem*> pickList = documents[doc]->gscene->items(pickRect);
 
         bool itemsInPickBox = pickList.size();
-        if (itemsInPickBox && !data->properties[VIEW_SELECTING] && !data->properties[VIEW_GRIPPING]) {
+        if (itemsInPickBox && !doc_get_bool(doc, VIEW_SELECTING) && !doc_get_bool(doc, VIEW_GRIPPING)) {
             bool itemsAlreadySelected = pickList.at(0)->isSelected();
             if (!itemsAlreadySelected) {
                 pickList.at(0)->setSelected(true);
@@ -3608,17 +3609,17 @@ Document::mousePressEvent(QMouseEvent* event)
                 }
                 else {
                     /* start moving */
-                    doc_set_prop(doc, VIEW_MOVING, true);
+                    doc_set_bool(doc, VIEW_MOVING, true);
                     data->pressPoint = to_emb_vector(event->pos());
                     data->scenePressPoint = doc_map_to_scene(doc, data->pressPoint);
                 }
             }
         }
-        else if (data->properties[VIEW_GRIPPING]) {
+        else if (doc_get_bool(doc, VIEW_GRIPPING)) {
             doc_stop_gripping(doc, true);
         }
-        else if (!data->properties[VIEW_SELECTING]) {
-            doc_set_prop(doc, VIEW_SELECTING, true);
+        else if (!doc_get_bool(doc, VIEW_SELECTING)) {
+            doc_set_bool(doc, VIEW_SELECTING, true);
             data->pressPoint = to_emb_vector(event->pos());
             data->scenePressPoint = doc_map_to_scene(doc, data->pressPoint);
 
@@ -3630,7 +3631,7 @@ Document::mousePressEvent(QMouseEvent* event)
             documents[doc]->selectBox->show();
         }
         else {
-            data->properties[VIEW_SELECTING] = false;
+            doc_set_bool(doc, VIEW_SELECTING, false);
             documents[doc]->selectBox->hide();
             data->releasePoint = to_emb_vector(event->pos());
             data->sceneReleasePoint = doc_map_to_scene(doc, data->releasePoint);
@@ -3638,7 +3639,7 @@ Document::mousePressEvent(QMouseEvent* event)
             set_selection(doc);
         }
 
-        if (data->properties[VIEW_PASTING]) {
+        if (doc_get_bool(doc, VIEW_PASTING)) {
             QList<QGraphicsItem*> itemList = documents[doc]->pasteObjectItemGroup->childItems();
             documents[doc]->gscene->destroyItemGroup(documents[doc]->pasteObjectItemGroup);
             foreach(QGraphicsItem* item, itemList) {
@@ -3658,10 +3659,10 @@ Document::mousePressEvent(QMouseEvent* event)
             }
             documents[doc]->undoStack->endMacro();
 
-            data->properties[VIEW_PASTING] = false;
-            data->properties[VIEW_SELECTING] = false;
+            doc_set_bool(doc, VIEW_PASTING, false);
+            doc_set_bool(doc, VIEW_SELECTING, false);
         }
-        if (data->properties[VIEW_ZOOMING]) {
+        if (doc_get_bool(doc, VIEW_ZOOMING)) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
             doc_clear_selection(doc);
         }
@@ -3685,7 +3686,7 @@ doc_pan_start(int32_t doc, const QPoint& point)
 
     doc_align_scene_point_with_view_point(doc, doc_map_to_scene(doc, to_emb_vector(point)), to_emb_vector(point));
 
-    doc_set_prop(doc, VIEW_PANNING, true);
+    doc_set_bool(doc, VIEW_PANNING, true);
     data->panStartX = point.x();
     data->panStartY = point.y();
 }
@@ -3739,12 +3740,12 @@ Document::mouseMoveEvent(QMouseEvent* event)
     data->sceneMovePoint = doc_map_to_scene(doc, data->movePoint);
 
     if (cmdActive) {
-        if (data->properties[VIEW_RAPID_MOVING]) {
+        if (doc_get_bool(doc, VIEW_RAPID_MOVING)) {
             run_command_move((char*)qPrintable(curCmd), data->sceneMovePoint.x,
                 data->sceneMovePoint.y);
         }
     }
-    if (data->properties[VIEW_PREVIEWING]) {
+    if (doc_get_bool(doc, VIEW_PREVIEWING)) {
     #if 0
     //FIXME:
         if (data->previewMode == PREVIEW_MOVE) {
@@ -3809,18 +3810,19 @@ Document::mouseMoveEvent(QMouseEvent* event)
         }
     #endif
     }
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         EmbVector p = emb_vector_subtract(data->sceneMousePoint,
             data->pasteDelta);
         documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
     }
-    if (data->properties[VIEW_MOVING]) {
+    if (doc_get_bool(doc, VIEW_MOVING)) {
         /* Ensure that the preview is only shown if the mouse has moved. */
-        if (!data->properties[VIEW_PREVIEWING])
+        if (!doc_get_bool(doc, VIEW_PREVIEWING)) {
             doc_preview_on(doc, PREVIEW_CLONE_SELECTED, PREVIEW_MOVE,
                 data->scenePressPoint.x, data->scenePressPoint.y, 0);
+        }
     }
-    if (data->properties[VIEW_SELECTING]) {
+    if (doc_get_bool(doc, VIEW_SELECTING)) {
         if ((data->sceneMovePoint.x >= data->scenePressPoint.x)
             && (data->sceneMovePoint.y >= data->scenePressPoint.y)) {
             documents[doc]->selectBox->setDirection(1);
@@ -3835,7 +3837,7 @@ Document::mouseMoveEvent(QMouseEvent* event)
         // FIXME: .normalized();
         event->accept();
     }
-    if (data->properties[VIEW_PANNING]) {
+    if (doc_get_bool(doc, VIEW_PANNING)) {
         documents[doc]->horizontalScrollBar()->setValue(
             documents[doc]->horizontalScrollBar()->value() - (event->position().x() - data->panStartX));
         documents[doc]->verticalScrollBar()->setValue(
@@ -3850,9 +3852,10 @@ Document::mouseMoveEvent(QMouseEvent* event)
 void
 Document::mouseReleaseEvent(QMouseEvent* event)
 {
+    int32_t doc = data->id;
     doc_update_mouse_coords(data->id, event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
-        if (data->properties[VIEW_MOVING]) {
+        if (doc_get_bool(doc, VIEW_MOVING)) {
             doc_preview_off(data->id);
             EmbVector delta = emb_vector_subtract(data->sceneMousePoint,
                 data->scenePressPoint);
@@ -3860,12 +3863,12 @@ Document::mouseReleaseEvent(QMouseEvent* event)
             if (emb_vector_distance(delta, emb_vector(0.0, 0.0)) >= 1) {
                 doc_move_selected(data->id, delta);
             }
-            data->properties[VIEW_MOVING] = false;
+            doc_set_bool(doc, VIEW_MOVING, false);
         }
         event->accept();
     }
     if (event->button() == Qt::MiddleButton) {
-        data->properties[VIEW_PANNING] = false;
+        doc_set_bool(doc, VIEW_PANNING, false);
         /* The Undo command will record the spot where the pan completed. */
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", data->id, 0);
         documents[data->id]->undoStack->push(cmd);
@@ -3932,12 +3935,12 @@ doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
     doc_align_scene_point_with_view_point(doc, pointBeforeScale, mousePoint);
 
     doc_update_mouse_coords(doc, mousePoint.x, mousePoint.y);
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         EmbVector p = emb_vector_subtract(data->sceneMousePoint,
             data->pasteDelta);
         documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
     }
-    if (data->properties[VIEW_SELECTING]) {
+    if (doc_get_bool(doc, VIEW_SELECTING)) {
         QPointF v1 = documents[doc]->mapFromScene(to_qpointf(data->scenePressPoint));
         QPointF v2 = to_qpointf(mousePoint);
         QRectF r(v1, v2);
@@ -3949,6 +3952,7 @@ doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
 void
 Document::contextMenuEvent(QContextMenuEvent* event)
 {
+    int doc = data->id;
     QMenu menu;
     bool selectionEmpty = (data->selectedItems->count == 0);
 
@@ -3960,7 +3964,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         }
     }
 
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         return;
     }
     if (!cmdActive) {
@@ -3969,7 +3973,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
         QObject::connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if (data->properties[VIEW_ZOOMING]) {
+    if (doc_get_bool(doc, VIEW_ZOOMING)) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         QObject::connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escape_pressed()));
@@ -4038,9 +4042,9 @@ doc_start_gripping(int32_t doc, Object* obj)
     if (!obj) {
         return;
     }
-    DocumentData *data = doc_data(doc);
-    data->properties[VIEW_GRIPPING] = true;
+    doc_set_bool(doc, VIEW_GRIPPING, true);
     documents[doc]->gripBaseObj = obj;
+    DocumentData *data = doc_data(doc);
     data->sceneGripPoint = mouse_snap_point(documents[doc]->gripBaseObj->core->objID, data->sceneMousePoint);
     obj_set_rubber_point(doc, "GRIP_POINT", data->sceneGripPoint);
     obj_set_rubber_mode(doc, RUBBER_GRIP);
@@ -4051,7 +4055,7 @@ void
 doc_stop_gripping(int32_t doc, bool accept)
 {
     DocumentData *data = doc_data(doc);
-    data->properties[VIEW_GRIPPING] = false;
+    doc_set_bool(doc, VIEW_GRIPPING, false);
     if (documents[doc]->gripBaseObj) {
         obj_vulcanize(documents[doc]->gripBaseObj->core->objID);
         if (accept) {
@@ -4133,7 +4137,7 @@ void
 doc_paste(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         documents[doc]->gscene->removeItem(documents[doc]->pasteObjectItemGroup);
         delete documents[doc]->pasteObjectItemGroup;
     }
@@ -4142,7 +4146,7 @@ doc_paste(int32_t doc)
     data->pasteDelta = to_emb_vector(documents[doc]->pasteObjectItemGroup->boundingRect().bottomLeft());
     EmbVector p = emb_vector_subtract(data->sceneMousePoint, data->pasteDelta);
     documents[doc]->pasteObjectItemGroup->setPos(to_qpointf(p));
-    data->properties[VIEW_PASTING] = true;
+    doc_set_bool(doc, VIEW_PASTING, true);
 }
 
 /* . */
@@ -4336,13 +4340,13 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         if (doc >= 0) {
             DocumentData *data = doc_data(doc);
             QAction* enable_realAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
-            enable_realAction->setEnabled(!data->properties[VIEW_REAL]);
+            enable_realAction->setEnabled(!doc_get_bool(doc, VIEW_REAL));
             QObject::connect(enable_realAction, SIGNAL(triggered), _main,
                 SLOT([=](void) { statusbar_toggle("REAL", true); }));
             menu.addAction(enable_realAction);
 
             QAction* disable_realAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
-            disable_realAction->setEnabled(data->properties[VIEW_REAL]);
+            disable_realAction->setEnabled(doc_get_bool(doc, VIEW_REAL));
             QObject::connect(disable_realAction, SIGNAL(triggered), _main,
                 SLOT([=](void) { statusbar_toggle("REAL", false); }));
             menu.addAction(disable_realAction);
@@ -5063,14 +5067,14 @@ MdiWindow::onWindowActivated()
     // FIXME: documents[doc]->undoStack->setActive(true);
     DocumentData *data = doc_data(doc_index);
     set_undo_clean_icon(data->fileWasLoaded);
-    statusBarButtons[SB_SNAP]->setChecked(data->properties[VIEW_SNAP]);
-    statusBarButtons[SB_GRID]->setChecked(data->properties[VIEW_GRID]);
-    statusBarButtons[SB_RULER]->setChecked(data->properties[VIEW_RULER]);
-    statusBarButtons[SB_ORTHO]->setChecked(data->properties[VIEW_ORTHO]);
-    statusBarButtons[SB_POLAR]->setChecked(data->properties[VIEW_POLAR]);
-    statusBarButtons[SB_QSNAP]->setChecked(data->properties[VIEW_QSNAP]);
-    statusBarButtons[SB_QTRACK]->setChecked(data->properties[VIEW_QTRACK]);
-    statusBarButtons[SB_LWT]->setChecked(data->properties[VIEW_LWT]);
+    statusBarButtons[SB_SNAP]->setChecked(doc_get_bool(doc_index, VIEW_SNAP));
+    statusBarButtons[SB_GRID]->setChecked(doc_get_bool(doc_index, VIEW_GRID));
+    statusBarButtons[SB_RULER]->setChecked(doc_get_bool(doc_index, VIEW_RULER));
+    statusBarButtons[SB_ORTHO]->setChecked(doc_get_bool(doc_index, VIEW_ORTHO));
+    statusBarButtons[SB_POLAR]->setChecked(doc_get_bool(doc_index, VIEW_POLAR));
+    statusBarButtons[SB_QSNAP]->setChecked(doc_get_bool(doc_index, VIEW_QSNAP));
+    statusBarButtons[SB_QTRACK]->setChecked(doc_get_bool(doc_index, VIEW_QTRACK));
+    statusBarButtons[SB_LWT]->setChecked(doc_get_bool(doc_index, VIEW_LWT));
     setHistory(promptHistoryData);
 }
 

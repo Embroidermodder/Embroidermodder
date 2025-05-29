@@ -2103,18 +2103,18 @@ doc_init(int32_t doc)
 
     data->panDistance = 10; /* TODO: should there be a setting for this??? */
 
-    data->properties[VIEW_GRIPPING] = false;
-    data->properties[VIEW_RAPID_MOVING] = false;
+    data->attributes[VIEW_GRIPPING] = script_bool(false);
+    data->attributes[VIEW_RAPID_MOVING] = script_bool(false);
     data->previewMode = PREVIEW_NULL;
     data->previewData = 0;
-    data->properties[VIEW_PREVIEWING] = false;
-    data->properties[VIEW_PASTING] = false;
-    data->properties[VIEW_MOVING] = false;
-    data->properties[VIEW_SELECTING] = false;
-    data->properties[VIEW_ZOOMING] = false;
-    data->properties[VIEW_PANNING_RT] = false;
-    data->properties[VIEW_PANNING_POINT] = false;
-    data->properties[VIEW_PANNING] = false;
+    data->attributes[VIEW_PREVIEWING] = script_bool(false);
+    data->attributes[VIEW_PASTING] = script_bool(false);
+    data->attributes[VIEW_MOVING] = script_bool(false);
+    data->attributes[VIEW_SELECTING] = script_bool(false);
+    data->attributes[VIEW_ZOOMING] = script_bool(false);
+    data->attributes[VIEW_PANNING_RT] = script_bool(false);
+    data->attributes[VIEW_PANNING_POINT] = script_bool(false);
+    data->attributes[VIEW_PANNING] = script_bool(false);
     data->qSnapActive = false;
     data->qSnapToggle = false;
 
@@ -2127,12 +2127,12 @@ doc_init(int32_t doc)
     data->pickBoxSize = get_int(SELECTION_PICKBOX_SIZE);
 
     /* TODO: set up config */
-    data->properties[VIEW_RULER] = true;
-    data->properties[VIEW_GRID] = true;
-    data->properties[VIEW_ORTHO] = false;
-    data->properties[VIEW_POLAR] = false;
-    data->properties[VIEW_LWT] = false;
-    data->properties[VIEW_RULER] = true;
+    data->attributes[VIEW_RULER] = script_bool(true);
+    data->attributes[VIEW_GRID] = script_bool(true);
+    data->attributes[VIEW_ORTHO] = script_bool(false);
+    data->attributes[VIEW_POLAR] = script_bool(false);
+    data->attributes[VIEW_LWT] = script_bool(false);
+    data->attributes[VIEW_RULER] = script_bool(true);
 
     /* Randomize the hot grip location initially so it's not located at (0,0). */
     srand(time(NULL));
@@ -2189,8 +2189,8 @@ void
 doc_zoom_window(int32_t doc)
 {
     DocumentData *data = doc_data(doc);
-    data->properties[VIEW_ZOOMING] = true;
-    data->properties[VIEW_SELECTING] = false;
+    data->attributes[VIEW_ZOOMING] = script_bool(true);
+    data->attributes[VIEW_SELECTING] = script_bool(false);
     doc_clear_selection(doc);
 }
 
@@ -2222,13 +2222,13 @@ doc_preview_on(int32_t doc, int clone, int mode, EmbReal x, EmbReal y, EmbReal d
         data->previewPoint.x = x;
         data->previewPoint.y = y; /* NOTE: Move: basePt; Rotate: basePt; Scale: basePt; */
         data->previewData = data_;           /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
-        data->properties[VIEW_PREVIEWING] = true;
+        data->attributes[VIEW_PREVIEWING] = script_bool(true);
     }
     else {
         data->previewMode = PREVIEW_NULL;
         data->previewPoint = emb_vector(0.0, 0.0);
         data->previewData = 0;
-        data->properties[VIEW_PREVIEWING] = false;
+        data->attributes[VIEW_PREVIEWING] = script_bool(false);
     }
 
     doc_update(doc);
@@ -2248,7 +2248,7 @@ doc_preview_off(int32_t doc)
         data->previewObjectList->count = 0;
     }
 
-    data->properties[VIEW_PREVIEWING] = false;
+    data->attributes[VIEW_PREVIEWING] = script_bool(false);
 
     doc_update(doc);
 }
@@ -2288,26 +2288,24 @@ doc_cut(int32_t doc)
 void
 doc_create_grid(int32_t doc, const char *gridType)
 {
-    DocumentData *data = doc_data(doc);
     if (!strcmp(gridType, "Rectangular")) {
         doc_create_grid_rect(doc);
-        data->properties[VIEW_GRID] = true;
+        doc_set_bool(doc, VIEW_GRID, true);
     }
     else if (!strcmp(gridType, "Circular")) {
         doc_create_grid_polar(doc);
-        data->properties[VIEW_GRID] = true;
+        doc_set_bool(doc, VIEW_GRID, true);
     }
     else if (!strcmp(gridType, "Isometric")) {
         doc_create_grid_iso(doc);
-        data->properties[VIEW_GRID] = true;
+        doc_set_bool(doc, VIEW_GRID, true);
     }
     else {
         doc_empty_grid(doc);
-        data->properties[VIEW_GRID] = false;
+        doc_set_bool(doc, VIEW_GRID, false);
     }
 
     doc_create_origin(doc);
-
     doc_update(doc);
 }
 
@@ -2476,14 +2474,6 @@ doc_allow_zoom_out(int32_t doc)
 }
 
 /* . */
-void
-doc_set_prop(int32_t doc, int key, bool value)
-{
-    DocumentData *data = doc_data(doc);
-    data->properties[key] = value;
-}
-
-/* . */
 bool
 doc_allow_rubber(int32_t doc)
 {
@@ -2492,31 +2482,80 @@ doc_allow_rubber(int32_t doc)
     return false;
 }
 
+/*! \brief Helper function to gain access to the document level attributes. */
+ScriptValue *
+doc_get_attr(int32_t doc, uint32_t key)
+{
+    DocumentData *data = doc_data(doc);
+    return data->attributes + key;
+}
+
+/*! \brief Helper function to gain access to the document level boolean
+ *         attribute.
+ */
+bool
+doc_get_bool(int32_t doc, uint32_t key)
+{
+    DocumentData *data = doc_data(doc);
+    return data->attributes[key].b;
+}
+
+/*! \brief Helper function to gain access to the document level integer
+ *         attribute.
+ */
+int32_t
+doc_get_int(int32_t doc, uint32_t key)
+{
+    DocumentData *data = doc_data(doc);
+    return data->attributes[key].i;
+}
+
+/*! \brief Helper function to set a document level attribute. */
+void
+doc_set_attr(int32_t doc, uint32_t key, ScriptValue value)
+{
+    DocumentData *data = doc_data(doc);
+    memcpy(data->attributes + key, &value, sizeof(ScriptValue));
+    doc_update(doc);
+}
+
+/*! \brief Helper function to set a document-level boolean attribute. */
+void
+doc_set_bool(int32_t doc, uint32_t key, bool value)
+{
+    DocumentData *data = doc_data(doc);
+    data->attributes[key].b = value;
+    doc_update(doc);
+}
+
+/*! \brief Helper function to set a document-level integer attribute. */
+void
+doc_set_int(int32_t doc, uint32_t key, int32_t value)
+{
+    DocumentData *data = doc_data(doc);
+    data->attributes[key].i = value;
+    doc_update(doc);
+}
+
 /* . */
 void
 doc_set_grid_color(int32_t doc, uint32_t color)
 {
-    DocumentData *data = doc_data(doc);
-    data->gridColor = color;
-    doc_update(doc);
+    doc_set_int(doc, VIEW_GRID_COLOR, (int32_t)color);
 }
 
 /* . */
 void
 doc_set_ruler_color(int32_t doc, uint32_t color)
 {
-    DocumentData *data = doc_data(doc);
-    data->rulerColor = color;
-    doc_update(doc);
+    doc_set_int(doc, VIEW_RULER_COLOR, (int32_t)color);
 }
 
 /* . */
 void
 doc_set_cross_hair_color(int32_t doc, uint32_t color)
 {
-    DocumentData *data = doc_data(doc);
-    data->crosshairColor = color;
-    doc_update(doc);
+    doc_set_int(doc, VIEW_CROSSHAIR_COLOR, (int32_t)color);
 }
 
 /* . */
@@ -2524,7 +2563,6 @@ void
 doc_toggle(int32_t doc, const char *key, bool on)
 {
     debug_message("doc_toggle(%d, %s, %d)", doc, key, on);
-    DocumentData *data = doc_data(doc);
     wait_cursor();
 
     if (!strcmp(key, "GRID")) {
@@ -2536,35 +2574,36 @@ doc_toggle(int32_t doc, const char *key, bool on)
         }
     }
     if (!strcmp(key, "RULER")) {
-        data->properties[VIEW_RULER] = on;
+        DocumentData *data = doc_data(doc);
+        doc_set_bool(doc, VIEW_RULER, on);
         data->rulerMetric = get_bool(RULER_METRIC);
         data->rulerColor = get_int(RULER_COLOR);
         data->rulerPixelSize = get_int(RULER_PIXEL_SIZE);
     }
     if (!strcmp(key, "SNAP")) {    
         /* TODO: finish this */
-        data->properties[VIEW_SNAP] = on;
+        doc_set_bool(doc, VIEW_SNAP, on);
     }
     if (!strcmp(key, "POLAR")) {    
         /* TODO: finish this */
-        data->properties[VIEW_POLAR] = on;
+        doc_set_bool(doc, VIEW_POLAR, on);
     }
     if (!strcmp(key, "ORTHO")) {
         /* TODO: finish this */
-        data->properties[VIEW_ORTHO] = on;
+        doc_set_bool(doc, VIEW_ORTHO, on);
     }
     if (!strcmp(key, "QTRACK")) {
         /* TODO: finish this */
-        data->properties[VIEW_QTRACK] = on;
+        doc_set_bool(doc, VIEW_QTRACK, on);
     }
     if (!strcmp(key, "LWT")) {
-        data->properties[VIEW_LWT] = on;
+        doc_set_bool(doc, VIEW_LWT, on);
     }
     if (!strcmp(key, "REAL")) {
-        data->properties[VIEW_REAL] = on;
+        doc_set_bool(doc, VIEW_REAL, on);
     }
     if (!strcmp(key, "QSNAP")) {
-        data->properties[VIEW_QSNAP] = on;
+        doc_set_bool(doc, VIEW_QSNAP, on);
     }
 
     doc_update(doc);
@@ -2575,15 +2614,14 @@ doc_toggle(int32_t doc, const char *key, bool on)
 void
 doc_stop(int32_t doc)
 {
-    DocumentData *data = doc_data(doc);
-    if (data->properties[VIEW_PASTING]) {
+    if (doc_get_bool(doc, VIEW_PASTING)) {
         remove_paste_object_item_group(doc);
     }
-    data->properties[VIEW_PASTING] = false;
-    data->properties[VIEW_ZOOMING] = false;
-    data->properties[VIEW_SELECTING] = false;
+    doc_set_bool(doc, VIEW_PASTING, false);
+    doc_set_bool(doc, VIEW_ZOOMING, false);
+    doc_set_bool(doc, VIEW_SELECTING, false);
     hide_selectbox(doc);
-    if (data->properties[VIEW_GRIPPING]) {
+    if (doc_get_bool(doc, VIEW_GRIPPING)) {
         doc_stop_gripping(doc, false);
     }
     else {

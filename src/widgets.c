@@ -359,7 +359,7 @@ ScriptValue
 panrealtime_command(ScriptEnv *context)
 {
     int doc_index = active_document();
-    doc_set_prop(doc_index, VIEW_PANNING_RT, true);
+    doc_set_bool(doc_index, VIEW_PANNING_RT, true);
     return script_true;
 }
 
@@ -368,7 +368,7 @@ ScriptValue
 panpoint_command(ScriptEnv *context)
 {
     int doc_index = active_document();
-    doc_set_prop(doc_index, VIEW_PANNING_POINT, true);
+    doc_set_bool(doc_index, VIEW_PANNING_POINT, true);
     return script_true;
 }
 
@@ -805,7 +805,7 @@ toggle_command(int mode)
         return script_false;
     }
     DocumentData *data = doc_data(doc);
-    data->properties[mode] = !data->properties[mode];
+    data->attributes[mode].b = !data->attributes[mode].b;
     return script_true;
 }
 
@@ -1996,7 +1996,7 @@ end_command(void)
     if (doc_index >= 0) {
         doc_clear_rubber_room(doc_index);
         doc_preview_off(doc_index);
-        doc_set_prop(doc_index, VIEW_RAPID_MOVING, false);
+        doc_set_bool(doc_index, VIEW_RAPID_MOVING, false);
     }
     prompt_end_command();
 }
@@ -2121,7 +2121,7 @@ disable_command(ScriptEnv *context)
     /* FIXME */
     int doc_index = 0;
     if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
-        doc_set_prop(doc_index, VIEW_RAPID_MOVING, false);
+        doc_set_bool(doc_index, VIEW_RAPID_MOVING, false);
     }
     if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
         disable_rapid_fire();
@@ -2136,7 +2136,7 @@ enable_command(ScriptEnv *context)
     /* FIXME */
     int doc_index = 0;
     if (!strcmp(STR(0), "MOVERAPIDFIRE")) {
-        doc_set_prop(doc_index, VIEW_RAPID_MOVING, true);
+        doc_set_bool(doc_index, VIEW_RAPID_MOVING, true);
     }
     if (!strcmp(STR(0), "PROMPTRAPIDFIRE")) {
         enable_rapid_fire();
