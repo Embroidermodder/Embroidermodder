@@ -14,7 +14,29 @@
 
 #include <string.h>
 
-extern const char *init_script[];
+/* OS string loads seperately because it's determined by compiler flags
+ * above.
+ *
+ * TODO: find a source for compiler flags for operating system detection so
+ * we know this works across compilers.
+ */
+#if defined(_WIN32)
+char *os = "Windows";
+#elif defined(__CYGWIN__)
+char *os = "Cygwin";
+#elif defined(__linux__)
+char *os = "Linux";
+#elif defined(__unix__)
+char *os = "Unix";
+#elif defined(__APPLE__) || defined(__MACH__)
+char *os = "Mac OS";
+#elif defined(__FREEBSD__)
+char *os = "FreeBSD";
+#elif defined(__ANDROID__)
+char *os = "Android";
+#else
+char *os = "Unknown Operating System";
+#endif
 
 ScriptValue *root;
 ScriptEnv *global;
@@ -3481,27 +3503,71 @@ emb_get_str(ScriptValue *node, const char *key)
     return emb_get_var(node, key)->s;
 }
 
+/* . */
+size_t
+load_file_to_buffer(char *fname, char *buffer)
+{
+    FILE *f = fopen(fname, "r");
+    if (!f) {
+        printf("ERROR: Failed to open configuration file \"%s\".\n", fname);
+        return 0;        
+    }
+    fseek(f, 0, SEEK_END);
+    size_t size = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    size_t bytes_read = fread(buffer, 1, size, f);
+    fclose(f);
+    if (bytes_read != size) {
+        printf("ERROR: Failed to read configuration file \"%s\".\n", fname);
+        return 0;
+    }
+    return 1;
+}
+
 /* Loads init_script 1 Mb buffer to chain together all of the
  * strings in the init_script string table.
+ *
+ * TODO: could reuse buffer safely between script loads.
  */
 toml_table_t *
-load_script(void)
+load_script(char *asset_dir, char *fname)
 {
+    char full_fname[400];
+    snprintf(full_fname, 400, "%s/%s", asset_dir, fname);
     char *buffer = malloc(1000*1000);
     char error_buffer[200];
     buffer[0] = 0;
-    for (int i=0; i<10000; i++) {
-        if (!strncmp(init_script[i], END_SYMBOL, MAX_STRING_LENGTH)) {
-            break;
-        }
-        strcat(buffer, init_script[i]);
+
+    if (!load_file_to_buffer(full_fname, buffer)) {
+        free(buffer);
+        return 0;
     }
+
     toml_table_t *table = toml_parse(buffer, error_buffer, 200);
     if (!table) {
         printf("ERROR: %s\n", error_buffer);
     }
     free(buffer);
-    return table;
+    if (!table) {
+        toml_free(table);
+        return 0;
+    }
+    for (int i=0; ; i++) {
+        const char *key = toml_key_in(table, i);
+        if (!key) {
+            break;
+        }
+        toml_datum_t s = toml_string_in(table, key);
+        if (s.ok) {
+            emb_create_leaf(root, EMB_DATATYPE_STR, key, s.u.s);
+        }
+        else {
+            printf("ERROR: failed to load %s\n", key);
+        }
+        free(s.u.s);
+    }
+    toml_free(table);
+    return 1;
 }
 
 /* Load our basic tree structure of data for all of our data structures above.
@@ -3524,52 +3590,26 @@ load_script(void)
  *
  * To get the length of an array we .
  */
-void
-load_global_state(ScriptValue *root)
+int
+load_global_state(ScriptValue *root, char *asset_dir)
 {
-    /* OS string loads seperately because it's determined by compiler flags
-     * above.
-     *
-     * TODO: find a source for compiler flags for operating system detection so
-     * we know this works across compilers.
-     */
-    #if defined(_WIN32)
-    char *os = "Windows";
-    #elif defined(__CYGWIN__)
-    char *os = "Cygwin";
-    #elif defined(__linux__)
-    char *os = "Linux";
-    #elif defined(__unix__)
-    char *os = "Unix";
-    #elif defined(__APPLE__) || defined(__MACH__)
-    char *os = "Mac OS";
-    #elif defined(__FREEBSD__)
-    char *os = "FreeBSD";
-    #elif defined(__ANDROID__)
-    char *os = "Android";
-    #else
-    char *os = "Unknown Operating System";
-    #endif
+    int error;
     emb_create_leaf(root, EMB_DATATYPE_STR, "os", os);
+    emb_create_leaf(root, EMB_DATATYPE_STR, "asset_dir", asset_dir);
 
-    toml_table_t *table = load_script();
-    if (!table) {
-        toml_free(table);
+    char *manifest[] = {
+        "data/versions.toml",
+        "data/paths.toml",
+        "END"
+    };
+
+    for (int i=0; strncmp(manifest, "END", 200); i++) {
+        printf("Loading \"%s\"...\n", manifest[i]);
+        error = load_script(asset_dir, manifest[i]);
+        if (error) {
+            return error;
+        }
     }
-    for (int i=0; ; i++) {
-        const char *key = toml_key_in(table, i);
-        if (!key) {
-            break;
-        }
-        toml_datum_t s = toml_string_in(table, key);
-        if (s.ok) {
-            emb_create_leaf(root, EMB_DATATYPE_STR, key, s.u.s);
-        }
-        else {
-            printf("ERROR: failed to load %s\n", key);
-        }
-        free(s.u.s);
-    }
-    toml_free(table);
+    return 0;
 }
 

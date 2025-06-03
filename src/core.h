@@ -1766,7 +1766,7 @@ char *qcolor_from_uint32_t(uint32_t color);
 ScriptValue allow_rubber_command(ScriptEnv *context);
 
 /* ---------------------- Script Environment management -------------------- */
-void load_global_state(ScriptValue *root);
+int load_global_state(ScriptValue *root, char *asset_dir);
 
 ScriptValue *emb_create_root(void);
 int emb_create_leaf(ScriptValue *branch, int type, char *label, char *data);

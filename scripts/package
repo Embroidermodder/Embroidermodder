@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# This file is part of Embroidermodder
+# Copyright 2011-2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on contributing to Embroidermodder.
+#
+
+BUILD_DIR="build_package"
+PACKAGE_DIR="em2"
+VERSION="2.0.0-alpha"
+
+# TODO check if the user has run this from the top of the source tree.
+if [[ $# < 1 ]]; then
+	echo "Usage: ./scripts/package [SYSTEM]"
+        echo "    where SYSTEM is one of the supported \"windows\", \"macos\" or \"linux\""
+        echo "    For example:"
+        echo "         $ ./scripts/package linux"
+
+	exit
+fi
+
+rm -fr $BUILD_DIR
+./scripts/get_dependancies $1
+SOURCE_DIR=`pwd`
+
+mkdir $BUILD_DIR
+cd $BUILD_DIR
+cmake $SOURCE_DIR
+cmake --build .
+cd $SOURCE_DIR
+
+cp $BUILD_DIR/embroidermodder2 $PACKAGE_DIR
+cp LICENSE.md $PACKAGE_DIR
+cp -r docs/ $PACKAGE_DIR
+
+if [[ $1 = "windows" ]]; then
+	GENERATOR="MinGW Makefiles"
+	cd em2
+	../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe
+	cd ..
+	powershell Compress-Archive em2 embroidermodder_${VERSION}_windows.zip
+else
+	tar cf embroidermodder_${VERSION}_$1.tar em2
+fi

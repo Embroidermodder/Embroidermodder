@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# This file is part of Embroidermodder.
+# Copyright 2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
+
+WORKDIR="test"
+FROM=`pwd`
+
+mkdir -p $WORKDIR
+cd $WORKDIR
+
+git submodule update --init
+cmake . || exit 1
+cmake --build . || exit 2
+make check || exit 3
+ctest || exit 4
+
+cd $FROM

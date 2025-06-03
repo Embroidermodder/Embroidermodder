@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in $@
+do
+	convert $1 +dither -colors 16 -depth 4 a.png
+	mv a.png $1
+done

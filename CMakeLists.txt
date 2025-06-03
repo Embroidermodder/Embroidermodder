@@ -73,7 +73,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/interface.c
 	${SRC}/objects.c
 	${SRC}/state.c
-	${SRC}/init_script.c
 	${SRC}/translations.c
 	${SRC}/icons.c
 	${SRC}/widgets.c

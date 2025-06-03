@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# This file is part of Embroidermodder
+# Copyright 2011-2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on contributing to Embroidermodder.
+#
+
+if [[ $# < 1 ]]; then
+	echo "Usage: ./scripts/get_dependencies [SYSTEM]"
+        echo "    where SYSTEM is one of the supported \"windows\", \"macos\" or \"linux\""
+        echo "    For example:"
+        echo "         $ ./scripts/get_dependencies linux"
+
+	exit
+fi
+
+git submodule update --init
+
+if [[ $1 = "windows" ]]; then
+	python -m pip install -U pip --upgrade pip
+ 	pip install aqtinstall
+	python -m aqt install-qt windows desktop 6.5.0 win64_mingw
+
+	echo "set (CMAKE_PREFIX_PATH \"6.5.0/mingw_64\")" >> config.cmake
+fi
+
+if [[ $1 = "macos" ]]; then
+	brew install qt6 qwt
+fi
+
+if [[ $1 = "linux" ]]; then
+	sudo apt-get update
+	sudo apt-get install git build-essential cmake qt6-base-dev libqt6widgets6 \
+		libqt6printsupport6 libqt6core6 libgl-dev libgl1-mesa-dev libglx-dev wayland-scanner
+	sudo apt upgrade
+fi

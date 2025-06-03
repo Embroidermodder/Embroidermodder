@@ -168,11 +168,17 @@ int n_prompt_lines = 3;
 int
 main(int argc, char* argv[])
 {
+    EmbString asset_dir = "assets";
     int i;
     int n_files = 0;
     char files_to_open[MAX_FILES][MAX_STRING_LENGTH];
 
     for (i = 1; i < argc; i++) {
+        if (string_equal(argv[i], "-a") || string_equal(argv[i], "--assets")) {
+            /* Override the normal asset folder with this one. */
+            i++;
+            strncpy(asset_dir, 200, argv[i]);
+        }
         if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")) {
             testing_mode = 1;
         }
@@ -218,7 +224,7 @@ main(int argc, char* argv[])
     }
 
     root = emb_create_root();
-    load_global_state(root);
+    load_global_state(root, asset_dir);
     int result = make_application(n_files, files_to_open);
     emb_free_root(root);
     free_script_env(global);
