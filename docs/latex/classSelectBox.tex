@@ -1,0 +1,152 @@
+\hypertarget{classSelectBox}{}\doxysubsection{Select\+Box Class Reference}
+\label{classSelectBox}\index{SelectBox@{SelectBox}}
+Inheritance diagram for Select\+Box\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classSelectBox}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classSelectBox_a3d4ff9beb9042ba8ff88bf2cb8b3033c}{set\+Direction}} (int dir)
+\item 
+void \mbox{\hyperlink{classSelectBox_af9dd24b8a1f4f49cc3ce819b525a9da3}{set\+Colors}} (const QColor \&colorL, const QColor \&fillL, const QColor \&colorR, const QColor \&fillR, int new\+Alpha)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSelectBox_a250ccb8efbba5790d3a7d5cfd5e09ba5}{Select\+Box}} (Shape s, QWidget $\ast$parent=0)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classSelectBox_a0194d77ba174b05d92357efca7633a42}{paint\+Event}} (QPaint\+Event $\ast$)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00060}{60}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSelectBox_a250ccb8efbba5790d3a7d5cfd5e09ba5}\label{classSelectBox_a250ccb8efbba5790d3a7d5cfd5e09ba5}} 
+\index{SelectBox@{SelectBox}!SelectBox@{SelectBox}}
+\index{SelectBox@{SelectBox}!SelectBox@{SelectBox}}
+\doxyparagraph{\texorpdfstring{SelectBox()}{SelectBox()}}
+{\footnotesize\ttfamily Select\+Box\+::\+Select\+Box (\begin{DoxyParamCaption}\item[{Shape}]{s,  }\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04409}{4409}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04409                                              : QRubberBand(s, parent)}
+\DoxyCodeLine{04410 \{}
+\DoxyCodeLine{04411     \textcolor{comment}{/* Default values */}}
+\DoxyCodeLine{04412     setColors(QColor(Qt::darkGreen), QColor(Qt::green), QColor(Qt::darkBlue), QColor(Qt::blue), 32);}
+\DoxyCodeLine{04413 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSelectBox_a0194d77ba174b05d92357efca7633a42}\label{classSelectBox_a0194d77ba174b05d92357efca7633a42}} 
+\index{SelectBox@{SelectBox}!paintEvent@{paintEvent}}
+\index{paintEvent@{paintEvent}!SelectBox@{SelectBox}}
+\doxyparagraph{\texorpdfstring{paintEvent()}{paintEvent()}}
+{\footnotesize\ttfamily void Select\+Box\+::paint\+Event (\begin{DoxyParamCaption}\item[{QPaint\+Event $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04466}{4466}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04467 \{}
+\DoxyCodeLine{04468     QPainter painter(\textcolor{keyword}{this});}
+\DoxyCodeLine{04469     painter.setPen(dirPen);}
+\DoxyCodeLine{04470     painter.fillRect(0,0,width()-\/1, height()-\/1, dirBrush);}
+\DoxyCodeLine{04471     painter.drawRect(0,0,width()-\/1, height()-\/1);}
+\DoxyCodeLine{04472 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSelectBox_af9dd24b8a1f4f49cc3ce819b525a9da3}\label{classSelectBox_af9dd24b8a1f4f49cc3ce819b525a9da3}} 
+\index{SelectBox@{SelectBox}!setColors@{setColors}}
+\index{setColors@{setColors}!SelectBox@{SelectBox}}
+\doxyparagraph{\texorpdfstring{setColors}{setColors}}
+{\footnotesize\ttfamily void Select\+Box\+::set\+Colors (\begin{DoxyParamCaption}\item[{const QColor \&}]{colorL,  }\item[{const QColor \&}]{fillL,  }\item[{const QColor \&}]{colorR,  }\item[{const QColor \&}]{fillR,  }\item[{int}]{new\+Alpha }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04432}{4432}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04433 \{}
+\DoxyCodeLine{04434     debug\_message(\textcolor{stringliteral}{"{}SelectBox setColors()"{}});}
+\DoxyCodeLine{04435     alpha = newAlpha;}
+\DoxyCodeLine{04436 }
+\DoxyCodeLine{04437     leftPenColor = colorL;}
+\DoxyCodeLine{04438     leftBrushColor = QColor(fillL.red(), fillL.green(), fillL.blue(), alpha);}
+\DoxyCodeLine{04439     rightPenColor = colorR;}
+\DoxyCodeLine{04440     rightBrushColor = QColor(fillR.red(), fillR.green(), fillR.blue(), alpha);}
+\DoxyCodeLine{04441 }
+\DoxyCodeLine{04442     leftPen.setColor(leftPenColor);}
+\DoxyCodeLine{04443     leftPen.setStyle(Qt::DashLine);}
+\DoxyCodeLine{04444     leftBrush.setStyle(Qt::SolidPattern);}
+\DoxyCodeLine{04445     leftBrush.setColor(leftBrushColor);}
+\DoxyCodeLine{04446 }
+\DoxyCodeLine{04447     rightPen.setColor(rightPenColor);}
+\DoxyCodeLine{04448     rightPen.setStyle(Qt::SolidLine);}
+\DoxyCodeLine{04449     rightBrush.setStyle(Qt::SolidPattern);}
+\DoxyCodeLine{04450     rightBrush.setColor(rightBrushColor);}
+\DoxyCodeLine{04451 }
+\DoxyCodeLine{04452     \textcolor{keywordflow}{if} (!boxDir) \{}
+\DoxyCodeLine{04453         dirPen = leftPen;}
+\DoxyCodeLine{04454         dirBrush = leftBrush;}
+\DoxyCodeLine{04455     \}}
+\DoxyCodeLine{04456     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{04457         dirPen = rightPen;}
+\DoxyCodeLine{04458         dirBrush = rightBrush;}
+\DoxyCodeLine{04459     \}}
+\DoxyCodeLine{04460 }
+\DoxyCodeLine{04461     forceRepaint();}
+\DoxyCodeLine{04462 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSelectBox_a3d4ff9beb9042ba8ff88bf2cb8b3033c}\label{classSelectBox_a3d4ff9beb9042ba8ff88bf2cb8b3033c}} 
+\index{SelectBox@{SelectBox}!setDirection@{setDirection}}
+\index{setDirection@{setDirection}!SelectBox@{SelectBox}}
+\doxyparagraph{\texorpdfstring{setDirection}{setDirection}}
+{\footnotesize\ttfamily void Select\+Box\+::set\+Direction (\begin{DoxyParamCaption}\item[{int}]{dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04417}{4417}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04418 \{}
+\DoxyCodeLine{04419     \textcolor{keywordflow}{if} (!dir) \{}
+\DoxyCodeLine{04420         dirPen = leftPen;}
+\DoxyCodeLine{04421         dirBrush = leftBrush;}
+\DoxyCodeLine{04422     \}}
+\DoxyCodeLine{04423     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{04424         dirPen = rightPen;}
+\DoxyCodeLine{04425         dirBrush = rightBrush;}
+\DoxyCodeLine{04426     \}}
+\DoxyCodeLine{04427     boxDir = dir;}
+\DoxyCodeLine{04428 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{qt_8h}{qt.\+h}}\item 
+src/commands.\+cpp\end{DoxyCompactItemize}

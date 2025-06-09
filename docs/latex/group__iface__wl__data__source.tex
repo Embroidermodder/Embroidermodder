@@ -1,0 +1,41 @@
+\hypertarget{group__iface__wl__data__source}{}\doxysection{The wl\+\_\+data\+\_\+source interface}
+\label{group__iface__wl__data__source}\index{The wl\_data\_source interface@{The wl\_data\_source interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__data__source__listener}{wl\+\_\+data\+\_\+source\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_ga6b1c2d7ac60b41999f594abf75f93d56}\label{group__iface__wl__data__source_ga6b1c2d7ac60b41999f594abf75f93d56}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+TARGET\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_ga0d1c949ccb0b4ae33bc177486986219f}\label{group__iface__wl__data__source_ga0d1c949ccb0b4ae33bc177486986219f}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+SEND\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_ga0c4822b4d10c093c2dfa8bd577d78a5c}\label{group__iface__wl__data__source_ga0c4822b4d10c093c2dfa8bd577d78a5c}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+CANCELLED\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_gaa1caaffc7481e81675f93531bb898e2b}\label{group__iface__wl__data__source_gaa1caaffc7481e81675f93531bb898e2b}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+DND\+\_\+\+DROP\+\_\+\+PERFORMED\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_ga5bf358bbbdba3e179582deca8688243c}\label{group__iface__wl__data__source_ga5bf358bbbdba3e179582deca8688243c}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+DND\+\_\+\+FINISHED\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_ga11ebba80c2d0e26d517f33a47b9e7306}\label{group__iface__wl__data__source_ga11ebba80c2d0e26d517f33a47b9e7306}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+ACTION\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_gada402b596e5708ff5edb355317ba9a05}\label{group__iface__wl__data__source_gada402b596e5708ff5edb355317ba9a05}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+OFFER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_ga8747041a96f59ec53c0c1d6279e704cb}\label{group__iface__wl__data__source_ga8747041a96f59ec53c0c1d6279e704cb}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__source_gad0531982d2d6fb8214bef7ab527d0a37}\label{group__iface__wl__data__source_gad0531982d2d6fb8214bef7ab527d0a37}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+SET\+\_\+\+ACTIONS\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The wl\+\_\+data\+\_\+source object is the source side of a wl\+\_\+data\+\_\+offer. It is created by the source client in a data transfer and provides a way to describe the offered data and a way to respond to requests to transfer the data. 

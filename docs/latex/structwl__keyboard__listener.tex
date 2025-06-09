@@ -1,0 +1,150 @@
+\hypertarget{structwl__keyboard__listener}{}\doxysection{wl\+\_\+keyboard\+\_\+listener Struct Reference}
+\label{structwl__keyboard__listener}\index{wl\_keyboard\_listener@{wl\_keyboard\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__keyboard__listener_aa0dd7bd42cdf4e77542cc6607fec5568}{keymap}} )(void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t format, int32\+\_\+t fd, uint32\+\_\+t size)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__keyboard__listener_aa62816906ef0a3217f405fa74479f3d7}{enter}} )(void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t serial, struct wl\+\_\+surface $\ast$surface, struct wl\+\_\+array $\ast$keys)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__keyboard__listener_acf90650bcb77922921f0bb686c022b50}{leave}} )(void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t serial, struct wl\+\_\+surface $\ast$surface)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__keyboard__listener_a8a680dbe6833c5cb93a3b11899b1fb24}{key}} )(void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t serial, uint32\+\_\+t time, uint32\+\_\+t key, uint32\+\_\+t state)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__keyboard__listener_af28d4c27b41e012e9186fee5b333fef5}{modifiers}} )(void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t serial, uint32\+\_\+t mods\+\_\+depressed, uint32\+\_\+t mods\+\_\+latched, uint32\+\_\+t mods\+\_\+locked, uint32\+\_\+t group)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__keyboard__listener_a2f11685e143ddce454e10bac0559a744}{repeat\+\_\+info}} )(void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, int32\+\_\+t rate, int32\+\_\+t delay)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structwl__keyboard__listener_aa62816906ef0a3217f405fa74479f3d7}\label{structwl__keyboard__listener_aa62816906ef0a3217f405fa74479f3d7}} 
+\index{wl\_keyboard\_listener@{wl\_keyboard\_listener}!enter@{enter}}
+\index{enter@{enter}!wl\_keyboard\_listener@{wl\_keyboard\_listener}}
+\doxysubsubsection{\texorpdfstring{enter}{enter}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+keyboard\+\_\+listener\+::enter) (void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t serial, struct wl\+\_\+surface $\ast$surface, struct wl\+\_\+array $\ast$keys)}
+
+enter event
+
+Notification that this seat\textquotesingle{}s keyboard focus is on a certain surface.
+
+The compositor must send the wl\+\_\+keyboard.\+modifiers event after this event. 
+\begin{DoxyParams}{Parameters}
+{\em serial} & serial number of the enter event \\
+\hline
+{\em surface} & surface gaining keyboard focus \\
+\hline
+{\em keys} & the currently pressed keys \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__keyboard__listener_a8a680dbe6833c5cb93a3b11899b1fb24}\label{structwl__keyboard__listener_a8a680dbe6833c5cb93a3b11899b1fb24}} 
+\index{wl\_keyboard\_listener@{wl\_keyboard\_listener}!key@{key}}
+\index{key@{key}!wl\_keyboard\_listener@{wl\_keyboard\_listener}}
+\doxysubsubsection{\texorpdfstring{key}{key}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+keyboard\+\_\+listener\+::key) (void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t serial, uint32\+\_\+t time, uint32\+\_\+t key, uint32\+\_\+t state)}
+
+key event
+
+A key was pressed or released. The time argument is a timestamp with millisecond granularity, with an undefined base.
+
+The key is a platform-\/specific key code that can be interpreted by feeding it to the keyboard mapping (see the keymap event).
+
+If this event produces a change in modifiers, then the resulting wl\+\_\+keyboard.\+modifiers event must be sent after this event. 
+\begin{DoxyParams}{Parameters}
+{\em serial} & serial number of the key event \\
+\hline
+{\em time} & timestamp with millisecond granularity \\
+\hline
+{\em key} & key that produced the event \\
+\hline
+{\em state} & physical state of the key \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__keyboard__listener_aa0dd7bd42cdf4e77542cc6607fec5568}\label{structwl__keyboard__listener_aa0dd7bd42cdf4e77542cc6607fec5568}} 
+\index{wl\_keyboard\_listener@{wl\_keyboard\_listener}!keymap@{keymap}}
+\index{keymap@{keymap}!wl\_keyboard\_listener@{wl\_keyboard\_listener}}
+\doxysubsubsection{\texorpdfstring{keymap}{keymap}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+keyboard\+\_\+listener\+::keymap) (void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t format, int32\+\_\+t fd, uint32\+\_\+t size)}
+
+keyboard mapping
+
+This event provides a file descriptor to the client which can be memory-\/mapped in read-\/only mode to provide a keyboard mapping description.
+
+From version 7 onwards, the fd must be mapped with MAP\+\_\+\+PRIVATE by the recipient, as MAP\+\_\+\+SHARED may fail. 
+\begin{DoxyParams}{Parameters}
+{\em format} & keymap format \\
+\hline
+{\em fd} & keymap file descriptor \\
+\hline
+{\em size} & keymap size, in bytes \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__keyboard__listener_acf90650bcb77922921f0bb686c022b50}\label{structwl__keyboard__listener_acf90650bcb77922921f0bb686c022b50}} 
+\index{wl\_keyboard\_listener@{wl\_keyboard\_listener}!leave@{leave}}
+\index{leave@{leave}!wl\_keyboard\_listener@{wl\_keyboard\_listener}}
+\doxysubsubsection{\texorpdfstring{leave}{leave}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+keyboard\+\_\+listener\+::leave) (void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t serial, struct wl\+\_\+surface $\ast$surface)}
+
+leave event
+
+Notification that this seat\textquotesingle{}s keyboard focus is no longer on a certain surface.
+
+The leave notification is sent before the enter notification for the new focus.
+
+After this event client must assume that all keys, including modifiers, are lifted and also it must stop key repeating if there\textquotesingle{}s some going on. 
+\begin{DoxyParams}{Parameters}
+{\em serial} & serial number of the leave event \\
+\hline
+{\em surface} & surface that lost keyboard focus \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__keyboard__listener_af28d4c27b41e012e9186fee5b333fef5}\label{structwl__keyboard__listener_af28d4c27b41e012e9186fee5b333fef5}} 
+\index{wl\_keyboard\_listener@{wl\_keyboard\_listener}!modifiers@{modifiers}}
+\index{modifiers@{modifiers}!wl\_keyboard\_listener@{wl\_keyboard\_listener}}
+\doxysubsubsection{\texorpdfstring{modifiers}{modifiers}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+keyboard\+\_\+listener\+::modifiers) (void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, uint32\+\_\+t serial, uint32\+\_\+t mods\+\_\+depressed, uint32\+\_\+t mods\+\_\+latched, uint32\+\_\+t mods\+\_\+locked, uint32\+\_\+t group)}
+
+modifier and group state
+
+Notifies clients that the modifier and/or group state has changed, and it should update its local state. 
+\begin{DoxyParams}{Parameters}
+{\em serial} & serial number of the modifiers event \\
+\hline
+{\em mods\+\_\+depressed} & depressed modifiers \\
+\hline
+{\em mods\+\_\+latched} & latched modifiers \\
+\hline
+{\em mods\+\_\+locked} & locked modifiers \\
+\hline
+{\em group} & keyboard layout \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__keyboard__listener_a2f11685e143ddce454e10bac0559a744}\label{structwl__keyboard__listener_a2f11685e143ddce454e10bac0559a744}} 
+\index{wl\_keyboard\_listener@{wl\_keyboard\_listener}!repeat\_info@{repeat\_info}}
+\index{repeat\_info@{repeat\_info}!wl\_keyboard\_listener@{wl\_keyboard\_listener}}
+\doxysubsubsection{\texorpdfstring{repeat\_info}{repeat\_info}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+keyboard\+\_\+listener\+::repeat\+\_\+info) (void $\ast$data, struct wl\+\_\+keyboard $\ast$wl\+\_\+keyboard, int32\+\_\+t rate, int32\+\_\+t delay)}
+
+repeat rate and delay
+
+Informs the client about the keyboard\textquotesingle{}s repeat rate and delay.
+
+This event is sent as soon as the wl\+\_\+keyboard object has been created, and is guaranteed to be received by the client before any key press event.
+
+Negative values for either rate or delay are illegal. A rate of zero will disable any repeating (regardless of the value of delay).
+
+This event can be sent later on as well with a new value if necessary, so clients should continue listening for the event past the creation of wl\+\_\+keyboard. 
+\begin{DoxyParams}{Parameters}
+{\em rate} & the rate of repeating keys in characters per second \\
+\hline
+{\em delay} & delay in milliseconds since key down until repeating starts \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+4 
+\end{DoxySince}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/wayland-\/client-\/protocol.\+h\end{DoxyCompactItemize}

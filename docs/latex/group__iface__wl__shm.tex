@@ -1,0 +1,593 @@
+\hypertarget{group__iface__wl__shm}{}\doxysection{The wl\+\_\+shm interface}
+\label{group__iface__wl__shm}\index{The wl\_shm interface@{The wl\_shm interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__shm__listener}{wl\+\_\+shm\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__shm_gadd4eed71e9a666ae2b2ba5b5f5a80269}\label{group__iface__wl__shm_gadd4eed71e9a666ae2b2ba5b5f5a80269}} 
+\#define {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__shm_gabd5307bb377e170d43fef366a3329ad3}\label{group__iface__wl__shm_gabd5307bb377e170d43fef366a3329ad3}} 
+\#define {\bfseries WL\+\_\+\+SHM\+\_\+\+CREATE\+\_\+\+POOL\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__shm_gaabe36ef34faed3ffc9da6bdaa495f8d7}{wl\+\_\+shm\+\_\+error}} \{ \mbox{\hyperlink{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7a7756c9a4d742cd165798b0e3b6875a04}{WL\+\_\+\+SHM\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+FORMAT}} = 0
+, \mbox{\hyperlink{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7a0489d264a20ab6839d932f2a9366deef}{WL\+\_\+\+SHM\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+STRIDE}} = 1
+, \mbox{\hyperlink{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7ad53df4e7a5fab56e4dd973799a277c2f}{WL\+\_\+\+SHM\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+FD}} = 2
+ \}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__shm_ga46cb1c1ec4b588baa9d6c48b89682443}{wl\+\_\+shm\+\_\+format}} \{ \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443acf38fd11fe09c92a96827cdc85e92f18}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB8888}} = 0
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4be46857c53d005f2673f36099b70387}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB8888}} = 1
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abc2aeca19e4ae14787c4c5e1083569c2}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+C8}} = 0x20203843
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2999c9f9ef4ad7e05cf2c4e290d8a65f}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGB332}} = 0x38424752
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae3fbaade0f9ddc18a8e9cffa331fc5c6}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGR233}} = 0x38524742
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a784eea9114a29925d9cf1acca77c44d6}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB4444}} = 0x32315258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a3554d2d07a07c42ce6aa089bd93b6610}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR4444}} = 0x32314258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7abbef92152dc723b912156563ca0f94}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX4444}} = 0x32315852
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a33c3eb35f1643f53c75a7364c52cce9e}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX4444}} = 0x32315842
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a92b1552e96305ab92398024b5992428c}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB4444}} = 0x32315241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7afdb5a7793e824c566a776f8bebad71}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR4444}} = 0x32314241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a1719db70746f4cfa1e8f1f45c8a69be4}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBA4444}} = 0x32314152
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a79c7db57e80380aa59098f41e60883ba}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRA4444}} = 0x32314142
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9f978c18c2b186d0ddc3c6a1909e7249}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB1555}} = 0x35315258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a57cdacdeb7666888b24492ca3400a4f7}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR1555}} = 0x35314258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a52f021a21e97dd5f54c83e06fee1ad61}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX5551}} = 0x35315852
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae37c061eed4101e7aa2a986d912ec313}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX5551}} = 0x35315842
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abb94496012bb8b50696b706dd6a12374}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB1555}} = 0x35315241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a34d301a79712286af7e3ac0354c121ee}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR1555}} = 0x35314241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aae5c2ae771fe41a346b14147eb373ee9}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBA5551}} = 0x35314152
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5dadf428ecc729d955a4c4fcc078942f}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRA5551}} = 0x35314142
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a67f7ac554d082d35aecd3770802d6715}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGB565}} = 0x36314752
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aca196c1c254cd62d6f9f4c781e716810}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGR565}} = 0x36314742
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ab437e4a7a8cfeed2e6e5dd2c241e1336}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGB888}} = 0x34324752
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af043d4d51ad8f8e19b77b932d7dce544}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGR888}} = 0x34324742
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a64f1d02a807eaacbe32d2ef7ffd332a0}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR8888}} = 0x34324258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af6a33b8c3306d939f498eb9f4702ef08}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX8888}} = 0x34325852
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a000e2d2d02bf5db38e7a93f0cc999737}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX8888}} = 0x34325842
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a05a7e334772d859045bbd3b5b9f8f1dd}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR8888}} = 0x34324241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac10c1ecb32c8a567fa2372238fdce567}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBA8888}} = 0x34324152
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aca690926d30ec33156e061072c47ed78}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRA8888}} = 0x34324142
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9d86f1cb339b17b1f3099cd109f1760a}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB2101010}} = 0x30335258
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a23de68b9e39c157aee1750bb4e07c600}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR2101010}} = 0x30334258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae07d9d4dfb070b70eab5b960726708a1}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX1010102}} = 0x30335852
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae3541f24f42bfb0b495511b932b3376f}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX1010102}} = 0x30335842
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af8a101c6384f965f560b2549ea73aa1f}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB2101010}} = 0x30335241
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ad97e4bc140b03d465e4019ab72d13a1b}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR2101010}} = 0x30334241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a6f276fd809ee11749583ee4ce38631da}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBA1010102}} = 0x30334152
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443acfaa1c4a36937c96ac0b807090501338}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRA1010102}} = 0x30334142
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443adcd31e63263405443cf907b983691d33}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUYV}} = 0x56595559
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a05ea2b9baaaa35bb57ddecb4db1b9454}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVYU}} = 0x55595659
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a85394cd4c8a837e6629ffa11985e0170}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+UYVY}} = 0x59565955
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a339b20f09e99308e21bef79022f7d1e5}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+VYUY}} = 0x59555956
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a41fb168aeb795057a5e95efccc894fec}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+AYUV}} = 0x56555941
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a222256eaa933a08a27cb1a3a7dc0a831}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV12}} = 0x3231564e
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a484a729bb8a479a80d53a13f1a02fbff}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV21}} = 0x3132564e
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7b0ad62c6e9135859b096ce7b022a340}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV16}} = 0x3631564e
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abff80d1b51829896cf187c878fa8c88c}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV61}} = 0x3136564e
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a607d352d08b212cc7f9f08f5d8097be0}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV410}} = 0x39565559
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae48edcf20221e34a8fe388892c629ea8}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU410}} = 0x39555659
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a01ed44be0cc5f011364145deed89c3df}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV411}} = 0x31315559
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac7fbcf9653b54238a05b132226a5564b}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU411}} = 0x31315659
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a90aa2526853ec8a3b01abbe5a7062527}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV420}} = 0x32315559
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a89243ca15600f3bd0e8edf035760e5bd}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU420}} = 0x32315659
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aeca2a405fa558579097cd2997707ef68}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV422}} = 0x36315559
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a64768e73e3da25c9a3c9678dc5ce3834}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU422}} = 0x36315659
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a3fa17436e60106108b1701947b4e8d9a}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV444}} = 0x34325559
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa9bc320ccf23b7e08d87649c3a36f650}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU444}} = 0x34325659
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a08f4e1679acf032e615b83ed1c3570c8}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+R8}} = 0x20203852
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9be721d50b83fa3ea9902b051b662181}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+R16}} = 0x20363152
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af94c98ed3712ce1bb61691b95662e45c}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RG88}} = 0x38384752
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a34ab9399a6c86cba8aa39b75d5c8c559}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+GR88}} = 0x38385247
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ace3208a988a49927541336774c664ee4}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RG1616}} = 0x32334752
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa2aee48693e3bd2a552937eecd7cfb71}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+GR1616}} = 0x32335247
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4eb2f788c71166aeb0f6785020a8a77f}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB16161616F}} = 0x48345258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8615056dde69d292f25ae98137abf23c}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR16161616F}} = 0x48344258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a03acf2c2f37d137a03d536a2cc45b39d}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB16161616F}} = 0x48345241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae5ef6ca6c359e9db75fe5e2c273a483b}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR16161616F}} = 0x48344241
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5d7a9db0efe349c90e55b158f5e2d7ff}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XYUV8888}} = 0x56555958
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2a15b0444a7b38464dbedae759fec71b}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+VUY888}} = 0x34325556
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af5d7d666678e3bcb3b441eee39caf1c4}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+VUY101010}} = 0x30335556
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a0405e2a99f764bdb44cca537b5d62672}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y210}} = 0x30313259
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5ce458ebcd96389ea9d4e90e1d9e45b4}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y212}} = 0x32313259
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8203d1082f9c7df4528bfe7bce97f80a}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y216}} = 0x36313259
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8dc1db69210afac6bd2e9edb077728dc}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y410}} = 0x30313459
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4c48f2ab01b9db7ef9987128bfdb34f7}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y412}} = 0x32313459
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a07f92004f3d9326eb177f8696b6f56ac}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y416}} = 0x36313459
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa9afe7eb3f4e0fb8a98748c513661674}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XVYU2101010}} = 0x30335658
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a43f19c2672cf894b391272ae10fea4e1}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XVYU12\+\_\+16161616}} = 0x36335658
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2f90e0cd0feb3776e6e0c4a93efefc27}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XVYU16161616}} = 0x38345658
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aaeebd0929a8914e1dbca834207786cf6}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y0\+L0}} = 0x304c3059
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ab0015eac5f9bf6e8398da92fb64648c1}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+X0\+L0}} = 0x304c3058
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a1dd404c2c278f0ab6c17a3349eeae159}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y0\+L2}} = 0x324c3059
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a38f59f6728b9d51cbafc1b0999476d64}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+X0\+L2}} = 0x324c3058
+, \newline
+{\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV420\+\_\+8\+BIT} = 0x38305559
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV420\+\_\+10\+BIT} = 0x30315559
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB8888\+\_\+\+A8} = 0x38415258
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR8888\+\_\+\+A8} = 0x38414258
+, \newline
+{\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX8888\+\_\+\+A8} = 0x38415852
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX8888\+\_\+\+A8} = 0x38415842
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGB888\+\_\+\+A8} = 0x38413852
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGR888\+\_\+\+A8} = 0x38413842
+, \newline
+{\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGB565\+\_\+\+A8} = 0x38413552
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGR565\+\_\+\+A8} = 0x38413542
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2713870422780cb16b16fbada40e631b}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV24}} = 0x3432564e
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac338a21dfacc515ed97e3d9b63dbb552}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV42}} = 0x3234564e
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a53b7764e377e8e7188626c7b1cf2900a}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+P210}} = 0x30313250
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a87b0d9b6f1d034820d4ac437cc6ac22a}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+P010}} = 0x30313050
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a157e526b288f24e154a81c5c1120a45e}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+P012}} = 0x32313050
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a153b3562600dc86a63e4f56fe4e39f45}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+P016}} = 0x36313050
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af3e6e1b3f706d22642cad2708374e1f6}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+AXBXGXRX106106106106}} = 0x30314241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a28a6cdd51224e703fe873137b175f029}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV15}} = 0x3531564e
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Q410} = 0x30313451
+, {\bfseries WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Q401} = 0x31303451
+, \newline
+\mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a09f9bf8b7ce1e1c29e100e65b18f334b}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB16161616}} = 0x38345258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a999d65c92641485a40919d6a7f98d436}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR16161616}} = 0x38344258
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5a5e7f352c71f1df221954a5d2ab9638}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB16161616}} = 0x38345241
+, \mbox{\hyperlink{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aaed9e021ad600cf837c11ab781e136d4}{WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR16161616}} = 0x38344241
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A singleton global object that provides support for shared memory.
+
+Clients can create wl\+\_\+shm\+\_\+pool objects using the create\+\_\+pool request.
+
+On binding the wl\+\_\+shm object one or more format events are emitted to inform clients about the valid pixel formats that can be used for buffers. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{group__iface__wl__shm_gaabe36ef34faed3ffc9da6bdaa495f8d7}\label{group__iface__wl__shm_gaabe36ef34faed3ffc9da6bdaa495f8d7}} 
+\index{The wl\_shm interface@{The wl\_shm interface}!wl\_shm\_error@{wl\_shm\_error}}
+\index{wl\_shm\_error@{wl\_shm\_error}!The wl\_shm interface@{The wl\_shm interface}}
+\doxysubsubsection{\texorpdfstring{wl\_shm\_error}{wl\_shm\_error}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__shm_gaabe36ef34faed3ffc9da6bdaa495f8d7}{wl\+\_\+shm\+\_\+error}}}
+
+wl\+\_\+shm error values
+
+These errors can be emitted in response to wl\+\_\+shm requests. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_ERROR\_INVALID\_FORMAT@{WL\_SHM\_ERROR\_INVALID\_FORMAT}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_ERROR\_INVALID\_FORMAT@{WL\_SHM\_ERROR\_INVALID\_FORMAT}}}\mbox{\Hypertarget{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7a7756c9a4d742cd165798b0e3b6875a04}\label{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7a7756c9a4d742cd165798b0e3b6875a04}} 
+WL\+\_\+\+SHM\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+FORMAT&buffer format is not known \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_ERROR\_INVALID\_STRIDE@{WL\_SHM\_ERROR\_INVALID\_STRIDE}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_ERROR\_INVALID\_STRIDE@{WL\_SHM\_ERROR\_INVALID\_STRIDE}}}\mbox{\Hypertarget{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7a0489d264a20ab6839d932f2a9366deef}\label{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7a0489d264a20ab6839d932f2a9366deef}} 
+WL\+\_\+\+SHM\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+STRIDE&invalid size or stride during pool or buffer creation \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_ERROR\_INVALID\_FD@{WL\_SHM\_ERROR\_INVALID\_FD}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_ERROR\_INVALID\_FD@{WL\_SHM\_ERROR\_INVALID\_FD}}}\mbox{\Hypertarget{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7ad53df4e7a5fab56e4dd973799a277c2f}\label{group__iface__wl__shm_ggaabe36ef34faed3ffc9da6bdaa495f8d7ad53df4e7a5fab56e4dd973799a277c2f}} 
+WL\+\_\+\+SHM\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+FD&mmapping the file descriptor failed \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{group__iface__wl__shm_ga46cb1c1ec4b588baa9d6c48b89682443}\label{group__iface__wl__shm_ga46cb1c1ec4b588baa9d6c48b89682443}} 
+\index{The wl\_shm interface@{The wl\_shm interface}!wl\_shm\_format@{wl\_shm\_format}}
+\index{wl\_shm\_format@{wl\_shm\_format}!The wl\_shm interface@{The wl\_shm interface}}
+\doxysubsubsection{\texorpdfstring{wl\_shm\_format}{wl\_shm\_format}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__shm_ga46cb1c1ec4b588baa9d6c48b89682443}{wl\+\_\+shm\+\_\+format}}}
+
+pixel formats
+
+This describes the memory layout of an individual pixel.
+
+All renderers should support argb8888 and xrgb8888 but any other formats are optional and may not be supported by the particular renderer in use.
+
+The drm format codes match the macros defined in drm\+\_\+fourcc.\+h, except argb8888 and xrgb8888. The formats actually supported by the compositor will be reported by the format event.
+
+For all wl\+\_\+shm formats and unless specified in another protocol extension, pre-\/multiplied alpha is used for pixel values. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ARGB8888@{WL\_SHM\_FORMAT\_ARGB8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ARGB8888@{WL\_SHM\_FORMAT\_ARGB8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443acf38fd11fe09c92a96827cdc85e92f18}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443acf38fd11fe09c92a96827cdc85e92f18}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB8888&32-\/bit ARGB format, \mbox{[}31\+:0\mbox{]} A\+:\+R\+:G\+:B 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XRGB8888@{WL\_SHM\_FORMAT\_XRGB8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XRGB8888@{WL\_SHM\_FORMAT\_XRGB8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4be46857c53d005f2673f36099b70387}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4be46857c53d005f2673f36099b70387}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB8888&32-\/bit RGB format, \mbox{[}31\+:0\mbox{]} x\+:\+R\+:G\+:B 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_C8@{WL\_SHM\_FORMAT\_C8}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_C8@{WL\_SHM\_FORMAT\_C8}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abc2aeca19e4ae14787c4c5e1083569c2}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abc2aeca19e4ae14787c4c5e1083569c2}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+C8&8-\/bit color index format, \mbox{[}7\+:0\mbox{]} C \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGB332@{WL\_SHM\_FORMAT\_RGB332}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGB332@{WL\_SHM\_FORMAT\_RGB332}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2999c9f9ef4ad7e05cf2c4e290d8a65f}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2999c9f9ef4ad7e05cf2c4e290d8a65f}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGB332&8-\/bit RGB format, \mbox{[}7\+:0\mbox{]} R\+:G\+:B 3\+:3\+:2 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGR233@{WL\_SHM\_FORMAT\_BGR233}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGR233@{WL\_SHM\_FORMAT\_BGR233}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae3fbaade0f9ddc18a8e9cffa331fc5c6}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae3fbaade0f9ddc18a8e9cffa331fc5c6}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGR233&8-\/bit BGR format, \mbox{[}7\+:0\mbox{]} B\+:G\+:R 2\+:3\+:3 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XRGB4444@{WL\_SHM\_FORMAT\_XRGB4444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XRGB4444@{WL\_SHM\_FORMAT\_XRGB4444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a784eea9114a29925d9cf1acca77c44d6}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a784eea9114a29925d9cf1acca77c44d6}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB4444&16-\/bit x\+RGB format, \mbox{[}15\+:0\mbox{]} x\+:\+R\+:G\+:B 4\+:4\+:4\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XBGR4444@{WL\_SHM\_FORMAT\_XBGR4444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XBGR4444@{WL\_SHM\_FORMAT\_XBGR4444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a3554d2d07a07c42ce6aa089bd93b6610}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a3554d2d07a07c42ce6aa089bd93b6610}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR4444&16-\/bit x\+BGR format, \mbox{[}15\+:0\mbox{]} x\+:\+B\+:G\+:R 4\+:4\+:4\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGBX4444@{WL\_SHM\_FORMAT\_RGBX4444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGBX4444@{WL\_SHM\_FORMAT\_RGBX4444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7abbef92152dc723b912156563ca0f94}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7abbef92152dc723b912156563ca0f94}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX4444&16-\/bit RGBx format, \mbox{[}15\+:0\mbox{]} R\+:\+G\+:B\+:x 4\+:4\+:4\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGRX4444@{WL\_SHM\_FORMAT\_BGRX4444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGRX4444@{WL\_SHM\_FORMAT\_BGRX4444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a33c3eb35f1643f53c75a7364c52cce9e}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a33c3eb35f1643f53c75a7364c52cce9e}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX4444&16-\/bit BGRx format, \mbox{[}15\+:0\mbox{]} B\+:\+G\+:R\+:x 4\+:4\+:4\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ARGB4444@{WL\_SHM\_FORMAT\_ARGB4444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ARGB4444@{WL\_SHM\_FORMAT\_ARGB4444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a92b1552e96305ab92398024b5992428c}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a92b1552e96305ab92398024b5992428c}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB4444&16-\/bit ARGB format, \mbox{[}15\+:0\mbox{]} A\+:\+R\+:G\+:B 4\+:4\+:4\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ABGR4444@{WL\_SHM\_FORMAT\_ABGR4444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ABGR4444@{WL\_SHM\_FORMAT\_ABGR4444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7afdb5a7793e824c566a776f8bebad71}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7afdb5a7793e824c566a776f8bebad71}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR4444&16-\/bit ABGR format, \mbox{[}15\+:0\mbox{]} A\+:\+B\+:G\+:R 4\+:4\+:4\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGBA4444@{WL\_SHM\_FORMAT\_RGBA4444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGBA4444@{WL\_SHM\_FORMAT\_RGBA4444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a1719db70746f4cfa1e8f1f45c8a69be4}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a1719db70746f4cfa1e8f1f45c8a69be4}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBA4444&16-\/bit RBGA format, \mbox{[}15\+:0\mbox{]} R\+:\+G\+:B\+:A 4\+:4\+:4\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGRA4444@{WL\_SHM\_FORMAT\_BGRA4444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGRA4444@{WL\_SHM\_FORMAT\_BGRA4444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a79c7db57e80380aa59098f41e60883ba}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a79c7db57e80380aa59098f41e60883ba}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRA4444&16-\/bit BGRA format, \mbox{[}15\+:0\mbox{]} B\+:\+G\+:R\+:A 4\+:4\+:4\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XRGB1555@{WL\_SHM\_FORMAT\_XRGB1555}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XRGB1555@{WL\_SHM\_FORMAT\_XRGB1555}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9f978c18c2b186d0ddc3c6a1909e7249}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9f978c18c2b186d0ddc3c6a1909e7249}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB1555&16-\/bit x\+RGB format, \mbox{[}15\+:0\mbox{]} x\+:\+R\+:G\+:B 1\+:5\+:5\+:5 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XBGR1555@{WL\_SHM\_FORMAT\_XBGR1555}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XBGR1555@{WL\_SHM\_FORMAT\_XBGR1555}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a57cdacdeb7666888b24492ca3400a4f7}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a57cdacdeb7666888b24492ca3400a4f7}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR1555&16-\/bit x\+BGR 1555 format, \mbox{[}15\+:0\mbox{]} x\+:\+B\+:G\+:R 1\+:5\+:5\+:5 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGBX5551@{WL\_SHM\_FORMAT\_RGBX5551}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGBX5551@{WL\_SHM\_FORMAT\_RGBX5551}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a52f021a21e97dd5f54c83e06fee1ad61}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a52f021a21e97dd5f54c83e06fee1ad61}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX5551&16-\/bit RGBx 5551 format, \mbox{[}15\+:0\mbox{]} R\+:\+G\+:B\+:x 5\+:5\+:5\+:1 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGRX5551@{WL\_SHM\_FORMAT\_BGRX5551}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGRX5551@{WL\_SHM\_FORMAT\_BGRX5551}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae37c061eed4101e7aa2a986d912ec313}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae37c061eed4101e7aa2a986d912ec313}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX5551&16-\/bit BGRx 5551 format, \mbox{[}15\+:0\mbox{]} B\+:\+G\+:R\+:x 5\+:5\+:5\+:1 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ARGB1555@{WL\_SHM\_FORMAT\_ARGB1555}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ARGB1555@{WL\_SHM\_FORMAT\_ARGB1555}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abb94496012bb8b50696b706dd6a12374}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abb94496012bb8b50696b706dd6a12374}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB1555&16-\/bit ARGB 1555 format, \mbox{[}15\+:0\mbox{]} A\+:\+R\+:G\+:B 1\+:5\+:5\+:5 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ABGR1555@{WL\_SHM\_FORMAT\_ABGR1555}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ABGR1555@{WL\_SHM\_FORMAT\_ABGR1555}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a34d301a79712286af7e3ac0354c121ee}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a34d301a79712286af7e3ac0354c121ee}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR1555&16-\/bit ABGR 1555 format, \mbox{[}15\+:0\mbox{]} A\+:\+B\+:G\+:R 1\+:5\+:5\+:5 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGBA5551@{WL\_SHM\_FORMAT\_RGBA5551}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGBA5551@{WL\_SHM\_FORMAT\_RGBA5551}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aae5c2ae771fe41a346b14147eb373ee9}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aae5c2ae771fe41a346b14147eb373ee9}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBA5551&16-\/bit RGBA 5551 format, \mbox{[}15\+:0\mbox{]} R\+:\+G\+:B\+:A 5\+:5\+:5\+:1 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGRA5551@{WL\_SHM\_FORMAT\_BGRA5551}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGRA5551@{WL\_SHM\_FORMAT\_BGRA5551}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5dadf428ecc729d955a4c4fcc078942f}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5dadf428ecc729d955a4c4fcc078942f}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRA5551&16-\/bit BGRA 5551 format, \mbox{[}15\+:0\mbox{]} B\+:\+G\+:R\+:A 5\+:5\+:5\+:1 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGB565@{WL\_SHM\_FORMAT\_RGB565}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGB565@{WL\_SHM\_FORMAT\_RGB565}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a67f7ac554d082d35aecd3770802d6715}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a67f7ac554d082d35aecd3770802d6715}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGB565&16-\/bit RGB 565 format, \mbox{[}15\+:0\mbox{]} R\+:G\+:B 5\+:6\+:5 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGR565@{WL\_SHM\_FORMAT\_BGR565}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGR565@{WL\_SHM\_FORMAT\_BGR565}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aca196c1c254cd62d6f9f4c781e716810}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aca196c1c254cd62d6f9f4c781e716810}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGR565&16-\/bit BGR 565 format, \mbox{[}15\+:0\mbox{]} B\+:G\+:R 5\+:6\+:5 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGB888@{WL\_SHM\_FORMAT\_RGB888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGB888@{WL\_SHM\_FORMAT\_RGB888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ab437e4a7a8cfeed2e6e5dd2c241e1336}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ab437e4a7a8cfeed2e6e5dd2c241e1336}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGB888&24-\/bit RGB format, \mbox{[}23\+:0\mbox{]} R\+:G\+:B little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGR888@{WL\_SHM\_FORMAT\_BGR888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGR888@{WL\_SHM\_FORMAT\_BGR888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af043d4d51ad8f8e19b77b932d7dce544}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af043d4d51ad8f8e19b77b932d7dce544}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGR888&24-\/bit BGR format, \mbox{[}23\+:0\mbox{]} B\+:G\+:R little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XBGR8888@{WL\_SHM\_FORMAT\_XBGR8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XBGR8888@{WL\_SHM\_FORMAT\_XBGR8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a64f1d02a807eaacbe32d2ef7ffd332a0}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a64f1d02a807eaacbe32d2ef7ffd332a0}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR8888&32-\/bit x\+BGR format, \mbox{[}31\+:0\mbox{]} x\+:\+B\+:G\+:R 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGBX8888@{WL\_SHM\_FORMAT\_RGBX8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGBX8888@{WL\_SHM\_FORMAT\_RGBX8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af6a33b8c3306d939f498eb9f4702ef08}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af6a33b8c3306d939f498eb9f4702ef08}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX8888&32-\/bit RGBx format, \mbox{[}31\+:0\mbox{]} R\+:\+G\+:B\+:x 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGRX8888@{WL\_SHM\_FORMAT\_BGRX8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGRX8888@{WL\_SHM\_FORMAT\_BGRX8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a000e2d2d02bf5db38e7a93f0cc999737}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a000e2d2d02bf5db38e7a93f0cc999737}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX8888&32-\/bit BGRx format, \mbox{[}31\+:0\mbox{]} B\+:\+G\+:R\+:x 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ABGR8888@{WL\_SHM\_FORMAT\_ABGR8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ABGR8888@{WL\_SHM\_FORMAT\_ABGR8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a05a7e334772d859045bbd3b5b9f8f1dd}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a05a7e334772d859045bbd3b5b9f8f1dd}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR8888&32-\/bit ABGR format, \mbox{[}31\+:0\mbox{]} A\+:\+B\+:G\+:R 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGBA8888@{WL\_SHM\_FORMAT\_RGBA8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGBA8888@{WL\_SHM\_FORMAT\_RGBA8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac10c1ecb32c8a567fa2372238fdce567}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac10c1ecb32c8a567fa2372238fdce567}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBA8888&32-\/bit RGBA format, \mbox{[}31\+:0\mbox{]} R\+:\+G\+:B\+:A 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGRA8888@{WL\_SHM\_FORMAT\_BGRA8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGRA8888@{WL\_SHM\_FORMAT\_BGRA8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aca690926d30ec33156e061072c47ed78}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aca690926d30ec33156e061072c47ed78}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRA8888&32-\/bit BGRA format, \mbox{[}31\+:0\mbox{]} B\+:\+G\+:R\+:A 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XRGB2101010@{WL\_SHM\_FORMAT\_XRGB2101010}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XRGB2101010@{WL\_SHM\_FORMAT\_XRGB2101010}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9d86f1cb339b17b1f3099cd109f1760a}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9d86f1cb339b17b1f3099cd109f1760a}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB2101010&32-\/bit x\+RGB format, \mbox{[}31\+:0\mbox{]} x\+:\+R\+:G\+:B 2\+:10\+:10\+:10 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XBGR2101010@{WL\_SHM\_FORMAT\_XBGR2101010}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XBGR2101010@{WL\_SHM\_FORMAT\_XBGR2101010}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a23de68b9e39c157aee1750bb4e07c600}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a23de68b9e39c157aee1750bb4e07c600}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR2101010&32-\/bit x\+BGR format, \mbox{[}31\+:0\mbox{]} x\+:\+B\+:G\+:R 2\+:10\+:10\+:10 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGBX1010102@{WL\_SHM\_FORMAT\_RGBX1010102}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGBX1010102@{WL\_SHM\_FORMAT\_RGBX1010102}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae07d9d4dfb070b70eab5b960726708a1}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae07d9d4dfb070b70eab5b960726708a1}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBX1010102&32-\/bit RGBx format, \mbox{[}31\+:0\mbox{]} R\+:\+G\+:B\+:x 10\+:10\+:10\+:2 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGRX1010102@{WL\_SHM\_FORMAT\_BGRX1010102}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGRX1010102@{WL\_SHM\_FORMAT\_BGRX1010102}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae3541f24f42bfb0b495511b932b3376f}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae3541f24f42bfb0b495511b932b3376f}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRX1010102&32-\/bit BGRx format, \mbox{[}31\+:0\mbox{]} B\+:\+G\+:R\+:x 10\+:10\+:10\+:2 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ARGB2101010@{WL\_SHM\_FORMAT\_ARGB2101010}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ARGB2101010@{WL\_SHM\_FORMAT\_ARGB2101010}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af8a101c6384f965f560b2549ea73aa1f}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af8a101c6384f965f560b2549ea73aa1f}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB2101010&32-\/bit ARGB format, \mbox{[}31\+:0\mbox{]} A\+:\+R\+:G\+:B 2\+:10\+:10\+:10 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ABGR2101010@{WL\_SHM\_FORMAT\_ABGR2101010}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ABGR2101010@{WL\_SHM\_FORMAT\_ABGR2101010}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ad97e4bc140b03d465e4019ab72d13a1b}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ad97e4bc140b03d465e4019ab72d13a1b}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR2101010&32-\/bit ABGR format, \mbox{[}31\+:0\mbox{]} A\+:\+B\+:G\+:R 2\+:10\+:10\+:10 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RGBA1010102@{WL\_SHM\_FORMAT\_RGBA1010102}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RGBA1010102@{WL\_SHM\_FORMAT\_RGBA1010102}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a6f276fd809ee11749583ee4ce38631da}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a6f276fd809ee11749583ee4ce38631da}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RGBA1010102&32-\/bit RGBA format, \mbox{[}31\+:0\mbox{]} R\+:\+G\+:B\+:A 10\+:10\+:10\+:2 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_BGRA1010102@{WL\_SHM\_FORMAT\_BGRA1010102}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_BGRA1010102@{WL\_SHM\_FORMAT\_BGRA1010102}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443acfaa1c4a36937c96ac0b807090501338}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443acfaa1c4a36937c96ac0b807090501338}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+BGRA1010102&32-\/bit BGRA format, \mbox{[}31\+:0\mbox{]} B\+:\+G\+:R\+:A 10\+:10\+:10\+:2 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YUYV@{WL\_SHM\_FORMAT\_YUYV}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YUYV@{WL\_SHM\_FORMAT\_YUYV}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443adcd31e63263405443cf907b983691d33}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443adcd31e63263405443cf907b983691d33}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUYV&packed YCb\+Cr format, \mbox{[}31\+:0\mbox{]} Cr0\+:\+Y1\+:\+Cb0\+:Y0 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YVYU@{WL\_SHM\_FORMAT\_YVYU}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YVYU@{WL\_SHM\_FORMAT\_YVYU}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a05ea2b9baaaa35bb57ddecb4db1b9454}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a05ea2b9baaaa35bb57ddecb4db1b9454}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVYU&packed YCb\+Cr format, \mbox{[}31\+:0\mbox{]} Cb0\+:\+Y1\+:\+Cr0\+:Y0 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_UYVY@{WL\_SHM\_FORMAT\_UYVY}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_UYVY@{WL\_SHM\_FORMAT\_UYVY}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a85394cd4c8a837e6629ffa11985e0170}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a85394cd4c8a837e6629ffa11985e0170}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+UYVY&packed YCb\+Cr format, \mbox{[}31\+:0\mbox{]} Y1\+:\+Cr0\+:\+Y0\+:Cb0 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_VYUY@{WL\_SHM\_FORMAT\_VYUY}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_VYUY@{WL\_SHM\_FORMAT\_VYUY}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a339b20f09e99308e21bef79022f7d1e5}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a339b20f09e99308e21bef79022f7d1e5}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+VYUY&packed YCb\+Cr format, \mbox{[}31\+:0\mbox{]} Y1\+:\+Cb0\+:\+Y0\+:Cr0 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_AYUV@{WL\_SHM\_FORMAT\_AYUV}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_AYUV@{WL\_SHM\_FORMAT\_AYUV}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a41fb168aeb795057a5e95efccc894fec}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a41fb168aeb795057a5e95efccc894fec}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+AYUV&packed AYCb\+Cr format, \mbox{[}31\+:0\mbox{]} A\+:\+Y\+:\+Cb\+:Cr 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_NV12@{WL\_SHM\_FORMAT\_NV12}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_NV12@{WL\_SHM\_FORMAT\_NV12}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a222256eaa933a08a27cb1a3a7dc0a831}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a222256eaa933a08a27cb1a3a7dc0a831}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV12&2 plane YCb\+Cr Cr\+:Cb format, 2x2 subsampled Cr\+:Cb plane \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_NV21@{WL\_SHM\_FORMAT\_NV21}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_NV21@{WL\_SHM\_FORMAT\_NV21}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a484a729bb8a479a80d53a13f1a02fbff}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a484a729bb8a479a80d53a13f1a02fbff}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV21&2 plane YCb\+Cr Cb\+:Cr format, 2x2 subsampled Cb\+:Cr plane \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_NV16@{WL\_SHM\_FORMAT\_NV16}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_NV16@{WL\_SHM\_FORMAT\_NV16}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7b0ad62c6e9135859b096ce7b022a340}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a7b0ad62c6e9135859b096ce7b022a340}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV16&2 plane YCb\+Cr Cr\+:Cb format, 2x1 subsampled Cr\+:Cb plane \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_NV61@{WL\_SHM\_FORMAT\_NV61}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_NV61@{WL\_SHM\_FORMAT\_NV61}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abff80d1b51829896cf187c878fa8c88c}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443abff80d1b51829896cf187c878fa8c88c}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV61&2 plane YCb\+Cr Cb\+:Cr format, 2x1 subsampled Cb\+:Cr plane \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YUV410@{WL\_SHM\_FORMAT\_YUV410}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YUV410@{WL\_SHM\_FORMAT\_YUV410}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a607d352d08b212cc7f9f08f5d8097be0}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a607d352d08b212cc7f9f08f5d8097be0}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV410&3 plane YCb\+Cr format, 4x4 subsampled Cb (1) and Cr (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YVU410@{WL\_SHM\_FORMAT\_YVU410}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YVU410@{WL\_SHM\_FORMAT\_YVU410}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae48edcf20221e34a8fe388892c629ea8}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae48edcf20221e34a8fe388892c629ea8}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU410&3 plane YCb\+Cr format, 4x4 subsampled Cr (1) and Cb (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YUV411@{WL\_SHM\_FORMAT\_YUV411}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YUV411@{WL\_SHM\_FORMAT\_YUV411}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a01ed44be0cc5f011364145deed89c3df}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a01ed44be0cc5f011364145deed89c3df}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV411&3 plane YCb\+Cr format, 4x1 subsampled Cb (1) and Cr (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YVU411@{WL\_SHM\_FORMAT\_YVU411}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YVU411@{WL\_SHM\_FORMAT\_YVU411}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac7fbcf9653b54238a05b132226a5564b}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac7fbcf9653b54238a05b132226a5564b}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU411&3 plane YCb\+Cr format, 4x1 subsampled Cr (1) and Cb (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YUV420@{WL\_SHM\_FORMAT\_YUV420}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YUV420@{WL\_SHM\_FORMAT\_YUV420}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a90aa2526853ec8a3b01abbe5a7062527}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a90aa2526853ec8a3b01abbe5a7062527}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV420&3 plane YCb\+Cr format, 2x2 subsampled Cb (1) and Cr (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YVU420@{WL\_SHM\_FORMAT\_YVU420}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YVU420@{WL\_SHM\_FORMAT\_YVU420}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a89243ca15600f3bd0e8edf035760e5bd}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a89243ca15600f3bd0e8edf035760e5bd}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU420&3 plane YCb\+Cr format, 2x2 subsampled Cr (1) and Cb (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YUV422@{WL\_SHM\_FORMAT\_YUV422}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YUV422@{WL\_SHM\_FORMAT\_YUV422}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aeca2a405fa558579097cd2997707ef68}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aeca2a405fa558579097cd2997707ef68}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV422&3 plane YCb\+Cr format, 2x1 subsampled Cb (1) and Cr (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YVU422@{WL\_SHM\_FORMAT\_YVU422}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YVU422@{WL\_SHM\_FORMAT\_YVU422}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a64768e73e3da25c9a3c9678dc5ce3834}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a64768e73e3da25c9a3c9678dc5ce3834}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU422&3 plane YCb\+Cr format, 2x1 subsampled Cr (1) and Cb (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YUV444@{WL\_SHM\_FORMAT\_YUV444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YUV444@{WL\_SHM\_FORMAT\_YUV444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a3fa17436e60106108b1701947b4e8d9a}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a3fa17436e60106108b1701947b4e8d9a}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YUV444&3 plane YCb\+Cr format, non-\/subsampled Cb (1) and Cr (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_YVU444@{WL\_SHM\_FORMAT\_YVU444}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_YVU444@{WL\_SHM\_FORMAT\_YVU444}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa9bc320ccf23b7e08d87649c3a36f650}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa9bc320ccf23b7e08d87649c3a36f650}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+YVU444&3 plane YCb\+Cr format, non-\/subsampled Cr (1) and Cb (2) planes \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_R8@{WL\_SHM\_FORMAT\_R8}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_R8@{WL\_SHM\_FORMAT\_R8}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a08f4e1679acf032e615b83ed1c3570c8}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a08f4e1679acf032e615b83ed1c3570c8}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+R8&\mbox{[}7\+:0\mbox{]} R \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_R16@{WL\_SHM\_FORMAT\_R16}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_R16@{WL\_SHM\_FORMAT\_R16}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9be721d50b83fa3ea9902b051b662181}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a9be721d50b83fa3ea9902b051b662181}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+R16&\mbox{[}15\+:0\mbox{]} R little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RG88@{WL\_SHM\_FORMAT\_RG88}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RG88@{WL\_SHM\_FORMAT\_RG88}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af94c98ed3712ce1bb61691b95662e45c}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af94c98ed3712ce1bb61691b95662e45c}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RG88&\mbox{[}15\+:0\mbox{]} R\+:G 8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_GR88@{WL\_SHM\_FORMAT\_GR88}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_GR88@{WL\_SHM\_FORMAT\_GR88}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a34ab9399a6c86cba8aa39b75d5c8c559}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a34ab9399a6c86cba8aa39b75d5c8c559}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+GR88&\mbox{[}15\+:0\mbox{]} G\+:R 8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_RG1616@{WL\_SHM\_FORMAT\_RG1616}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_RG1616@{WL\_SHM\_FORMAT\_RG1616}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ace3208a988a49927541336774c664ee4}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ace3208a988a49927541336774c664ee4}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+RG1616&\mbox{[}31\+:0\mbox{]} R\+:G 16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_GR1616@{WL\_SHM\_FORMAT\_GR1616}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_GR1616@{WL\_SHM\_FORMAT\_GR1616}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa2aee48693e3bd2a552937eecd7cfb71}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa2aee48693e3bd2a552937eecd7cfb71}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+GR1616&\mbox{[}31\+:0\mbox{]} G\+:R 16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XRGB16161616F@{WL\_SHM\_FORMAT\_XRGB16161616F}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XRGB16161616F@{WL\_SHM\_FORMAT\_XRGB16161616F}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4eb2f788c71166aeb0f6785020a8a77f}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4eb2f788c71166aeb0f6785020a8a77f}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB16161616F&\mbox{[}63\+:0\mbox{]} x\+:\+R\+:G\+:B 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XBGR16161616F@{WL\_SHM\_FORMAT\_XBGR16161616F}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XBGR16161616F@{WL\_SHM\_FORMAT\_XBGR16161616F}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8615056dde69d292f25ae98137abf23c}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8615056dde69d292f25ae98137abf23c}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR16161616F&\mbox{[}63\+:0\mbox{]} x\+:\+B\+:G\+:R 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ARGB16161616F@{WL\_SHM\_FORMAT\_ARGB16161616F}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ARGB16161616F@{WL\_SHM\_FORMAT\_ARGB16161616F}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a03acf2c2f37d137a03d536a2cc45b39d}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a03acf2c2f37d137a03d536a2cc45b39d}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB16161616F&\mbox{[}63\+:0\mbox{]} A\+:\+R\+:G\+:B 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ABGR16161616F@{WL\_SHM\_FORMAT\_ABGR16161616F}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ABGR16161616F@{WL\_SHM\_FORMAT\_ABGR16161616F}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae5ef6ca6c359e9db75fe5e2c273a483b}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ae5ef6ca6c359e9db75fe5e2c273a483b}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR16161616F&\mbox{[}63\+:0\mbox{]} A\+:\+B\+:G\+:R 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XYUV8888@{WL\_SHM\_FORMAT\_XYUV8888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XYUV8888@{WL\_SHM\_FORMAT\_XYUV8888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5d7a9db0efe349c90e55b158f5e2d7ff}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5d7a9db0efe349c90e55b158f5e2d7ff}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XYUV8888&\mbox{[}31\+:0\mbox{]} X\+:\+Y\+:\+Cb\+:Cr 8\+:8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_VUY888@{WL\_SHM\_FORMAT\_VUY888}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_VUY888@{WL\_SHM\_FORMAT\_VUY888}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2a15b0444a7b38464dbedae759fec71b}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2a15b0444a7b38464dbedae759fec71b}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+VUY888&\mbox{[}23\+:0\mbox{]} Cr\+:\+Cb\+:Y 8\+:8\+:8 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_VUY101010@{WL\_SHM\_FORMAT\_VUY101010}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_VUY101010@{WL\_SHM\_FORMAT\_VUY101010}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af5d7d666678e3bcb3b441eee39caf1c4}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af5d7d666678e3bcb3b441eee39caf1c4}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+VUY101010&Y followed by U then V, 10\+:10\+:10. Non-\/linear modifier only \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_Y210@{WL\_SHM\_FORMAT\_Y210}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_Y210@{WL\_SHM\_FORMAT\_Y210}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a0405e2a99f764bdb44cca537b5d62672}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a0405e2a99f764bdb44cca537b5d62672}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y210&\mbox{[}63\+:0\mbox{]} Cr0\+:0\+:Y1\+:0\+:Cb0\+:0\+:Y0\+:0 10\+:6\+:10\+:6\+:10\+:6\+:10\+:6 little endian per 2 Y pixels \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_Y212@{WL\_SHM\_FORMAT\_Y212}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_Y212@{WL\_SHM\_FORMAT\_Y212}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5ce458ebcd96389ea9d4e90e1d9e45b4}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5ce458ebcd96389ea9d4e90e1d9e45b4}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y212&\mbox{[}63\+:0\mbox{]} Cr0\+:0\+:Y1\+:0\+:Cb0\+:0\+:Y0\+:0 12\+:4\+:12\+:4\+:12\+:4\+:12\+:4 little endian per 2 Y pixels \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_Y216@{WL\_SHM\_FORMAT\_Y216}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_Y216@{WL\_SHM\_FORMAT\_Y216}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8203d1082f9c7df4528bfe7bce97f80a}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8203d1082f9c7df4528bfe7bce97f80a}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y216&\mbox{[}63\+:0\mbox{]} Cr0\+:\+Y1\+:\+Cb0\+:Y0 16\+:16\+:16\+:16 little endian per 2 Y pixels \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_Y410@{WL\_SHM\_FORMAT\_Y410}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_Y410@{WL\_SHM\_FORMAT\_Y410}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8dc1db69210afac6bd2e9edb077728dc}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a8dc1db69210afac6bd2e9edb077728dc}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y410&\mbox{[}31\+:0\mbox{]} A\+:\+Cr\+:Y\+:Cb 2\+:10\+:10\+:10 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_Y412@{WL\_SHM\_FORMAT\_Y412}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_Y412@{WL\_SHM\_FORMAT\_Y412}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4c48f2ab01b9db7ef9987128bfdb34f7}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a4c48f2ab01b9db7ef9987128bfdb34f7}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y412&\mbox{[}63\+:0\mbox{]} A\+:0\+:Cr\+:0\+:Y\+:0\+:Cb\+:0 12\+:4\+:12\+:4\+:12\+:4\+:12\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_Y416@{WL\_SHM\_FORMAT\_Y416}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_Y416@{WL\_SHM\_FORMAT\_Y416}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a07f92004f3d9326eb177f8696b6f56ac}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a07f92004f3d9326eb177f8696b6f56ac}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y416&\mbox{[}63\+:0\mbox{]} A\+:\+Cr\+:Y\+:Cb 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XVYU2101010@{WL\_SHM\_FORMAT\_XVYU2101010}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XVYU2101010@{WL\_SHM\_FORMAT\_XVYU2101010}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa9afe7eb3f4e0fb8a98748c513661674}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aa9afe7eb3f4e0fb8a98748c513661674}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XVYU2101010&\mbox{[}31\+:0\mbox{]} X\+:\+Cr\+:Y\+:Cb 2\+:10\+:10\+:10 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XVYU12\_16161616@{WL\_SHM\_FORMAT\_XVYU12\_16161616}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XVYU12\_16161616@{WL\_SHM\_FORMAT\_XVYU12\_16161616}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a43f19c2672cf894b391272ae10fea4e1}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a43f19c2672cf894b391272ae10fea4e1}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XVYU12\+\_\+16161616&\mbox{[}63\+:0\mbox{]} X\+:0\+:Cr\+:0\+:Y\+:0\+:Cb\+:0 12\+:4\+:12\+:4\+:12\+:4\+:12\+:4 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XVYU16161616@{WL\_SHM\_FORMAT\_XVYU16161616}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XVYU16161616@{WL\_SHM\_FORMAT\_XVYU16161616}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2f90e0cd0feb3776e6e0c4a93efefc27}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2f90e0cd0feb3776e6e0c4a93efefc27}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XVYU16161616&\mbox{[}63\+:0\mbox{]} X\+:\+Cr\+:Y\+:Cb 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_Y0L0@{WL\_SHM\_FORMAT\_Y0L0}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_Y0L0@{WL\_SHM\_FORMAT\_Y0L0}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aaeebd0929a8914e1dbca834207786cf6}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aaeebd0929a8914e1dbca834207786cf6}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y0\+L0&\mbox{[}63\+:0\mbox{]} A3\+:\+A2\+:\+Y3\+:0\+:Cr0\+:0\+:Y2\+:0\+:A1\+:\+A0\+:\+Y1\+:0\+:Cb0\+:0\+:Y0\+:0 1\+:1\+:8\+:2\+:8\+:2\+:8\+:2\+:1\+:1\+:8\+:2\+:8\+:2\+:8\+:2 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_X0L0@{WL\_SHM\_FORMAT\_X0L0}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_X0L0@{WL\_SHM\_FORMAT\_X0L0}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ab0015eac5f9bf6e8398da92fb64648c1}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ab0015eac5f9bf6e8398da92fb64648c1}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+X0\+L0&\mbox{[}63\+:0\mbox{]} X3\+:\+X2\+:\+Y3\+:0\+:Cr0\+:0\+:Y2\+:0\+:X1\+:\+X0\+:\+Y1\+:0\+:Cb0\+:0\+:Y0\+:0 1\+:1\+:8\+:2\+:8\+:2\+:8\+:2\+:1\+:1\+:8\+:2\+:8\+:2\+:8\+:2 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_Y0L2@{WL\_SHM\_FORMAT\_Y0L2}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_Y0L2@{WL\_SHM\_FORMAT\_Y0L2}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a1dd404c2c278f0ab6c17a3349eeae159}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a1dd404c2c278f0ab6c17a3349eeae159}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+Y0\+L2&\mbox{[}63\+:0\mbox{]} A3\+:\+A2\+:\+Y3\+:\+Cr0\+:\+Y2\+:\+A1\+:\+A0\+:\+Y1\+:\+Cb0\+:Y0 1\+:1\+:10\+:10\+:10\+:1\+:1\+:10\+:10\+:10 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_X0L2@{WL\_SHM\_FORMAT\_X0L2}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_X0L2@{WL\_SHM\_FORMAT\_X0L2}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a38f59f6728b9d51cbafc1b0999476d64}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a38f59f6728b9d51cbafc1b0999476d64}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+X0\+L2&\mbox{[}63\+:0\mbox{]} X3\+:\+X2\+:\+Y3\+:\+Cr0\+:\+Y2\+:\+X1\+:\+X0\+:\+Y1\+:\+Cb0\+:Y0 1\+:1\+:10\+:10\+:10\+:1\+:1\+:10\+:10\+:10 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_NV24@{WL\_SHM\_FORMAT\_NV24}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_NV24@{WL\_SHM\_FORMAT\_NV24}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2713870422780cb16b16fbada40e631b}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a2713870422780cb16b16fbada40e631b}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV24&non-\/subsampled Cr\+:Cb plane \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_NV42@{WL\_SHM\_FORMAT\_NV42}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_NV42@{WL\_SHM\_FORMAT\_NV42}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac338a21dfacc515ed97e3d9b63dbb552}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443ac338a21dfacc515ed97e3d9b63dbb552}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV42&non-\/subsampled Cb\+:Cr plane \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_P210@{WL\_SHM\_FORMAT\_P210}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_P210@{WL\_SHM\_FORMAT\_P210}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a53b7764e377e8e7188626c7b1cf2900a}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a53b7764e377e8e7188626c7b1cf2900a}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+P210&2x1 subsampled Cr\+:Cb plane, 10 bit per channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_P010@{WL\_SHM\_FORMAT\_P010}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_P010@{WL\_SHM\_FORMAT\_P010}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a87b0d9b6f1d034820d4ac437cc6ac22a}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a87b0d9b6f1d034820d4ac437cc6ac22a}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+P010&2x2 subsampled Cr\+:Cb plane 10 bits per channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_P012@{WL\_SHM\_FORMAT\_P012}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_P012@{WL\_SHM\_FORMAT\_P012}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a157e526b288f24e154a81c5c1120a45e}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a157e526b288f24e154a81c5c1120a45e}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+P012&2x2 subsampled Cr\+:Cb plane 12 bits per channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_P016@{WL\_SHM\_FORMAT\_P016}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_P016@{WL\_SHM\_FORMAT\_P016}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a153b3562600dc86a63e4f56fe4e39f45}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a153b3562600dc86a63e4f56fe4e39f45}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+P016&2x2 subsampled Cr\+:Cb plane 16 bits per channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_AXBXGXRX106106106106@{WL\_SHM\_FORMAT\_AXBXGXRX106106106106}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_AXBXGXRX106106106106@{WL\_SHM\_FORMAT\_AXBXGXRX106106106106}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af3e6e1b3f706d22642cad2708374e1f6}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443af3e6e1b3f706d22642cad2708374e1f6}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+AXBXGXRX106106106106&\mbox{[}63\+:0\mbox{]} A\+:x\+:\+B\+:x\+:\+G\+:x\+:R\+:x 10\+:6\+:10\+:6\+:10\+:6\+:10\+:6 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_NV15@{WL\_SHM\_FORMAT\_NV15}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_NV15@{WL\_SHM\_FORMAT\_NV15}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a28a6cdd51224e703fe873137b175f029}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a28a6cdd51224e703fe873137b175f029}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+NV15&2x2 subsampled Cr\+:Cb plane \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XRGB16161616@{WL\_SHM\_FORMAT\_XRGB16161616}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XRGB16161616@{WL\_SHM\_FORMAT\_XRGB16161616}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a09f9bf8b7ce1e1c29e100e65b18f334b}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a09f9bf8b7ce1e1c29e100e65b18f334b}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XRGB16161616&\mbox{[}63\+:0\mbox{]} x\+:\+R\+:G\+:B 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_XBGR16161616@{WL\_SHM\_FORMAT\_XBGR16161616}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_XBGR16161616@{WL\_SHM\_FORMAT\_XBGR16161616}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a999d65c92641485a40919d6a7f98d436}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a999d65c92641485a40919d6a7f98d436}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+XBGR16161616&\mbox{[}63\+:0\mbox{]} x\+:\+B\+:G\+:R 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ARGB16161616@{WL\_SHM\_FORMAT\_ARGB16161616}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ARGB16161616@{WL\_SHM\_FORMAT\_ARGB16161616}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5a5e7f352c71f1df221954a5d2ab9638}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443a5a5e7f352c71f1df221954a5d2ab9638}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ARGB16161616&\mbox{[}63\+:0\mbox{]} A\+:\+R\+:G\+:B 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SHM\_FORMAT\_ABGR16161616@{WL\_SHM\_FORMAT\_ABGR16161616}!The wl\_shm interface@{The wl\_shm interface}}\index{The wl\_shm interface@{The wl\_shm interface}!WL\_SHM\_FORMAT\_ABGR16161616@{WL\_SHM\_FORMAT\_ABGR16161616}}}\mbox{\Hypertarget{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aaed9e021ad600cf837c11ab781e136d4}\label{group__iface__wl__shm_gga46cb1c1ec4b588baa9d6c48b89682443aaed9e021ad600cf837c11ab781e136d4}} 
+WL\+\_\+\+SHM\+\_\+\+FORMAT\+\_\+\+ABGR16161616&\mbox{[}63\+:0\mbox{]} A\+:\+B\+:G\+:R 16\+:16\+:16\+:16 little endian \\
+\hline
+
+\end{DoxyEnumFields}

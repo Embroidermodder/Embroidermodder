@@ -1,4 +1,6 @@
-/*
+/*!
+ * \file state.c
+ *
  * Embroidermodder 2.
  *
  * Copyright 2011-2025 The Embroidermodder Team
@@ -37,6 +39,18 @@ char *os = "Android";
 #else
 char *os = "Unknown Operating System";
 #endif
+
+/*! The list of all the asset files used by Embroidermodder.
+ *
+ * The manifest is fixed: user overrides to the set files are available
+ * by adding to "overrides.toml" in the configuration folder (as opposed to
+ * the shared asset folder). For testing purposes only we can change the
+ * parent assets folder containing all these using the --assets flag.
+ */
+static EmbString manifest[] = {
+    "data/versions.toml",
+    "data/paths.toml"
+};
 
 ScriptValue *root;
 ScriptEnv *global;
@@ -128,17 +142,6 @@ int testing_mode = 0;
 char defaultPrefix[200];
 char prefix[200];
 char curCmd[200];
-
-/* ---------------------------- Paths ------------------------------ */
-
-const char *circle_origin_path = "M 0.0 1.0 " \
-    "A -1.0 -1.0 2.0 2.0 1 90.0 360.0 " \
-    "A -1.0 -1.0 2.0 2.0 1 90.0 -360.0 " \
-    "L 0.0 -1.0 " \
-    "A -1.0 -1.0 2.0 2.0 1 270.0 90.0 " \
-    "L -1.0 0.0 " \
-    "A -1.0 -1.0 2.0 2.0 1 180.0 -90.0 ";
-//  "Z";
 
 /* ---------------------------- Menus ------------------------------ */
 
@@ -3467,9 +3470,9 @@ CommandData command_data[MAX_COMMANDS] = {
 
 /* -------------------- State Management Functions ------------------------- */
 
-/* WARNING: key overrides whatever label the ScriptValue has, this is an
- *     an intended feature to allow for use of the script_* functions
- *     for constructing ScriptValues.
+/* \warning key overrides whatever label the ScriptValue has, this is an
+ *          an intended feature to allow for use of the script_* functions
+ *          for constructing ScriptValues.
  */
 int
 emb_set_var(ScriptValue *node, const char *key, ScriptValue value)
@@ -3483,10 +3486,12 @@ emb_set_var(ScriptValue *node, const char *key, ScriptValue value)
     return 0;
 }
 
-/* Load a ScriptValue from the environment using the key supplied. */
+/*! \brief Load a ScriptValue from the environment using the key supplied.
+ */
 ScriptValue *
 emb_get_var(ScriptValue *node, const char *key)
 {
+    printf("%d\n", node->n_leaves);
     for (int i=0; i<node->n_leaves; i++) {
         if (!strncmp(node->leaves[i].label, key, MAX_STRING_LENGTH)) {
             return node->leaves + i;
@@ -3496,14 +3501,15 @@ emb_get_var(ScriptValue *node, const char *key)
     return &script_null;
 }
 
-/* Load a char array from the environment using the key supplied. */
+/*! \brief Load a char array from the environment using the key supplied.
+ */
 const char*
 emb_get_str(ScriptValue *node, const char *key)
 {
     return emb_get_var(node, key)->s;
 }
 
-/* . */
+/*! . */
 size_t
 load_file_to_buffer(char *fname, char *buffer)
 {
@@ -3524,12 +3530,12 @@ load_file_to_buffer(char *fname, char *buffer)
     return 1;
 }
 
-/* Loads init_script 1 Mb buffer to chain together all of the
- * strings in the init_script string table.
+/*! \brief Loads init_script 1 Mb buffer to chain together all of the
+ *         strings in the init_script string table.
  *
- * TODO: could reuse buffer safely between script loads.
+ * \todo could reuse buffer safely between script loads.
  */
-toml_table_t *
+int
 load_script(char *asset_dir, char *fname)
 {
     char full_fname[400];
@@ -3544,14 +3550,13 @@ load_script(char *asset_dir, char *fname)
     }
 
     toml_table_t *table = toml_parse(buffer, error_buffer, 200);
-    if (!table) {
-        printf("ERROR: %s\n", error_buffer);
-    }
     free(buffer);
     if (!table) {
+        printf("ERROR: %s\n", error_buffer);
         toml_free(table);
-        return 0;
+        return 1;
     }
+    /*! \todo loading of nested structures like arrays of dicts etc. */
     for (int i=0; ; i++) {
         const char *key = toml_key_in(table, i);
         if (!key) {
@@ -3559,7 +3564,7 @@ load_script(char *asset_dir, char *fname)
         }
         toml_datum_t s = toml_string_in(table, key);
         if (s.ok) {
-            emb_create_leaf(root, EMB_DATATYPE_STR, key, s.u.s);
+            emb_create_leaf(root, EMB_DATATYPE_STR, (char*)key, s.u.s);
         }
         else {
             printf("ERROR: failed to load %s\n", key);
@@ -3567,10 +3572,11 @@ load_script(char *asset_dir, char *fname)
         free(s.u.s);
     }
     toml_free(table);
-    return 1;
+    return 0;
 }
 
-/* Load our basic tree structure of data for all of our data structures above.
+/*! \brief Load our basic tree structure of data for all of our data structures
+ *         above.
  *
  * EXAMPLE
  * We want access to the `os` string, it is a static in this file.
@@ -3597,13 +3603,9 @@ load_global_state(ScriptValue *root, char *asset_dir)
     emb_create_leaf(root, EMB_DATATYPE_STR, "os", os);
     emb_create_leaf(root, EMB_DATATYPE_STR, "asset_dir", asset_dir);
 
-    char *manifest[] = {
-        "data/versions.toml",
-        "data/paths.toml",
-        "END"
-    };
-
-    for (int i=0; strncmp(manifest, "END", 200); i++) {
+    /** Hard capped at 1000 configuration files. */
+    size_t n = sizeof(manifest) / sizeof(EmbString);
+    for (size_t i=0; i<n; i++) {
         printf("Loading \"%s\"...\n", manifest[i]);
         error = load_script(asset_dir, manifest[i]);
         if (error) {

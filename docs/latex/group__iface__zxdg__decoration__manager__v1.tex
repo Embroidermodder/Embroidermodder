@@ -1,0 +1,23 @@
+\hypertarget{group__iface__zxdg__decoration__manager__v1}{}\doxysection{The zxdg\+\_\+decoration\+\_\+manager\+\_\+v1 interface}
+\label{group__iface__zxdg__decoration__manager__v1}\index{The zxdg\_decoration\_manager\_v1 interface@{The zxdg\_decoration\_manager\_v1 interface}}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__zxdg__decoration__manager__v1_ga5a79b7a94f1cb236e5b0df9250be7ab6}\label{group__iface__zxdg__decoration__manager__v1_ga5a79b7a94f1cb236e5b0df9250be7ab6}} 
+\#define {\bfseries ZXDG\+\_\+\+DECORATION\+\_\+\+MANAGER\+\_\+\+V1\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zxdg__decoration__manager__v1_ga72fff5807337809bccf6d6236de99a45}\label{group__iface__zxdg__decoration__manager__v1_ga72fff5807337809bccf6d6236de99a45}} 
+\#define {\bfseries ZXDG\+\_\+\+DECORATION\+\_\+\+MANAGER\+\_\+\+V1\+\_\+\+GET\+\_\+\+TOPLEVEL\+\_\+\+DECORATION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This interface allows a compositor to announce support for server-\/side decorations.
+
+A window decoration is a set of window controls as deemed appropriate by the party managing them, such as user interface components used to move, resize and change a window\textquotesingle{}s state.
+
+A client can use this protocol to request being decorated by a supporting compositor.
+
+If compositor and client do not negotiate the use of a server-\/side decoration using this protocol, clients continue to self-\/decorate as they see fit.
+
+Warning! The protocol described in this file is experimental and backward incompatible changes may be made. Backward compatible changes may be added together with the corresponding interface version bump. Backward incompatible changes are done by bumping the version number in the protocol and interface names and resetting the interface version. Once the protocol is to be declared stable, the \textquotesingle{}z\textquotesingle{} prefix and the version number in the protocol and interface names are removed and the interface version number is reset. 

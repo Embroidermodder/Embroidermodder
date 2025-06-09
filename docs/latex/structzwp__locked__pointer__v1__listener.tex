@@ -1,0 +1,33 @@
+\hypertarget{structzwp__locked__pointer__v1__listener}{}\doxysection{zwp\+\_\+locked\+\_\+pointer\+\_\+v1\+\_\+listener Struct Reference}
+\label{structzwp__locked__pointer__v1__listener}\index{zwp\_locked\_pointer\_v1\_listener@{zwp\_locked\_pointer\_v1\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structzwp__locked__pointer__v1__listener_aaa4df48c2e963203db97933e21ecfc65}{locked}} )(void $\ast$data, struct zwp\+\_\+locked\+\_\+pointer\+\_\+v1 $\ast$zwp\+\_\+locked\+\_\+pointer\+\_\+v1)
+\item 
+void($\ast$ \mbox{\hyperlink{structzwp__locked__pointer__v1__listener_aff390811b26f694fcb33eb6ea7ca7c2b}{unlocked}} )(void $\ast$data, struct zwp\+\_\+locked\+\_\+pointer\+\_\+v1 $\ast$zwp\+\_\+locked\+\_\+pointer\+\_\+v1)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structzwp__locked__pointer__v1__listener_aaa4df48c2e963203db97933e21ecfc65}\label{structzwp__locked__pointer__v1__listener_aaa4df48c2e963203db97933e21ecfc65}} 
+\index{zwp\_locked\_pointer\_v1\_listener@{zwp\_locked\_pointer\_v1\_listener}!locked@{locked}}
+\index{locked@{locked}!zwp\_locked\_pointer\_v1\_listener@{zwp\_locked\_pointer\_v1\_listener}}
+\doxysubsubsection{\texorpdfstring{locked}{locked}}
+{\footnotesize\ttfamily void($\ast$ zwp\+\_\+locked\+\_\+pointer\+\_\+v1\+\_\+listener\+::locked) (void $\ast$data, struct zwp\+\_\+locked\+\_\+pointer\+\_\+v1 $\ast$zwp\+\_\+locked\+\_\+pointer\+\_\+v1)}
+
+lock activation event
+
+Notification that the pointer lock of the seat\textquotesingle{}s pointer is activated. \mbox{\Hypertarget{structzwp__locked__pointer__v1__listener_aff390811b26f694fcb33eb6ea7ca7c2b}\label{structzwp__locked__pointer__v1__listener_aff390811b26f694fcb33eb6ea7ca7c2b}} 
+\index{zwp\_locked\_pointer\_v1\_listener@{zwp\_locked\_pointer\_v1\_listener}!unlocked@{unlocked}}
+\index{unlocked@{unlocked}!zwp\_locked\_pointer\_v1\_listener@{zwp\_locked\_pointer\_v1\_listener}}
+\doxysubsubsection{\texorpdfstring{unlocked}{unlocked}}
+{\footnotesize\ttfamily void($\ast$ zwp\+\_\+locked\+\_\+pointer\+\_\+v1\+\_\+listener\+::unlocked) (void $\ast$data, struct zwp\+\_\+locked\+\_\+pointer\+\_\+v1 $\ast$zwp\+\_\+locked\+\_\+pointer\+\_\+v1)}
+
+lock deactivation event
+
+Notification that the pointer lock of the seat\textquotesingle{}s pointer is no longer active. If this is a oneshot pointer lock (see wp\+\_\+pointer\+\_\+constraints.\+lifetime) this object is now defunct and should be destroyed. If this is a persistent pointer lock (see wp\+\_\+pointer\+\_\+constraints.\+lifetime) this pointer lock may again reactivate in the future. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/pointer-\/constraints-\/unstable-\/v1-\/client-\/protocol.\+h\end{DoxyCompactItemize}

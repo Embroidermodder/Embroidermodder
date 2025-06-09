@@ -1,0 +1,612 @@
+\hypertarget{linmath_8h_source}{}\doxysection{linmath.\+h}
+\label{linmath_8h_source}\index{extern/glfw/deps/linmath.h@{extern/glfw/deps/linmath.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef LINMATH\_H}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#define LINMATH\_H}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <math.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{comment}{/* 2021-\/03-\/21 Camilla Löwy <elmindreda@elmindreda.org>}}
+\DoxyCodeLine{9 \textcolor{comment}{ * -\/ Replaced double constants with float equivalents}}
+\DoxyCodeLine{10 \textcolor{comment}{ */}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#ifdef LINMATH\_NO\_INLINE}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#define LINMATH\_H\_FUNC static}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#define LINMATH\_H\_FUNC static inline}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#define LINMATH\_H\_DEFINE\_VEC(n) \(\backslash\)}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{typedef float vec\#\#n[n]; \(\backslash\)}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{LINMATH\_H\_FUNC void vec\#\#n\#\#\_add(vec\#\#n r, vec\#\#n const a, vec\#\#n const b) \(\backslash\)}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{    int i; \(\backslash\)}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{    for(i=0; i<n; ++i) \(\backslash\)}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{        r[i] = a[i] + b[i]; \(\backslash\)}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\} \(\backslash\)}}
+\DoxyCodeLine{26 \textcolor{preprocessor}{LINMATH\_H\_FUNC void vec\#\#n\#\#\_sub(vec\#\#n r, vec\#\#n const a, vec\#\#n const b) \(\backslash\)}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{    int i; \(\backslash\)}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{    for(i=0; i<n; ++i) \(\backslash\)}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{        r[i] = a[i] -\/ b[i]; \(\backslash\)}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\} \(\backslash\)}}
+\DoxyCodeLine{32 \textcolor{preprocessor}{LINMATH\_H\_FUNC void vec\#\#n\#\#\_scale(vec\#\#n r, vec\#\#n const v, float const s) \(\backslash\)}}
+\DoxyCodeLine{33 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{    int i; \(\backslash\)}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{    for(i=0; i<n; ++i) \(\backslash\)}}
+\DoxyCodeLine{36 \textcolor{preprocessor}{        r[i] = v[i] * s; \(\backslash\)}}
+\DoxyCodeLine{37 \textcolor{preprocessor}{\} \(\backslash\)}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{LINMATH\_H\_FUNC float vec\#\#n\#\#\_mul\_inner(vec\#\#n const a, vec\#\#n const b) \(\backslash\)}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{40 \textcolor{preprocessor}{    float p = 0.f; \(\backslash\)}}
+\DoxyCodeLine{41 \textcolor{preprocessor}{    int i; \(\backslash\)}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{    for(i=0; i<n; ++i) \(\backslash\)}}
+\DoxyCodeLine{43 \textcolor{preprocessor}{        p += b[i]*a[i]; \(\backslash\)}}
+\DoxyCodeLine{44 \textcolor{preprocessor}{    return p; \(\backslash\)}}
+\DoxyCodeLine{45 \textcolor{preprocessor}{\} \(\backslash\)}}
+\DoxyCodeLine{46 \textcolor{preprocessor}{LINMATH\_H\_FUNC float vec\#\#n\#\#\_len(vec\#\#n const v) \(\backslash\)}}
+\DoxyCodeLine{47 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{48 \textcolor{preprocessor}{    return sqrtf(vec\#\#n\#\#\_mul\_inner(v,v)); \(\backslash\)}}
+\DoxyCodeLine{49 \textcolor{preprocessor}{\} \(\backslash\)}}
+\DoxyCodeLine{50 \textcolor{preprocessor}{LINMATH\_H\_FUNC void vec\#\#n\#\#\_norm(vec\#\#n r, vec\#\#n const v) \(\backslash\)}}
+\DoxyCodeLine{51 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{52 \textcolor{preprocessor}{    float k = 1.f / vec\#\#n\#\#\_len(v); \(\backslash\)}}
+\DoxyCodeLine{53 \textcolor{preprocessor}{    vec\#\#n\#\#\_scale(r, v, k); \(\backslash\)}}
+\DoxyCodeLine{54 \textcolor{preprocessor}{\} \(\backslash\)}}
+\DoxyCodeLine{55 \textcolor{preprocessor}{LINMATH\_H\_FUNC void vec\#\#n\#\#\_min(vec\#\#n r, vec\#\#n const a, vec\#\#n const b) \(\backslash\)}}
+\DoxyCodeLine{56 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{57 \textcolor{preprocessor}{    int i; \(\backslash\)}}
+\DoxyCodeLine{58 \textcolor{preprocessor}{    for(i=0; i<n; ++i) \(\backslash\)}}
+\DoxyCodeLine{59 \textcolor{preprocessor}{        r[i] = a[i]<b[i] ? a[i] : b[i]; \(\backslash\)}}
+\DoxyCodeLine{60 \textcolor{preprocessor}{\} \(\backslash\)}}
+\DoxyCodeLine{61 \textcolor{preprocessor}{LINMATH\_H\_FUNC void vec\#\#n\#\#\_max(vec\#\#n r, vec\#\#n const a, vec\#\#n const b) \(\backslash\)}}
+\DoxyCodeLine{62 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{63 \textcolor{preprocessor}{    int i; \(\backslash\)}}
+\DoxyCodeLine{64 \textcolor{preprocessor}{    for(i=0; i<n; ++i) \(\backslash\)}}
+\DoxyCodeLine{65 \textcolor{preprocessor}{        r[i] = a[i]>b[i] ? a[i] : b[i]; \(\backslash\)}}
+\DoxyCodeLine{66 \textcolor{preprocessor}{\} \(\backslash\)}}
+\DoxyCodeLine{67 \textcolor{preprocessor}{LINMATH\_H\_FUNC void vec\#\#n\#\#\_dup(vec\#\#n r, vec\#\#n const src) \(\backslash\)}}
+\DoxyCodeLine{68 \textcolor{preprocessor}{\{ \(\backslash\)}}
+\DoxyCodeLine{69 \textcolor{preprocessor}{    int i; \(\backslash\)}}
+\DoxyCodeLine{70 \textcolor{preprocessor}{    for(i=0; i<n; ++i) \(\backslash\)}}
+\DoxyCodeLine{71 \textcolor{preprocessor}{        r[i] = src[i]; \(\backslash\)}}
+\DoxyCodeLine{72 \textcolor{preprocessor}{\}}}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74 LINMATH\_H\_DEFINE\_VEC(2)}
+\DoxyCodeLine{75 LINMATH\_H\_DEFINE\_VEC(3)}
+\DoxyCodeLine{76 LINMATH\_H\_DEFINE\_VEC(4)}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{78 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} vec3\_mul\_cross(vec3 r, vec3 const a, vec3 const b)}
+\DoxyCodeLine{79 \{}
+\DoxyCodeLine{80     r[0] = a[1]*b[2] -\/ a[2]*b[1];}
+\DoxyCodeLine{81     r[1] = a[2]*b[0] -\/ a[0]*b[2];}
+\DoxyCodeLine{82     r[2] = a[0]*b[1] -\/ a[1]*b[0];}
+\DoxyCodeLine{83 \}}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} vec3\_reflect(vec3 r, vec3 \textcolor{keyword}{const} v, vec3 \textcolor{keyword}{const} n)}
+\DoxyCodeLine{86 \{}
+\DoxyCodeLine{87     \textcolor{keywordtype}{float} p = 2.f * vec3\_mul\_inner(v, n);}
+\DoxyCodeLine{88     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{89     \textcolor{keywordflow}{for}(i=0;i<3;++i)}
+\DoxyCodeLine{90         r[i] = v[i] -\/ p*n[i];}
+\DoxyCodeLine{91 \}}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} vec4\_mul\_cross(vec4 r, vec4 \textcolor{keyword}{const} a, vec4 \textcolor{keyword}{const} b)}
+\DoxyCodeLine{94 \{}
+\DoxyCodeLine{95     r[0] = a[1]*b[2] -\/ a[2]*b[1];}
+\DoxyCodeLine{96     r[1] = a[2]*b[0] -\/ a[0]*b[2];}
+\DoxyCodeLine{97     r[2] = a[0]*b[1] -\/ a[1]*b[0];}
+\DoxyCodeLine{98     r[3] = 1.f;}
+\DoxyCodeLine{99 \}}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} vec4\_reflect(vec4 r, vec4 \textcolor{keyword}{const} v, vec4 \textcolor{keyword}{const} n)}
+\DoxyCodeLine{102 \{}
+\DoxyCodeLine{103     \textcolor{keywordtype}{float} p  = 2.f*vec4\_mul\_inner(v, n);}
+\DoxyCodeLine{104     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{105     \textcolor{keywordflow}{for}(i=0;i<4;++i)}
+\DoxyCodeLine{106         r[i] = v[i] -\/ p*n[i];}
+\DoxyCodeLine{107 \}}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{109 \textcolor{keyword}{typedef} vec4 mat4x4[4];}
+\DoxyCodeLine{110 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_identity(mat4x4 M)}
+\DoxyCodeLine{111 \{}
+\DoxyCodeLine{112     \textcolor{keywordtype}{int} i, j;}
+\DoxyCodeLine{113     \textcolor{keywordflow}{for}(i=0; i<4; ++i)}
+\DoxyCodeLine{114         \textcolor{keywordflow}{for}(j=0; j<4; ++j)}
+\DoxyCodeLine{115             M[i][j] = i==j ? 1.f : 0.f;}
+\DoxyCodeLine{116 \}}
+\DoxyCodeLine{117 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_dup(mat4x4 M, mat4x4 \textcolor{keyword}{const} N)}
+\DoxyCodeLine{118 \{}
+\DoxyCodeLine{119     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{120     \textcolor{keywordflow}{for}(i=0; i<4; ++i)}
+\DoxyCodeLine{121         vec4\_dup(M[i], N[i]);}
+\DoxyCodeLine{122 \}}
+\DoxyCodeLine{123 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_row(vec4 r, mat4x4 \textcolor{keyword}{const} M, \textcolor{keywordtype}{int} i)}
+\DoxyCodeLine{124 \{}
+\DoxyCodeLine{125     \textcolor{keywordtype}{int} k;}
+\DoxyCodeLine{126     \textcolor{keywordflow}{for}(k=0; k<4; ++k)}
+\DoxyCodeLine{127         r[k] = M[k][i];}
+\DoxyCodeLine{128 \}}
+\DoxyCodeLine{129 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_col(vec4 r, mat4x4 \textcolor{keyword}{const} M, \textcolor{keywordtype}{int} i)}
+\DoxyCodeLine{130 \{}
+\DoxyCodeLine{131     \textcolor{keywordtype}{int} k;}
+\DoxyCodeLine{132     \textcolor{keywordflow}{for}(k=0; k<4; ++k)}
+\DoxyCodeLine{133         r[k] = M[i][k];}
+\DoxyCodeLine{134 \}}
+\DoxyCodeLine{135 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_transpose(mat4x4 M, mat4x4 \textcolor{keyword}{const} N)}
+\DoxyCodeLine{136 \{}
+\DoxyCodeLine{137     \textcolor{comment}{// Note: if M and N are the same, the user has to}}
+\DoxyCodeLine{138     \textcolor{comment}{// explicitly make a copy of M and set it to N.}}
+\DoxyCodeLine{139     \textcolor{keywordtype}{int} i, j;}
+\DoxyCodeLine{140     \textcolor{keywordflow}{for}(j=0; j<4; ++j)}
+\DoxyCodeLine{141         \textcolor{keywordflow}{for}(i=0; i<4; ++i)}
+\DoxyCodeLine{142             M[i][j] = N[j][i];}
+\DoxyCodeLine{143 \}}
+\DoxyCodeLine{144 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_add(mat4x4 M, mat4x4 \textcolor{keyword}{const} a, mat4x4 \textcolor{keyword}{const} b)}
+\DoxyCodeLine{145 \{}
+\DoxyCodeLine{146     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{147     \textcolor{keywordflow}{for}(i=0; i<4; ++i)}
+\DoxyCodeLine{148         vec4\_add(M[i], a[i], b[i]);}
+\DoxyCodeLine{149 \}}
+\DoxyCodeLine{150 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_sub(mat4x4 M, mat4x4 \textcolor{keyword}{const} a, mat4x4 \textcolor{keyword}{const} b)}
+\DoxyCodeLine{151 \{}
+\DoxyCodeLine{152     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{153     \textcolor{keywordflow}{for}(i=0; i<4; ++i)}
+\DoxyCodeLine{154         vec4\_sub(M[i], a[i], b[i]);}
+\DoxyCodeLine{155 \}}
+\DoxyCodeLine{156 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_scale(mat4x4 M, mat4x4 \textcolor{keyword}{const} a, \textcolor{keywordtype}{float} k)}
+\DoxyCodeLine{157 \{}
+\DoxyCodeLine{158     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{159     \textcolor{keywordflow}{for}(i=0; i<4; ++i)}
+\DoxyCodeLine{160         vec4\_scale(M[i], a[i], k);}
+\DoxyCodeLine{161 \}}
+\DoxyCodeLine{162 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_scale\_aniso(mat4x4 M, mat4x4 \textcolor{keyword}{const} a, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y, \textcolor{keywordtype}{float} z)}
+\DoxyCodeLine{163 \{}
+\DoxyCodeLine{164     vec4\_scale(M[0], a[0], x);}
+\DoxyCodeLine{165     vec4\_scale(M[1], a[1], y);}
+\DoxyCodeLine{166     vec4\_scale(M[2], a[2], z);}
+\DoxyCodeLine{167     vec4\_dup(M[3], a[3]);}
+\DoxyCodeLine{168 \}}
+\DoxyCodeLine{169 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_mul(mat4x4 M, mat4x4 \textcolor{keyword}{const} a, mat4x4 \textcolor{keyword}{const} b)}
+\DoxyCodeLine{170 \{}
+\DoxyCodeLine{171     mat4x4 temp;}
+\DoxyCodeLine{172     \textcolor{keywordtype}{int} k, r, c;}
+\DoxyCodeLine{173     \textcolor{keywordflow}{for}(c=0; c<4; ++c) \textcolor{keywordflow}{for}(r=0; r<4; ++r) \{}
+\DoxyCodeLine{174         temp[c][r] = 0.f;}
+\DoxyCodeLine{175         \textcolor{keywordflow}{for}(k=0; k<4; ++k)}
+\DoxyCodeLine{176             temp[c][r] += a[k][r] * b[c][k];}
+\DoxyCodeLine{177     \}}
+\DoxyCodeLine{178     mat4x4\_dup(M, temp);}
+\DoxyCodeLine{179 \}}
+\DoxyCodeLine{180 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_mul\_vec4(vec4 r, mat4x4 \textcolor{keyword}{const} M, vec4 \textcolor{keyword}{const} v)}
+\DoxyCodeLine{181 \{}
+\DoxyCodeLine{182     \textcolor{keywordtype}{int} i, j;}
+\DoxyCodeLine{183     \textcolor{keywordflow}{for}(j=0; j<4; ++j) \{}
+\DoxyCodeLine{184         r[j] = 0.f;}
+\DoxyCodeLine{185         \textcolor{keywordflow}{for}(i=0; i<4; ++i)}
+\DoxyCodeLine{186             r[j] += M[i][j] * v[i];}
+\DoxyCodeLine{187     \}}
+\DoxyCodeLine{188 \}}
+\DoxyCodeLine{189 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_translate(mat4x4 T, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y, \textcolor{keywordtype}{float} z)}
+\DoxyCodeLine{190 \{}
+\DoxyCodeLine{191     mat4x4\_identity(T);}
+\DoxyCodeLine{192     T[3][0] = x;}
+\DoxyCodeLine{193     T[3][1] = y;}
+\DoxyCodeLine{194     T[3][2] = z;}
+\DoxyCodeLine{195 \}}
+\DoxyCodeLine{196 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_translate\_in\_place(mat4x4 M, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y, \textcolor{keywordtype}{float} z)}
+\DoxyCodeLine{197 \{}
+\DoxyCodeLine{198     vec4 t = \{x, y, z, 0\};}
+\DoxyCodeLine{199     vec4 r;}
+\DoxyCodeLine{200     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{201     \textcolor{keywordflow}{for} (i = 0; i < 4; ++i) \{}
+\DoxyCodeLine{202         mat4x4\_row(r, M, i);}
+\DoxyCodeLine{203         M[3][i] += vec4\_mul\_inner(r, t);}
+\DoxyCodeLine{204     \}}
+\DoxyCodeLine{205 \}}
+\DoxyCodeLine{206 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_from\_vec3\_mul\_outer(mat4x4 M, vec3 \textcolor{keyword}{const} a, vec3 \textcolor{keyword}{const} b)}
+\DoxyCodeLine{207 \{}
+\DoxyCodeLine{208     \textcolor{keywordtype}{int} i, j;}
+\DoxyCodeLine{209     \textcolor{keywordflow}{for}(i=0; i<4; ++i) \textcolor{keywordflow}{for}(j=0; j<4; ++j)}
+\DoxyCodeLine{210         M[i][j] = i<3 \&\& j<3 ? a[i] * b[j] : 0.f;}
+\DoxyCodeLine{211 \}}
+\DoxyCodeLine{212 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_rotate(mat4x4 R, mat4x4 \textcolor{keyword}{const} M, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y, \textcolor{keywordtype}{float} z, \textcolor{keywordtype}{float} angle)}
+\DoxyCodeLine{213 \{}
+\DoxyCodeLine{214     \textcolor{keywordtype}{float} s = sinf(angle);}
+\DoxyCodeLine{215     \textcolor{keywordtype}{float} c = cosf(angle);}
+\DoxyCodeLine{216     vec3 u = \{x, y, z\};}
+\DoxyCodeLine{217 }
+\DoxyCodeLine{218     \textcolor{keywordflow}{if}(vec3\_len(u) > 1e-\/4) \{}
+\DoxyCodeLine{219         vec3\_norm(u, u);}
+\DoxyCodeLine{220         mat4x4 T;}
+\DoxyCodeLine{221         mat4x4\_from\_vec3\_mul\_outer(T, u, u);}
+\DoxyCodeLine{222 }
+\DoxyCodeLine{223         mat4x4 S = \{}
+\DoxyCodeLine{224             \{    0,  u[2], -\/u[1], 0\},}
+\DoxyCodeLine{225             \{-\/u[2],     0,  u[0], 0\},}
+\DoxyCodeLine{226             \{ u[1], -\/u[0],     0, 0\},}
+\DoxyCodeLine{227             \{    0,     0,     0, 0\}}
+\DoxyCodeLine{228         \};}
+\DoxyCodeLine{229         mat4x4\_scale(S, S, s);}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231         mat4x4 C;}
+\DoxyCodeLine{232         mat4x4\_identity(C);}
+\DoxyCodeLine{233         mat4x4\_sub(C, C, T);}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{235         mat4x4\_scale(C, C, c);}
+\DoxyCodeLine{236 }
+\DoxyCodeLine{237         mat4x4\_add(T, T, C);}
+\DoxyCodeLine{238         mat4x4\_add(T, T, S);}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240         T[3][3] = 1.f;}
+\DoxyCodeLine{241         mat4x4\_mul(R, M, T);}
+\DoxyCodeLine{242     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{243         mat4x4\_dup(R, M);}
+\DoxyCodeLine{244     \}}
+\DoxyCodeLine{245 \}}
+\DoxyCodeLine{246 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_rotate\_X(mat4x4 Q, mat4x4 \textcolor{keyword}{const} M, \textcolor{keywordtype}{float} angle)}
+\DoxyCodeLine{247 \{}
+\DoxyCodeLine{248     \textcolor{keywordtype}{float} s = sinf(angle);}
+\DoxyCodeLine{249     \textcolor{keywordtype}{float} c = cosf(angle);}
+\DoxyCodeLine{250     mat4x4 R = \{}
+\DoxyCodeLine{251         \{1.f, 0.f, 0.f, 0.f\},}
+\DoxyCodeLine{252         \{0.f,   c,   s, 0.f\},}
+\DoxyCodeLine{253         \{0.f,  -\/s,   c, 0.f\},}
+\DoxyCodeLine{254         \{0.f, 0.f, 0.f, 1.f\}}
+\DoxyCodeLine{255     \};}
+\DoxyCodeLine{256     mat4x4\_mul(Q, M, R);}
+\DoxyCodeLine{257 \}}
+\DoxyCodeLine{258 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_rotate\_Y(mat4x4 Q, mat4x4 \textcolor{keyword}{const} M, \textcolor{keywordtype}{float} angle)}
+\DoxyCodeLine{259 \{}
+\DoxyCodeLine{260     \textcolor{keywordtype}{float} s = sinf(angle);}
+\DoxyCodeLine{261     \textcolor{keywordtype}{float} c = cosf(angle);}
+\DoxyCodeLine{262     mat4x4 R = \{}
+\DoxyCodeLine{263         \{   c, 0.f,  -\/s, 0.f\},}
+\DoxyCodeLine{264         \{ 0.f, 1.f, 0.f, 0.f\},}
+\DoxyCodeLine{265         \{   s, 0.f,   c, 0.f\},}
+\DoxyCodeLine{266         \{ 0.f, 0.f, 0.f, 1.f\}}
+\DoxyCodeLine{267     \};}
+\DoxyCodeLine{268     mat4x4\_mul(Q, M, R);}
+\DoxyCodeLine{269 \}}
+\DoxyCodeLine{270 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_rotate\_Z(mat4x4 Q, mat4x4 \textcolor{keyword}{const} M, \textcolor{keywordtype}{float} angle)}
+\DoxyCodeLine{271 \{}
+\DoxyCodeLine{272     \textcolor{keywordtype}{float} s = sinf(angle);}
+\DoxyCodeLine{273     \textcolor{keywordtype}{float} c = cosf(angle);}
+\DoxyCodeLine{274     mat4x4 R = \{}
+\DoxyCodeLine{275         \{   c,   s, 0.f, 0.f\},}
+\DoxyCodeLine{276         \{  -\/s,   c, 0.f, 0.f\},}
+\DoxyCodeLine{277         \{ 0.f, 0.f, 1.f, 0.f\},}
+\DoxyCodeLine{278         \{ 0.f, 0.f, 0.f, 1.f\}}
+\DoxyCodeLine{279     \};}
+\DoxyCodeLine{280     mat4x4\_mul(Q, M, R);}
+\DoxyCodeLine{281 \}}
+\DoxyCodeLine{282 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_invert(mat4x4 T, mat4x4 \textcolor{keyword}{const} M)}
+\DoxyCodeLine{283 \{}
+\DoxyCodeLine{284     \textcolor{keywordtype}{float} s[6];}
+\DoxyCodeLine{285     \textcolor{keywordtype}{float} c[6];}
+\DoxyCodeLine{286     s[0] = M[0][0]*M[1][1] -\/ M[1][0]*M[0][1];}
+\DoxyCodeLine{287     s[1] = M[0][0]*M[1][2] -\/ M[1][0]*M[0][2];}
+\DoxyCodeLine{288     s[2] = M[0][0]*M[1][3] -\/ M[1][0]*M[0][3];}
+\DoxyCodeLine{289     s[3] = M[0][1]*M[1][2] -\/ M[1][1]*M[0][2];}
+\DoxyCodeLine{290     s[4] = M[0][1]*M[1][3] -\/ M[1][1]*M[0][3];}
+\DoxyCodeLine{291     s[5] = M[0][2]*M[1][3] -\/ M[1][2]*M[0][3];}
+\DoxyCodeLine{292 }
+\DoxyCodeLine{293     c[0] = M[2][0]*M[3][1] -\/ M[3][0]*M[2][1];}
+\DoxyCodeLine{294     c[1] = M[2][0]*M[3][2] -\/ M[3][0]*M[2][2];}
+\DoxyCodeLine{295     c[2] = M[2][0]*M[3][3] -\/ M[3][0]*M[2][3];}
+\DoxyCodeLine{296     c[3] = M[2][1]*M[3][2] -\/ M[3][1]*M[2][2];}
+\DoxyCodeLine{297     c[4] = M[2][1]*M[3][3] -\/ M[3][1]*M[2][3];}
+\DoxyCodeLine{298     c[5] = M[2][2]*M[3][3] -\/ M[3][2]*M[2][3];}
+\DoxyCodeLine{299     }
+\DoxyCodeLine{300     \textcolor{comment}{/* Assumes it is invertible */}}
+\DoxyCodeLine{301     \textcolor{keywordtype}{float} idet = 1.0f/( s[0]*c[5]-\/s[1]*c[4]+s[2]*c[3]+s[3]*c[2]-\/s[4]*c[1]+s[5]*c[0] );}
+\DoxyCodeLine{302     }
+\DoxyCodeLine{303     T[0][0] = ( M[1][1] * c[5] -\/ M[1][2] * c[4] + M[1][3] * c[3]) * idet;}
+\DoxyCodeLine{304     T[0][1] = (-\/M[0][1] * c[5] + M[0][2] * c[4] -\/ M[0][3] * c[3]) * idet;}
+\DoxyCodeLine{305     T[0][2] = ( M[3][1] * s[5] -\/ M[3][2] * s[4] + M[3][3] * s[3]) * idet;}
+\DoxyCodeLine{306     T[0][3] = (-\/M[2][1] * s[5] + M[2][2] * s[4] -\/ M[2][3] * s[3]) * idet;}
+\DoxyCodeLine{307 }
+\DoxyCodeLine{308     T[1][0] = (-\/M[1][0] * c[5] + M[1][2] * c[2] -\/ M[1][3] * c[1]) * idet;}
+\DoxyCodeLine{309     T[1][1] = ( M[0][0] * c[5] -\/ M[0][2] * c[2] + M[0][3] * c[1]) * idet;}
+\DoxyCodeLine{310     T[1][2] = (-\/M[3][0] * s[5] + M[3][2] * s[2] -\/ M[3][3] * s[1]) * idet;}
+\DoxyCodeLine{311     T[1][3] = ( M[2][0] * s[5] -\/ M[2][2] * s[2] + M[2][3] * s[1]) * idet;}
+\DoxyCodeLine{312 }
+\DoxyCodeLine{313     T[2][0] = ( M[1][0] * c[4] -\/ M[1][1] * c[2] + M[1][3] * c[0]) * idet;}
+\DoxyCodeLine{314     T[2][1] = (-\/M[0][0] * c[4] + M[0][1] * c[2] -\/ M[0][3] * c[0]) * idet;}
+\DoxyCodeLine{315     T[2][2] = ( M[3][0] * s[4] -\/ M[3][1] * s[2] + M[3][3] * s[0]) * idet;}
+\DoxyCodeLine{316     T[2][3] = (-\/M[2][0] * s[4] + M[2][1] * s[2] -\/ M[2][3] * s[0]) * idet;}
+\DoxyCodeLine{317 }
+\DoxyCodeLine{318     T[3][0] = (-\/M[1][0] * c[3] + M[1][1] * c[1] -\/ M[1][2] * c[0]) * idet;}
+\DoxyCodeLine{319     T[3][1] = ( M[0][0] * c[3] -\/ M[0][1] * c[1] + M[0][2] * c[0]) * idet;}
+\DoxyCodeLine{320     T[3][2] = (-\/M[3][0] * s[3] + M[3][1] * s[1] -\/ M[3][2] * s[0]) * idet;}
+\DoxyCodeLine{321     T[3][3] = ( M[2][0] * s[3] -\/ M[2][1] * s[1] + M[2][2] * s[0]) * idet;}
+\DoxyCodeLine{322 \}}
+\DoxyCodeLine{323 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_orthonormalize(mat4x4 R, mat4x4 \textcolor{keyword}{const} M)}
+\DoxyCodeLine{324 \{}
+\DoxyCodeLine{325     mat4x4\_dup(R, M);}
+\DoxyCodeLine{326     \textcolor{keywordtype}{float} s = 1.f;}
+\DoxyCodeLine{327     vec3 h;}
+\DoxyCodeLine{328 }
+\DoxyCodeLine{329     vec3\_norm(R[2], R[2]);}
+\DoxyCodeLine{330     }
+\DoxyCodeLine{331     s = vec3\_mul\_inner(R[1], R[2]);}
+\DoxyCodeLine{332     vec3\_scale(h, R[2], s);}
+\DoxyCodeLine{333     vec3\_sub(R[1], R[1], h);}
+\DoxyCodeLine{334     vec3\_norm(R[1], R[1]);}
+\DoxyCodeLine{335 }
+\DoxyCodeLine{336     s = vec3\_mul\_inner(R[0], R[2]);}
+\DoxyCodeLine{337     vec3\_scale(h, R[2], s);}
+\DoxyCodeLine{338     vec3\_sub(R[0], R[0], h);}
+\DoxyCodeLine{339 }
+\DoxyCodeLine{340     s = vec3\_mul\_inner(R[0], R[1]);}
+\DoxyCodeLine{341     vec3\_scale(h, R[1], s);}
+\DoxyCodeLine{342     vec3\_sub(R[0], R[0], h);}
+\DoxyCodeLine{343     vec3\_norm(R[0], R[0]);}
+\DoxyCodeLine{344 \}}
+\DoxyCodeLine{345 }
+\DoxyCodeLine{346 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_frustum(mat4x4 M, \textcolor{keywordtype}{float} l, \textcolor{keywordtype}{float} r, \textcolor{keywordtype}{float} b, \textcolor{keywordtype}{float} t, \textcolor{keywordtype}{float} n, \textcolor{keywordtype}{float} f)}
+\DoxyCodeLine{347 \{}
+\DoxyCodeLine{348     M[0][0] = 2.f*n/(r-\/l);}
+\DoxyCodeLine{349     M[0][1] = M[0][2] = M[0][3] = 0.f;}
+\DoxyCodeLine{350     }
+\DoxyCodeLine{351     M[1][1] = 2.f*n/(t-\/b);}
+\DoxyCodeLine{352     M[1][0] = M[1][2] = M[1][3] = 0.f;}
+\DoxyCodeLine{353 }
+\DoxyCodeLine{354     M[2][0] = (r+l)/(r-\/l);}
+\DoxyCodeLine{355     M[2][1] = (t+b)/(t-\/b);}
+\DoxyCodeLine{356     M[2][2] = -\/(f+n)/(f-\/n);}
+\DoxyCodeLine{357     M[2][3] = -\/1.f;}
+\DoxyCodeLine{358     }
+\DoxyCodeLine{359     M[3][2] = -\/2.f*(f*n)/(f-\/n);}
+\DoxyCodeLine{360     M[3][0] = M[3][1] = M[3][3] = 0.f;}
+\DoxyCodeLine{361 \}}
+\DoxyCodeLine{362 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_ortho(mat4x4 M, \textcolor{keywordtype}{float} l, \textcolor{keywordtype}{float} r, \textcolor{keywordtype}{float} b, \textcolor{keywordtype}{float} t, \textcolor{keywordtype}{float} n, \textcolor{keywordtype}{float} f)}
+\DoxyCodeLine{363 \{}
+\DoxyCodeLine{364     M[0][0] = 2.f/(r-\/l);}
+\DoxyCodeLine{365     M[0][1] = M[0][2] = M[0][3] = 0.f;}
+\DoxyCodeLine{366 }
+\DoxyCodeLine{367     M[1][1] = 2.f/(t-\/b);}
+\DoxyCodeLine{368     M[1][0] = M[1][2] = M[1][3] = 0.f;}
+\DoxyCodeLine{369 }
+\DoxyCodeLine{370     M[2][2] = -\/2.f/(f-\/n);}
+\DoxyCodeLine{371     M[2][0] = M[2][1] = M[2][3] = 0.f;}
+\DoxyCodeLine{372     }
+\DoxyCodeLine{373     M[3][0] = -\/(r+l)/(r-\/l);}
+\DoxyCodeLine{374     M[3][1] = -\/(t+b)/(t-\/b);}
+\DoxyCodeLine{375     M[3][2] = -\/(f+n)/(f-\/n);}
+\DoxyCodeLine{376     M[3][3] = 1.f;}
+\DoxyCodeLine{377 \}}
+\DoxyCodeLine{378 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_perspective(mat4x4 m, \textcolor{keywordtype}{float} y\_fov, \textcolor{keywordtype}{float} aspect, \textcolor{keywordtype}{float} n, \textcolor{keywordtype}{float} f)}
+\DoxyCodeLine{379 \{}
+\DoxyCodeLine{380     \textcolor{comment}{/* NOTE: Degrees are an unhandy unit to work with.}}
+\DoxyCodeLine{381 \textcolor{comment}{     * linmath.h uses radians for everything! */}}
+\DoxyCodeLine{382     \textcolor{keywordtype}{float} \textcolor{keyword}{const} a = 1.f / tanf(y\_fov / 2.f);}
+\DoxyCodeLine{383 }
+\DoxyCodeLine{384     m[0][0] = a / aspect;}
+\DoxyCodeLine{385     m[0][1] = 0.f;}
+\DoxyCodeLine{386     m[0][2] = 0.f;}
+\DoxyCodeLine{387     m[0][3] = 0.f;}
+\DoxyCodeLine{388 }
+\DoxyCodeLine{389     m[1][0] = 0.f;}
+\DoxyCodeLine{390     m[1][1] = a;}
+\DoxyCodeLine{391     m[1][2] = 0.f;}
+\DoxyCodeLine{392     m[1][3] = 0.f;}
+\DoxyCodeLine{393 }
+\DoxyCodeLine{394     m[2][0] = 0.f;}
+\DoxyCodeLine{395     m[2][1] = 0.f;}
+\DoxyCodeLine{396     m[2][2] = -\/((f + n) / (f -\/ n));}
+\DoxyCodeLine{397     m[2][3] = -\/1.f;}
+\DoxyCodeLine{398 }
+\DoxyCodeLine{399     m[3][0] = 0.f;}
+\DoxyCodeLine{400     m[3][1] = 0.f;}
+\DoxyCodeLine{401     m[3][2] = -\/((2.f * f * n) / (f -\/ n));}
+\DoxyCodeLine{402     m[3][3] = 0.f;}
+\DoxyCodeLine{403 \}}
+\DoxyCodeLine{404 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_look\_at(mat4x4 m, vec3 \textcolor{keyword}{const} eye, vec3 \textcolor{keyword}{const} center, vec3 \textcolor{keyword}{const} up)}
+\DoxyCodeLine{405 \{}
+\DoxyCodeLine{406     \textcolor{comment}{/* Adapted from Android's OpenGL Matrix.java.                        */}}
+\DoxyCodeLine{407     \textcolor{comment}{/* See the OpenGL GLUT documentation for gluLookAt for a description */}}
+\DoxyCodeLine{408     \textcolor{comment}{/* of the algorithm. We implement it in a straightforward way:       */}}
+\DoxyCodeLine{409 }
+\DoxyCodeLine{410     \textcolor{comment}{/* TODO: The negation of of can be spared by swapping the order of}}
+\DoxyCodeLine{411 \textcolor{comment}{     *       operands in the following cross products in the right way. */}}
+\DoxyCodeLine{412     vec3 f;}
+\DoxyCodeLine{413     vec3\_sub(f, center, eye);   }
+\DoxyCodeLine{414     vec3\_norm(f, f);    }
+\DoxyCodeLine{415     }
+\DoxyCodeLine{416     vec3 s;}
+\DoxyCodeLine{417     vec3\_mul\_cross(s, f, up);}
+\DoxyCodeLine{418     vec3\_norm(s, s);}
+\DoxyCodeLine{419 }
+\DoxyCodeLine{420     vec3 t;}
+\DoxyCodeLine{421     vec3\_mul\_cross(t, s, f);}
+\DoxyCodeLine{422 }
+\DoxyCodeLine{423     m[0][0] =  s[0];}
+\DoxyCodeLine{424     m[0][1] =  t[0];}
+\DoxyCodeLine{425     m[0][2] = -\/f[0];}
+\DoxyCodeLine{426     m[0][3] =   0.f;}
+\DoxyCodeLine{427 }
+\DoxyCodeLine{428     m[1][0] =  s[1];}
+\DoxyCodeLine{429     m[1][1] =  t[1];}
+\DoxyCodeLine{430     m[1][2] = -\/f[1];}
+\DoxyCodeLine{431     m[1][3] =   0.f;}
+\DoxyCodeLine{432 }
+\DoxyCodeLine{433     m[2][0] =  s[2];}
+\DoxyCodeLine{434     m[2][1] =  t[2];}
+\DoxyCodeLine{435     m[2][2] = -\/f[2];}
+\DoxyCodeLine{436     m[2][3] =   0.f;}
+\DoxyCodeLine{437 }
+\DoxyCodeLine{438     m[3][0] =  0.f;}
+\DoxyCodeLine{439     m[3][1] =  0.f;}
+\DoxyCodeLine{440     m[3][2] =  0.f;}
+\DoxyCodeLine{441     m[3][3] =  1.f;}
+\DoxyCodeLine{442 }
+\DoxyCodeLine{443     mat4x4\_translate\_in\_place(m, -\/eye[0], -\/eye[1], -\/eye[2]);}
+\DoxyCodeLine{444 \}}
+\DoxyCodeLine{445 }
+\DoxyCodeLine{446 \textcolor{keyword}{typedef} \textcolor{keywordtype}{float} quat[4];}
+\DoxyCodeLine{447 \textcolor{preprocessor}{\#define quat\_add vec4\_add}}
+\DoxyCodeLine{448 \textcolor{preprocessor}{\#define quat\_sub vec4\_sub}}
+\DoxyCodeLine{449 \textcolor{preprocessor}{\#define quat\_norm vec4\_norm}}
+\DoxyCodeLine{450 \textcolor{preprocessor}{\#define quat\_scale vec4\_scale}}
+\DoxyCodeLine{451 \textcolor{preprocessor}{\#define quat\_mul\_inner vec4\_mul\_inner}}
+\DoxyCodeLine{452 }
+\DoxyCodeLine{453 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} quat\_identity(quat q)}
+\DoxyCodeLine{454 \{}
+\DoxyCodeLine{455     q[0] = q[1] = q[2] = 0.f;}
+\DoxyCodeLine{456     q[3] = 1.f;}
+\DoxyCodeLine{457 \}}
+\DoxyCodeLine{458 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} quat\_mul(quat r, quat \textcolor{keyword}{const} p, quat \textcolor{keyword}{const} q)}
+\DoxyCodeLine{459 \{}
+\DoxyCodeLine{460     vec3 w;}
+\DoxyCodeLine{461     vec3\_mul\_cross(r, p, q);}
+\DoxyCodeLine{462     vec3\_scale(w, p, q[3]);}
+\DoxyCodeLine{463     vec3\_add(r, r, w);}
+\DoxyCodeLine{464     vec3\_scale(w, q, p[3]);}
+\DoxyCodeLine{465     vec3\_add(r, r, w);}
+\DoxyCodeLine{466     r[3] = p[3]*q[3] -\/ vec3\_mul\_inner(p, q);}
+\DoxyCodeLine{467 \}}
+\DoxyCodeLine{468 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} quat\_conj(quat r, quat \textcolor{keyword}{const} q)}
+\DoxyCodeLine{469 \{}
+\DoxyCodeLine{470     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{471     \textcolor{keywordflow}{for}(i=0; i<3; ++i)}
+\DoxyCodeLine{472         r[i] = -\/q[i];}
+\DoxyCodeLine{473     r[3] = q[3];}
+\DoxyCodeLine{474 \}}
+\DoxyCodeLine{475 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} quat\_rotate(quat r, \textcolor{keywordtype}{float} angle, vec3 \textcolor{keyword}{const} axis) \{}
+\DoxyCodeLine{476     vec3 axis\_norm;}
+\DoxyCodeLine{477     vec3\_norm(axis\_norm, axis);}
+\DoxyCodeLine{478     \textcolor{keywordtype}{float} s = sinf(angle / 2);}
+\DoxyCodeLine{479     \textcolor{keywordtype}{float} c = cosf(angle / 2);}
+\DoxyCodeLine{480     vec3\_scale(r, axis\_norm, s);}
+\DoxyCodeLine{481     r[3] = c;}
+\DoxyCodeLine{482 \}}
+\DoxyCodeLine{483 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} quat\_mul\_vec3(vec3 r, quat \textcolor{keyword}{const} q, vec3 \textcolor{keyword}{const} v)}
+\DoxyCodeLine{484 \{}
+\DoxyCodeLine{485 \textcolor{comment}{/*}}
+\DoxyCodeLine{486 \textcolor{comment}{ * Method by Fabian 'ryg' Giessen (of Farbrausch)}}
+\DoxyCodeLine{487 \textcolor{comment}{t = 2 * cross(q.xyz, v)}}
+\DoxyCodeLine{488 \textcolor{comment}{v' = v + q.w * t + cross(q.xyz, t)}}
+\DoxyCodeLine{489 \textcolor{comment}{ */}}
+\DoxyCodeLine{490     vec3 t;}
+\DoxyCodeLine{491     vec3 q\_xyz = \{q[0], q[1], q[2]\};}
+\DoxyCodeLine{492     vec3 u = \{q[0], q[1], q[2]\};}
+\DoxyCodeLine{493 }
+\DoxyCodeLine{494     vec3\_mul\_cross(t, q\_xyz, v);}
+\DoxyCodeLine{495     vec3\_scale(t, t, 2);}
+\DoxyCodeLine{496 }
+\DoxyCodeLine{497     vec3\_mul\_cross(u, q\_xyz, t);}
+\DoxyCodeLine{498     vec3\_scale(t, t, q[3]);}
+\DoxyCodeLine{499 }
+\DoxyCodeLine{500     vec3\_add(r, v, t);}
+\DoxyCodeLine{501     vec3\_add(r, r, u);}
+\DoxyCodeLine{502 \}}
+\DoxyCodeLine{503 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_from\_quat(mat4x4 M, quat \textcolor{keyword}{const} q)}
+\DoxyCodeLine{504 \{}
+\DoxyCodeLine{505     \textcolor{keywordtype}{float} a = q[3];}
+\DoxyCodeLine{506     \textcolor{keywordtype}{float} b = q[0];}
+\DoxyCodeLine{507     \textcolor{keywordtype}{float} c = q[1];}
+\DoxyCodeLine{508     \textcolor{keywordtype}{float} d = q[2];}
+\DoxyCodeLine{509     \textcolor{keywordtype}{float} a2 = a*a;}
+\DoxyCodeLine{510     \textcolor{keywordtype}{float} b2 = b*b;}
+\DoxyCodeLine{511     \textcolor{keywordtype}{float} c2 = c*c;}
+\DoxyCodeLine{512     \textcolor{keywordtype}{float} d2 = d*d;}
+\DoxyCodeLine{513     }
+\DoxyCodeLine{514     M[0][0] = a2 + b2 -\/ c2 -\/ d2;}
+\DoxyCodeLine{515     M[0][1] = 2.f*(b*c + a*d);}
+\DoxyCodeLine{516     M[0][2] = 2.f*(b*d -\/ a*c);}
+\DoxyCodeLine{517     M[0][3] = 0.f;}
+\DoxyCodeLine{518 }
+\DoxyCodeLine{519     M[1][0] = 2*(b*c -\/ a*d);}
+\DoxyCodeLine{520     M[1][1] = a2 -\/ b2 + c2 -\/ d2;}
+\DoxyCodeLine{521     M[1][2] = 2.f*(c*d + a*b);}
+\DoxyCodeLine{522     M[1][3] = 0.f;}
+\DoxyCodeLine{523 }
+\DoxyCodeLine{524     M[2][0] = 2.f*(b*d + a*c);}
+\DoxyCodeLine{525     M[2][1] = 2.f*(c*d -\/ a*b);}
+\DoxyCodeLine{526     M[2][2] = a2 -\/ b2 -\/ c2 + d2;}
+\DoxyCodeLine{527     M[2][3] = 0.f;}
+\DoxyCodeLine{528 }
+\DoxyCodeLine{529     M[3][0] = M[3][1] = M[3][2] = 0.f;}
+\DoxyCodeLine{530     M[3][3] = 1.f;}
+\DoxyCodeLine{531 \}}
+\DoxyCodeLine{532 }
+\DoxyCodeLine{533 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4o\_mul\_quat(mat4x4 R, mat4x4 \textcolor{keyword}{const} M, quat \textcolor{keyword}{const} q)}
+\DoxyCodeLine{534 \{}
+\DoxyCodeLine{535 \textcolor{comment}{/*  XXX: The way this is written only works for orthogonal matrices. */}}
+\DoxyCodeLine{536 \textcolor{comment}{/* TODO: Take care of non-\/orthogonal case. */}}
+\DoxyCodeLine{537     quat\_mul\_vec3(R[0], q, M[0]);}
+\DoxyCodeLine{538     quat\_mul\_vec3(R[1], q, M[1]);}
+\DoxyCodeLine{539     quat\_mul\_vec3(R[2], q, M[2]);}
+\DoxyCodeLine{540 }
+\DoxyCodeLine{541     R[3][0] = R[3][1] = R[3][2] = 0.f;}
+\DoxyCodeLine{542     R[0][3] = M[0][3];}
+\DoxyCodeLine{543     R[1][3] = M[1][3];}
+\DoxyCodeLine{544     R[2][3] = M[2][3];}
+\DoxyCodeLine{545     R[3][3] = M[3][3];  \textcolor{comment}{// typically 1.0, but here we make it general}}
+\DoxyCodeLine{546 \}}
+\DoxyCodeLine{547 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} quat\_from\_mat4x4(quat q, mat4x4 \textcolor{keyword}{const} M)}
+\DoxyCodeLine{548 \{}
+\DoxyCodeLine{549     \textcolor{keywordtype}{float} r=0.f;}
+\DoxyCodeLine{550     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{551 }
+\DoxyCodeLine{552     \textcolor{keywordtype}{int} perm[] = \{ 0, 1, 2, 0, 1 \};}
+\DoxyCodeLine{553     \textcolor{keywordtype}{int} *p = perm;}
+\DoxyCodeLine{554 }
+\DoxyCodeLine{555     \textcolor{keywordflow}{for}(i = 0; i<3; i++) \{}
+\DoxyCodeLine{556         \textcolor{keywordtype}{float} m = M[i][i];}
+\DoxyCodeLine{557         \textcolor{keywordflow}{if}( m < r )}
+\DoxyCodeLine{558             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{559         m = r;}
+\DoxyCodeLine{560         p = \&perm[i];}
+\DoxyCodeLine{561     \}}
+\DoxyCodeLine{562 }
+\DoxyCodeLine{563     r = sqrtf(1.f + M[p[0]][p[0]] -\/ M[p[1]][p[1]] -\/ M[p[2]][p[2]] );}
+\DoxyCodeLine{564 }
+\DoxyCodeLine{565     \textcolor{keywordflow}{if}(r < 1e-\/6) \{}
+\DoxyCodeLine{566         q[0] = 1.f;}
+\DoxyCodeLine{567         q[1] = q[2] = q[3] = 0.f;}
+\DoxyCodeLine{568         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{569     \}}
+\DoxyCodeLine{570 }
+\DoxyCodeLine{571     q[0] = r/2.f;}
+\DoxyCodeLine{572     q[1] = (M[p[0]][p[1]] -\/ M[p[1]][p[0]])/(2.f*r);}
+\DoxyCodeLine{573     q[2] = (M[p[2]][p[0]] -\/ M[p[0]][p[2]])/(2.f*r);}
+\DoxyCodeLine{574     q[3] = (M[p[2]][p[1]] -\/ M[p[1]][p[2]])/(2.f*r);}
+\DoxyCodeLine{575 \}}
+\DoxyCodeLine{576 }
+\DoxyCodeLine{577 LINMATH\_H\_FUNC \textcolor{keywordtype}{void} mat4x4\_arcball(mat4x4 R, mat4x4 \textcolor{keyword}{const} M, vec2 \textcolor{keyword}{const} \_a, vec2 \textcolor{keyword}{const} \_b, \textcolor{keywordtype}{float} s)}
+\DoxyCodeLine{578 \{}
+\DoxyCodeLine{579     vec2 a; memcpy(a, \_a, \textcolor{keyword}{sizeof}(a));}
+\DoxyCodeLine{580     vec2 b; memcpy(b, \_b, \textcolor{keyword}{sizeof}(b));}
+\DoxyCodeLine{581     }
+\DoxyCodeLine{582     \textcolor{keywordtype}{float} z\_a = 0.f;}
+\DoxyCodeLine{583     \textcolor{keywordtype}{float} z\_b = 0.f;}
+\DoxyCodeLine{584 }
+\DoxyCodeLine{585     \textcolor{keywordflow}{if}(vec2\_len(a) < 1.f) \{}
+\DoxyCodeLine{586         z\_a = sqrtf(1.f -\/ vec2\_mul\_inner(a, a));}
+\DoxyCodeLine{587     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{588         vec2\_norm(a, a);}
+\DoxyCodeLine{589     \}}
+\DoxyCodeLine{590 }
+\DoxyCodeLine{591     \textcolor{keywordflow}{if}(vec2\_len(b) < 1.f) \{}
+\DoxyCodeLine{592         z\_b = sqrtf(1.f -\/ vec2\_mul\_inner(b, b));}
+\DoxyCodeLine{593     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{594         vec2\_norm(b, b);}
+\DoxyCodeLine{595     \}}
+\DoxyCodeLine{596     }
+\DoxyCodeLine{597     vec3 a\_ = \{a[0], a[1], z\_a\};}
+\DoxyCodeLine{598     vec3 b\_ = \{b[0], b[1], z\_b\};}
+\DoxyCodeLine{599 }
+\DoxyCodeLine{600     vec3 c\_;}
+\DoxyCodeLine{601     vec3\_mul\_cross(c\_, a\_, b\_);}
+\DoxyCodeLine{602 }
+\DoxyCodeLine{603     \textcolor{keywordtype}{float} \textcolor{keyword}{const} angle = acos(vec3\_mul\_inner(a\_, b\_)) * s;}
+\DoxyCodeLine{604     mat4x4\_rotate(R, M, c\_[0], c\_[1], c\_[2], angle);}
+\DoxyCodeLine{605 \}}
+\DoxyCodeLine{606 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

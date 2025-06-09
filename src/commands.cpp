@@ -2669,7 +2669,11 @@ svg_to_painterpath(QPainterPath *path, const char *svg, EmbVector pos, EmbVector
     }
 }
 
-/* TODO: Make Origin Customizable */
+/*! \brief Create the path object for the origin if the GRID_SHOW_ORIGIN flag is
+ *         true.
+ *
+ * \todo Make Origin Customizable
+ */
 void
 doc_create_origin(int32_t doc)
 {
@@ -2677,12 +2681,15 @@ doc_create_origin(int32_t doc)
 
     if (get_bool(GRID_SHOW_ORIGIN)) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */
+        const char *circle_origin_path = emb_get_str(root, "path_circle_origin");
         svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path,
             emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
     }
 }
 
-/* . */
+/*! \brief 
+ * .
+ */
 void
 doc_create_grid_rect(int32_t doc)
 {

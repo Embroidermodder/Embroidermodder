@@ -1,0 +1,72 @@
+\hypertarget{structxdg__popup__listener}{}\doxysection{xdg\+\_\+popup\+\_\+listener Struct Reference}
+\label{structxdg__popup__listener}\index{xdg\_popup\_listener@{xdg\_popup\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structxdg__popup__listener_a36e98cf6e6e4137ee2896a43f1c10730}{configure}} )(void $\ast$data, struct xdg\+\_\+popup $\ast$xdg\+\_\+popup, int32\+\_\+t x, int32\+\_\+t y, int32\+\_\+t width, int32\+\_\+t height)
+\item 
+void($\ast$ \mbox{\hyperlink{structxdg__popup__listener_af62aceff9bcec24ac9e5243107db53a2}{popup\+\_\+done}} )(void $\ast$data, struct xdg\+\_\+popup $\ast$xdg\+\_\+popup)
+\item 
+void($\ast$ \mbox{\hyperlink{structxdg__popup__listener_a6e3f7f24ea625d8d11b99f4de878163b}{repositioned}} )(void $\ast$data, struct xdg\+\_\+popup $\ast$xdg\+\_\+popup, uint32\+\_\+t token)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structxdg__popup__listener_a36e98cf6e6e4137ee2896a43f1c10730}\label{structxdg__popup__listener_a36e98cf6e6e4137ee2896a43f1c10730}} 
+\index{xdg\_popup\_listener@{xdg\_popup\_listener}!configure@{configure}}
+\index{configure@{configure}!xdg\_popup\_listener@{xdg\_popup\_listener}}
+\doxysubsubsection{\texorpdfstring{configure}{configure}}
+{\footnotesize\ttfamily void($\ast$ xdg\+\_\+popup\+\_\+listener\+::configure) (void $\ast$data, struct xdg\+\_\+popup $\ast$xdg\+\_\+popup, int32\+\_\+t x, int32\+\_\+t y, int32\+\_\+t width, int32\+\_\+t height)}
+
+configure the popup surface
+
+This event asks the popup surface to configure itself given the configuration. The configured state should not be applied immediately. See xdg\+\_\+surface.\+configure for details.
+
+The x and y arguments represent the position the popup was placed at given the xdg\+\_\+positioner rule, relative to the upper left corner of the window geometry of the parent surface.
+
+For version 2 or older, the configure event for an xdg\+\_\+popup is only ever sent once for the initial configuration. Starting with version 3, it may be sent again if the popup is setup with an xdg\+\_\+positioner with set\+\_\+reactive requested, or in response to xdg\+\_\+popup.\+reposition requests. 
+\begin{DoxyParams}{Parameters}
+{\em x} & x position relative to parent surface window geometry \\
+\hline
+{\em y} & y position relative to parent surface window geometry \\
+\hline
+{\em width} & window geometry width \\
+\hline
+{\em height} & window geometry height \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structxdg__popup__listener_af62aceff9bcec24ac9e5243107db53a2}\label{structxdg__popup__listener_af62aceff9bcec24ac9e5243107db53a2}} 
+\index{xdg\_popup\_listener@{xdg\_popup\_listener}!popup\_done@{popup\_done}}
+\index{popup\_done@{popup\_done}!xdg\_popup\_listener@{xdg\_popup\_listener}}
+\doxysubsubsection{\texorpdfstring{popup\_done}{popup\_done}}
+{\footnotesize\ttfamily void($\ast$ xdg\+\_\+popup\+\_\+listener\+::popup\+\_\+done) (void $\ast$data, struct xdg\+\_\+popup $\ast$xdg\+\_\+popup)}
+
+popup interaction is done
+
+The popup\+\_\+done event is sent out when a popup is dismissed by the compositor. The client should destroy the xdg\+\_\+popup object at this point. \mbox{\Hypertarget{structxdg__popup__listener_a6e3f7f24ea625d8d11b99f4de878163b}\label{structxdg__popup__listener_a6e3f7f24ea625d8d11b99f4de878163b}} 
+\index{xdg\_popup\_listener@{xdg\_popup\_listener}!repositioned@{repositioned}}
+\index{repositioned@{repositioned}!xdg\_popup\_listener@{xdg\_popup\_listener}}
+\doxysubsubsection{\texorpdfstring{repositioned}{repositioned}}
+{\footnotesize\ttfamily void($\ast$ xdg\+\_\+popup\+\_\+listener\+::repositioned) (void $\ast$data, struct xdg\+\_\+popup $\ast$xdg\+\_\+popup, uint32\+\_\+t token)}
+
+signal the completion of a repositioned request
+
+The repositioned event is sent as part of a popup configuration sequence, together with xdg\+\_\+popup.\+configure and lastly xdg\+\_\+surface.\+configure to notify the completion of a reposition request.
+
+The repositioned event is to notify about the completion of a xdg\+\_\+popup.\+reposition request. The token argument is the token passed in the xdg\+\_\+popup.\+reposition request.
+
+Immediately after this event is emitted, xdg\+\_\+popup.\+configure and xdg\+\_\+surface.\+configure will be sent with the updated size and position, as well as a new configure serial.
+
+The client should optionally update the content of the popup, but must acknowledge the new popup configuration for the new position to take effect. See xdg\+\_\+surface.\+ack\+\_\+configure for details. 
+\begin{DoxyParams}{Parameters}
+{\em token} & reposition request token \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+3 
+\end{DoxySince}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/xdg-\/shell-\/client-\/protocol.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,62 @@
+\hypertarget{structwl__seat__listener}{}\doxysection{wl\+\_\+seat\+\_\+listener Struct Reference}
+\label{structwl__seat__listener}\index{wl\_seat\_listener@{wl\_seat\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__seat__listener_a2d05701aa6cdc40a4218604e41c10523}{capabilities}} )(void $\ast$data, struct wl\+\_\+seat $\ast$wl\+\_\+seat, uint32\+\_\+t capabilities)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__seat__listener_a2289aff4263de68305468de1732da77a}{name}} )(void $\ast$data, struct wl\+\_\+seat $\ast$wl\+\_\+seat, const char $\ast$name)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structwl__seat__listener_a2d05701aa6cdc40a4218604e41c10523}\label{structwl__seat__listener_a2d05701aa6cdc40a4218604e41c10523}} 
+\index{wl\_seat\_listener@{wl\_seat\_listener}!capabilities@{capabilities}}
+\index{capabilities@{capabilities}!wl\_seat\_listener@{wl\_seat\_listener}}
+\doxysubsubsection{\texorpdfstring{capabilities}{capabilities}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+seat\+\_\+listener\+::capabilities) (void $\ast$data, struct wl\+\_\+seat $\ast$wl\+\_\+seat, uint32\+\_\+t capabilities)}
+
+seat capabilities changed
+
+This is emitted whenever a seat gains or loses the pointer, keyboard or touch capabilities. The argument is a capability enum containing the complete set of capabilities this seat has.
+
+When the pointer capability is added, a client may create a wl\+\_\+pointer object using the wl\+\_\+seat.\+get\+\_\+pointer request. This object will receive pointer events until the capability is removed in the future.
+
+When the pointer capability is removed, a client should destroy the wl\+\_\+pointer objects associated with the seat where the capability was removed, using the wl\+\_\+pointer.\+release request. No further pointer events will be received on these objects.
+
+In some compositors, if a seat regains the pointer capability and a client has a previously obtained wl\+\_\+pointer object of version 4 or less, that object may start sending pointer events again. This behavior is considered a misinterpretation of the intended behavior and must not be relied upon by the client. wl\+\_\+pointer objects of version 5 or later must not send events if created before the most recent event notifying the client of an added pointer capability.
+
+The above behavior also applies to wl\+\_\+keyboard and wl\+\_\+touch with the keyboard and touch capabilities, respectively. 
+\begin{DoxyParams}{Parameters}
+{\em capabilities} & capabilities of the seat \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__seat__listener_a2289aff4263de68305468de1732da77a}\label{structwl__seat__listener_a2289aff4263de68305468de1732da77a}} 
+\index{wl\_seat\_listener@{wl\_seat\_listener}!name@{name}}
+\index{name@{name}!wl\_seat\_listener@{wl\_seat\_listener}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+seat\+\_\+listener\+::name) (void $\ast$data, struct wl\+\_\+seat $\ast$wl\+\_\+seat, const char $\ast$name)}
+
+unique identifier for this seat
+
+In a multi-\/seat configuration the seat name can be used by clients to help identify which physical devices the seat represents.
+
+The seat name is a UTF-\/8 string with no convention defined for its contents. Each name is unique among all wl\+\_\+seat globals. The name is only guaranteed to be unique for the current compositor instance.
+
+The same seat names are used for all clients. Thus, the name can be shared across processes to refer to a specific wl\+\_\+seat global.
+
+The name event is sent after binding to the seat global. This event is only sent once per seat object, and the name does not change over the lifetime of the wl\+\_\+seat global.
+
+Compositors may re-\/use the same seat name if the wl\+\_\+seat global is destroyed and re-\/created later. 
+\begin{DoxyParams}{Parameters}
+{\em name} & seat identifier \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+2 
+\end{DoxySince}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/wayland-\/client-\/protocol.\+h\end{DoxyCompactItemize}

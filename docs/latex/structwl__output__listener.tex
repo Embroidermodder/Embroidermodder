@@ -1,0 +1,176 @@
+\hypertarget{structwl__output__listener}{}\doxysection{wl\+\_\+output\+\_\+listener Struct Reference}
+\label{structwl__output__listener}\index{wl\_output\_listener@{wl\_output\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__output__listener_a78ab10c593e6545157ee9be9b250c0e9}{geometry}} )(void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, int32\+\_\+t x, int32\+\_\+t y, int32\+\_\+t physical\+\_\+width, int32\+\_\+t physical\+\_\+height, int32\+\_\+t subpixel, const char $\ast$make, const char $\ast$model, int32\+\_\+t transform)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__output__listener_ae39fd599e402922e605b12c418fd4073}{mode}} )(void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, uint32\+\_\+t flags, int32\+\_\+t width, int32\+\_\+t height, int32\+\_\+t refresh)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__output__listener_ab9e8bc270b4e15734974d789e5fc62e2}{done}} )(void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__output__listener_a694edb23f3a4bcf8ff61679fc9e87143}{scale}} )(void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, int32\+\_\+t factor)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__output__listener_ad791cf20f3c5e9ad903d0a4a54dd3cb3}{name}} )(void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, const char $\ast$name)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__output__listener_ac97dfdc1f5d5298f9aaadfb062f07425}{description}} )(void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, const char $\ast$description)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structwl__output__listener_ac97dfdc1f5d5298f9aaadfb062f07425}\label{structwl__output__listener_ac97dfdc1f5d5298f9aaadfb062f07425}} 
+\index{wl\_output\_listener@{wl\_output\_listener}!description@{description}}
+\index{description@{description}!wl\_output\_listener@{wl\_output\_listener}}
+\doxysubsubsection{\texorpdfstring{description}{description}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+output\+\_\+listener\+::description) (void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, const char $\ast$description)}
+
+human-\/readable description of this output
+
+Many compositors can produce human-\/readable descriptions of their outputs. The client may wish to know this description as well, e.\+g. for output selection purposes.
+
+The description is a UTF-\/8 string with no convention defined for its contents. The description is not guaranteed to be unique among all wl\+\_\+output globals. Examples might include \textquotesingle{}Foocorp 11"{} Display\textquotesingle{} or \textquotesingle{}Virtual X11 output via \+:1\textquotesingle{}.
+
+The description event is sent after binding the output object and whenever the description changes. The description is optional, and may not be sent at all.
+
+The description event will be followed by a done event. 
+\begin{DoxyParams}{Parameters}
+{\em description} & output description \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+4 
+\end{DoxySince}
+\mbox{\Hypertarget{structwl__output__listener_ab9e8bc270b4e15734974d789e5fc62e2}\label{structwl__output__listener_ab9e8bc270b4e15734974d789e5fc62e2}} 
+\index{wl\_output\_listener@{wl\_output\_listener}!done@{done}}
+\index{done@{done}!wl\_output\_listener@{wl\_output\_listener}}
+\doxysubsubsection{\texorpdfstring{done}{done}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+output\+\_\+listener\+::done) (void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output)}
+
+sent all information about output
+
+This event is sent after all other properties have been sent after binding to the output object and after any other property changes done after that. This allows changes to the output properties to be seen as atomic, even if they happen via multiple events. \begin{DoxySince}{Since}
+2 
+\end{DoxySince}
+\mbox{\Hypertarget{structwl__output__listener_a78ab10c593e6545157ee9be9b250c0e9}\label{structwl__output__listener_a78ab10c593e6545157ee9be9b250c0e9}} 
+\index{wl\_output\_listener@{wl\_output\_listener}!geometry@{geometry}}
+\index{geometry@{geometry}!wl\_output\_listener@{wl\_output\_listener}}
+\doxysubsubsection{\texorpdfstring{geometry}{geometry}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+output\+\_\+listener\+::geometry) (void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, int32\+\_\+t x, int32\+\_\+t y, int32\+\_\+t physical\+\_\+width, int32\+\_\+t physical\+\_\+height, int32\+\_\+t subpixel, const char $\ast$make, const char $\ast$model, int32\+\_\+t transform)}
+
+properties of the output
+
+The geometry event describes geometric properties of the output. The event is sent when binding to the output object and whenever any of the properties change.
+
+The physical size can be set to zero if it doesn\textquotesingle{}t make sense for this output (e.\+g. for projectors or virtual outputs).
+
+The geometry event will be followed by a done event (starting from version 2).
+
+Note\+: wl\+\_\+output only advertises partial information about the output position and identification. Some compositors, for instance those not implementing a desktop-\/style output layout or those exposing virtual outputs, might fake this information. Instead of using x and y, clients should use xdg\+\_\+output.\+logical\+\_\+position. Instead of using make and model, clients should use name and description. 
+\begin{DoxyParams}{Parameters}
+{\em x} & x position within the global compositor space \\
+\hline
+{\em y} & y position within the global compositor space \\
+\hline
+{\em physical\+\_\+width} & width in millimeters of the output \\
+\hline
+{\em physical\+\_\+height} & height in millimeters of the output \\
+\hline
+{\em subpixel} & subpixel orientation of the output \\
+\hline
+{\em make} & textual description of the manufacturer \\
+\hline
+{\em model} & textual description of the model \\
+\hline
+{\em transform} & transform that maps framebuffer to output \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__output__listener_ae39fd599e402922e605b12c418fd4073}\label{structwl__output__listener_ae39fd599e402922e605b12c418fd4073}} 
+\index{wl\_output\_listener@{wl\_output\_listener}!mode@{mode}}
+\index{mode@{mode}!wl\_output\_listener@{wl\_output\_listener}}
+\doxysubsubsection{\texorpdfstring{mode}{mode}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+output\+\_\+listener\+::mode) (void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, uint32\+\_\+t flags, int32\+\_\+t width, int32\+\_\+t height, int32\+\_\+t refresh)}
+
+advertise available modes for the output
+
+The mode event describes an available mode for the output.
+
+The event is sent when binding to the output object and there will always be one mode, the current mode. The event is sent again if an output changes mode, for the mode that is now current. In other words, the current mode is always the last mode that was received with the current flag set.
+
+Non-\/current modes are deprecated. A compositor can decide to only advertise the current mode and never send other modes. Clients should not rely on non-\/current modes.
+
+The size of a mode is given in physical hardware units of the output device. This is not necessarily the same as the output size in the global compositor space. For instance, the output may be scaled, as described in wl\+\_\+output.\+scale, or transformed, as described in wl\+\_\+output.\+transform. Clients willing to retrieve the output size in the global compositor space should use xdg\+\_\+output.\+logical\+\_\+size instead.
+
+The vertical refresh rate can be set to zero if it doesn\textquotesingle{}t make sense for this output (e.\+g. for virtual outputs).
+
+The mode event will be followed by a done event (starting from version 2).
+
+Clients should not use the refresh rate to schedule frames. Instead, they should use the wl\+\_\+surface.\+frame event or the presentation-\/time protocol.
+
+Note\+: this information is not always meaningful for all outputs. Some compositors, such as those exposing virtual outputs, might fake the refresh rate or the size. 
+\begin{DoxyParams}{Parameters}
+{\em flags} & bitfield of mode flags \\
+\hline
+{\em width} & width of the mode in hardware units \\
+\hline
+{\em height} & height of the mode in hardware units \\
+\hline
+{\em refresh} & vertical refresh rate in m\+Hz \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__output__listener_ad791cf20f3c5e9ad903d0a4a54dd3cb3}\label{structwl__output__listener_ad791cf20f3c5e9ad903d0a4a54dd3cb3}} 
+\index{wl\_output\_listener@{wl\_output\_listener}!name@{name}}
+\index{name@{name}!wl\_output\_listener@{wl\_output\_listener}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+output\+\_\+listener\+::name) (void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, const char $\ast$name)}
+
+name of this output
+
+Many compositors will assign user-\/friendly names to their outputs, show them to the user, allow the user to refer to an output, etc. The client may wish to know this name as well to offer the user similar behaviors.
+
+The name is a UTF-\/8 string with no convention defined for its contents. Each name is unique among all wl\+\_\+output globals. The name is only guaranteed to be unique for the compositor instance.
+
+The same output name is used for all clients for a given wl\+\_\+output global. Thus, the name can be shared across processes to refer to a specific wl\+\_\+output global.
+
+The name is not guaranteed to be persistent across sessions, thus cannot be used to reliably identify an output in e.\+g. configuration files.
+
+Examples of names include \textquotesingle{}HDMI-\/\+A-\/1\textquotesingle{}, \textquotesingle{}WL-\/1\textquotesingle{}, \textquotesingle{}X11-\/1\textquotesingle{}, etc. However, do not assume that the name is a reflection of an underlying DRM connector, X11 connection, etc.
+
+The name event is sent after binding the output object. This event is only sent once per output object, and the name does not change over the lifetime of the wl\+\_\+output global.
+
+Compositors may re-\/use the same output name if the wl\+\_\+output global is destroyed and re-\/created later. Compositors should avoid re-\/using the same name if possible.
+
+The name event will be followed by a done event. 
+\begin{DoxyParams}{Parameters}
+{\em name} & output name \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+4 
+\end{DoxySince}
+\mbox{\Hypertarget{structwl__output__listener_a694edb23f3a4bcf8ff61679fc9e87143}\label{structwl__output__listener_a694edb23f3a4bcf8ff61679fc9e87143}} 
+\index{wl\_output\_listener@{wl\_output\_listener}!scale@{scale}}
+\index{scale@{scale}!wl\_output\_listener@{wl\_output\_listener}}
+\doxysubsubsection{\texorpdfstring{scale}{scale}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+output\+\_\+listener\+::scale) (void $\ast$data, struct wl\+\_\+output $\ast$wl\+\_\+output, int32\+\_\+t factor)}
+
+output scaling properties
+
+This event contains scaling geometry information that is not in the geometry event. It may be sent after binding the output object or if the output scale changes later. If it is not sent, the client should assume a scale of 1.
+
+A scale larger than 1 means that the compositor will automatically scale surface buffers by this amount when rendering. This is used for very high resolution displays where applications rendering at the native resolution would be too small to be legible.
+
+It is intended that scaling aware clients track the current output of a surface, and if it is on a scaled output it should use wl\+\_\+surface.\+set\+\_\+buffer\+\_\+scale with the scale of the output. That way the compositor can avoid scaling the surface, and the client can supply a higher detail image.
+
+The scale event will be followed by a done event. 
+\begin{DoxyParams}{Parameters}
+{\em factor} & scaling factor of output \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+2 
+\end{DoxySince}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/wayland-\/client-\/protocol.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,113 @@
+\hypertarget{group__iface__wl__surface}{}\doxysection{The wl\+\_\+surface interface}
+\label{group__iface__wl__surface}\index{The wl\_surface interface@{The wl\_surface interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__surface__listener}{wl\+\_\+surface\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_gadcead2d1022b6d1f9c463ccfb83336bf}\label{group__iface__wl__surface_gadcead2d1022b6d1f9c463ccfb83336bf}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+ENTER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_ga2db1e447822613427d91869d75a74296}\label{group__iface__wl__surface_ga2db1e447822613427d91869d75a74296}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+LEAVE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_ga481ab7790a6867bc8a5a6009c7358f4a}\label{group__iface__wl__surface_ga481ab7790a6867bc8a5a6009c7358f4a}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+PREFERRED\+\_\+\+BUFFER\+\_\+\+SCALE\+\_\+\+SINCE\+\_\+\+VERSION}~6
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_gad0e7ff4bb99234de3a0d3a66c007d141}\label{group__iface__wl__surface_gad0e7ff4bb99234de3a0d3a66c007d141}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+PREFERRED\+\_\+\+BUFFER\+\_\+\+TRANSFORM\+\_\+\+SINCE\+\_\+\+VERSION}~6
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_gaa6a1b712af6ce79e72ab49e94bfd9b12}\label{group__iface__wl__surface_gaa6a1b712af6ce79e72ab49e94bfd9b12}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_gac6984ac1d35597f7d96efc037841b895}\label{group__iface__wl__surface_gac6984ac1d35597f7d96efc037841b895}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+ATTACH\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_ga6f1c9855e5957983cd1792c063128fd4}\label{group__iface__wl__surface_ga6f1c9855e5957983cd1792c063128fd4}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+DAMAGE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_gacae95419e12ddfd98839f075f3396292}\label{group__iface__wl__surface_gacae95419e12ddfd98839f075f3396292}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+FRAME\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_ga61eb90fe03b82dcb375aa487bf76e6d2}\label{group__iface__wl__surface_ga61eb90fe03b82dcb375aa487bf76e6d2}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+SET\+\_\+\+OPAQUE\+\_\+\+REGION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_ga17b837d3f77f88d93be6b7bc8ffd9415}\label{group__iface__wl__surface_ga17b837d3f77f88d93be6b7bc8ffd9415}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+SET\+\_\+\+INPUT\+\_\+\+REGION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_ga822331ddfbccf42abd12600a2f911ade}\label{group__iface__wl__surface_ga822331ddfbccf42abd12600a2f911ade}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+COMMIT\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_ga4ae4feb45718030727c0df5301758060}\label{group__iface__wl__surface_ga4ae4feb45718030727c0df5301758060}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+SET\+\_\+\+BUFFER\+\_\+\+TRANSFORM\+\_\+\+SINCE\+\_\+\+VERSION}~2
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_gaf46263c1c21fb94bc2c50e15f2e7fe3b}\label{group__iface__wl__surface_gaf46263c1c21fb94bc2c50e15f2e7fe3b}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+SET\+\_\+\+BUFFER\+\_\+\+SCALE\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_gafb721b63a9c0ae59fbeff05f6b01236e}\label{group__iface__wl__surface_gafb721b63a9c0ae59fbeff05f6b01236e}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+DAMAGE\+\_\+\+BUFFER\+\_\+\+SINCE\+\_\+\+VERSION}~4
+\item 
+\mbox{\Hypertarget{group__iface__wl__surface_ga10c9d3af671200c84fe387cc8a4c4384}\label{group__iface__wl__surface_ga10c9d3af671200c84fe387cc8a4c4384}} 
+\#define {\bfseries WL\+\_\+\+SURFACE\+\_\+\+OFFSET\+\_\+\+SINCE\+\_\+\+VERSION}~5
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__surface_ga88d039defab53085379a60885305ded1}{wl\+\_\+surface\+\_\+error}} \{ \newline
+\mbox{\hyperlink{group__iface__wl__surface_gga88d039defab53085379a60885305ded1acdf99857645d9d1e064d74526525c804}{WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+SCALE}} = 0
+, \mbox{\hyperlink{group__iface__wl__surface_gga88d039defab53085379a60885305ded1ae73ac6ab224495c44c585e610934a080}{WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+TRANSFORM}} = 1
+, \mbox{\hyperlink{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a5b79d581ca9e6b5658269b8025b25341}{WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+SIZE}} = 2
+, \mbox{\hyperlink{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a5567a941c3d998b1ea5e7b662d95ecaa}{WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+OFFSET}} = 3
+, \newline
+\mbox{\hyperlink{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a8bc4bd5048c6aecde6d48280f2c80890}{WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+DEFUNCT\+\_\+\+ROLE\+\_\+\+OBJECT}} = 4
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A surface is a rectangular area that may be displayed on zero or more outputs, and shown any number of times at the compositor\textquotesingle{}s discretion. They can present wl\+\_\+buffers, receive user input, and define a local coordinate system.
+
+The size of a surface (and relative positions on it) is described in surface-\/local coordinates, which may differ from the buffer coordinates of the pixel content, in case a buffer\+\_\+transform or a buffer\+\_\+scale is used.
+
+A surface without a \char`\"{}role\char`\"{} is fairly useless\+: a compositor does not know where, when or how to present it. The role is the purpose of a wl\+\_\+surface. Examples of roles are a cursor for a pointer (as set by wl\+\_\+pointer.\+set\+\_\+cursor), a drag icon (wl\+\_\+data\+\_\+device.\+start\+\_\+drag), a sub-\/surface (wl\+\_\+subcompositor.\+get\+\_\+subsurface), and a window as defined by a shell protocol (e.\+g. wl\+\_\+shell.\+get\+\_\+shell\+\_\+surface).
+
+A surface can have only one role at a time. Initially a wl\+\_\+surface does not have a role. Once a wl\+\_\+surface is given a role, it is set permanently for the whole lifetime of the wl\+\_\+surface object. Giving the current role again is allowed, unless explicitly forbidden by the relevant interface specification.
+
+Surface roles are given by requests in other interfaces such as wl\+\_\+pointer.\+set\+\_\+cursor. The request should explicitly mention that this request gives a role to a wl\+\_\+surface. Often, this request also creates a new protocol object that represents the role and adds additional functionality to wl\+\_\+surface. When a client wants to destroy a wl\+\_\+surface, they must destroy this role object before the wl\+\_\+surface, otherwise a defunct\+\_\+role\+\_\+object error is sent.
+
+Destroying the role object does not remove the role from the wl\+\_\+surface, but it may stop the wl\+\_\+surface from \char`\"{}playing the role\char`\"{}. For instance, if a wl\+\_\+subsurface object is destroyed, the wl\+\_\+surface it was created for will be unmapped and forget its position and z-\/order. It is allowed to create a wl\+\_\+subsurface for the same wl\+\_\+surface again, but it is not allowed to use the wl\+\_\+surface as a cursor (cursor is a different role than sub-\/surface, and role switching is not allowed). 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{group__iface__wl__surface_ga88d039defab53085379a60885305ded1}\label{group__iface__wl__surface_ga88d039defab53085379a60885305ded1}} 
+\index{The wl\_surface interface@{The wl\_surface interface}!wl\_surface\_error@{wl\_surface\_error}}
+\index{wl\_surface\_error@{wl\_surface\_error}!The wl\_surface interface@{The wl\_surface interface}}
+\doxysubsubsection{\texorpdfstring{wl\_surface\_error}{wl\_surface\_error}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__surface_ga88d039defab53085379a60885305ded1}{wl\+\_\+surface\+\_\+error}}}
+
+wl\+\_\+surface error values
+
+These errors can be emitted in response to wl\+\_\+surface requests. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SURFACE\_ERROR\_INVALID\_SCALE@{WL\_SURFACE\_ERROR\_INVALID\_SCALE}!The wl\_surface interface@{The wl\_surface interface}}\index{The wl\_surface interface@{The wl\_surface interface}!WL\_SURFACE\_ERROR\_INVALID\_SCALE@{WL\_SURFACE\_ERROR\_INVALID\_SCALE}}}\mbox{\Hypertarget{group__iface__wl__surface_gga88d039defab53085379a60885305ded1acdf99857645d9d1e064d74526525c804}\label{group__iface__wl__surface_gga88d039defab53085379a60885305ded1acdf99857645d9d1e064d74526525c804}} 
+WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+SCALE&buffer scale value is invalid \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SURFACE\_ERROR\_INVALID\_TRANSFORM@{WL\_SURFACE\_ERROR\_INVALID\_TRANSFORM}!The wl\_surface interface@{The wl\_surface interface}}\index{The wl\_surface interface@{The wl\_surface interface}!WL\_SURFACE\_ERROR\_INVALID\_TRANSFORM@{WL\_SURFACE\_ERROR\_INVALID\_TRANSFORM}}}\mbox{\Hypertarget{group__iface__wl__surface_gga88d039defab53085379a60885305ded1ae73ac6ab224495c44c585e610934a080}\label{group__iface__wl__surface_gga88d039defab53085379a60885305ded1ae73ac6ab224495c44c585e610934a080}} 
+WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+TRANSFORM&buffer transform value is invalid \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SURFACE\_ERROR\_INVALID\_SIZE@{WL\_SURFACE\_ERROR\_INVALID\_SIZE}!The wl\_surface interface@{The wl\_surface interface}}\index{The wl\_surface interface@{The wl\_surface interface}!WL\_SURFACE\_ERROR\_INVALID\_SIZE@{WL\_SURFACE\_ERROR\_INVALID\_SIZE}}}\mbox{\Hypertarget{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a5b79d581ca9e6b5658269b8025b25341}\label{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a5b79d581ca9e6b5658269b8025b25341}} 
+WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+SIZE&buffer size is invalid \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SURFACE\_ERROR\_INVALID\_OFFSET@{WL\_SURFACE\_ERROR\_INVALID\_OFFSET}!The wl\_surface interface@{The wl\_surface interface}}\index{The wl\_surface interface@{The wl\_surface interface}!WL\_SURFACE\_ERROR\_INVALID\_OFFSET@{WL\_SURFACE\_ERROR\_INVALID\_OFFSET}}}\mbox{\Hypertarget{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a5567a941c3d998b1ea5e7b662d95ecaa}\label{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a5567a941c3d998b1ea5e7b662d95ecaa}} 
+WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+OFFSET&buffer offset is invalid \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_SURFACE\_ERROR\_DEFUNCT\_ROLE\_OBJECT@{WL\_SURFACE\_ERROR\_DEFUNCT\_ROLE\_OBJECT}!The wl\_surface interface@{The wl\_surface interface}}\index{The wl\_surface interface@{The wl\_surface interface}!WL\_SURFACE\_ERROR\_DEFUNCT\_ROLE\_OBJECT@{WL\_SURFACE\_ERROR\_DEFUNCT\_ROLE\_OBJECT}}}\mbox{\Hypertarget{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a8bc4bd5048c6aecde6d48280f2c80890}\label{group__iface__wl__surface_gga88d039defab53085379a60885305ded1a8bc4bd5048c6aecde6d48280f2c80890}} 
+WL\+\_\+\+SURFACE\+\_\+\+ERROR\+\_\+\+DEFUNCT\+\_\+\+ROLE\+\_\+\+OBJECT&surface was destroyed before its role object \\
+\hline
+
+\end{DoxyEnumFields}

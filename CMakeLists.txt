@@ -82,6 +82,11 @@ qt_add_executable(embroidermodder2
 	${SRC}/qt.h
 )
 
+# WARNING: This does NOT regenerate when the assets change, so you have to
+# make a new build folder to ensure that this retriggers.
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+
 add_executable(test_translations
 	${SRC}/translations.c
 	${SRC}/core.h

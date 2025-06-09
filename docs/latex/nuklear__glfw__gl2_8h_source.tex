@@ -1,0 +1,387 @@
+\hypertarget{nuklear__glfw__gl2_8h_source}{}\doxysection{nuklear\+\_\+glfw\+\_\+gl2.\+h}
+\label{nuklear__glfw__gl2_8h_source}\index{extern/glfw/deps/nuklear\_glfw\_gl2.h@{extern/glfw/deps/nuklear\_glfw\_gl2.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{/*}}
+\DoxyCodeLine{2 \textcolor{comment}{ * Nuklear -\/ v1.32.0 -\/ public domain}}
+\DoxyCodeLine{3 \textcolor{comment}{ * no warrenty implied; use at your own risk.}}
+\DoxyCodeLine{4 \textcolor{comment}{ * authored from 2015-\/2017 by Micha Mettke}}
+\DoxyCodeLine{5 \textcolor{comment}{ */}}
+\DoxyCodeLine{6 \textcolor{comment}{/*}}
+\DoxyCodeLine{7 \textcolor{comment}{ * ==============================================================}}
+\DoxyCodeLine{8 \textcolor{comment}{ *}}
+\DoxyCodeLine{9 \textcolor{comment}{ *                              API}}
+\DoxyCodeLine{10 \textcolor{comment}{ *}}
+\DoxyCodeLine{11 \textcolor{comment}{ * ===============================================================}}
+\DoxyCodeLine{12 \textcolor{comment}{ */}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#ifndef NK\_GLFW\_GL2\_H\_}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#define NK\_GLFW\_GL2\_H\_}}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include <\mbox{\hyperlink{glfw3_8h}{GLFW/glfw3.h}}>}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{keyword}{enum} nk\_glfw\_init\_state\{}
+\DoxyCodeLine{19     NK\_GLFW3\_DEFAULT = 0,}
+\DoxyCodeLine{20     NK\_GLFW3\_INSTALL\_CALLBACKS}
+\DoxyCodeLine{21 \};}
+\DoxyCodeLine{22 NK\_API \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__context}{nk\_context}}*   nk\_glfw3\_init(\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} *win, \textcolor{keyword}{enum} nk\_glfw\_init\_state);}
+\DoxyCodeLine{23 NK\_API \textcolor{keywordtype}{void}                 nk\_glfw3\_font\_stash\_begin(\textcolor{keyword}{struct} nk\_font\_atlas **atlas);}
+\DoxyCodeLine{24 NK\_API \textcolor{keywordtype}{void}                 nk\_glfw3\_font\_stash\_end(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 NK\_API \textcolor{keywordtype}{void}                 nk\_glfw3\_new\_frame(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{27 NK\_API \textcolor{keywordtype}{void}                 nk\_glfw3\_render(\textcolor{keyword}{enum} nk\_anti\_aliasing);}
+\DoxyCodeLine{28 NK\_API \textcolor{keywordtype}{void}                 nk\_glfw3\_shutdown(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 NK\_API \textcolor{keywordtype}{void}                 nk\_glfw3\_char\_callback(\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} *win, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} codepoint);}
+\DoxyCodeLine{31 NK\_API \textcolor{keywordtype}{void}                 nk\_gflw3\_scroll\_callback(\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} *win, \textcolor{keywordtype}{double} xoff, \textcolor{keywordtype}{double} yoff);}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35 \textcolor{comment}{/*}}
+\DoxyCodeLine{36 \textcolor{comment}{ * ==============================================================}}
+\DoxyCodeLine{37 \textcolor{comment}{ *}}
+\DoxyCodeLine{38 \textcolor{comment}{ *                          IMPLEMENTATION}}
+\DoxyCodeLine{39 \textcolor{comment}{ *}}
+\DoxyCodeLine{40 \textcolor{comment}{ * ===============================================================}}
+\DoxyCodeLine{41 \textcolor{comment}{ */}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#ifdef NK\_GLFW\_GL2\_IMPLEMENTATION}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#ifndef NK\_GLFW\_TEXT\_MAX}}
+\DoxyCodeLine{45 \textcolor{preprocessor}{\#define NK\_GLFW\_TEXT\_MAX 256}}
+\DoxyCodeLine{46 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{47 \textcolor{preprocessor}{\#ifndef NK\_GLFW\_DOUBLE\_CLICK\_LO}}
+\DoxyCodeLine{48 \textcolor{preprocessor}{\#define NK\_GLFW\_DOUBLE\_CLICK\_LO 0.02}}
+\DoxyCodeLine{49 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{50 \textcolor{preprocessor}{\#ifndef NK\_GLFW\_DOUBLE\_CLICK\_HI}}
+\DoxyCodeLine{51 \textcolor{preprocessor}{\#define NK\_GLFW\_DOUBLE\_CLICK\_HI 0.2}}
+\DoxyCodeLine{52 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54 \textcolor{keyword}{struct }nk\_glfw\_device \{}
+\DoxyCodeLine{55     \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__buffer}{nk\_buffer}} cmds;}
+\DoxyCodeLine{56     \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__draw__null__texture}{nk\_draw\_null\_texture}} null;}
+\DoxyCodeLine{57     GLuint font\_tex;}
+\DoxyCodeLine{58 \};}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60 \textcolor{keyword}{struct }nk\_glfw\_vertex \{}
+\DoxyCodeLine{61     \textcolor{keywordtype}{float} position[2];}
+\DoxyCodeLine{62     \textcolor{keywordtype}{float} uv[2];}
+\DoxyCodeLine{63     nk\_byte col[4];}
+\DoxyCodeLine{64 \};}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66 \textcolor{keyword}{static} \textcolor{keyword}{struct }nk\_glfw \{}
+\DoxyCodeLine{67     \mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} *win;}
+\DoxyCodeLine{68     \textcolor{keywordtype}{int} width, height;}
+\DoxyCodeLine{69     \textcolor{keywordtype}{int} display\_width, display\_height;}
+\DoxyCodeLine{70     \textcolor{keyword}{struct }nk\_glfw\_device ogl;}
+\DoxyCodeLine{71     \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__context}{nk\_context}} ctx;}
+\DoxyCodeLine{72     \textcolor{keyword}{struct }nk\_font\_atlas atlas;}
+\DoxyCodeLine{73     \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__vec2}{nk\_vec2}} fb\_scale;}
+\DoxyCodeLine{74     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} text[NK\_GLFW\_TEXT\_MAX];}
+\DoxyCodeLine{75     \textcolor{keywordtype}{int} text\_len;}
+\DoxyCodeLine{76     \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__vec2}{nk\_vec2}} scroll;}
+\DoxyCodeLine{77     \textcolor{keywordtype}{double} last\_button\_click;}
+\DoxyCodeLine{78     \textcolor{keywordtype}{int} is\_double\_click\_down;}
+\DoxyCodeLine{79     \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__vec2}{nk\_vec2}} double\_click\_pos;}
+\DoxyCodeLine{80 \} glfw;}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82 NK\_INTERN \textcolor{keywordtype}{void}}
+\DoxyCodeLine{83 nk\_glfw3\_device\_upload\_atlas(\textcolor{keyword}{const} \textcolor{keywordtype}{void} *image, \textcolor{keywordtype}{int} width, \textcolor{keywordtype}{int} height)}
+\DoxyCodeLine{84 \{}
+\DoxyCodeLine{85     \textcolor{keyword}{struct }nk\_glfw\_device *dev = \&glfw.ogl;}
+\DoxyCodeLine{86     glGenTextures(1, \&dev-\/>font\_tex);}
+\DoxyCodeLine{87     glBindTexture(GL\_TEXTURE\_2D, dev-\/>font\_tex);}
+\DoxyCodeLine{88     glTexParameteri(GL\_TEXTURE\_2D, GL\_TEXTURE\_MIN\_FILTER, GL\_LINEAR);}
+\DoxyCodeLine{89     glTexParameteri(GL\_TEXTURE\_2D, GL\_TEXTURE\_MAG\_FILTER, GL\_LINEAR);}
+\DoxyCodeLine{90     glTexImage2D(GL\_TEXTURE\_2D, 0, GL\_RGBA, (GLsizei)width, (GLsizei)height, 0,}
+\DoxyCodeLine{91                 GL\_RGBA, GL\_UNSIGNED\_BYTE, image);}
+\DoxyCodeLine{92 \}}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94 NK\_API \textcolor{keywordtype}{void}}
+\DoxyCodeLine{95 nk\_glfw3\_render(\textcolor{keyword}{enum} nk\_anti\_aliasing AA)}
+\DoxyCodeLine{96 \{}
+\DoxyCodeLine{97     \textcolor{comment}{/* setup global state */}}
+\DoxyCodeLine{98     \textcolor{keyword}{struct }nk\_glfw\_device *dev = \&glfw.ogl;}
+\DoxyCodeLine{99     glPushAttrib(GL\_ENABLE\_BIT|GL\_COLOR\_BUFFER\_BIT|GL\_TRANSFORM\_BIT);}
+\DoxyCodeLine{100     glDisable(GL\_CULL\_FACE);}
+\DoxyCodeLine{101     glDisable(GL\_DEPTH\_TEST);}
+\DoxyCodeLine{102     glEnable(GL\_SCISSOR\_TEST);}
+\DoxyCodeLine{103     glEnable(GL\_BLEND);}
+\DoxyCodeLine{104     glEnable(GL\_TEXTURE\_2D);}
+\DoxyCodeLine{105     glBlendFunc(GL\_SRC\_ALPHA, GL\_ONE\_MINUS\_SRC\_ALPHA);}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107     \textcolor{comment}{/* setup viewport/project */}}
+\DoxyCodeLine{108     glViewport(0,0,(GLsizei)glfw.display\_width,(GLsizei)glfw.display\_height);}
+\DoxyCodeLine{109     glMatrixMode(GL\_PROJECTION);}
+\DoxyCodeLine{110     glPushMatrix();}
+\DoxyCodeLine{111     glLoadIdentity();}
+\DoxyCodeLine{112     glOrtho(0.0f, glfw.width, glfw.height, 0.0f, -\/1.0f, 1.0f);}
+\DoxyCodeLine{113     glMatrixMode(GL\_MODELVIEW);}
+\DoxyCodeLine{114     glPushMatrix();}
+\DoxyCodeLine{115     glLoadIdentity();}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117     glEnableClientState(GL\_VERTEX\_ARRAY);}
+\DoxyCodeLine{118     glEnableClientState(GL\_TEXTURE\_COORD\_ARRAY);}
+\DoxyCodeLine{119     glEnableClientState(GL\_COLOR\_ARRAY);}
+\DoxyCodeLine{120     \{}
+\DoxyCodeLine{121         GLsizei vs = \textcolor{keyword}{sizeof}(\textcolor{keyword}{struct }nk\_glfw\_vertex);}
+\DoxyCodeLine{122         \textcolor{keywordtype}{size\_t} vp = offsetof(\textcolor{keyword}{struct} nk\_glfw\_vertex, position);}
+\DoxyCodeLine{123         \textcolor{keywordtype}{size\_t} vt = offsetof(\textcolor{keyword}{struct} nk\_glfw\_vertex, uv);}
+\DoxyCodeLine{124         \textcolor{keywordtype}{size\_t} vc = offsetof(\textcolor{keyword}{struct} nk\_glfw\_vertex, col);}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{126         \textcolor{comment}{/* convert from command queue into draw list and draw to screen */}}
+\DoxyCodeLine{127         \textcolor{keyword}{const} \textcolor{keyword}{struct }nk\_draw\_command *cmd;}
+\DoxyCodeLine{128         \textcolor{keyword}{const} nk\_draw\_index *offset = NULL;}
+\DoxyCodeLine{129         \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__buffer}{nk\_buffer}} vbuf, ebuf;}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{131         \textcolor{comment}{/* fill convert configuration */}}
+\DoxyCodeLine{132         \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__convert__config}{nk\_convert\_config}} config;}
+\DoxyCodeLine{133         \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keyword}{struct }nk\_draw\_vertex\_layout\_element vertex\_layout[] = \{}
+\DoxyCodeLine{134             \{NK\_VERTEX\_POSITION, NK\_FORMAT\_FLOAT, NK\_OFFSETOF(\textcolor{keyword}{struct} nk\_glfw\_vertex, position)\},}
+\DoxyCodeLine{135             \{NK\_VERTEX\_TEXCOORD, NK\_FORMAT\_FLOAT, NK\_OFFSETOF(\textcolor{keyword}{struct} nk\_glfw\_vertex, uv)\},}
+\DoxyCodeLine{136             \{NK\_VERTEX\_COLOR, NK\_FORMAT\_R8G8B8A8, NK\_OFFSETOF(\textcolor{keyword}{struct} nk\_glfw\_vertex, col)\},}
+\DoxyCodeLine{137             \{NK\_VERTEX\_LAYOUT\_END\}}
+\DoxyCodeLine{138         \};}
+\DoxyCodeLine{139         NK\_MEMSET(\&config, 0, \textcolor{keyword}{sizeof}(config));}
+\DoxyCodeLine{140         config.vertex\_layout = vertex\_layout;}
+\DoxyCodeLine{141         config.vertex\_size = \textcolor{keyword}{sizeof}(\textcolor{keyword}{struct }nk\_glfw\_vertex);}
+\DoxyCodeLine{142         config.vertex\_alignment = NK\_ALIGNOF(\textcolor{keyword}{struct} nk\_glfw\_vertex);}
+\DoxyCodeLine{143         config.null = dev-\/>null;}
+\DoxyCodeLine{144         config.circle\_segment\_count = 22;}
+\DoxyCodeLine{145         config.curve\_segment\_count = 22;}
+\DoxyCodeLine{146         config.arc\_segment\_count = 22;}
+\DoxyCodeLine{147         config.global\_alpha = 1.0f;}
+\DoxyCodeLine{148         config.shape\_AA = AA;}
+\DoxyCodeLine{149         config.line\_AA = AA;}
+\DoxyCodeLine{150 }
+\DoxyCodeLine{151         \textcolor{comment}{/* convert shapes into vertexes */}}
+\DoxyCodeLine{152         nk\_buffer\_init\_default(\&vbuf);}
+\DoxyCodeLine{153         nk\_buffer\_init\_default(\&ebuf);}
+\DoxyCodeLine{154         nk\_convert(\&glfw.ctx, \&dev-\/>cmds, \&vbuf, \&ebuf, \&config);}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156         \textcolor{comment}{/* setup vertex buffer pointer */}}
+\DoxyCodeLine{157         \{\textcolor{keyword}{const} \textcolor{keywordtype}{void} *vertices = nk\_buffer\_memory\_const(\&vbuf);}
+\DoxyCodeLine{158         glVertexPointer(2, GL\_FLOAT, vs, (\textcolor{keyword}{const} \textcolor{keywordtype}{void}*)((\textcolor{keyword}{const} nk\_byte*)vertices + vp));}
+\DoxyCodeLine{159         glTexCoordPointer(2, GL\_FLOAT, vs, (\textcolor{keyword}{const} \textcolor{keywordtype}{void}*)((\textcolor{keyword}{const} nk\_byte*)vertices + vt));}
+\DoxyCodeLine{160         glColorPointer(4, GL\_UNSIGNED\_BYTE, vs, (\textcolor{keyword}{const} \textcolor{keywordtype}{void}*)((\textcolor{keyword}{const} nk\_byte*)vertices + vc));\}}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162         \textcolor{comment}{/* iterate over and execute each draw command */}}
+\DoxyCodeLine{163         offset = (\textcolor{keyword}{const} nk\_draw\_index*)nk\_buffer\_memory\_const(\&ebuf);}
+\DoxyCodeLine{164         nk\_draw\_foreach(cmd, \&glfw.ctx, \&dev-\/>cmds)}
+\DoxyCodeLine{165         \{}
+\DoxyCodeLine{166             \textcolor{keywordflow}{if} (!cmd-\/>elem\_count) \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{167             glBindTexture(GL\_TEXTURE\_2D, (GLuint)cmd-\/>texture.id);}
+\DoxyCodeLine{168             glScissor(}
+\DoxyCodeLine{169                 (GLint)(cmd-\/>clip\_rect.x * glfw.fb\_scale.x),}
+\DoxyCodeLine{170                 (GLint)((glfw.height -\/ (GLint)(cmd-\/>clip\_rect.y + cmd-\/>clip\_rect.h)) * glfw.fb\_scale.y),}
+\DoxyCodeLine{171                 (GLint)(cmd-\/>clip\_rect.w * glfw.fb\_scale.x),}
+\DoxyCodeLine{172                 (GLint)(cmd-\/>clip\_rect.h * glfw.fb\_scale.y));}
+\DoxyCodeLine{173             glDrawElements(GL\_TRIANGLES, (GLsizei)cmd-\/>elem\_count, GL\_UNSIGNED\_SHORT, offset);}
+\DoxyCodeLine{174             offset += cmd-\/>elem\_count;}
+\DoxyCodeLine{175         \}}
+\DoxyCodeLine{176         nk\_clear(\&glfw.ctx);}
+\DoxyCodeLine{177         nk\_buffer\_free(\&vbuf);}
+\DoxyCodeLine{178         nk\_buffer\_free(\&ebuf);}
+\DoxyCodeLine{179     \}}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181     \textcolor{comment}{/* default OpenGL state */}}
+\DoxyCodeLine{182     glDisableClientState(GL\_VERTEX\_ARRAY);}
+\DoxyCodeLine{183     glDisableClientState(GL\_TEXTURE\_COORD\_ARRAY);}
+\DoxyCodeLine{184     glDisableClientState(GL\_COLOR\_ARRAY);}
+\DoxyCodeLine{185 }
+\DoxyCodeLine{186     glDisable(GL\_CULL\_FACE);}
+\DoxyCodeLine{187     glDisable(GL\_DEPTH\_TEST);}
+\DoxyCodeLine{188     glDisable(GL\_SCISSOR\_TEST);}
+\DoxyCodeLine{189     glDisable(GL\_BLEND);}
+\DoxyCodeLine{190     glDisable(GL\_TEXTURE\_2D);}
+\DoxyCodeLine{191 }
+\DoxyCodeLine{192     glBindTexture(GL\_TEXTURE\_2D, 0);}
+\DoxyCodeLine{193     glMatrixMode(GL\_MODELVIEW);}
+\DoxyCodeLine{194     glPopMatrix();}
+\DoxyCodeLine{195     glMatrixMode(GL\_PROJECTION);}
+\DoxyCodeLine{196     glPopMatrix();}
+\DoxyCodeLine{197     glPopAttrib();}
+\DoxyCodeLine{198 \}}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200 NK\_API \textcolor{keywordtype}{void}}
+\DoxyCodeLine{201 nk\_glfw3\_char\_callback(\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} *win, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} codepoint)}
+\DoxyCodeLine{202 \{}
+\DoxyCodeLine{203     (void)win;}
+\DoxyCodeLine{204     \textcolor{keywordflow}{if} (glfw.text\_len < NK\_GLFW\_TEXT\_MAX)}
+\DoxyCodeLine{205         glfw.text[glfw.text\_len++] = codepoint;}
+\DoxyCodeLine{206 \}}
+\DoxyCodeLine{207 }
+\DoxyCodeLine{208 NK\_API \textcolor{keywordtype}{void}}
+\DoxyCodeLine{209 nk\_gflw3\_scroll\_callback(\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} *win, \textcolor{keywordtype}{double} xoff, \textcolor{keywordtype}{double} yoff)}
+\DoxyCodeLine{210 \{}
+\DoxyCodeLine{211     (void)win; (void)xoff;}
+\DoxyCodeLine{212     glfw.scroll.x += (float)xoff;}
+\DoxyCodeLine{213     glfw.scroll.y += (float)yoff;}
+\DoxyCodeLine{214 \}}
+\DoxyCodeLine{215 }
+\DoxyCodeLine{216 NK\_API \textcolor{keywordtype}{void}}
+\DoxyCodeLine{217 nk\_glfw3\_mouse\_button\_callback(\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}}* window, \textcolor{keywordtype}{int} button, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods)}
+\DoxyCodeLine{218 \{}
+\DoxyCodeLine{219     \textcolor{keywordtype}{double} x, y;}
+\DoxyCodeLine{220     \textcolor{keywordflow}{if} (button != GLFW\_MOUSE\_BUTTON\_LEFT) \textcolor{keywordflow}{return};}
+\DoxyCodeLine{221     \mbox{\hyperlink{group__input_gad289438eb7cf53d11eca685373f44105}{glfwGetCursorPos}}(window, \&x, \&y);}
+\DoxyCodeLine{222     \textcolor{keywordflow}{if} (action == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}})  \{}
+\DoxyCodeLine{223         \textcolor{keywordtype}{double} dt = \mbox{\hyperlink{group__input_ga03d4a1039b8662c71eeb40beea8cb622}{glfwGetTime}}() -\/ glfw.last\_button\_click;}
+\DoxyCodeLine{224         \textcolor{keywordflow}{if} (dt > NK\_GLFW\_DOUBLE\_CLICK\_LO \&\& dt < NK\_GLFW\_DOUBLE\_CLICK\_HI) \{}
+\DoxyCodeLine{225             glfw.is\_double\_click\_down = nk\_true;}
+\DoxyCodeLine{226             glfw.double\_click\_pos = \mbox{\hyperlink{structnk__vec2}{nk\_vec2}}((\textcolor{keywordtype}{float})x, (\textcolor{keywordtype}{float})y);}
+\DoxyCodeLine{227         \}}
+\DoxyCodeLine{228         glfw.last\_button\_click = \mbox{\hyperlink{group__input_ga03d4a1039b8662c71eeb40beea8cb622}{glfwGetTime}}();}
+\DoxyCodeLine{229     \} \textcolor{keywordflow}{else} glfw.is\_double\_click\_down = nk\_false;}
+\DoxyCodeLine{230 \}}
+\DoxyCodeLine{231 }
+\DoxyCodeLine{232 NK\_INTERN \textcolor{keywordtype}{void}}
+\DoxyCodeLine{233 nk\_glfw3\_clipboard\_paste(\mbox{\hyperlink{unionnk__handle}{nk\_handle}} usr, \textcolor{keyword}{struct} \mbox{\hyperlink{structnk__text__edit}{nk\_text\_edit}} *edit)}
+\DoxyCodeLine{234 \{}
+\DoxyCodeLine{235     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *text = \mbox{\hyperlink{group__input_ga315b28b05797d00fe7cdf1ecfdc638dc}{glfwGetClipboardString}}(glfw.win);}
+\DoxyCodeLine{236     \textcolor{keywordflow}{if} (text) nk\_textedit\_paste(edit, text, nk\_strlen(text));}
+\DoxyCodeLine{237     (void)usr;}
+\DoxyCodeLine{238 \}}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240 NK\_INTERN \textcolor{keywordtype}{void}}
+\DoxyCodeLine{241 nk\_glfw3\_clipboard\_copy(\mbox{\hyperlink{unionnk__handle}{nk\_handle}} usr, \textcolor{keyword}{const} \textcolor{keywordtype}{char} *text, \textcolor{keywordtype}{int} len)}
+\DoxyCodeLine{242 \{}
+\DoxyCodeLine{243     \textcolor{keywordtype}{char} *str = 0;}
+\DoxyCodeLine{244     (void)usr;}
+\DoxyCodeLine{245     \textcolor{keywordflow}{if} (!len) \textcolor{keywordflow}{return};}
+\DoxyCodeLine{246     str = (\textcolor{keywordtype}{char}*)malloc((\textcolor{keywordtype}{size\_t})len+1);}
+\DoxyCodeLine{247     \textcolor{keywordflow}{if} (!str) \textcolor{keywordflow}{return};}
+\DoxyCodeLine{248     NK\_MEMCPY(str, text, (\textcolor{keywordtype}{size\_t})len);}
+\DoxyCodeLine{249     str[len] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{250     \mbox{\hyperlink{group__input_ga7a580309bbc185a0459c3559021d2fd7}{glfwSetClipboardString}}(glfw.win, str);}
+\DoxyCodeLine{251     free(str);}
+\DoxyCodeLine{252 \}}
+\DoxyCodeLine{253 }
+\DoxyCodeLine{254 NK\_API \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__context}{nk\_context}}*}
+\DoxyCodeLine{255 nk\_glfw3\_init(\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} *win, \textcolor{keyword}{enum} nk\_glfw\_init\_state init\_state)}
+\DoxyCodeLine{256 \{}
+\DoxyCodeLine{257     glfw.win = win;}
+\DoxyCodeLine{258     \textcolor{keywordflow}{if} (init\_state == NK\_GLFW3\_INSTALL\_CALLBACKS) \{}
+\DoxyCodeLine{259         \mbox{\hyperlink{group__input_gaa786b59f19ad8525d251cda8e0d7d29b}{glfwSetScrollCallback}}(win, nk\_gflw3\_scroll\_callback);}
+\DoxyCodeLine{260         \mbox{\hyperlink{group__input_gad3d7e6e3134fa034cc1604162579585e}{glfwSetCharCallback}}(win, nk\_glfw3\_char\_callback);}
+\DoxyCodeLine{261         \mbox{\hyperlink{group__input_gab8f17646f43cdca14e5095512618fdf6}{glfwSetMouseButtonCallback}}(win, nk\_glfw3\_mouse\_button\_callback);}
+\DoxyCodeLine{262     \}}
+\DoxyCodeLine{263     nk\_init\_default(\&glfw.ctx, 0);}
+\DoxyCodeLine{264     glfw.ctx.clip.copy = nk\_glfw3\_clipboard\_copy;}
+\DoxyCodeLine{265     glfw.ctx.clip.paste = nk\_glfw3\_clipboard\_paste;}
+\DoxyCodeLine{266     glfw.ctx.clip.userdata = nk\_handle\_ptr(0);}
+\DoxyCodeLine{267     nk\_buffer\_init\_default(\&glfw.ogl.cmds);}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269     glfw.is\_double\_click\_down = nk\_false;}
+\DoxyCodeLine{270     glfw.double\_click\_pos = \mbox{\hyperlink{structnk__vec2}{nk\_vec2}}(0, 0);}
+\DoxyCodeLine{271 }
+\DoxyCodeLine{272     \textcolor{keywordflow}{return} \&glfw.ctx;}
+\DoxyCodeLine{273 \}}
+\DoxyCodeLine{274 }
+\DoxyCodeLine{275 NK\_API \textcolor{keywordtype}{void}}
+\DoxyCodeLine{276 nk\_glfw3\_font\_stash\_begin(\textcolor{keyword}{struct} nk\_font\_atlas **atlas)}
+\DoxyCodeLine{277 \{}
+\DoxyCodeLine{278     nk\_font\_atlas\_init\_default(\&glfw.atlas);}
+\DoxyCodeLine{279     nk\_font\_atlas\_begin(\&glfw.atlas);}
+\DoxyCodeLine{280     *atlas = \&glfw.atlas;}
+\DoxyCodeLine{281 \}}
+\DoxyCodeLine{282 }
+\DoxyCodeLine{283 NK\_API \textcolor{keywordtype}{void}}
+\DoxyCodeLine{284 nk\_glfw3\_font\_stash\_end(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{285 \{}
+\DoxyCodeLine{286     \textcolor{keyword}{const} \textcolor{keywordtype}{void} *image; \textcolor{keywordtype}{int} w, h;}
+\DoxyCodeLine{287     image = nk\_font\_atlas\_bake(\&glfw.atlas, \&w, \&h, NK\_FONT\_ATLAS\_RGBA32);}
+\DoxyCodeLine{288     nk\_glfw3\_device\_upload\_atlas(image, w, h);}
+\DoxyCodeLine{289     nk\_font\_atlas\_end(\&glfw.atlas, nk\_handle\_id((\textcolor{keywordtype}{int})glfw.ogl.font\_tex), \&glfw.ogl.null);}
+\DoxyCodeLine{290     \textcolor{keywordflow}{if} (glfw.atlas.default\_font)}
+\DoxyCodeLine{291         nk\_style\_set\_font(\&glfw.ctx, \&glfw.atlas.default\_font-\/>handle);}
+\DoxyCodeLine{292 \}}
+\DoxyCodeLine{293 }
+\DoxyCodeLine{294 NK\_API \textcolor{keywordtype}{void}}
+\DoxyCodeLine{295 nk\_glfw3\_new\_frame(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{296 \{}
+\DoxyCodeLine{297     \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{298     \textcolor{keywordtype}{double} x, y;}
+\DoxyCodeLine{299     \textcolor{keyword}{struct }\mbox{\hyperlink{structnk__context}{nk\_context}} *ctx = \&glfw.ctx;}
+\DoxyCodeLine{300     \textcolor{keyword}{struct }\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} *win = glfw.win;}
+\DoxyCodeLine{301 }
+\DoxyCodeLine{302     \mbox{\hyperlink{group__window_ga7feb769ebb3f3d21579b5a3fb07be76e}{glfwGetWindowSize}}(win, \&glfw.width, \&glfw.height);}
+\DoxyCodeLine{303     \mbox{\hyperlink{group__window_gaf7d17f3534b4b6dc9a6f905e3a240b7e}{glfwGetFramebufferSize}}(win, \&glfw.display\_width, \&glfw.display\_height);}
+\DoxyCodeLine{304     glfw.fb\_scale.x = (float)glfw.display\_width/(\textcolor{keywordtype}{float})glfw.width;}
+\DoxyCodeLine{305     glfw.fb\_scale.y = (float)glfw.display\_height/(\textcolor{keywordtype}{float})glfw.height;}
+\DoxyCodeLine{306 }
+\DoxyCodeLine{307     nk\_input\_begin(ctx);}
+\DoxyCodeLine{308     \textcolor{keywordflow}{for} (i = 0; i < glfw.text\_len; ++i)}
+\DoxyCodeLine{309         nk\_input\_unicode(ctx, glfw.text[i]);}
+\DoxyCodeLine{310 }
+\DoxyCodeLine{311     \textcolor{comment}{/* optional grabbing behavior */}}
+\DoxyCodeLine{312     \textcolor{keywordflow}{if} (ctx-\/>input.mouse.grab)}
+\DoxyCodeLine{313         \mbox{\hyperlink{group__input_gae1eb729d2dd91dc33fd60e150a6e1684}{glfwSetInputMode}}(glfw.win, GLFW\_CURSOR, GLFW\_CURSOR\_HIDDEN);}
+\DoxyCodeLine{314     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (ctx-\/>input.mouse.ungrab)}
+\DoxyCodeLine{315         \mbox{\hyperlink{group__input_gae1eb729d2dd91dc33fd60e150a6e1684}{glfwSetInputMode}}(glfw.win, GLFW\_CURSOR, GLFW\_CURSOR\_NORMAL);}
+\DoxyCodeLine{316 }
+\DoxyCodeLine{317     nk\_input\_key(ctx, NK\_KEY\_DEL, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_DELETE) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{318     nk\_input\_key(ctx, NK\_KEY\_ENTER, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_ENTER) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{319     nk\_input\_key(ctx, NK\_KEY\_TAB, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_TAB) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{320     nk\_input\_key(ctx, NK\_KEY\_BACKSPACE, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_BACKSPACE) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{321     nk\_input\_key(ctx, NK\_KEY\_UP, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_UP) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{322     nk\_input\_key(ctx, NK\_KEY\_DOWN, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_DOWN) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{323     nk\_input\_key(ctx, NK\_KEY\_TEXT\_START, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_HOME) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{324     nk\_input\_key(ctx, NK\_KEY\_TEXT\_END, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_END) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{325     nk\_input\_key(ctx, NK\_KEY\_SCROLL\_START, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_HOME) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{326     nk\_input\_key(ctx, NK\_KEY\_SCROLL\_END, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_END) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{327     nk\_input\_key(ctx, NK\_KEY\_SCROLL\_DOWN, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_PAGE\_DOWN) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{328     nk\_input\_key(ctx, NK\_KEY\_SCROLL\_UP, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_PAGE\_UP) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{329     nk\_input\_key(ctx, NK\_KEY\_SHIFT, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_LEFT\_SHIFT) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}}||}
+\DoxyCodeLine{330                                     \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_RIGHT\_SHIFT) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{331 }
+\DoxyCodeLine{332     \textcolor{keywordflow}{if} (\mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_LEFT\_CONTROL) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}} ||}
+\DoxyCodeLine{333         \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_RIGHT\_CONTROL) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}}) \{}
+\DoxyCodeLine{334         nk\_input\_key(ctx, NK\_KEY\_COPY, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_C) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{335         nk\_input\_key(ctx, NK\_KEY\_PASTE, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_V) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{336         nk\_input\_key(ctx, NK\_KEY\_CUT, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_X) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{337         nk\_input\_key(ctx, NK\_KEY\_TEXT\_UNDO, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_Z) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{338         nk\_input\_key(ctx, NK\_KEY\_TEXT\_REDO, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_R) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{339         nk\_input\_key(ctx, NK\_KEY\_TEXT\_WORD\_LEFT, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_LEFT) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{340         nk\_input\_key(ctx, NK\_KEY\_TEXT\_WORD\_RIGHT, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_RIGHT) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{341         nk\_input\_key(ctx, NK\_KEY\_TEXT\_LINE\_START, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_B) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{342         nk\_input\_key(ctx, NK\_KEY\_TEXT\_LINE\_END, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_E) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{343     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{344         nk\_input\_key(ctx, NK\_KEY\_LEFT, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_LEFT) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{345         nk\_input\_key(ctx, NK\_KEY\_RIGHT, \mbox{\hyperlink{group__input_ga7d8ad8ffaf272808f04e1d5d33ec8859}{glfwGetKey}}(win, GLFW\_KEY\_RIGHT) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{346         nk\_input\_key(ctx, NK\_KEY\_COPY, 0);}
+\DoxyCodeLine{347         nk\_input\_key(ctx, NK\_KEY\_PASTE, 0);}
+\DoxyCodeLine{348         nk\_input\_key(ctx, NK\_KEY\_CUT, 0);}
+\DoxyCodeLine{349         nk\_input\_key(ctx, NK\_KEY\_SHIFT, 0);}
+\DoxyCodeLine{350     \}}
+\DoxyCodeLine{351 }
+\DoxyCodeLine{352     \mbox{\hyperlink{group__input_gad289438eb7cf53d11eca685373f44105}{glfwGetCursorPos}}(win, \&x, \&y);}
+\DoxyCodeLine{353     nk\_input\_motion(ctx, (\textcolor{keywordtype}{int})x, (\textcolor{keywordtype}{int})y);}
+\DoxyCodeLine{354     \textcolor{keywordflow}{if} (ctx-\/>input.mouse.grabbed) \{}
+\DoxyCodeLine{355         \mbox{\hyperlink{group__input_gaaf152cc93418acb0ba342e3f4af922bc}{glfwSetCursorPos}}(glfw.win, (\textcolor{keywordtype}{double})ctx-\/>input.mouse.prev.x, (\textcolor{keywordtype}{double})ctx-\/>input.mouse.prev.y);}
+\DoxyCodeLine{356         ctx-\/>input.mouse.pos.x = ctx-\/>input.mouse.prev.x;}
+\DoxyCodeLine{357         ctx-\/>input.mouse.pos.y = ctx-\/>input.mouse.prev.y;}
+\DoxyCodeLine{358     \}}
+\DoxyCodeLine{359 }
+\DoxyCodeLine{360     nk\_input\_button(ctx, NK\_BUTTON\_LEFT, (\textcolor{keywordtype}{int})x, (\textcolor{keywordtype}{int})y, \mbox{\hyperlink{group__input_ga6da5efb04f700c312a57a169fa9393a0}{glfwGetMouseButton}}(win, GLFW\_MOUSE\_BUTTON\_LEFT) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{361     nk\_input\_button(ctx, NK\_BUTTON\_MIDDLE, (\textcolor{keywordtype}{int})x, (\textcolor{keywordtype}{int})y, \mbox{\hyperlink{group__input_ga6da5efb04f700c312a57a169fa9393a0}{glfwGetMouseButton}}(win, GLFW\_MOUSE\_BUTTON\_MIDDLE) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{362     nk\_input\_button(ctx, NK\_BUTTON\_RIGHT, (\textcolor{keywordtype}{int})x, (\textcolor{keywordtype}{int})y, \mbox{\hyperlink{group__input_ga6da5efb04f700c312a57a169fa9393a0}{glfwGetMouseButton}}(win, GLFW\_MOUSE\_BUTTON\_RIGHT) == \mbox{\hyperlink{group__input_ga2485743d0b59df3791c45951c4195265}{GLFW\_PRESS}});}
+\DoxyCodeLine{363     nk\_input\_button(ctx, NK\_BUTTON\_DOUBLE, (\textcolor{keywordtype}{int})glfw.double\_click\_pos.x, (\textcolor{keywordtype}{int})glfw.double\_click\_pos.y, glfw.is\_double\_click\_down);}
+\DoxyCodeLine{364     nk\_input\_scroll(ctx, glfw.scroll);}
+\DoxyCodeLine{365     nk\_input\_end(\&glfw.ctx);}
+\DoxyCodeLine{366     glfw.text\_len = 0;}
+\DoxyCodeLine{367     glfw.scroll = \mbox{\hyperlink{structnk__vec2}{nk\_vec2}}(0,0);}
+\DoxyCodeLine{368 \}}
+\DoxyCodeLine{369 }
+\DoxyCodeLine{370 NK\_API}
+\DoxyCodeLine{371 \textcolor{keywordtype}{void} nk\_glfw3\_shutdown(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{372 \{}
+\DoxyCodeLine{373     \textcolor{keyword}{struct }nk\_glfw\_device *dev = \&glfw.ogl;}
+\DoxyCodeLine{374     nk\_font\_atlas\_clear(\&glfw.atlas);}
+\DoxyCodeLine{375     nk\_free(\&glfw.ctx);}
+\DoxyCodeLine{376     glDeleteTextures(1, \&dev-\/>font\_tex);}
+\DoxyCodeLine{377     nk\_buffer\_free(\&dev-\/>cmds);}
+\DoxyCodeLine{378     NK\_MEMSET(\&glfw, 0, \textcolor{keyword}{sizeof}(glfw));}
+\DoxyCodeLine{379 \}}
+\DoxyCodeLine{380 }
+\DoxyCodeLine{381 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

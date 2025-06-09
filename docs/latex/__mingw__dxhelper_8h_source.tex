@@ -1,0 +1,118 @@
+\hypertarget{__mingw__dxhelper_8h_source}{}\doxysection{\+\_\+mingw\+\_\+dxhelper.\+h}
+\label{__mingw__dxhelper_8h_source}\index{extern/glfw/deps/mingw/\_mingw\_dxhelper.h@{extern/glfw/deps/mingw/\_mingw\_dxhelper.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& !defined(\_MSC\_EXTENSIONS)}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#define NONAMELESSUNION     1}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#if defined(NONAMELESSSTRUCT) \&\& \(\backslash\)}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{   !defined(NONAMELESSUNION)}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#define NONAMELESSUNION     1}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#if defined(NONAMELESSUNION)  \&\& \(\backslash\)}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{   !defined(NONAMELESSSTRUCT)}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define NONAMELESSSTRUCT    1}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#if !defined(\_\_GNU\_EXTENSION)}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_) || defined(\_\_GNUG\_\_)}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#define \_\_GNU\_EXTENSION     \_\_extension\_\_}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#define \_\_GNU\_EXTENSION}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#endif }\textcolor{comment}{/* \_\_extension\_\_ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#ifndef \_\_ANONYMOUS\_DEFINED}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#define \_\_ANONYMOUS\_DEFINED}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_) || defined(\_\_GNUG\_\_)}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#define \_ANONYMOUS\_UNION    \_\_extension\_\_}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#define \_ANONYMOUS\_STRUCT   \_\_extension\_\_}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{32 \textcolor{preprocessor}{\#define \_ANONYMOUS\_UNION}}
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#define \_ANONYMOUS\_STRUCT}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#ifndef NONAMELESSUNION}}
+\DoxyCodeLine{36 \textcolor{preprocessor}{\#define \_UNION\_NAME(x)}}
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#define \_STRUCT\_NAME(x)}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#else }\textcolor{comment}{/* NONAMELESSUNION */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#define \_UNION\_NAME(x)  x}}
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#define \_STRUCT\_NAME(x) x}}
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{/* \_\_ANONYMOUS\_DEFINED */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#ifndef DUMMYUNIONNAME}}
+\DoxyCodeLine{45 \textcolor{preprocessor}{\# ifdef NONAMELESSUNION}}
+\DoxyCodeLine{46 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME  u}}
+\DoxyCodeLine{47 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME1 u1    }\textcolor{comment}{/* Wine uses this variant */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{48 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME2 u2}}
+\DoxyCodeLine{49 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME3 u3}}
+\DoxyCodeLine{50 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME4 u4}}
+\DoxyCodeLine{51 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME5 u5}}
+\DoxyCodeLine{52 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME6 u6}}
+\DoxyCodeLine{53 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME7 u7}}
+\DoxyCodeLine{54 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME8 u8}}
+\DoxyCodeLine{55 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME9 u9}}
+\DoxyCodeLine{56 \textcolor{preprocessor}{\# else }\textcolor{comment}{/* NONAMELESSUNION */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{57 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME}}
+\DoxyCodeLine{58 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME1   }\textcolor{comment}{/* Wine uses this variant */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{59 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME2}}
+\DoxyCodeLine{60 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME3}}
+\DoxyCodeLine{61 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME4}}
+\DoxyCodeLine{62 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME5}}
+\DoxyCodeLine{63 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME6}}
+\DoxyCodeLine{64 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME7}}
+\DoxyCodeLine{65 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME8}}
+\DoxyCodeLine{66 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME9}}
+\DoxyCodeLine{67 \textcolor{preprocessor}{\# endif}}
+\DoxyCodeLine{68 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{/* DUMMYUNIONNAME */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70 \textcolor{preprocessor}{\#if !defined(DUMMYUNIONNAME1)   }\textcolor{comment}{/* MinGW does not define this one */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{71 \textcolor{preprocessor}{\# ifdef NONAMELESSUNION}}
+\DoxyCodeLine{72 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME1 u1    }\textcolor{comment}{/* Wine uses this variant */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{73 \textcolor{preprocessor}{\# else}}
+\DoxyCodeLine{74 \textcolor{preprocessor}{\#  define DUMMYUNIONNAME1   }\textcolor{comment}{/* Wine uses this variant */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{75 \textcolor{preprocessor}{\# endif}}
+\DoxyCodeLine{76 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{/* DUMMYUNIONNAME1 */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{78 \textcolor{preprocessor}{\#ifndef DUMMYSTRUCTNAME}}
+\DoxyCodeLine{79 \textcolor{preprocessor}{\# ifdef NONAMELESSUNION}}
+\DoxyCodeLine{80 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME  s}}
+\DoxyCodeLine{81 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME1 s1   }\textcolor{comment}{/* Wine uses this variant */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{82 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME2 s2}}
+\DoxyCodeLine{83 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME3 s3}}
+\DoxyCodeLine{84 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME4 s4}}
+\DoxyCodeLine{85 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME5 s5}}
+\DoxyCodeLine{86 \textcolor{preprocessor}{\# else}}
+\DoxyCodeLine{87 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME}}
+\DoxyCodeLine{88 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME1  }\textcolor{comment}{/* Wine uses this variant */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{89 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME2}}
+\DoxyCodeLine{90 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME3}}
+\DoxyCodeLine{91 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME4}}
+\DoxyCodeLine{92 \textcolor{preprocessor}{\#  define DUMMYSTRUCTNAME5}}
+\DoxyCodeLine{93 \textcolor{preprocessor}{\# endif}}
+\DoxyCodeLine{94 \textcolor{preprocessor}{\#endif }\textcolor{comment}{/* DUMMYSTRUCTNAME */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{96 \textcolor{comment}{/* These are for compatibility with the Wine source tree */}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98 \textcolor{preprocessor}{\#ifndef WINELIB\_NAME\_AW}}
+\DoxyCodeLine{99 \textcolor{preprocessor}{\# ifdef \_\_MINGW\_NAME\_AW}}
+\DoxyCodeLine{100 \textcolor{preprocessor}{\#   define WINELIB\_NAME\_AW  \_\_MINGW\_NAME\_AW}}
+\DoxyCodeLine{101 \textcolor{preprocessor}{\# else}}
+\DoxyCodeLine{102 \textcolor{preprocessor}{\#  ifdef UNICODE}}
+\DoxyCodeLine{103 \textcolor{preprocessor}{\#   define WINELIB\_NAME\_AW(func) func\#\#W}}
+\DoxyCodeLine{104 \textcolor{preprocessor}{\#  else}}
+\DoxyCodeLine{105 \textcolor{preprocessor}{\#   define WINELIB\_NAME\_AW(func) func\#\#A}}
+\DoxyCodeLine{106 \textcolor{preprocessor}{\#  endif}}
+\DoxyCodeLine{107 \textcolor{preprocessor}{\# endif}}
+\DoxyCodeLine{108 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{/* WINELIB\_NAME\_AW */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110 \textcolor{preprocessor}{\#ifndef DECL\_WINELIB\_TYPE\_AW}}
+\DoxyCodeLine{111 \textcolor{preprocessor}{\# ifdef \_\_MINGW\_TYPEDEF\_AW}}
+\DoxyCodeLine{112 \textcolor{preprocessor}{\#  define DECL\_WINELIB\_TYPE\_AW  \_\_MINGW\_TYPEDEF\_AW}}
+\DoxyCodeLine{113 \textcolor{preprocessor}{\# else}}
+\DoxyCodeLine{114 \textcolor{preprocessor}{\#  define DECL\_WINELIB\_TYPE\_AW(type)  typedef WINELIB\_NAME\_AW(type) type;}}
+\DoxyCodeLine{115 \textcolor{preprocessor}{\# endif}}
+\DoxyCodeLine{116 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{/* DECL\_WINELIB\_TYPE\_AW */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{117 }
+
+\end{DoxyCode}

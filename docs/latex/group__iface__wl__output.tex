@@ -1,0 +1,164 @@
+\hypertarget{group__iface__wl__output}{}\doxysection{The wl\+\_\+output interface}
+\label{group__iface__wl__output}\index{The wl\_output interface@{The wl\_output interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__output__listener}{wl\+\_\+output\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__output_gad4dfa73c73f778e4b477c7c2f996a079}\label{group__iface__wl__output_gad4dfa73c73f778e4b477c7c2f996a079}} 
+\#define {\bfseries WL\+\_\+\+OUTPUT\+\_\+\+GEOMETRY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__output_ga0c698eb8e4bff554af23f0c43526812c}\label{group__iface__wl__output_ga0c698eb8e4bff554af23f0c43526812c}} 
+\#define {\bfseries WL\+\_\+\+OUTPUT\+\_\+\+MODE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__output_gaee54f6b8b6c06901f59dcc4b35b584cf}\label{group__iface__wl__output_gaee54f6b8b6c06901f59dcc4b35b584cf}} 
+\#define {\bfseries WL\+\_\+\+OUTPUT\+\_\+\+DONE\+\_\+\+SINCE\+\_\+\+VERSION}~2
+\item 
+\mbox{\Hypertarget{group__iface__wl__output_ga95a88aafbe7c8acdb704a537dec490e2}\label{group__iface__wl__output_ga95a88aafbe7c8acdb704a537dec490e2}} 
+\#define {\bfseries WL\+\_\+\+OUTPUT\+\_\+\+SCALE\+\_\+\+SINCE\+\_\+\+VERSION}~2
+\item 
+\mbox{\Hypertarget{group__iface__wl__output_gad2256bb2624901b59cae3885ef87e21c}\label{group__iface__wl__output_gad2256bb2624901b59cae3885ef87e21c}} 
+\#define {\bfseries WL\+\_\+\+OUTPUT\+\_\+\+NAME\+\_\+\+SINCE\+\_\+\+VERSION}~4
+\item 
+\mbox{\Hypertarget{group__iface__wl__output_gaf4fb59dfe7d7442ca39fd847ce889089}\label{group__iface__wl__output_gaf4fb59dfe7d7442ca39fd847ce889089}} 
+\#define {\bfseries WL\+\_\+\+OUTPUT\+\_\+\+DESCRIPTION\+\_\+\+SINCE\+\_\+\+VERSION}~4
+\item 
+\mbox{\Hypertarget{group__iface__wl__output_ga774327328ee2ab8017c6a12cffaa4179}\label{group__iface__wl__output_ga774327328ee2ab8017c6a12cffaa4179}} 
+\#define {\bfseries WL\+\_\+\+OUTPUT\+\_\+\+RELEASE\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__output_ga64f36fda01d748b801a520bffb71a14e}{wl\+\_\+output\+\_\+subpixel}} \{ \newline
+\mbox{\hyperlink{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea64b0092d35b3603f7b03ee025f4a8d10}{WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+UNKNOWN}} = 0
+, \mbox{\hyperlink{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eae7077dce5b8a3e9510e9219a0da87500}{WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+NONE}} = 1
+, \mbox{\hyperlink{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea8673136b53d566633a01626643a7ba5d}{WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+HORIZONTAL\+\_\+\+RGB}} = 2
+, \mbox{\hyperlink{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eaa23495e4fb3b5d033c17f8e36589fd53}{WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+HORIZONTAL\+\_\+\+BGR}} = 3
+, \newline
+\mbox{\hyperlink{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eabd77fae3c5ecb7b001fedf3477a0f166}{WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+VERTICAL\+\_\+\+RGB}} = 4
+, \mbox{\hyperlink{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea33a240c6cb06ce4b5cb1699cb0399978}{WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+VERTICAL\+\_\+\+BGR}} = 5
+ \}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__output_ga0afb88badb9898109143cb912924d8f4}{wl\+\_\+output\+\_\+transform}} \{ \newline
+\mbox{\hyperlink{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a03bd1e750f8b356f9cee33ef300a002c}{WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+NORMAL}} = 0
+, \mbox{\hyperlink{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a465d65fbdfdff53a840984f3e0d4a108}{WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+90}} = 1
+, \mbox{\hyperlink{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a56b6b697d63bee9e8efb1431e342dafb}{WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+180}} = 2
+, \mbox{\hyperlink{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4afd1478669994114f2b84e6b2005bef41}{WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+270}} = 3
+, \newline
+\mbox{\hyperlink{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4af222f7d49d19635a055fe2fd27beaf95}{WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+FLIPPED}} = 4
+, \mbox{\hyperlink{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a4eb986827a572f7404663b362fe62394}{WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+FLIPPED\+\_\+90}} = 5
+, \mbox{\hyperlink{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a6afe00d43ac3998914fcca1c21287822}{WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+FLIPPED\+\_\+180}} = 6
+, \mbox{\hyperlink{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4af7afbbd8f5a434fbfde9631cc2e8384e}{WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+FLIPPED\+\_\+270}} = 7
+ \}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__output_ga5d04a6d0edf917f1bf0bdc6fc92d670d}{wl\+\_\+output\+\_\+mode}} \{ \mbox{\hyperlink{group__iface__wl__output_gga5d04a6d0edf917f1bf0bdc6fc92d670da610b4bea7ad957493ce6c9868ce832e9}{WL\+\_\+\+OUTPUT\+\_\+\+MODE\+\_\+\+CURRENT}} = 0x1
+, \mbox{\hyperlink{group__iface__wl__output_gga5d04a6d0edf917f1bf0bdc6fc92d670da2c79e4656d6be457afb40231f22a53e6}{WL\+\_\+\+OUTPUT\+\_\+\+MODE\+\_\+\+PREFERRED}} = 0x2
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An output describes part of the compositor geometry. The compositor works in the \textquotesingle{}compositor coordinate system\textquotesingle{} and an output corresponds to a rectangular area in that space that is actually visible. This typically corresponds to a monitor that displays part of the compositor space. This object is published as global during start up, or when a monitor is hotplugged. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{group__iface__wl__output_ga5d04a6d0edf917f1bf0bdc6fc92d670d}\label{group__iface__wl__output_ga5d04a6d0edf917f1bf0bdc6fc92d670d}} 
+\index{The wl\_output interface@{The wl\_output interface}!wl\_output\_mode@{wl\_output\_mode}}
+\index{wl\_output\_mode@{wl\_output\_mode}!The wl\_output interface@{The wl\_output interface}}
+\doxysubsubsection{\texorpdfstring{wl\_output\_mode}{wl\_output\_mode}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__output_ga5d04a6d0edf917f1bf0bdc6fc92d670d}{wl\+\_\+output\+\_\+mode}}}
+
+mode information
+
+These flags describe properties of an output mode. They are used in the flags bitfield of the mode event. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_MODE\_CURRENT@{WL\_OUTPUT\_MODE\_CURRENT}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_MODE\_CURRENT@{WL\_OUTPUT\_MODE\_CURRENT}}}\mbox{\Hypertarget{group__iface__wl__output_gga5d04a6d0edf917f1bf0bdc6fc92d670da610b4bea7ad957493ce6c9868ce832e9}\label{group__iface__wl__output_gga5d04a6d0edf917f1bf0bdc6fc92d670da610b4bea7ad957493ce6c9868ce832e9}} 
+WL\+\_\+\+OUTPUT\+\_\+\+MODE\+\_\+\+CURRENT&indicates this is the current mode \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_MODE\_PREFERRED@{WL\_OUTPUT\_MODE\_PREFERRED}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_MODE\_PREFERRED@{WL\_OUTPUT\_MODE\_PREFERRED}}}\mbox{\Hypertarget{group__iface__wl__output_gga5d04a6d0edf917f1bf0bdc6fc92d670da2c79e4656d6be457afb40231f22a53e6}\label{group__iface__wl__output_gga5d04a6d0edf917f1bf0bdc6fc92d670da2c79e4656d6be457afb40231f22a53e6}} 
+WL\+\_\+\+OUTPUT\+\_\+\+MODE\+\_\+\+PREFERRED&indicates this is the preferred mode \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{group__iface__wl__output_ga64f36fda01d748b801a520bffb71a14e}\label{group__iface__wl__output_ga64f36fda01d748b801a520bffb71a14e}} 
+\index{The wl\_output interface@{The wl\_output interface}!wl\_output\_subpixel@{wl\_output\_subpixel}}
+\index{wl\_output\_subpixel@{wl\_output\_subpixel}!The wl\_output interface@{The wl\_output interface}}
+\doxysubsubsection{\texorpdfstring{wl\_output\_subpixel}{wl\_output\_subpixel}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__output_ga64f36fda01d748b801a520bffb71a14e}{wl\+\_\+output\+\_\+subpixel}}}
+
+subpixel geometry information
+
+This enumeration describes how the physical pixels on an output are laid out. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_SUBPIXEL\_UNKNOWN@{WL\_OUTPUT\_SUBPIXEL\_UNKNOWN}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_SUBPIXEL\_UNKNOWN@{WL\_OUTPUT\_SUBPIXEL\_UNKNOWN}}}\mbox{\Hypertarget{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea64b0092d35b3603f7b03ee025f4a8d10}\label{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea64b0092d35b3603f7b03ee025f4a8d10}} 
+WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+UNKNOWN&unknown geometry \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_SUBPIXEL\_NONE@{WL\_OUTPUT\_SUBPIXEL\_NONE}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_SUBPIXEL\_NONE@{WL\_OUTPUT\_SUBPIXEL\_NONE}}}\mbox{\Hypertarget{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eae7077dce5b8a3e9510e9219a0da87500}\label{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eae7077dce5b8a3e9510e9219a0da87500}} 
+WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+NONE&no geometry \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_SUBPIXEL\_HORIZONTAL\_RGB@{WL\_OUTPUT\_SUBPIXEL\_HORIZONTAL\_RGB}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_SUBPIXEL\_HORIZONTAL\_RGB@{WL\_OUTPUT\_SUBPIXEL\_HORIZONTAL\_RGB}}}\mbox{\Hypertarget{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea8673136b53d566633a01626643a7ba5d}\label{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea8673136b53d566633a01626643a7ba5d}} 
+WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+HORIZONTAL\+\_\+\+RGB&horizontal RGB \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_SUBPIXEL\_HORIZONTAL\_BGR@{WL\_OUTPUT\_SUBPIXEL\_HORIZONTAL\_BGR}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_SUBPIXEL\_HORIZONTAL\_BGR@{WL\_OUTPUT\_SUBPIXEL\_HORIZONTAL\_BGR}}}\mbox{\Hypertarget{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eaa23495e4fb3b5d033c17f8e36589fd53}\label{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eaa23495e4fb3b5d033c17f8e36589fd53}} 
+WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+HORIZONTAL\+\_\+\+BGR&horizontal BGR \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_SUBPIXEL\_VERTICAL\_RGB@{WL\_OUTPUT\_SUBPIXEL\_VERTICAL\_RGB}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_SUBPIXEL\_VERTICAL\_RGB@{WL\_OUTPUT\_SUBPIXEL\_VERTICAL\_RGB}}}\mbox{\Hypertarget{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eabd77fae3c5ecb7b001fedf3477a0f166}\label{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14eabd77fae3c5ecb7b001fedf3477a0f166}} 
+WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+VERTICAL\+\_\+\+RGB&vertical RGB \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_SUBPIXEL\_VERTICAL\_BGR@{WL\_OUTPUT\_SUBPIXEL\_VERTICAL\_BGR}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_SUBPIXEL\_VERTICAL\_BGR@{WL\_OUTPUT\_SUBPIXEL\_VERTICAL\_BGR}}}\mbox{\Hypertarget{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea33a240c6cb06ce4b5cb1699cb0399978}\label{group__iface__wl__output_gga64f36fda01d748b801a520bffb71a14ea33a240c6cb06ce4b5cb1699cb0399978}} 
+WL\+\_\+\+OUTPUT\+\_\+\+SUBPIXEL\+\_\+\+VERTICAL\+\_\+\+BGR&vertical BGR \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{group__iface__wl__output_ga0afb88badb9898109143cb912924d8f4}\label{group__iface__wl__output_ga0afb88badb9898109143cb912924d8f4}} 
+\index{The wl\_output interface@{The wl\_output interface}!wl\_output\_transform@{wl\_output\_transform}}
+\index{wl\_output\_transform@{wl\_output\_transform}!The wl\_output interface@{The wl\_output interface}}
+\doxysubsubsection{\texorpdfstring{wl\_output\_transform}{wl\_output\_transform}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__output_ga0afb88badb9898109143cb912924d8f4}{wl\+\_\+output\+\_\+transform}}}
+
+transform from framebuffer to output
+
+This describes the transform that a compositor will apply to a surface to compensate for the rotation or mirroring of an output device.
+
+The flipped values correspond to an initial flip around a vertical axis followed by rotation.
+
+The purpose is mainly to allow clients to render accordingly and tell the compositor, so that for fullscreen surfaces, the compositor will still be able to scan out directly from client surfaces. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_TRANSFORM\_NORMAL@{WL\_OUTPUT\_TRANSFORM\_NORMAL}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_TRANSFORM\_NORMAL@{WL\_OUTPUT\_TRANSFORM\_NORMAL}}}\mbox{\Hypertarget{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a03bd1e750f8b356f9cee33ef300a002c}\label{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a03bd1e750f8b356f9cee33ef300a002c}} 
+WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+NORMAL&no transform \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_TRANSFORM\_90@{WL\_OUTPUT\_TRANSFORM\_90}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_TRANSFORM\_90@{WL\_OUTPUT\_TRANSFORM\_90}}}\mbox{\Hypertarget{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a465d65fbdfdff53a840984f3e0d4a108}\label{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a465d65fbdfdff53a840984f3e0d4a108}} 
+WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+90&90 degrees counter-\/clockwise \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_TRANSFORM\_180@{WL\_OUTPUT\_TRANSFORM\_180}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_TRANSFORM\_180@{WL\_OUTPUT\_TRANSFORM\_180}}}\mbox{\Hypertarget{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a56b6b697d63bee9e8efb1431e342dafb}\label{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a56b6b697d63bee9e8efb1431e342dafb}} 
+WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+180&180 degrees counter-\/clockwise \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_TRANSFORM\_270@{WL\_OUTPUT\_TRANSFORM\_270}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_TRANSFORM\_270@{WL\_OUTPUT\_TRANSFORM\_270}}}\mbox{\Hypertarget{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4afd1478669994114f2b84e6b2005bef41}\label{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4afd1478669994114f2b84e6b2005bef41}} 
+WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+270&270 degrees counter-\/clockwise \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_TRANSFORM\_FLIPPED@{WL\_OUTPUT\_TRANSFORM\_FLIPPED}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_TRANSFORM\_FLIPPED@{WL\_OUTPUT\_TRANSFORM\_FLIPPED}}}\mbox{\Hypertarget{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4af222f7d49d19635a055fe2fd27beaf95}\label{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4af222f7d49d19635a055fe2fd27beaf95}} 
+WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+FLIPPED&180 degree flip around a vertical axis \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_90@{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_90}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_TRANSFORM\_FLIPPED\_90@{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_90}}}\mbox{\Hypertarget{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a4eb986827a572f7404663b362fe62394}\label{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a4eb986827a572f7404663b362fe62394}} 
+WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+FLIPPED\+\_\+90&flip and rotate 90 degrees counter-\/clockwise \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_180@{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_180}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_TRANSFORM\_FLIPPED\_180@{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_180}}}\mbox{\Hypertarget{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a6afe00d43ac3998914fcca1c21287822}\label{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4a6afe00d43ac3998914fcca1c21287822}} 
+WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+FLIPPED\+\_\+180&flip and rotate 180 degrees counter-\/clockwise \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_270@{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_270}!The wl\_output interface@{The wl\_output interface}}\index{The wl\_output interface@{The wl\_output interface}!WL\_OUTPUT\_TRANSFORM\_FLIPPED\_270@{WL\_OUTPUT\_TRANSFORM\_FLIPPED\_270}}}\mbox{\Hypertarget{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4af7afbbd8f5a434fbfde9631cc2e8384e}\label{group__iface__wl__output_gga0afb88badb9898109143cb912924d8f4af7afbbd8f5a434fbfde9631cc2e8384e}} 
+WL\+\_\+\+OUTPUT\+\_\+\+TRANSFORM\+\_\+\+FLIPPED\+\_\+270&flip and rotate 270 degrees counter-\/clockwise \\
+\hline
+
+\end{DoxyEnumFields}

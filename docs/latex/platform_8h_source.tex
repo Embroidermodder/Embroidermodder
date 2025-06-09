@@ -1,0 +1,218 @@
+\hypertarget{platform_8h_source}{}\doxysection{platform.\+h}
+\label{platform_8h_source}\index{extern/glfw/src/platform.h@{extern/glfw/src/platform.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{//========================================================================}}
+\DoxyCodeLine{2 \textcolor{comment}{// GLFW 3.5 -\/ www.glfw.org}}
+\DoxyCodeLine{3 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{4 \textcolor{comment}{// Copyright (c) 2002-\/2006 Marcus Geelnard}}
+\DoxyCodeLine{5 \textcolor{comment}{// Copyright (c) 2006-\/2018 Camilla Löwy <elmindreda@glfw.org>}}
+\DoxyCodeLine{6 \textcolor{comment}{//}}
+\DoxyCodeLine{7 \textcolor{comment}{// This software is provided 'as-\/is', without any express or implied}}
+\DoxyCodeLine{8 \textcolor{comment}{// warranty. In no event will the authors be held liable for any damages}}
+\DoxyCodeLine{9 \textcolor{comment}{// arising from the use of this software.}}
+\DoxyCodeLine{10 \textcolor{comment}{//}}
+\DoxyCodeLine{11 \textcolor{comment}{// Permission is granted to anyone to use this software for any purpose,}}
+\DoxyCodeLine{12 \textcolor{comment}{// including commercial applications, and to alter it and redistribute it}}
+\DoxyCodeLine{13 \textcolor{comment}{// freely, subject to the following restrictions:}}
+\DoxyCodeLine{14 \textcolor{comment}{//}}
+\DoxyCodeLine{15 \textcolor{comment}{// 1. The origin of this software must not be misrepresented; you must not}}
+\DoxyCodeLine{16 \textcolor{comment}{//    claim that you wrote the original software. If you use this software}}
+\DoxyCodeLine{17 \textcolor{comment}{//    in a product, an acknowledgment in the product documentation would}}
+\DoxyCodeLine{18 \textcolor{comment}{//    be appreciated but is not required.}}
+\DoxyCodeLine{19 \textcolor{comment}{//}}
+\DoxyCodeLine{20 \textcolor{comment}{// 2. Altered source versions must be plainly marked as such, and must not}}
+\DoxyCodeLine{21 \textcolor{comment}{//    be misrepresented as being the original software.}}
+\DoxyCodeLine{22 \textcolor{comment}{//}}
+\DoxyCodeLine{23 \textcolor{comment}{// 3. This notice may not be removed or altered from any source}}
+\DoxyCodeLine{24 \textcolor{comment}{//    distribution.}}
+\DoxyCodeLine{25 \textcolor{comment}{//}}
+\DoxyCodeLine{26 \textcolor{comment}{//========================================================================}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#if defined(GLFW\_BUILD\_WIN32\_TIMER) || \(\backslash\)}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{    defined(GLFW\_BUILD\_WIN32\_MODULE) || \(\backslash\)}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{    defined(GLFW\_BUILD\_WIN32\_THREAD) || \(\backslash\)}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{    defined(GLFW\_BUILD\_COCOA\_TIMER) || \(\backslash\)}}
+\DoxyCodeLine{32 \textcolor{preprocessor}{    defined(GLFW\_BUILD\_POSIX\_TIMER) || \(\backslash\)}}
+\DoxyCodeLine{33 \textcolor{preprocessor}{    defined(GLFW\_BUILD\_POSIX\_MODULE) || \(\backslash\)}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{    defined(GLFW\_BUILD\_POSIX\_THREAD) || \(\backslash\)}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{    defined(GLFW\_BUILD\_POSIX\_POLL) || \(\backslash\)}}
+\DoxyCodeLine{36 \textcolor{preprocessor}{    defined(GLFW\_BUILD\_LINUX\_JOYSTICK)}}
+\DoxyCodeLine{37 \textcolor{preprocessor}{ \#error "{}You must not define these; define zero or more \_GLFW\_<platform> macros instead"{}}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#include "{}null\_platform.h"{}}}
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#define GLFW\_EXPOSE\_NATIVE\_EGL}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#define GLFW\_EXPOSE\_NATIVE\_OSMESA}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#if defined(\_GLFW\_WIN32)}}
+\DoxyCodeLine{45 \textcolor{preprocessor}{ \#include "{}win32\_platform.h"{}}}
+\DoxyCodeLine{46 \textcolor{preprocessor}{ \#define GLFW\_EXPOSE\_NATIVE\_WIN32}}
+\DoxyCodeLine{47 \textcolor{preprocessor}{ \#define GLFW\_EXPOSE\_NATIVE\_WGL}}
+\DoxyCodeLine{48 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{49 \textcolor{preprocessor}{ \#define GLFW\_WIN32\_WINDOW\_STATE}}
+\DoxyCodeLine{50 \textcolor{preprocessor}{ \#define GLFW\_WIN32\_MONITOR\_STATE}}
+\DoxyCodeLine{51 \textcolor{preprocessor}{ \#define GLFW\_WIN32\_CURSOR\_STATE}}
+\DoxyCodeLine{52 \textcolor{preprocessor}{ \#define GLFW\_WIN32\_LIBRARY\_WINDOW\_STATE}}
+\DoxyCodeLine{53 \textcolor{preprocessor}{ \#define GLFW\_WGL\_CONTEXT\_STATE}}
+\DoxyCodeLine{54 \textcolor{preprocessor}{ \#define GLFW\_WGL\_LIBRARY\_CONTEXT\_STATE}}
+\DoxyCodeLine{55 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57 \textcolor{preprocessor}{\#if defined(\_GLFW\_COCOA)}}
+\DoxyCodeLine{58 \textcolor{preprocessor}{ \#include "{}cocoa\_platform.h"{}}}
+\DoxyCodeLine{59 \textcolor{preprocessor}{ \#define GLFW\_EXPOSE\_NATIVE\_COCOA}}
+\DoxyCodeLine{60 \textcolor{preprocessor}{ \#define GLFW\_EXPOSE\_NATIVE\_NSGL}}
+\DoxyCodeLine{61 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{62 \textcolor{preprocessor}{ \#define GLFW\_COCOA\_WINDOW\_STATE}}
+\DoxyCodeLine{63 \textcolor{preprocessor}{ \#define GLFW\_COCOA\_MONITOR\_STATE}}
+\DoxyCodeLine{64 \textcolor{preprocessor}{ \#define GLFW\_COCOA\_CURSOR\_STATE}}
+\DoxyCodeLine{65 \textcolor{preprocessor}{ \#define GLFW\_COCOA\_LIBRARY\_WINDOW\_STATE}}
+\DoxyCodeLine{66 \textcolor{preprocessor}{ \#define GLFW\_NSGL\_CONTEXT\_STATE}}
+\DoxyCodeLine{67 \textcolor{preprocessor}{ \#define GLFW\_NSGL\_LIBRARY\_CONTEXT\_STATE}}
+\DoxyCodeLine{68 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70 \textcolor{preprocessor}{\#if defined(\_GLFW\_WAYLAND)}}
+\DoxyCodeLine{71 \textcolor{preprocessor}{ \#include "{}wl\_platform.h"{}}}
+\DoxyCodeLine{72 \textcolor{preprocessor}{ \#define GLFW\_EXPOSE\_NATIVE\_WAYLAND}}
+\DoxyCodeLine{73 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{74 \textcolor{preprocessor}{ \#define GLFW\_WAYLAND\_WINDOW\_STATE}}
+\DoxyCodeLine{75 \textcolor{preprocessor}{ \#define GLFW\_WAYLAND\_MONITOR\_STATE}}
+\DoxyCodeLine{76 \textcolor{preprocessor}{ \#define GLFW\_WAYLAND\_CURSOR\_STATE}}
+\DoxyCodeLine{77 \textcolor{preprocessor}{ \#define GLFW\_WAYLAND\_LIBRARY\_WINDOW\_STATE}}
+\DoxyCodeLine{78 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{80 \textcolor{preprocessor}{\#if defined(\_GLFW\_X11)}}
+\DoxyCodeLine{81 \textcolor{preprocessor}{ \#include "{}x11\_platform.h"{}}}
+\DoxyCodeLine{82 \textcolor{preprocessor}{ \#define GLFW\_EXPOSE\_NATIVE\_X11}}
+\DoxyCodeLine{83 \textcolor{preprocessor}{ \#define GLFW\_EXPOSE\_NATIVE\_GLX}}
+\DoxyCodeLine{84 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{85 \textcolor{preprocessor}{ \#define GLFW\_X11\_WINDOW\_STATE}}
+\DoxyCodeLine{86 \textcolor{preprocessor}{ \#define GLFW\_X11\_MONITOR\_STATE}}
+\DoxyCodeLine{87 \textcolor{preprocessor}{ \#define GLFW\_X11\_CURSOR\_STATE}}
+\DoxyCodeLine{88 \textcolor{preprocessor}{ \#define GLFW\_X11\_LIBRARY\_WINDOW\_STATE}}
+\DoxyCodeLine{89 \textcolor{preprocessor}{ \#define GLFW\_GLX\_CONTEXT\_STATE}}
+\DoxyCodeLine{90 \textcolor{preprocessor}{ \#define GLFW\_GLX\_LIBRARY\_CONTEXT\_STATE}}
+\DoxyCodeLine{91 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93 \textcolor{preprocessor}{\#include "{}null\_joystick.h"{}}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95 \textcolor{preprocessor}{\#if defined(\_GLFW\_WIN32)}}
+\DoxyCodeLine{96 \textcolor{preprocessor}{ \#include "{}win32\_joystick.h"{}}}
+\DoxyCodeLine{97 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{98 \textcolor{preprocessor}{ \#define GLFW\_WIN32\_JOYSTICK\_STATE}}
+\DoxyCodeLine{99 \textcolor{preprocessor}{ \#define GLFW\_WIN32\_LIBRARY\_JOYSTICK\_STATE}}
+\DoxyCodeLine{100 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{101 }
+\DoxyCodeLine{102 \textcolor{preprocessor}{\#if defined(\_GLFW\_COCOA)}}
+\DoxyCodeLine{103 \textcolor{preprocessor}{ \#include "{}cocoa\_joystick.h"{}}}
+\DoxyCodeLine{104 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{105 \textcolor{preprocessor}{ \#define GLFW\_COCOA\_JOYSTICK\_STATE}}
+\DoxyCodeLine{106 \textcolor{preprocessor}{ \#define GLFW\_COCOA\_LIBRARY\_JOYSTICK\_STATE}}
+\DoxyCodeLine{107 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{109 \textcolor{preprocessor}{\#if (defined(\_GLFW\_X11) || defined(\_GLFW\_WAYLAND)) \&\& defined(\_\_linux\_\_)}}
+\DoxyCodeLine{110 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_LINUX\_JOYSTICK}}
+\DoxyCodeLine{111 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113 \textcolor{preprocessor}{\#if defined(GLFW\_BUILD\_LINUX\_JOYSTICK)}}
+\DoxyCodeLine{114 \textcolor{preprocessor}{ \#include "{}linux\_joystick.h"{}}}
+\DoxyCodeLine{115 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{116 \textcolor{preprocessor}{ \#define GLFW\_LINUX\_JOYSTICK\_STATE}}
+\DoxyCodeLine{117 \textcolor{preprocessor}{ \#define GLFW\_LINUX\_LIBRARY\_JOYSTICK\_STATE}}
+\DoxyCodeLine{118 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{120 \textcolor{preprocessor}{\#define GLFW\_PLATFORM\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{121 \textcolor{preprocessor}{        GLFW\_WIN32\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{122 \textcolor{preprocessor}{        GLFW\_COCOA\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{123 \textcolor{preprocessor}{        GLFW\_WAYLAND\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{124 \textcolor{preprocessor}{        GLFW\_X11\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{125 \textcolor{preprocessor}{        GLFW\_NULL\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{126 \textcolor{preprocessor}{}}
+\DoxyCodeLine{127 \textcolor{preprocessor}{\#define GLFW\_PLATFORM\_MONITOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{128 \textcolor{preprocessor}{        GLFW\_WIN32\_MONITOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{129 \textcolor{preprocessor}{        GLFW\_COCOA\_MONITOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{130 \textcolor{preprocessor}{        GLFW\_WAYLAND\_MONITOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{131 \textcolor{preprocessor}{        GLFW\_X11\_MONITOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{132 \textcolor{preprocessor}{        GLFW\_NULL\_MONITOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{133 \textcolor{preprocessor}{}}
+\DoxyCodeLine{134 \textcolor{preprocessor}{\#define GLFW\_PLATFORM\_CURSOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{135 \textcolor{preprocessor}{        GLFW\_WIN32\_CURSOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{136 \textcolor{preprocessor}{        GLFW\_COCOA\_CURSOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{137 \textcolor{preprocessor}{        GLFW\_WAYLAND\_CURSOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{138 \textcolor{preprocessor}{        GLFW\_X11\_CURSOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{139 \textcolor{preprocessor}{        GLFW\_NULL\_CURSOR\_STATE \(\backslash\)}}
+\DoxyCodeLine{140 \textcolor{preprocessor}{}}
+\DoxyCodeLine{141 \textcolor{preprocessor}{\#define GLFW\_PLATFORM\_JOYSTICK\_STATE \(\backslash\)}}
+\DoxyCodeLine{142 \textcolor{preprocessor}{        GLFW\_WIN32\_JOYSTICK\_STATE \(\backslash\)}}
+\DoxyCodeLine{143 \textcolor{preprocessor}{        GLFW\_COCOA\_JOYSTICK\_STATE \(\backslash\)}}
+\DoxyCodeLine{144 \textcolor{preprocessor}{        GLFW\_LINUX\_JOYSTICK\_STATE}}
+\DoxyCodeLine{145 }
+\DoxyCodeLine{146 \textcolor{preprocessor}{\#define GLFW\_PLATFORM\_LIBRARY\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{147 \textcolor{preprocessor}{        GLFW\_WIN32\_LIBRARY\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{148 \textcolor{preprocessor}{        GLFW\_COCOA\_LIBRARY\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{149 \textcolor{preprocessor}{        GLFW\_WAYLAND\_LIBRARY\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{150 \textcolor{preprocessor}{        GLFW\_X11\_LIBRARY\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{151 \textcolor{preprocessor}{        GLFW\_NULL\_LIBRARY\_WINDOW\_STATE \(\backslash\)}}
+\DoxyCodeLine{152 \textcolor{preprocessor}{}}
+\DoxyCodeLine{153 \textcolor{preprocessor}{\#define GLFW\_PLATFORM\_LIBRARY\_JOYSTICK\_STATE \(\backslash\)}}
+\DoxyCodeLine{154 \textcolor{preprocessor}{        GLFW\_WIN32\_LIBRARY\_JOYSTICK\_STATE \(\backslash\)}}
+\DoxyCodeLine{155 \textcolor{preprocessor}{        GLFW\_COCOA\_LIBRARY\_JOYSTICK\_STATE \(\backslash\)}}
+\DoxyCodeLine{156 \textcolor{preprocessor}{        GLFW\_LINUX\_LIBRARY\_JOYSTICK\_STATE}}
+\DoxyCodeLine{157 }
+\DoxyCodeLine{158 \textcolor{preprocessor}{\#define GLFW\_PLATFORM\_CONTEXT\_STATE \(\backslash\)}}
+\DoxyCodeLine{159 \textcolor{preprocessor}{        GLFW\_WGL\_CONTEXT\_STATE \(\backslash\)}}
+\DoxyCodeLine{160 \textcolor{preprocessor}{        GLFW\_NSGL\_CONTEXT\_STATE \(\backslash\)}}
+\DoxyCodeLine{161 \textcolor{preprocessor}{        GLFW\_GLX\_CONTEXT\_STATE}}
+\DoxyCodeLine{162 }
+\DoxyCodeLine{163 \textcolor{preprocessor}{\#define GLFW\_PLATFORM\_LIBRARY\_CONTEXT\_STATE \(\backslash\)}}
+\DoxyCodeLine{164 \textcolor{preprocessor}{        GLFW\_WGL\_LIBRARY\_CONTEXT\_STATE \(\backslash\)}}
+\DoxyCodeLine{165 \textcolor{preprocessor}{        GLFW\_NSGL\_LIBRARY\_CONTEXT\_STATE \(\backslash\)}}
+\DoxyCodeLine{166 \textcolor{preprocessor}{        GLFW\_GLX\_LIBRARY\_CONTEXT\_STATE}}
+\DoxyCodeLine{167 }
+\DoxyCodeLine{168 \textcolor{preprocessor}{\#if defined(\_WIN32)}}
+\DoxyCodeLine{169 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_WIN32\_THREAD}}
+\DoxyCodeLine{170 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{171 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_POSIX\_THREAD}}
+\DoxyCodeLine{172 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{173 }
+\DoxyCodeLine{174 \textcolor{preprocessor}{\#if defined(GLFW\_BUILD\_WIN32\_THREAD)}}
+\DoxyCodeLine{175 \textcolor{preprocessor}{ \#include "{}win32\_thread.h"{}}}
+\DoxyCodeLine{176 \textcolor{preprocessor}{ \#define GLFW\_PLATFORM\_TLS\_STATE    GLFW\_WIN32\_TLS\_STATE}}
+\DoxyCodeLine{177 \textcolor{preprocessor}{ \#define GLFW\_PLATFORM\_MUTEX\_STATE  GLFW\_WIN32\_MUTEX\_STATE}}
+\DoxyCodeLine{178 \textcolor{preprocessor}{\#elif defined(GLFW\_BUILD\_POSIX\_THREAD)}}
+\DoxyCodeLine{179 \textcolor{preprocessor}{ \#include "{}posix\_thread.h"{}}}
+\DoxyCodeLine{180 \textcolor{preprocessor}{ \#define GLFW\_PLATFORM\_TLS\_STATE    GLFW\_POSIX\_TLS\_STATE}}
+\DoxyCodeLine{181 \textcolor{preprocessor}{ \#define GLFW\_PLATFORM\_MUTEX\_STATE  GLFW\_POSIX\_MUTEX\_STATE}}
+\DoxyCodeLine{182 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{183 }
+\DoxyCodeLine{184 \textcolor{preprocessor}{\#if defined(\_WIN32)}}
+\DoxyCodeLine{185 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_WIN32\_TIMER}}
+\DoxyCodeLine{186 \textcolor{preprocessor}{\#elif defined(\_\_APPLE\_\_)}}
+\DoxyCodeLine{187 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_COCOA\_TIMER}}
+\DoxyCodeLine{188 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{189 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_POSIX\_TIMER}}
+\DoxyCodeLine{190 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{191 }
+\DoxyCodeLine{192 \textcolor{preprocessor}{\#if defined(GLFW\_BUILD\_WIN32\_TIMER)}}
+\DoxyCodeLine{193 \textcolor{preprocessor}{ \#include "{}win32\_time.h"{}}}
+\DoxyCodeLine{194 \textcolor{preprocessor}{ \#define GLFW\_PLATFORM\_LIBRARY\_TIMER\_STATE  GLFW\_WIN32\_LIBRARY\_TIMER\_STATE}}
+\DoxyCodeLine{195 \textcolor{preprocessor}{\#elif defined(GLFW\_BUILD\_COCOA\_TIMER)}}
+\DoxyCodeLine{196 \textcolor{preprocessor}{ \#include "{}cocoa\_time.h"{}}}
+\DoxyCodeLine{197 \textcolor{preprocessor}{ \#define GLFW\_PLATFORM\_LIBRARY\_TIMER\_STATE  GLFW\_COCOA\_LIBRARY\_TIMER\_STATE}}
+\DoxyCodeLine{198 \textcolor{preprocessor}{\#elif defined(GLFW\_BUILD\_POSIX\_TIMER)}}
+\DoxyCodeLine{199 \textcolor{preprocessor}{ \#include "{}posix\_time.h"{}}}
+\DoxyCodeLine{200 \textcolor{preprocessor}{ \#define GLFW\_PLATFORM\_LIBRARY\_TIMER\_STATE  GLFW\_POSIX\_LIBRARY\_TIMER\_STATE}}
+\DoxyCodeLine{201 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{202 }
+\DoxyCodeLine{203 \textcolor{preprocessor}{\#if defined(\_WIN32)}}
+\DoxyCodeLine{204 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_WIN32\_MODULE}}
+\DoxyCodeLine{205 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{206 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_POSIX\_MODULE}}
+\DoxyCodeLine{207 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{208 }
+\DoxyCodeLine{209 \textcolor{preprocessor}{\#if defined(\_GLFW\_WAYLAND) || defined(\_GLFW\_X11)}}
+\DoxyCodeLine{210 \textcolor{preprocessor}{ \#define GLFW\_BUILD\_POSIX\_POLL}}
+\DoxyCodeLine{211 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{212 }
+
+\end{DoxyCode}

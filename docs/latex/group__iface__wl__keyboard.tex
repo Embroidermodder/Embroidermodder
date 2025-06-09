@@ -1,0 +1,84 @@
+\hypertarget{group__iface__wl__keyboard}{}\doxysection{The wl\+\_\+keyboard interface}
+\label{group__iface__wl__keyboard}\index{The wl\_keyboard interface@{The wl\_keyboard interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__keyboard__listener}{wl\+\_\+keyboard\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__keyboard_ga41a558f19f095411b4be6e7a3cceabb3}\label{group__iface__wl__keyboard_ga41a558f19f095411b4be6e7a3cceabb3}} 
+\#define {\bfseries WL\+\_\+\+KEYBOARD\+\_\+\+KEYMAP\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__keyboard_gaeb96d48d4a5f70bc281575eff7008e77}\label{group__iface__wl__keyboard_gaeb96d48d4a5f70bc281575eff7008e77}} 
+\#define {\bfseries WL\+\_\+\+KEYBOARD\+\_\+\+ENTER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__keyboard_gae25f4315205d6a9e3346b70c12ce92f0}\label{group__iface__wl__keyboard_gae25f4315205d6a9e3346b70c12ce92f0}} 
+\#define {\bfseries WL\+\_\+\+KEYBOARD\+\_\+\+LEAVE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__keyboard_gacfd945f1c85fc53b8f9920bc6155311b}\label{group__iface__wl__keyboard_gacfd945f1c85fc53b8f9920bc6155311b}} 
+\#define {\bfseries WL\+\_\+\+KEYBOARD\+\_\+\+KEY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__keyboard_gad213fbe48809c90bedb45d5d5ec633a3}\label{group__iface__wl__keyboard_gad213fbe48809c90bedb45d5d5ec633a3}} 
+\#define {\bfseries WL\+\_\+\+KEYBOARD\+\_\+\+MODIFIERS\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__keyboard_gae4b2633c3a1ab562001b2f9eacccda7a}\label{group__iface__wl__keyboard_gae4b2633c3a1ab562001b2f9eacccda7a}} 
+\#define {\bfseries WL\+\_\+\+KEYBOARD\+\_\+\+REPEAT\+\_\+\+INFO\+\_\+\+SINCE\+\_\+\+VERSION}~4
+\item 
+\mbox{\Hypertarget{group__iface__wl__keyboard_ga1efe9d0a25084a6f3e6d2f7efe4d9553}\label{group__iface__wl__keyboard_ga1efe9d0a25084a6f3e6d2f7efe4d9553}} 
+\#define {\bfseries WL\+\_\+\+KEYBOARD\+\_\+\+RELEASE\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__keyboard_ga8fcb2531467eb09fed9348064c779b34}{wl\+\_\+keyboard\+\_\+keymap\+\_\+format}} \{ \mbox{\hyperlink{group__iface__wl__keyboard_gga8fcb2531467eb09fed9348064c779b34ab9caba93831efc062ebbb7e6b1b8667d}{WL\+\_\+\+KEYBOARD\+\_\+\+KEYMAP\+\_\+\+FORMAT\+\_\+\+NO\+\_\+\+KEYMAP}} = 0
+, \mbox{\hyperlink{group__iface__wl__keyboard_gga8fcb2531467eb09fed9348064c779b34a43b6634f7cef9acc8a6822a0d4afe058}{WL\+\_\+\+KEYBOARD\+\_\+\+KEYMAP\+\_\+\+FORMAT\+\_\+\+XKB\+\_\+\+V1}} = 1
+ \}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__keyboard_ga4f8d052ed213a169410fb9e0bd4a904d}{wl\+\_\+keyboard\+\_\+key\+\_\+state}} \{ \mbox{\hyperlink{group__iface__wl__keyboard_gga4f8d052ed213a169410fb9e0bd4a904dafb8b2c02267be1f9af7191828e0b78c5}{WL\+\_\+\+KEYBOARD\+\_\+\+KEY\+\_\+\+STATE\+\_\+\+RELEASED}} = 0
+, \mbox{\hyperlink{group__iface__wl__keyboard_gga4f8d052ed213a169410fb9e0bd4a904da5fc90736090b474ea8cc361b25343b4f}{WL\+\_\+\+KEYBOARD\+\_\+\+KEY\+\_\+\+STATE\+\_\+\+PRESSED}} = 1
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The wl\+\_\+keyboard interface represents one or more keyboards associated with a seat. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{group__iface__wl__keyboard_ga4f8d052ed213a169410fb9e0bd4a904d}\label{group__iface__wl__keyboard_ga4f8d052ed213a169410fb9e0bd4a904d}} 
+\index{The wl\_keyboard interface@{The wl\_keyboard interface}!wl\_keyboard\_key\_state@{wl\_keyboard\_key\_state}}
+\index{wl\_keyboard\_key\_state@{wl\_keyboard\_key\_state}!The wl\_keyboard interface@{The wl\_keyboard interface}}
+\doxysubsubsection{\texorpdfstring{wl\_keyboard\_key\_state}{wl\_keyboard\_key\_state}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__keyboard_ga4f8d052ed213a169410fb9e0bd4a904d}{wl\+\_\+keyboard\+\_\+key\+\_\+state}}}
+
+physical key state
+
+Describes the physical state of a key that produced the key event. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_KEYBOARD\_KEY\_STATE\_RELEASED@{WL\_KEYBOARD\_KEY\_STATE\_RELEASED}!The wl\_keyboard interface@{The wl\_keyboard interface}}\index{The wl\_keyboard interface@{The wl\_keyboard interface}!WL\_KEYBOARD\_KEY\_STATE\_RELEASED@{WL\_KEYBOARD\_KEY\_STATE\_RELEASED}}}\mbox{\Hypertarget{group__iface__wl__keyboard_gga4f8d052ed213a169410fb9e0bd4a904dafb8b2c02267be1f9af7191828e0b78c5}\label{group__iface__wl__keyboard_gga4f8d052ed213a169410fb9e0bd4a904dafb8b2c02267be1f9af7191828e0b78c5}} 
+WL\+\_\+\+KEYBOARD\+\_\+\+KEY\+\_\+\+STATE\+\_\+\+RELEASED&key is not pressed \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_KEYBOARD\_KEY\_STATE\_PRESSED@{WL\_KEYBOARD\_KEY\_STATE\_PRESSED}!The wl\_keyboard interface@{The wl\_keyboard interface}}\index{The wl\_keyboard interface@{The wl\_keyboard interface}!WL\_KEYBOARD\_KEY\_STATE\_PRESSED@{WL\_KEYBOARD\_KEY\_STATE\_PRESSED}}}\mbox{\Hypertarget{group__iface__wl__keyboard_gga4f8d052ed213a169410fb9e0bd4a904da5fc90736090b474ea8cc361b25343b4f}\label{group__iface__wl__keyboard_gga4f8d052ed213a169410fb9e0bd4a904da5fc90736090b474ea8cc361b25343b4f}} 
+WL\+\_\+\+KEYBOARD\+\_\+\+KEY\+\_\+\+STATE\+\_\+\+PRESSED&key is pressed \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{group__iface__wl__keyboard_ga8fcb2531467eb09fed9348064c779b34}\label{group__iface__wl__keyboard_ga8fcb2531467eb09fed9348064c779b34}} 
+\index{The wl\_keyboard interface@{The wl\_keyboard interface}!wl\_keyboard\_keymap\_format@{wl\_keyboard\_keymap\_format}}
+\index{wl\_keyboard\_keymap\_format@{wl\_keyboard\_keymap\_format}!The wl\_keyboard interface@{The wl\_keyboard interface}}
+\doxysubsubsection{\texorpdfstring{wl\_keyboard\_keymap\_format}{wl\_keyboard\_keymap\_format}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__keyboard_ga8fcb2531467eb09fed9348064c779b34}{wl\+\_\+keyboard\+\_\+keymap\+\_\+format}}}
+
+keyboard mapping format
+
+This specifies the format of the keymap provided to the client with the wl\+\_\+keyboard.\+keymap event. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_KEYBOARD\_KEYMAP\_FORMAT\_NO\_KEYMAP@{WL\_KEYBOARD\_KEYMAP\_FORMAT\_NO\_KEYMAP}!The wl\_keyboard interface@{The wl\_keyboard interface}}\index{The wl\_keyboard interface@{The wl\_keyboard interface}!WL\_KEYBOARD\_KEYMAP\_FORMAT\_NO\_KEYMAP@{WL\_KEYBOARD\_KEYMAP\_FORMAT\_NO\_KEYMAP}}}\mbox{\Hypertarget{group__iface__wl__keyboard_gga8fcb2531467eb09fed9348064c779b34ab9caba93831efc062ebbb7e6b1b8667d}\label{group__iface__wl__keyboard_gga8fcb2531467eb09fed9348064c779b34ab9caba93831efc062ebbb7e6b1b8667d}} 
+WL\+\_\+\+KEYBOARD\+\_\+\+KEYMAP\+\_\+\+FORMAT\+\_\+\+NO\+\_\+\+KEYMAP&no keymap; client must understand how to interpret the raw keycode \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_KEYBOARD\_KEYMAP\_FORMAT\_XKB\_V1@{WL\_KEYBOARD\_KEYMAP\_FORMAT\_XKB\_V1}!The wl\_keyboard interface@{The wl\_keyboard interface}}\index{The wl\_keyboard interface@{The wl\_keyboard interface}!WL\_KEYBOARD\_KEYMAP\_FORMAT\_XKB\_V1@{WL\_KEYBOARD\_KEYMAP\_FORMAT\_XKB\_V1}}}\mbox{\Hypertarget{group__iface__wl__keyboard_gga8fcb2531467eb09fed9348064c779b34a43b6634f7cef9acc8a6822a0d4afe058}\label{group__iface__wl__keyboard_gga8fcb2531467eb09fed9348064c779b34a43b6634f7cef9acc8a6822a0d4afe058}} 
+WL\+\_\+\+KEYBOARD\+\_\+\+KEYMAP\+\_\+\+FORMAT\+\_\+\+XKB\+\_\+\+V1&libxkbcommon compatible, null-\/terminated string; to determine the xkb keycode, clients must add 8 to the key event keycode \\
+\hline
+
+\end{DoxyEnumFields}

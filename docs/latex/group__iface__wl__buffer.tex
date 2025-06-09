@@ -1,0 +1,24 @@
+\hypertarget{group__iface__wl__buffer}{}\doxysection{The wl\+\_\+buffer interface}
+\label{group__iface__wl__buffer}\index{The wl\_buffer interface@{The wl\_buffer interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__buffer__listener}{wl\+\_\+buffer\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__buffer_ga4b613f341d7a8e00cd5f93bb6a1cddd1}\label{group__iface__wl__buffer_ga4b613f341d7a8e00cd5f93bb6a1cddd1}} 
+\#define {\bfseries WL\+\_\+\+BUFFER\+\_\+\+RELEASE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__buffer_ga152920aa394c73b313dd4fc415d76dd5}\label{group__iface__wl__buffer_ga152920aa394c73b313dd4fc415d76dd5}} 
+\#define {\bfseries WL\+\_\+\+BUFFER\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A buffer provides the content for a wl\+\_\+surface. Buffers are created through factory interfaces such as wl\+\_\+shm, wp\+\_\+linux\+\_\+buffer\+\_\+params (from the linux-\/dmabuf protocol extension) or similar. It has a width and a height and can be attached to a wl\+\_\+surface, but the mechanism by which a client provides and updates the contents is defined by the buffer factory interface.
+
+If the buffer uses a format that has an alpha channel, the alpha channel is assumed to be premultiplied in the color channels unless otherwise specified.
+
+Note, because wl\+\_\+buffer objects are created from multiple independent factory interfaces, the wl\+\_\+buffer interface is frozen at version 1. 

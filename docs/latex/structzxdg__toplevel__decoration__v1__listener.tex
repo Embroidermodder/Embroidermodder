@@ -1,0 +1,30 @@
+\hypertarget{structzxdg__toplevel__decoration__v1__listener}{}\doxysection{zxdg\+\_\+toplevel\+\_\+decoration\+\_\+v1\+\_\+listener Struct Reference}
+\label{structzxdg__toplevel__decoration__v1__listener}\index{zxdg\_toplevel\_decoration\_v1\_listener@{zxdg\_toplevel\_decoration\_v1\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structzxdg__toplevel__decoration__v1__listener_aa2e05c2aee9c6cc32dcf85df87d97baa}{configure}} )(void $\ast$data, struct zxdg\+\_\+toplevel\+\_\+decoration\+\_\+v1 $\ast$zxdg\+\_\+toplevel\+\_\+decoration\+\_\+v1, uint32\+\_\+t mode)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structzxdg__toplevel__decoration__v1__listener_aa2e05c2aee9c6cc32dcf85df87d97baa}\label{structzxdg__toplevel__decoration__v1__listener_aa2e05c2aee9c6cc32dcf85df87d97baa}} 
+\index{zxdg\_toplevel\_decoration\_v1\_listener@{zxdg\_toplevel\_decoration\_v1\_listener}!configure@{configure}}
+\index{configure@{configure}!zxdg\_toplevel\_decoration\_v1\_listener@{zxdg\_toplevel\_decoration\_v1\_listener}}
+\doxysubsubsection{\texorpdfstring{configure}{configure}}
+{\footnotesize\ttfamily void($\ast$ zxdg\+\_\+toplevel\+\_\+decoration\+\_\+v1\+\_\+listener\+::configure) (void $\ast$data, struct zxdg\+\_\+toplevel\+\_\+decoration\+\_\+v1 $\ast$zxdg\+\_\+toplevel\+\_\+decoration\+\_\+v1, uint32\+\_\+t mode)}
+
+suggest a surface change
+
+The configure event asks the client to change its decoration mode. The configured state should not be applied immediately. Clients must send an ack\+\_\+configure in response to this event. See xdg\+\_\+surface.\+configure and xdg\+\_\+surface.\+ack\+\_\+configure for details.
+
+A configure event can be sent at any time. The specified mode must be obeyed by the client. 
+\begin{DoxyParams}{Parameters}
+{\em mode} & the decoration mode \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/xdg-\/decoration-\/unstable-\/v1-\/client-\/protocol.\+h\end{DoxyCompactItemize}

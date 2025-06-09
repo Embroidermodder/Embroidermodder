@@ -1,0 +1,40 @@
+\hypertarget{group__iface__wl__touch}{}\doxysection{The wl\+\_\+touch interface}
+\label{group__iface__wl__touch}\index{The wl\_touch interface@{The wl\_touch interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__touch__listener}{wl\+\_\+touch\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__touch_ga40cbaacfb6abe9c8f60733b6f05839a8}\label{group__iface__wl__touch_ga40cbaacfb6abe9c8f60733b6f05839a8}} 
+\#define {\bfseries WL\+\_\+\+TOUCH\+\_\+\+DOWN\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__touch_gae915b3a29e173f4d5a7ef2d85566192f}\label{group__iface__wl__touch_gae915b3a29e173f4d5a7ef2d85566192f}} 
+\#define {\bfseries WL\+\_\+\+TOUCH\+\_\+\+UP\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__touch_ga91a921fbd2e1b0186462285911932906}\label{group__iface__wl__touch_ga91a921fbd2e1b0186462285911932906}} 
+\#define {\bfseries WL\+\_\+\+TOUCH\+\_\+\+MOTION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__touch_gaaabfd1f28b5900a5f45f4e1f95845e19}\label{group__iface__wl__touch_gaaabfd1f28b5900a5f45f4e1f95845e19}} 
+\#define {\bfseries WL\+\_\+\+TOUCH\+\_\+\+FRAME\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__touch_gaaca68eb4c8739498c186c918f4b69577}\label{group__iface__wl__touch_gaaca68eb4c8739498c186c918f4b69577}} 
+\#define {\bfseries WL\+\_\+\+TOUCH\+\_\+\+CANCEL\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__touch_ga2c6945fac264437ba7c02220f7761311}\label{group__iface__wl__touch_ga2c6945fac264437ba7c02220f7761311}} 
+\#define {\bfseries WL\+\_\+\+TOUCH\+\_\+\+SHAPE\+\_\+\+SINCE\+\_\+\+VERSION}~6
+\item 
+\mbox{\Hypertarget{group__iface__wl__touch_ga8388c53a4d212620ad133823af3b0bb5}\label{group__iface__wl__touch_ga8388c53a4d212620ad133823af3b0bb5}} 
+\#define {\bfseries WL\+\_\+\+TOUCH\+\_\+\+ORIENTATION\+\_\+\+SINCE\+\_\+\+VERSION}~6
+\item 
+\mbox{\Hypertarget{group__iface__wl__touch_ga8a24e0c456e24039a2b1c43801bfdaa9}\label{group__iface__wl__touch_ga8a24e0c456e24039a2b1c43801bfdaa9}} 
+\#define {\bfseries WL\+\_\+\+TOUCH\+\_\+\+RELEASE\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The wl\+\_\+touch interface represents a touchscreen associated with a seat.
+
+Touch interactions can consist of one or more contacts. For each contact, a series of events is generated, starting with a down event, followed by zero or more motion events, and ending with an up event. Events relating to the same contact point can be identified by the ID of the sequence. 

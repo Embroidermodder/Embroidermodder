@@ -1,0 +1,485 @@
+\hypertarget{classObject}{}\doxysubsection{Object Class Reference}
+\label{classObject}\index{Object@{Object}}
+Inheritance diagram for Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classObject}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classObject_a92d7793f8f159bde7b1f75bc1374ac5c}{Object}} (int type\+\_\+, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$item=0)
+\item 
+\mbox{\Hypertarget{classObject_a249df41b7ea4e8ff081de1677d4470a7}\label{classObject_a249df41b7ea4e8ff081de1677d4470a7}} 
+void {\bfseries grip\+Edit} (Emb\+Vector before, Emb\+Vector after)
+\item 
+QPainter\+Path \mbox{\hyperlink{classObject_aef0a578c62bee7aec690e4d82668a770}{shape}} () const
+\item 
+\mbox{\Hypertarget{classObject_a15f944a73f6cacaaf0c81cfd7bca7f00}\label{classObject_a15f944a73f6cacaaf0c81cfd7bca7f00}} 
+void {\bfseries draw\+Rubber\+Line} (QLineF rub\+Line, QPainter $\ast$painter=0, const char $\ast$color\+From\+Scene=0)
+\item 
+void \mbox{\hyperlink{classObject_a268b70dc539fa2451d8470d8c63c782b}{set\+Object\+Size}} (double width, Emb\+Real height)
+\item 
+QPainter\+Path \mbox{\hyperlink{classObject_ab3cc16c237d241d5f3fe1a67096bfaae}{object\+Copy\+Path}} () const
+\item 
+QPainter\+Path \mbox{\hyperlink{classObject_aab2bbdf2bb157a9800ff5280df62e533}{object\+Save\+Path}} () const
+\item 
+QList$<$ QPainter\+Path $>$ \mbox{\hyperlink{classObject_a1ca5ed4c4b5654c1dd4944b0acf67c43}{object\+Save\+Path\+List}} () const
+\item 
+QList$<$ QPainter\+Path $>$ \mbox{\hyperlink{classObject_a0388f7ac0014acf12fada3a73b1ac84a}{sub\+Path\+List}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structObjectCore__}{Object\+Core}} $\ast$ \mbox{\hyperlink{classObject_a9d18227008cdf786e94a73987d6cfdae}{core}}
+\item 
+QGraphics\+Path\+Item \mbox{\hyperlink{classObject_ae2ac19753e1239dbf15c8b9decc23908}{path\+\_\+}}
+\item 
+QPen \mbox{\hyperlink{classObject_a40be29d16e62fb02ff5bb93ff27824eb}{obj\+Pen}}
+\item 
+QPen \mbox{\hyperlink{classObject_acab2251427aeda1f1c84a621f7f3a61a}{lwt\+Pen}}
+\item 
+QLineF \mbox{\hyperlink{classObject_aece46ab4d197bf778b1b57929e9fde17}{obj\+Line}}
+\item 
+QPainter $\ast$ \mbox{\hyperlink{classObject_ad1d395bf504d3f3a439a19c42d91753b}{obj\+\_\+painter}}
+\item 
+QPainter\+Path \mbox{\hyperlink{classObject_a84b6f551b56b94e8609ec4db9d3bb8a2}{text\+Path}}
+\item 
+QPainter\+Path \mbox{\hyperlink{classObject_ab1597194e62c0984a0dd45d006397b3f}{line\+Style\+Path}}
+\item 
+QPainter\+Path \mbox{\hyperlink{classObject_a5d0a06a6db63ccf61ac91b5458141941}{arrow\+Style\+Path}}
+\item 
+QPainter\+Path \mbox{\hyperlink{classObject_af7281f6db36040f9d25446a80cd79312}{normal\+Path}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classObject_a1d3dcd1ed2d0a5a3f4e970f65ed27932}{paint}} (QPainter $\ast$, const QStyle\+Option\+Graphics\+Item $\ast$, QWidget $\ast$)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00025}{25}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classObject_a92d7793f8f159bde7b1f75bc1374ac5c}\label{classObject_a92d7793f8f159bde7b1f75bc1374ac5c}} 
+\index{Object@{Object}!Object@{Object}}
+\index{Object@{Object}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{Object()}{Object()}}
+{\footnotesize\ttfamily Object\+::\+Object (\begin{DoxyParamCaption}\item[{int}]{type\+\_\+,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{item = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l01128}{1128}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{01129 \{}
+\DoxyCodeLine{01130 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classObject_ae8f5483f459e46687bd01e6f9977afd3}\label{classObject_ae8f5483f459e46687bd01e6f9977afd3}} 
+\index{Object@{Object}!````~Object@{$\sim$Object}}
+\index{````~Object@{$\sim$Object}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{$\sim$Object()}{~Object()}}
+{\footnotesize\ttfamily Object\+::$\sim$\+Object (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00042}{42}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00042 \{ free\_object(core); \}}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classObject_ab3cc16c237d241d5f3fe1a67096bfaae}\label{classObject_ab3cc16c237d241d5f3fe1a67096bfaae}} 
+\index{Object@{Object}!objectCopyPath@{objectCopyPath}}
+\index{objectCopyPath@{objectCopyPath}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{objectCopyPath()}{objectCopyPath()}}
+{\footnotesize\ttfamily QPainter\+Path Object\+::object\+Copy\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l02272}{2272}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{02273 \{}
+\DoxyCodeLine{02274     \textcolor{keywordflow}{return} normalPath;}
+\DoxyCodeLine{02275 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classObject_aab2bbdf2bb157a9800ff5280df62e533}\label{classObject_aab2bbdf2bb157a9800ff5280df62e533}} 
+\index{Object@{Object}!objectSavePath@{objectSavePath}}
+\index{objectSavePath@{objectSavePath}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{objectSavePath()}{objectSavePath()}}
+{\footnotesize\ttfamily QPainter\+Path Object\+::object\+Save\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l02278}{2278}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{02279 \{}
+\DoxyCodeLine{02280     QPainterPath path;}
+\DoxyCodeLine{02281     QRectF r = to\_qrectf(obj\_rect(core));}
+\DoxyCodeLine{02282     \textcolor{keywordflow}{switch} (core-\/>geometry-\/>type) \{}
+\DoxyCodeLine{02283     \textcolor{keywordflow}{case} EMB\_CIRCLE:}
+\DoxyCodeLine{02284     \textcolor{keywordflow}{case} EMB\_ELLIPSE: \{}
+\DoxyCodeLine{02285         path.arcMoveTo(r, 0);}
+\DoxyCodeLine{02286         path.arcTo(r, 0, 360);}
+\DoxyCodeLine{02287 }
+\DoxyCodeLine{02288         EmbReal s = scale();}
+\DoxyCodeLine{02289         QTransform trans;}
+\DoxyCodeLine{02290         trans.rotate(rotation());}
+\DoxyCodeLine{02291         trans.scale(s,s);}
+\DoxyCodeLine{02292         \textcolor{keywordflow}{return} trans.map(path);}
+\DoxyCodeLine{02293     \}}
+\DoxyCodeLine{02294     \textcolor{keywordflow}{case} EMB\_DIM\_LEADER:}
+\DoxyCodeLine{02295     \textcolor{keywordflow}{case} EMB\_LINE: \{}
+\DoxyCodeLine{02296         QPainterPath path;}
+\DoxyCodeLine{02297         EmbVector start = emb\_gget(this-\/>core-\/>geometry, EMB\_START).v;}
+\DoxyCodeLine{02298         EmbVector end = emb\_gget(this-\/>core-\/>geometry, EMB\_END).v;}
+\DoxyCodeLine{02299         EmbVector delta = emb\_vector\_subtract(end, start);}
+\DoxyCodeLine{02300         path.lineTo(delta.x, delta.y);}
+\DoxyCodeLine{02301         \textcolor{keywordflow}{return} path;}
+\DoxyCodeLine{02302     \}}
+\DoxyCodeLine{02303     \textcolor{keywordflow}{case} EMB\_POINT: \{}
+\DoxyCodeLine{02304         path.addRect(-\/0.00000001, -\/0.00000001, 0.00000002, 0.00000002);}
+\DoxyCodeLine{02305         \textcolor{keywordflow}{return} path;}
+\DoxyCodeLine{02306     \}}
+\DoxyCodeLine{02307     \textcolor{keywordflow}{case} EMB\_RECT: \{}
+\DoxyCodeLine{02308         path.moveTo(r.bottomLeft());}
+\DoxyCodeLine{02309         path.lineTo(r.bottomRight());}
+\DoxyCodeLine{02310         path.lineTo(r.topRight());}
+\DoxyCodeLine{02311         path.lineTo(r.topLeft());}
+\DoxyCodeLine{02312         path.lineTo(r.bottomLeft());}
+\DoxyCodeLine{02313 }
+\DoxyCodeLine{02314         EmbReal s = scale();}
+\DoxyCodeLine{02315         QTransform trans;}
+\DoxyCodeLine{02316         trans.rotate(rotation());}
+\DoxyCodeLine{02317         trans.scale(s,s);}
+\DoxyCodeLine{02318         \textcolor{keywordflow}{return} trans.map(path);}
+\DoxyCodeLine{02319     \}}
+\DoxyCodeLine{02320     \textcolor{keywordflow}{case} EMB\_PATH:}
+\DoxyCodeLine{02321     \textcolor{keywordflow}{case} EMB\_POLYLINE: \{}
+\DoxyCodeLine{02322         EmbReal s = scale();}
+\DoxyCodeLine{02323         QTransform trans;}
+\DoxyCodeLine{02324         trans.rotate(rotation());}
+\DoxyCodeLine{02325         trans.scale(s,s);}
+\DoxyCodeLine{02326         \textcolor{keywordflow}{return} trans.map(normalPath);}
+\DoxyCodeLine{02327     \}}
+\DoxyCodeLine{02328     \textcolor{keywordflow}{case} EMB\_POLYGON: \{}
+\DoxyCodeLine{02329         QPainterPath closedPath = normalPath;}
+\DoxyCodeLine{02330         closedPath.closeSubpath();}
+\DoxyCodeLine{02331         EmbReal s = scale();}
+\DoxyCodeLine{02332         QTransform trans;}
+\DoxyCodeLine{02333         trans.rotate(rotation());}
+\DoxyCodeLine{02334         trans.scale(s,s);}
+\DoxyCodeLine{02335         \textcolor{keywordflow}{return} trans.map(closedPath);}
+\DoxyCodeLine{02336     \}}
+\DoxyCodeLine{02337     \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{02338         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02339     \}}
+\DoxyCodeLine{02340     \textcolor{keywordflow}{return} normalPath;}
+\DoxyCodeLine{02341 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classObject_a1ca5ed4c4b5654c1dd4944b0acf67c43}\label{classObject_a1ca5ed4c4b5654c1dd4944b0acf67c43}} 
+\index{Object@{Object}!objectSavePathList@{objectSavePathList}}
+\index{objectSavePathList@{objectSavePathList}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{objectSavePathList()}{objectSavePathList()}}
+{\footnotesize\ttfamily QList$<$ QPainter\+Path $>$ Object\+::object\+Save\+Path\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00053}{53}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00053 \{ \textcolor{keywordflow}{return} subPathList(); \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classObject_a1d3dcd1ed2d0a5a3f4e970f65ed27932}\label{classObject_a1d3dcd1ed2d0a5a3f4e970f65ed27932}} 
+\index{Object@{Object}!paint@{paint}}
+\index{paint@{paint}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{paint()}{paint()}}
+{\footnotesize\ttfamily void Object\+::paint (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter,  }\item[{const QStyle\+Option\+Graphics\+Item $\ast$}]{option,  }\item[{QWidget $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l02173}{2173}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{02174 \{}
+\DoxyCodeLine{02175     QGraphicsScene* objScene = scene();}
+\DoxyCodeLine{02176     \textcolor{keywordflow}{if} (!objScene) \{}
+\DoxyCodeLine{02177         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{02178     \}}
+\DoxyCodeLine{02179 }
+\DoxyCodeLine{02180     obj\_painter = painter;}
+\DoxyCodeLine{02181 }
+\DoxyCodeLine{02182     QPen paintPen = pen();}
+\DoxyCodeLine{02183     painter-\/>setPen(paintPen);}
+\DoxyCodeLine{02184     obj\_update\_rubber(core-\/>objID, painter);}
+\DoxyCodeLine{02185     \textcolor{keywordflow}{if} (option-\/>state \& QStyle::State\_Selected) \{}
+\DoxyCodeLine{02186         paintPen.setStyle(Qt::DashLine);}
+\DoxyCodeLine{02187     \}}
+\DoxyCodeLine{02188     \mbox{\hyperlink{structDocumentData__}{DocumentData}} *data = doc\_data(core-\/>doc);}
+\DoxyCodeLine{02189     \textcolor{keywordtype}{int} doc = data-\/>id;}
+\DoxyCodeLine{02190     \textcolor{keywordflow}{if} (\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc, VIEW\_LWT)) \{}
+\DoxyCodeLine{02191         paintPen = lwtPen;}
+\DoxyCodeLine{02192     \}}
+\DoxyCodeLine{02193     painter-\/>setPen(paintPen);}
+\DoxyCodeLine{02194 }
+\DoxyCodeLine{02195     \textcolor{keywordflow}{switch} (core-\/>geometry-\/>type) \{}
+\DoxyCodeLine{02196     \textcolor{keywordflow}{case} EMB\_ARC: \{}
+\DoxyCodeLine{02197         EmbReal startAngle = (emb\_start\_angle(core-\/>geometry) + rotation())*16;}
+\DoxyCodeLine{02198         EmbReal spanAngle = emb\_included\_angle(core-\/>geometry) * 16;}
+\DoxyCodeLine{02199 }
+\DoxyCodeLine{02200         \textcolor{keywordflow}{if} (emb\_clockwise(core-\/>geometry)) \{}
+\DoxyCodeLine{02201             spanAngle = -\/spanAngle;}
+\DoxyCodeLine{02202         \}}
+\DoxyCodeLine{02203 }
+\DoxyCodeLine{02204         EmbReal rad = emb\_gget(this-\/>core-\/>geometry, EMB\_RADIUS).r;}
+\DoxyCodeLine{02205         QRectF paintRect(-\/rad, -\/rad, rad*2.0, rad*2.0);}
+\DoxyCodeLine{02206         painter-\/>drawArc(paintRect, startAngle, spanAngle);}
+\DoxyCodeLine{02207         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02208     \}}
+\DoxyCodeLine{02209     \textcolor{keywordflow}{case} EMB\_CIRCLE:}
+\DoxyCodeLine{02210     \textcolor{keywordflow}{case} EMB\_ELLIPSE: \{}
+\DoxyCodeLine{02211         painter-\/>drawEllipse(to\_qrectf(obj\_rect(core)));}
+\DoxyCodeLine{02212         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02213     \}}
+\DoxyCodeLine{02214     \textcolor{keywordflow}{case} EMB\_DIM\_LEADER: \{}
+\DoxyCodeLine{02215         painter-\/>drawPath(lineStylePath);}
+\DoxyCodeLine{02216         painter-\/>drawPath(arrowStylePath);}
+\DoxyCodeLine{02217 }
+\DoxyCodeLine{02218         \textcolor{keywordflow}{if} (core-\/>filled) \{}
+\DoxyCodeLine{02219             painter-\/>fillPath(arrowStylePath, objPen.color());}
+\DoxyCodeLine{02220         \}}
+\DoxyCodeLine{02221         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02222     \}}
+\DoxyCodeLine{02223     \textcolor{keywordflow}{case} EMB\_LINE: \{}
+\DoxyCodeLine{02224         \textcolor{keywordflow}{if} (core-\/>rubber\_mode != RUBBER\_LINE) \{}
+\DoxyCodeLine{02225             painter-\/>drawLine(obj\_line(core-\/>objID));}
+\DoxyCodeLine{02226         \}}
+\DoxyCodeLine{02227 }
+\DoxyCodeLine{02228         \textcolor{keywordflow}{if} (\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc, VIEW\_LWT) \&\& \mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc, VIEW\_REAL)) \{}
+\DoxyCodeLine{02229             obj\_real\_render(\textcolor{keyword}{this}, painter, path());}
+\DoxyCodeLine{02230         \}}
+\DoxyCodeLine{02231         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02232     \}}
+\DoxyCodeLine{02233     \textcolor{keywordflow}{case} EMB\_IMAGE:}
+\DoxyCodeLine{02234     \textcolor{keywordflow}{case} EMB\_RECT: \{}
+\DoxyCodeLine{02235         painter-\/>drawRect(to\_qrectf(obj\_rect(core)));}
+\DoxyCodeLine{02236         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02237     \}}
+\DoxyCodeLine{02238     \textcolor{keywordflow}{case} EMB\_PATH: \{}
+\DoxyCodeLine{02239         painter-\/>drawPath(obj\_path(\textcolor{keyword}{this}));}
+\DoxyCodeLine{02240         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02241     \}}
+\DoxyCodeLine{02242     \textcolor{keywordflow}{case} EMB\_POLYGON: \{}
+\DoxyCodeLine{02243         \textcolor{keywordflow}{if} (normalPath.elementCount()) \{}
+\DoxyCodeLine{02244             painter-\/>drawPath(normalPath);}
+\DoxyCodeLine{02245             QPainterPath::Element zero = normalPath.elementAt(0);}
+\DoxyCodeLine{02246             QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-\/1);}
+\DoxyCodeLine{02247             painter-\/>drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));}
+\DoxyCodeLine{02248         \}}
+\DoxyCodeLine{02249         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02250     \}}
+\DoxyCodeLine{02251     \textcolor{keywordflow}{case} EMB\_POLYLINE: \{}
+\DoxyCodeLine{02252         painter-\/>drawPath(normalPath);}
+\DoxyCodeLine{02253 }
+\DoxyCodeLine{02254         \textcolor{keywordflow}{if} (\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc, VIEW\_LWT) \&\& \mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc, VIEW\_REAL)) \{}
+\DoxyCodeLine{02255             obj\_real\_render(\textcolor{keyword}{this}, painter, normalPath);}
+\DoxyCodeLine{02256         \}}
+\DoxyCodeLine{02257         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02258     \}}
+\DoxyCodeLine{02259     \textcolor{keywordflow}{case} EMB\_TEXT\_SINGLE: \{}
+\DoxyCodeLine{02260         painter-\/>drawPath(textPath);}
+\DoxyCodeLine{02261         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02262     \}}
+\DoxyCodeLine{02263     \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{02264     \textcolor{keywordflow}{case} EMB\_POINT: \{}
+\DoxyCodeLine{02265         painter-\/>drawPoint(0,0);}
+\DoxyCodeLine{02266         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{02267     \}}
+\DoxyCodeLine{02268     \}}
+\DoxyCodeLine{02269 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classObject_a268b70dc539fa2451d8470d8c63c782b}\label{classObject_a268b70dc539fa2451d8470d8c63c782b}} 
+\index{Object@{Object}!setObjectSize@{setObjectSize}}
+\index{setObjectSize@{setObjectSize}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{setObjectSize()}{setObjectSize()}}
+{\footnotesize\ttfamily void Object\+::set\+Object\+Size (\begin{DoxyParamCaption}\item[{double}]{width,  }\item[{Emb\+Real}]{height }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l01276}{1276}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{01277 \{}
+\DoxyCodeLine{01278     QRectF elRect = to\_qrectf(obj\_rect(core));}
+\DoxyCodeLine{01279     elRect.setWidth(width);}
+\DoxyCodeLine{01280     elRect.setHeight(height);}
+\DoxyCodeLine{01281     elRect.moveCenter(QPointF(0, 0));}
+\DoxyCodeLine{01282     \textcolor{comment}{// FIXME: obj-\/>setRect(elRect);}}
+\DoxyCodeLine{01283 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classObject_aef0a578c62bee7aec690e4d82668a770}\label{classObject_aef0a578c62bee7aec690e4d82668a770}} 
+\index{Object@{Object}!shape@{shape}}
+\index{shape@{shape}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{shape()}{shape()}}
+{\footnotesize\ttfamily QPainter\+Path Object\+::shape (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00045}{45}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00045 \{ \textcolor{keywordflow}{return} path(); \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classObject_a0388f7ac0014acf12fada3a73b1ac84a}\label{classObject_a0388f7ac0014acf12fada3a73b1ac84a}} 
+\index{Object@{Object}!subPathList@{subPathList}}
+\index{subPathList@{subPathList}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{subPathList()}{subPathList()}}
+{\footnotesize\ttfamily QList$<$ QPainter\+Path $>$ Object\+::sub\+Path\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l01495}{1495}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{01496 \{}
+\DoxyCodeLine{01497     QList<QPainterPath> p;}
+\DoxyCodeLine{01498     \textcolor{keywordflow}{return} p;}
+\DoxyCodeLine{01499 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Field Documentation}
+\mbox{\Hypertarget{classObject_a5d0a06a6db63ccf61ac91b5458141941}\label{classObject_a5d0a06a6db63ccf61ac91b5458141941}} 
+\index{Object@{Object}!arrowStylePath@{arrowStylePath}}
+\index{arrowStylePath@{arrowStylePath}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{arrowStylePath}{arrowStylePath}}
+{\footnotesize\ttfamily QPainter\+Path Object\+::arrow\+Style\+Path}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00038}{38}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_a9d18227008cdf786e94a73987d6cfdae}\label{classObject_a9d18227008cdf786e94a73987d6cfdae}} 
+\index{Object@{Object}!core@{core}}
+\index{core@{core}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{core}{core}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structObjectCore__}{Object\+Core}}$\ast$ Object\+::core}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00028}{28}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_ab1597194e62c0984a0dd45d006397b3f}\label{classObject_ab1597194e62c0984a0dd45d006397b3f}} 
+\index{Object@{Object}!lineStylePath@{lineStylePath}}
+\index{lineStylePath@{lineStylePath}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{lineStylePath}{lineStylePath}}
+{\footnotesize\ttfamily QPainter\+Path Object\+::line\+Style\+Path}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00037}{37}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_acab2251427aeda1f1c84a621f7f3a61a}\label{classObject_acab2251427aeda1f1c84a621f7f3a61a}} 
+\index{Object@{Object}!lwtPen@{lwtPen}}
+\index{lwtPen@{lwtPen}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{lwtPen}{lwtPen}}
+{\footnotesize\ttfamily QPen Object\+::lwt\+Pen}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00032}{32}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_af7281f6db36040f9d25446a80cd79312}\label{classObject_af7281f6db36040f9d25446a80cd79312}} 
+\index{Object@{Object}!normalPath@{normalPath}}
+\index{normalPath@{normalPath}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{normalPath}{normalPath}}
+{\footnotesize\ttfamily QPainter\+Path Object\+::normal\+Path}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00039}{39}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_ad1d395bf504d3f3a439a19c42d91753b}\label{classObject_ad1d395bf504d3f3a439a19c42d91753b}} 
+\index{Object@{Object}!obj\_painter@{obj\_painter}}
+\index{obj\_painter@{obj\_painter}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{obj\_painter}{obj\_painter}}
+{\footnotesize\ttfamily QPainter$\ast$ Object\+::obj\+\_\+painter}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00034}{34}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_aece46ab4d197bf778b1b57929e9fde17}\label{classObject_aece46ab4d197bf778b1b57929e9fde17}} 
+\index{Object@{Object}!objLine@{objLine}}
+\index{objLine@{objLine}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{objLine}{objLine}}
+{\footnotesize\ttfamily QLineF Object\+::obj\+Line}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00033}{33}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_a40be29d16e62fb02ff5bb93ff27824eb}\label{classObject_a40be29d16e62fb02ff5bb93ff27824eb}} 
+\index{Object@{Object}!objPen@{objPen}}
+\index{objPen@{objPen}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{objPen}{objPen}}
+{\footnotesize\ttfamily QPen Object\+::obj\+Pen}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00031}{31}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_ae2ac19753e1239dbf15c8b9decc23908}\label{classObject_ae2ac19753e1239dbf15c8b9decc23908}} 
+\index{Object@{Object}!path\_@{path\_}}
+\index{path\_@{path\_}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{path\_}{path\_}}
+{\footnotesize\ttfamily QGraphics\+Path\+Item Object\+::path\+\_\+}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00030}{30}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classObject_a84b6f551b56b94e8609ec4db9d3bb8a2}\label{classObject_a84b6f551b56b94e8609ec4db9d3bb8a2}} 
+\index{Object@{Object}!textPath@{textPath}}
+\index{textPath@{textPath}!Object@{Object}}
+\doxyparagraph{\texorpdfstring{textPath}{textPath}}
+{\footnotesize\ttfamily QPainter\+Path Object\+::text\+Path}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00036}{36}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{qt_8h}{qt.\+h}}\item 
+src/commands.\+cpp\end{DoxyCompactItemize}

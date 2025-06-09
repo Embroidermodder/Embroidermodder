@@ -1,0 +1,63 @@
+\hypertarget{group__iface__wl__display}{}\doxysection{The wl\+\_\+display interface}
+\label{group__iface__wl__display}\index{The wl\_display interface@{The wl\_display interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__display__listener}{wl\+\_\+display\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__display_gace95b6626689c030437b73faa927d888}\label{group__iface__wl__display_gace95b6626689c030437b73faa927d888}} 
+\#define {\bfseries WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__display_gad9c7e6cf8e2eeb0524ff0d5f0f8d733f}\label{group__iface__wl__display_gad9c7e6cf8e2eeb0524ff0d5f0f8d733f}} 
+\#define {\bfseries WL\+\_\+\+DISPLAY\+\_\+\+DELETE\+\_\+\+ID\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__display_ga0a5e812b5c5e389ed8f3a3464512202d}\label{group__iface__wl__display_ga0a5e812b5c5e389ed8f3a3464512202d}} 
+\#define {\bfseries WL\+\_\+\+DISPLAY\+\_\+\+SYNC\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__display_gad0ba93efd3f460af90b9193ae8018db7}\label{group__iface__wl__display_gad0ba93efd3f460af90b9193ae8018db7}} 
+\#define {\bfseries WL\+\_\+\+DISPLAY\+\_\+\+GET\+\_\+\+REGISTRY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__display_ga29a41a1c6738fcf3db6b81343ad6e4c1}{wl\+\_\+display\+\_\+error}} \{ \mbox{\hyperlink{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a5c9ff7f99e743272d39b5be3744026b4}{WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+OBJECT}} = 0
+, \mbox{\hyperlink{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a5ee3bd60708f2d979bc84e4daad21a67}{WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+METHOD}} = 1
+, \mbox{\hyperlink{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a3da8f4aa3328e12ebcbe95448a40d4a8}{WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+NO\+\_\+\+MEMORY}} = 2
+, \mbox{\hyperlink{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1aa12b7bdb0fa5cabd36367984fa9a07df}{WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+IMPLEMENTATION}} = 3
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The core global object. This is a special singleton object. It is used for internal Wayland protocol features. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{group__iface__wl__display_ga29a41a1c6738fcf3db6b81343ad6e4c1}\label{group__iface__wl__display_ga29a41a1c6738fcf3db6b81343ad6e4c1}} 
+\index{The wl\_display interface@{The wl\_display interface}!wl\_display\_error@{wl\_display\_error}}
+\index{wl\_display\_error@{wl\_display\_error}!The wl\_display interface@{The wl\_display interface}}
+\doxysubsubsection{\texorpdfstring{wl\_display\_error}{wl\_display\_error}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__display_ga29a41a1c6738fcf3db6b81343ad6e4c1}{wl\+\_\+display\+\_\+error}}}
+
+global error values
+
+These errors are global and can be emitted in response to any server request. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_DISPLAY\_ERROR\_INVALID\_OBJECT@{WL\_DISPLAY\_ERROR\_INVALID\_OBJECT}!The wl\_display interface@{The wl\_display interface}}\index{The wl\_display interface@{The wl\_display interface}!WL\_DISPLAY\_ERROR\_INVALID\_OBJECT@{WL\_DISPLAY\_ERROR\_INVALID\_OBJECT}}}\mbox{\Hypertarget{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a5c9ff7f99e743272d39b5be3744026b4}\label{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a5c9ff7f99e743272d39b5be3744026b4}} 
+WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+OBJECT&server couldn\textquotesingle{}t find object \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_DISPLAY\_ERROR\_INVALID\_METHOD@{WL\_DISPLAY\_ERROR\_INVALID\_METHOD}!The wl\_display interface@{The wl\_display interface}}\index{The wl\_display interface@{The wl\_display interface}!WL\_DISPLAY\_ERROR\_INVALID\_METHOD@{WL\_DISPLAY\_ERROR\_INVALID\_METHOD}}}\mbox{\Hypertarget{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a5ee3bd60708f2d979bc84e4daad21a67}\label{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a5ee3bd60708f2d979bc84e4daad21a67}} 
+WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+INVALID\+\_\+\+METHOD&method doesn\textquotesingle{}t exist on the specified interface or malformed request \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_DISPLAY\_ERROR\_NO\_MEMORY@{WL\_DISPLAY\_ERROR\_NO\_MEMORY}!The wl\_display interface@{The wl\_display interface}}\index{The wl\_display interface@{The wl\_display interface}!WL\_DISPLAY\_ERROR\_NO\_MEMORY@{WL\_DISPLAY\_ERROR\_NO\_MEMORY}}}\mbox{\Hypertarget{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a3da8f4aa3328e12ebcbe95448a40d4a8}\label{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1a3da8f4aa3328e12ebcbe95448a40d4a8}} 
+WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+NO\+\_\+\+MEMORY&server is out of memory \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_DISPLAY\_ERROR\_IMPLEMENTATION@{WL\_DISPLAY\_ERROR\_IMPLEMENTATION}!The wl\_display interface@{The wl\_display interface}}\index{The wl\_display interface@{The wl\_display interface}!WL\_DISPLAY\_ERROR\_IMPLEMENTATION@{WL\_DISPLAY\_ERROR\_IMPLEMENTATION}}}\mbox{\Hypertarget{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1aa12b7bdb0fa5cabd36367984fa9a07df}\label{group__iface__wl__display_gga29a41a1c6738fcf3db6b81343ad6e4c1aa12b7bdb0fa5cabd36367984fa9a07df}} 
+WL\+\_\+\+DISPLAY\+\_\+\+ERROR\+\_\+\+IMPLEMENTATION&implementation error in compositor \\
+\hline
+
+\end{DoxyEnumFields}

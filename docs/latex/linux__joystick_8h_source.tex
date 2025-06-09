@@ -1,0 +1,70 @@
+\hypertarget{linux__joystick_8h_source}{}\doxysection{linux\+\_\+joystick.\+h}
+\label{linux__joystick_8h_source}\index{extern/glfw/src/linux\_joystick.h@{extern/glfw/src/linux\_joystick.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{//========================================================================}}
+\DoxyCodeLine{2 \textcolor{comment}{// GLFW 3.5 Linux -\/ www.glfw.org}}
+\DoxyCodeLine{3 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{4 \textcolor{comment}{// Copyright (c) 2014 Jonas Ådahl <jadahl@gmail.com>}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{6 \textcolor{comment}{// This software is provided 'as-\/is', without any express or implied}}
+\DoxyCodeLine{7 \textcolor{comment}{// warranty. In no event will the authors be held liable for any damages}}
+\DoxyCodeLine{8 \textcolor{comment}{// arising from the use of this software.}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Permission is granted to anyone to use this software for any purpose,}}
+\DoxyCodeLine{11 \textcolor{comment}{// including commercial applications, and to alter it and redistribute it}}
+\DoxyCodeLine{12 \textcolor{comment}{// freely, subject to the following restrictions:}}
+\DoxyCodeLine{13 \textcolor{comment}{//}}
+\DoxyCodeLine{14 \textcolor{comment}{// 1. The origin of this software must not be misrepresented; you must not}}
+\DoxyCodeLine{15 \textcolor{comment}{//    claim that you wrote the original software. If you use this software}}
+\DoxyCodeLine{16 \textcolor{comment}{//    in a product, an acknowledgment in the product documentation would}}
+\DoxyCodeLine{17 \textcolor{comment}{//    be appreciated but is not required.}}
+\DoxyCodeLine{18 \textcolor{comment}{//}}
+\DoxyCodeLine{19 \textcolor{comment}{// 2. Altered source versions must be plainly marked as such, and must not}}
+\DoxyCodeLine{20 \textcolor{comment}{//    be misrepresented as being the original software.}}
+\DoxyCodeLine{21 \textcolor{comment}{//}}
+\DoxyCodeLine{22 \textcolor{comment}{// 3. This notice may not be removed or altered from any source}}
+\DoxyCodeLine{23 \textcolor{comment}{//    distribution.}}
+\DoxyCodeLine{24 \textcolor{comment}{//}}
+\DoxyCodeLine{25 \textcolor{comment}{//========================================================================}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#include <linux/input.h>}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#include <linux/limits.h>}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#include <regex.h>}}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#define GLFW\_LINUX\_JOYSTICK\_STATE         \_GLFWjoystickLinux linjs;}}
+\DoxyCodeLine{32 \textcolor{preprocessor}{\#define GLFW\_LINUX\_LIBRARY\_JOYSTICK\_STATE \_GLFWlibraryLinux  linjs;}}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \textcolor{comment}{// Linux-\/specific joystick data}}
+\DoxyCodeLine{35 \textcolor{comment}{//}}
+\DoxyCodeLine{36 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{struct__GLFWjoystickLinux}{\_GLFWjoystickLinux}}}
+\DoxyCodeLine{37 \{}
+\DoxyCodeLine{38     \textcolor{keywordtype}{int}                     fd;}
+\DoxyCodeLine{39     \textcolor{keywordtype}{char}                    path[PATH\_MAX];}
+\DoxyCodeLine{40     \textcolor{keywordtype}{int}                     keyMap[KEY\_CNT -\/ BTN\_MISC];}
+\DoxyCodeLine{41     \textcolor{keywordtype}{int}                     absMap[ABS\_CNT];}
+\DoxyCodeLine{42     \textcolor{keyword}{struct }input\_absinfo    absInfo[ABS\_CNT];}
+\DoxyCodeLine{43     \textcolor{keywordtype}{int}                     hats[4][2];}
+\DoxyCodeLine{44 \} \mbox{\hyperlink{struct__GLFWjoystickLinux}{\_GLFWjoystickLinux}};}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46 \textcolor{comment}{// Linux-\/specific joystick API data}}
+\DoxyCodeLine{47 \textcolor{comment}{//}}
+\DoxyCodeLine{48 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{struct__GLFWlibraryLinux}{\_GLFWlibraryLinux}}}
+\DoxyCodeLine{49 \{}
+\DoxyCodeLine{50     \textcolor{keywordtype}{int}                     inotify;}
+\DoxyCodeLine{51     \textcolor{keywordtype}{int}                     watch;}
+\DoxyCodeLine{52     regex\_t                 regex;}
+\DoxyCodeLine{53     GLFWbool                regexCompiled;}
+\DoxyCodeLine{54     GLFWbool                dropped;}
+\DoxyCodeLine{55 \} \mbox{\hyperlink{struct__GLFWlibraryLinux}{\_GLFWlibraryLinux}};}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57 \textcolor{keywordtype}{void} \_glfwDetectJoystickConnectionLinux(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59 GLFWbool \_glfwInitJoysticksLinux(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{60 \textcolor{keywordtype}{void} \_glfwTerminateJoysticksLinux(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{61 GLFWbool \_glfwPollJoystickLinux(\mbox{\hyperlink{struct__GLFWjoystick}{\_GLFWjoystick}}* js, \textcolor{keywordtype}{int} mode);}
+\DoxyCodeLine{62 \textcolor{keyword}{const} \textcolor{keywordtype}{char}* \_glfwGetMappingNameLinux(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{63 \textcolor{keywordtype}{void} \_glfwUpdateGamepadGUIDLinux(\textcolor{keywordtype}{char}* guid);}
+\DoxyCodeLine{64 }
+
+\end{DoxyCode}

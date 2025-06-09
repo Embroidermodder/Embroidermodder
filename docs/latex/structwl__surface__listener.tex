@@ -1,0 +1,87 @@
+\hypertarget{structwl__surface__listener}{}\doxysection{wl\+\_\+surface\+\_\+listener Struct Reference}
+\label{structwl__surface__listener}\index{wl\_surface\_listener@{wl\_surface\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__surface__listener_af448ed5d394bdb2324be1974fe092fc1}{enter}} )(void $\ast$data, struct wl\+\_\+surface $\ast$wl\+\_\+surface, struct wl\+\_\+output $\ast$output)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__surface__listener_af2fac9ddb69388bd91e59e9fa163f96e}{leave}} )(void $\ast$data, struct wl\+\_\+surface $\ast$wl\+\_\+surface, struct wl\+\_\+output $\ast$output)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__surface__listener_a4e78c4a90f6f084e048cd4a25d4b3219}{preferred\+\_\+buffer\+\_\+scale}} )(void $\ast$data, struct wl\+\_\+surface $\ast$wl\+\_\+surface, int32\+\_\+t factor)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__surface__listener_a3e323bca3e42c9640670e5635d16fe21}{preferred\+\_\+buffer\+\_\+transform}} )(void $\ast$data, struct wl\+\_\+surface $\ast$wl\+\_\+surface, uint32\+\_\+t transform)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structwl__surface__listener_af448ed5d394bdb2324be1974fe092fc1}\label{structwl__surface__listener_af448ed5d394bdb2324be1974fe092fc1}} 
+\index{wl\_surface\_listener@{wl\_surface\_listener}!enter@{enter}}
+\index{enter@{enter}!wl\_surface\_listener@{wl\_surface\_listener}}
+\doxysubsubsection{\texorpdfstring{enter}{enter}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+surface\+\_\+listener\+::enter) (void $\ast$data, struct wl\+\_\+surface $\ast$wl\+\_\+surface, struct wl\+\_\+output $\ast$output)}
+
+surface enters an output
+
+This is emitted whenever a surface\textquotesingle{}s creation, movement, or resizing results in some part of it being within the scanout region of an output.
+
+Note that a surface may be overlapping with zero or more outputs. 
+\begin{DoxyParams}{Parameters}
+{\em output} & output entered by the surface \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__surface__listener_af2fac9ddb69388bd91e59e9fa163f96e}\label{structwl__surface__listener_af2fac9ddb69388bd91e59e9fa163f96e}} 
+\index{wl\_surface\_listener@{wl\_surface\_listener}!leave@{leave}}
+\index{leave@{leave}!wl\_surface\_listener@{wl\_surface\_listener}}
+\doxysubsubsection{\texorpdfstring{leave}{leave}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+surface\+\_\+listener\+::leave) (void $\ast$data, struct wl\+\_\+surface $\ast$wl\+\_\+surface, struct wl\+\_\+output $\ast$output)}
+
+surface leaves an output
+
+This is emitted whenever a surface\textquotesingle{}s creation, movement, or resizing results in it no longer having any part of it within the scanout region of an output.
+
+Clients should not use the number of outputs the surface is on for frame throttling purposes. The surface might be hidden even if no leave event has been sent, and the compositor might expect new surface content updates even if no enter event has been sent. The frame event should be used instead. 
+\begin{DoxyParams}{Parameters}
+{\em output} & output left by the surface \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__surface__listener_a4e78c4a90f6f084e048cd4a25d4b3219}\label{structwl__surface__listener_a4e78c4a90f6f084e048cd4a25d4b3219}} 
+\index{wl\_surface\_listener@{wl\_surface\_listener}!preferred\_buffer\_scale@{preferred\_buffer\_scale}}
+\index{preferred\_buffer\_scale@{preferred\_buffer\_scale}!wl\_surface\_listener@{wl\_surface\_listener}}
+\doxysubsubsection{\texorpdfstring{preferred\_buffer\_scale}{preferred\_buffer\_scale}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+surface\+\_\+listener\+::preferred\+\_\+buffer\+\_\+scale) (void $\ast$data, struct wl\+\_\+surface $\ast$wl\+\_\+surface, int32\+\_\+t factor)}
+
+preferred buffer scale for the surface
+
+This event indicates the preferred buffer scale for this surface. It is sent whenever the compositor\textquotesingle{}s preference changes.
+
+It is intended that scaling aware clients use this event to scale their content and use wl\+\_\+surface.\+set\+\_\+buffer\+\_\+scale to indicate the scale they have rendered with. This allows clients to supply a higher detail buffer. 
+\begin{DoxyParams}{Parameters}
+{\em factor} & preferred scaling factor \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+6 
+\end{DoxySince}
+\mbox{\Hypertarget{structwl__surface__listener_a3e323bca3e42c9640670e5635d16fe21}\label{structwl__surface__listener_a3e323bca3e42c9640670e5635d16fe21}} 
+\index{wl\_surface\_listener@{wl\_surface\_listener}!preferred\_buffer\_transform@{preferred\_buffer\_transform}}
+\index{preferred\_buffer\_transform@{preferred\_buffer\_transform}!wl\_surface\_listener@{wl\_surface\_listener}}
+\doxysubsubsection{\texorpdfstring{preferred\_buffer\_transform}{preferred\_buffer\_transform}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+surface\+\_\+listener\+::preferred\+\_\+buffer\+\_\+transform) (void $\ast$data, struct wl\+\_\+surface $\ast$wl\+\_\+surface, uint32\+\_\+t transform)}
+
+preferred buffer transform for the surface
+
+This event indicates the preferred buffer transform for this surface. It is sent whenever the compositor\textquotesingle{}s preference changes.
+
+It is intended that transform aware clients use this event to apply the transform to their content and use wl\+\_\+surface.\+set\+\_\+buffer\+\_\+transform to indicate the transform they have rendered with. 
+\begin{DoxyParams}{Parameters}
+{\em transform} & preferred transform \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+6 
+\end{DoxySince}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/wayland-\/client-\/protocol.\+h\end{DoxyCompactItemize}

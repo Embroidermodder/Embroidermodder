@@ -1,0 +1,90 @@
+\hypertarget{classApplication}{}\doxysubsection{Application Class Reference}
+\label{classApplication}\index{Application@{Application}}
+Inheritance diagram for Application\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classApplication}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classApplication_a758ec0591237b4b7204ee8d87a26f834}{Application}} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool \mbox{\hyperlink{classApplication_ac1e0ff5624e7e253f6b33dccc2a020d0}{event}} (QEvent $\ast$e)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00296}{296}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classApplication_a758ec0591237b4b7204ee8d87a26f834}\label{classApplication_a758ec0591237b4b7204ee8d87a26f834}} 
+\index{Application@{Application}!Application@{Application}}
+\index{Application@{Application}!Application@{Application}}
+\doxyparagraph{\texorpdfstring{Application()}{Application()}}
+{\footnotesize\ttfamily Application\+::\+Application (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l05544}{5544}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{05544                                              : QApplication(argc, argv)}
+\DoxyCodeLine{05545 \{}
+\DoxyCodeLine{05546 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classApplication_ac1e0ff5624e7e253f6b33dccc2a020d0}\label{classApplication_ac1e0ff5624e7e253f6b33dccc2a020d0}} 
+\index{Application@{Application}!event@{event}}
+\index{event@{event}!Application@{Application}}
+\doxyparagraph{\texorpdfstring{event()}{event()}}
+{\footnotesize\ttfamily bool Application\+::event (\begin{DoxyParamCaption}\item[{QEvent $\ast$}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l05549}{5549}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{05550 \{}
+\DoxyCodeLine{05551     \textcolor{keywordflow}{switch} (event-\/>type()) \{}
+\DoxyCodeLine{05552     \textcolor{keywordflow}{case} QEvent::FileOpen:}
+\DoxyCodeLine{05553         \textcolor{keywordflow}{if} (\_main) \{}
+\DoxyCodeLine{05554             QStringList sl = QStringList(\textcolor{keyword}{static\_cast<}QFileOpenEvent *\textcolor{keyword}{>}(event)-\/>file());}
+\DoxyCodeLine{05555             \textcolor{keywordtype}{char} *files\_ptrs[MAX\_FILES];}
+\DoxyCodeLine{05556             \textcolor{keywordtype}{char} files[MAX\_FILES][MAX\_STRING\_LENGTH];}
+\DoxyCodeLine{05557             \textcolor{keywordtype}{int} i;}
+\DoxyCodeLine{05558             \textcolor{keywordflow}{for} (i=0; i < MAX\_FILES \&\& i < sl.size(); i++) \{}
+\DoxyCodeLine{05559                 strcpy(files[i], qPrintable(sl[i]));}
+\DoxyCodeLine{05560                 files\_ptrs[i] = (\textcolor{keywordtype}{char}*)files[i];}
+\DoxyCodeLine{05561             \}}
+\DoxyCodeLine{05562             strcpy(files[i], END\_SYMBOL);}
+\DoxyCodeLine{05563             files\_ptrs[i] = (\textcolor{keywordtype}{char}*)files[i];}
+\DoxyCodeLine{05564             open\_selected\_files(files\_ptrs);}
+\DoxyCodeLine{05565             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{05566         \}}
+\DoxyCodeLine{05567         \textcolor{comment}{/* Fall through */}}
+\DoxyCodeLine{05568     \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{05569         \textcolor{keywordflow}{return} QApplication::event(event);}
+\DoxyCodeLine{05570     \}}
+\DoxyCodeLine{05571 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{qt_8h}{qt.\+h}}\item 
+src/commands.\+cpp\end{DoxyCompactItemize}

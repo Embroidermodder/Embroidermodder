@@ -1,0 +1,32 @@
+\hypertarget{group__iface__zwp__confined__pointer__v1}{}\doxysection{The zwp\+\_\+confined\+\_\+pointer\+\_\+v1 interface}
+\label{group__iface__zwp__confined__pointer__v1}\index{The zwp\_confined\_pointer\_v1 interface@{The zwp\_confined\_pointer\_v1 interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structzwp__confined__pointer__v1__listener}{zwp\+\_\+confined\+\_\+pointer\+\_\+v1\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__zwp__confined__pointer__v1_ga66a2ced5a78ee601e6b4fb1e12dee07f}\label{group__iface__zwp__confined__pointer__v1_ga66a2ced5a78ee601e6b4fb1e12dee07f}} 
+\#define {\bfseries ZWP\+\_\+\+CONFINED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+CONFINED\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__confined__pointer__v1_ga7eb85399bebfd1fd5dd5c341fd36b39b}\label{group__iface__zwp__confined__pointer__v1_ga7eb85399bebfd1fd5dd5c341fd36b39b}} 
+\#define {\bfseries ZWP\+\_\+\+CONFINED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+UNCONFINED\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__confined__pointer__v1_ga2c6a2d41a987776836b8be611f98a1f6}\label{group__iface__zwp__confined__pointer__v1_ga2c6a2d41a987776836b8be611f98a1f6}} 
+\#define {\bfseries ZWP\+\_\+\+CONFINED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__confined__pointer__v1_ga99babb7e0d4dfb9da9304f73116a2139}\label{group__iface__zwp__confined__pointer__v1_ga99babb7e0d4dfb9da9304f73116a2139}} 
+\#define {\bfseries ZWP\+\_\+\+CONFINED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+SET\+\_\+\+REGION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The wp\+\_\+confined\+\_\+pointer interface represents a confined pointer state.
+
+This object will send the event \textquotesingle{}confined\textquotesingle{} when the confinement is activated. Whenever the confinement is activated, it is guaranteed that the surface the pointer is confined to will already have received pointer focus and that the pointer will be within the region passed to the request creating this object. It is up to the compositor to decide whether this requires some user interaction and if the pointer will warp to within the passed region if outside.
+
+To unconfine the pointer, send the destroy request. This will also destroy the wp\+\_\+confined\+\_\+pointer object.
+
+If the compositor decides to unconfine the pointer the unconfined event is sent. The wp\+\_\+confined\+\_\+pointer object is at this point defunct and should be destroyed. 

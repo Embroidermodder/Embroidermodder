@@ -1,0 +1,183 @@
+\hypertarget{page_wayland_page_ifaces_wayland}{}\doxysection{Interfaces}\label{page_wayland_page_ifaces_wayland}
+
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{page_iface_wl_display}{wl\+\_\+display}} -\/ core global object
+\item \mbox{\hyperlink{page_iface_wl_registry}{wl\+\_\+registry}} -\/ global registry object
+\item \mbox{\hyperlink{page_iface_wl_callback}{wl\+\_\+callback}} -\/ callback object
+\item \mbox{\hyperlink{page_iface_wl_compositor}{wl\+\_\+compositor}} -\/ the compositor singleton
+\item \mbox{\hyperlink{page_iface_wl_shm_pool}{wl\+\_\+shm\+\_\+pool}} -\/ a shared memory pool
+\item \mbox{\hyperlink{page_iface_wl_shm}{wl\+\_\+shm}} -\/ shared memory support
+\item \mbox{\hyperlink{page_iface_wl_buffer}{wl\+\_\+buffer}} -\/ content for a wl\+\_\+surface
+\item \mbox{\hyperlink{page_iface_wl_data_offer}{wl\+\_\+data\+\_\+offer}} -\/ offer to transfer data
+\item \mbox{\hyperlink{page_iface_wl_data_source}{wl\+\_\+data\+\_\+source}} -\/ offer to transfer data
+\item \mbox{\hyperlink{page_iface_wl_data_device}{wl\+\_\+data\+\_\+device}} -\/ data transfer device
+\item \mbox{\hyperlink{page_iface_wl_data_device_manager}{wl\+\_\+data\+\_\+device\+\_\+manager}} -\/ data transfer interface
+\item \mbox{\hyperlink{page_iface_wl_shell}{wl\+\_\+shell}} -\/ create desktop-\/style surfaces
+\item \mbox{\hyperlink{page_iface_wl_shell_surface}{wl\+\_\+shell\+\_\+surface}} -\/ desktop-\/style metadata interface
+\item \mbox{\hyperlink{page_iface_wl_surface}{wl\+\_\+surface}} -\/ an onscreen surface
+\item \mbox{\hyperlink{page_iface_wl_seat}{wl\+\_\+seat}} -\/ group of input devices
+\item \mbox{\hyperlink{page_iface_wl_pointer}{wl\+\_\+pointer}} -\/ pointer input device
+\item \mbox{\hyperlink{page_iface_wl_keyboard}{wl\+\_\+keyboard}} -\/ keyboard input device
+\item \mbox{\hyperlink{page_iface_wl_touch}{wl\+\_\+touch}} -\/ touchscreen input device
+\item \mbox{\hyperlink{page_iface_wl_output}{wl\+\_\+output}} -\/ compositor output region
+\item \mbox{\hyperlink{page_iface_wl_region}{wl\+\_\+region}} -\/ region interface
+\item \mbox{\hyperlink{page_iface_wl_subcompositor}{wl\+\_\+subcompositor}} -\/ sub-\/surface compositing
+\item \mbox{\hyperlink{page_iface_wl_subsurface}{wl\+\_\+subsurface}} -\/ sub-\/surface interface to a wl\+\_\+surface 
+\end{DoxyItemize}\hypertarget{page_wayland_page_copyright_wayland}{}\doxysection{Copyright}\label{page_wayland_page_copyright_wayland}
+
+\begin{DoxyPre}
+
+Copyright © 2008-\/2011 Kristian Høgsberg
+Copyright © 2010-\/2011 Intel Corporation
+Copyright © 2012-\/2013 Collabora, Ltd.
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation files
+(the "{}Software"{}), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice (including the
+next paragraph) shall be included in all copies or substantial
+portions of the Software.
+
+THE SOFTWARE IS PROVIDED "{}AS IS"{}, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+\end{DoxyPre}
+ \hypertarget{page_iface_wl_display}{}\doxysection{wl\+\_\+display}\label{page_iface_wl_display}
+\hypertarget{page_iface_wl_display_page_iface_wl_display_desc}{}\doxysubsection{Description}\label{page_iface_wl_display_page_iface_wl_display_desc}
+The core global object. This is a special singleton object. It is used for internal Wayland protocol features. \hypertarget{page_iface_wl_display_page_iface_wl_display_api}{}\doxysubsection{API}\label{page_iface_wl_display_page_iface_wl_display_api}
+See \mbox{\hyperlink{group__iface__wl__display}{The wl\+\_\+display interface}}. \hypertarget{page_iface_wl_registry}{}\doxysection{wl\+\_\+registry}\label{page_iface_wl_registry}
+\hypertarget{page_iface_wl_registry_page_iface_wl_registry_desc}{}\doxysubsection{Description}\label{page_iface_wl_registry_page_iface_wl_registry_desc}
+The singleton global registry object. The server has a number of global objects that are available to all clients. These objects typically represent an actual object in the server (for example, an input device) or they are singleton objects that provide extension functionality.
+
+When a client creates a registry object, the registry object will emit a global event for each global currently in the registry. Globals come and go as a result of device or monitor hotplugs, reconfiguration or other events, and the registry will send out global and global\+\_\+remove events to keep the client up to date with the changes. To mark the end of the initial burst of events, the client can use the wl\+\_\+display.\+sync request immediately after calling wl\+\_\+display.\+get\+\_\+registry.
+
+A client can bind to a global object by using the bind request. This creates a client-\/side handle that lets the object emit events to the client and lets the client invoke requests on the object. \hypertarget{page_iface_wl_registry_page_iface_wl_registry_api}{}\doxysubsection{API}\label{page_iface_wl_registry_page_iface_wl_registry_api}
+See \mbox{\hyperlink{group__iface__wl__registry}{The wl\+\_\+registry interface}}. \hypertarget{page_iface_wl_callback}{}\doxysection{wl\+\_\+callback}\label{page_iface_wl_callback}
+\hypertarget{page_iface_wl_callback_page_iface_wl_callback_desc}{}\doxysubsection{Description}\label{page_iface_wl_callback_page_iface_wl_callback_desc}
+Clients can handle the \textquotesingle{}done\textquotesingle{} event to get notified when the related request is done.
+
+Note, because wl\+\_\+callback objects are created from multiple independent factory interfaces, the wl\+\_\+callback interface is frozen at version 1. \hypertarget{page_iface_wl_callback_page_iface_wl_callback_api}{}\doxysubsection{API}\label{page_iface_wl_callback_page_iface_wl_callback_api}
+See \mbox{\hyperlink{group__iface__wl__callback}{The wl\+\_\+callback interface}}. \hypertarget{page_iface_wl_compositor}{}\doxysection{wl\+\_\+compositor}\label{page_iface_wl_compositor}
+\hypertarget{page_iface_wl_compositor_page_iface_wl_compositor_desc}{}\doxysubsection{Description}\label{page_iface_wl_compositor_page_iface_wl_compositor_desc}
+A compositor. This object is a singleton global. The compositor is in charge of combining the contents of multiple surfaces into one displayable output. \hypertarget{page_iface_wl_compositor_page_iface_wl_compositor_api}{}\doxysubsection{API}\label{page_iface_wl_compositor_page_iface_wl_compositor_api}
+See \mbox{\hyperlink{group__iface__wl__compositor}{The wl\+\_\+compositor interface}}. \hypertarget{page_iface_wl_shm_pool}{}\doxysection{wl\+\_\+shm\+\_\+pool}\label{page_iface_wl_shm_pool}
+\hypertarget{page_iface_wl_shm_pool_page_iface_wl_shm_pool_desc}{}\doxysubsection{Description}\label{page_iface_wl_shm_pool_page_iface_wl_shm_pool_desc}
+The wl\+\_\+shm\+\_\+pool object encapsulates a piece of memory shared between the compositor and client. Through the wl\+\_\+shm\+\_\+pool object, the client can allocate shared memory wl\+\_\+buffer objects. All objects created through the same pool share the same underlying mapped memory. Reusing the mapped memory avoids the setup/teardown overhead and is useful when interactively resizing a surface or for many small buffers. \hypertarget{page_iface_wl_shm_pool_page_iface_wl_shm_pool_api}{}\doxysubsection{API}\label{page_iface_wl_shm_pool_page_iface_wl_shm_pool_api}
+See \mbox{\hyperlink{group__iface__wl__shm__pool}{The wl\+\_\+shm\+\_\+pool interface}}. \hypertarget{page_iface_wl_shm}{}\doxysection{wl\+\_\+shm}\label{page_iface_wl_shm}
+\hypertarget{page_iface_wl_shm_page_iface_wl_shm_desc}{}\doxysubsection{Description}\label{page_iface_wl_shm_page_iface_wl_shm_desc}
+A singleton global object that provides support for shared memory.
+
+Clients can create wl\+\_\+shm\+\_\+pool objects using the create\+\_\+pool request.
+
+On binding the wl\+\_\+shm object one or more format events are emitted to inform clients about the valid pixel formats that can be used for buffers. \hypertarget{page_iface_wl_shm_page_iface_wl_shm_api}{}\doxysubsection{API}\label{page_iface_wl_shm_page_iface_wl_shm_api}
+See \mbox{\hyperlink{group__iface__wl__shm}{The wl\+\_\+shm interface}}. \hypertarget{page_iface_wl_buffer}{}\doxysection{wl\+\_\+buffer}\label{page_iface_wl_buffer}
+\hypertarget{page_iface_wl_buffer_page_iface_wl_buffer_desc}{}\doxysubsection{Description}\label{page_iface_wl_buffer_page_iface_wl_buffer_desc}
+A buffer provides the content for a wl\+\_\+surface. Buffers are created through factory interfaces such as wl\+\_\+shm, wp\+\_\+linux\+\_\+buffer\+\_\+params (from the linux-\/dmabuf protocol extension) or similar. It has a width and a height and can be attached to a wl\+\_\+surface, but the mechanism by which a client provides and updates the contents is defined by the buffer factory interface.
+
+If the buffer uses a format that has an alpha channel, the alpha channel is assumed to be premultiplied in the color channels unless otherwise specified.
+
+Note, because wl\+\_\+buffer objects are created from multiple independent factory interfaces, the wl\+\_\+buffer interface is frozen at version 1. \hypertarget{page_iface_wl_buffer_page_iface_wl_buffer_api}{}\doxysubsection{API}\label{page_iface_wl_buffer_page_iface_wl_buffer_api}
+See \mbox{\hyperlink{group__iface__wl__buffer}{The wl\+\_\+buffer interface}}. \hypertarget{page_iface_wl_data_offer}{}\doxysection{wl\+\_\+data\+\_\+offer}\label{page_iface_wl_data_offer}
+\hypertarget{page_iface_wl_data_offer_page_iface_wl_data_offer_desc}{}\doxysubsection{Description}\label{page_iface_wl_data_offer_page_iface_wl_data_offer_desc}
+A wl\+\_\+data\+\_\+offer represents a piece of data offered for transfer by another client (the source client). It is used by the copy-\/and-\/paste and drag-\/and-\/drop mechanisms. The offer describes the different mime types that the data can be converted to and provides the mechanism for transferring the data directly from the source client. \hypertarget{page_iface_wl_data_offer_page_iface_wl_data_offer_api}{}\doxysubsection{API}\label{page_iface_wl_data_offer_page_iface_wl_data_offer_api}
+See \mbox{\hyperlink{group__iface__wl__data__offer}{The wl\+\_\+data\+\_\+offer interface}}. \hypertarget{page_iface_wl_data_source}{}\doxysection{wl\+\_\+data\+\_\+source}\label{page_iface_wl_data_source}
+\hypertarget{page_iface_wl_data_source_page_iface_wl_data_source_desc}{}\doxysubsection{Description}\label{page_iface_wl_data_source_page_iface_wl_data_source_desc}
+The wl\+\_\+data\+\_\+source object is the source side of a wl\+\_\+data\+\_\+offer. It is created by the source client in a data transfer and provides a way to describe the offered data and a way to respond to requests to transfer the data. \hypertarget{page_iface_wl_data_source_page_iface_wl_data_source_api}{}\doxysubsection{API}\label{page_iface_wl_data_source_page_iface_wl_data_source_api}
+See \mbox{\hyperlink{group__iface__wl__data__source}{The wl\+\_\+data\+\_\+source interface}}. \hypertarget{page_iface_wl_data_device}{}\doxysection{wl\+\_\+data\+\_\+device}\label{page_iface_wl_data_device}
+\hypertarget{page_iface_wl_data_device_page_iface_wl_data_device_desc}{}\doxysubsection{Description}\label{page_iface_wl_data_device_page_iface_wl_data_device_desc}
+There is one wl\+\_\+data\+\_\+device per seat which can be obtained from the global wl\+\_\+data\+\_\+device\+\_\+manager singleton.
+
+A wl\+\_\+data\+\_\+device provides access to inter-\/client data transfer mechanisms such as copy-\/and-\/paste and drag-\/and-\/drop. \hypertarget{page_iface_wl_data_device_page_iface_wl_data_device_api}{}\doxysubsection{API}\label{page_iface_wl_data_device_page_iface_wl_data_device_api}
+See \mbox{\hyperlink{group__iface__wl__data__device}{The wl\+\_\+data\+\_\+device interface}}. \hypertarget{page_iface_wl_data_device_manager}{}\doxysection{wl\+\_\+data\+\_\+device\+\_\+manager}\label{page_iface_wl_data_device_manager}
+\hypertarget{page_iface_wl_data_device_manager_page_iface_wl_data_device_manager_desc}{}\doxysubsection{Description}\label{page_iface_wl_data_device_manager_page_iface_wl_data_device_manager_desc}
+The wl\+\_\+data\+\_\+device\+\_\+manager is a singleton global object that provides access to inter-\/client data transfer mechanisms such as copy-\/and-\/paste and drag-\/and-\/drop. These mechanisms are tied to a wl\+\_\+seat and this interface lets a client get a wl\+\_\+data\+\_\+device corresponding to a wl\+\_\+seat.
+
+Depending on the version bound, the objects created from the bound wl\+\_\+data\+\_\+device\+\_\+manager object will have different requirements for functioning properly. See wl\+\_\+data\+\_\+source.\+set\+\_\+actions, wl\+\_\+data\+\_\+offer.\+accept and wl\+\_\+data\+\_\+offer.\+finish for details. \hypertarget{page_iface_wl_data_device_manager_page_iface_wl_data_device_manager_api}{}\doxysubsection{API}\label{page_iface_wl_data_device_manager_page_iface_wl_data_device_manager_api}
+See \mbox{\hyperlink{group__iface__wl__data__device__manager}{The wl\+\_\+data\+\_\+device\+\_\+manager interface}}. \hypertarget{page_iface_wl_shell}{}\doxysection{wl\+\_\+shell}\label{page_iface_wl_shell}
+\hypertarget{page_iface_wl_shell_page_iface_wl_shell_desc}{}\doxysubsection{Description}\label{page_iface_wl_shell_page_iface_wl_shell_desc}
+This interface is implemented by servers that provide desktop-\/style user interfaces.
+
+It allows clients to associate a wl\+\_\+shell\+\_\+surface with a basic surface.
+
+Note! This protocol is deprecated and not intended for production use. For desktop-\/style user interfaces, use xdg\+\_\+shell. Compositors and clients should not implement this interface. \hypertarget{page_iface_wl_shell_page_iface_wl_shell_api}{}\doxysubsection{API}\label{page_iface_wl_shell_page_iface_wl_shell_api}
+See \mbox{\hyperlink{group__iface__wl__shell}{The wl\+\_\+shell interface}}. \hypertarget{page_iface_wl_shell_surface}{}\doxysection{wl\+\_\+shell\+\_\+surface}\label{page_iface_wl_shell_surface}
+\hypertarget{page_iface_wl_shell_surface_page_iface_wl_shell_surface_desc}{}\doxysubsection{Description}\label{page_iface_wl_shell_surface_page_iface_wl_shell_surface_desc}
+An interface that may be implemented by a wl\+\_\+surface, for implementations that provide a desktop-\/style user interface.
+
+It provides requests to treat surfaces like toplevel, fullscreen or popup windows, move, resize or maximize them, associate metadata like title and class, etc.
+
+On the server side the object is automatically destroyed when the related wl\+\_\+surface is destroyed. On the client side, wl\+\_\+shell\+\_\+surface\+\_\+destroy() must be called before destroying the wl\+\_\+surface object. \hypertarget{page_iface_wl_shell_surface_page_iface_wl_shell_surface_api}{}\doxysubsection{API}\label{page_iface_wl_shell_surface_page_iface_wl_shell_surface_api}
+See \mbox{\hyperlink{group__iface__wl__shell__surface}{The wl\+\_\+shell\+\_\+surface interface}}. \hypertarget{page_iface_wl_surface}{}\doxysection{wl\+\_\+surface}\label{page_iface_wl_surface}
+\hypertarget{page_iface_wl_surface_page_iface_wl_surface_desc}{}\doxysubsection{Description}\label{page_iface_wl_surface_page_iface_wl_surface_desc}
+A surface is a rectangular area that may be displayed on zero or more outputs, and shown any number of times at the compositor\textquotesingle{}s discretion. They can present wl\+\_\+buffers, receive user input, and define a local coordinate system.
+
+The size of a surface (and relative positions on it) is described in surface-\/local coordinates, which may differ from the buffer coordinates of the pixel content, in case a buffer\+\_\+transform or a buffer\+\_\+scale is used.
+
+A surface without a \char`\"{}role\char`\"{} is fairly useless\+: a compositor does not know where, when or how to present it. The role is the purpose of a wl\+\_\+surface. Examples of roles are a cursor for a pointer (as set by wl\+\_\+pointer.\+set\+\_\+cursor), a drag icon (wl\+\_\+data\+\_\+device.\+start\+\_\+drag), a sub-\/surface (wl\+\_\+subcompositor.\+get\+\_\+subsurface), and a window as defined by a shell protocol (e.\+g. wl\+\_\+shell.\+get\+\_\+shell\+\_\+surface).
+
+A surface can have only one role at a time. Initially a wl\+\_\+surface does not have a role. Once a wl\+\_\+surface is given a role, it is set permanently for the whole lifetime of the wl\+\_\+surface object. Giving the current role again is allowed, unless explicitly forbidden by the relevant interface specification.
+
+Surface roles are given by requests in other interfaces such as wl\+\_\+pointer.\+set\+\_\+cursor. The request should explicitly mention that this request gives a role to a wl\+\_\+surface. Often, this request also creates a new protocol object that represents the role and adds additional functionality to wl\+\_\+surface. When a client wants to destroy a wl\+\_\+surface, they must destroy this role object before the wl\+\_\+surface, otherwise a defunct\+\_\+role\+\_\+object error is sent.
+
+Destroying the role object does not remove the role from the wl\+\_\+surface, but it may stop the wl\+\_\+surface from \char`\"{}playing the role\char`\"{}. For instance, if a wl\+\_\+subsurface object is destroyed, the wl\+\_\+surface it was created for will be unmapped and forget its position and z-\/order. It is allowed to create a wl\+\_\+subsurface for the same wl\+\_\+surface again, but it is not allowed to use the wl\+\_\+surface as a cursor (cursor is a different role than sub-\/surface, and role switching is not allowed). \hypertarget{page_iface_wl_surface_page_iface_wl_surface_api}{}\doxysubsection{API}\label{page_iface_wl_surface_page_iface_wl_surface_api}
+See \mbox{\hyperlink{group__iface__wl__surface}{The wl\+\_\+surface interface}}. \hypertarget{page_iface_wl_seat}{}\doxysection{wl\+\_\+seat}\label{page_iface_wl_seat}
+\hypertarget{page_iface_wl_seat_page_iface_wl_seat_desc}{}\doxysubsection{Description}\label{page_iface_wl_seat_page_iface_wl_seat_desc}
+A seat is a group of keyboards, pointer and touch devices. This object is published as a global during start up, or when such a device is hot plugged. A seat typically has a pointer and maintains a keyboard focus and a pointer focus. \hypertarget{page_iface_wl_seat_page_iface_wl_seat_api}{}\doxysubsection{API}\label{page_iface_wl_seat_page_iface_wl_seat_api}
+See \mbox{\hyperlink{group__iface__wl__seat}{The wl\+\_\+seat interface}}. \hypertarget{page_iface_wl_pointer}{}\doxysection{wl\+\_\+pointer}\label{page_iface_wl_pointer}
+\hypertarget{page_iface_wl_pointer_page_iface_wl_pointer_desc}{}\doxysubsection{Description}\label{page_iface_wl_pointer_page_iface_wl_pointer_desc}
+The wl\+\_\+pointer interface represents one or more input devices, such as mice, which control the pointer location and pointer\+\_\+focus of a seat.
+
+The wl\+\_\+pointer interface generates motion, enter and leave events for the surfaces that the pointer is located over, and button and axis events for button presses, button releases and scrolling. \hypertarget{page_iface_wl_pointer_page_iface_wl_pointer_api}{}\doxysubsection{API}\label{page_iface_wl_pointer_page_iface_wl_pointer_api}
+See \mbox{\hyperlink{group__iface__wl__pointer}{The wl\+\_\+pointer interface}}. \hypertarget{page_iface_wl_keyboard}{}\doxysection{wl\+\_\+keyboard}\label{page_iface_wl_keyboard}
+\hypertarget{page_iface_wl_keyboard_page_iface_wl_keyboard_desc}{}\doxysubsection{Description}\label{page_iface_wl_keyboard_page_iface_wl_keyboard_desc}
+The wl\+\_\+keyboard interface represents one or more keyboards associated with a seat. \hypertarget{page_iface_wl_keyboard_page_iface_wl_keyboard_api}{}\doxysubsection{API}\label{page_iface_wl_keyboard_page_iface_wl_keyboard_api}
+See \mbox{\hyperlink{group__iface__wl__keyboard}{The wl\+\_\+keyboard interface}}. \hypertarget{page_iface_wl_touch}{}\doxysection{wl\+\_\+touch}\label{page_iface_wl_touch}
+\hypertarget{page_iface_wl_touch_page_iface_wl_touch_desc}{}\doxysubsection{Description}\label{page_iface_wl_touch_page_iface_wl_touch_desc}
+The wl\+\_\+touch interface represents a touchscreen associated with a seat.
+
+Touch interactions can consist of one or more contacts. For each contact, a series of events is generated, starting with a down event, followed by zero or more motion events, and ending with an up event. Events relating to the same contact point can be identified by the ID of the sequence. \hypertarget{page_iface_wl_touch_page_iface_wl_touch_api}{}\doxysubsection{API}\label{page_iface_wl_touch_page_iface_wl_touch_api}
+See \mbox{\hyperlink{group__iface__wl__touch}{The wl\+\_\+touch interface}}. \hypertarget{page_iface_wl_output}{}\doxysection{wl\+\_\+output}\label{page_iface_wl_output}
+\hypertarget{page_iface_wl_output_page_iface_wl_output_desc}{}\doxysubsection{Description}\label{page_iface_wl_output_page_iface_wl_output_desc}
+An output describes part of the compositor geometry. The compositor works in the \textquotesingle{}compositor coordinate system\textquotesingle{} and an output corresponds to a rectangular area in that space that is actually visible. This typically corresponds to a monitor that displays part of the compositor space. This object is published as global during start up, or when a monitor is hotplugged. \hypertarget{page_iface_wl_output_page_iface_wl_output_api}{}\doxysubsection{API}\label{page_iface_wl_output_page_iface_wl_output_api}
+See \mbox{\hyperlink{group__iface__wl__output}{The wl\+\_\+output interface}}. \hypertarget{page_iface_wl_region}{}\doxysection{wl\+\_\+region}\label{page_iface_wl_region}
+\hypertarget{page_iface_wl_region_page_iface_wl_region_desc}{}\doxysubsection{Description}\label{page_iface_wl_region_page_iface_wl_region_desc}
+A region object describes an area.
+
+Region objects are used to describe the opaque and input regions of a surface. \hypertarget{page_iface_wl_region_page_iface_wl_region_api}{}\doxysubsection{API}\label{page_iface_wl_region_page_iface_wl_region_api}
+See \mbox{\hyperlink{group__iface__wl__region}{The wl\+\_\+region interface}}. \hypertarget{page_iface_wl_subcompositor}{}\doxysection{wl\+\_\+subcompositor}\label{page_iface_wl_subcompositor}
+\hypertarget{page_iface_wl_subcompositor_page_iface_wl_subcompositor_desc}{}\doxysubsection{Description}\label{page_iface_wl_subcompositor_page_iface_wl_subcompositor_desc}
+The global interface exposing sub-\/surface compositing capabilities. A wl\+\_\+surface, that has sub-\/surfaces associated, is called the parent surface. Sub-\/surfaces can be arbitrarily nested and create a tree of sub-\/surfaces.
+
+The root surface in a tree of sub-\/surfaces is the main surface. The main surface cannot be a sub-\/surface, because sub-\/surfaces must always have a parent.
+
+A main surface with its sub-\/surfaces forms a (compound) window. For window management purposes, this set of wl\+\_\+surface objects is to be considered as a single window, and it should also behave as such.
+
+The aim of sub-\/surfaces is to offload some of the compositing work within a window from clients to the compositor. A prime example is a video player with decorations and video in separate wl\+\_\+surface objects. This should allow the compositor to pass YUV video buffer processing to dedicated overlay hardware when possible. \hypertarget{page_iface_wl_subcompositor_page_iface_wl_subcompositor_api}{}\doxysubsection{API}\label{page_iface_wl_subcompositor_page_iface_wl_subcompositor_api}
+See \mbox{\hyperlink{group__iface__wl__subcompositor}{The wl\+\_\+subcompositor interface}}. \hypertarget{page_iface_wl_subsurface}{}\doxysection{wl\+\_\+subsurface}\label{page_iface_wl_subsurface}
+\hypertarget{page_iface_wl_subsurface_page_iface_wl_subsurface_desc}{}\doxysubsection{Description}\label{page_iface_wl_subsurface_page_iface_wl_subsurface_desc}
+An additional interface to a wl\+\_\+surface object, which has been made a sub-\/surface. A sub-\/surface has one parent surface. A sub-\/surface\textquotesingle{}s size and position are not limited to that of the parent. Particularly, a sub-\/surface is not automatically clipped to its parent\textquotesingle{}s area.
+
+A sub-\/surface becomes mapped, when a non-\/\+NULL wl\+\_\+buffer is applied and the parent surface is mapped. The order of which one happens first is irrelevant. A sub-\/surface is hidden if the parent becomes hidden, or if a NULL wl\+\_\+buffer is applied. These rules apply recursively through the tree of surfaces.
+
+The behaviour of a wl\+\_\+surface.\+commit request on a sub-\/surface depends on the sub-\/surface\textquotesingle{}s mode. The possible modes are synchronized and desynchronized, see methods wl\+\_\+subsurface.\+set\+\_\+sync and wl\+\_\+subsurface.\+set\+\_\+desync. Synchronized mode caches the wl\+\_\+surface state to be applied when the parent\textquotesingle{}s state gets applied, and desynchronized mode applies the pending wl\+\_\+surface state directly. A sub-\/surface is initially in the synchronized mode.
+
+Sub-\/surfaces also have another kind of state, which is managed by wl\+\_\+subsurface requests, as opposed to wl\+\_\+surface requests. This state includes the sub-\/surface position relative to the parent surface (wl\+\_\+subsurface.\+set\+\_\+position), and the stacking order of the parent and its sub-\/surfaces (wl\+\_\+subsurface.\+place\+\_\+above and .place\+\_\+below). This state is applied when the parent surface\textquotesingle{}s wl\+\_\+surface state is applied, regardless of the sub-\/surface\textquotesingle{}s mode. As the exception, set\+\_\+sync and set\+\_\+desync are effective immediately.
+
+The main surface can be thought to be always in desynchronized mode, since it does not have a parent in the sub-\/surfaces sense.
+
+Even if a sub-\/surface is in desynchronized mode, it will behave as in synchronized mode, if its parent surface behaves as in synchronized mode. This rule is applied recursively throughout the tree of surfaces. This means, that one can set a sub-\/surface into synchronized mode, and then assume that all its child and grand-\/child sub-\/surfaces are synchronized, too, without explicitly setting them.
+
+Destroying a sub-\/surface takes effect immediately. If you need to synchronize the removal of a sub-\/surface to the parent surface update, unmap the sub-\/surface first by attaching a NULL wl\+\_\+buffer, update parent, and then destroy the sub-\/surface.
+
+If the parent wl\+\_\+surface object is destroyed, the sub-\/surface is unmapped. \hypertarget{page_iface_wl_subsurface_page_iface_wl_subsurface_api}{}\doxysubsection{API}\label{page_iface_wl_subsurface_page_iface_wl_subsurface_api}
+See \mbox{\hyperlink{group__iface__wl__subsurface}{The wl\+\_\+subsurface interface}}. 

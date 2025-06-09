@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zlib_2flibpng_20license_0',['zlib/libpng License',['../md_LICENSE.html',1,'']]]
+  ['embroidermodder_20user_20manual_0',['Embroidermodder User Manual',['../md_docs_man_README.html',1,'']]]
 ];

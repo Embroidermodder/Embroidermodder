@@ -1,0 +1,168 @@
+\hypertarget{group__iface__wl__pointer}{}\doxysection{The wl\+\_\+pointer interface}
+\label{group__iface__wl__pointer}\index{The wl\_pointer interface@{The wl\_pointer interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__pointer__listener}{wl\+\_\+pointer\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga9c327ea6653691e1a9d0cedd3d3721e3}\label{group__iface__wl__pointer_ga9c327ea6653691e1a9d0cedd3d3721e3}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+WHEEL\+\_\+\+TILT\+\_\+\+SINCE\+\_\+\+VERSION}~6
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga57d74416484ecd47b3ff5404bd7f76c7}\label{group__iface__wl__pointer_ga57d74416484ecd47b3ff5404bd7f76c7}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+ENTER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga5d1f6d5fcb96039634fe71174f827f01}\label{group__iface__wl__pointer_ga5d1f6d5fcb96039634fe71174f827f01}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+LEAVE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga04faf37b77e02460ccbf14ee4d8c3b97}\label{group__iface__wl__pointer_ga04faf37b77e02460ccbf14ee4d8c3b97}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+MOTION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga623fd7e61701797d61c7c1106d1897f5}\label{group__iface__wl__pointer_ga623fd7e61701797d61c7c1106d1897f5}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+BUTTON\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_gade32ec813c53abce09a707c1206ae8e5}\label{group__iface__wl__pointer_gade32ec813c53abce09a707c1206ae8e5}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga749d3995e6e9e5ac301617d4896e3a23}\label{group__iface__wl__pointer_ga749d3995e6e9e5ac301617d4896e3a23}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+FRAME\+\_\+\+SINCE\+\_\+\+VERSION}~5
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga5b0d160385cab7c0de2eb1d7df15ac43}\label{group__iface__wl__pointer_ga5b0d160385cab7c0de2eb1d7df15ac43}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+SINCE\+\_\+\+VERSION}~5
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga006f7f3e22ae735753ab7da86b923c3a}\label{group__iface__wl__pointer_ga006f7f3e22ae735753ab7da86b923c3a}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+STOP\+\_\+\+SINCE\+\_\+\+VERSION}~5
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga311eb47c94348f553b0027ef9246191f}\label{group__iface__wl__pointer_ga311eb47c94348f553b0027ef9246191f}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+DISCRETE\+\_\+\+SINCE\+\_\+\+VERSION}~5
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga74fc901c4711f750dca23f60ea67b41c}\label{group__iface__wl__pointer_ga74fc901c4711f750dca23f60ea67b41c}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+VALUE120\+\_\+\+SINCE\+\_\+\+VERSION}~8
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga35b46cea1d54e843f7686f4970e04f47}\label{group__iface__wl__pointer_ga35b46cea1d54e843f7686f4970e04f47}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+RELATIVE\+\_\+\+DIRECTION\+\_\+\+SINCE\+\_\+\+VERSION}~9
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_ga2e41bf40fa326bb800fe5331a604fe38}\label{group__iface__wl__pointer_ga2e41bf40fa326bb800fe5331a604fe38}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+SET\+\_\+\+CURSOR\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__pointer_gaa7c4900bd517b2a009cb03c5d565fd29}\label{group__iface__wl__pointer_gaa7c4900bd517b2a009cb03c5d565fd29}} 
+\#define {\bfseries WL\+\_\+\+POINTER\+\_\+\+RELEASE\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__pointer_gab1ee8cc5dabf930c4fe0a6afccf0354b}{wl\+\_\+pointer\+\_\+button\+\_\+state}} \{ \mbox{\hyperlink{group__iface__wl__pointer_ggab1ee8cc5dabf930c4fe0a6afccf0354ba4901696d5b07772cf560dbfd08ab8ec8}{WL\+\_\+\+POINTER\+\_\+\+BUTTON\+\_\+\+STATE\+\_\+\+RELEASED}} = 0
+, \mbox{\hyperlink{group__iface__wl__pointer_ggab1ee8cc5dabf930c4fe0a6afccf0354baf6822252043a2b5ce499b3773b7305ed}{WL\+\_\+\+POINTER\+\_\+\+BUTTON\+\_\+\+STATE\+\_\+\+PRESSED}} = 1
+ \}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__pointer_ga748d1512f9deacfc5343ef27c66b67d6}{wl\+\_\+pointer\+\_\+axis}} \{ \mbox{\hyperlink{group__iface__wl__pointer_gga748d1512f9deacfc5343ef27c66b67d6a14a3b186c34ebdf5c7be97871ef07929}{WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+VERTICAL\+\_\+\+SCROLL}} = 0
+, \mbox{\hyperlink{group__iface__wl__pointer_gga748d1512f9deacfc5343ef27c66b67d6abd7cc4249803e23dedf3171d1545904e}{WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+HORIZONTAL\+\_\+\+SCROLL}} = 1
+ \}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__pointer_ga61c62929856711491ac932ab9d21af8b}{wl\+\_\+pointer\+\_\+axis\+\_\+source}} \{ \mbox{\hyperlink{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba97dc24fcf7a8c3252986a1efd14a2833}{WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+WHEEL}} = 0
+, \mbox{\hyperlink{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8badffbd2e8f59c20987c47fd13087a291b}{WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+FINGER}} = 1
+, \mbox{\hyperlink{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba6aac04dd22bca6424d1c5e7148652542}{WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+CONTINUOUS}} = 2
+, \mbox{\hyperlink{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba49f95864c7c41c1cd4156eea1d25ddd8}{WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+WHEEL\+\_\+\+TILT}} = 3
+ \}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__pointer_ga5df5fa4082465ad9b7dbac2df064218c}{wl\+\_\+pointer\+\_\+axis\+\_\+relative\+\_\+direction}} \{ \mbox{\hyperlink{group__iface__wl__pointer_gga5df5fa4082465ad9b7dbac2df064218ca412ff3925971745cf108e18b1702c544}{WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+RELATIVE\+\_\+\+DIRECTION\+\_\+\+IDENTICAL}} = 0
+, \mbox{\hyperlink{group__iface__wl__pointer_gga5df5fa4082465ad9b7dbac2df064218caf632cde741147430b005e941171f7ff7}{WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+RELATIVE\+\_\+\+DIRECTION\+\_\+\+INVERTED}} = 1
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The wl\+\_\+pointer interface represents one or more input devices, such as mice, which control the pointer location and pointer\+\_\+focus of a seat.
+
+The wl\+\_\+pointer interface generates motion, enter and leave events for the surfaces that the pointer is located over, and button and axis events for button presses, button releases and scrolling. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{group__iface__wl__pointer_ga748d1512f9deacfc5343ef27c66b67d6}\label{group__iface__wl__pointer_ga748d1512f9deacfc5343ef27c66b67d6}} 
+\index{The wl\_pointer interface@{The wl\_pointer interface}!wl\_pointer\_axis@{wl\_pointer\_axis}}
+\index{wl\_pointer\_axis@{wl\_pointer\_axis}!The wl\_pointer interface@{The wl\_pointer interface}}
+\doxysubsubsection{\texorpdfstring{wl\_pointer\_axis}{wl\_pointer\_axis}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__pointer_ga748d1512f9deacfc5343ef27c66b67d6}{wl\+\_\+pointer\+\_\+axis}}}
+
+axis types
+
+Describes the axis types of scroll events. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_AXIS\_VERTICAL\_SCROLL@{WL\_POINTER\_AXIS\_VERTICAL\_SCROLL}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_AXIS\_VERTICAL\_SCROLL@{WL\_POINTER\_AXIS\_VERTICAL\_SCROLL}}}\mbox{\Hypertarget{group__iface__wl__pointer_gga748d1512f9deacfc5343ef27c66b67d6a14a3b186c34ebdf5c7be97871ef07929}\label{group__iface__wl__pointer_gga748d1512f9deacfc5343ef27c66b67d6a14a3b186c34ebdf5c7be97871ef07929}} 
+WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+VERTICAL\+\_\+\+SCROLL&vertical axis \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_AXIS\_HORIZONTAL\_SCROLL@{WL\_POINTER\_AXIS\_HORIZONTAL\_SCROLL}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_AXIS\_HORIZONTAL\_SCROLL@{WL\_POINTER\_AXIS\_HORIZONTAL\_SCROLL}}}\mbox{\Hypertarget{group__iface__wl__pointer_gga748d1512f9deacfc5343ef27c66b67d6abd7cc4249803e23dedf3171d1545904e}\label{group__iface__wl__pointer_gga748d1512f9deacfc5343ef27c66b67d6abd7cc4249803e23dedf3171d1545904e}} 
+WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+HORIZONTAL\+\_\+\+SCROLL&horizontal axis \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{group__iface__wl__pointer_ga5df5fa4082465ad9b7dbac2df064218c}\label{group__iface__wl__pointer_ga5df5fa4082465ad9b7dbac2df064218c}} 
+\index{The wl\_pointer interface@{The wl\_pointer interface}!wl\_pointer\_axis\_relative\_direction@{wl\_pointer\_axis\_relative\_direction}}
+\index{wl\_pointer\_axis\_relative\_direction@{wl\_pointer\_axis\_relative\_direction}!The wl\_pointer interface@{The wl\_pointer interface}}
+\doxysubsubsection{\texorpdfstring{wl\_pointer\_axis\_relative\_direction}{wl\_pointer\_axis\_relative\_direction}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__pointer_ga5df5fa4082465ad9b7dbac2df064218c}{wl\+\_\+pointer\+\_\+axis\+\_\+relative\+\_\+direction}}}
+
+axis relative direction
+
+This specifies the direction of the physical motion that caused a wl\+\_\+pointer.\+axis event, relative to the wl\+\_\+pointer.\+axis direction. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_AXIS\_RELATIVE\_DIRECTION\_IDENTICAL@{WL\_POINTER\_AXIS\_RELATIVE\_DIRECTION\_IDENTICAL}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_AXIS\_RELATIVE\_DIRECTION\_IDENTICAL@{WL\_POINTER\_AXIS\_RELATIVE\_DIRECTION\_IDENTICAL}}}\mbox{\Hypertarget{group__iface__wl__pointer_gga5df5fa4082465ad9b7dbac2df064218ca412ff3925971745cf108e18b1702c544}\label{group__iface__wl__pointer_gga5df5fa4082465ad9b7dbac2df064218ca412ff3925971745cf108e18b1702c544}} 
+WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+RELATIVE\+\_\+\+DIRECTION\+\_\+\+IDENTICAL&physical motion matches axis direction \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_AXIS\_RELATIVE\_DIRECTION\_INVERTED@{WL\_POINTER\_AXIS\_RELATIVE\_DIRECTION\_INVERTED}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_AXIS\_RELATIVE\_DIRECTION\_INVERTED@{WL\_POINTER\_AXIS\_RELATIVE\_DIRECTION\_INVERTED}}}\mbox{\Hypertarget{group__iface__wl__pointer_gga5df5fa4082465ad9b7dbac2df064218caf632cde741147430b005e941171f7ff7}\label{group__iface__wl__pointer_gga5df5fa4082465ad9b7dbac2df064218caf632cde741147430b005e941171f7ff7}} 
+WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+RELATIVE\+\_\+\+DIRECTION\+\_\+\+INVERTED&physical motion is the inverse of the axis direction \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{group__iface__wl__pointer_ga61c62929856711491ac932ab9d21af8b}\label{group__iface__wl__pointer_ga61c62929856711491ac932ab9d21af8b}} 
+\index{The wl\_pointer interface@{The wl\_pointer interface}!wl\_pointer\_axis\_source@{wl\_pointer\_axis\_source}}
+\index{wl\_pointer\_axis\_source@{wl\_pointer\_axis\_source}!The wl\_pointer interface@{The wl\_pointer interface}}
+\doxysubsubsection{\texorpdfstring{wl\_pointer\_axis\_source}{wl\_pointer\_axis\_source}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__pointer_ga61c62929856711491ac932ab9d21af8b}{wl\+\_\+pointer\+\_\+axis\+\_\+source}}}
+
+axis source types
+
+Describes the source types for axis events. This indicates to the client how an axis event was physically generated; a client may adjust the user interface accordingly. For example, scroll events from a \char`\"{}finger\char`\"{} source may be in a smooth coordinate space with kinetic scrolling whereas a \char`\"{}wheel\char`\"{} source may be in discrete steps of a number of lines.
+
+The \char`\"{}continuous\char`\"{} axis source is a device generating events in a continuous coordinate space, but using something other than a finger. One example for this source is button-\/based scrolling where the vertical motion of a device is converted to scroll events while a button is held down.
+
+The \char`\"{}wheel tilt\char`\"{} axis source indicates that the actual device is a wheel but the scroll event is not caused by a rotation but a (usually sideways) tilt of the wheel. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_AXIS\_SOURCE\_WHEEL@{WL\_POINTER\_AXIS\_SOURCE\_WHEEL}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_AXIS\_SOURCE\_WHEEL@{WL\_POINTER\_AXIS\_SOURCE\_WHEEL}}}\mbox{\Hypertarget{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba97dc24fcf7a8c3252986a1efd14a2833}\label{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba97dc24fcf7a8c3252986a1efd14a2833}} 
+WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+WHEEL&a physical wheel rotation \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_AXIS\_SOURCE\_FINGER@{WL\_POINTER\_AXIS\_SOURCE\_FINGER}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_AXIS\_SOURCE\_FINGER@{WL\_POINTER\_AXIS\_SOURCE\_FINGER}}}\mbox{\Hypertarget{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8badffbd2e8f59c20987c47fd13087a291b}\label{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8badffbd2e8f59c20987c47fd13087a291b}} 
+WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+FINGER&finger on a touch surface \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_AXIS\_SOURCE\_CONTINUOUS@{WL\_POINTER\_AXIS\_SOURCE\_CONTINUOUS}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_AXIS\_SOURCE\_CONTINUOUS@{WL\_POINTER\_AXIS\_SOURCE\_CONTINUOUS}}}\mbox{\Hypertarget{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba6aac04dd22bca6424d1c5e7148652542}\label{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba6aac04dd22bca6424d1c5e7148652542}} 
+WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+CONTINUOUS&continuous coordinate space \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_AXIS\_SOURCE\_WHEEL\_TILT@{WL\_POINTER\_AXIS\_SOURCE\_WHEEL\_TILT}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_AXIS\_SOURCE\_WHEEL\_TILT@{WL\_POINTER\_AXIS\_SOURCE\_WHEEL\_TILT}}}\mbox{\Hypertarget{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba49f95864c7c41c1cd4156eea1d25ddd8}\label{group__iface__wl__pointer_gga61c62929856711491ac932ab9d21af8ba49f95864c7c41c1cd4156eea1d25ddd8}} 
+WL\+\_\+\+POINTER\+\_\+\+AXIS\+\_\+\+SOURCE\+\_\+\+WHEEL\+\_\+\+TILT&a physical wheel tilt \begin{DoxySince}{Since}
+6 
+\end{DoxySince}
+\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{group__iface__wl__pointer_gab1ee8cc5dabf930c4fe0a6afccf0354b}\label{group__iface__wl__pointer_gab1ee8cc5dabf930c4fe0a6afccf0354b}} 
+\index{The wl\_pointer interface@{The wl\_pointer interface}!wl\_pointer\_button\_state@{wl\_pointer\_button\_state}}
+\index{wl\_pointer\_button\_state@{wl\_pointer\_button\_state}!The wl\_pointer interface@{The wl\_pointer interface}}
+\doxysubsubsection{\texorpdfstring{wl\_pointer\_button\_state}{wl\_pointer\_button\_state}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__pointer_gab1ee8cc5dabf930c4fe0a6afccf0354b}{wl\+\_\+pointer\+\_\+button\+\_\+state}}}
+
+physical button state
+
+Describes the physical state of a button that produced the button event. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_BUTTON\_STATE\_RELEASED@{WL\_POINTER\_BUTTON\_STATE\_RELEASED}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_BUTTON\_STATE\_RELEASED@{WL\_POINTER\_BUTTON\_STATE\_RELEASED}}}\mbox{\Hypertarget{group__iface__wl__pointer_ggab1ee8cc5dabf930c4fe0a6afccf0354ba4901696d5b07772cf560dbfd08ab8ec8}\label{group__iface__wl__pointer_ggab1ee8cc5dabf930c4fe0a6afccf0354ba4901696d5b07772cf560dbfd08ab8ec8}} 
+WL\+\_\+\+POINTER\+\_\+\+BUTTON\+\_\+\+STATE\+\_\+\+RELEASED&the button is not pressed \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_POINTER\_BUTTON\_STATE\_PRESSED@{WL\_POINTER\_BUTTON\_STATE\_PRESSED}!The wl\_pointer interface@{The wl\_pointer interface}}\index{The wl\_pointer interface@{The wl\_pointer interface}!WL\_POINTER\_BUTTON\_STATE\_PRESSED@{WL\_POINTER\_BUTTON\_STATE\_PRESSED}}}\mbox{\Hypertarget{group__iface__wl__pointer_ggab1ee8cc5dabf930c4fe0a6afccf0354baf6822252043a2b5ce499b3773b7305ed}\label{group__iface__wl__pointer_ggab1ee8cc5dabf930c4fe0a6afccf0354baf6822252043a2b5ce499b3773b7305ed}} 
+WL\+\_\+\+POINTER\+\_\+\+BUTTON\+\_\+\+STATE\+\_\+\+PRESSED&the button is pressed \\
+\hline
+
+\end{DoxyEnumFields}

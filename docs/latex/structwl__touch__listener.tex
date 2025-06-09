@@ -1,0 +1,158 @@
+\hypertarget{structwl__touch__listener}{}\doxysection{wl\+\_\+touch\+\_\+listener Struct Reference}
+\label{structwl__touch__listener}\index{wl\_touch\_listener@{wl\_touch\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__touch__listener_a45579741458f769bbbfff1d65fc6c34b}{down}} )(void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, uint32\+\_\+t serial, uint32\+\_\+t time, struct wl\+\_\+surface $\ast$surface, int32\+\_\+t id, wl\+\_\+fixed\+\_\+t x, wl\+\_\+fixed\+\_\+t y)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__touch__listener_a2f7c19c487c26b8b411af6d566383803}{up}} )(void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, uint32\+\_\+t serial, uint32\+\_\+t time, int32\+\_\+t id)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__touch__listener_ae402bac6571663e50666a3728fc9dca1}{motion}} )(void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, uint32\+\_\+t time, int32\+\_\+t id, wl\+\_\+fixed\+\_\+t x, wl\+\_\+fixed\+\_\+t y)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__touch__listener_a1565842ddd48e9294bc82601fe16e798}{frame}} )(void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__touch__listener_a455d5080d9b38588b701731c56ae3143}{cancel}} )(void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__touch__listener_afd22c52529d09768574a9935d27319eb}{shape}} )(void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, int32\+\_\+t id, wl\+\_\+fixed\+\_\+t major, wl\+\_\+fixed\+\_\+t minor)
+\item 
+void($\ast$ \mbox{\hyperlink{structwl__touch__listener_aaa0b88744da58f8da9295510ea7576cb}{orientation}} )(void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, int32\+\_\+t id, wl\+\_\+fixed\+\_\+t orientation)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structwl__touch__listener_a455d5080d9b38588b701731c56ae3143}\label{structwl__touch__listener_a455d5080d9b38588b701731c56ae3143}} 
+\index{wl\_touch\_listener@{wl\_touch\_listener}!cancel@{cancel}}
+\index{cancel@{cancel}!wl\_touch\_listener@{wl\_touch\_listener}}
+\doxysubsubsection{\texorpdfstring{cancel}{cancel}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+touch\+\_\+listener\+::cancel) (void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch)}
+
+touch session cancelled
+
+Sent if the compositor decides the touch stream is a global gesture. No further events are sent to the clients from that particular gesture. Touch cancellation applies to all touch points currently active on this client\textquotesingle{}s surface. The client is responsible for finalizing the touch points, future touch points on this surface may reuse the touch point ID. \mbox{\Hypertarget{structwl__touch__listener_a45579741458f769bbbfff1d65fc6c34b}\label{structwl__touch__listener_a45579741458f769bbbfff1d65fc6c34b}} 
+\index{wl\_touch\_listener@{wl\_touch\_listener}!down@{down}}
+\index{down@{down}!wl\_touch\_listener@{wl\_touch\_listener}}
+\doxysubsubsection{\texorpdfstring{down}{down}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+touch\+\_\+listener\+::down) (void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, uint32\+\_\+t serial, uint32\+\_\+t time, struct wl\+\_\+surface $\ast$surface, int32\+\_\+t id, wl\+\_\+fixed\+\_\+t x, wl\+\_\+fixed\+\_\+t y)}
+
+touch down event and beginning of a touch sequence
+
+A new touch point has appeared on the surface. This touch point is assigned a unique ID. Future events from this touch point reference this ID. The ID ceases to be valid after a touch up event and may be reused in the future. 
+\begin{DoxyParams}{Parameters}
+{\em serial} & serial number of the touch down event \\
+\hline
+{\em time} & timestamp with millisecond granularity \\
+\hline
+{\em surface} & surface touched \\
+\hline
+{\em id} & the unique ID of this touch point \\
+\hline
+{\em x} & surface-\/local x coordinate \\
+\hline
+{\em y} & surface-\/local y coordinate \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__touch__listener_a1565842ddd48e9294bc82601fe16e798}\label{structwl__touch__listener_a1565842ddd48e9294bc82601fe16e798}} 
+\index{wl\_touch\_listener@{wl\_touch\_listener}!frame@{frame}}
+\index{frame@{frame}!wl\_touch\_listener@{wl\_touch\_listener}}
+\doxysubsubsection{\texorpdfstring{frame}{frame}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+touch\+\_\+listener\+::frame) (void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch)}
+
+end of touch frame event
+
+Indicates the end of a set of events that logically belong together. A client is expected to accumulate the data in all events within the frame before proceeding.
+
+A wl\+\_\+touch.\+frame terminates at least one event but otherwise no guarantee is provided about the set of events within a frame. A client must assume that any state not updated in a frame is unchanged from the previously known state. \mbox{\Hypertarget{structwl__touch__listener_ae402bac6571663e50666a3728fc9dca1}\label{structwl__touch__listener_ae402bac6571663e50666a3728fc9dca1}} 
+\index{wl\_touch\_listener@{wl\_touch\_listener}!motion@{motion}}
+\index{motion@{motion}!wl\_touch\_listener@{wl\_touch\_listener}}
+\doxysubsubsection{\texorpdfstring{motion}{motion}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+touch\+\_\+listener\+::motion) (void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, uint32\+\_\+t time, int32\+\_\+t id, wl\+\_\+fixed\+\_\+t x, wl\+\_\+fixed\+\_\+t y)}
+
+update of touch point coordinates
+
+A touch point has changed coordinates. 
+\begin{DoxyParams}{Parameters}
+{\em time} & timestamp with millisecond granularity \\
+\hline
+{\em id} & the unique ID of this touch point \\
+\hline
+{\em x} & surface-\/local x coordinate \\
+\hline
+{\em y} & surface-\/local y coordinate \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structwl__touch__listener_aaa0b88744da58f8da9295510ea7576cb}\label{structwl__touch__listener_aaa0b88744da58f8da9295510ea7576cb}} 
+\index{wl\_touch\_listener@{wl\_touch\_listener}!orientation@{orientation}}
+\index{orientation@{orientation}!wl\_touch\_listener@{wl\_touch\_listener}}
+\doxysubsubsection{\texorpdfstring{orientation}{orientation}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+touch\+\_\+listener\+::orientation) (void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, int32\+\_\+t id, wl\+\_\+fixed\+\_\+t orientation)}
+
+update orientation of touch point
+
+Sent when a touchpoint has changed its orientation.
+
+This event does not occur on its own. It is sent before a wl\+\_\+touch.\+frame event and carries the new shape information for any previously reported, or new touch points of that frame.
+
+Other events describing the touch point such as wl\+\_\+touch.\+down, wl\+\_\+touch.\+motion or wl\+\_\+touch.\+shape may be sent within the same wl\+\_\+touch.\+frame. A client should treat these events as a single logical touch point update. The order of wl\+\_\+touch.\+shape, wl\+\_\+touch.\+orientation and wl\+\_\+touch.\+motion is not guaranteed. A wl\+\_\+touch.\+down event is guaranteed to occur before the first wl\+\_\+touch.\+orientation event for this touch ID but both events may occur within the same wl\+\_\+touch.\+frame.
+
+The orientation describes the clockwise angle of a touchpoint\textquotesingle{}s major axis to the positive surface y-\/axis and is normalized to the -\/180 to +180 degree range. The granularity of orientation depends on the touch device, some devices only support binary rotation values between 0 and 90 degrees.
+
+This event is only sent by the compositor if the touch device supports orientation reports. 
+\begin{DoxyParams}{Parameters}
+{\em id} & the unique ID of this touch point \\
+\hline
+{\em orientation} & angle between major axis and positive surface y-\/axis in degrees \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+6 
+\end{DoxySince}
+\mbox{\Hypertarget{structwl__touch__listener_afd22c52529d09768574a9935d27319eb}\label{structwl__touch__listener_afd22c52529d09768574a9935d27319eb}} 
+\index{wl\_touch\_listener@{wl\_touch\_listener}!shape@{shape}}
+\index{shape@{shape}!wl\_touch\_listener@{wl\_touch\_listener}}
+\doxysubsubsection{\texorpdfstring{shape}{shape}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+touch\+\_\+listener\+::shape) (void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, int32\+\_\+t id, wl\+\_\+fixed\+\_\+t major, wl\+\_\+fixed\+\_\+t minor)}
+
+update shape of touch point
+
+Sent when a touchpoint has changed its shape.
+
+This event does not occur on its own. It is sent before a wl\+\_\+touch.\+frame event and carries the new shape information for any previously reported, or new touch points of that frame.
+
+Other events describing the touch point such as wl\+\_\+touch.\+down, wl\+\_\+touch.\+motion or wl\+\_\+touch.\+orientation may be sent within the same wl\+\_\+touch.\+frame. A client should treat these events as a single logical touch point update. The order of wl\+\_\+touch.\+shape, wl\+\_\+touch.\+orientation and wl\+\_\+touch.\+motion is not guaranteed. A wl\+\_\+touch.\+down event is guaranteed to occur before the first wl\+\_\+touch.\+shape event for this touch ID but both events may occur within the same wl\+\_\+touch.\+frame.
+
+A touchpoint shape is approximated by an ellipse through the major and minor axis length. The major axis length describes the longer diameter of the ellipse, while the minor axis length describes the shorter diameter. Major and minor are orthogonal and both are specified in surface-\/local coordinates. The center of the ellipse is always at the touchpoint location as reported by wl\+\_\+touch.\+down or wl\+\_\+touch.\+move.
+
+This event is only sent by the compositor if the touch device supports shape reports. The client has to make reasonable assumptions about the shape if it did not receive this event. 
+\begin{DoxyParams}{Parameters}
+{\em id} & the unique ID of this touch point \\
+\hline
+{\em major} & length of the major axis in surface-\/local coordinates \\
+\hline
+{\em minor} & length of the minor axis in surface-\/local coordinates \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+6 
+\end{DoxySince}
+\mbox{\Hypertarget{structwl__touch__listener_a2f7c19c487c26b8b411af6d566383803}\label{structwl__touch__listener_a2f7c19c487c26b8b411af6d566383803}} 
+\index{wl\_touch\_listener@{wl\_touch\_listener}!up@{up}}
+\index{up@{up}!wl\_touch\_listener@{wl\_touch\_listener}}
+\doxysubsubsection{\texorpdfstring{up}{up}}
+{\footnotesize\ttfamily void($\ast$ wl\+\_\+touch\+\_\+listener\+::up) (void $\ast$data, struct wl\+\_\+touch $\ast$wl\+\_\+touch, uint32\+\_\+t serial, uint32\+\_\+t time, int32\+\_\+t id)}
+
+end of a touch event sequence
+
+The touch point has disappeared. No further events will be sent for this touch point and the touch point\textquotesingle{}s ID is released and may be reused in a future touch down event. 
+\begin{DoxyParams}{Parameters}
+{\em serial} & serial number of the touch up event \\
+\hline
+{\em time} & timestamp with millisecond granularity \\
+\hline
+{\em id} & the unique ID of this touch point \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/wayland-\/client-\/protocol.\+h\end{DoxyCompactItemize}

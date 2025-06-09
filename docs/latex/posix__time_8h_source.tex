@@ -1,0 +1,47 @@
+\hypertarget{posix__time_8h_source}{}\doxysection{posix\+\_\+time.\+h}
+\label{posix__time_8h_source}\index{extern/glfw/src/posix\_time.h@{extern/glfw/src/posix\_time.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{//========================================================================}}
+\DoxyCodeLine{2 \textcolor{comment}{// GLFW 3.5 POSIX -\/ www.glfw.org}}
+\DoxyCodeLine{3 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{4 \textcolor{comment}{// Copyright (c) 2002-\/2006 Marcus Geelnard}}
+\DoxyCodeLine{5 \textcolor{comment}{// Copyright (c) 2006-\/2017 Camilla Löwy <elmindreda@glfw.org>}}
+\DoxyCodeLine{6 \textcolor{comment}{//}}
+\DoxyCodeLine{7 \textcolor{comment}{// This software is provided 'as-\/is', without any express or implied}}
+\DoxyCodeLine{8 \textcolor{comment}{// warranty. In no event will the authors be held liable for any damages}}
+\DoxyCodeLine{9 \textcolor{comment}{// arising from the use of this software.}}
+\DoxyCodeLine{10 \textcolor{comment}{//}}
+\DoxyCodeLine{11 \textcolor{comment}{// Permission is granted to anyone to use this software for any purpose,}}
+\DoxyCodeLine{12 \textcolor{comment}{// including commercial applications, and to alter it and redistribute it}}
+\DoxyCodeLine{13 \textcolor{comment}{// freely, subject to the following restrictions:}}
+\DoxyCodeLine{14 \textcolor{comment}{//}}
+\DoxyCodeLine{15 \textcolor{comment}{// 1. The origin of this software must not be misrepresented; you must not}}
+\DoxyCodeLine{16 \textcolor{comment}{//    claim that you wrote the original software. If you use this software}}
+\DoxyCodeLine{17 \textcolor{comment}{//    in a product, an acknowledgment in the product documentation would}}
+\DoxyCodeLine{18 \textcolor{comment}{//    be appreciated but is not required.}}
+\DoxyCodeLine{19 \textcolor{comment}{//}}
+\DoxyCodeLine{20 \textcolor{comment}{// 2. Altered source versions must be plainly marked as such, and must not}}
+\DoxyCodeLine{21 \textcolor{comment}{//    be misrepresented as being the original software.}}
+\DoxyCodeLine{22 \textcolor{comment}{//}}
+\DoxyCodeLine{23 \textcolor{comment}{// 3. This notice may not be removed or altered from any source}}
+\DoxyCodeLine{24 \textcolor{comment}{//    distribution.}}
+\DoxyCodeLine{25 \textcolor{comment}{//}}
+\DoxyCodeLine{26 \textcolor{comment}{//========================================================================}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#define GLFW\_POSIX\_LIBRARY\_TIMER\_STATE \_GLFWtimerPOSIX posix;}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#include <stdint.h>}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#include <time.h>}}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \textcolor{comment}{// POSIX-\/specific global timer data}}
+\DoxyCodeLine{35 \textcolor{comment}{//}}
+\DoxyCodeLine{36 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{struct__GLFWtimerPOSIX}{\_GLFWtimerPOSIX}}}
+\DoxyCodeLine{37 \{}
+\DoxyCodeLine{38     clockid\_t   clock;}
+\DoxyCodeLine{39     uint64\_t    frequency;}
+\DoxyCodeLine{40 \} \mbox{\hyperlink{struct__GLFWtimerPOSIX}{\_GLFWtimerPOSIX}};}
+\DoxyCodeLine{41 }
+
+\end{DoxyCode}

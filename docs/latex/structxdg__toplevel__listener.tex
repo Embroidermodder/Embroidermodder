@@ -1,0 +1,88 @@
+\hypertarget{structxdg__toplevel__listener}{}\doxysection{xdg\+\_\+toplevel\+\_\+listener Struct Reference}
+\label{structxdg__toplevel__listener}\index{xdg\_toplevel\_listener@{xdg\_toplevel\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structxdg__toplevel__listener_a8884ee61ecc055f927c54a5f068edaed}{configure}} )(void $\ast$data, struct xdg\+\_\+toplevel $\ast$xdg\+\_\+toplevel, int32\+\_\+t width, int32\+\_\+t height, struct wl\+\_\+array $\ast$states)
+\item 
+void($\ast$ \mbox{\hyperlink{structxdg__toplevel__listener_ad43ce681ea9785dd3f88f794037d1560}{close}} )(void $\ast$data, struct xdg\+\_\+toplevel $\ast$xdg\+\_\+toplevel)
+\item 
+void($\ast$ \mbox{\hyperlink{structxdg__toplevel__listener_a74d28321edf15393ea63a47ea5d3e5ec}{configure\+\_\+bounds}} )(void $\ast$data, struct xdg\+\_\+toplevel $\ast$xdg\+\_\+toplevel, int32\+\_\+t width, int32\+\_\+t height)
+\item 
+void($\ast$ \mbox{\hyperlink{structxdg__toplevel__listener_a0a5d85c3d4dad3c5ec5ffb2d45ad5183}{wm\+\_\+capabilities}} )(void $\ast$data, struct xdg\+\_\+toplevel $\ast$xdg\+\_\+toplevel, struct wl\+\_\+array $\ast$capabilities)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structxdg__toplevel__listener_ad43ce681ea9785dd3f88f794037d1560}\label{structxdg__toplevel__listener_ad43ce681ea9785dd3f88f794037d1560}} 
+\index{xdg\_toplevel\_listener@{xdg\_toplevel\_listener}!close@{close}}
+\index{close@{close}!xdg\_toplevel\_listener@{xdg\_toplevel\_listener}}
+\doxysubsubsection{\texorpdfstring{close}{close}}
+{\footnotesize\ttfamily void($\ast$ xdg\+\_\+toplevel\+\_\+listener\+::close) (void $\ast$data, struct xdg\+\_\+toplevel $\ast$xdg\+\_\+toplevel)}
+
+surface wants to be closed
+
+The close event is sent by the compositor when the user wants the surface to be closed. This should be equivalent to the user clicking the close button in client-\/side decorations, if your application has any.
+
+This is only a request that the user intends to close the window. The client may choose to ignore this request, or show a dialog to ask the user to save their data, etc. \mbox{\Hypertarget{structxdg__toplevel__listener_a8884ee61ecc055f927c54a5f068edaed}\label{structxdg__toplevel__listener_a8884ee61ecc055f927c54a5f068edaed}} 
+\index{xdg\_toplevel\_listener@{xdg\_toplevel\_listener}!configure@{configure}}
+\index{configure@{configure}!xdg\_toplevel\_listener@{xdg\_toplevel\_listener}}
+\doxysubsubsection{\texorpdfstring{configure}{configure}}
+{\footnotesize\ttfamily void($\ast$ xdg\+\_\+toplevel\+\_\+listener\+::configure) (void $\ast$data, struct xdg\+\_\+toplevel $\ast$xdg\+\_\+toplevel, int32\+\_\+t width, int32\+\_\+t height, struct wl\+\_\+array $\ast$states)}
+
+suggest a surface change
+
+This configure event asks the client to resize its toplevel surface or to change its state. The configured state should not be applied immediately. See xdg\+\_\+surface.\+configure for details.
+
+The width and height arguments specify a hint to the window about how its surface should be resized in window geometry coordinates. See set\+\_\+window\+\_\+geometry.
+
+If the width or height arguments are zero, it means the client should decide its own window dimension. This may happen when the compositor needs to configure the state of the surface but doesn\textquotesingle{}t have any information about any previous or expected dimension.
+
+The states listed in the event specify how the width/height arguments should be interpreted, and possibly how it should be drawn.
+
+Clients must send an ack\+\_\+configure in response to this event. See xdg\+\_\+surface.\+configure and xdg\+\_\+surface.\+ack\+\_\+configure for details. \mbox{\Hypertarget{structxdg__toplevel__listener_a74d28321edf15393ea63a47ea5d3e5ec}\label{structxdg__toplevel__listener_a74d28321edf15393ea63a47ea5d3e5ec}} 
+\index{xdg\_toplevel\_listener@{xdg\_toplevel\_listener}!configure\_bounds@{configure\_bounds}}
+\index{configure\_bounds@{configure\_bounds}!xdg\_toplevel\_listener@{xdg\_toplevel\_listener}}
+\doxysubsubsection{\texorpdfstring{configure\_bounds}{configure\_bounds}}
+{\footnotesize\ttfamily void($\ast$ xdg\+\_\+toplevel\+\_\+listener\+::configure\+\_\+bounds) (void $\ast$data, struct xdg\+\_\+toplevel $\ast$xdg\+\_\+toplevel, int32\+\_\+t width, int32\+\_\+t height)}
+
+recommended window geometry bounds
+
+The configure\+\_\+bounds event may be sent prior to a xdg\+\_\+toplevel.\+configure event to communicate the bounds a window geometry size is recommended to constrain to.
+
+The passed width and height are in surface coordinate space. If width and height are 0, it means bounds is unknown and equivalent to as if no configure\+\_\+bounds event was ever sent for this surface.
+
+The bounds can for example correspond to the size of a monitor excluding any panels or other shell components, so that a surface isn\textquotesingle{}t created in a way that it cannot fit.
+
+The bounds may change at any point, and in such a case, a new xdg\+\_\+toplevel.\+configure\+\_\+bounds will be sent, followed by xdg\+\_\+toplevel.\+configure and xdg\+\_\+surface.\+configure. \begin{DoxySince}{Since}
+4 
+\end{DoxySince}
+\mbox{\Hypertarget{structxdg__toplevel__listener_a0a5d85c3d4dad3c5ec5ffb2d45ad5183}\label{structxdg__toplevel__listener_a0a5d85c3d4dad3c5ec5ffb2d45ad5183}} 
+\index{xdg\_toplevel\_listener@{xdg\_toplevel\_listener}!wm\_capabilities@{wm\_capabilities}}
+\index{wm\_capabilities@{wm\_capabilities}!xdg\_toplevel\_listener@{xdg\_toplevel\_listener}}
+\doxysubsubsection{\texorpdfstring{wm\_capabilities}{wm\_capabilities}}
+{\footnotesize\ttfamily void($\ast$ xdg\+\_\+toplevel\+\_\+listener\+::wm\+\_\+capabilities) (void $\ast$data, struct xdg\+\_\+toplevel $\ast$xdg\+\_\+toplevel, struct wl\+\_\+array $\ast$capabilities)}
+
+compositor capabilities
+
+This event advertises the capabilities supported by the compositor. If a capability isn\textquotesingle{}t supported, clients should hide or disable the UI elements that expose this functionality. For instance, if the compositor doesn\textquotesingle{}t advertise support for minimized toplevels, a button triggering the set\+\_\+minimized request should not be displayed.
+
+The compositor will ignore requests it doesn\textquotesingle{}t support. For instance, a compositor which doesn\textquotesingle{}t advertise support for minimized will ignore set\+\_\+minimized requests.
+
+Compositors must send this event once before the first xdg\+\_\+surface.\+configure event. When the capabilities change, compositors must send this event again and then send an xdg\+\_\+surface.\+configure event.
+
+The configured state should not be applied immediately. See xdg\+\_\+surface.\+configure for details.
+
+The capabilities are sent as an array of 32-\/bit unsigned integers in native endianness. 
+\begin{DoxyParams}{Parameters}
+{\em capabilities} & array of 32-\/bit capabilities \\
+\hline
+\end{DoxyParams}
+\begin{DoxySince}{Since}
+5 
+\end{DoxySince}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/xdg-\/shell-\/client-\/protocol.\+h\end{DoxyCompactItemize}

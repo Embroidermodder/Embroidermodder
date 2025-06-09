@@ -1,0 +1,48 @@
+Protocol for requesting fractional surface scales\hypertarget{page_fractional_scale_v1_page_desc_fractional_scale_v1}{}\doxysection{Description}\label{page_fractional_scale_v1_page_desc_fractional_scale_v1}
+This protocol allows a compositor to suggest for surfaces to render at fractional scales.
+
+A client can submit scaled content by utilizing wp\+\_\+viewport. This is done by creating a wp\+\_\+viewport object for the surface and setting the destination rectangle to the surface size before the scale factor is applied.
+
+The buffer size is calculated by multiplying the surface size by the intended scale.
+
+The wl\+\_\+surface buffer scale should remain set to 1.
+
+If a surface has a surface-\/local size of 100 px by 50 px and wishes to submit buffers with a scale of 1.\+5, then a buffer of 150px by 75 px should be used and the wp\+\_\+viewport destination rectangle should be 100 px by 50 px.
+
+For toplevel surfaces, the size is rounded halfway away from zero. The rounding algorithm for subsurface position and size is not defined.\hypertarget{page_fractional_scale_v1_page_ifaces_fractional_scale_v1}{}\doxysection{Interfaces}\label{page_fractional_scale_v1_page_ifaces_fractional_scale_v1}
+
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{page_iface_wp_fractional_scale_manager_v1}{wp\+\_\+fractional\+\_\+scale\+\_\+manager\+\_\+v1}} -\/ fractional surface scale information
+\item \mbox{\hyperlink{page_iface_wp_fractional_scale_v1}{wp\+\_\+fractional\+\_\+scale\+\_\+v1}} -\/ fractional scale interface to a wl\+\_\+surface 
+\end{DoxyItemize}\hypertarget{page_fractional_scale_v1_page_copyright_fractional_scale_v1}{}\doxysection{Copyright}\label{page_fractional_scale_v1_page_copyright_fractional_scale_v1}
+
+\begin{DoxyPre}
+
+Copyright © 2022 Kenny Levinsen
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "{}Software"{}),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "{}AS IS"{}, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+\end{DoxyPre}
+ \hypertarget{page_iface_wp_fractional_scale_manager_v1}{}\doxysection{wp\+\_\+fractional\+\_\+scale\+\_\+manager\+\_\+v1}\label{page_iface_wp_fractional_scale_manager_v1}
+\hypertarget{page_iface_wp_fractional_scale_manager_v1_page_iface_wp_fractional_scale_manager_v1_desc}{}\doxysubsection{Description}\label{page_iface_wp_fractional_scale_manager_v1_page_iface_wp_fractional_scale_manager_v1_desc}
+A global interface for requesting surfaces to use fractional scales. \hypertarget{page_iface_wp_fractional_scale_manager_v1_page_iface_wp_fractional_scale_manager_v1_api}{}\doxysubsection{API}\label{page_iface_wp_fractional_scale_manager_v1_page_iface_wp_fractional_scale_manager_v1_api}
+See \mbox{\hyperlink{group__iface__wp__fractional__scale__manager__v1}{The wp\+\_\+fractional\+\_\+scale\+\_\+manager\+\_\+v1 interface}}. \hypertarget{page_iface_wp_fractional_scale_v1}{}\doxysection{wp\+\_\+fractional\+\_\+scale\+\_\+v1}\label{page_iface_wp_fractional_scale_v1}
+\hypertarget{page_iface_wp_fractional_scale_v1_page_iface_wp_fractional_scale_v1_desc}{}\doxysubsection{Description}\label{page_iface_wp_fractional_scale_v1_page_iface_wp_fractional_scale_v1_desc}
+An additional interface to a wl\+\_\+surface object which allows the compositor to inform the client of the preferred scale. \hypertarget{page_iface_wp_fractional_scale_v1_page_iface_wp_fractional_scale_v1_api}{}\doxysubsection{API}\label{page_iface_wp_fractional_scale_v1_page_iface_wp_fractional_scale_v1_api}
+See \mbox{\hyperlink{group__iface__wp__fractional__scale__v1}{The wp\+\_\+fractional\+\_\+scale\+\_\+v1 interface}}. 

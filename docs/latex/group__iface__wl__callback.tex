@@ -1,0 +1,19 @@
+\hypertarget{group__iface__wl__callback}{}\doxysection{The wl\+\_\+callback interface}
+\label{group__iface__wl__callback}\index{The wl\_callback interface@{The wl\_callback interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__callback__listener}{wl\+\_\+callback\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__callback_gaaa7468654e38df9f357d9649b2b39c16}\label{group__iface__wl__callback_gaaa7468654e38df9f357d9649b2b39c16}} 
+\#define {\bfseries WL\+\_\+\+CALLBACK\+\_\+\+DONE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clients can handle the \textquotesingle{}done\textquotesingle{} event to get notified when the related request is done.
+
+Note, because wl\+\_\+callback objects are created from multiple independent factory interfaces, the wl\+\_\+callback interface is frozen at version 1. 

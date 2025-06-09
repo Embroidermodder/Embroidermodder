@@ -1,4 +1,7 @@
 /*
+ * \file core.h
+ * \brief The C compatible parts of the header. Generally the non-Qt parts.
+ *
  * Embroidermodder 2.
  *
  * Copyright 2011-2025 The Embroidermodder Team
@@ -1023,23 +1026,26 @@ typedef struct Translation_ {
     int32_t status;
 } Translation;
 
-/* Generic widget pointer for a widget map. */
+/*! Generic widget pointer for a widget map. */
 typedef struct Widget_ {
-    EmbString key;
-    void *widget;
+    EmbString key; /*!< Used for identifying the element */
+    void *widget; /*!< A void pointer to represent a structure not in the C part of the source code. */
 } Widget;
 
+/*! Generic widget data. */
 typedef struct WidgetData_ {
-    char *key;
-    char *label;
-    int id;
-    int type;
+    char *key;   /** The key used by Qt to deal with signals and slots. */
+    char *label; /** The label presented to the user in overlays. */
+    int id;      /** Used for identifying the element, if less than 0 then this is the terminator symbol for the list. */
+    int type;    /** What type of widget out of spinbox, button, etc. */
 } WidgetData;
 
+/*! Data necessary to create a view of the EmbPattern (pointer to this pattern
+ * is available via the doc index). */
 typedef struct ViewData_ {
-    int32_t doc;
-    double little;
-    double medium;
+    int32_t doc;             /** Index to the document in the list of open files. */ 
+    double little;           /** The size of the small ticks on the rulers. */
+    double medium;           /** The size of the medium ticks on the rulers. */
     EmbLine *lines;
     int n_lines;
     EmbGeometry *geometry;
@@ -1798,8 +1804,6 @@ extern int n_variables;
 
 extern const char *index_th_name[];
 extern bool exitApp;
-
-extern const char *circle_origin_path;
 
 /* Menus */
 extern char *menu_list[];

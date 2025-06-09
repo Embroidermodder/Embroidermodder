@@ -1,0 +1,43 @@
+protocol for relative pointer motion events\hypertarget{page_relative_pointer_unstable_v1_page_desc_relative_pointer_unstable_v1}{}\doxysection{Description}\label{page_relative_pointer_unstable_v1_page_desc_relative_pointer_unstable_v1}
+This protocol specifies a set of interfaces used for making clients able to receive relative pointer events not obstructed by barriers (such as the monitor edge or other pointer barriers).
+
+To start receiving relative pointer events, a client must first bind the global interface \char`\"{}wp\+\_\+relative\+\_\+pointer\+\_\+manager\char`\"{} which, if a compositor supports relative pointer motion events, is exposed by the registry. After having created the relative pointer manager proxy object, the client uses it to create the actual relative pointer object using the \char`\"{}get\+\_\+relative\+\_\+pointer\char`\"{} request given a wl\+\_\+pointer. The relative pointer motion events will then, when applicable, be transmitted via the proxy of the newly created relative pointer object. See the documentation of the relative pointer interface for more details.
+
+Warning! The protocol described in this file is experimental and backward incompatible changes may be made. Backward compatible changes may be added together with the corresponding interface version bump. Backward incompatible changes are done by bumping the version number in the protocol and interface names and resetting the interface version. Once the protocol is to be declared stable, the \textquotesingle{}z\textquotesingle{} prefix and the version number in the protocol and interface names are removed and the interface version number is reset.\hypertarget{page_relative_pointer_unstable_v1_page_ifaces_relative_pointer_unstable_v1}{}\doxysection{Interfaces}\label{page_relative_pointer_unstable_v1_page_ifaces_relative_pointer_unstable_v1}
+
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{page_iface_zwp_relative_pointer_manager_v1}{zwp\+\_\+relative\+\_\+pointer\+\_\+manager\+\_\+v1}} -\/ get relative pointer objects
+\item \mbox{\hyperlink{page_iface_zwp_relative_pointer_v1}{zwp\+\_\+relative\+\_\+pointer\+\_\+v1}} -\/ relative pointer object 
+\end{DoxyItemize}\hypertarget{page_relative_pointer_unstable_v1_page_copyright_relative_pointer_unstable_v1}{}\doxysection{Copyright}\label{page_relative_pointer_unstable_v1_page_copyright_relative_pointer_unstable_v1}
+
+\begin{DoxyPre}
+
+Copyright © 2014      Jonas Ådahl
+Copyright © 2015      Red Hat Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "{}Software"{}),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "{}AS IS"{}, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+\end{DoxyPre}
+ \hypertarget{page_iface_zwp_relative_pointer_manager_v1}{}\doxysection{zwp\+\_\+relative\+\_\+pointer\+\_\+manager\+\_\+v1}\label{page_iface_zwp_relative_pointer_manager_v1}
+\hypertarget{page_iface_zwp_relative_pointer_manager_v1_page_iface_zwp_relative_pointer_manager_v1_desc}{}\doxysubsection{Description}\label{page_iface_zwp_relative_pointer_manager_v1_page_iface_zwp_relative_pointer_manager_v1_desc}
+A global interface used for getting the relative pointer object for a given pointer. \hypertarget{page_iface_zwp_relative_pointer_manager_v1_page_iface_zwp_relative_pointer_manager_v1_api}{}\doxysubsection{API}\label{page_iface_zwp_relative_pointer_manager_v1_page_iface_zwp_relative_pointer_manager_v1_api}
+See \mbox{\hyperlink{group__iface__zwp__relative__pointer__manager__v1}{The zwp\+\_\+relative\+\_\+pointer\+\_\+manager\+\_\+v1 interface}}. \hypertarget{page_iface_zwp_relative_pointer_v1}{}\doxysection{zwp\+\_\+relative\+\_\+pointer\+\_\+v1}\label{page_iface_zwp_relative_pointer_v1}
+\hypertarget{page_iface_zwp_relative_pointer_v1_page_iface_zwp_relative_pointer_v1_desc}{}\doxysubsection{Description}\label{page_iface_zwp_relative_pointer_v1_page_iface_zwp_relative_pointer_v1_desc}
+A wp\+\_\+relative\+\_\+pointer object is an extension to the wl\+\_\+pointer interface used for emitting relative pointer events. It shares the same focus as wl\+\_\+pointer objects of the same seat and will only emit events when it has focus. \hypertarget{page_iface_zwp_relative_pointer_v1_page_iface_zwp_relative_pointer_v1_api}{}\doxysubsection{API}\label{page_iface_zwp_relative_pointer_v1_page_iface_zwp_relative_pointer_v1_api}
+See \mbox{\hyperlink{group__iface__zwp__relative__pointer__v1}{The zwp\+\_\+relative\+\_\+pointer\+\_\+v1 interface}}. 

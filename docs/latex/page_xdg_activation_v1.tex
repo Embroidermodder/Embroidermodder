@@ -1,0 +1,57 @@
+Protocol for requesting activation of surfaces\hypertarget{page_xdg_activation_v1_page_desc_xdg_activation_v1}{}\doxysection{Description}\label{page_xdg_activation_v1_page_desc_xdg_activation_v1}
+The way for a client to pass focus to another toplevel is as follows.
+
+The client that intends to activate another toplevel uses the xdg\+\_\+activation\+\_\+v1.\+get\+\_\+activation\+\_\+token request to get an activation token. This token is then forwarded to the client, which is supposed to activate one of its surfaces, through a separate band of communication.
+
+One established way of doing this is through the XDG\+\_\+\+ACTIVATION\+\_\+\+TOKEN environment variable of a newly launched child process. The child process should unset the environment variable again right after reading it out in order to avoid propagating it to other child processes.
+
+Another established way exists for Applications implementing the D-\/\+Bus interface org.\+freedesktop.\+Application, which should get their token under activation-\/token on their platform\+\_\+data.
+
+In general activation tokens may be transferred across clients through means not described in this protocol.
+
+The client to be activated will then pass the token it received to the xdg\+\_\+activation\+\_\+v1.\+activate request. The compositor can then use this token to decide how to react to the activation request.
+
+The token the activating client gets may be ineffective either already at the time it receives it, for example if it was not focused, for focus stealing prevention. The activating client will have no way to discover the validity of the token, and may still forward it to the to be activated client.
+
+The created activation token may optionally get information attached to it that can be used by the compositor to identify the application that we intend to activate. This can for example be used to display a visual hint about what application is being started.
+
+Warning! The protocol described in this file is currently in the testing phase. Backward compatible changes may be added together with the corresponding interface version bump. Backward incompatible changes can only be done by creating a new major version of the extension.\hypertarget{page_xdg_activation_v1_page_ifaces_xdg_activation_v1}{}\doxysection{Interfaces}\label{page_xdg_activation_v1_page_ifaces_xdg_activation_v1}
+
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{page_iface_xdg_activation_v1}{xdg\+\_\+activation\+\_\+v1}} -\/ interface for activating surfaces
+\item \mbox{\hyperlink{page_iface_xdg_activation_token_v1}{xdg\+\_\+activation\+\_\+token\+\_\+v1}} -\/ an exported activation handle 
+\end{DoxyItemize}\hypertarget{page_xdg_activation_v1_page_copyright_xdg_activation_v1}{}\doxysection{Copyright}\label{page_xdg_activation_v1_page_copyright_xdg_activation_v1}
+
+\begin{DoxyPre}
+
+Copyright © 2020 Aleix Pol Gonzalez \href{mailto:aleixpol@kde.org}{\texttt{ aleixpol@kde.org}}
+Copyright © 2020 Carlos Garnacho \href{mailto:carlosg@gnome.org}{\texttt{ carlosg@gnome.org}}
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "{}Software"{}),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "{}AS IS"{}, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+\end{DoxyPre}
+ \hypertarget{page_iface_xdg_activation_v1}{}\doxysection{xdg\+\_\+activation\+\_\+v1}\label{page_iface_xdg_activation_v1}
+\hypertarget{page_iface_xdg_activation_v1_page_iface_xdg_activation_v1_desc}{}\doxysubsection{Description}\label{page_iface_xdg_activation_v1_page_iface_xdg_activation_v1_desc}
+A global interface used for informing the compositor about applications being activated or started, or for applications to request to be activated. \hypertarget{page_iface_xdg_activation_v1_page_iface_xdg_activation_v1_api}{}\doxysubsection{API}\label{page_iface_xdg_activation_v1_page_iface_xdg_activation_v1_api}
+See \mbox{\hyperlink{group__iface__xdg__activation__v1}{The xdg\+\_\+activation\+\_\+v1 interface}}. \hypertarget{page_iface_xdg_activation_token_v1}{}\doxysection{xdg\+\_\+activation\+\_\+token\+\_\+v1}\label{page_iface_xdg_activation_token_v1}
+\hypertarget{page_iface_xdg_activation_token_v1_page_iface_xdg_activation_token_v1_desc}{}\doxysubsection{Description}\label{page_iface_xdg_activation_token_v1_page_iface_xdg_activation_token_v1_desc}
+An object for setting up a token and receiving a token handle that can be passed as an activation token to another client.
+
+The object is created using the xdg\+\_\+activation\+\_\+v1.\+get\+\_\+activation\+\_\+token request. This object should then be populated with the app\+\_\+id, surface and serial information and committed. The compositor shall then issue a done event with the token. In case the request\textquotesingle{}s parameters are invalid, the compositor will provide an invalid token. \hypertarget{page_iface_xdg_activation_token_v1_page_iface_xdg_activation_token_v1_api}{}\doxysubsection{API}\label{page_iface_xdg_activation_token_v1_page_iface_xdg_activation_token_v1_api}
+See \mbox{\hyperlink{group__iface__xdg__activation__token__v1}{The xdg\+\_\+activation\+\_\+token\+\_\+v1 interface}}. 

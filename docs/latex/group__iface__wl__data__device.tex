@@ -1,0 +1,43 @@
+\hypertarget{group__iface__wl__data__device}{}\doxysection{The wl\+\_\+data\+\_\+device interface}
+\label{group__iface__wl__data__device}\index{The wl\_data\_device interface@{The wl\_data\_device interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structwl__data__device__listener}{wl\+\_\+data\+\_\+device\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_ga42ac24722bd8bf5195059309d19e22ed}\label{group__iface__wl__data__device_ga42ac24722bd8bf5195059309d19e22ed}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+DATA\+\_\+\+OFFER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_gaa415da220c0fa9da301a285108bd6f3a}\label{group__iface__wl__data__device_gaa415da220c0fa9da301a285108bd6f3a}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+ENTER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_gafd7c1021f7edb07a5d69c11285a6220a}\label{group__iface__wl__data__device_gafd7c1021f7edb07a5d69c11285a6220a}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+LEAVE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_ga6e42e2437c40de360ba28515e1ba661b}\label{group__iface__wl__data__device_ga6e42e2437c40de360ba28515e1ba661b}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MOTION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_ga1daf5df99c7b93a9d77f1113d770ee02}\label{group__iface__wl__data__device_ga1daf5df99c7b93a9d77f1113d770ee02}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+DROP\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_ga892f31138da5647bcf1d1b39852ccb42}\label{group__iface__wl__data__device_ga892f31138da5647bcf1d1b39852ccb42}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+SELECTION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_ga13f15c6a95905ad67ba4fb541192e968}\label{group__iface__wl__data__device_ga13f15c6a95905ad67ba4fb541192e968}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+START\+\_\+\+DRAG\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_ga359aff4bf0c0282e6137d4a34083eb0c}\label{group__iface__wl__data__device_ga359aff4bf0c0282e6137d4a34083eb0c}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+SET\+\_\+\+SELECTION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device_ga958fca4bf78f7124874bb9b198ce046f}\label{group__iface__wl__data__device_ga958fca4bf78f7124874bb9b198ce046f}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+RELEASE\+\_\+\+SINCE\+\_\+\+VERSION}~2
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+There is one wl\+\_\+data\+\_\+device per seat which can be obtained from the global wl\+\_\+data\+\_\+device\+\_\+manager singleton.
+
+A wl\+\_\+data\+\_\+device provides access to inter-\/client data transfer mechanisms such as copy-\/and-\/paste and drag-\/and-\/drop. 

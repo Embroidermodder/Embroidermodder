@@ -1,0 +1,278 @@
+\hypertarget{classMdiArea}{}\doxysubsection{Mdi\+Area Class Reference}
+\label{classMdiArea}\index{MdiArea@{MdiArea}}
+Inheritance diagram for Mdi\+Area\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMdiArea}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classMdiArea_af5c29c4ccfe105f2fde0b89c9a6eb360}{cascade}} ()
+\item 
+void \mbox{\hyperlink{classMdiArea_a315ca6483a5e1535c53e0a766b2698fc}{tile}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMdiArea_af68a26b7fb51d73c8d389a74c70904cf}{Mdi\+Area}} (QWidget $\ast$parent=0)
+\item 
+void \mbox{\hyperlink{classMdiArea_ae9b79fbd872320490f295fc5ff8bd61c}{force\+Repaint}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classMdiArea_a32a54f5b6b503c0cad9a8275f78c94bc}{use\+Logo}}
+\item 
+bool \mbox{\hyperlink{classMdiArea_a0a2ccb058050af191c56e7eb98c1085a}{use\+Texture}}
+\item 
+bool \mbox{\hyperlink{classMdiArea_aa5af716630ba943f98527ab5aa1232e9}{use\+Color}}
+\item 
+QPixmap \mbox{\hyperlink{classMdiArea_a3ef4342130254e1b668990307258f897}{bg\+Logo}}
+\item 
+QPixmap \mbox{\hyperlink{classMdiArea_a2a0f2f2e5f6890b374163892d4990925}{bg\+Texture}}
+\item 
+QColor \mbox{\hyperlink{classMdiArea_a4188b768d58311363eab45a6d1091410}{bg\+Color}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classMdiArea_ad1d74bd6f455ea9135e02099ed50b106}{mouse\+Double\+Click\+Event}} (QMouse\+Event $\ast$e)
+\item 
+virtual void \mbox{\hyperlink{classMdiArea_aba04aa5ea8e42c64fd5e3dc908165d3e}{paint\+Event}} (QPaint\+Event $\ast$e)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00111}{111}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMdiArea_af68a26b7fb51d73c8d389a74c70904cf}\label{classMdiArea_af68a26b7fb51d73c8d389a74c70904cf}} 
+\index{MdiArea@{MdiArea}!MdiArea@{MdiArea}}
+\index{MdiArea@{MdiArea}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{MdiArea()}{MdiArea()}}
+{\footnotesize\ttfamily Mdi\+Area\+::\+Mdi\+Area (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04736}{4736}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04736                                : QMdiArea(parent)}
+\DoxyCodeLine{04737 \{}
+\DoxyCodeLine{04738     setTabsClosable(\textcolor{keyword}{true});}
+\DoxyCodeLine{04739 }
+\DoxyCodeLine{04740     useLogo = \textcolor{keyword}{false};}
+\DoxyCodeLine{04741     useTexture = \textcolor{keyword}{false};}
+\DoxyCodeLine{04742     useColor = \textcolor{keyword}{false};}
+\DoxyCodeLine{04743 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMdiArea_af6c46f381e9146665222503a8e72e2bd}\label{classMdiArea_af6c46f381e9146665222503a8e72e2bd}} 
+\index{MdiArea@{MdiArea}!````~MdiArea@{$\sim$MdiArea}}
+\index{````~MdiArea@{$\sim$MdiArea}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{$\sim$MdiArea()}{~MdiArea()}}
+{\footnotesize\ttfamily Mdi\+Area\+::$\sim$\+Mdi\+Area (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00117}{117}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00117 \{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMdiArea_af5c29c4ccfe105f2fde0b89c9a6eb360}\label{classMdiArea_af5c29c4ccfe105f2fde0b89c9a6eb360}} 
+\index{MdiArea@{MdiArea}!cascade@{cascade}}
+\index{cascade@{cascade}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{cascade}{cascade}}
+{\footnotesize\ttfamily void Mdi\+Area\+::cascade (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04837}{4837}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04838 \{}
+\DoxyCodeLine{04839     cascadeSubWindows();}
+\DoxyCodeLine{04840     zoom\_extents\_all\_sub\_windows();}
+\DoxyCodeLine{04841 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMdiArea_ae9b79fbd872320490f295fc5ff8bd61c}\label{classMdiArea_ae9b79fbd872320490f295fc5ff8bd61c}} 
+\index{MdiArea@{MdiArea}!forceRepaint@{forceRepaint}}
+\index{forceRepaint@{forceRepaint}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{forceRepaint()}{forceRepaint()}}
+{\footnotesize\ttfamily void Mdi\+Area\+::force\+Repaint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04852}{4852}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04853 \{}
+\DoxyCodeLine{04854     QSize hack = size();}
+\DoxyCodeLine{04855     resize(hack + QSize(1,1));}
+\DoxyCodeLine{04856     resize(hack);}
+\DoxyCodeLine{04857 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMdiArea_ad1d74bd6f455ea9135e02099ed50b106}\label{classMdiArea_ad1d74bd6f455ea9135e02099ed50b106}} 
+\index{MdiArea@{MdiArea}!mouseDoubleClickEvent@{mouseDoubleClickEvent}}
+\index{mouseDoubleClickEvent@{mouseDoubleClickEvent}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{mouseDoubleClickEvent()}{mouseDoubleClickEvent()}}
+{\footnotesize\ttfamily void Mdi\+Area\+::mouse\+Double\+Click\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event $\ast$}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04798}{4798}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04799 \{}
+\DoxyCodeLine{04800     open\_file(\textcolor{keyword}{false}, \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{04801 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMdiArea_aba04aa5ea8e42c64fd5e3dc908165d3e}\label{classMdiArea_aba04aa5ea8e42c64fd5e3dc908165d3e}} 
+\index{MdiArea@{MdiArea}!paintEvent@{paintEvent}}
+\index{paintEvent@{paintEvent}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{paintEvent()}{paintEvent()}}
+{\footnotesize\ttfamily void Mdi\+Area\+::paint\+Event (\begin{DoxyParamCaption}\item[{QPaint\+Event $\ast$}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04805}{4805}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04806 \{}
+\DoxyCodeLine{04807     QWidget* vport = viewport();}
+\DoxyCodeLine{04808     QRect rect = vport-\/>rect();}
+\DoxyCodeLine{04809 }
+\DoxyCodeLine{04810     QPainter painter(vport);}
+\DoxyCodeLine{04811     painter.setRenderHint(QPainter::SmoothPixmapTransform);}
+\DoxyCodeLine{04812 }
+\DoxyCodeLine{04813     \textcolor{comment}{/* Always fill with a solid color first */}}
+\DoxyCodeLine{04814     \textcolor{keywordflow}{if} (useColor) \{}
+\DoxyCodeLine{04815         painter.fillRect(rect, bgColor);}
+\DoxyCodeLine{04816     \}}
+\DoxyCodeLine{04817     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{04818         painter.fillRect(rect, background());}
+\DoxyCodeLine{04819     \}}
+\DoxyCodeLine{04820 }
+\DoxyCodeLine{04821     \textcolor{comment}{/* Then overlay the texture */}}
+\DoxyCodeLine{04822     \textcolor{keywordflow}{if} (useTexture) \{}
+\DoxyCodeLine{04823         QBrush bgBrush(bgTexture);}
+\DoxyCodeLine{04824         painter.fillRect(rect, bgBrush);}
+\DoxyCodeLine{04825     \}}
+\DoxyCodeLine{04826 }
+\DoxyCodeLine{04827     \textcolor{comment}{/* Overlay the logo last */}}
+\DoxyCodeLine{04828     \textcolor{keywordflow}{if} (useLogo) \{}
+\DoxyCodeLine{04829         \textcolor{comment}{/* Center the pixmap */}}
+\DoxyCodeLine{04830         \textcolor{keywordtype}{int} dx = (rect.width()-\/bgLogo.width())/2;}
+\DoxyCodeLine{04831         \textcolor{keywordtype}{int} dy = (rect.height()-\/bgLogo.height())/2;}
+\DoxyCodeLine{04832         painter.drawPixmap(dx, dy, bgLogo.width(), bgLogo.height(), bgLogo);}
+\DoxyCodeLine{04833     \}}
+\DoxyCodeLine{04834 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMdiArea_a315ca6483a5e1535c53e0a766b2698fc}\label{classMdiArea_a315ca6483a5e1535c53e0a766b2698fc}} 
+\index{MdiArea@{MdiArea}!tile@{tile}}
+\index{tile@{tile}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{tile}{tile}}
+{\footnotesize\ttfamily void Mdi\+Area\+::tile (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04844}{4844}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04845 \{}
+\DoxyCodeLine{04846     tileSubWindows();}
+\DoxyCodeLine{04847     zoom\_extents\_all\_sub\_windows();}
+\DoxyCodeLine{04848 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Field Documentation}
+\mbox{\Hypertarget{classMdiArea_a4188b768d58311363eab45a6d1091410}\label{classMdiArea_a4188b768d58311363eab45a6d1091410}} 
+\index{MdiArea@{MdiArea}!bgColor@{bgColor}}
+\index{bgColor@{bgColor}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{bgColor}{bgColor}}
+{\footnotesize\ttfamily QColor Mdi\+Area\+::bg\+Color}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00125}{125}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classMdiArea_a3ef4342130254e1b668990307258f897}\label{classMdiArea_a3ef4342130254e1b668990307258f897}} 
+\index{MdiArea@{MdiArea}!bgLogo@{bgLogo}}
+\index{bgLogo@{bgLogo}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{bgLogo}{bgLogo}}
+{\footnotesize\ttfamily QPixmap Mdi\+Area\+::bg\+Logo}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00123}{123}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classMdiArea_a2a0f2f2e5f6890b374163892d4990925}\label{classMdiArea_a2a0f2f2e5f6890b374163892d4990925}} 
+\index{MdiArea@{MdiArea}!bgTexture@{bgTexture}}
+\index{bgTexture@{bgTexture}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{bgTexture}{bgTexture}}
+{\footnotesize\ttfamily QPixmap Mdi\+Area\+::bg\+Texture}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00124}{124}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classMdiArea_aa5af716630ba943f98527ab5aa1232e9}\label{classMdiArea_aa5af716630ba943f98527ab5aa1232e9}} 
+\index{MdiArea@{MdiArea}!useColor@{useColor}}
+\index{useColor@{useColor}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{useColor}{useColor}}
+{\footnotesize\ttfamily bool Mdi\+Area\+::use\+Color}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00121}{121}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classMdiArea_a32a54f5b6b503c0cad9a8275f78c94bc}\label{classMdiArea_a32a54f5b6b503c0cad9a8275f78c94bc}} 
+\index{MdiArea@{MdiArea}!useLogo@{useLogo}}
+\index{useLogo@{useLogo}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{useLogo}{useLogo}}
+{\footnotesize\ttfamily bool Mdi\+Area\+::use\+Logo}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00119}{119}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+\mbox{\Hypertarget{classMdiArea_a0a2ccb058050af191c56e7eb98c1085a}\label{classMdiArea_a0a2ccb058050af191c56e7eb98c1085a}} 
+\index{MdiArea@{MdiArea}!useTexture@{useTexture}}
+\index{useTexture@{useTexture}!MdiArea@{MdiArea}}
+\doxyparagraph{\texorpdfstring{useTexture}{useTexture}}
+{\footnotesize\ttfamily bool Mdi\+Area\+::use\+Texture}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00120}{120}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{qt_8h}{qt.\+h}}\item 
+src/commands.\+cpp\end{DoxyCompactItemize}

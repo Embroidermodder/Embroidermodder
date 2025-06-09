@@ -1,0 +1,67 @@
+\hypertarget{group__iface__wl__data__device__manager}{}\doxysection{The wl\+\_\+data\+\_\+device\+\_\+manager interface}
+\label{group__iface__wl__data__device__manager}\index{The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device__manager_ga1cad9aee4db5ef16bc1a8777be9c7596}\label{group__iface__wl__data__device__manager_ga1cad9aee4db5ef16bc1a8777be9c7596}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+CREATE\+\_\+\+DATA\+\_\+\+SOURCE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__wl__data__device__manager_ga7b5a61dcdc20123e0aacdee30dbb184d}\label{group__iface__wl__data__device__manager_ga7b5a61dcdc20123e0aacdee30dbb184d}} 
+\#define {\bfseries WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+GET\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group__iface__wl__data__device__manager_ga7f88544e86dcba64b4fb255576f0ccb0}{wl\+\_\+data\+\_\+device\+\_\+manager\+\_\+dnd\+\_\+action}} \{ \mbox{\hyperlink{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0ab81d1b844097784e82670e7092f4aefe}{WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+DND\+\_\+\+ACTION\+\_\+\+NONE}} = 0
+, \mbox{\hyperlink{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0a00d4a04469eb474edcdffafb87a914a9}{WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+DND\+\_\+\+ACTION\+\_\+\+COPY}} = 1
+, \mbox{\hyperlink{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0a61cd155ee2e0a9b991b9e5f9bfc3470a}{WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+DND\+\_\+\+ACTION\+\_\+\+MOVE}} = 2
+, \mbox{\hyperlink{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0ab3791f388292b09d4e1368c33c3d8602}{WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+DND\+\_\+\+ACTION\+\_\+\+ASK}} = 4
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The wl\+\_\+data\+\_\+device\+\_\+manager is a singleton global object that provides access to inter-\/client data transfer mechanisms such as copy-\/and-\/paste and drag-\/and-\/drop. These mechanisms are tied to a wl\+\_\+seat and this interface lets a client get a wl\+\_\+data\+\_\+device corresponding to a wl\+\_\+seat.
+
+Depending on the version bound, the objects created from the bound wl\+\_\+data\+\_\+device\+\_\+manager object will have different requirements for functioning properly. See wl\+\_\+data\+\_\+source.\+set\+\_\+actions, wl\+\_\+data\+\_\+offer.\+accept and wl\+\_\+data\+\_\+offer.\+finish for details. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{group__iface__wl__data__device__manager_ga7f88544e86dcba64b4fb255576f0ccb0}\label{group__iface__wl__data__device__manager_ga7f88544e86dcba64b4fb255576f0ccb0}} 
+\index{The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}!wl\_data\_device\_manager\_dnd\_action@{wl\_data\_device\_manager\_dnd\_action}}
+\index{wl\_data\_device\_manager\_dnd\_action@{wl\_data\_device\_manager\_dnd\_action}!The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}}
+\doxysubsubsection{\texorpdfstring{wl\_data\_device\_manager\_dnd\_action}{wl\_data\_device\_manager\_dnd\_action}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__wl__data__device__manager_ga7f88544e86dcba64b4fb255576f0ccb0}{wl\+\_\+data\+\_\+device\+\_\+manager\+\_\+dnd\+\_\+action}}}
+
+drag and drop actions
+
+This is a bitmask of the available/preferred actions in a drag-\/and-\/drop operation.
+
+In the compositor, the selected action is a result of matching the actions offered by the source and destination sides. \char`\"{}action\char`\"{} events with a \char`\"{}none\char`\"{} action will be sent to both source and destination if there is no match. All further checks will effectively happen on (source actions ∩ destination actions).
+
+In addition, compositors may also pick different actions in reaction to key modifiers being pressed. One common design that is used in major toolkits (and the behavior recommended for compositors) is\+:
+
+
+\begin{DoxyItemize}
+\item If no modifiers are pressed, the first match (in bit order) will be used.
+\item Pressing Shift selects \char`\"{}move\char`\"{}, if enabled in the mask.
+\item Pressing Control selects \char`\"{}copy\char`\"{}, if enabled in the mask.
+\end{DoxyItemize}
+
+Behavior beyond that is considered implementation-\/dependent. Compositors may for example bind other modifiers (like Alt/\+Meta) or drags initiated with other buttons than BTN\+\_\+\+LEFT to specific actions (e.\+g. \char`\"{}ask\char`\"{}). \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_NONE@{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_NONE}!The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}}\index{The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}!WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_NONE@{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_NONE}}}\mbox{\Hypertarget{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0ab81d1b844097784e82670e7092f4aefe}\label{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0ab81d1b844097784e82670e7092f4aefe}} 
+WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+DND\+\_\+\+ACTION\+\_\+\+NONE&no action \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_COPY@{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_COPY}!The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}}\index{The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}!WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_COPY@{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_COPY}}}\mbox{\Hypertarget{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0a00d4a04469eb474edcdffafb87a914a9}\label{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0a00d4a04469eb474edcdffafb87a914a9}} 
+WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+DND\+\_\+\+ACTION\+\_\+\+COPY&copy action \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_MOVE@{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_MOVE}!The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}}\index{The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}!WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_MOVE@{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_MOVE}}}\mbox{\Hypertarget{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0a61cd155ee2e0a9b991b9e5f9bfc3470a}\label{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0a61cd155ee2e0a9b991b9e5f9bfc3470a}} 
+WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+DND\+\_\+\+ACTION\+\_\+\+MOVE&move action \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_ASK@{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_ASK}!The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}}\index{The wl\_data\_device\_manager interface@{The wl\_data\_device\_manager interface}!WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_ASK@{WL\_DATA\_DEVICE\_MANAGER\_DND\_ACTION\_ASK}}}\mbox{\Hypertarget{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0ab3791f388292b09d4e1368c33c3d8602}\label{group__iface__wl__data__device__manager_gga7f88544e86dcba64b4fb255576f0ccb0ab3791f388292b09d4e1368c33c3d8602}} 
+WL\+\_\+\+DATA\+\_\+\+DEVICE\+\_\+\+MANAGER\+\_\+\+DND\+\_\+\+ACTION\+\_\+\+ASK&ask action \\
+\hline
+
+\end{DoxyEnumFields}

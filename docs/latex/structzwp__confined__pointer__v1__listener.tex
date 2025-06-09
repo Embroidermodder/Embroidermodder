@@ -1,0 +1,33 @@
+\hypertarget{structzwp__confined__pointer__v1__listener}{}\doxysection{zwp\+\_\+confined\+\_\+pointer\+\_\+v1\+\_\+listener Struct Reference}
+\label{structzwp__confined__pointer__v1__listener}\index{zwp\_confined\_pointer\_v1\_listener@{zwp\_confined\_pointer\_v1\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structzwp__confined__pointer__v1__listener_a2ecdfea2cb5cefff1b2dd3d37859b63c}{confined}} )(void $\ast$data, struct zwp\+\_\+confined\+\_\+pointer\+\_\+v1 $\ast$zwp\+\_\+confined\+\_\+pointer\+\_\+v1)
+\item 
+void($\ast$ \mbox{\hyperlink{structzwp__confined__pointer__v1__listener_aedf1d893e8281086fabd11a6425cfdee}{unconfined}} )(void $\ast$data, struct zwp\+\_\+confined\+\_\+pointer\+\_\+v1 $\ast$zwp\+\_\+confined\+\_\+pointer\+\_\+v1)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structzwp__confined__pointer__v1__listener_a2ecdfea2cb5cefff1b2dd3d37859b63c}\label{structzwp__confined__pointer__v1__listener_a2ecdfea2cb5cefff1b2dd3d37859b63c}} 
+\index{zwp\_confined\_pointer\_v1\_listener@{zwp\_confined\_pointer\_v1\_listener}!confined@{confined}}
+\index{confined@{confined}!zwp\_confined\_pointer\_v1\_listener@{zwp\_confined\_pointer\_v1\_listener}}
+\doxysubsubsection{\texorpdfstring{confined}{confined}}
+{\footnotesize\ttfamily void($\ast$ zwp\+\_\+confined\+\_\+pointer\+\_\+v1\+\_\+listener\+::confined) (void $\ast$data, struct zwp\+\_\+confined\+\_\+pointer\+\_\+v1 $\ast$zwp\+\_\+confined\+\_\+pointer\+\_\+v1)}
+
+pointer confined
+
+Notification that the pointer confinement of the seat\textquotesingle{}s pointer is activated. \mbox{\Hypertarget{structzwp__confined__pointer__v1__listener_aedf1d893e8281086fabd11a6425cfdee}\label{structzwp__confined__pointer__v1__listener_aedf1d893e8281086fabd11a6425cfdee}} 
+\index{zwp\_confined\_pointer\_v1\_listener@{zwp\_confined\_pointer\_v1\_listener}!unconfined@{unconfined}}
+\index{unconfined@{unconfined}!zwp\_confined\_pointer\_v1\_listener@{zwp\_confined\_pointer\_v1\_listener}}
+\doxysubsubsection{\texorpdfstring{unconfined}{unconfined}}
+{\footnotesize\ttfamily void($\ast$ zwp\+\_\+confined\+\_\+pointer\+\_\+v1\+\_\+listener\+::unconfined) (void $\ast$data, struct zwp\+\_\+confined\+\_\+pointer\+\_\+v1 $\ast$zwp\+\_\+confined\+\_\+pointer\+\_\+v1)}
+
+pointer unconfined
+
+Notification that the pointer confinement of the seat\textquotesingle{}s pointer is no longer active. If this is a oneshot pointer confinement (see wp\+\_\+pointer\+\_\+constraints.\+lifetime) this object is now defunct and should be destroyed. If this is a persistent pointer confinement (see wp\+\_\+pointer\+\_\+constraints.\+lifetime) this pointer confinement may again reactivate in the future. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/pointer-\/constraints-\/unstable-\/v1-\/client-\/protocol.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,49 @@
+\hypertarget{win32__time_8h_source}{}\doxysection{win32\+\_\+time.\+h}
+\label{win32__time_8h_source}\index{extern/glfw/src/win32\_time.h@{extern/glfw/src/win32\_time.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{//========================================================================}}
+\DoxyCodeLine{2 \textcolor{comment}{// GLFW 3.5 Win32 -\/ www.glfw.org}}
+\DoxyCodeLine{3 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{4 \textcolor{comment}{// Copyright (c) 2002-\/2006 Marcus Geelnard}}
+\DoxyCodeLine{5 \textcolor{comment}{// Copyright (c) 2006-\/2017 Camilla Löwy <elmindreda@glfw.org>}}
+\DoxyCodeLine{6 \textcolor{comment}{//}}
+\DoxyCodeLine{7 \textcolor{comment}{// This software is provided 'as-\/is', without any express or implied}}
+\DoxyCodeLine{8 \textcolor{comment}{// warranty. In no event will the authors be held liable for any damages}}
+\DoxyCodeLine{9 \textcolor{comment}{// arising from the use of this software.}}
+\DoxyCodeLine{10 \textcolor{comment}{//}}
+\DoxyCodeLine{11 \textcolor{comment}{// Permission is granted to anyone to use this software for any purpose,}}
+\DoxyCodeLine{12 \textcolor{comment}{// including commercial applications, and to alter it and redistribute it}}
+\DoxyCodeLine{13 \textcolor{comment}{// freely, subject to the following restrictions:}}
+\DoxyCodeLine{14 \textcolor{comment}{//}}
+\DoxyCodeLine{15 \textcolor{comment}{// 1. The origin of this software must not be misrepresented; you must not}}
+\DoxyCodeLine{16 \textcolor{comment}{//    claim that you wrote the original software. If you use this software}}
+\DoxyCodeLine{17 \textcolor{comment}{//    in a product, an acknowledgment in the product documentation would}}
+\DoxyCodeLine{18 \textcolor{comment}{//    be appreciated but is not required.}}
+\DoxyCodeLine{19 \textcolor{comment}{//}}
+\DoxyCodeLine{20 \textcolor{comment}{// 2. Altered source versions must be plainly marked as such, and must not}}
+\DoxyCodeLine{21 \textcolor{comment}{//    be misrepresented as being the original software.}}
+\DoxyCodeLine{22 \textcolor{comment}{//}}
+\DoxyCodeLine{23 \textcolor{comment}{// 3. This notice may not be removed or altered from any source}}
+\DoxyCodeLine{24 \textcolor{comment}{//    distribution.}}
+\DoxyCodeLine{25 \textcolor{comment}{//}}
+\DoxyCodeLine{26 \textcolor{comment}{//========================================================================}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{comment}{// This is a workaround for the fact that glfw3.h needs to export APIENTRY (for}}
+\DoxyCodeLine{29 \textcolor{comment}{// example to allow applications to correctly declare a GL\_KHR\_debug callback)}}
+\DoxyCodeLine{30 \textcolor{comment}{// but windows.h assumes no one will define APIENTRY before it does}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#undef APIENTRY}}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#include <windows.h>}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#define GLFW\_WIN32\_LIBRARY\_TIMER\_STATE  \_GLFWtimerWin32   win32;}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{comment}{// Win32-\/specific global timer data}}
+\DoxyCodeLine{38 \textcolor{comment}{//}}
+\DoxyCodeLine{39 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{struct__GLFWtimerWin32}{\_GLFWtimerWin32}}}
+\DoxyCodeLine{40 \{}
+\DoxyCodeLine{41     uint64\_t            frequency;}
+\DoxyCodeLine{42 \} \mbox{\hyperlink{struct__GLFWtimerWin32}{\_GLFWtimerWin32}};}
+\DoxyCodeLine{43 }
+
+\end{DoxyCode}

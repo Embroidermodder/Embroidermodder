@@ -1,0 +1,34 @@
+\hypertarget{group__iface__xdg__activation__token__v1}{}\doxysection{The xdg\+\_\+activation\+\_\+token\+\_\+v1 interface}
+\label{group__iface__xdg__activation__token__v1}\index{The xdg\_activation\_token\_v1 interface@{The xdg\_activation\_token\_v1 interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structxdg__activation__token__v1__listener}{xdg\+\_\+activation\+\_\+token\+\_\+v1\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__xdg__activation__token__v1_gab7e583eaef0b4195b080c3627348da37}\label{group__iface__xdg__activation__token__v1_gab7e583eaef0b4195b080c3627348da37}} 
+\#define {\bfseries XDG\+\_\+\+ACTIVATION\+\_\+\+TOKEN\+\_\+\+V1\+\_\+\+DONE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__activation__token__v1_ga554c15f114446fbfd4901fcf1afea710}\label{group__iface__xdg__activation__token__v1_ga554c15f114446fbfd4901fcf1afea710}} 
+\#define {\bfseries XDG\+\_\+\+ACTIVATION\+\_\+\+TOKEN\+\_\+\+V1\+\_\+\+SET\+\_\+\+SERIAL\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__activation__token__v1_ga9040423d086d934c3a199c0194cc496d}\label{group__iface__xdg__activation__token__v1_ga9040423d086d934c3a199c0194cc496d}} 
+\#define {\bfseries XDG\+\_\+\+ACTIVATION\+\_\+\+TOKEN\+\_\+\+V1\+\_\+\+SET\+\_\+\+APP\+\_\+\+ID\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__activation__token__v1_ga28bb3cd9fbff0a4351c469b3dec5fdfb}\label{group__iface__xdg__activation__token__v1_ga28bb3cd9fbff0a4351c469b3dec5fdfb}} 
+\#define {\bfseries XDG\+\_\+\+ACTIVATION\+\_\+\+TOKEN\+\_\+\+V1\+\_\+\+SET\+\_\+\+SURFACE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__activation__token__v1_gaeb5f8fa53d1d0eaf0eb15793603bb6f4}\label{group__iface__xdg__activation__token__v1_gaeb5f8fa53d1d0eaf0eb15793603bb6f4}} 
+\#define {\bfseries XDG\+\_\+\+ACTIVATION\+\_\+\+TOKEN\+\_\+\+V1\+\_\+\+COMMIT\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__activation__token__v1_ga4f78c83b8f22097ac0a893e5e2135ccf}\label{group__iface__xdg__activation__token__v1_ga4f78c83b8f22097ac0a893e5e2135ccf}} 
+\#define {\bfseries XDG\+\_\+\+ACTIVATION\+\_\+\+TOKEN\+\_\+\+V1\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An object for setting up a token and receiving a token handle that can be passed as an activation token to another client.
+
+The object is created using the xdg\+\_\+activation\+\_\+v1.\+get\+\_\+activation\+\_\+token request. This object should then be populated with the app\+\_\+id, surface and serial information and committed. The compositor shall then issue a done event with the token. In case the request\textquotesingle{}s parameters are invalid, the compositor will provide an invalid token. 

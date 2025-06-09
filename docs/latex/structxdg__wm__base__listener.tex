@@ -1,0 +1,32 @@
+\hypertarget{structxdg__wm__base__listener}{}\doxysection{xdg\+\_\+wm\+\_\+base\+\_\+listener Struct Reference}
+\label{structxdg__wm__base__listener}\index{xdg\_wm\_base\_listener@{xdg\_wm\_base\_listener}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void($\ast$ \mbox{\hyperlink{structxdg__wm__base__listener_a4c735d844e84443304b37d917ec847d0}{ping}} )(void $\ast$data, struct xdg\+\_\+wm\+\_\+base $\ast$xdg\+\_\+wm\+\_\+base, uint32\+\_\+t serial)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structxdg__wm__base__listener_a4c735d844e84443304b37d917ec847d0}\label{structxdg__wm__base__listener_a4c735d844e84443304b37d917ec847d0}} 
+\index{xdg\_wm\_base\_listener@{xdg\_wm\_base\_listener}!ping@{ping}}
+\index{ping@{ping}!xdg\_wm\_base\_listener@{xdg\_wm\_base\_listener}}
+\doxysubsubsection{\texorpdfstring{ping}{ping}}
+{\footnotesize\ttfamily void($\ast$ xdg\+\_\+wm\+\_\+base\+\_\+listener\+::ping) (void $\ast$data, struct xdg\+\_\+wm\+\_\+base $\ast$xdg\+\_\+wm\+\_\+base, uint32\+\_\+t serial)}
+
+check if the client is alive
+
+The ping event asks the client if it\textquotesingle{}s still alive. Pass the serial specified in the event back to the compositor by sending a \char`\"{}pong\char`\"{} request back with the specified serial. See xdg\+\_\+wm\+\_\+base.\+pong.
+
+Compositors can use this to determine if the client is still alive. It\textquotesingle{}s unspecified what will happen if the client doesn\textquotesingle{}t respond to the ping request, or in what timeframe. Clients should try to respond in a reasonable amount of time. The “unresponsive” error is provided for compositors that wish to disconnect unresponsive clients.
+
+A compositor is free to ping in any way it wants, but a client must always respond to any xdg\+\_\+wm\+\_\+base object it created. 
+\begin{DoxyParams}{Parameters}
+{\em serial} & pass this to the pong request \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+build/extern/glfw/src/xdg-\/shell-\/client-\/protocol.\+h\end{DoxyCompactItemize}

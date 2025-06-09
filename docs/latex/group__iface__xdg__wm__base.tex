@@ -1,0 +1,29 @@
+\hypertarget{group__iface__xdg__wm__base}{}\doxysection{The xdg\+\_\+wm\+\_\+base interface}
+\label{group__iface__xdg__wm__base}\index{The xdg\_wm\_base interface@{The xdg\_wm\_base interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structxdg__wm__base__listener}{xdg\+\_\+wm\+\_\+base\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__xdg__wm__base_ga418896ccb516abf4361755b94a3a503f}\label{group__iface__xdg__wm__base_ga418896ccb516abf4361755b94a3a503f}} 
+\#define {\bfseries XDG\+\_\+\+WM\+\_\+\+BASE\+\_\+\+PING\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__wm__base_ga6b425713c80443ceaf846d8c065ff133}\label{group__iface__xdg__wm__base_ga6b425713c80443ceaf846d8c065ff133}} 
+\#define {\bfseries XDG\+\_\+\+WM\+\_\+\+BASE\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__wm__base_ga11828b3dde2f34364cfc0a1423230aad}\label{group__iface__xdg__wm__base_ga11828b3dde2f34364cfc0a1423230aad}} 
+\#define {\bfseries XDG\+\_\+\+WM\+\_\+\+BASE\+\_\+\+CREATE\+\_\+\+POSITIONER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__wm__base_ga123013ed24904a0e2e27fcf8e1ff7e68}\label{group__iface__xdg__wm__base_ga123013ed24904a0e2e27fcf8e1ff7e68}} 
+\#define {\bfseries XDG\+\_\+\+WM\+\_\+\+BASE\+\_\+\+GET\+\_\+\+XDG\+\_\+\+SURFACE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__wm__base_ga79767418b9f5d722e3418b9c193e4aa2}\label{group__iface__xdg__wm__base_ga79767418b9f5d722e3418b9c193e4aa2}} 
+\#define {\bfseries XDG\+\_\+\+WM\+\_\+\+BASE\+\_\+\+PONG\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The xdg\+\_\+wm\+\_\+base interface is exposed as a global object enabling clients to turn their wl\+\_\+surfaces into windows in a desktop environment. It defines the basic functionality needed for clients and the compositor to create windows that can be dragged, resized, maximized, etc, as well as creating transient windows such as popup menus. 

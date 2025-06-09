@@ -1,0 +1,94 @@
+\hypertarget{page_xdg_shell_page_ifaces_xdg_shell}{}\doxysection{Interfaces}\label{page_xdg_shell_page_ifaces_xdg_shell}
+
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{page_iface_xdg_wm_base}{xdg\+\_\+wm\+\_\+base}} -\/ create desktop-\/style surfaces
+\item \mbox{\hyperlink{page_iface_xdg_positioner}{xdg\+\_\+positioner}} -\/ child surface positioner
+\item \mbox{\hyperlink{page_iface_xdg_surface}{xdg\+\_\+surface}} -\/ desktop user interface surface base interface
+\item \mbox{\hyperlink{page_iface_xdg_toplevel}{xdg\+\_\+toplevel}} -\/ toplevel surface
+\item \mbox{\hyperlink{page_iface_xdg_popup}{xdg\+\_\+popup}} -\/ short-\/lived, popup surfaces for menus 
+\end{DoxyItemize}\hypertarget{page_xdg_shell_page_copyright_xdg_shell}{}\doxysection{Copyright}\label{page_xdg_shell_page_copyright_xdg_shell}
+
+\begin{DoxyPre}
+
+Copyright © 2008-\/2013 Kristian Høgsberg
+Copyright © 2013      Rafael Antognolli
+Copyright © 2013      Jasper St. Pierre
+Copyright © 2010-\/2013 Intel Corporation
+Copyright © 2015-\/2017 Samsung Electronics Co., Ltd
+Copyright © 2015-\/2017 Red Hat Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "{}Software"{}),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "{}AS IS"{}, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+\end{DoxyPre}
+ \hypertarget{page_iface_xdg_wm_base}{}\doxysection{xdg\+\_\+wm\+\_\+base}\label{page_iface_xdg_wm_base}
+\hypertarget{page_iface_xdg_wm_base_page_iface_xdg_wm_base_desc}{}\doxysubsection{Description}\label{page_iface_xdg_wm_base_page_iface_xdg_wm_base_desc}
+The xdg\+\_\+wm\+\_\+base interface is exposed as a global object enabling clients to turn their wl\+\_\+surfaces into windows in a desktop environment. It defines the basic functionality needed for clients and the compositor to create windows that can be dragged, resized, maximized, etc, as well as creating transient windows such as popup menus. \hypertarget{page_iface_xdg_wm_base_page_iface_xdg_wm_base_api}{}\doxysubsection{API}\label{page_iface_xdg_wm_base_page_iface_xdg_wm_base_api}
+See \mbox{\hyperlink{group__iface__xdg__wm__base}{The xdg\+\_\+wm\+\_\+base interface}}. \hypertarget{page_iface_xdg_positioner}{}\doxysection{xdg\+\_\+positioner}\label{page_iface_xdg_positioner}
+\hypertarget{page_iface_xdg_positioner_page_iface_xdg_positioner_desc}{}\doxysubsection{Description}\label{page_iface_xdg_positioner_page_iface_xdg_positioner_desc}
+The xdg\+\_\+positioner provides a collection of rules for the placement of a child surface relative to a parent surface. Rules can be defined to ensure the child surface remains within the visible area\textquotesingle{}s borders, and to specify how the child surface changes its position, such as sliding along an axis, or flipping around a rectangle. These positioner-\/created rules are constrained by the requirement that a child surface must intersect with or be at least partially adjacent to its parent surface.
+
+See the various requests for details about possible rules.
+
+At the time of the request, the compositor makes a copy of the rules specified by the xdg\+\_\+positioner. Thus, after the request is complete the xdg\+\_\+positioner object can be destroyed or reused; further changes to the object will have no effect on previous usages.
+
+For an xdg\+\_\+positioner object to be considered complete, it must have a non-\/zero size set by set\+\_\+size, and a non-\/zero anchor rectangle set by set\+\_\+anchor\+\_\+rect. Passing an incomplete xdg\+\_\+positioner object when positioning a surface raises an invalid\+\_\+positioner error. \hypertarget{page_iface_xdg_positioner_page_iface_xdg_positioner_api}{}\doxysubsection{API}\label{page_iface_xdg_positioner_page_iface_xdg_positioner_api}
+See \mbox{\hyperlink{group__iface__xdg__positioner}{The xdg\+\_\+positioner interface}}. \hypertarget{page_iface_xdg_surface}{}\doxysection{xdg\+\_\+surface}\label{page_iface_xdg_surface}
+\hypertarget{page_iface_xdg_surface_page_iface_xdg_surface_desc}{}\doxysubsection{Description}\label{page_iface_xdg_surface_page_iface_xdg_surface_desc}
+An interface that may be implemented by a wl\+\_\+surface, for implementations that provide a desktop-\/style user interface.
+
+It provides a base set of functionality required to construct user interface elements requiring management by the compositor, such as toplevel windows, menus, etc. The types of functionality are split into xdg\+\_\+surface roles.
+
+Creating an xdg\+\_\+surface does not set the role for a wl\+\_\+surface. In order to map an xdg\+\_\+surface, the client must create a role-\/specific object using, e.\+g., get\+\_\+toplevel, get\+\_\+popup. The wl\+\_\+surface for any given xdg\+\_\+surface can have at most one role, and may not be assigned any role not based on xdg\+\_\+surface.
+
+A role must be assigned before any other requests are made to the xdg\+\_\+surface object.
+
+The client must call wl\+\_\+surface.\+commit on the corresponding wl\+\_\+surface for the xdg\+\_\+surface state to take effect.
+
+Creating an xdg\+\_\+surface from a wl\+\_\+surface which has a buffer attached or committed is a client error, and any attempts by a client to attach or manipulate a buffer prior to the first xdg\+\_\+surface.\+configure call must also be treated as errors.
+
+After creating a role-\/specific object and setting it up, the client must perform an initial commit without any buffer attached. The compositor will reply with initial wl\+\_\+surface state such as wl\+\_\+surface.\+preferred\+\_\+buffer\+\_\+scale followed by an xdg\+\_\+surface.\+configure event. The client must acknowledge it and is then allowed to attach a buffer to map the surface.
+
+Mapping an xdg\+\_\+surface-\/based role surface is defined as making it possible for the surface to be shown by the compositor. Note that a mapped surface is not guaranteed to be visible once it is mapped.
+
+For an xdg\+\_\+surface to be mapped by the compositor, the following conditions must be met\+: (1) the client has assigned an xdg\+\_\+surface-\/based role to the surface (2) the client has set and committed the xdg\+\_\+surface state and the role-\/dependent state to the surface (3) the client has committed a buffer to the surface
+
+A newly-\/unmapped surface is considered to have met condition (1) out of the 3 required conditions for mapping a surface if its role surface has not been destroyed, i.\+e. the client must perform the initial commit again before attaching a buffer. \hypertarget{page_iface_xdg_surface_page_iface_xdg_surface_api}{}\doxysubsection{API}\label{page_iface_xdg_surface_page_iface_xdg_surface_api}
+See \mbox{\hyperlink{group__iface__xdg__surface}{The xdg\+\_\+surface interface}}. \hypertarget{page_iface_xdg_toplevel}{}\doxysection{xdg\+\_\+toplevel}\label{page_iface_xdg_toplevel}
+\hypertarget{page_iface_xdg_toplevel_page_iface_xdg_toplevel_desc}{}\doxysubsection{Description}\label{page_iface_xdg_toplevel_page_iface_xdg_toplevel_desc}
+This interface defines an xdg\+\_\+surface role which allows a surface to, among other things, set window-\/like properties such as maximize, fullscreen, and minimize, set application-\/specific metadata like title and id, and well as trigger user interactive operations such as interactive resize and move.
+
+Unmapping an xdg\+\_\+toplevel means that the surface cannot be shown by the compositor until it is explicitly mapped again. All active operations (e.\+g., move, resize) are canceled and all attributes (e.\+g. title, state, stacking, ...) are discarded for an xdg\+\_\+toplevel surface when it is unmapped. The xdg\+\_\+toplevel returns to the state it had right after xdg\+\_\+surface.\+get\+\_\+toplevel. The client can re-\/map the toplevel by perfoming a commit without any buffer attached, waiting for a configure event and handling it as usual (see xdg\+\_\+surface description).
+
+Attaching a null buffer to a toplevel unmaps the surface. \hypertarget{page_iface_xdg_toplevel_page_iface_xdg_toplevel_api}{}\doxysubsection{API}\label{page_iface_xdg_toplevel_page_iface_xdg_toplevel_api}
+See \mbox{\hyperlink{group__iface__xdg__toplevel}{The xdg\+\_\+toplevel interface}}. \hypertarget{page_iface_xdg_popup}{}\doxysection{xdg\+\_\+popup}\label{page_iface_xdg_popup}
+\hypertarget{page_iface_xdg_popup_page_iface_xdg_popup_desc}{}\doxysubsection{Description}\label{page_iface_xdg_popup_page_iface_xdg_popup_desc}
+A popup surface is a short-\/lived, temporary surface. It can be used to implement for example menus, popovers, tooltips and other similar user interface concepts.
+
+A popup can be made to take an explicit grab. See xdg\+\_\+popup.\+grab for details.
+
+When the popup is dismissed, a popup\+\_\+done event will be sent out, and at the same time the surface will be unmapped. See the xdg\+\_\+popup.\+popup\+\_\+done event for details.
+
+Explicitly destroying the xdg\+\_\+popup object will also dismiss the popup and unmap the surface. Clients that want to dismiss the popup when another surface of their own is clicked should dismiss the popup using the destroy request.
+
+A newly created xdg\+\_\+popup will be stacked on top of all previously created xdg\+\_\+popup surfaces associated with the same xdg\+\_\+toplevel.
+
+The parent of an xdg\+\_\+popup must be mapped (see the xdg\+\_\+surface description) before the xdg\+\_\+popup itself.
+
+The client must call wl\+\_\+surface.\+commit on the corresponding wl\+\_\+surface for the xdg\+\_\+popup state to take effect. \hypertarget{page_iface_xdg_popup_page_iface_xdg_popup_api}{}\doxysubsection{API}\label{page_iface_xdg_popup_page_iface_xdg_popup_api}
+See \mbox{\hyperlink{group__iface__xdg__popup}{The xdg\+\_\+popup interface}}. 

@@ -1,4 +1,6 @@
-/*
+/*!
+ * \file objects.c
+ *
  * Embroidermodder 2.
  *
  * Copyright 2011-2025 The Embroidermodder Team

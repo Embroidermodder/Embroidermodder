@@ -1,0 +1,70 @@
+\hypertarget{group__iface__zwp__pointer__constraints__v1}{}\doxysection{The zwp\+\_\+pointer\+\_\+constraints\+\_\+v1 interface}
+\label{group__iface__zwp__pointer__constraints__v1}\index{The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__zwp__pointer__constraints__v1_ga0ff87756249d4f5f06f9039cc3e7c6d4}\label{group__iface__zwp__pointer__constraints__v1_ga0ff87756249d4f5f06f9039cc3e7c6d4}} 
+\#define {\bfseries ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__pointer__constraints__v1_ga4ba69bffff915fcd6ba370202a596789}\label{group__iface__zwp__pointer__constraints__v1_ga4ba69bffff915fcd6ba370202a596789}} 
+\#define {\bfseries ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+LOCK\+\_\+\+POINTER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__pointer__constraints__v1_ga918e264a1d0eb3a04ec10f2f46240366}\label{group__iface__zwp__pointer__constraints__v1_ga918e264a1d0eb3a04ec10f2f46240366}} 
+\#define {\bfseries ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+CONFINE\+\_\+\+POINTER\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group__iface__zwp__pointer__constraints__v1_gad04422cc099d78ed20fcce6b694c0468}{zwp\+\_\+pointer\+\_\+constraints\+\_\+v1\+\_\+error}} \{ \mbox{\hyperlink{group__iface__zwp__pointer__constraints__v1_ggad04422cc099d78ed20fcce6b694c0468a6422e842aa381627bfc163faf4a33aa8}{ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+ERROR\+\_\+\+ALREADY\+\_\+\+CONSTRAINED}} = 1
+ \}
+\item 
+enum \mbox{\hyperlink{group__iface__zwp__pointer__constraints__v1_ga7f10e94c18fe314f5dc7ab590052c944}{zwp\+\_\+pointer\+\_\+constraints\+\_\+v1\+\_\+lifetime}} \{ \mbox{\hyperlink{group__iface__zwp__pointer__constraints__v1_gga7f10e94c18fe314f5dc7ab590052c944a94280d6e7e30f5cb76cd8a13fa571eda}{ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+LIFETIME\+\_\+\+ONESHOT}} = 1
+, \mbox{\hyperlink{group__iface__zwp__pointer__constraints__v1_gga7f10e94c18fe314f5dc7ab590052c944ac2d941e8021d0f0258a529882f40d072}{ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+LIFETIME\+\_\+\+PERSISTENT}} = 2
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The global interface exposing pointer constraining functionality. It exposes two requests\+: lock\+\_\+pointer for locking the pointer to its position, and confine\+\_\+pointer for locking the pointer to a region.
+
+The lock\+\_\+pointer and confine\+\_\+pointer requests create the objects wp\+\_\+locked\+\_\+pointer and wp\+\_\+confined\+\_\+pointer respectively, and the client can use these objects to interact with the lock.
+
+For any surface, only one lock or confinement may be active across all wl\+\_\+pointer objects of the same seat. If a lock or confinement is requested when another lock or confinement is active or requested on the same surface and with any of the wl\+\_\+pointer objects of the same seat, an \textquotesingle{}already\+\_\+constrained\textquotesingle{} error will be raised. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{group__iface__zwp__pointer__constraints__v1_gad04422cc099d78ed20fcce6b694c0468}\label{group__iface__zwp__pointer__constraints__v1_gad04422cc099d78ed20fcce6b694c0468}} 
+\index{The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}!zwp\_pointer\_constraints\_v1\_error@{zwp\_pointer\_constraints\_v1\_error}}
+\index{zwp\_pointer\_constraints\_v1\_error@{zwp\_pointer\_constraints\_v1\_error}!The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}}
+\doxysubsubsection{\texorpdfstring{zwp\_pointer\_constraints\_v1\_error}{zwp\_pointer\_constraints\_v1\_error}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__zwp__pointer__constraints__v1_gad04422cc099d78ed20fcce6b694c0468}{zwp\+\_\+pointer\+\_\+constraints\+\_\+v1\+\_\+error}}}
+
+wp\+\_\+pointer\+\_\+constraints error values
+
+These errors can be emitted in response to wp\+\_\+pointer\+\_\+constraints requests. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ZWP\_POINTER\_CONSTRAINTS\_V1\_ERROR\_ALREADY\_CONSTRAINED@{ZWP\_POINTER\_CONSTRAINTS\_V1\_ERROR\_ALREADY\_CONSTRAINED}!The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}}\index{The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}!ZWP\_POINTER\_CONSTRAINTS\_V1\_ERROR\_ALREADY\_CONSTRAINED@{ZWP\_POINTER\_CONSTRAINTS\_V1\_ERROR\_ALREADY\_CONSTRAINED}}}\mbox{\Hypertarget{group__iface__zwp__pointer__constraints__v1_ggad04422cc099d78ed20fcce6b694c0468a6422e842aa381627bfc163faf4a33aa8}\label{group__iface__zwp__pointer__constraints__v1_ggad04422cc099d78ed20fcce6b694c0468a6422e842aa381627bfc163faf4a33aa8}} 
+ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+ERROR\+\_\+\+ALREADY\+\_\+\+CONSTRAINED&pointer constraint already requested on that surface \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{group__iface__zwp__pointer__constraints__v1_ga7f10e94c18fe314f5dc7ab590052c944}\label{group__iface__zwp__pointer__constraints__v1_ga7f10e94c18fe314f5dc7ab590052c944}} 
+\index{The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}!zwp\_pointer\_constraints\_v1\_lifetime@{zwp\_pointer\_constraints\_v1\_lifetime}}
+\index{zwp\_pointer\_constraints\_v1\_lifetime@{zwp\_pointer\_constraints\_v1\_lifetime}!The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}}
+\doxysubsubsection{\texorpdfstring{zwp\_pointer\_constraints\_v1\_lifetime}{zwp\_pointer\_constraints\_v1\_lifetime}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{group__iface__zwp__pointer__constraints__v1_ga7f10e94c18fe314f5dc7ab590052c944}{zwp\+\_\+pointer\+\_\+constraints\+\_\+v1\+\_\+lifetime}}}
+
+constraint lifetime
+
+These values represent different lifetime semantics. They are passed as arguments to the factory requests to specify how the constraint lifetimes should be managed. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ZWP\_POINTER\_CONSTRAINTS\_V1\_LIFETIME\_ONESHOT@{ZWP\_POINTER\_CONSTRAINTS\_V1\_LIFETIME\_ONESHOT}!The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}}\index{The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}!ZWP\_POINTER\_CONSTRAINTS\_V1\_LIFETIME\_ONESHOT@{ZWP\_POINTER\_CONSTRAINTS\_V1\_LIFETIME\_ONESHOT}}}\mbox{\Hypertarget{group__iface__zwp__pointer__constraints__v1_gga7f10e94c18fe314f5dc7ab590052c944a94280d6e7e30f5cb76cd8a13fa571eda}\label{group__iface__zwp__pointer__constraints__v1_gga7f10e94c18fe314f5dc7ab590052c944a94280d6e7e30f5cb76cd8a13fa571eda}} 
+ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+LIFETIME\+\_\+\+ONESHOT&the pointer constraint is defunct once deactivated
+
+A oneshot pointer constraint will never reactivate once it has been deactivated. See the corresponding deactivation event (wp\+\_\+locked\+\_\+pointer.\+unlocked and wp\+\_\+confined\+\_\+pointer.\+unconfined) for details. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ZWP\_POINTER\_CONSTRAINTS\_V1\_LIFETIME\_PERSISTENT@{ZWP\_POINTER\_CONSTRAINTS\_V1\_LIFETIME\_PERSISTENT}!The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}}\index{The zwp\_pointer\_constraints\_v1 interface@{The zwp\_pointer\_constraints\_v1 interface}!ZWP\_POINTER\_CONSTRAINTS\_V1\_LIFETIME\_PERSISTENT@{ZWP\_POINTER\_CONSTRAINTS\_V1\_LIFETIME\_PERSISTENT}}}\mbox{\Hypertarget{group__iface__zwp__pointer__constraints__v1_gga7f10e94c18fe314f5dc7ab590052c944ac2d941e8021d0f0258a529882f40d072}\label{group__iface__zwp__pointer__constraints__v1_gga7f10e94c18fe314f5dc7ab590052c944ac2d941e8021d0f0258a529882f40d072}} 
+ZWP\+\_\+\+POINTER\+\_\+\+CONSTRAINTS\+\_\+\+V1\+\_\+\+LIFETIME\+\_\+\+PERSISTENT&the pointer constraint may reactivate
+
+A persistent pointer constraint may again reactivate once it has been deactivated. See the corresponding deactivation event (wp\+\_\+locked\+\_\+pointer.\+unlocked and wp\+\_\+confined\+\_\+pointer.\+unconfined) for details. \\
+\hline
+
+\end{DoxyEnumFields}

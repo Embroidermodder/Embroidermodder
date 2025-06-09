@@ -1,0 +1,240 @@
+\hypertarget{classUndoEditor}{}\doxysubsection{Undo\+Editor Class Reference}
+\label{classUndoEditor}\index{UndoEditor@{UndoEditor}}
+Inheritance diagram for Undo\+Editor\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classUndoEditor}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classUndoEditor_a711bb4a61cb6110b0ca41187aafd01cd}{undo}} ()
+\item 
+void \mbox{\hyperlink{classUndoEditor_aaafb3b23df9d66bcd11b945bdceb9c36}{redo}} ()
+\item 
+void \mbox{\hyperlink{classUndoEditor_a6cd24d1a91655edcca9066fdde144057}{update\+Clean\+Icon}} (bool opened)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classUndoEditor_ad334914a1959f67010b789b91f790047}{Undo\+Editor}} (QString icon\+Directory=\char`\"{}\char`\"{}, QWidget $\ast$widget\+To\+Focus=0, QWidget $\ast$parent=0)
+\item 
+void \mbox{\hyperlink{classUndoEditor_a570e0736eddc0c3086f1d8f2cd9d672b}{add\+Stack}} (QUndo\+Stack $\ast$stack)
+\item 
+bool \mbox{\hyperlink{classUndoEditor_a0bd588248fa12d7aa56403dab2090bd8}{can\+Undo}} () const
+\item 
+bool \mbox{\hyperlink{classUndoEditor_a7f3f3bda585f92bc2fdde42f2d6c47b9}{can\+Redo}} () const
+\item 
+QString \mbox{\hyperlink{classUndoEditor_aa540aa8f3bfa37c1b7b3910e9c20613b}{undo\+Text}} () const
+\item 
+QString \mbox{\hyperlink{classUndoEditor_a91c9e504d9307fdeeb389f4768e2f5e0}{redo\+Text}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00203}{203}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classUndoEditor_ad334914a1959f67010b789b91f790047}\label{classUndoEditor_ad334914a1959f67010b789b91f790047}} 
+\index{UndoEditor@{UndoEditor}!UndoEditor@{UndoEditor}}
+\index{UndoEditor@{UndoEditor}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{UndoEditor()}{UndoEditor()}}
+{\footnotesize\ttfamily Undo\+Editor\+::\+Undo\+Editor (\begin{DoxyParamCaption}\item[{QString}]{icon\+Directory = {\ttfamily \char`\"{}\char`\"{}},  }\item[{QWidget $\ast$}]{widget\+To\+Focus = {\ttfamily 0},  }\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04209}{4209}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04209                                                                                      : QDockWidget(parent)}
+\DoxyCodeLine{04210 \{}
+\DoxyCodeLine{04211     iconDir = iconDirectory;}
+\DoxyCodeLine{04212     iconSize = 16;}
+\DoxyCodeLine{04213     setMinimumSize(100,100);}
+\DoxyCodeLine{04214 }
+\DoxyCodeLine{04215     undoGroup = \textcolor{keyword}{new} QUndoGroup(\textcolor{keyword}{this});}
+\DoxyCodeLine{04216     undoView = \textcolor{keyword}{new} QUndoView(undoGroup, \textcolor{keyword}{this});}
+\DoxyCodeLine{04217     updateCleanIcon(\textcolor{keyword}{false});}
+\DoxyCodeLine{04218 }
+\DoxyCodeLine{04219     setWidget(undoView);}
+\DoxyCodeLine{04220     setWindowTitle(tr(\textcolor{stringliteral}{"{}History"{}}));}
+\DoxyCodeLine{04221     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);}
+\DoxyCodeLine{04222 }
+\DoxyCodeLine{04223     this-\/>setFocusProxy(widgetToFocus);}
+\DoxyCodeLine{04224     undoView-\/>setFocusProxy(widgetToFocus);}
+\DoxyCodeLine{04225 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classUndoEditor_a7b3812825c358c489dcc6c3632723d14}\label{classUndoEditor_a7b3812825c358c489dcc6c3632723d14}} 
+\index{UndoEditor@{UndoEditor}!````~UndoEditor@{$\sim$UndoEditor}}
+\index{````~UndoEditor@{$\sim$UndoEditor}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{$\sim$UndoEditor()}{~UndoEditor()}}
+{\footnotesize\ttfamily Undo\+Editor\+::$\sim$\+Undo\+Editor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{qt_8h_source_l00210}{210}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00210 \{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classUndoEditor_a570e0736eddc0c3086f1d8f2cd9d672b}\label{classUndoEditor_a570e0736eddc0c3086f1d8f2cd9d672b}} 
+\index{UndoEditor@{UndoEditor}!addStack@{addStack}}
+\index{addStack@{addStack}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{addStack()}{addStack()}}
+{\footnotesize\ttfamily void Undo\+Editor\+::add\+Stack (\begin{DoxyParamCaption}\item[{QUndo\+Stack $\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04243}{4243}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04244 \{}
+\DoxyCodeLine{04245     undoGroup-\/>addStack(stack);}
+\DoxyCodeLine{04246 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classUndoEditor_a7f3f3bda585f92bc2fdde42f2d6c47b9}\label{classUndoEditor_a7f3f3bda585f92bc2fdde42f2d6c47b9}} 
+\index{UndoEditor@{UndoEditor}!canRedo@{canRedo}}
+\index{canRedo@{canRedo}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{canRedo()}{canRedo()}}
+{\footnotesize\ttfamily bool Undo\+Editor\+::can\+Redo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04257}{4257}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04258 \{}
+\DoxyCodeLine{04259     \textcolor{keywordflow}{return} undoGroup-\/>canRedo();}
+\DoxyCodeLine{04260 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classUndoEditor_a0bd588248fa12d7aa56403dab2090bd8}\label{classUndoEditor_a0bd588248fa12d7aa56403dab2090bd8}} 
+\index{UndoEditor@{UndoEditor}!canUndo@{canUndo}}
+\index{canUndo@{canUndo}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{canUndo()}{canUndo()}}
+{\footnotesize\ttfamily bool Undo\+Editor\+::can\+Undo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04250}{4250}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04251 \{}
+\DoxyCodeLine{04252     \textcolor{keywordflow}{return} undoGroup-\/>canUndo();}
+\DoxyCodeLine{04253 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classUndoEditor_aaafb3b23df9d66bcd11b945bdceb9c36}\label{classUndoEditor_aaafb3b23df9d66bcd11b945bdceb9c36}} 
+\index{UndoEditor@{UndoEditor}!redo@{redo}}
+\index{redo@{redo}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{redo}{redo}}
+{\footnotesize\ttfamily void Undo\+Editor\+::redo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04285}{4285}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04286 \{}
+\DoxyCodeLine{04287     undoGroup-\/>redo();}
+\DoxyCodeLine{04288 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classUndoEditor_a91c9e504d9307fdeeb389f4768e2f5e0}\label{classUndoEditor_a91c9e504d9307fdeeb389f4768e2f5e0}} 
+\index{UndoEditor@{UndoEditor}!redoText@{redoText}}
+\index{redoText@{redoText}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{redoText()}{redoText()}}
+{\footnotesize\ttfamily QString Undo\+Editor\+::redo\+Text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04271}{4271}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04272 \{}
+\DoxyCodeLine{04273     \textcolor{keywordflow}{return} undoGroup-\/>redoText();}
+\DoxyCodeLine{04274 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classUndoEditor_a711bb4a61cb6110b0ca41187aafd01cd}\label{classUndoEditor_a711bb4a61cb6110b0ca41187aafd01cd}} 
+\index{UndoEditor@{UndoEditor}!undo@{undo}}
+\index{undo@{undo}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{undo}{undo}}
+{\footnotesize\ttfamily void Undo\+Editor\+::undo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04278}{4278}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04279 \{}
+\DoxyCodeLine{04280     undoGroup-\/>undo();}
+\DoxyCodeLine{04281 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classUndoEditor_aa540aa8f3bfa37c1b7b3910e9c20613b}\label{classUndoEditor_aa540aa8f3bfa37c1b7b3910e9c20613b}} 
+\index{UndoEditor@{UndoEditor}!undoText@{undoText}}
+\index{undoText@{undoText}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{undoText()}{undoText()}}
+{\footnotesize\ttfamily QString Undo\+Editor\+::undo\+Text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04264}{4264}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04265 \{}
+\DoxyCodeLine{04266     \textcolor{keywordflow}{return} undoGroup-\/>undoText();}
+\DoxyCodeLine{04267 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classUndoEditor_a6cd24d1a91655edcca9066fdde144057}\label{classUndoEditor_a6cd24d1a91655edcca9066fdde144057}} 
+\index{UndoEditor@{UndoEditor}!updateCleanIcon@{updateCleanIcon}}
+\index{updateCleanIcon@{updateCleanIcon}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{updateCleanIcon}{updateCleanIcon}}
+{\footnotesize\ttfamily void Undo\+Editor\+::update\+Clean\+Icon (\begin{DoxyParamCaption}\item[{bool}]{opened }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{commands_8cpp_source_l04229}{4229}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{04230 \{}
+\DoxyCodeLine{04231     \textcolor{keywordflow}{if} (opened) \{}
+\DoxyCodeLine{04232         undoView-\/>setEmptyLabel(tr(\textcolor{stringliteral}{"{}Open"{}}));}
+\DoxyCodeLine{04233         undoView-\/>setCleanIcon(create\_icon(\textcolor{stringliteral}{"{}open"{}}));}
+\DoxyCodeLine{04234     \}}
+\DoxyCodeLine{04235     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{04236         undoView-\/>setEmptyLabel(tr(\textcolor{stringliteral}{"{}New"{}}));}
+\DoxyCodeLine{04237         undoView-\/>setCleanIcon(create\_icon(\textcolor{stringliteral}{"{}new"{}}));}
+\DoxyCodeLine{04238     \}}
+\DoxyCodeLine{04239 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{qt_8h}{qt.\+h}}\item 
+src/commands.\+cpp\end{DoxyCompactItemize}

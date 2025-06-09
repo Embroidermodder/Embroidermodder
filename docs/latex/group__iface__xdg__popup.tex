@@ -1,0 +1,44 @@
+\hypertarget{group__iface__xdg__popup}{}\doxysection{The xdg\+\_\+popup interface}
+\label{group__iface__xdg__popup}\index{The xdg\_popup interface@{The xdg\_popup interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structxdg__popup__listener}{xdg\+\_\+popup\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__xdg__popup_ga151eed04f49621104c98c93464d442ae}\label{group__iface__xdg__popup_ga151eed04f49621104c98c93464d442ae}} 
+\#define {\bfseries XDG\+\_\+\+POPUP\+\_\+\+CONFIGURE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__popup_ga78a80519c46f9099cd029ca172705560}\label{group__iface__xdg__popup_ga78a80519c46f9099cd029ca172705560}} 
+\#define {\bfseries XDG\+\_\+\+POPUP\+\_\+\+POPUP\+\_\+\+DONE\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__popup_ga6cc7c8701bd4f58a8aced886013c543b}\label{group__iface__xdg__popup_ga6cc7c8701bd4f58a8aced886013c543b}} 
+\#define {\bfseries XDG\+\_\+\+POPUP\+\_\+\+REPOSITIONED\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\item 
+\mbox{\Hypertarget{group__iface__xdg__popup_ga13f61af07a0ecea6d3b433e6e8e06879}\label{group__iface__xdg__popup_ga13f61af07a0ecea6d3b433e6e8e06879}} 
+\#define {\bfseries XDG\+\_\+\+POPUP\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__popup_gaa676f7d60bed3ef08d1bad3b74a0ae11}\label{group__iface__xdg__popup_gaa676f7d60bed3ef08d1bad3b74a0ae11}} 
+\#define {\bfseries XDG\+\_\+\+POPUP\+\_\+\+GRAB\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__xdg__popup_ga3e6c85e3b3917e49583704925c1be3d4}\label{group__iface__xdg__popup_ga3e6c85e3b3917e49583704925c1be3d4}} 
+\#define {\bfseries XDG\+\_\+\+POPUP\+\_\+\+REPOSITION\+\_\+\+SINCE\+\_\+\+VERSION}~3
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A popup surface is a short-\/lived, temporary surface. It can be used to implement for example menus, popovers, tooltips and other similar user interface concepts.
+
+A popup can be made to take an explicit grab. See xdg\+\_\+popup.\+grab for details.
+
+When the popup is dismissed, a popup\+\_\+done event will be sent out, and at the same time the surface will be unmapped. See the xdg\+\_\+popup.\+popup\+\_\+done event for details.
+
+Explicitly destroying the xdg\+\_\+popup object will also dismiss the popup and unmap the surface. Clients that want to dismiss the popup when another surface of their own is clicked should dismiss the popup using the destroy request.
+
+A newly created xdg\+\_\+popup will be stacked on top of all previously created xdg\+\_\+popup surfaces associated with the same xdg\+\_\+toplevel.
+
+The parent of an xdg\+\_\+popup must be mapped (see the xdg\+\_\+surface description) before the xdg\+\_\+popup itself.
+
+The client must call wl\+\_\+surface.\+commit on the corresponding wl\+\_\+surface for the xdg\+\_\+popup state to take effect. 

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['what_20is_20embroidermodder_3f_0',['What is Embroidermodder?',['../md_README.html',1,'']]]
+  ['contributor_20covenant_20code_20of_20conduct_0',['Contributor Covenant Code of Conduct',['../md_docs_CODE_OF_CONDUCT.html',1,'(Global Namespace)'],['../md_docs_man_CODE_OF_CONDUCT.html',1,'(Global Namespace)']]]
 ];

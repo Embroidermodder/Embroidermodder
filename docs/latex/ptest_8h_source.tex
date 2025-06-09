@@ -1,0 +1,28 @@
+\hypertarget{ptest_8h_source}{}\doxysection{ptest.\+h}
+\label{ptest_8h_source}\index{extern/libembroidery/extern/mpc/tests/ptest.h@{extern/libembroidery/extern/mpc/tests/ptest.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef ptest\_h}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#define ptest\_h}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#define PT\_SUITE(name) void name(void)}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#define PT\_FUNC(name) static void name(void)}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#define PT\_REG(name) pt\_add\_test(name, \#name)}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#define PT\_TEST(name) auto void name(void); PT\_REG(name); void name(void)}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#define PT\_ASSERT(expr) pt\_assert\_run((int)(expr), \#expr, \_\_FILE\_\_, \_\_LINE\_\_)}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#define PT\_ASSERT\_STR\_EQ(fst, snd) pt\_assert\_run(strcmp(fst, snd) == 0, "{}strcmp( "{}} \#fst "{}, "{} \#snd "{} ) == 0"{}, \_\_FILE\_\_, \_\_LINE\_\_)}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{keywordtype}{void} pt\_assert\_run(\textcolor{keywordtype}{int} \mbox{\hyperlink{structresult}{result}}, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* expr, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* file, \textcolor{keywordtype}{int} line);}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17 \textcolor{keywordtype}{void} pt\_add\_test(\textcolor{keywordtype}{void} (*func)(\textcolor{keywordtype}{void}), \textcolor{keyword}{const} \textcolor{keywordtype}{char}* name, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* suite);}
+\DoxyCodeLine{18 \textcolor{keywordtype}{void} pt\_add\_suite(\textcolor{keywordtype}{void} (*func)(\textcolor{keywordtype}{void}));}
+\DoxyCodeLine{19 \textcolor{keywordtype}{int} pt\_run(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{22 }
+
+\end{DoxyCode}

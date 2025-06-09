@@ -1,0 +1,240 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\contentsline {section}{\numberline {1}Contributor Covenant Code of Conduct}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Our Pledge}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Our Standards}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Enforcement Responsibilities}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Scope}{2}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Enforcement}{3}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Enforcement Guidelines}{3}{subsection.1.6}%
+\contentsline {subsubsection}{\numberline {1.6.1}1. Correction}{3}{subsubsection.1.6.1}%
+\contentsline {subsubsection}{\numberline {1.6.2}2. Warning}{3}{subsubsection.1.6.2}%
+\contentsline {subsubsection}{\numberline {1.6.3}3. Temporary Ban}{3}{subsubsection.1.6.3}%
+\contentsline {subsubsection}{\numberline {1.6.4}4. Permanent Ban}{3}{subsubsection.1.6.4}%
+\contentsline {subsection}{\numberline {1.7}Attribution}{4}{subsection.1.7}%
+\contentsline {section}{\numberline {2}Contributor Covenant Code of Conduct}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Our Pledge}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Our Standards}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Enforcement Responsibilities}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Scope}{5}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Enforcement}{5}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Enforcement Guidelines}{5}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}1. Correction}{5}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}2. Warning}{5}{subsubsection.2.6.2}%
+\contentsline {subsubsection}{\numberline {2.6.3}3. Temporary Ban}{6}{subsubsection.2.6.3}%
+\contentsline {subsubsection}{\numberline {2.6.4}4. Permanent Ban}{6}{subsubsection.2.6.4}%
+\contentsline {subsection}{\numberline {2.7}Attribution}{6}{subsection.2.7}%
+\contentsline {section}{\numberline {3}source-\/code-\/pro-\/license}{6}{section.3}%
+\contentsline {subsubsection}{\numberline {3.0.1}SIL OPEN FONT LICENSE Version 1.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}1 -\/ 26 February 2007}{7}{subsubsection.3.0.1}%
+\contentsline {section}{\numberline {4}Source Code Pro}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Open source files}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Getting involved}{7}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Releases}{8}{subsection.4.3}%
+\contentsline {section}{\numberline {5}source-\/sans-\/license}{8}{section.5}%
+\contentsline {subsubsection}{\numberline {5.0.1}SIL OPEN FONT LICENSE Version 1.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}1 -\/ 26 February 2007}{8}{subsubsection.5.0.1}%
+\contentsline {section}{\numberline {6}Source Sans 3}{9}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Open source files}{9}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Getting involved}{9}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Releases}{9}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Photographs}{9}{section.7}%
+\contentsline {section}{\numberline {8}GNU Free Documentation License}{9}{section.8}%
+\contentsline {subsection}{\numberline {8.1}0. PREAMBLE}{9}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}1. APPLICABILITY AND DEFINITIONS}{9}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}2. VERBATIM COPYING}{10}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}3. COPYING IN QUANTITY}{10}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}4. MODIFICATIONS}{11}{subsection.8.5}%
+\contentsline {subsection}{\numberline {8.6}5. COMBINING DOCUMENTS}{12}{subsection.8.6}%
+\contentsline {subsection}{\numberline {8.7}6. COLLECTIONS OF DOCUMENTS}{12}{subsection.8.7}%
+\contentsline {subsection}{\numberline {8.8}7. AGGREGATION WITH INDEPENDENT WORKS}{12}{subsection.8.8}%
+\contentsline {subsection}{\numberline {8.9}8. TRANSLATION}{13}{subsection.8.9}%
+\contentsline {subsection}{\numberline {8.10}9. TERMINATION}{13}{subsection.8.10}%
+\contentsline {subsection}{\numberline {8.11}10. FUTURE REVISIONS OF THIS LICENSE}{13}{subsection.8.11}%
+\contentsline {subsection}{\numberline {8.12}11. RELICENSING}{13}{subsection.8.12}%
+\contentsline {subsection}{\numberline {8.13}ADDENDUM\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}: How to use this License for your documents}{14}{subsection.8.13}%
+\contentsline {section}{\numberline {9}Privacy Policy for Embroidery Viewer}{14}{section.9}%
+\contentsline {subsubsection}{\numberline {9.0.1}CONTACT US}{14}{subsubsection.9.0.1}%
+\contentsline {section}{\numberline {10}Embroidermodder User Manual}{14}{section.10}%
+\contentsline {section}{\numberline {11}Test Designs}{14}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Wishlist}{15}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}On the original test designs}{15}{subsection.11.2}%
+\contentsline {subsection}{\numberline {11.3}Embroidermodder Logo}{15}{subsection.11.3}%
+\contentsline {subsection}{\numberline {11.4}Shamrockin}{15}{subsection.11.4}%
+\contentsline {subsection}{\numberline {11.5}Spirals}{15}{subsection.11.5}%
+\contentsline {section}{\numberline {12}Privacy Policy for Embroidery Viewer}{15}{section.12}%
+\contentsline {subsubsection}{\numberline {12.0.1}CONTACT US}{15}{subsubsection.12.0.1}%
+\contentsline {section}{\numberline {13}Photographs}{15}{section.13}%
+\contentsline {section}{\numberline {14}GNU Free Documentation License}{16}{section.14}%
+\contentsline {subsection}{\numberline {14.1}0. PREAMBLE}{16}{subsection.14.1}%
+\contentsline {subsection}{\numberline {14.2}1. APPLICABILITY AND DEFINITIONS}{16}{subsection.14.2}%
+\contentsline {subsection}{\numberline {14.3}2. VERBATIM COPYING}{17}{subsection.14.3}%
+\contentsline {subsection}{\numberline {14.4}3. COPYING IN QUANTITY}{17}{subsection.14.4}%
+\contentsline {subsection}{\numberline {14.5}4. MODIFICATIONS}{17}{subsection.14.5}%
+\contentsline {subsection}{\numberline {14.6}5. COMBINING DOCUMENTS}{18}{subsection.14.6}%
+\contentsline {subsection}{\numberline {14.7}6. COLLECTIONS OF DOCUMENTS}{19}{subsection.14.7}%
+\contentsline {subsection}{\numberline {14.8}7. AGGREGATION WITH INDEPENDENT WORKS}{19}{subsection.14.8}%
+\contentsline {subsection}{\numberline {14.9}8. TRANSLATION}{19}{subsection.14.9}%
+\contentsline {subsection}{\numberline {14.10}9. TERMINATION}{19}{subsection.14.10}%
+\contentsline {subsection}{\numberline {14.11}10. FUTURE REVISIONS OF THIS LICENSE}{20}{subsection.14.11}%
+\contentsline {subsection}{\numberline {14.12}11. RELICENSING}{20}{subsection.14.12}%
+\contentsline {subsection}{\numberline {14.13}ADDENDUM\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}: How to use this License for your documents}{20}{subsection.14.13}%
+\contentsline {section}{\numberline {15}The Embroidermodder Reference Manual}{20}{section.15}%
+\contentsline {subsection}{\numberline {15.1}Build}{20}{subsection.15.1}%
+\contentsline {subsubsection}{\numberline {15.1.1}Dependencies on Ubuntu}{21}{subsubsection.15.1.1}%
+\contentsline {subsection}{\numberline {15.2}Experimental Build}{21}{subsection.15.2}%
+\contentsline {section}{\numberline {16}Test Designs}{21}{section.16}%
+\contentsline {section}{\numberline {17}zlib/libpng License}{21}{section.17}%
+\contentsline {section}{\numberline {18}What is Embroidermodder?}{21}{section.18}%
+\contentsline {subsection}{\numberline {18.1}Dependencies}{22}{subsection.18.1}%
+\contentsline {subsubsection}{\numberline {18.1.1}Included}{22}{subsubsection.18.1.1}%
+\contentsline {subsection}{\numberline {18.2}Building}{22}{subsection.18.2}%
+\contentsline {subsubsection}{\numberline {18.2.1}Building Without Bash}{22}{subsubsection.18.2.1}%
+\contentsline {subsubsection}{\numberline {18.2.2}Building Without Cmake}{22}{subsubsection.18.2.2}%
+\contentsline {subsubsection}{\numberline {18.2.3}Testing One-\/liner (\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Bash-\/only)}{22}{subsubsection.18.2.3}%
+\contentsline {subsection}{\numberline {18.3}Help Files}{23}{subsection.18.3}%
+\contentsline {subsection}{\numberline {18.4}Sample Files}{23}{subsection.18.4}%
+\contentsline {subsection}{\numberline {18.5}Install/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Uninstall}{23}{subsection.18.5}%
+\contentsline {section}{\numberline {19}KDE4 Thumbnailer}{23}{section.19}%
+\contentsline {section}{\numberline {20}Todo List}{23}{section.20}%
+\contentsline {section}{\numberline {21}Hierarchical Index}{23}{section.21}%
+\contentsline {subsection}{\numberline {21.1}Class Hierarchy}{23}{subsection.21.1}%
+\contentsline {section}{\numberline {22}Data Structure Index}{24}{section.22}%
+\contentsline {subsection}{\numberline {22.1}Data Structures}{24}{subsection.22.1}%
+\contentsline {section}{\numberline {23}File Index}{25}{section.23}%
+\contentsline {subsection}{\numberline {23.1}File List}{25}{subsection.23.1}%
+\contentsline {section}{\numberline {24}Data Structure Documentation}{25}{section.24}%
+\contentsline {subsection}{\numberline {24.1}Application Class Reference}{25}{subsection.24.1}%
+\contentsline {subsection}{\numberline {24.2}Button\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{26}{subsection.24.2}%
+\contentsline {subsection}{\numberline {24.3}Cmd\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Prompt\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Input Class Reference}{26}{subsection.24.3}%
+\contentsline {subsection}{\numberline {24.4}Command\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Data\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{27}{subsection.24.4}%
+\contentsline {subsection}{\numberline {24.5}Document Class Reference}{27}{subsection.24.5}%
+\contentsline {subsection}{\numberline {24.6}Document\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Data\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{28}{subsection.24.6}%
+\contentsline {subsection}{\numberline {24.7}Embroidery\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Thumbnailer Class Reference}{29}{subsection.24.7}%
+\contentsline {subsection}{\numberline {24.8}Group\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Box\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Data\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{29}{subsection.24.8}%
+\contentsline {subsection}{\numberline {24.9}Layer\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Data\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{30}{subsection.24.9}%
+\contentsline {subsection}{\numberline {24.10}Layer\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Manager Class Reference}{30}{subsection.24.10}%
+\contentsline {subsection}{\numberline {24.11}Main\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Window Class Reference}{30}{subsection.24.11}%
+\contentsline {subsection}{\numberline {24.12}Mdi\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Area Class Reference}{31}{subsection.24.12}%
+\contentsline {subsection}{\numberline {24.13}Mdi\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Window Class Reference}{32}{subsection.24.13}%
+\contentsline {subsection}{\numberline {24.14}Object Class Reference}{32}{subsection.24.14}%
+\contentsline {subsection}{\numberline {24.15}Object\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Core\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{33}{subsection.24.15}%
+\contentsline {subsection}{\numberline {24.16}Property\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Editor Class Reference}{34}{subsection.24.16}%
+\contentsline {subsection}{\numberline {24.17}Select\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Box Class Reference}{34}{subsection.24.17}%
+\contentsline {subsection}{\numberline {24.18}Setting\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{35}{subsection.24.18}%
+\contentsline {subsection}{\numberline {24.19}Tab\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{35}{subsection.24.19}%
+\contentsline {subsection}{\numberline {24.20}Translation\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{35}{subsection.24.20}%
+\contentsline {subsection}{\numberline {24.21}Undoable\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Command Class Reference}{35}{subsection.24.21}%
+\contentsline {subsection}{\numberline {24.22}Undo\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Data\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{36}{subsection.24.22}%
+\contentsline {subsection}{\numberline {24.23}Undo\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Editor Class Reference}{37}{subsection.24.23}%
+\contentsline {subsection}{\numberline {24.24}View\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Data\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{37}{subsection.24.24}%
+\contentsline {subsubsection}{\numberline {24.24.1}Detailed Description}{37}{subsubsection.24.24.1}%
+\contentsline {subsubsection}{\numberline {24.24.2}Field Documentation}{37}{subsubsection.24.24.2}%
+\contentsline {paragraph}{\numberline {24.24.2.1}lines}{38}{paragraph.24.24.2.1}%
+\contentsline {paragraph}{\numberline {24.24.2.2}little}{38}{paragraph.24.24.2.2}%
+\contentsline {paragraph}{\numberline {24.24.2.3}medium}{38}{paragraph.24.24.2.3}%
+\contentsline {subsection}{\numberline {24.25}Widget\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{38}{subsection.24.25}%
+\contentsline {subsubsection}{\numberline {24.25.1}Detailed Description}{38}{subsubsection.24.25.1}%
+\contentsline {subsubsection}{\numberline {24.25.2}Field Documentation}{38}{subsubsection.24.25.2}%
+\contentsline {paragraph}{\numberline {24.25.2.1}key}{38}{paragraph.24.25.2.1}%
+\contentsline {paragraph}{\numberline {24.25.2.2}widget}{38}{paragraph.24.25.2.2}%
+\contentsline {subsection}{\numberline {24.26}Widget\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Data\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{38}{subsection.24.26}%
+\contentsline {subsubsection}{\numberline {24.26.1}Detailed Description}{38}{subsubsection.24.26.1}%
+\contentsline {subsubsection}{\numberline {24.26.2}Field Documentation}{38}{subsubsection.24.26.2}%
+\contentsline {paragraph}{\numberline {24.26.2.1}id}{38}{paragraph.24.26.2.1}%
+\contentsline {paragraph}{\numberline {24.26.2.2}label}{39}{paragraph.24.26.2.2}%
+\contentsline {paragraph}{\numberline {24.26.2.3}type}{39}{paragraph.24.26.2.3}%
+\contentsline {subsection}{\numberline {24.27}Widget\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Desc\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{} Struct Reference}{39}{subsection.24.27}%
+\contentsline {section}{\numberline {25}File Documentation}{39}{section.25}%
+\contentsline {subsection}{\numberline {25.1}core.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{39}{subsection.25.1}%
+\contentsline {subsection}{\numberline {25.2}src/interface.c File Reference}{62}{subsection.25.2}%
+\contentsline {subsubsection}{\numberline {25.2.1}Detailed Description}{66}{subsubsection.25.2.1}%
+\contentsline {subsubsection}{\numberline {25.2.2}Variable Documentation}{66}{subsubsection.25.2.2}%
+\contentsline {paragraph}{\numberline {25.2.2.1}config\_table}{66}{paragraph.25.2.2.1}%
+\contentsline {paragraph}{\numberline {25.2.2.2}help\_msg}{66}{paragraph.25.2.2.2}%
+\contentsline {paragraph}{\numberline {25.2.2.3}objectTextJustifyList}{66}{paragraph.25.2.2.3}%
+\contentsline {paragraph}{\numberline {25.2.2.4}prompt\_text}{66}{paragraph.25.2.2.4}%
+\contentsline {paragraph}{\numberline {25.2.2.5}ruler\_svg}{67}{paragraph.25.2.2.5}%
+\contentsline {subsection}{\numberline {25.3}src/objects.c File Reference}{67}{subsection.25.3}%
+\contentsline {subsubsection}{\numberline {25.3.1}Detailed Description}{69}{subsubsection.25.3.1}%
+\contentsline {subsection}{\numberline {25.4}src/qt.h File Reference}{69}{subsection.25.4}%
+\contentsline {subsubsection}{\numberline {25.4.1}Detailed Description}{69}{subsubsection.25.4.1}%
+\contentsline {subsection}{\numberline {25.5}qt.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{69}{subsection.25.5}%
+\contentsline {subsection}{\numberline {25.6}src/state.c File Reference}{73}{subsection.25.6}%
+\contentsline {subsubsection}{\numberline {25.6.1}Detailed Description}{76}{subsubsection.25.6.1}%
+\contentsline {subsubsection}{\numberline {25.6.2}Function Documentation}{76}{subsubsection.25.6.2}%
+\contentsline {paragraph}{\numberline {25.6.2.1}load\_file\_to\_buffer()}{76}{paragraph.25.6.2.1}%
+\contentsline {paragraph}{\numberline {25.6.2.2}load\_script()}{76}{paragraph.25.6.2.2}%
+\contentsline {subsubsection}{\numberline {25.6.3}Variable Documentation}{77}{subsubsection.25.6.3}%
+\contentsline {paragraph}{\numberline {25.6.3.1}accept\_to\_dialog}{77}{paragraph.25.6.3.1}%
+\contentsline {paragraph}{\numberline {25.6.3.2}bottom\_toolbar}{77}{paragraph.25.6.3.2}%
+\contentsline {paragraph}{\numberline {25.6.3.3}button\_list}{77}{paragraph.25.6.3.3}%
+\contentsline {paragraph}{\numberline {25.6.3.4}center\_on\_origin\_group}{77}{paragraph.25.6.3.4}%
+\contentsline {paragraph}{\numberline {25.6.3.5}circular\_grid\_group}{77}{paragraph.25.6.3.5}%
+\contentsline {paragraph}{\numberline {25.6.3.6}circular\_grid\_visible\_group}{77}{paragraph.25.6.3.6}%
+\contentsline {paragraph}{\numberline {25.6.3.7}color\_list}{78}{paragraph.25.6.3.7}%
+\contentsline {paragraph}{\numberline {25.6.3.8}combobox\_list}{78}{paragraph.25.6.3.8}%
+\contentsline {paragraph}{\numberline {25.6.3.9}coverage\_test}{78}{paragraph.25.6.3.9}%
+\contentsline {paragraph}{\numberline {25.6.3.10}defined\_origin\_group}{78}{paragraph.25.6.3.10}%
+\contentsline {paragraph}{\numberline {25.6.3.11}dimension\_menu}{78}{paragraph.25.6.3.11}%
+\contentsline {paragraph}{\numberline {25.6.3.12}dimension\_toolbar}{79}{paragraph.25.6.3.12}%
+\contentsline {paragraph}{\numberline {25.6.3.13}draw\_menu}{79}{paragraph.25.6.3.13}%
+\contentsline {paragraph}{\numberline {25.6.3.14}draw\_toolbar}{79}{paragraph.25.6.3.14}%
+\contentsline {paragraph}{\numberline {25.6.3.15}edit\_menu}{79}{paragraph.25.6.3.15}%
+\contentsline {paragraph}{\numberline {25.6.3.16}edit\_toolbar}{79}{paragraph.25.6.3.16}%
+\contentsline {paragraph}{\numberline {25.6.3.17}file\_menu}{80}{paragraph.25.6.3.17}%
+\contentsline {paragraph}{\numberline {25.6.3.18}file\_toolbar}{80}{paragraph.25.6.3.18}%
+\contentsline {paragraph}{\numberline {25.6.3.19}geometry\_type\_keys}{80}{paragraph.25.6.3.19}%
+\contentsline {paragraph}{\numberline {25.6.3.20}grid\_enabled\_group}{80}{paragraph.25.6.3.20}%
+\contentsline {paragraph}{\numberline {25.6.3.21}grid\_layout}{81}{paragraph.25.6.3.21}%
+\contentsline {paragraph}{\numberline {25.6.3.22}grid\_load\_from\_file\_group}{81}{paragraph.25.6.3.22}%
+\contentsline {paragraph}{\numberline {25.6.3.23}help\_menu}{81}{paragraph.25.6.3.23}%
+\contentsline {paragraph}{\numberline {25.6.3.24}help\_toolbar}{81}{paragraph.25.6.3.24}%
+\contentsline {paragraph}{\numberline {25.6.3.25}icon\_toolbar}{82}{paragraph.25.6.3.25}%
+\contentsline {paragraph}{\numberline {25.6.3.26}index\_name}{82}{paragraph.25.6.3.26}%
+\contentsline {paragraph}{\numberline {25.6.3.27}index\_th\_name}{82}{paragraph.25.6.3.27}%
+\contentsline {paragraph}{\numberline {25.6.3.28}inquiry\_toolbar}{82}{paragraph.25.6.3.28}%
+\contentsline {paragraph}{\numberline {25.6.3.29}key\_state}{82}{paragraph.25.6.3.29}%
+\contentsline {paragraph}{\numberline {25.6.3.30}layer\_list}{82}{paragraph.25.6.3.30}%
+\contentsline {paragraph}{\numberline {25.6.3.31}layer\_toolbar}{83}{paragraph.25.6.3.31}%
+\contentsline {paragraph}{\numberline {25.6.3.32}left\_toolbar}{83}{paragraph.25.6.3.32}%
+\contentsline {paragraph}{\numberline {25.6.3.33}line\_type\_list}{83}{paragraph.25.6.3.33}%
+\contentsline {paragraph}{\numberline {25.6.3.34}line\_weight\_list}{83}{paragraph.25.6.3.34}%
+\contentsline {paragraph}{\numberline {25.6.3.35}menu\_list}{83}{paragraph.25.6.3.35}%
+\contentsline {paragraph}{\numberline {25.6.3.36}menubar\_full\_list}{84}{paragraph.25.6.3.36}%
+\contentsline {paragraph}{\numberline {25.6.3.37}menubar\_no\_docs}{84}{paragraph.25.6.3.37}%
+\contentsline {paragraph}{\numberline {25.6.3.38}modify\_menu}{84}{paragraph.25.6.3.38}%
+\contentsline {paragraph}{\numberline {25.6.3.39}modify\_toolbar}{84}{paragraph.25.6.3.39}%
+\contentsline {paragraph}{\numberline {25.6.3.40}pan\_menu}{84}{paragraph.25.6.3.40}%
+\contentsline {paragraph}{\numberline {25.6.3.41}patternDetailsBox}{85}{paragraph.25.6.3.41}%
+\contentsline {paragraph}{\numberline {25.6.3.42}preview\_to\_dialog}{85}{paragraph.25.6.3.42}%
+\contentsline {paragraph}{\numberline {25.6.3.43}prompt\_toolbar}{85}{paragraph.25.6.3.43}%
+\contentsline {paragraph}{\numberline {25.6.3.44}promptColorLayout}{85}{paragraph.25.6.3.44}%
+\contentsline {paragraph}{\numberline {25.6.3.45}properties\_toolbar}{85}{paragraph.25.6.3.45}%
+\contentsline {paragraph}{\numberline {25.6.3.46}recent\_files}{85}{paragraph.25.6.3.46}%
+\contentsline {paragraph}{\numberline {25.6.3.47}recent\_menu}{86}{paragraph.25.6.3.47}%
+\contentsline {paragraph}{\numberline {25.6.3.48}rectangular\_grid\_group}{86}{paragraph.25.6.3.48}%
+\contentsline {paragraph}{\numberline {25.6.3.49}rectangular\_grid\_visible\_group}{86}{paragraph.25.6.3.49}%
+\contentsline {paragraph}{\numberline {25.6.3.50}render\_hints}{86}{paragraph.25.6.3.50}%
+\contentsline {paragraph}{\numberline {25.6.3.51}rulerLayout}{86}{paragraph.25.6.3.51}%
+\contentsline {paragraph}{\numberline {25.6.3.52}sandbox\_menu}{86}{paragraph.25.6.3.52}%
+\contentsline {paragraph}{\numberline {25.6.3.53}sandbox\_toolbar}{87}{paragraph.25.6.3.53}%
+\contentsline {paragraph}{\numberline {25.6.3.54}script\_false}{87}{paragraph.25.6.3.54}%
+\contentsline {paragraph}{\numberline {25.6.3.55}script\_null}{87}{paragraph.25.6.3.55}%
+\contentsline {paragraph}{\numberline {25.6.3.56}script\_true}{87}{paragraph.25.6.3.56}%
+\contentsline {paragraph}{\numberline {25.6.3.57}selectionBoxLayout}{87}{paragraph.25.6.3.57}%
+\contentsline {paragraph}{\numberline {25.6.3.58}settings\_tab\_labels}{87}{paragraph.25.6.3.58}%
+\contentsline {paragraph}{\numberline {25.6.3.59}text\_size\_list}{88}{paragraph.25.6.3.59}%
+\contentsline {paragraph}{\numberline {25.6.3.60}text\_toolbar}{88}{paragraph.25.6.3.60}%
+\contentsline {paragraph}{\numberline {25.6.3.61}tips}{88}{paragraph.25.6.3.61}%
+\contentsline {paragraph}{\numberline {25.6.3.62}toolbar\_horizontal}{88}{paragraph.25.6.3.62}%
+\contentsline {paragraph}{\numberline {25.6.3.63}toolbar\_list}{88}{paragraph.25.6.3.63}%
+\contentsline {paragraph}{\numberline {25.6.3.64}toolbars\_when\_docs}{89}{paragraph.25.6.3.64}%
+\contentsline {paragraph}{\numberline {25.6.3.65}tools\_menu}{89}{paragraph.25.6.3.65}%
+\contentsline {paragraph}{\numberline {25.6.3.66}top\_toolbar}{89}{paragraph.25.6.3.66}%
+\contentsline {paragraph}{\numberline {25.6.3.67}ui\_labels}{89}{paragraph.25.6.3.67}%
+\contentsline {paragraph}{\numberline {25.6.3.68}view\_menu}{90}{paragraph.25.6.3.68}%
+\contentsline {paragraph}{\numberline {25.6.3.69}view\_toolbar}{90}{paragraph.25.6.3.69}%
+\contentsline {paragraph}{\numberline {25.6.3.70}window\_menu}{90}{paragraph.25.6.3.70}%
+\contentsline {paragraph}{\numberline {25.6.3.71}zoom\_gb\_data}{90}{paragraph.25.6.3.71}%
+\contentsline {paragraph}{\numberline {25.6.3.72}zoom\_layout}{90}{paragraph.25.6.3.72}%
+\contentsline {paragraph}{\numberline {25.6.3.73}zoom\_menu}{91}{paragraph.25.6.3.73}%
+\contentsline {subsection}{\numberline {25.7}libembroidery-\/thumbnailer-\/kde4.h}{91}{subsection.25.7}%
+\contentsline {section}{Index}{93}{section*.73}%

@@ -1,0 +1,41 @@
+\hypertarget{group__iface__zwp__locked__pointer__v1}{}\doxysection{The zwp\+\_\+locked\+\_\+pointer\+\_\+v1 interface}
+\label{group__iface__zwp__locked__pointer__v1}\index{The zwp\_locked\_pointer\_v1 interface@{The zwp\_locked\_pointer\_v1 interface}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structzwp__locked__pointer__v1__listener}{zwp\+\_\+locked\+\_\+pointer\+\_\+v1\+\_\+listener}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{group__iface__zwp__locked__pointer__v1_ga8992a155c5d6891d4e26f8eb533d352a}\label{group__iface__zwp__locked__pointer__v1_ga8992a155c5d6891d4e26f8eb533d352a}} 
+\#define {\bfseries ZWP\+\_\+\+LOCKED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+LOCKED\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__locked__pointer__v1_ga9d7bf244dc1e933e7d20a4c10adc79e0}\label{group__iface__zwp__locked__pointer__v1_ga9d7bf244dc1e933e7d20a4c10adc79e0}} 
+\#define {\bfseries ZWP\+\_\+\+LOCKED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+UNLOCKED\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__locked__pointer__v1_ga6e34588dcc1e8780dd72d967c6bcc7c9}\label{group__iface__zwp__locked__pointer__v1_ga6e34588dcc1e8780dd72d967c6bcc7c9}} 
+\#define {\bfseries ZWP\+\_\+\+LOCKED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+DESTROY\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__locked__pointer__v1_ga30115a296bf50a7532ee12f05c453cbb}\label{group__iface__zwp__locked__pointer__v1_ga30115a296bf50a7532ee12f05c453cbb}} 
+\#define {\bfseries ZWP\+\_\+\+LOCKED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+SET\+\_\+\+CURSOR\+\_\+\+POSITION\+\_\+\+HINT\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\item 
+\mbox{\Hypertarget{group__iface__zwp__locked__pointer__v1_ga48906ba096cd90ff14e69c9ad3cc1981}\label{group__iface__zwp__locked__pointer__v1_ga48906ba096cd90ff14e69c9ad3cc1981}} 
+\#define {\bfseries ZWP\+\_\+\+LOCKED\+\_\+\+POINTER\+\_\+\+V1\+\_\+\+SET\+\_\+\+REGION\+\_\+\+SINCE\+\_\+\+VERSION}~1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The wp\+\_\+locked\+\_\+pointer interface represents a locked pointer state.
+
+While the lock of this object is active, the wl\+\_\+pointer objects of the associated seat will not emit any wl\+\_\+pointer.\+motion events.
+
+This object will send the event \textquotesingle{}locked\textquotesingle{} when the lock is activated. Whenever the lock is activated, it is guaranteed that the locked surface will already have received pointer focus and that the pointer will be within the region passed to the request creating this object.
+
+To unlock the pointer, send the destroy request. This will also destroy the wp\+\_\+locked\+\_\+pointer object.
+
+If the compositor decides to unlock the pointer the unlocked event is sent. See wp\+\_\+locked\+\_\+pointer.\+unlock for details.
+
+When unlocking, the compositor may warp the cursor position to the set cursor position hint. If it does, it will not result in any relative motion events emitted via wp\+\_\+relative\+\_\+pointer.
+
+If the surface the lock was requested on is destroyed and the lock is not yet activated, the wp\+\_\+locked\+\_\+pointer object is now defunct and must be destroyed. 

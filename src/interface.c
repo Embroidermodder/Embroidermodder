@@ -1,4 +1,6 @@
-/*
+/*!
+ * \file interface.c
+ *
  * Embroidermodder 2 (GLFW version)
  *
  * Copyright 2011-2025 The Embroidermodder Team
@@ -171,42 +173,51 @@ main(int argc, char* argv[])
     EmbString asset_dir = "assets";
     int i;
     int n_files = 0;
+    int test = 0;
     char files_to_open[MAX_FILES][MAX_STRING_LENGTH];
 
     for (i = 1; i < argc; i++) {
         if (string_equal(argv[i], "-a") || string_equal(argv[i], "--assets")) {
             /* Override the normal asset folder with this one. */
             i++;
-            strncpy(asset_dir, 200, argv[i]);
+            strncpy(asset_dir, argv[i], 200);
+            continue;
+        }
+        if (string_equal(argv[i], "--test")) {
+            test = 1;
+            continue;
         }
         if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")) {
             testing_mode = 1;
+            continue;
         }
-        else if (string_equal(argv[i], "-h") || string_equal(argv[i], "--help")) {
+        if (string_equal(argv[i], "-h") || string_equal(argv[i], "--help")) {
             fprintf(stderr, help_msg);
             exitApp = true;
+            continue;
         }
-        else if (string_equal(argv[i], "-v") || string_equal(argv[i], "--version")) {
+        if (string_equal(argv[i], "-v") || string_equal(argv[i], "--version")) {
             /* Print out version string and exit. */
             fprintf(stdout, "%s %s\n", _appName_, _appVer_);
             exitApp = true;
+            continue;
         }
-        else if (argv[i][0] == '-') {
+        if (argv[i][0] == '-') {
             fprintf(stderr, "ERROR: unrecognised flag \"%s\".\n", argv[i]);            
             exitApp = true;
+            continue;
         }
-        else if (1 /* FIXME: QFile::exists(argv[i]) && emb_valid_file_format(argv[i])*/) {
+        if (1 /* FIXME: QFile::exists(argv[i]) && emb_valid_file_format(argv[i])*/) {
             if (n_files >= MAX_FILES) {
                 printf("ERROR: More files to open than MAX_FILES.");
                 continue;
             }
             strcpy(files_to_open[n_files], argv[i]);
             n_files++;
+            continue;
         }
-        else {
-            fprintf(stderr, "ERROR: file \"%s\" not found.", argv[i]);
-            exitApp = true;
-        }
+        fprintf(stderr, "ERROR: file \"%s\" not found.", argv[i]);
+        exitApp = true;
     }
 
     if (exitApp) {
@@ -225,7 +236,15 @@ main(int argc, char* argv[])
 
     root = emb_create_root();
     load_global_state(root, asset_dir);
-    int result = make_application(n_files, files_to_open);
+    int result = 0;
+    if (test) {
+        puts("Loaded configuration:");
+        emb_print_tree(root, 0);
+        puts("");
+    }
+    else {
+        result = make_application(n_files, files_to_open);
+    }
     emb_free_root(root);
     free_script_env(global);
     free(config);
