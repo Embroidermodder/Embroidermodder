@@ -74,9 +74,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/objects.c
 	${SRC}/state.c
 	${SRC}/translations.c
-	${SRC}/icons.c
 	${SRC}/widgets.c
-	${SRC}/xpm.c
 
 	${SRC}/core.h
 	${SRC}/qt.h
@@ -86,13 +84,6 @@ qt_add_executable(embroidermodder2
 # make a new build folder to ensure that this retriggers.
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-
-add_executable(test_translations
-	${SRC}/translations.c
-	${SRC}/core.h
-
-	${TEST}/translations.c
-)
 
 include_directories(
 	${EXTERN}/libembroidery/src

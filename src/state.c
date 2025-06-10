@@ -3509,13 +3509,16 @@ emb_get_str(ScriptValue *node, const char *key)
     return emb_get_var(node, key)->s;
 }
 
-/*! . */
+/*! \brief Load the entire file with path fname into the buffer passed in.
+ *
+ * Caller is responsible for reporting the error, as we use this to determine
+ * if the file exists as well as if it can be read.
+ */
 size_t
 load_file_to_buffer(char *fname, char *buffer)
 {
     FILE *f = fopen(fname, "r");
     if (!f) {
-        printf("ERROR: Failed to open configuration file \"%s\".\n", fname);
         return 0;        
     }
     fseek(f, 0, SEEK_END);

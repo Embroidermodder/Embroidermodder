@@ -2681,9 +2681,10 @@ doc_create_origin(int32_t doc)
 
     if (get_bool(GRID_SHOW_ORIGIN)) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */
-        const char *circle_origin_path = emb_get_str(root, "path_circle_origin");
-        svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path,
-            emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
+        //! /todo
+        //const char *circle_origin_path = emb_get_str(root, "path_circle_origin");
+        //svg_to_painterpath(&(documents[doc]->originPath), circle_origin_path,
+        //    emb_vector(0.0, 0.0), emb_vector(1.0, 1.0));
     }
 }
 
@@ -5494,52 +5495,83 @@ to_qpointf(EmbVector v)
     return p;
 }
 
-/* TODO: choose a better default icon. */
+/*! TODO: choose a better default icon.
+ *
+ * Loads in the preference order:
+ * 1. Our PNG.
+ * 2. Our SVG.
+ * 3. Heroicon SVG.
+ * 4. Default blank icon.
+ */
 QPixmap
 create_pixmap(const char *icon)
 {
+    EmbString fname;
+    char *buffer = (char*)malloc(1000*1000);
+    size_t loaded;
+    /* \todo this should be based on the global icon size variable */
+    QSize size(50, 50);
+
     /* SVG icon by default */
-    int n = table_length((char**)svgs);
     if (!strcmp(icon, "blank")) {
-        debug_message("    blank icon");
-        /* FIXME: this should be based on the global icon size variable */
-        QSize size(50, 50);
         QPixmap pixmap(size);
         pixmap.fill(Qt::transparent);
         return pixmap;
     }
-    debug_message("svg_table_length = %d.", n);
-    for (int i=0; i<n/2; i++) {
-        if (!strcmp(icon, svgs[2*i+0])) {
-            /* We're storing the SVGs as part of the code, so we need to convert
-             * the string to a ByteArray for QSvgRenderer to recognise it.
-             */
-            debug_message("    found svg %s", icon);
-            QString svg_s(svgs[2*i+1]);
-            QSvgRenderer renderer(svg_s.toUtf8());
-            /* FIXME: this should be based on the global icon size variable */
-            QSize size(50, 50);
-            QPixmap pixmap(size);
-            QPainter painter;
-            pixmap.fill(Qt::transparent);
-            painter.begin(&pixmap);
-            renderer.render(&painter);
-            painter.end();
-            return pixmap;
-        }
+
+    /* 1. Our PNG icon (as XPM). */
+    sprintf(fname, "assets/images/%s.png", icon);
+    loaded = load_file_to_buffer(fname, buffer);
+    if (loaded) {
+        QImage *image = new QImage(fname);
+        QPainter painter;
+        QPixmap pixmap(size);
+        QRect rect(0, 0, 50, 50);
+        pixmap.fill(Qt::transparent);
+        painter.begin(&pixmap);
+        painter.drawImage(rect, *image);
+        painter.end();
+        free(buffer);
+        return pixmap;
     }
-    /* Fallback to XPM. */
-    n = table_length(xpm_icon_labels);
-    for (int i=0; i<n; i++) {
-        if (!strcmp(icon, xpm_icon_labels[i])) {
-            debug_message("    fallback png %s", icon);
-            QPixmap pixmap(xpm_icons[i]);
-            return pixmap;
+
+    /* 2. Our SVG icon. */
+    sprintf(fname, "assets/images/%s.svg", icon);
+    loaded = load_file_to_buffer(fname, buffer);
+    if (!loaded) {
+        /* 3. Heroicon SVG icon. */
+        int i;
+        sprintf(fname, "assets/icons/heroicons/optimized/24/outline/%s.svg", icon);
+        for (i=0; i<200; i++) {
+            if (fname[i] == '_') {
+                fname[i] = '-';
+            }
         }
+        loaded = load_file_to_buffer(fname, buffer);
     }
-    /* Use "about" to represent missing icon. */
-    QPixmap pixmap(xpm_icons[0]);
-    debug_message("    ERROR: failed to find icon %s", icon);
+    if (loaded) {
+        /* We're storing the SVGs as part of the code, so we need to convert
+         * the string to a ByteArray for QSvgRenderer to recognise it.
+         */
+        debug_message("    found svg %s", icon);
+        QPixmap pixmap(size);
+        pixmap.fill(Qt::transparent);
+        QString svg_s(buffer);
+        QSvgRenderer renderer(svg_s.toUtf8());
+        /* FIXME: this should be based on the global icon size variable */
+        QPainter painter;
+        pixmap.fill(Qt::transparent);
+        painter.begin(&pixmap);
+        renderer.render(&painter);
+        painter.end();
+        free(buffer);
+        return pixmap;
+    }
+
+    printf("Failed to load any version of the image %s.\n", icon);
+    QPixmap pixmap(size);
+    pixmap.fill(Qt::red);
+    free(buffer);
     return pixmap;
 }
 

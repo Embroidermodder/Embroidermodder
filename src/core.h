@@ -1771,6 +1771,8 @@ int find_widget_list(const char *key);
 char *qcolor_from_uint32_t(uint32_t color);
 ScriptValue allow_rubber_command(ScriptEnv *context);
 
+size_t load_file_to_buffer(char *fname, char *buffer);
+
 /* ---------------------- Script Environment management -------------------- */
 int load_global_state(ScriptValue *root, char *asset_dir);
 
@@ -1793,7 +1795,6 @@ extern Setting setting[N_SETTINGS];
 extern GroupBoxData group_box_list[];
 extern Translation translations[];
 extern Design designs[];
-extern const char *svgs[];
 extern ScriptValue *root;
 
 extern const char *config_table[];
@@ -1916,9 +1917,6 @@ extern char *combobox_list[];
 
 extern char *grid_layout[];
 extern char *zoom_layout[];
-
-extern char **xpm_icons[];
-extern char *xpm_icon_labels[];
 
 extern char recent_files[MAX_FILES][MAX_STRING_LENGTH];
 
