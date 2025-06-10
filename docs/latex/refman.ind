@@ -1,364 +1,373 @@
 \begin{theindex}
 
   \item {accept\_to\_dialog}
-    \subitem {state.c}, \hyperpage{77}
-  \item {Application}, \hyperpage{25}
+    \subitem {state.c}, \hyperpage{68}
+  \item {Application}, \hyperpage{7}
 
   \indexspace
 
   \item {bottom\_toolbar}
-    \subitem {state.c}, \hyperpage{77}
-  \item {Button\_}, \hyperpage{26}
+    \subitem {state.c}, \hyperpage{68}
+  \item {Button\_}, \hyperpage{7}
   \item {button\_list}
-    \subitem {state.c}, \hyperpage{77}
+    \subitem {state.c}, \hyperpage{68}
 
   \indexspace
 
   \item {center\_on\_origin\_group}
-    \subitem {state.c}, \hyperpage{77}
+    \subitem {state.c}, \hyperpage{68}
   \item {circular\_grid\_group}
-    \subitem {state.c}, \hyperpage{77}
+    \subitem {state.c}, \hyperpage{69}
   \item {circular\_grid\_visible\_group}
-    \subitem {state.c}, \hyperpage{77}
-  \item {CmdPromptInput}, \hyperpage{26}
+    \subitem {state.c}, \hyperpage{69}
+  \item {CmdPromptInput}, \hyperpage{8}
   \item {color\_list}
-    \subitem {state.c}, \hyperpage{78}
+    \subitem {state.c}, \hyperpage{69}
   \item {combobox\_list}
-    \subitem {state.c}, \hyperpage{78}
-  \item {CommandData\_}, \hyperpage{27}
+    \subitem {state.c}, \hyperpage{69}
+  \item {CommandData\_}, \hyperpage{8}
   \item {config\_table}
-    \subitem {interface.c}, \hyperpage{66}
+    \subitem {interface.c}, \hyperpage{56}
   \item {coverage\_test}
-    \subitem {state.c}, \hyperpage{78}
+    \subitem {state.c}, \hyperpage{69}
 
   \indexspace
 
   \item {defined\_origin\_group}
-    \subitem {state.c}, \hyperpage{78}
+    \subitem {state.c}, \hyperpage{70}
   \item {dimension\_menu}
-    \subitem {state.c}, \hyperpage{78}
+    \subitem {state.c}, \hyperpage{70}
   \item {dimension\_toolbar}
-    \subitem {state.c}, \hyperpage{78}
-  \item {Document}, \hyperpage{27}
-  \item {DocumentData\_}, \hyperpage{28}
+    \subitem {state.c}, \hyperpage{70}
+  \item {Document}, \hyperpage{9}
+  \item {DocumentData\_}, \hyperpage{10}
   \item {draw\_menu}
-    \subitem {state.c}, \hyperpage{79}
+    \subitem {state.c}, \hyperpage{70}
   \item {draw\_toolbar}
-    \subitem {state.c}, \hyperpage{79}
+    \subitem {state.c}, \hyperpage{70}
 
   \indexspace
 
   \item {edit\_menu}
-    \subitem {state.c}, \hyperpage{79}
+    \subitem {state.c}, \hyperpage{71}
   \item {edit\_toolbar}
-    \subitem {state.c}, \hyperpage{79}
-  \item {EmbroideryThumbnailer}, \hyperpage{29}
+    \subitem {state.c}, \hyperpage{71}
+  \item {embroidermodder2\_autogen/moc\_predefs.h}, \hyperpage{24}
+  \item {EmbroideryThumbnailer}, \hyperpage{11}
 
   \indexspace
 
   \item {file\_menu}
-    \subitem {state.c}, \hyperpage{80}
+    \subitem {state.c}, \hyperpage{71}
   \item {file\_toolbar}
-    \subitem {state.c}, \hyperpage{80}
+    \subitem {state.c}, \hyperpage{71}
 
   \indexspace
 
   \item {geometry\_type\_keys}
-    \subitem {state.c}, \hyperpage{80}
+    \subitem {state.c}, \hyperpage{72}
   \item {grid\_enabled\_group}
-    \subitem {state.c}, \hyperpage{80}
+    \subitem {state.c}, \hyperpage{72}
   \item {grid\_layout}
-    \subitem {state.c}, \hyperpage{81}
+    \subitem {state.c}, \hyperpage{72}
   \item {grid\_load\_from\_file\_group}
-    \subitem {state.c}, \hyperpage{81}
-  \item {GroupBoxData\_}, \hyperpage{29}
+    \subitem {state.c}, \hyperpage{73}
+  \item {GroupBoxData\_}, \hyperpage{11}
 
   \indexspace
 
   \item {help\_menu}
-    \subitem {state.c}, \hyperpage{81}
+    \subitem {state.c}, \hyperpage{73}
   \item {help\_msg}
-    \subitem {interface.c}, \hyperpage{66}
+    \subitem {interface.c}, \hyperpage{56}
   \item {help\_toolbar}
-    \subitem {state.c}, \hyperpage{81}
+    \subitem {state.c}, \hyperpage{73}
 
   \indexspace
 
   \item {icon\_toolbar}
-    \subitem {state.c}, \hyperpage{82}
+    \subitem {state.c}, \hyperpage{73}
   \item {id}
-    \subitem {WidgetData\_}, \hyperpage{38}
+    \subitem {WidgetData\_}, \hyperpage{23}
   \item {index\_name}
-    \subitem {state.c}, \hyperpage{82}
+    \subitem {state.c}, \hyperpage{74}
   \item {index\_th\_name}
-    \subitem {state.c}, \hyperpage{82}
+    \subitem {state.c}, \hyperpage{74}
   \item {inquiry\_toolbar}
-    \subitem {state.c}, \hyperpage{82}
+    \subitem {state.c}, \hyperpage{74}
   \item {interface.c}
-    \subitem {config\_table}, \hyperpage{66}
-    \subitem {help\_msg}, \hyperpage{66}
-    \subitem {objectTextJustifyList}, \hyperpage{66}
-    \subitem {prompt\_text}, \hyperpage{66}
-    \subitem {ruler\_svg}, \hyperpage{66}
+    \subitem {config\_table}, \hyperpage{56}
+    \subitem {help\_msg}, \hyperpage{56}
+    \subitem {objectTextJustifyList}, \hyperpage{56}
+    \subitem {prompt\_text}, \hyperpage{56}
+    \subitem {ruler\_svg}, \hyperpage{57}
 
   \indexspace
 
   \item {key}
-    \subitem {Widget\_}, \hyperpage{38}
+    \subitem {Widget\_}, \hyperpage{22}
   \item {key\_state}
-    \subitem {state.c}, \hyperpage{82}
+    \subitem {state.c}, \hyperpage{74}
 
   \indexspace
 
   \item {label}
-    \subitem {WidgetData\_}, \hyperpage{38}
+    \subitem {WidgetData\_}, \hyperpage{23}
   \item {layer\_list}
-    \subitem {state.c}, \hyperpage{82}
+    \subitem {state.c}, \hyperpage{74}
   \item {layer\_toolbar}
-    \subitem {state.c}, \hyperpage{83}
-  \item {LayerData\_}, \hyperpage{30}
-  \item {LayerManager}, \hyperpage{30}
+    \subitem {state.c}, \hyperpage{75}
+  \item {LayerData\_}, \hyperpage{12}
+  \item {LayerManager}, \hyperpage{12}
   \item {left\_toolbar}
-    \subitem {state.c}, \hyperpage{83}
+    \subitem {state.c}, \hyperpage{75}
   \item {line\_type\_list}
-    \subitem {state.c}, \hyperpage{83}
+    \subitem {state.c}, \hyperpage{75}
   \item {line\_weight\_list}
-    \subitem {state.c}, \hyperpage{83}
+    \subitem {state.c}, \hyperpage{75}
   \item {lines}
-    \subitem {ViewData\_}, \hyperpage{37}
+    \subitem {ViewData\_}, \hyperpage{21}
   \item {little}
-    \subitem {ViewData\_}, \hyperpage{38}
+    \subitem {ViewData\_}, \hyperpage{21}
   \item {load\_file\_to\_buffer}
-    \subitem {state.c}, \hyperpage{76}
+    \subitem {state.c}, \hyperpage{67}
+  \item {load\_global\_state}
+    \subitem {state.c}, \hyperpage{67}
   \item {load\_script}
-    \subitem {state.c}, \hyperpage{76}
+    \subitem {state.c}, \hyperpage{67}
 
   \indexspace
 
-  \item {MainWindow}, \hyperpage{30}
-  \item {MdiArea}, \hyperpage{31}
-  \item {MdiWindow}, \hyperpage{32}
+  \item {MainWindow}, \hyperpage{13}
+  \item {MdiArea}, \hyperpage{13}
+  \item {MdiWindow}, \hyperpage{14}
   \item {medium}
-    \subitem {ViewData\_}, \hyperpage{38}
+    \subitem {ViewData\_}, \hyperpage{22}
   \item {menu\_list}
-    \subitem {state.c}, \hyperpage{83}
+    \subitem {state.c}, \hyperpage{76}
   \item {menubar\_full\_list}
-    \subitem {state.c}, \hyperpage{84}
+    \subitem {state.c}, \hyperpage{76}
   \item {menubar\_no\_docs}
-    \subitem {state.c}, \hyperpage{84}
+    \subitem {state.c}, \hyperpage{76}
   \item {modify\_menu}
-    \subitem {state.c}, \hyperpage{84}
+    \subitem {state.c}, \hyperpage{77}
   \item {modify\_toolbar}
-    \subitem {state.c}, \hyperpage{84}
+    \subitem {state.c}, \hyperpage{77}
 
   \indexspace
 
-  \item {Object}, \hyperpage{32}
-  \item {ObjectCore\_}, \hyperpage{33}
+  \item {Object}, \hyperpage{15}
+  \item {ObjectCore\_}, \hyperpage{16}
   \item {objectTextJustifyList}
-    \subitem {interface.c}, \hyperpage{66}
+    \subitem {interface.c}, \hyperpage{56}
 
   \indexspace
 
   \item {pan\_menu}
-    \subitem {state.c}, \hyperpage{84}
+    \subitem {state.c}, \hyperpage{77}
   \item {patternDetailsBox}
-    \subitem {state.c}, \hyperpage{85}
+    \subitem {state.c}, \hyperpage{77}
   \item {preview\_to\_dialog}
-    \subitem {state.c}, \hyperpage{85}
+    \subitem {state.c}, \hyperpage{77}
   \item {prompt\_text}
-    \subitem {interface.c}, \hyperpage{66}
+    \subitem {interface.c}, \hyperpage{56}
   \item {prompt\_toolbar}
-    \subitem {state.c}, \hyperpage{85}
+    \subitem {state.c}, \hyperpage{78}
   \item {promptColorLayout}
-    \subitem {state.c}, \hyperpage{85}
+    \subitem {state.c}, \hyperpage{78}
   \item {properties\_toolbar}
-    \subitem {state.c}, \hyperpage{85}
-  \item {PropertyEditor}, \hyperpage{34}
+    \subitem {state.c}, \hyperpage{78}
+  \item {PropertyEditor}, \hyperpage{17}
+
+  \indexspace
+
+  \item {QT\_WARNING\_DISABLE\_DEPRECATED::qt\_meta\_stringdata\_SelectBox\_t}, 
+		\hyperpage{17}
 
   \indexspace
 
   \item {recent\_files}
-    \subitem {state.c}, \hyperpage{85}
+    \subitem {state.c}, \hyperpage{78}
   \item {recent\_menu}
-    \subitem {state.c}, \hyperpage{85}
+    \subitem {state.c}, \hyperpage{78}
   \item {rectangular\_grid\_group}
-    \subitem {state.c}, \hyperpage{86}
+    \subitem {state.c}, \hyperpage{78}
   \item {rectangular\_grid\_visible\_group}
-    \subitem {state.c}, \hyperpage{86}
+    \subitem {state.c}, \hyperpage{79}
   \item {render\_hints}
-    \subitem {state.c}, \hyperpage{86}
+    \subitem {state.c}, \hyperpage{79}
   \item {ruler\_svg}
-    \subitem {interface.c}, \hyperpage{66}
+    \subitem {interface.c}, \hyperpage{57}
   \item {rulerLayout}
-    \subitem {state.c}, \hyperpage{86}
+    \subitem {state.c}, \hyperpage{79}
 
   \indexspace
 
   \item {sandbox\_menu}
-    \subitem {state.c}, \hyperpage{86}
+    \subitem {state.c}, \hyperpage{79}
   \item {sandbox\_toolbar}
-    \subitem {state.c}, \hyperpage{86}
+    \subitem {state.c}, \hyperpage{79}
   \item {script\_false}
-    \subitem {state.c}, \hyperpage{87}
+    \subitem {state.c}, \hyperpage{80}
   \item {script\_null}
-    \subitem {state.c}, \hyperpage{87}
+    \subitem {state.c}, \hyperpage{80}
   \item {script\_true}
-    \subitem {state.c}, \hyperpage{87}
-  \item {SelectBox}, \hyperpage{34}
+    \subitem {state.c}, \hyperpage{80}
+  \item {SelectBox}, \hyperpage{18}
   \item {selectionBoxLayout}
-    \subitem {state.c}, \hyperpage{87}
-  \item {Setting\_}, \hyperpage{35}
+    \subitem {state.c}, \hyperpage{80}
+  \item {Setting\_}, \hyperpage{18}
   \item {settings\_tab\_labels}
-    \subitem {state.c}, \hyperpage{87}
-  \item {src/core.h}, \hyperpage{39}
-  \item {src/interface.c}, \hyperpage{62}
-  \item {src/objects.c}, \hyperpage{67}
-  \item {src/qt.h}, \hyperpage{69}
-  \item {src/state.c}, \hyperpage{73}
+    \subitem {state.c}, \hyperpage{80}
+  \item {src/core.h}, \hyperpage{29}
+  \item {src/interface.c}, \hyperpage{52}
+  \item {src/objects.c}, \hyperpage{57}
+  \item {src/qt.h}, \hyperpage{59, 60}
+  \item {src/state.c}, \hyperpage{64}
   \item {state.c}
-    \subitem {accept\_to\_dialog}, \hyperpage{77}
-    \subitem {bottom\_toolbar}, \hyperpage{77}
-    \subitem {button\_list}, \hyperpage{77}
-    \subitem {center\_on\_origin\_group}, \hyperpage{77}
-    \subitem {circular\_grid\_group}, \hyperpage{77}
-    \subitem {circular\_grid\_visible\_group}, \hyperpage{77}
-    \subitem {color\_list}, \hyperpage{78}
-    \subitem {combobox\_list}, \hyperpage{78}
-    \subitem {coverage\_test}, \hyperpage{78}
-    \subitem {defined\_origin\_group}, \hyperpage{78}
-    \subitem {dimension\_menu}, \hyperpage{78}
-    \subitem {dimension\_toolbar}, \hyperpage{78}
-    \subitem {draw\_menu}, \hyperpage{79}
-    \subitem {draw\_toolbar}, \hyperpage{79}
-    \subitem {edit\_menu}, \hyperpage{79}
-    \subitem {edit\_toolbar}, \hyperpage{79}
-    \subitem {file\_menu}, \hyperpage{80}
-    \subitem {file\_toolbar}, \hyperpage{80}
-    \subitem {geometry\_type\_keys}, \hyperpage{80}
-    \subitem {grid\_enabled\_group}, \hyperpage{80}
-    \subitem {grid\_layout}, \hyperpage{81}
-    \subitem {grid\_load\_from\_file\_group}, \hyperpage{81}
-    \subitem {help\_menu}, \hyperpage{81}
-    \subitem {help\_toolbar}, \hyperpage{81}
-    \subitem {icon\_toolbar}, \hyperpage{82}
-    \subitem {index\_name}, \hyperpage{82}
-    \subitem {index\_th\_name}, \hyperpage{82}
-    \subitem {inquiry\_toolbar}, \hyperpage{82}
-    \subitem {key\_state}, \hyperpage{82}
-    \subitem {layer\_list}, \hyperpage{82}
-    \subitem {layer\_toolbar}, \hyperpage{83}
-    \subitem {left\_toolbar}, \hyperpage{83}
-    \subitem {line\_type\_list}, \hyperpage{83}
-    \subitem {line\_weight\_list}, \hyperpage{83}
-    \subitem {load\_file\_to\_buffer}, \hyperpage{76}
-    \subitem {load\_script}, \hyperpage{76}
-    \subitem {menu\_list}, \hyperpage{83}
-    \subitem {menubar\_full\_list}, \hyperpage{84}
-    \subitem {menubar\_no\_docs}, \hyperpage{84}
-    \subitem {modify\_menu}, \hyperpage{84}
-    \subitem {modify\_toolbar}, \hyperpage{84}
-    \subitem {pan\_menu}, \hyperpage{84}
-    \subitem {patternDetailsBox}, \hyperpage{85}
-    \subitem {preview\_to\_dialog}, \hyperpage{85}
-    \subitem {prompt\_toolbar}, \hyperpage{85}
-    \subitem {promptColorLayout}, \hyperpage{85}
-    \subitem {properties\_toolbar}, \hyperpage{85}
-    \subitem {recent\_files}, \hyperpage{85}
-    \subitem {recent\_menu}, \hyperpage{85}
-    \subitem {rectangular\_grid\_group}, \hyperpage{86}
-    \subitem {rectangular\_grid\_visible\_group}, \hyperpage{86}
-    \subitem {render\_hints}, \hyperpage{86}
-    \subitem {rulerLayout}, \hyperpage{86}
-    \subitem {sandbox\_menu}, \hyperpage{86}
-    \subitem {sandbox\_toolbar}, \hyperpage{86}
-    \subitem {script\_false}, \hyperpage{87}
-    \subitem {script\_null}, \hyperpage{87}
-    \subitem {script\_true}, \hyperpage{87}
-    \subitem {selectionBoxLayout}, \hyperpage{87}
-    \subitem {settings\_tab\_labels}, \hyperpage{87}
-    \subitem {text\_size\_list}, \hyperpage{88}
-    \subitem {text\_toolbar}, \hyperpage{88}
-    \subitem {tips}, \hyperpage{88}
-    \subitem {toolbar\_horizontal}, \hyperpage{88}
-    \subitem {toolbar\_list}, \hyperpage{88}
-    \subitem {toolbars\_when\_docs}, \hyperpage{89}
-    \subitem {tools\_menu}, \hyperpage{89}
-    \subitem {top\_toolbar}, \hyperpage{89}
-    \subitem {ui\_labels}, \hyperpage{89}
-    \subitem {view\_menu}, \hyperpage{90}
-    \subitem {view\_toolbar}, \hyperpage{90}
-    \subitem {window\_menu}, \hyperpage{90}
-    \subitem {zoom\_gb\_data}, \hyperpage{90}
-    \subitem {zoom\_layout}, \hyperpage{90}
-    \subitem {zoom\_menu}, \hyperpage{90}
+    \subitem {accept\_to\_dialog}, \hyperpage{68}
+    \subitem {bottom\_toolbar}, \hyperpage{68}
+    \subitem {button\_list}, \hyperpage{68}
+    \subitem {center\_on\_origin\_group}, \hyperpage{68}
+    \subitem {circular\_grid\_group}, \hyperpage{69}
+    \subitem {circular\_grid\_visible\_group}, \hyperpage{69}
+    \subitem {color\_list}, \hyperpage{69}
+    \subitem {combobox\_list}, \hyperpage{69}
+    \subitem {coverage\_test}, \hyperpage{69}
+    \subitem {defined\_origin\_group}, \hyperpage{70}
+    \subitem {dimension\_menu}, \hyperpage{70}
+    \subitem {dimension\_toolbar}, \hyperpage{70}
+    \subitem {draw\_menu}, \hyperpage{70}
+    \subitem {draw\_toolbar}, \hyperpage{70}
+    \subitem {edit\_menu}, \hyperpage{71}
+    \subitem {edit\_toolbar}, \hyperpage{71}
+    \subitem {file\_menu}, \hyperpage{71}
+    \subitem {file\_toolbar}, \hyperpage{71}
+    \subitem {geometry\_type\_keys}, \hyperpage{72}
+    \subitem {grid\_enabled\_group}, \hyperpage{72}
+    \subitem {grid\_layout}, \hyperpage{72}
+    \subitem {grid\_load\_from\_file\_group}, \hyperpage{73}
+    \subitem {help\_menu}, \hyperpage{73}
+    \subitem {help\_toolbar}, \hyperpage{73}
+    \subitem {icon\_toolbar}, \hyperpage{73}
+    \subitem {index\_name}, \hyperpage{74}
+    \subitem {index\_th\_name}, \hyperpage{74}
+    \subitem {inquiry\_toolbar}, \hyperpage{74}
+    \subitem {key\_state}, \hyperpage{74}
+    \subitem {layer\_list}, \hyperpage{74}
+    \subitem {layer\_toolbar}, \hyperpage{75}
+    \subitem {left\_toolbar}, \hyperpage{75}
+    \subitem {line\_type\_list}, \hyperpage{75}
+    \subitem {line\_weight\_list}, \hyperpage{75}
+    \subitem {load\_file\_to\_buffer}, \hyperpage{67}
+    \subitem {load\_global\_state}, \hyperpage{67}
+    \subitem {load\_script}, \hyperpage{67}
+    \subitem {menu\_list}, \hyperpage{76}
+    \subitem {menubar\_full\_list}, \hyperpage{76}
+    \subitem {menubar\_no\_docs}, \hyperpage{76}
+    \subitem {modify\_menu}, \hyperpage{77}
+    \subitem {modify\_toolbar}, \hyperpage{77}
+    \subitem {pan\_menu}, \hyperpage{77}
+    \subitem {patternDetailsBox}, \hyperpage{77}
+    \subitem {preview\_to\_dialog}, \hyperpage{77}
+    \subitem {prompt\_toolbar}, \hyperpage{78}
+    \subitem {promptColorLayout}, \hyperpage{78}
+    \subitem {properties\_toolbar}, \hyperpage{78}
+    \subitem {recent\_files}, \hyperpage{78}
+    \subitem {recent\_menu}, \hyperpage{78}
+    \subitem {rectangular\_grid\_group}, \hyperpage{78}
+    \subitem {rectangular\_grid\_visible\_group}, \hyperpage{79}
+    \subitem {render\_hints}, \hyperpage{79}
+    \subitem {rulerLayout}, \hyperpage{79}
+    \subitem {sandbox\_menu}, \hyperpage{79}
+    \subitem {sandbox\_toolbar}, \hyperpage{79}
+    \subitem {script\_false}, \hyperpage{80}
+    \subitem {script\_null}, \hyperpage{80}
+    \subitem {script\_true}, \hyperpage{80}
+    \subitem {selectionBoxLayout}, \hyperpage{80}
+    \subitem {settings\_tab\_labels}, \hyperpage{80}
+    \subitem {text\_size\_list}, \hyperpage{81}
+    \subitem {text\_toolbar}, \hyperpage{81}
+    \subitem {tips}, \hyperpage{81}
+    \subitem {toolbar\_horizontal}, \hyperpage{81}
+    \subitem {toolbar\_list}, \hyperpage{82}
+    \subitem {toolbars\_when\_docs}, \hyperpage{82}
+    \subitem {tools\_menu}, \hyperpage{82}
+    \subitem {top\_toolbar}, \hyperpage{82}
+    \subitem {ui\_labels}, \hyperpage{83}
+    \subitem {view\_menu}, \hyperpage{83}
+    \subitem {view\_toolbar}, \hyperpage{83}
+    \subitem {window\_menu}, \hyperpage{84}
+    \subitem {zoom\_gb\_data}, \hyperpage{84}
+    \subitem {zoom\_layout}, \hyperpage{84}
+    \subitem {zoom\_menu}, \hyperpage{84}
 
   \indexspace
 
-  \item {Tab\_}, \hyperpage{35}
+  \item {Tab\_}, \hyperpage{19}
   \item {text\_size\_list}
-    \subitem {state.c}, \hyperpage{88}
+    \subitem {state.c}, \hyperpage{81}
   \item {text\_toolbar}
-    \subitem {state.c}, \hyperpage{88}
+    \subitem {state.c}, \hyperpage{81}
   \item {thumbnailer/libembroidery-\/thumbnailer-\/kde4.h}, 
-		\hyperpage{91}
+		\hyperpage{85}
   \item {tips}
-    \subitem {state.c}, \hyperpage{88}
+    \subitem {state.c}, \hyperpage{81}
   \item {toolbar\_horizontal}
-    \subitem {state.c}, \hyperpage{88}
+    \subitem {state.c}, \hyperpage{81}
   \item {toolbar\_list}
-    \subitem {state.c}, \hyperpage{88}
+    \subitem {state.c}, \hyperpage{82}
   \item {toolbars\_when\_docs}
-    \subitem {state.c}, \hyperpage{89}
+    \subitem {state.c}, \hyperpage{82}
   \item {tools\_menu}
-    \subitem {state.c}, \hyperpage{89}
+    \subitem {state.c}, \hyperpage{82}
   \item {top\_toolbar}
-    \subitem {state.c}, \hyperpage{89}
-  \item {Translation\_}, \hyperpage{35}
+    \subitem {state.c}, \hyperpage{82}
+  \item {Translation\_}, \hyperpage{19}
   \item {type}
-    \subitem {WidgetData\_}, \hyperpage{39}
+    \subitem {WidgetData\_}, \hyperpage{23}
 
   \indexspace
 
   \item {ui\_labels}
-    \subitem {state.c}, \hyperpage{89}
-  \item {UndoableCommand}, \hyperpage{35}
-  \item {UndoData\_}, \hyperpage{36}
-  \item {UndoEditor}, \hyperpage{37}
+    \subitem {state.c}, \hyperpage{83}
+  \item {UndoableCommand}, \hyperpage{19}
+  \item {UndoData\_}, \hyperpage{20}
+  \item {UndoEditor}, \hyperpage{20}
 
   \indexspace
 
   \item {view\_menu}
-    \subitem {state.c}, \hyperpage{90}
+    \subitem {state.c}, \hyperpage{83}
   \item {view\_toolbar}
-    \subitem {state.c}, \hyperpage{90}
-  \item {ViewData\_}, \hyperpage{37}
-    \subitem {lines}, \hyperpage{37}
-    \subitem {little}, \hyperpage{38}
-    \subitem {medium}, \hyperpage{38}
+    \subitem {state.c}, \hyperpage{83}
+  \item {ViewData\_}, \hyperpage{21}
+    \subitem {lines}, \hyperpage{21}
+    \subitem {little}, \hyperpage{21}
+    \subitem {medium}, \hyperpage{22}
 
   \indexspace
 
   \item {widget}
-    \subitem {Widget\_}, \hyperpage{38}
-  \item {Widget\_}, \hyperpage{38}
-    \subitem {key}, \hyperpage{38}
-    \subitem {widget}, \hyperpage{38}
-  \item {WidgetData\_}, \hyperpage{38}
-    \subitem {id}, \hyperpage{38}
-    \subitem {label}, \hyperpage{38}
-    \subitem {type}, \hyperpage{39}
-  \item {WidgetDesc\_}, \hyperpage{39}
+    \subitem {Widget\_}, \hyperpage{22}
+  \item {Widget\_}, \hyperpage{22}
+    \subitem {key}, \hyperpage{22}
+    \subitem {widget}, \hyperpage{22}
+  \item {WidgetData\_}, \hyperpage{22}
+    \subitem {id}, \hyperpage{23}
+    \subitem {label}, \hyperpage{23}
+    \subitem {type}, \hyperpage{23}
+  \item {WidgetDesc\_}, \hyperpage{23}
   \item {window\_menu}
-    \subitem {state.c}, \hyperpage{90}
+    \subitem {state.c}, \hyperpage{84}
 
   \indexspace
 
   \item {zoom\_gb\_data}
-    \subitem {state.c}, \hyperpage{90}
+    \subitem {state.c}, \hyperpage{84}
   \item {zoom\_layout}
-    \subitem {state.c}, \hyperpage{90}
+    \subitem {state.c}, \hyperpage{84}
   \item {zoom\_menu}
-    \subitem {state.c}, \hyperpage{90}
+    \subitem {state.c}, \hyperpage{84}
 
 \end{theindex}

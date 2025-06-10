@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['viewdata_5f_0',['ViewData_',['../structViewData__.html',1,'']]]
+  ['undoablecommand_0',['UndoableCommand',['../classUndoableCommand.html',1,'']]],
+  ['undodata_5f_1',['UndoData_',['../structUndoData__.html',1,'']]],
+  ['undoeditor_2',['UndoEditor',['../classUndoEditor.html',1,'']]]
 ];

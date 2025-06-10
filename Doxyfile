@@ -941,10 +941,6 @@ FILE_PATTERNS          = *.c \
                          *.cpp \
                          *.c++ \
                          *.java \
-                         *.ii \
-                         *.ixx \
-                         *.ipp \
-                         *.i++ \
                          *.inl \
                          *.idl \
                          *.ddl \
@@ -956,10 +952,6 @@ FILE_PATTERNS          = *.c \
                          *.h++ \
                          *.l \
                          *.cs \
-                         *.d \
-                         *.php \
-                         *.php4 \
-                         *.php5 \
                          *.phtml \
                          *.inc \
                          *.m \
@@ -969,15 +961,7 @@ FILE_PATTERNS          = *.c \
                          *.dox \
                          *.py \
                          *.pyw \
-                         *.f90 \
-                         *.f95 \
-                         *.f03 \
-                         *.f08 \
-                         *.f18 \
-                         *.f \
                          *.for \
-                         *.vhd \
-                         *.vhdl \
                          *.ucf \
                          *.qsf \
                          *.ice
@@ -997,7 +981,10 @@ RECURSIVE              = YES
 
 EXCLUDE                = extern \
                          assets \
-                         build
+                         build \
+                         CMakeFiles \
+                         docs \
+                         *_autogen
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -1119,13 +1106,13 @@ USE_MDFILE_AS_MAINPAGE =
 # also VERBATIM_HEADERS is set to NO.
 # The default value is: NO.
 
-SOURCE_BROWSER         = YES
+SOURCE_BROWSER         = NO
 
 # Setting the INLINE_SOURCES tag to YES will include the body of functions,
 # classes and enums directly into the documentation.
 # The default value is: NO.
 
-INLINE_SOURCES         = YES
+INLINE_SOURCES         = NO
 
 # Setting the STRIP_CODE_COMMENTS tag to YES will instruct doxygen to hide any
 # special comment blocks from generated source code fragments. Normal C, C++ and

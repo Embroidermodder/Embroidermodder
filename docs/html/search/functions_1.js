@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['load_5ffile_5fto_5fbuffer_0',['load_file_to_buffer',['../state_8c.html#ae0324dd47ecf95c8590df27917f69efa',1,'state.c']]],
-  ['load_5fscript_1',['load_script',['../state_8c.html#ad1b6433aaee85b9e210b23f7f6e95bf3',1,'state.c']]]
+  ['emb_5fget_5fstr_0',['emb_get_str',['../state_8c.html#aca9f9bea5ee5776b7849559d22040947',1,'state.c']]],
+  ['emb_5fget_5fvar_1',['emb_get_var',['../state_8c.html#a901278b059b7d658fbe1da517e0736fd',1,'state.c']]]
 ];

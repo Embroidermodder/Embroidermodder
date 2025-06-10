@@ -9,181 +9,27 @@ Inheritance diagram for Layer\+Manager\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classLayerManager_a8c8e7f4db82209ed61b31b42874eb010}{Layer\+Manager}} (QWidget $\ast$parent=0)
+\mbox{\Hypertarget{classLayerManager_a8c8e7f4db82209ed61b31b42874eb010}\label{classLayerManager_a8c8e7f4db82209ed61b31b42874eb010}} 
+{\bfseries Layer\+Manager} (QWidget $\ast$parent=0)
 \item 
-void \mbox{\hyperlink{classLayerManager_a4d14f2d2e38c43f0bcf7e37c62e21ded}{add\+Layer}} (char $\ast$name, bool visible, bool frozen, Emb\+Real z\+Value, QRgb color, char $\ast$line\+Type, char $\ast$line\+Weight, bool print)
+\mbox{\Hypertarget{classLayerManager_a4d14f2d2e38c43f0bcf7e37c62e21ded}\label{classLayerManager_a4d14f2d2e38c43f0bcf7e37c62e21ded}} 
+void {\bfseries add\+Layer} (char $\ast$name, bool visible, bool frozen, Emb\+Real z\+Value, QRgb color, char $\ast$line\+Type, char $\ast$line\+Weight, bool print)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{structLayerData__}{Layer\+Data}} \mbox{\hyperlink{classLayerManager_adcaa6124b6603f89cd5a3c859f1bdf1a}{data}} \mbox{[}MAX\+\_\+\+LAYERS\mbox{]}
-\item 
-QStandard\+Item\+Model $\ast$ \mbox{\hyperlink{classLayerManager_a24a2f16221297f7bed6d4fe735d301ea}{layer\+Model}}
-\item 
-QSort\+Filter\+Proxy\+Model $\ast$ \mbox{\hyperlink{classLayerManager_ad0fe67f3b6e3228aa178b931b89b1a9d}{layer\+Model\+Sorted}}
-\item 
-QTree\+View $\ast$ \mbox{\hyperlink{classLayerManager_a743c404583e922be86f5a463769f0395}{tree\+View}}
-\end{DoxyCompactItemize}
-
-
-\doxysubsubsection{Detailed Description}
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00094}{94}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
-
-
-\doxysubsubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classLayerManager_a8c8e7f4db82209ed61b31b42874eb010}\label{classLayerManager_a8c8e7f4db82209ed61b31b42874eb010}} 
-\index{LayerManager@{LayerManager}!LayerManager@{LayerManager}}
-\index{LayerManager@{LayerManager}!LayerManager@{LayerManager}}
-\doxyparagraph{\texorpdfstring{LayerManager()}{LayerManager()}}
-{\footnotesize\ttfamily Layer\+Manager\+::\+Layer\+Manager (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l04485}{4485}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{04485                                           : QDialog(parent)}
-\DoxyCodeLine{04486 \{}
-\DoxyCodeLine{04487     layerModel = \textcolor{keyword}{new} QStandardItemModel(0, 8, \textcolor{keyword}{this});}
-\DoxyCodeLine{04488 }
-\DoxyCodeLine{04489     layerModelSorted = \textcolor{keyword}{new} QSortFilterProxyModel;}
-\DoxyCodeLine{04490     layerModelSorted-\/>setDynamicSortFilter(\textcolor{keyword}{true});}
-\DoxyCodeLine{04491     layerModelSorted-\/>setSourceModel(layerModel);}
-\DoxyCodeLine{04492 }
-\DoxyCodeLine{04493     treeView = \textcolor{keyword}{new} QTreeView;}
-\DoxyCodeLine{04494     treeView-\/>setRootIsDecorated(\textcolor{keyword}{false});}
-\DoxyCodeLine{04495     treeView-\/>setAlternatingRowColors(\textcolor{keyword}{true});}
-\DoxyCodeLine{04496     treeView-\/>setModel(layerModelSorted);}
-\DoxyCodeLine{04497     treeView-\/>setSortingEnabled(\textcolor{keyword}{true});}
-\DoxyCodeLine{04498     treeView-\/>sortByColumn(0, Qt::AscendingOrder);}
-\DoxyCodeLine{04499 }
-\DoxyCodeLine{04500     QVBoxLayout *mainLayout = \textcolor{keyword}{new} QVBoxLayout;}
-\DoxyCodeLine{04501     mainLayout-\/>addWidget(treeView);}
-\DoxyCodeLine{04502     setLayout(mainLayout);}
-\DoxyCodeLine{04503 }
-\DoxyCodeLine{04504     setWindowTitle(tr(\textcolor{stringliteral}{"{}Layer Manager"{}}));}
-\DoxyCodeLine{04505     setMinimumSize(750, 550);}
-\DoxyCodeLine{04506 }
-\DoxyCodeLine{04507     layerModel-\/>setHeaderData(0, Qt::Horizontal, QString(translate(\textcolor{stringliteral}{"{}Name"{}})));}
-\DoxyCodeLine{04508     layerModel-\/>setHeaderData(1, Qt::Horizontal, QString(translate(\textcolor{stringliteral}{"{}Visible"{}})));}
-\DoxyCodeLine{04509     layerModel-\/>setHeaderData(2, Qt::Horizontal, QString(translate(\textcolor{stringliteral}{"{}Frozen"{}})));}
-\DoxyCodeLine{04510     layerModel-\/>setHeaderData(3, Qt::Horizontal, QString(translate(\textcolor{stringliteral}{"{}Z Value"{}})));}
-\DoxyCodeLine{04511     layerModel-\/>setHeaderData(4, Qt::Horizontal, QString(translate(\textcolor{stringliteral}{"{}Color"{}})));}
-\DoxyCodeLine{04512     layerModel-\/>setHeaderData(5, Qt::Horizontal, QString(translate(\textcolor{stringliteral}{"{}Linetype"{}})));}
-\DoxyCodeLine{04513     layerModel-\/>setHeaderData(6, Qt::Horizontal, QString(translate(\textcolor{stringliteral}{"{}Lineweight"{}})));}
-\DoxyCodeLine{04514     layerModel-\/>setHeaderData(7, Qt::Horizontal, QString(translate(\textcolor{stringliteral}{"{}Print"{}})));}
-\DoxyCodeLine{04515 }
-\DoxyCodeLine{04516     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<10; i++) \{}
-\DoxyCodeLine{04517         EmbString layer\_name;}
-\DoxyCodeLine{04518         sprintf(layer\_name, \textcolor{stringliteral}{"{}\%d"{}}, i);}
-\DoxyCodeLine{04519         addLayer(layer\_name, \textcolor{keyword}{true}, \textcolor{keyword}{false}, 1.0*i, qRgb(0,0,0), \textcolor{stringliteral}{"{}Continuous"{}},}
-\DoxyCodeLine{04520             \textcolor{stringliteral}{"{}Default"{}}, \textcolor{keyword}{true});}
-\DoxyCodeLine{04521     \}}
-\DoxyCodeLine{04522 }
-\DoxyCodeLine{04523     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < layerModel-\/>columnCount(); ++i) \{}
-\DoxyCodeLine{04524         treeView-\/>resizeColumnToContents(i);}
-\DoxyCodeLine{04525     \}}
-\DoxyCodeLine{04526 }
-\DoxyCodeLine{04527     arrow\_cursor();}
-\DoxyCodeLine{04528 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classLayerManager_afa43f2ec578a8f3bb0e670305d5fe12e}\label{classLayerManager_afa43f2ec578a8f3bb0e670305d5fe12e}} 
-\index{LayerManager@{LayerManager}!````~LayerManager@{$\sim$LayerManager}}
-\index{````~LayerManager@{$\sim$LayerManager}!LayerManager@{LayerManager}}
-\doxyparagraph{\texorpdfstring{$\sim$LayerManager()}{~LayerManager()}}
-{\footnotesize\ttfamily Layer\+Manager\+::$\sim$\+Layer\+Manager (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00100}{100}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00100 \{ restore\_cursor(); \}}
-
-\end{DoxyCode}
-
-
-\doxysubsubsection{Member Function Documentation}
-\mbox{\Hypertarget{classLayerManager_a4d14f2d2e38c43f0bcf7e37c62e21ded}\label{classLayerManager_a4d14f2d2e38c43f0bcf7e37c62e21ded}} 
-\index{LayerManager@{LayerManager}!addLayer@{addLayer}}
-\index{addLayer@{addLayer}!LayerManager@{LayerManager}}
-\doxyparagraph{\texorpdfstring{addLayer()}{addLayer()}}
-{\footnotesize\ttfamily void Layer\+Manager\+::add\+Layer (\begin{DoxyParamCaption}\item[{char $\ast$}]{name,  }\item[{bool}]{visible,  }\item[{bool}]{frozen,  }\item[{Emb\+Real}]{z\+Value,  }\item[{QRgb}]{color,  }\item[{char $\ast$}]{line\+Type,  }\item[{char $\ast$}]{line\+Weight,  }\item[{bool}]{print }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l04532}{4532}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{04534 \{}
-\DoxyCodeLine{04535     \textcolor{keywordtype}{int} n\_layers = 0;}
-\DoxyCodeLine{04536     layerModel-\/>insertRow(0);}
-\DoxyCodeLine{04537     strcpy(data[n\_layers].name, name);}
-\DoxyCodeLine{04538     data[n\_layers].visible = visible;}
-\DoxyCodeLine{04539     data[n\_layers].frozen = frozen;}
-\DoxyCodeLine{04540     data[n\_layers].zValue = zValue;}
-\DoxyCodeLine{04541 }
-\DoxyCodeLine{04542     QPixmap colorPix(QSize(16,16));}
-\DoxyCodeLine{04543     colorPix.fill(QColor(color));}
-\DoxyCodeLine{04544     layerModel-\/>itemFromIndex(layerModel-\/>index(0, 4))-\/>setIcon(QIcon(colorPix));}
-\DoxyCodeLine{04545     layerModel-\/>setData(layerModel-\/>index(0, 4), QColor(color));}
-\DoxyCodeLine{04546 }
-\DoxyCodeLine{04547     data[n\_layers].lineType = lineType;}
-\DoxyCodeLine{04548     data[n\_layers].lineWeight = lineWeight;}
-\DoxyCodeLine{04549     data[n\_layers].print = print;}
-\DoxyCodeLine{04550 \}}
-
-\end{DoxyCode}
-
-
-\doxysubsubsection{Field Documentation}
 \mbox{\Hypertarget{classLayerManager_adcaa6124b6603f89cd5a3c859f1bdf1a}\label{classLayerManager_adcaa6124b6603f89cd5a3c859f1bdf1a}} 
-\index{LayerManager@{LayerManager}!data@{data}}
-\index{data@{data}!LayerManager@{LayerManager}}
-\doxyparagraph{\texorpdfstring{data}{data}}
-{\footnotesize\ttfamily \mbox{\hyperlink{structLayerData__}{Layer\+Data}} Layer\+Manager\+::data\mbox{[}MAX\+\_\+\+LAYERS\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00101}{101}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
+\mbox{\hyperlink{structLayerData__}{Layer\+Data}} {\bfseries data} \mbox{[}MAX\+\_\+\+LAYERS\mbox{]}
+\item 
 \mbox{\Hypertarget{classLayerManager_a24a2f16221297f7bed6d4fe735d301ea}\label{classLayerManager_a24a2f16221297f7bed6d4fe735d301ea}} 
-\index{LayerManager@{LayerManager}!layerModel@{layerModel}}
-\index{layerModel@{layerModel}!LayerManager@{LayerManager}}
-\doxyparagraph{\texorpdfstring{layerModel}{layerModel}}
-{\footnotesize\ttfamily QStandard\+Item\+Model$\ast$ Layer\+Manager\+::layer\+Model}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00106}{106}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
+QStandard\+Item\+Model $\ast$ {\bfseries layer\+Model}
+\item 
 \mbox{\Hypertarget{classLayerManager_ad0fe67f3b6e3228aa178b931b89b1a9d}\label{classLayerManager_ad0fe67f3b6e3228aa178b931b89b1a9d}} 
-\index{LayerManager@{LayerManager}!layerModelSorted@{layerModelSorted}}
-\index{layerModelSorted@{layerModelSorted}!LayerManager@{LayerManager}}
-\doxyparagraph{\texorpdfstring{layerModelSorted}{layerModelSorted}}
-{\footnotesize\ttfamily QSort\+Filter\+Proxy\+Model$\ast$ Layer\+Manager\+::layer\+Model\+Sorted}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00107}{107}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
+QSort\+Filter\+Proxy\+Model $\ast$ {\bfseries layer\+Model\+Sorted}
+\item 
 \mbox{\Hypertarget{classLayerManager_a743c404583e922be86f5a463769f0395}\label{classLayerManager_a743c404583e922be86f5a463769f0395}} 
-\index{LayerManager@{LayerManager}!treeView@{treeView}}
-\index{treeView@{treeView}!LayerManager@{LayerManager}}
-\doxyparagraph{\texorpdfstring{treeView}{treeView}}
-{\footnotesize\ttfamily QTree\+View$\ast$ Layer\+Manager\+::tree\+View}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00108}{108}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
+QTree\+View $\ast$ {\bfseries tree\+View}
+\end{DoxyCompactItemize}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

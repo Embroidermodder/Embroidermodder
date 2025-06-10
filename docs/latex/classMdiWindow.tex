@@ -9,13 +9,17 @@ Inheritance diagram for Mdi\+Window\+:\begin{figure}[H]
 \doxysubsubsection*{Public Slots}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{classMdiWindow_a8e34b9f6e0708f17f66a3a75a4a281b6}{close\+Event}} (QClose\+Event $\ast$e)
+\mbox{\Hypertarget{classMdiWindow_a8e34b9f6e0708f17f66a3a75a4a281b6}\label{classMdiWindow_a8e34b9f6e0708f17f66a3a75a4a281b6}} 
+void {\bfseries close\+Event} (QClose\+Event $\ast$e)
 \item 
-void \mbox{\hyperlink{classMdiWindow_a7aeaec47dff4863767ca612356660df5}{on\+Window\+Activated}} ()
+\mbox{\Hypertarget{classMdiWindow_a7aeaec47dff4863767ca612356660df5}\label{classMdiWindow_a7aeaec47dff4863767ca612356660df5}} 
+void {\bfseries on\+Window\+Activated} ()
 \item 
-void \mbox{\hyperlink{classMdiWindow_aa251dcef1c5212fcb0a6567f1dcb4334}{print}} ()
+\mbox{\Hypertarget{classMdiWindow_aa251dcef1c5212fcb0a6567f1dcb4334}\label{classMdiWindow_aa251dcef1c5212fcb0a6567f1dcb4334}} 
+void {\bfseries print} ()
 \item 
-void \mbox{\hyperlink{classMdiWindow_ae4dae4cdb4b94c611f4b9bc67848df20}{save\+BMC}} ()
+\mbox{\Hypertarget{classMdiWindow_ae4dae4cdb4b94c611f4b9bc67848df20}\label{classMdiWindow_ae4dae4cdb4b94c611f4b9bc67848df20}} 
+void {\bfseries save\+BMC} ()
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Signals}
 \begin{DoxyCompactItemize}
@@ -26,401 +30,37 @@ void {\bfseries send\+Close\+Mdi\+Win} (\mbox{\hyperlink{classMdiWindow}{Mdi\+Wi
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classMdiWindow_a4bd1561eaa8a6620f6c31c25b5650cb8}{Mdi\+Window}} (const int the\+Index, QMdi\+Area $\ast$parent, Qt\+::\+Window\+Flags wflags)
+\mbox{\Hypertarget{classMdiWindow_a4bd1561eaa8a6620f6c31c25b5650cb8}\label{classMdiWindow_a4bd1561eaa8a6620f6c31c25b5650cb8}} 
+{\bfseries Mdi\+Window} (const int the\+Index, QMdi\+Area $\ast$parent, Qt\+::\+Window\+Flags wflags)
 \item 
-virtual QSize \mbox{\hyperlink{classMdiWindow_a8c0cf644117640fc656ce2148a7bd348}{size\+Hint}} () const
+\mbox{\Hypertarget{classMdiWindow_a8c0cf644117640fc656ce2148a7bd348}\label{classMdiWindow_a8c0cf644117640fc656ce2148a7bd348}} 
+virtual QSize {\bfseries size\+Hint} () const
 \item 
-QString \mbox{\hyperlink{classMdiWindow_a29d8f3be44a431ab986618289e7a2a98}{get\+Short\+Current\+File}} ()
+\mbox{\Hypertarget{classMdiWindow_a29d8f3be44a431ab986618289e7a2a98}\label{classMdiWindow_a29d8f3be44a431ab986618289e7a2a98}} 
+QString {\bfseries get\+Short\+Current\+File} ()
 \item 
-bool \mbox{\hyperlink{classMdiWindow_ad7830249bed3c8f7077310f3f6fac701}{load\+File}} (char $\ast$file\+Name)
+\mbox{\Hypertarget{classMdiWindow_ad7830249bed3c8f7077310f3f6fac701}\label{classMdiWindow_ad7830249bed3c8f7077310f3f6fac701}} 
+bool {\bfseries load\+File} (char $\ast$file\+Name)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
-QMdi\+Area $\ast$ \mbox{\hyperlink{classMdiWindow_a331dde6988b3c8e9b440451f74bd7f1d}{mdi\+Area}}
-\item 
-QGraphics\+Scene $\ast$ \mbox{\hyperlink{classMdiWindow_a46baf385bc95bd7302339847af20a7a6}{gscene}}
-\item 
-int32\+\_\+t \mbox{\hyperlink{classMdiWindow_a9658bfd028ea0bba8438b146688cd7b1}{doc\+\_\+index}}
-\item 
-QPrinter \mbox{\hyperlink{classMdiWindow_a41c7c1bfb5916bf0ee5d4298ca6b9cd5}{printer}}
-\end{DoxyCompactItemize}
-
-
-\doxysubsubsection{Detailed Description}
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00259}{259}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
-
-
-\doxysubsubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classMdiWindow_a4bd1561eaa8a6620f6c31c25b5650cb8}\label{classMdiWindow_a4bd1561eaa8a6620f6c31c25b5650cb8}} 
-\index{MdiWindow@{MdiWindow}!MdiWindow@{MdiWindow}}
-\index{MdiWindow@{MdiWindow}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{MdiWindow()}{MdiWindow()}}
-{\footnotesize\ttfamily Mdi\+Window\+::\+Mdi\+Window (\begin{DoxyParamCaption}\item[{const int}]{the\+Index,  }\item[{QMdi\+Area $\ast$}]{parent,  }\item[{Qt\+::\+Window\+Flags}]{wflags }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l04860}{4860}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{04860                                                                                : QMdiSubWindow(parent, wflags)}
-\DoxyCodeLine{04861 \{}
-\DoxyCodeLine{04862     mdiArea = parent;}
-\DoxyCodeLine{04863 }
-\DoxyCodeLine{04864     setAttribute(Qt::WA\_DeleteOnClose);}
-\DoxyCodeLine{04865 }
-\DoxyCodeLine{04866     this-\/>setWindowIcon(create\_icon(\textcolor{stringliteral}{"{}app"{}}));}
-\DoxyCodeLine{04867 }
-\DoxyCodeLine{04868     gscene = \textcolor{keyword}{new} QGraphicsScene(0,0,0,0, \textcolor{keyword}{this});}
-\DoxyCodeLine{04869     \textcolor{comment}{/* FIXME:. */}}
-\DoxyCodeLine{04870     doc\_index = numOfDocs;}
-\DoxyCodeLine{04871     documents[doc\_index] = create\_doc(gscene, \textcolor{keyword}{this});}
-\DoxyCodeLine{04872     \mbox{\hyperlink{structDocumentData__}{DocumentData}} *data = documents[doc\_index]-\/>data;}
-\DoxyCodeLine{04873 }
-\DoxyCodeLine{04874     data-\/>myIndex = theIndex;}
-\DoxyCodeLine{04875     data-\/>fileWasLoaded = \textcolor{keyword}{false};}
-\DoxyCodeLine{04876     sprintf(data-\/>curFile, \textcolor{stringliteral}{"{}Untitled\%d.dst"{}}, theIndex);}
-\DoxyCodeLine{04877     this-\/>setWindowTitle(data-\/>curFile);}
-\DoxyCodeLine{04878 }
-\DoxyCodeLine{04879     setWidget(documents[doc\_index]);}
-\DoxyCodeLine{04880 }
-\DoxyCodeLine{04881     \textcolor{comment}{/* WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT}}
-\DoxyCodeLine{04882 \textcolor{comment}{     * WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!}}
-\DoxyCodeLine{04883 \textcolor{comment}{     * WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.}}
-\DoxyCodeLine{04884 \textcolor{comment}{     */}}
-\DoxyCodeLine{04885     documents[doc\_index]-\/>setFocusProxy(prompt);}
-\DoxyCodeLine{04886 }
-\DoxyCodeLine{04887     resize(sizeHint());}
-\DoxyCodeLine{04888 }
-\DoxyCodeLine{04889     strcpy(promptHistoryData, \textcolor{stringliteral}{"{}Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1."{}});}
-\DoxyCodeLine{04890     setHistory(promptHistoryData);}
-\DoxyCodeLine{04891 }
-\DoxyCodeLine{04892     \textcolor{comment}{/* Due to strange Qt4.2.3 feature the child window icon is not drawn}}
-\DoxyCodeLine{04893 \textcolor{comment}{     * in the main menu if showMaximized() is called for a non-\/visible child window}}
-\DoxyCodeLine{04894 \textcolor{comment}{     * Therefore calling show() first...}}
-\DoxyCodeLine{04895 \textcolor{comment}{     */}}
-\DoxyCodeLine{04896     show();}
-\DoxyCodeLine{04897     showMaximized();}
-\DoxyCodeLine{04898 }
-\DoxyCodeLine{04899     setFocusPolicy(Qt::WheelFocus);}
-\DoxyCodeLine{04900     setFocus();}
-\DoxyCodeLine{04901 }
-\DoxyCodeLine{04902     onWindowActivated();}
-\DoxyCodeLine{04903 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classMdiWindow_acf4b3a129311b0d28ce06f584c4a9577}\label{classMdiWindow_acf4b3a129311b0d28ce06f584c4a9577}} 
-\index{MdiWindow@{MdiWindow}!````~MdiWindow@{$\sim$MdiWindow}}
-\index{````~MdiWindow@{$\sim$MdiWindow}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{$\sim$MdiWindow()}{~MdiWindow()}}
-{\footnotesize\ttfamily Mdi\+Window\+::$\sim$\+Mdi\+Window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00265}{265}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00265                  \{}
-\DoxyCodeLine{00266         debug\_message(\textcolor{stringliteral}{"{}MdiWindow Destructor()"{}});}
-\DoxyCodeLine{00267         emb\_pattern\_free(documents[doc\_index]-\/>data-\/>pattern);}
-\DoxyCodeLine{00268     \}}
-
-\end{DoxyCode}
-
-
-\doxysubsubsection{Member Function Documentation}
-\mbox{\Hypertarget{classMdiWindow_a8e34b9f6e0708f17f66a3a75a4a281b6}\label{classMdiWindow_a8e34b9f6e0708f17f66a3a75a4a281b6}} 
-\index{MdiWindow@{MdiWindow}!closeEvent@{closeEvent}}
-\index{closeEvent@{closeEvent}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{closeEvent}{closeEvent}}
-{\footnotesize\ttfamily void Mdi\+Window\+::close\+Event (\begin{DoxyParamCaption}\item[{QClose\+Event $\ast$}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05057}{5057}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05058 \{}
-\DoxyCodeLine{05059     debug\_message(\textcolor{stringliteral}{"{}MdiWindow closeEvent()"{}});}
-\DoxyCodeLine{05060     emit sendCloseMdiWin(\textcolor{keyword}{this});}
-\DoxyCodeLine{05061 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classMdiWindow_a29d8f3be44a431ab986618289e7a2a98}\label{classMdiWindow_a29d8f3be44a431ab986618289e7a2a98}} 
-\index{MdiWindow@{MdiWindow}!getShortCurrentFile@{getShortCurrentFile}}
-\index{getShortCurrentFile@{getShortCurrentFile}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{getShortCurrentFile()}{getShortCurrentFile()}}
-{\footnotesize\ttfamily QString Mdi\+Window\+::get\+Short\+Current\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05046}{5046}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05047 \{}
-\DoxyCodeLine{05048     \textcolor{keywordflow}{return} QFileInfo(documents[doc\_index]-\/>data-\/>curFile).fileName();}
-\DoxyCodeLine{05049 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classMdiWindow_ad7830249bed3c8f7077310f3f6fac701}\label{classMdiWindow_ad7830249bed3c8f7077310f3f6fac701}} 
-\index{MdiWindow@{MdiWindow}!loadFile@{loadFile}}
-\index{loadFile@{loadFile}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{loadFile()}{loadFile()}}
-{\footnotesize\ttfamily bool Mdi\+Window\+::load\+File (\begin{DoxyParamCaption}\item[{char $\ast$}]{file\+Name }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l04906}{4906}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{04907 \{}
-\DoxyCodeLine{04908     debug\_message(\textcolor{stringliteral}{"{}MdiWindow loadFile()"{}});}
-\DoxyCodeLine{04909     \mbox{\hyperlink{structDocumentData__}{DocumentData}} *data = documents[doc\_index]-\/>data;}
-\DoxyCodeLine{04910 }
-\DoxyCodeLine{04911     QRgb tmpColor = data-\/>curColor;}
-\DoxyCodeLine{04912 }
-\DoxyCodeLine{04913     QFile file(fileName);}
-\DoxyCodeLine{04914     \textcolor{keywordflow}{if} (!file.open(QFile::ReadOnly | QFile::Text)) \{}
-\DoxyCodeLine{04915         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *msg = qPrintable(tr(\textcolor{stringliteral}{"{}Cannot read file \%1:\(\backslash\)n\%2."{}}).arg(fileName).arg(file.errorString()));}
-\DoxyCodeLine{04916         messagebox(\textcolor{stringliteral}{"{}warning"{}}, translate(\textcolor{stringliteral}{"{}Error reading file"{}}), msg);}
-\DoxyCodeLine{04917         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{04918     \}}
-\DoxyCodeLine{04919 }
-\DoxyCodeLine{04920     wait\_cursor();}
-\DoxyCodeLine{04921 }
-\DoxyCodeLine{04922     \textcolor{keywordtype}{char} *ext = file\_extension(fileName);}
-\DoxyCodeLine{04923     debug\_message(\textcolor{stringliteral}{"{}ext: \%s"{}}, ext);}
-\DoxyCodeLine{04924 }
-\DoxyCodeLine{04925     EmbPattern *pattern = data-\/>pattern;}
-\DoxyCodeLine{04926 }
-\DoxyCodeLine{04927     \textcolor{comment}{/* Read */}}
-\DoxyCodeLine{04928     \textcolor{keywordtype}{int} format = EMB\_FORMAT\_CSV; \textcolor{comment}{/* emb\_identify\_format(fileName); */}}
-\DoxyCodeLine{04929     \textcolor{keywordflow}{if} (format <= 0) \{}
-\DoxyCodeLine{04930         debug\_message(\textcolor{stringliteral}{"{}Unsupported read file type: \%s"{}}, fileName);}
-\DoxyCodeLine{04931         restore\_cursor();}
-\DoxyCodeLine{04932         messagebox(\textcolor{stringliteral}{"{}warning"{}}, translate(\textcolor{stringliteral}{"{}Error reading pattern"{}}),}
-\DoxyCodeLine{04933             qPrintable(tr(\textcolor{stringliteral}{"{}Unsupported read file type: "{}}) + fileName));}
-\DoxyCodeLine{04934         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{04935     \}}
-\DoxyCodeLine{04936 }
-\DoxyCodeLine{04937     \textcolor{keywordtype}{int} readSuccessful = emb\_pattern\_read(data-\/>pattern, fileName, format);}
-\DoxyCodeLine{04938     \textcolor{keywordflow}{if} (!readSuccessful) \{}
-\DoxyCodeLine{04939         debug\_message(\textcolor{stringliteral}{"{}Reading file was unsuccessful: \%s"{}}, fileName);}
-\DoxyCodeLine{04940         restore\_cursor();}
-\DoxyCodeLine{04941         messagebox(\textcolor{stringliteral}{"{}warning"{}}, translate(\textcolor{stringliteral}{"{}Error reading pattern"{}}),}
-\DoxyCodeLine{04942             qPrintable(tr(\textcolor{stringliteral}{"{}Reading file was unsuccessful: "{}}) + fileName));}
-\DoxyCodeLine{04943         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{04944     \}}
-\DoxyCodeLine{04945 }
-\DoxyCodeLine{04946     debug\_message(\textcolor{stringliteral}{"{}Read successful.\(\backslash\)n"{}});}
-\DoxyCodeLine{04947     \textcolor{comment}{/* emb\_pattern\_moveStitchListToPolylines(pattern); */} \textcolor{comment}{/* TODO: Test more */}}
-\DoxyCodeLine{04948     EmbPolyline polyline;}
-\DoxyCodeLine{04949     polyline.pointList = emb\_array\_create(EMB\_VECTOR);}
-\DoxyCodeLine{04950     polyline.flagList = emb\_array\_create(EMB\_FLAG);}
-\DoxyCodeLine{04951     polyline.lineType = 0;}
-\DoxyCodeLine{04952     polyline.color.r = 0;}
-\DoxyCodeLine{04953     polyline.color.g = 0;}
-\DoxyCodeLine{04954     polyline.color.b = 0;}
-\DoxyCodeLine{04955     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=1; i<pattern-\/>stitch\_list-\/>count; i++) \{}
-\DoxyCodeLine{04956         EmbVector v;}
-\DoxyCodeLine{04957         v.x = pattern-\/>stitch\_list-\/>stitch[i].x;}
-\DoxyCodeLine{04958         v.y = pattern-\/>stitch\_list-\/>stitch[i].y;}
-\DoxyCodeLine{04959         emb\_array\_addVector(polyline.pointList, v);}
-\DoxyCodeLine{04960     \}}
-\DoxyCodeLine{04961     emb\_array\_addPolyline(pattern-\/>geometry, polyline);}
-\DoxyCodeLine{04962 }
-\DoxyCodeLine{04963     setCurrentFile(fileName);}
-\DoxyCodeLine{04964     statusbar-\/>showMessage(\textcolor{stringliteral}{"{}File loaded."{}});}
-\DoxyCodeLine{04965 }
-\DoxyCodeLine{04966     \textcolor{keywordflow}{if} (get\_bool(GRID\_LOAD\_FROM\_FILE)) \{}
-\DoxyCodeLine{04967         \textcolor{comment}{/* TODO: Josh, provide me a hoop size and/or grid spacing from the pattern. */}}
-\DoxyCodeLine{04968     \}}
-\DoxyCodeLine{04969 }
-\DoxyCodeLine{04970     restore\_cursor();}
-\DoxyCodeLine{04971 }
-\DoxyCodeLine{04972     \textcolor{comment}{/* Clear the undo stack so it is not possible to undo past this point. */}}
-\DoxyCodeLine{04973     documents[doc\_index]-\/>undoStack-\/>clear();}
-\DoxyCodeLine{04974 }
-\DoxyCodeLine{04975     documents[doc\_index]-\/>data-\/>curColor = tmpColor;}
-\DoxyCodeLine{04976 }
-\DoxyCodeLine{04977     documents[doc\_index]-\/>data-\/>fileWasLoaded = \textcolor{keyword}{true};}
-\DoxyCodeLine{04978     set\_undo\_clean\_icon(documents[doc\_index]-\/>data-\/>fileWasLoaded);}
-\DoxyCodeLine{04979     \textcolor{keywordflow}{return} documents[doc\_index]-\/>data-\/>fileWasLoaded;}
-\DoxyCodeLine{04980 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classMdiWindow_a7aeaec47dff4863767ca612356660df5}\label{classMdiWindow_a7aeaec47dff4863767ca612356660df5}} 
-\index{MdiWindow@{MdiWindow}!onWindowActivated@{onWindowActivated}}
-\index{onWindowActivated@{onWindowActivated}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{onWindowActivated}{onWindowActivated}}
-{\footnotesize\ttfamily void Mdi\+Window\+::on\+Window\+Activated (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05064}{5064}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05065 \{}
-\DoxyCodeLine{05066     debug\_message(\textcolor{stringliteral}{"{}MdiWindow onWindowActivated()"{}});}
-\DoxyCodeLine{05067     \textcolor{comment}{// FIXME: documents[doc]-\/>undoStack-\/>setActive(true);}}
-\DoxyCodeLine{05068     \mbox{\hyperlink{structDocumentData__}{DocumentData}} *data = doc\_data(doc\_index);}
-\DoxyCodeLine{05069     set\_undo\_clean\_icon(data-\/>fileWasLoaded);}
-\DoxyCodeLine{05070     statusBarButtons[SB\_SNAP]-\/>setChecked(\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc\_index, VIEW\_SNAP));}
-\DoxyCodeLine{05071     statusBarButtons[SB\_GRID]-\/>setChecked(\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc\_index, VIEW\_GRID));}
-\DoxyCodeLine{05072     statusBarButtons[SB\_RULER]-\/>setChecked(\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc\_index, VIEW\_RULER));}
-\DoxyCodeLine{05073     statusBarButtons[SB\_ORTHO]-\/>setChecked(\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc\_index, VIEW\_ORTHO));}
-\DoxyCodeLine{05074     statusBarButtons[SB\_POLAR]-\/>setChecked(\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc\_index, VIEW\_POLAR));}
-\DoxyCodeLine{05075     statusBarButtons[SB\_QSNAP]-\/>setChecked(\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc\_index, VIEW\_QSNAP));}
-\DoxyCodeLine{05076     statusBarButtons[SB\_QTRACK]-\/>setChecked(\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc\_index, VIEW\_QTRACK));}
-\DoxyCodeLine{05077     statusBarButtons[SB\_LWT]-\/>setChecked(\mbox{\hyperlink{interface_8c_a5053f6f075d900f322604397448d8321}{doc\_get\_bool}}(doc\_index, VIEW\_LWT));}
-\DoxyCodeLine{05078     setHistory(promptHistoryData);}
-\DoxyCodeLine{05079 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classMdiWindow_aa251dcef1c5212fcb0a6567f1dcb4334}\label{classMdiWindow_aa251dcef1c5212fcb0a6567f1dcb4334}} 
-\index{MdiWindow@{MdiWindow}!print@{print}}
-\index{print@{print}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{print}{print}}
-{\footnotesize\ttfamily void Mdi\+Window\+::print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l04983}{4983}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{04984 \{}
-\DoxyCodeLine{04985     QPrintDialog dialog(\&printer, \textcolor{keyword}{this});}
-\DoxyCodeLine{04986     \textcolor{keywordflow}{if} (dialog.exec() == QDialog::Accepted) \{}
-\DoxyCodeLine{04987         QPainter painter(\&printer);}
-\DoxyCodeLine{04988         \textcolor{keywordflow}{if} (get\_bool(PRINTING\_DISABLE\_BG)) \{}
-\DoxyCodeLine{04989             \textcolor{comment}{/* Save current bg */}}
-\DoxyCodeLine{04990             QBrush brush = documents[doc\_index]-\/>backgroundBrush();}
-\DoxyCodeLine{04991             \textcolor{comment}{/* Save ink by not printing the bg at all */}}
-\DoxyCodeLine{04992             documents[doc\_index]-\/>setBackgroundBrush(Qt::NoBrush);}
-\DoxyCodeLine{04993             \textcolor{comment}{/* Print, fitting the viewport contents into a full page */}}
-\DoxyCodeLine{04994             documents[doc\_index]-\/>render(\&painter);}
-\DoxyCodeLine{04995             \textcolor{comment}{/* Restore the bg */}}
-\DoxyCodeLine{04996             documents[doc\_index]-\/>setBackgroundBrush(brush);}
-\DoxyCodeLine{04997         \}}
-\DoxyCodeLine{04998         \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{04999             \textcolor{comment}{/* Print, fitting the viewport contents into a full page */}}
-\DoxyCodeLine{05000             documents[doc\_index]-\/>render(\&painter);}
-\DoxyCodeLine{05001         \}}
-\DoxyCodeLine{05002     \}}
-\DoxyCodeLine{05003 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classMdiWindow_ae4dae4cdb4b94c611f4b9bc67848df20}\label{classMdiWindow_ae4dae4cdb4b94c611f4b9bc67848df20}} 
-\index{MdiWindow@{MdiWindow}!saveBMC@{saveBMC}}
-\index{saveBMC@{saveBMC}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{saveBMC}{saveBMC}}
-{\footnotesize\ttfamily void Mdi\+Window\+::save\+BMC (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05011}{5011}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05012 \{}
-\DoxyCodeLine{05013     \textcolor{comment}{/* TODO: figure out how to center the image, right now it just plops it to the left side. */}}
-\DoxyCodeLine{05014     QImage img(150, 150, QImage::Format\_ARGB32\_Premultiplied);}
-\DoxyCodeLine{05015     img.fill(qRgb(255,255,255));}
-\DoxyCodeLine{05016     QRectF extents = gscene-\/>itemsBoundingRect();}
-\DoxyCodeLine{05017 }
-\DoxyCodeLine{05018     QPainter painter(\&img);}
-\DoxyCodeLine{05019     QRectF targetRect(0,0,150,150);}
-\DoxyCodeLine{05020     \textcolor{keywordflow}{if} (get\_bool(PRINTING\_DISABLE\_BG)) \{}
-\DoxyCodeLine{05021         \textcolor{comment}{/* TODO: Make BMC background into it's own setting? */}}
-\DoxyCodeLine{05022         QBrush brush = gscene-\/>backgroundBrush();}
-\DoxyCodeLine{05023         gscene-\/>setBackgroundBrush(Qt::NoBrush);}
-\DoxyCodeLine{05024         gscene-\/>update();}
-\DoxyCodeLine{05025         gscene-\/>render(\&painter, targetRect, extents, Qt::KeepAspectRatio);}
-\DoxyCodeLine{05026         gscene-\/>setBackgroundBrush(brush);}
-\DoxyCodeLine{05027     \}}
-\DoxyCodeLine{05028     \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{05029         gscene-\/>update();}
-\DoxyCodeLine{05030         gscene-\/>render(\&painter, targetRect, extents, Qt::KeepAspectRatio);}
-\DoxyCodeLine{05031     \}}
-\DoxyCodeLine{05032 }
-\DoxyCodeLine{05033     img.convertToFormat(QImage::Format\_Indexed8, Qt::ThresholdDither|Qt::AvoidDither).save(\textcolor{stringliteral}{"{}test.bmc"{}}, \textcolor{stringliteral}{"{}BMP"{}});}
-\DoxyCodeLine{05034 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classMdiWindow_a8c0cf644117640fc656ce2148a7bd348}\label{classMdiWindow_a8c0cf644117640fc656ce2148a7bd348}} 
-\index{MdiWindow@{MdiWindow}!sizeHint@{sizeHint}}
-\index{sizeHint@{sizeHint}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{sizeHint()}{sizeHint()}}
-{\footnotesize\ttfamily QSize Mdi\+Window\+::size\+Hint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05082}{5082}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05083 \{}
-\DoxyCodeLine{05084     debug\_message(\textcolor{stringliteral}{"{}MdiWindow sizeHint()"{}});}
-\DoxyCodeLine{05085     \textcolor{keywordflow}{return} QSize(450, 300);}
-\DoxyCodeLine{05086 \}}
-
-\end{DoxyCode}
-
-
-\doxysubsubsection{Field Documentation}
-\mbox{\Hypertarget{classMdiWindow_a9658bfd028ea0bba8438b146688cd7b1}\label{classMdiWindow_a9658bfd028ea0bba8438b146688cd7b1}} 
-\index{MdiWindow@{MdiWindow}!doc\_index@{doc\_index}}
-\index{doc\_index@{doc\_index}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{doc\_index}{doc\_index}}
-{\footnotesize\ttfamily int32\+\_\+t Mdi\+Window\+::doc\+\_\+index}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00272}{272}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
-\mbox{\Hypertarget{classMdiWindow_a46baf385bc95bd7302339847af20a7a6}\label{classMdiWindow_a46baf385bc95bd7302339847af20a7a6}} 
-\index{MdiWindow@{MdiWindow}!gscene@{gscene}}
-\index{gscene@{gscene}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{gscene}{gscene}}
-{\footnotesize\ttfamily QGraphics\+Scene$\ast$ Mdi\+Window\+::gscene}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00271}{271}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
 \mbox{\Hypertarget{classMdiWindow_a331dde6988b3c8e9b440451f74bd7f1d}\label{classMdiWindow_a331dde6988b3c8e9b440451f74bd7f1d}} 
-\index{MdiWindow@{MdiWindow}!mdiArea@{mdiArea}}
-\index{mdiArea@{mdiArea}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{mdiArea}{mdiArea}}
-{\footnotesize\ttfamily QMdi\+Area$\ast$ Mdi\+Window\+::mdi\+Area}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00270}{270}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
+QMdi\+Area $\ast$ {\bfseries mdi\+Area}
+\item 
+\mbox{\Hypertarget{classMdiWindow_a46baf385bc95bd7302339847af20a7a6}\label{classMdiWindow_a46baf385bc95bd7302339847af20a7a6}} 
+QGraphics\+Scene $\ast$ {\bfseries gscene}
+\item 
+\mbox{\Hypertarget{classMdiWindow_a9658bfd028ea0bba8438b146688cd7b1}\label{classMdiWindow_a9658bfd028ea0bba8438b146688cd7b1}} 
+int32\+\_\+t {\bfseries doc\+\_\+index}
+\item 
 \mbox{\Hypertarget{classMdiWindow_a41c7c1bfb5916bf0ee5d4298ca6b9cd5}\label{classMdiWindow_a41c7c1bfb5916bf0ee5d4298ca6b9cd5}} 
-\index{MdiWindow@{MdiWindow}!printer@{printer}}
-\index{printer@{printer}!MdiWindow@{MdiWindow}}
-\doxyparagraph{\texorpdfstring{printer}{printer}}
-{\footnotesize\ttfamily QPrinter Mdi\+Window\+::printer}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00274}{274}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
+QPrinter {\bfseries printer}
+\end{DoxyCompactItemize}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
 src/\mbox{\hyperlink{qt_8h}{qt.\+h}}\item 
+embroidermodder2\+\_\+autogen/\+UVLADIE3\+JM/moc\+\_\+qt.\+cpp\item 
 src/commands.\+cpp\end{DoxyCompactItemize}

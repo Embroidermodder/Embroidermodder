@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gnu_20free_20documentation_20license_0',['GNU Free Documentation License',['../md_docs_man_LICENSE.html',1,'(Global Namespace)'],['../md_docs_refman_license.html',1,'(Global Namespace)']]]
+  ['what_20is_20embroidermodder_3f_0',['What is Embroidermodder?',['../md_README.html',1,'']]]
 ];

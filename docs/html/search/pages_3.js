@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kde4_20thumbnailer_0',['KDE4 Thumbnailer',['../md_thumbnailer_README.html',1,'']]]
+  ['zlib_2flibpng_20license_0',['zlib/libpng License',['../md_LICENSE.html',1,'']]]
 ];

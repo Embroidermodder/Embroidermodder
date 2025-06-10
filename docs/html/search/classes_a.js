@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['selectbox_0',['SelectBox',['../classSelectBox.html',1,'']]],
-  ['setting_5f_1',['Setting_',['../structSetting__.html',1,'']]]
+  ['qt_5fmeta_5fstringdata_5fselectbox_5ft_0',['qt_meta_stringdata_SelectBox_t',['../structQT__WARNING__DISABLE__DEPRECATED_1_1qt__meta__stringdata__SelectBox__t.html',1,'QT_WARNING_DISABLE_DEPRECATED']]]
 ];

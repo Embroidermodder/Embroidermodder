@@ -77,69 +77,96 @@ $(function() {
 <div class="textblock"><code>#include &quot;core.h&quot;</code><br />
 <code>#include &quot;toml.h&quot;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
-</div>
-<p><a href="state_8c_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a55ab32599d2d57410df9a74ad67fd6da"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a55ab32599d2d57410df9a74ad67fd6da">emb_set_var</a> (ScriptValue *node, const char *key, ScriptValue value)</td></tr>
+<tr class="memitem:a55ab32599d2d57410df9a74ad67fd6da"><td class="memItemLeft" align="right" valign="top"><a id="a55ab32599d2d57410df9a74ad67fd6da" name="a55ab32599d2d57410df9a74ad67fd6da"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>emb_set_var</b> (ScriptValue *node, const char *key, ScriptValue value)</td></tr>
 <tr class="separator:a55ab32599d2d57410df9a74ad67fd6da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a901278b059b7d658fbe1da517e0736fd"><td class="memItemLeft" align="right" valign="top">ScriptValue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a901278b059b7d658fbe1da517e0736fd">emb_get_var</a> (ScriptValue *node, const char *key)</td></tr>
+<tr class="memitem:a901278b059b7d658fbe1da517e0736fd"><td class="memItemLeft" align="right" valign="top"><a id="a901278b059b7d658fbe1da517e0736fd" name="a901278b059b7d658fbe1da517e0736fd"></a>
+ScriptValue *&#160;</td><td class="memItemRight" valign="bottom"><b>emb_get_var</b> (ScriptValue *node, const char *key)</td></tr>
+<tr class="memdesc:a901278b059b7d658fbe1da517e0736fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a ScriptValue from the environment using the key supplied. <br /></td></tr>
 <tr class="separator:a901278b059b7d658fbe1da517e0736fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca9f9bea5ee5776b7849559d22040947"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#aca9f9bea5ee5776b7849559d22040947">emb_get_str</a> (ScriptValue *node, const char *key)</td></tr>
+<tr class="memitem:aca9f9bea5ee5776b7849559d22040947"><td class="memItemLeft" align="right" valign="top"><a id="aca9f9bea5ee5776b7849559d22040947" name="aca9f9bea5ee5776b7849559d22040947"></a>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><b>emb_get_str</b> (ScriptValue *node, const char *key)</td></tr>
+<tr class="memdesc:aca9f9bea5ee5776b7849559d22040947"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a char array from the environment using the key supplied. <br /></td></tr>
 <tr class="separator:aca9f9bea5ee5776b7849559d22040947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0324dd47ecf95c8590df27917f69efa"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ae0324dd47ecf95c8590df27917f69efa">load_file_to_buffer</a> (char *fname, char *buffer)</td></tr>
+<tr class="memdesc:ae0324dd47ecf95c8590df27917f69efa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the entire file with path fname into the buffer passed in.  <a href="state_8c.html#ae0324dd47ecf95c8590df27917f69efa">More...</a><br /></td></tr>
 <tr class="separator:ae0324dd47ecf95c8590df27917f69efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1b6433aaee85b9e210b23f7f6e95bf3"><td class="memItemLeft" align="right" valign="top">toml_table_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ad1b6433aaee85b9e210b23f7f6e95bf3">load_script</a> (char *asset_dir, char *fname)</td></tr>
-<tr class="separator:ad1b6433aaee85b9e210b23f7f6e95bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c19f7ac884ab029c9933ffb0bd498fc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a0c19f7ac884ab029c9933ffb0bd498fc">load_script</a> (char *asset_dir, char *fname)</td></tr>
+<tr class="memdesc:a0c19f7ac884ab029c9933ffb0bd498fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads init_script 1 Mb buffer to chain together all of the strings in the init_script string table.  <a href="state_8c.html#a0c19f7ac884ab029c9933ffb0bd498fc">More...</a><br /></td></tr>
+<tr class="separator:a0c19f7ac884ab029c9933ffb0bd498fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a165e76f9c2ca5ff9569a4cb373fe9d25"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a165e76f9c2ca5ff9569a4cb373fe9d25">load_global_state</a> (ScriptValue *root, char *asset_dir)</td></tr>
+<tr class="memdesc:a165e76f9c2ca5ff9569a4cb373fe9d25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load our basic tree structure of data for all of our data structures above.  <a href="state_8c.html#a165e76f9c2ca5ff9569a4cb373fe9d25">More...</a><br /></td></tr>
 <tr class="separator:a165e76f9c2ca5ff9569a4cb373fe9d25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ab7c99743c4b122cc43bd67ba4d1cac03"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ab7c99743c4b122cc43bd67ba4d1cac03">os</a> = &quot;Unknown Operating System&quot;</td></tr>
+<tr class="memitem:ab7c99743c4b122cc43bd67ba4d1cac03"><td class="memItemLeft" align="right" valign="top"><a id="ab7c99743c4b122cc43bd67ba4d1cac03" name="ab7c99743c4b122cc43bd67ba4d1cac03"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>os</b> = &quot;Unknown Operating System&quot;</td></tr>
 <tr class="separator:ab7c99743c4b122cc43bd67ba4d1cac03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ab564d41e31041cac6b26b7087917de"><td class="memItemLeft" align="right" valign="top">ScriptValue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a6ab564d41e31041cac6b26b7087917de">root</a></td></tr>
+<tr class="memitem:a6ab564d41e31041cac6b26b7087917de"><td class="memItemLeft" align="right" valign="top"><a id="a6ab564d41e31041cac6b26b7087917de" name="a6ab564d41e31041cac6b26b7087917de"></a>
+ScriptValue *&#160;</td><td class="memItemRight" valign="bottom"><b>root</b></td></tr>
 <tr class="separator:a6ab564d41e31041cac6b26b7087917de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af35025f46345dc5ebff750296f91b6f5"><td class="memItemLeft" align="right" valign="top">ScriptEnv *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#af35025f46345dc5ebff750296f91b6f5">global</a></td></tr>
+<tr class="memitem:af35025f46345dc5ebff750296f91b6f5"><td class="memItemLeft" align="right" valign="top"><a id="af35025f46345dc5ebff750296f91b6f5" name="af35025f46345dc5ebff750296f91b6f5"></a>
+ScriptEnv *&#160;</td><td class="memItemRight" valign="bottom"><b>global</b></td></tr>
 <tr class="separator:af35025f46345dc5ebff750296f91b6f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad97895c3132cb92504e469b710ee3f2"><td class="memItemLeft" align="right" valign="top">ScriptValue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#aad97895c3132cb92504e469b710ee3f2">config</a></td></tr>
+<tr class="memitem:aad97895c3132cb92504e469b710ee3f2"><td class="memItemLeft" align="right" valign="top"><a id="aad97895c3132cb92504e469b710ee3f2" name="aad97895c3132cb92504e469b710ee3f2"></a>
+ScriptValue *&#160;</td><td class="memItemRight" valign="bottom"><b>config</b></td></tr>
 <tr class="separator:aad97895c3132cb92504e469b710ee3f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a697cff18529a6237f3972e48d540eddd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a697cff18529a6237f3972e48d540eddd">n_variables</a> = 0</td></tr>
+<tr class="memitem:a697cff18529a6237f3972e48d540eddd"><td class="memItemLeft" align="right" valign="top"><a id="a697cff18529a6237f3972e48d540eddd" name="a697cff18529a6237f3972e48d540eddd"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>n_variables</b> = 0</td></tr>
 <tr class="separator:a697cff18529a6237f3972e48d540eddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb7584e990a5c015e27d818426be9bb8"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#abb7584e990a5c015e27d818426be9bb8">formatFilterOpen</a> [MAX_LONG_STRING]</td></tr>
+<tr class="memitem:abb7584e990a5c015e27d818426be9bb8"><td class="memItemLeft" align="right" valign="top"><a id="abb7584e990a5c015e27d818426be9bb8" name="abb7584e990a5c015e27d818426be9bb8"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>formatFilterOpen</b> [MAX_LONG_STRING]</td></tr>
 <tr class="separator:abb7584e990a5c015e27d818426be9bb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62d59a7cd32d6c4444e37db908264183"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a62d59a7cd32d6c4444e37db908264183">formatFilterSave</a> [MAX_LONG_STRING]</td></tr>
+<tr class="memitem:a62d59a7cd32d6c4444e37db908264183"><td class="memItemLeft" align="right" valign="top"><a id="a62d59a7cd32d6c4444e37db908264183" name="a62d59a7cd32d6c4444e37db908264183"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>formatFilterSave</b> [MAX_LONG_STRING]</td></tr>
 <tr class="separator:a62d59a7cd32d6c4444e37db908264183"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89d470a26e6c9ba7c3185693840f386c"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a89d470a26e6c9ba7c3185693840f386c">open_files_path</a> [MAX_STRING_LENGTH]</td></tr>
+<tr class="memitem:a89d470a26e6c9ba7c3185693840f386c"><td class="memItemLeft" align="right" valign="top"><a id="a89d470a26e6c9ba7c3185693840f386c" name="a89d470a26e6c9ba7c3185693840f386c"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>open_files_path</b> [MAX_STRING_LENGTH]</td></tr>
 <tr class="separator:a89d470a26e6c9ba7c3185693840f386c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a629185a2c86e82c070bc42db2e73bde1"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a629185a2c86e82c070bc42db2e73bde1">prompt_color_</a> [MAX_STRING_LENGTH]</td></tr>
+<tr class="memitem:a629185a2c86e82c070bc42db2e73bde1"><td class="memItemLeft" align="right" valign="top"><a id="a629185a2c86e82c070bc42db2e73bde1" name="a629185a2c86e82c070bc42db2e73bde1"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>prompt_color_</b> [MAX_STRING_LENGTH]</td></tr>
 <tr class="separator:a629185a2c86e82c070bc42db2e73bde1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad966e2e054810a3c5ccd1a442d402494"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ad966e2e054810a3c5ccd1a442d402494">prompt_selection_bg_color_</a> [MAX_STRING_LENGTH]</td></tr>
+<tr class="memitem:ad966e2e054810a3c5ccd1a442d402494"><td class="memItemLeft" align="right" valign="top"><a id="ad966e2e054810a3c5ccd1a442d402494" name="ad966e2e054810a3c5ccd1a442d402494"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>prompt_selection_bg_color_</b> [MAX_STRING_LENGTH]</td></tr>
 <tr class="separator:ad966e2e054810a3c5ccd1a442d402494"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ae3868a32ea5ec594ea8c28472d9588"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a6ae3868a32ea5ec594ea8c28472d9588">prompt_bg_color_</a> [MAX_STRING_LENGTH]</td></tr>
+<tr class="memitem:a6ae3868a32ea5ec594ea8c28472d9588"><td class="memItemLeft" align="right" valign="top"><a id="a6ae3868a32ea5ec594ea8c28472d9588" name="a6ae3868a32ea5ec594ea8c28472d9588"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>prompt_bg_color_</b> [MAX_STRING_LENGTH]</td></tr>
 <tr class="separator:a6ae3868a32ea5ec594ea8c28472d9588"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98423167898a9a35d715f6c298c4f2c7"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a98423167898a9a35d715f6c298c4f2c7">prompt_selection_color_</a> [MAX_STRING_LENGTH]</td></tr>
+<tr class="memitem:a98423167898a9a35d715f6c298c4f2c7"><td class="memItemLeft" align="right" valign="top"><a id="a98423167898a9a35d715f6c298c4f2c7" name="a98423167898a9a35d715f6c298c4f2c7"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>prompt_selection_color_</b> [MAX_STRING_LENGTH]</td></tr>
 <tr class="separator:a98423167898a9a35d715f6c298c4f2c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3c933ba8bd7986bb8e6a6f3d82e8028"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ac3c933ba8bd7986bb8e6a6f3d82e8028">document_memory</a> [MAX_OPEN_FILES]</td></tr>
+<tr class="memitem:ac3c933ba8bd7986bb8e6a6f3d82e8028"><td class="memItemLeft" align="right" valign="top"><a id="ac3c933ba8bd7986bb8e6a6f3d82e8028" name="ac3c933ba8bd7986bb8e6a6f3d82e8028"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>document_memory</b> [MAX_OPEN_FILES]</td></tr>
 <tr class="separator:ac3c933ba8bd7986bb8e6a6f3d82e8028"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1378a2dd56cbdc33ba254356eac946c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a1378a2dd56cbdc33ba254356eac946c9">shiftKeyPressedState</a> = false</td></tr>
+<tr class="memitem:a1378a2dd56cbdc33ba254356eac946c9"><td class="memItemLeft" align="right" valign="top"><a id="a1378a2dd56cbdc33ba254356eac946c9" name="a1378a2dd56cbdc33ba254356eac946c9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>shiftKeyPressedState</b> = false</td></tr>
 <tr class="separator:a1378a2dd56cbdc33ba254356eac946c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b910e1bf795b20bdb8b51f09fae8e45"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a5b910e1bf795b20bdb8b51f09fae8e45">cmdActive</a></td></tr>
+<tr class="memitem:a5b910e1bf795b20bdb8b51f09fae8e45"><td class="memItemLeft" align="right" valign="top"><a id="a5b910e1bf795b20bdb8b51f09fae8e45" name="a5b910e1bf795b20bdb8b51f09fae8e45"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>cmdActive</b></td></tr>
 <tr class="separator:a5b910e1bf795b20bdb8b51f09fae8e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad651d258c5fe49323b105b1b23d64777"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ad651d258c5fe49323b105b1b23d64777">rapidFireEnabled</a> = false</td></tr>
+<tr class="memitem:ad651d258c5fe49323b105b1b23d64777"><td class="memItemLeft" align="right" valign="top"><a id="ad651d258c5fe49323b105b1b23d64777" name="ad651d258c5fe49323b105b1b23d64777"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>rapidFireEnabled</b> = false</td></tr>
 <tr class="separator:ad651d258c5fe49323b105b1b23d64777"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f7636df8b2a22914ee5e8a96139b655"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a2f7636df8b2a22914ee5e8a96139b655">isBlinking</a> = false</td></tr>
+<tr class="memitem:a2f7636df8b2a22914ee5e8a96139b655"><td class="memItemLeft" align="right" valign="top"><a id="a2f7636df8b2a22914ee5e8a96139b655" name="a2f7636df8b2a22914ee5e8a96139b655"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBlinking</b> = false</td></tr>
 <tr class="separator:a2f7636df8b2a22914ee5e8a96139b655"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c0e2bc6cc4deb130635b69023080d80"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a3c0e2bc6cc4deb130635b69023080d80">numOfDocs</a> = 0</td></tr>
+<tr class="memitem:a3c0e2bc6cc4deb130635b69023080d80"><td class="memItemLeft" align="right" valign="top"><a id="a3c0e2bc6cc4deb130635b69023080d80" name="a3c0e2bc6cc4deb130635b69023080d80"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>numOfDocs</b> = 0</td></tr>
 <tr class="separator:a3c0e2bc6cc4deb130635b69023080d80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa430e53ebc7388c2664394eaf934ebe2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#aa430e53ebc7388c2664394eaf934ebe2">docIndex</a> = 0</td></tr>
+<tr class="memitem:aa430e53ebc7388c2664394eaf934ebe2"><td class="memItemLeft" align="right" valign="top"><a id="aa430e53ebc7388c2664394eaf934ebe2" name="aa430e53ebc7388c2664394eaf934ebe2"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>docIndex</b> = 0</td></tr>
 <tr class="separator:aa430e53ebc7388c2664394eaf934ebe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58d95e2b310a39fb791005e81f3bf6cc"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a58d95e2b310a39fb791005e81f3bf6cc">settings_file</a> [MAX_STRING_LENGTH] = &quot;settings.ini&quot;</td></tr>
+<tr class="memitem:a58d95e2b310a39fb791005e81f3bf6cc"><td class="memItemLeft" align="right" valign="top"><a id="a58d95e2b310a39fb791005e81f3bf6cc" name="a58d95e2b310a39fb791005e81f3bf6cc"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>settings_file</b> [MAX_STRING_LENGTH] = &quot;settings.ini&quot;</td></tr>
 <tr class="separator:a58d95e2b310a39fb791005e81f3bf6cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacba5c5d4669c6cec368ff6ab1bc8c0f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#aacba5c5d4669c6cec368ff6ab1bc8c0f">key_state</a> [N_KEY_SEQUENCES]</td></tr>
 <tr class="separator:aacba5c5d4669c6cec368ff6ab1bc8c0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1b9b04f8ae7283a897a8eb9fe0e9e8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSetting__.html">Setting</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#af1b9b04f8ae7283a897a8eb9fe0e9e8d">setting</a> [N_SETTINGS]</td></tr>
+<tr class="memitem:af1b9b04f8ae7283a897a8eb9fe0e9e8d"><td class="memItemLeft" align="right" valign="top"><a id="af1b9b04f8ae7283a897a8eb9fe0e9e8d" name="af1b9b04f8ae7283a897a8eb9fe0e9e8d"></a>
+<a class="el" href="structSetting__.html">Setting</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setting</b> [N_SETTINGS]</td></tr>
 <tr class="separator:af1b9b04f8ae7283a897a8eb9fe0e9e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aa09582dbe11119f9401a173c6971c3"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a8aa09582dbe11119f9401a173c6971c3">recent_files</a> [MAX_FILES][MAX_STRING_LENGTH]</td></tr>
 <tr class="separator:a8aa09582dbe11119f9401a173c6971c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,19 +180,26 @@ Variables</h2></td></tr>
 <tr class="separator:a5a49cc14328f6948aa9a4be0702123f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a424d5624a77d4626360afa1e14633c54"><td class="memItemLeft" align="right" valign="top">const ScriptValue&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a424d5624a77d4626360afa1e14633c54">script_false</a></td></tr>
 <tr class="separator:a424d5624a77d4626360afa1e14633c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aceaae8d607fdbcd696797239ac027560"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#aceaae8d607fdbcd696797239ac027560">_appName_</a> = &quot;Embroidermodder&quot;</td></tr>
+<tr class="memitem:aceaae8d607fdbcd696797239ac027560"><td class="memItemLeft" align="right" valign="top"><a id="aceaae8d607fdbcd696797239ac027560" name="aceaae8d607fdbcd696797239ac027560"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>_appName_</b> = &quot;Embroidermodder&quot;</td></tr>
 <tr class="separator:aceaae8d607fdbcd696797239ac027560"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4a48c9fc749ca785389d7b102bb3c6a"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ab4a48c9fc749ca785389d7b102bb3c6a">_appVer_</a> = &quot;v2.0 alpha&quot;</td></tr>
+<tr class="memitem:ab4a48c9fc749ca785389d7b102bb3c6a"><td class="memItemLeft" align="right" valign="top"><a id="ab4a48c9fc749ca785389d7b102bb3c6a" name="ab4a48c9fc749ca785389d7b102bb3c6a"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>_appVer_</b> = &quot;v2.0 alpha&quot;</td></tr>
 <tr class="separator:ab4a48c9fc749ca785389d7b102bb3c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a42421b0311e4b603861e5b1e809ea5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a5a42421b0311e4b603861e5b1e809ea5">exitApp</a> = false</td></tr>
+<tr class="memitem:a5a42421b0311e4b603861e5b1e809ea5"><td class="memItemLeft" align="right" valign="top"><a id="a5a42421b0311e4b603861e5b1e809ea5" name="a5a42421b0311e4b603861e5b1e809ea5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>exitApp</b> = false</td></tr>
 <tr class="separator:a5a42421b0311e4b603861e5b1e809ea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20820415ca05720c97b77275fb424e11"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a20820415ca05720c97b77275fb424e11">testing_mode</a> = 0</td></tr>
+<tr class="memitem:a20820415ca05720c97b77275fb424e11"><td class="memItemLeft" align="right" valign="top"><a id="a20820415ca05720c97b77275fb424e11" name="a20820415ca05720c97b77275fb424e11"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>testing_mode</b> = 0</td></tr>
 <tr class="separator:a20820415ca05720c97b77275fb424e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c916f4cc685690b44731ba0f7c3e06d"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a5c916f4cc685690b44731ba0f7c3e06d">defaultPrefix</a> [200]</td></tr>
+<tr class="memitem:a5c916f4cc685690b44731ba0f7c3e06d"><td class="memItemLeft" align="right" valign="top"><a id="a5c916f4cc685690b44731ba0f7c3e06d" name="a5c916f4cc685690b44731ba0f7c3e06d"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>defaultPrefix</b> [200]</td></tr>
 <tr class="separator:a5c916f4cc685690b44731ba0f7c3e06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32fe6bd71d63678c8f07cd224f3581cb"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a32fe6bd71d63678c8f07cd224f3581cb">prefix</a> [200]</td></tr>
+<tr class="memitem:a32fe6bd71d63678c8f07cd224f3581cb"><td class="memItemLeft" align="right" valign="top"><a id="a32fe6bd71d63678c8f07cd224f3581cb" name="a32fe6bd71d63678c8f07cd224f3581cb"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>prefix</b> [200]</td></tr>
 <tr class="separator:a32fe6bd71d63678c8f07cd224f3581cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a498e67d156e17351bf58dd2a40299852"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a498e67d156e17351bf58dd2a40299852">curCmd</a> [200]</td></tr>
+<tr class="memitem:a498e67d156e17351bf58dd2a40299852"><td class="memItemLeft" align="right" valign="top"><a id="a498e67d156e17351bf58dd2a40299852" name="a498e67d156e17351bf58dd2a40299852"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>curCmd</b> [200]</td></tr>
 <tr class="separator:a498e67d156e17351bf58dd2a40299852"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a670f970f156bd690c5f0c2cae3a75730"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a670f970f156bd690c5f0c2cae3a75730">menu_list</a> []</td></tr>
 <tr class="separator:a670f970f156bd690c5f0c2cae3a75730"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,15 +291,18 @@ Variables</h2></td></tr>
 <tr class="separator:a6437cd5623d756cad708949f690dae1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd14d6bf0db0f2553abaa090160f3bb6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#abd14d6bf0db0f2553abaa090160f3bb6">render_hints</a> []</td></tr>
 <tr class="separator:abd14d6bf0db0f2553abaa090160f3bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34076a0637953b98847e8a4fd11459ca"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a34076a0637953b98847e8a4fd11459ca">object_names</a> []</td></tr>
+<tr class="memitem:a34076a0637953b98847e8a4fd11459ca"><td class="memItemLeft" align="right" valign="top"><a id="a34076a0637953b98847e8a4fd11459ca" name="a34076a0637953b98847e8a4fd11459ca"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>object_names</b> []</td></tr>
 <tr class="separator:a34076a0637953b98847e8a4fd11459ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7013bddd1c4531493f5626f7bb028164"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a7013bddd1c4531493f5626f7bb028164">coverage_test</a> []</td></tr>
 <tr class="separator:a7013bddd1c4531493f5626f7bb028164"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe61f345e586218cca3fc329e805a530"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#afe61f345e586218cca3fc329e805a530">tips</a> []</td></tr>
 <tr class="separator:afe61f345e586218cca3fc329e805a530"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5318d7b599615c831722d3102eb2db49"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a5318d7b599615c831722d3102eb2db49">extensions</a> []</td></tr>
+<tr class="memitem:a5318d7b599615c831722d3102eb2db49"><td class="memItemLeft" align="right" valign="top"><a id="a5318d7b599615c831722d3102eb2db49" name="a5318d7b599615c831722d3102eb2db49"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>extensions</b> []</td></tr>
 <tr class="separator:a5318d7b599615c831722d3102eb2db49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf796746a16f8af6794ef411325d764d"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#acf796746a16f8af6794ef411325d764d">editor_list</a> []</td></tr>
+<tr class="memitem:acf796746a16f8af6794ef411325d764d"><td class="memItemLeft" align="right" valign="top"><a id="acf796746a16f8af6794ef411325d764d" name="acf796746a16f8af6794ef411325d764d"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>editor_list</b> []</td></tr>
 <tr class="separator:acf796746a16f8af6794ef411325d764d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e5d04b0fbebb1afe6c9367d703926ca"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a9e5d04b0fbebb1afe6c9367d703926ca">combobox_list</a> []</td></tr>
 <tr class="separator:a9e5d04b0fbebb1afe6c9367d703926ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -279,53 +316,76 @@ Variables</h2></td></tr>
 <tr class="separator:a4561b9fec01952f029a71e4247cde242"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab75914ab7fb0e6afb87175e88627b9c8"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ab75914ab7fb0e6afb87175e88627b9c8">text_size_list</a> []</td></tr>
 <tr class="separator:ab75914ab7fb0e6afb87175e88627b9c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0dfb3ec65d05692dd0ad1de6bf3d0b1f"><td class="memItemLeft" align="right" valign="top">StringMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a0dfb3ec65d05692dd0ad1de6bf3d0b1f">aliasHash</a> [MAX_ALIASES]</td></tr>
+<tr class="memitem:a0dfb3ec65d05692dd0ad1de6bf3d0b1f"><td class="memItemLeft" align="right" valign="top"><a id="a0dfb3ec65d05692dd0ad1de6bf3d0b1f" name="a0dfb3ec65d05692dd0ad1de6bf3d0b1f"></a>
+StringMap&#160;</td><td class="memItemRight" valign="bottom"><b>aliasHash</b> [MAX_ALIASES]</td></tr>
 <tr class="separator:a0dfb3ec65d05692dd0ad1de6bf3d0b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60c4f9a7c4a4d065aae6637cf8c74915"><td class="memItemLeft" align="right" valign="top">IntMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a60c4f9a7c4a4d065aae6637cf8c74915">obj_index</a> [MAX_OBJECTS]</td></tr>
+<tr class="memitem:a60c4f9a7c4a4d065aae6637cf8c74915"><td class="memItemLeft" align="right" valign="top"><a id="a60c4f9a7c4a4d065aae6637cf8c74915" name="a60c4f9a7c4a4d065aae6637cf8c74915"></a>
+IntMap&#160;</td><td class="memItemRight" valign="bottom"><b>obj_index</b> [MAX_OBJECTS]</td></tr>
 <tr class="separator:a60c4f9a7c4a4d065aae6637cf8c74915"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd92c1feeabfe68dd5fbe3c0a535bb11"><td class="memItemLeft" align="right" valign="top">EmbIdList *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#afd92c1feeabfe68dd5fbe3c0a535bb11">cutCopyObjectList</a></td></tr>
+<tr class="memitem:afd92c1feeabfe68dd5fbe3c0a535bb11"><td class="memItemLeft" align="right" valign="top"><a id="afd92c1feeabfe68dd5fbe3c0a535bb11" name="afd92c1feeabfe68dd5fbe3c0a535bb11"></a>
+EmbIdList *&#160;</td><td class="memItemRight" valign="bottom"><b>cutCopyObjectList</b></td></tr>
 <tr class="separator:afd92c1feeabfe68dd5fbe3c0a535bb11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08dbc8fa8eee6ad95aa230b9a5d10d25"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a08dbc8fa8eee6ad95aa230b9a5d10d25">blinkState</a></td></tr>
+<tr class="memitem:a08dbc8fa8eee6ad95aa230b9a5d10d25"><td class="memItemLeft" align="right" valign="top"><a id="a08dbc8fa8eee6ad95aa230b9a5d10d25" name="a08dbc8fa8eee6ad95aa230b9a5d10d25"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>blinkState</b></td></tr>
 <tr class="separator:a08dbc8fa8eee6ad95aa230b9a5d10d25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69e645ac34ef17670c8d6efe067f2a85"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a69e645ac34ef17670c8d6efe067f2a85">iconSize</a></td></tr>
+<tr class="memitem:a69e645ac34ef17670c8d6efe067f2a85"><td class="memItemLeft" align="right" valign="top"><a id="a69e645ac34ef17670c8d6efe067f2a85" name="a69e645ac34ef17670c8d6efe067f2a85"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>iconSize</b></td></tr>
 <tr class="separator:a69e645ac34ef17670c8d6efe067f2a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a75a2a25a6094bc638240f9fe178621"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a1a75a2a25a6094bc638240f9fe178621">pickAdd</a></td></tr>
+<tr class="memitem:a1a75a2a25a6094bc638240f9fe178621"><td class="memItemLeft" align="right" valign="top"><a id="a1a75a2a25a6094bc638240f9fe178621" name="a1a75a2a25a6094bc638240f9fe178621"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>pickAdd</b></td></tr>
 <tr class="separator:a1a75a2a25a6094bc638240f9fe178621"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74505d10227dcd378095afb41fc3f612"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a74505d10227dcd378095afb41fc3f612">promptInputNum</a> = 0</td></tr>
+<tr class="memitem:a74505d10227dcd378095afb41fc3f612"><td class="memItemLeft" align="right" valign="top"><a id="a74505d10227dcd378095afb41fc3f612" name="a74505d10227dcd378095afb41fc3f612"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>promptInputNum</b> = 0</td></tr>
 <tr class="separator:a74505d10227dcd378095afb41fc3f612"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67bcdae431fd4c2babe0c045dfb68cd7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a67bcdae431fd4c2babe0c045dfb68cd7">precisionAngle</a></td></tr>
+<tr class="memitem:a67bcdae431fd4c2babe0c045dfb68cd7"><td class="memItemLeft" align="right" valign="top"><a id="a67bcdae431fd4c2babe0c045dfb68cd7" name="a67bcdae431fd4c2babe0c045dfb68cd7"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>precisionAngle</b></td></tr>
 <tr class="separator:a67bcdae431fd4c2babe0c045dfb68cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e42212d5fa5815bc291e26e83df4239"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a9e42212d5fa5815bc291e26e83df4239">precisionLength</a></td></tr>
+<tr class="memitem:a9e42212d5fa5815bc291e26e83df4239"><td class="memItemLeft" align="right" valign="top"><a id="a9e42212d5fa5815bc291e26e83df4239" name="a9e42212d5fa5815bc291e26e83df4239"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>precisionLength</b></td></tr>
 <tr class="separator:a9e42212d5fa5815bc291e26e83df4239"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af212424f77b3e5d1376bcc2dae8786bf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#af212424f77b3e5d1376bcc2dae8786bf">n_aliases</a> = 0</td></tr>
+<tr class="memitem:af212424f77b3e5d1376bcc2dae8786bf"><td class="memItemLeft" align="right" valign="top"><a id="af212424f77b3e5d1376bcc2dae8786bf" name="af212424f77b3e5d1376bcc2dae8786bf"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>n_aliases</b> = 0</td></tr>
 <tr class="separator:af212424f77b3e5d1376bcc2dae8786bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b20d9bbde54f55c1111fa181a1f4725"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a4b20d9bbde54f55c1111fa181a1f4725">n_objects</a> = 0</td></tr>
+<tr class="memitem:a4b20d9bbde54f55c1111fa181a1f4725"><td class="memItemLeft" align="right" valign="top"><a id="a4b20d9bbde54f55c1111fa181a1f4725" name="a4b20d9bbde54f55c1111fa181a1f4725"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>n_objects</b> = 0</td></tr>
 <tr class="separator:a4b20d9bbde54f55c1111fa181a1f4725"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affe288f3f22973c4471aa9a271a53c77"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#affe288f3f22973c4471aa9a271a53c77">n_widgets</a> = 0</td></tr>
+<tr class="memitem:affe288f3f22973c4471aa9a271a53c77"><td class="memItemLeft" align="right" valign="top"><a id="affe288f3f22973c4471aa9a271a53c77" name="affe288f3f22973c4471aa9a271a53c77"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>n_widgets</b> = 0</td></tr>
 <tr class="separator:affe288f3f22973c4471aa9a271a53c77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2bcc9894846f1e1e8fd1509f1eb4698"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#aa2bcc9894846f1e1e8fd1509f1eb4698">n_actions</a> = 0</td></tr>
+<tr class="memitem:aa2bcc9894846f1e1e8fd1509f1eb4698"><td class="memItemLeft" align="right" valign="top"><a id="aa2bcc9894846f1e1e8fd1509f1eb4698" name="aa2bcc9894846f1e1e8fd1509f1eb4698"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>n_actions</b> = 0</td></tr>
 <tr class="separator:aa2bcc9894846f1e1e8fd1509f1eb4698"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1687ac5c17f9944c6da26a5e9ba03648"><td class="memItemLeft" align="right" valign="top">EmbString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a1687ac5c17f9944c6da26a5e9ba03648">curText</a></td></tr>
+<tr class="memitem:a1687ac5c17f9944c6da26a5e9ba03648"><td class="memItemLeft" align="right" valign="top"><a id="a1687ac5c17f9944c6da26a5e9ba03648" name="a1687ac5c17f9944c6da26a5e9ba03648"></a>
+EmbString&#160;</td><td class="memItemRight" valign="bottom"><b>curText</b></td></tr>
 <tr class="separator:a1687ac5c17f9944c6da26a5e9ba03648"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7c57cde5c49ed0e512dee028a6c4ed0"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ad7c57cde5c49ed0e512dee028a6c4ed0">promptHistoryData</a> [MAX_LONG_STRING]</td></tr>
+<tr class="memitem:ad7c57cde5c49ed0e512dee028a6c4ed0"><td class="memItemLeft" align="right" valign="top"><a id="ad7c57cde5c49ed0e512dee028a6c4ed0" name="ad7c57cde5c49ed0e512dee028a6c4ed0"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>promptHistoryData</b> [MAX_LONG_STRING]</td></tr>
 <tr class="separator:ad7c57cde5c49ed0e512dee028a6c4ed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b509d483a54a25d6c0a01b0e6eaad3a"><td class="memItemLeft" align="right" valign="top">EmbString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a6b509d483a54a25d6c0a01b0e6eaad3a">fieldOldText</a></td></tr>
+<tr class="memitem:a6b509d483a54a25d6c0a01b0e6eaad3a"><td class="memItemLeft" align="right" valign="top"><a id="a6b509d483a54a25d6c0a01b0e6eaad3a" name="a6b509d483a54a25d6c0a01b0e6eaad3a"></a>
+EmbString&#160;</td><td class="memItemRight" valign="bottom"><b>fieldOldText</b></td></tr>
 <tr class="separator:a6b509d483a54a25d6c0a01b0e6eaad3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c215bf314407f4630ca90b40873cd5e"><td class="memItemLeft" align="right" valign="top">EmbString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a8c215bf314407f4630ca90b40873cd5e">fieldNewText</a></td></tr>
+<tr class="memitem:a8c215bf314407f4630ca90b40873cd5e"><td class="memItemLeft" align="right" valign="top"><a id="a8c215bf314407f4630ca90b40873cd5e" name="a8c215bf314407f4630ca90b40873cd5e"></a>
+EmbString&#160;</td><td class="memItemRight" valign="bottom"><b>fieldNewText</b></td></tr>
 <tr class="separator:a8c215bf314407f4630ca90b40873cd5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9de3ce9d5579cd578f6e028f8104693"><td class="memItemLeft" align="right" valign="top">EmbString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ac9de3ce9d5579cd578f6e028f8104693">fieldVariesText</a></td></tr>
+<tr class="memitem:ac9de3ce9d5579cd578f6e028f8104693"><td class="memItemLeft" align="right" valign="top"><a id="ac9de3ce9d5579cd578f6e028f8104693" name="ac9de3ce9d5579cd578f6e028f8104693"></a>
+EmbString&#160;</td><td class="memItemRight" valign="bottom"><b>fieldVariesText</b></td></tr>
 <tr class="separator:ac9de3ce9d5579cd578f6e028f8104693"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4fffaa306829e97d5bfdc098f22eca1"><td class="memItemLeft" align="right" valign="top">EmbString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ab4fffaa306829e97d5bfdc098f22eca1">fieldYesText</a></td></tr>
+<tr class="memitem:ab4fffaa306829e97d5bfdc098f22eca1"><td class="memItemLeft" align="right" valign="top"><a id="ab4fffaa306829e97d5bfdc098f22eca1" name="ab4fffaa306829e97d5bfdc098f22eca1"></a>
+EmbString&#160;</td><td class="memItemRight" valign="bottom"><b>fieldYesText</b></td></tr>
 <tr class="separator:ab4fffaa306829e97d5bfdc098f22eca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d7c2f1bde9e2d18081d2abe85207cb6"><td class="memItemLeft" align="right" valign="top">EmbString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a0d7c2f1bde9e2d18081d2abe85207cb6">fieldNoText</a></td></tr>
+<tr class="memitem:a0d7c2f1bde9e2d18081d2abe85207cb6"><td class="memItemLeft" align="right" valign="top"><a id="a0d7c2f1bde9e2d18081d2abe85207cb6" name="a0d7c2f1bde9e2d18081d2abe85207cb6"></a>
+EmbString&#160;</td><td class="memItemRight" valign="bottom"><b>fieldNoText</b></td></tr>
 <tr class="separator:a0d7c2f1bde9e2d18081d2abe85207cb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92c287cd0a4d7dca134ce672385237df"><td class="memItemLeft" align="right" valign="top">EmbString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a92c287cd0a4d7dca134ce672385237df">fieldOnText</a></td></tr>
+<tr class="memitem:a92c287cd0a4d7dca134ce672385237df"><td class="memItemLeft" align="right" valign="top"><a id="a92c287cd0a4d7dca134ce672385237df" name="a92c287cd0a4d7dca134ce672385237df"></a>
+EmbString&#160;</td><td class="memItemRight" valign="bottom"><b>fieldOnText</b></td></tr>
 <tr class="separator:a92c287cd0a4d7dca134ce672385237df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0fa29dcbdb3c004f944955fe765924eb"><td class="memItemLeft" align="right" valign="top">EmbString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a0fa29dcbdb3c004f944955fe765924eb">fieldOffText</a></td></tr>
+<tr class="memitem:a0fa29dcbdb3c004f944955fe765924eb"><td class="memItemLeft" align="right" valign="top"><a id="a0fa29dcbdb3c004f944955fe765924eb" name="a0fa29dcbdb3c004f944955fe765924eb"></a>
+EmbString&#160;</td><td class="memItemRight" valign="bottom"><b>fieldOffText</b></td></tr>
 <tr class="separator:a0fa29dcbdb3c004f944955fe765924eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7279bc30bc53005c580fb71af5b9b27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structWidgetData__.html">WidgetData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ad7279bc30bc53005c580fb71af5b9b27">zoom_gb_data</a> []</td></tr>
 <tr class="separator:ad7279bc30bc53005c580fb71af5b9b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a053018510e43ec601ac079a174b41c01"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structWidgetData__.html">WidgetData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a053018510e43ec601ac079a174b41c01">grid_gb_data</a> []</td></tr>
+<tr class="memitem:a053018510e43ec601ac079a174b41c01"><td class="memItemLeft" align="right" valign="top"><a id="a053018510e43ec601ac079a174b41c01" name="a053018510e43ec601ac079a174b41c01"></a>
+<a class="el" href="structWidgetData__.html">WidgetData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>grid_gb_data</b> []</td></tr>
 <tr class="separator:a053018510e43ec601ac079a174b41c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc92ec7dcda8b335c3c9cb456ab56cb9"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#adc92ec7dcda8b335c3c9cb456ab56cb9">button_list</a> []</td></tr>
 <tr class="separator:adc92ec7dcda8b335c3c9cb456ab56cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -339,9 +399,11 @@ Variables</h2></td></tr>
 <tr class="separator:a00a359c9663a77ac1553353ac1297f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef0c9145ad56318d8351d07ae484dee8"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#aef0c9145ad56318d8351d07ae484dee8">rulerLayout</a> []</td></tr>
 <tr class="separator:aef0c9145ad56318d8351d07ae484dee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa45e5da31f2ac1c3723a67f5537e454e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGroupBoxData__.html">GroupBoxData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#aa45e5da31f2ac1c3723a67f5537e454e">group_box_list</a> []</td></tr>
+<tr class="memitem:aa45e5da31f2ac1c3723a67f5537e454e"><td class="memItemLeft" align="right" valign="top"><a id="aa45e5da31f2ac1c3723a67f5537e454e" name="aa45e5da31f2ac1c3723a67f5537e454e"></a>
+<a class="el" href="structGroupBoxData__.html">GroupBoxData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>group_box_list</b> []</td></tr>
 <tr class="separator:aa45e5da31f2ac1c3723a67f5537e454e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a481b3bdac5703ab4bd50dacc048e1350"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a481b3bdac5703ab4bd50dacc048e1350">settings_data</a> []</td></tr>
+<tr class="memitem:a481b3bdac5703ab4bd50dacc048e1350"><td class="memItemLeft" align="right" valign="top"><a id="a481b3bdac5703ab4bd50dacc048e1350" name="a481b3bdac5703ab4bd50dacc048e1350"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>settings_data</b> []</td></tr>
 <tr class="separator:a481b3bdac5703ab4bd50dacc048e1350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a775bd0d7c9e845b51040579619b63852"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#a775bd0d7c9e845b51040579619b63852">grid_enabled_group</a> []</td></tr>
 <tr class="separator:a775bd0d7c9e845b51040579619b63852"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -353,137 +415,20 @@ Variables</h2></td></tr>
 <tr class="separator:aa2ff7213399a2fc2342865248d6c2f67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adeb1199c85d400672e7a49dc9832820d"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#adeb1199c85d400672e7a49dc9832820d">zoom_layout</a> []</td></tr>
 <tr class="separator:adeb1199c85d400672e7a49dc9832820d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab109c307200cba3a4a63923a645ef6fc"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ab109c307200cba3a4a63923a645ef6fc">lastCmd</a> [MAX_STRING_LENGTH] = &quot;help&quot;</td></tr>
+<tr class="memitem:ab109c307200cba3a4a63923a645ef6fc"><td class="memItemLeft" align="right" valign="top"><a id="ab109c307200cba3a4a63923a645ef6fc" name="ab109c307200cba3a4a63923a645ef6fc"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>lastCmd</b> [MAX_STRING_LENGTH] = &quot;help&quot;</td></tr>
 <tr class="separator:ab109c307200cba3a4a63923a645ef6fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc4858f95488d9905bcd127b8e74e47b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#afc4858f95488d9905bcd127b8e74e47b">geometry_type_keys</a> []</td></tr>
 <tr class="separator:afc4858f95488d9905bcd127b8e74e47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1b4ab3cfbdb1cc54f0a159c9161bcdc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCommandData__.html">CommandData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="state_8c.html#ac1b4ab3cfbdb1cc54f0a159c9161bcdc">command_data</a> [MAX_COMMANDS]</td></tr>
+<tr class="memitem:ac1b4ab3cfbdb1cc54f0a159c9161bcdc"><td class="memItemLeft" align="right" valign="top"><a id="ac1b4ab3cfbdb1cc54f0a159c9161bcdc" name="ac1b4ab3cfbdb1cc54f0a159c9161bcdc"></a>
+<a class="el" href="structCommandData__.html">CommandData</a>&#160;</td><td class="memItemRight" valign="bottom"><b>command_data</b> [MAX_COMMANDS]</td></tr>
 <tr class="separator:ac1b4ab3cfbdb1cc54f0a159c9161bcdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Embroidermodder 2.</p>
 <p >Copyright 2011-2025 The Embroidermodder Team Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.</p>
 <p >Read the reference manual (<a href="https://www.libembroidery.org/downloads/emrm.pdf">https://www.libembroidery.org/downloads/emrm.pdf</a>) for advice on altering this file. </p>
-
-<p class="definition">Definition in file <a class="el" href="state_8c_source.html">state.c</a>.</p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="aca9f9bea5ee5776b7849559d22040947" name="aca9f9bea5ee5776b7849559d22040947"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca9f9bea5ee5776b7849559d22040947">&#9670;&nbsp;</a></span>emb_get_str()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char * emb_get_str </td>
-          <td>(</td>
-          <td class="paramtype">ScriptValue *&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>key</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l03505">3505</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno"> 3506</span>{</div>
-<div class="line"><span class="lineno"> 3507</span>    <span class="keywordflow">return</span> emb_get_var(node, key)-&gt;s;</div>
-<div class="line"><span class="lineno"> 3508</span>}</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a901278b059b7d658fbe1da517e0736fd" name="a901278b059b7d658fbe1da517e0736fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a901278b059b7d658fbe1da517e0736fd">&#9670;&nbsp;</a></span>emb_get_var()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ScriptValue * emb_get_var </td>
-          <td>(</td>
-          <td class="paramtype">ScriptValue *&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>key</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l03492">3492</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno"> 3493</span>{</div>
-<div class="line"><span class="lineno"> 3494</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;node-&gt;n_leaves; i++) {</div>
-<div class="line"><span class="lineno"> 3495</span>        <span class="keywordflow">if</span> (!strncmp(node-&gt;leaves[i].label, key, MAX_STRING_LENGTH)) {</div>
-<div class="line"><span class="lineno"> 3496</span>            <span class="keywordflow">return</span> node-&gt;leaves + i;</div>
-<div class="line"><span class="lineno"> 3497</span>        }</div>
-<div class="line"><span class="lineno"> 3498</span>    }</div>
-<div class="line"><span class="lineno"> 3499</span>    <span class="comment">/* This shows we failed to find the variable. */</span></div>
-<div class="line"><span class="lineno"> 3500</span>    <span class="keywordflow">return</span> &amp;script_null;</div>
-<div class="line"><span class="lineno"> 3501</span>}</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a55ab32599d2d57410df9a74ad67fd6da" name="a55ab32599d2d57410df9a74ad67fd6da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55ab32599d2d57410df9a74ad67fd6da">&#9670;&nbsp;</a></span>emb_set_var()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int emb_set_var </td>
-          <td>(</td>
-          <td class="paramtype">ScriptValue *&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>key</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ScriptValue&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l03479">3479</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno"> 3480</span>{</div>
-<div class="line"><span class="lineno"> 3481</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;node-&gt;n_leaves; i++) {</div>
-<div class="line"><span class="lineno"> 3482</span>        <span class="keywordflow">if</span> (!strncmp(node-&gt;leaves[i].label, key, MAX_STRING_LENGTH)) {</div>
-<div class="line"><span class="lineno"> 3483</span>            memcpy(node-&gt;leaves + i, &amp;value, <span class="keyword">sizeof</span>(value));</div>
-<div class="line"><span class="lineno"> 3484</span>            <span class="keywordflow">return</span> 1;</div>
-<div class="line"><span class="lineno"> 3485</span>        }</div>
-<div class="line"><span class="lineno"> 3486</span>    }</div>
-<div class="line"><span class="lineno"> 3487</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno"> 3488</span>}</div>
-</div><!-- fragment -->
-</div>
-</div>
 <a id="ae0324dd47ecf95c8590df27917f69efa" name="ae0324dd47ecf95c8590df27917f69efa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae0324dd47ecf95c8590df27917f69efa">&#9670;&nbsp;</a></span>load_file_to_buffer()</h2>
 
@@ -510,25 +455,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l03512">3512</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno"> 3513</span>{</div>
-<div class="line"><span class="lineno"> 3514</span>    FILE *f = fopen(fname, <span class="stringliteral">&quot;r&quot;</span>);</div>
-<div class="line"><span class="lineno"> 3515</span>    <span class="keywordflow">if</span> (!f) {</div>
-<div class="line"><span class="lineno"> 3516</span>        printf(<span class="stringliteral">&quot;ERROR: Failed to open configuration file \&quot;%s\&quot;.\n&quot;</span>, fname);</div>
-<div class="line"><span class="lineno"> 3517</span>        <span class="keywordflow">return</span> 0;        </div>
-<div class="line"><span class="lineno"> 3518</span>    }</div>
-<div class="line"><span class="lineno"> 3519</span>    fseek(f, 0, SEEK_END);</div>
-<div class="line"><span class="lineno"> 3520</span>    <span class="keywordtype">size_t</span> size = ftell(f);</div>
-<div class="line"><span class="lineno"> 3521</span>    fseek(f, 0, SEEK_SET);</div>
-<div class="line"><span class="lineno"> 3522</span>    <span class="keywordtype">size_t</span> bytes_read = fread(buffer, 1, size, f);</div>
-<div class="line"><span class="lineno"> 3523</span>    fclose(f);</div>
-<div class="line"><span class="lineno"> 3524</span>    <span class="keywordflow">if</span> (bytes_read != size) {</div>
-<div class="line"><span class="lineno"> 3525</span>        printf(<span class="stringliteral">&quot;ERROR: Failed to read configuration file \&quot;%s\&quot;.\n&quot;</span>, fname);</div>
-<div class="line"><span class="lineno"> 3526</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno"> 3527</span>    }</div>
-<div class="line"><span class="lineno"> 3528</span>    <span class="keywordflow">return</span> 1;</div>
-<div class="line"><span class="lineno"> 3529</span>}</div>
-</div><!-- fragment -->
+<p>Load the entire file with path fname into the buffer passed in. </p>
+<p >Caller is responsible for reporting the error, as we use this to determine if the file exists as well as if it can be read. </p>
+
 </div>
 </div>
 <a id="a165e76f9c2ca5ff9569a4cb373fe9d25" name="a165e76f9c2ca5ff9569a4cb373fe9d25"></a>
@@ -557,33 +486,26 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l03599">3599</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno"> 3600</span>{</div>
-<div class="line"><span class="lineno"> 3601</span>    <span class="keywordtype">int</span> error;</div>
-<div class="line"><span class="lineno"> 3602</span>    emb_create_leaf(root, EMB_DATATYPE_STR, <span class="stringliteral">&quot;os&quot;</span>, os);</div>
-<div class="line"><span class="lineno"> 3603</span>    emb_create_leaf(root, EMB_DATATYPE_STR, <span class="stringliteral">&quot;asset_dir&quot;</span>, asset_dir);</div>
-<div class="line"><span class="lineno"> 3604</span> </div>
-<div class="line"><span class="lineno"> 3605</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; strncmp(manifest, <span class="stringliteral">&quot;END&quot;</span>, 200); i++) {</div>
-<div class="line"><span class="lineno"> 3606</span>        printf(<span class="stringliteral">&quot;Loading \&quot;%s\&quot;...\n&quot;</span>, manifest[i]);</div>
-<div class="line"><span class="lineno"> 3607</span>        error = <a class="code hl_function" href="state_8c.html#ad1b6433aaee85b9e210b23f7f6e95bf3">load_script</a>(asset_dir, manifest[i]);</div>
-<div class="line"><span class="lineno"> 3608</span>        <span class="keywordflow">if</span> (error) {</div>
-<div class="line"><span class="lineno"> 3609</span>            <span class="keywordflow">return</span> error;</div>
-<div class="line"><span class="lineno"> 3610</span>        }</div>
-<div class="line"><span class="lineno"> 3611</span>    }</div>
-<div class="line"><span class="lineno"> 3612</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno"> 3613</span>}</div>
-<div class="ttc" id="astate_8c_html_ad1b6433aaee85b9e210b23f7f6e95bf3"><div class="ttname"><a href="state_8c.html#ad1b6433aaee85b9e210b23f7f6e95bf3">load_script</a></div><div class="ttdeci">toml_table_t * load_script(char *asset_dir, char *fname)</div><div class="ttdef"><b>Definition:</b> <a href="state_8c_source.html#l03537">state.c:3537</a></div></div>
-</div><!-- fragment -->
+<p>Load our basic tree structure of data for all of our data structures above. </p>
+<p >EXAMPLE We want access to the <code>os</code> string, it is a static in this file. The command would be <code>get_env_var(global, "os").s</code>.</p>
+<p >To access something deeper in the tree we use the dot operator, which allows searches to run faster by encapsulating data into structures. Like "file_menu.4" to give the 4th element in the file_menu array.</p>
+<p >For accessing data at speed we can keep the parent node pointer available, so for example: </p><pre class="fragment">ScriptValue *file_menu = get_var(root, "file_menu");
+for (int i=0; i&lt;file_menu-&gt;n_leaves; i++) {
+    printf("%s\n", file_menu-&gt;leaves[i].s);
+}
+</pre><p> To get the length of an array we . </p>
+<p >Hard capped at 1000 configuration files.</p>
+
 </div>
 </div>
-<a id="ad1b6433aaee85b9e210b23f7f6e95bf3" name="ad1b6433aaee85b9e210b23f7f6e95bf3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1b6433aaee85b9e210b23f7f6e95bf3">&#9670;&nbsp;</a></span>load_script()</h2>
+<a id="a0c19f7ac884ab029c9933ffb0bd498fc" name="a0c19f7ac884ab029c9933ffb0bd498fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c19f7ac884ab029c9933ffb0bd498fc">&#9670;&nbsp;</a></span>load_script()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">toml_table_t * load_script </td>
+          <td class="memname">int load_script </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>asset_dir</em>, </td>
@@ -601,86 +523,14 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Loads init_script 1 Mb buffer to chain together all of the strings in the init_script string table.</p>
-<p >TODO: could reuse buffer safely between script loads. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>loading of nested structures like arrays of dicts etc. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l03537">3537</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno"> 3538</span>{</div>
-<div class="line"><span class="lineno"> 3539</span>    <span class="keywordtype">char</span> full_fname[400];</div>
-<div class="line"><span class="lineno"> 3540</span>    snprintf(full_fname, 400, <span class="stringliteral">&quot;%s/%s&quot;</span>, asset_dir, fname);</div>
-<div class="line"><span class="lineno"> 3541</span>    <span class="keywordtype">char</span> *buffer = malloc(1000*1000);</div>
-<div class="line"><span class="lineno"> 3542</span>    <span class="keywordtype">char</span> error_buffer[200];</div>
-<div class="line"><span class="lineno"> 3543</span>    buffer[0] = 0;</div>
-<div class="line"><span class="lineno"> 3544</span> </div>
-<div class="line"><span class="lineno"> 3545</span>    <span class="keywordflow">if</span> (!<a class="code hl_function" href="state_8c.html#ae0324dd47ecf95c8590df27917f69efa">load_file_to_buffer</a>(full_fname, buffer)) {</div>
-<div class="line"><span class="lineno"> 3546</span>        free(buffer);</div>
-<div class="line"><span class="lineno"> 3547</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno"> 3548</span>    }</div>
-<div class="line"><span class="lineno"> 3549</span> </div>
-<div class="line"><span class="lineno"> 3550</span>    toml_table_t *table = toml_parse(buffer, error_buffer, 200);</div>
-<div class="line"><span class="lineno"> 3551</span>    <span class="keywordflow">if</span> (!table) {</div>
-<div class="line"><span class="lineno"> 3552</span>        printf(<span class="stringliteral">&quot;ERROR: %s\n&quot;</span>, error_buffer);</div>
-<div class="line"><span class="lineno"> 3553</span>    }</div>
-<div class="line"><span class="lineno"> 3554</span>    free(buffer);</div>
-<div class="line"><span class="lineno"> 3555</span>    <span class="keywordflow">if</span> (!table) {</div>
-<div class="line"><span class="lineno"> 3556</span>        toml_free(table);</div>
-<div class="line"><span class="lineno"> 3557</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno"> 3558</span>    }</div>
-<div class="line"><span class="lineno"> 3560</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; ; i++) {</div>
-<div class="line"><span class="lineno"> 3561</span>        <span class="keyword">const</span> <span class="keywordtype">char</span> *key = toml_key_in(table, i);</div>
-<div class="line"><span class="lineno"> 3562</span>        <span class="keywordflow">if</span> (!key) {</div>
-<div class="line"><span class="lineno"> 3563</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><span class="lineno"> 3564</span>        }</div>
-<div class="line"><span class="lineno"> 3565</span>        toml_datum_t s = toml_string_in(table, key);</div>
-<div class="line"><span class="lineno"> 3566</span>        <span class="keywordflow">if</span> (s.ok) {</div>
-<div class="line"><span class="lineno"> 3567</span>            emb_create_leaf(root, EMB_DATATYPE_STR, key, s.u.s);</div>
-<div class="line"><span class="lineno"> 3568</span>        }</div>
-<div class="line"><span class="lineno"> 3569</span>        <span class="keywordflow">else</span> {</div>
-<div class="line"><span class="lineno"> 3570</span>            printf(<span class="stringliteral">&quot;ERROR: failed to load %s\n&quot;</span>, key);</div>
-<div class="line"><span class="lineno"> 3571</span>        }</div>
-<div class="line"><span class="lineno"> 3572</span>        free(s.u.s);</div>
-<div class="line"><span class="lineno"> 3573</span>    }</div>
-<div class="line"><span class="lineno"> 3574</span>    toml_free(table);</div>
-<div class="line"><span class="lineno"> 3575</span>    <span class="keywordflow">return</span> 1;</div>
-<div class="line"><span class="lineno"> 3576</span>}</div>
-<div class="ttc" id="astate_8c_html_ae0324dd47ecf95c8590df27917f69efa"><div class="ttname"><a href="state_8c.html#ae0324dd47ecf95c8590df27917f69efa">load_file_to_buffer</a></div><div class="ttdeci">size_t load_file_to_buffer(char *fname, char *buffer)</div><div class="ttdef"><b>Definition:</b> <a href="state_8c_source.html#l03512">state.c:3512</a></div></div>
-</div><!-- fragment -->
+<p>Loads init_script 1 Mb buffer to chain together all of the strings in the init_script string table. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>could reuse buffer safely between script loads. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>loading of nested structures like arrays of dicts etc. </dd></dl>
+
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="aceaae8d607fdbcd696797239ac027560" name="aceaae8d607fdbcd696797239ac027560"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aceaae8d607fdbcd696797239ac027560">&#9670;&nbsp;</a></span>_appName_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* _appName_ = &quot;Embroidermodder&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00138">138</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ab4a48c9fc749ca785389d7b102bb3c6a" name="ab4a48c9fc749ca785389d7b102bb3c6a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4a48c9fc749ca785389d7b102bb3c6a">&#9670;&nbsp;</a></span>_appVer_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* _appVer_ = &quot;v2.0 alpha&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00139">139</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
 <a id="a6437cd5623d756cad708949f690dae1e" name="a6437cd5623d756cad708949f690dae1e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6437cd5623d756cad708949f690dae1e">&#9670;&nbsp;</a></span>accept_to_dialog</h2>
 
@@ -708,40 +558,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00606">606</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a0dfb3ec65d05692dd0ad1de6bf3d0b1f" name="a0dfb3ec65d05692dd0ad1de6bf3d0b1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0dfb3ec65d05692dd0ad1de6bf3d0b1f">&#9670;&nbsp;</a></span>aliasHash</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">StringMap aliasHash[MAX_ALIASES]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00954">954</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a08dbc8fa8eee6ad95aa230b9a5d10d25" name="a08dbc8fa8eee6ad95aa230b9a5d10d25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08dbc8fa8eee6ad95aa230b9a5d10d25">&#9670;&nbsp;</a></span>blinkState</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool blinkState</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00959">959</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ad4212555a435619d573169b7f5adf808" name="ad4212555a435619d573169b7f5adf808"></a>
@@ -760,8 +576,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00374">374</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="adc92ec7dcda8b335c3c9cb456ab56cb9" name="adc92ec7dcda8b335c3c9cb456ab56cb9"></a>
@@ -787,8 +601,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01066">1066</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a0f22739d5c874a9c72a221223027b6f9" name="a0f22739d5c874a9c72a221223027b6f9"></a>
@@ -806,8 +618,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00569">569</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a8fbcc6ce664bb6945e8906eca245163a" name="a8fbcc6ce664bb6945e8906eca245163a"></a>
@@ -831,8 +641,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00558">558</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ae937997e33b4156a615fe08b58860ec7" name="ae937997e33b4156a615fe08b58860ec7"></a>
@@ -853,24 +661,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01816">1816</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a5b910e1bf795b20bdb8b51f09fae8e45" name="a5b910e1bf795b20bdb8b51f09fae8e45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b910e1bf795b20bdb8b51f09fae8e45">&#9670;&nbsp;</a></span>cmdActive</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool cmdActive</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00072">72</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aa106da98d305d523e894306dc35844e5" name="aa106da98d305d523e894306dc35844e5"></a>
@@ -898,8 +688,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00880">880</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a9e5d04b0fbebb1afe6c9367d703926ca" name="a9e5d04b0fbebb1afe6c9367d703926ca"></a>
@@ -929,40 +717,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00850">850</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ac1b4ab3cfbdb1cc54f0a159c9161bcdc" name="ac1b4ab3cfbdb1cc54f0a159c9161bcdc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1b4ab3cfbdb1cc54f0a159c9161bcdc">&#9670;&nbsp;</a></span>command_data</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structCommandData__.html">CommandData</a> command_data[MAX_COMMANDS]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01885">1885</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="aad97895c3132cb92504e469b710ee3f2" name="aad97895c3132cb92504e469b710ee3f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad97895c3132cb92504e469b710ee3f2">&#9670;&nbsp;</a></span>config</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ScriptValue* config</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00058">58</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a7013bddd1c4531493f5626f7bb028164" name="a7013bddd1c4531493f5626f7bb028164"></a>
@@ -985,72 +739,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00671">671</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a498e67d156e17351bf58dd2a40299852" name="a498e67d156e17351bf58dd2a40299852"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a498e67d156e17351bf58dd2a40299852">&#9670;&nbsp;</a></span>curCmd</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char curCmd[200]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00145">145</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a1687ac5c17f9944c6da26a5e9ba03648" name="a1687ac5c17f9944c6da26a5e9ba03648"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1687ac5c17f9944c6da26a5e9ba03648">&#9670;&nbsp;</a></span>curText</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbString curText</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00975">975</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="afd92c1feeabfe68dd5fbe3c0a535bb11" name="afd92c1feeabfe68dd5fbe3c0a535bb11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd92c1feeabfe68dd5fbe3c0a535bb11">&#9670;&nbsp;</a></span>cutCopyObjectList</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbIdList* cutCopyObjectList</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00957">957</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a5c916f4cc685690b44731ba0f7c3e06d" name="a5c916f4cc685690b44731ba0f7c3e06d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c916f4cc685690b44731ba0f7c3e06d">&#9670;&nbsp;</a></span>defaultPrefix</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char defaultPrefix[200]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00143">143</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a27f461bf53bc129f1b6ce8365d951977" name="a27f461bf53bc129f1b6ce8365d951977"></a>
@@ -1076,8 +764,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00534">534</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a99d16446d2f11c59244ad2dd133bece5" name="a99d16446d2f11c59244ad2dd133bece5"></a>
@@ -1096,8 +782,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00303">303</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a6006ac91b6cef4ce1b9ad58233c05fe9" name="a6006ac91b6cef4ce1b9ad58233c05fe9"></a>
@@ -1116,40 +800,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00489">489</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="aa430e53ebc7388c2664394eaf934ebe2" name="aa430e53ebc7388c2664394eaf934ebe2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa430e53ebc7388c2664394eaf934ebe2">&#9670;&nbsp;</a></span>docIndex</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int docIndex = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00076">76</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ac3c933ba8bd7986bb8e6a6f3d82e8028" name="ac3c933ba8bd7986bb8e6a6f3d82e8028"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3c933ba8bd7986bb8e6a6f3d82e8028">&#9670;&nbsp;</a></span>document_memory</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool document_memory[MAX_OPEN_FILES]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00069">69</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a48ca1fb6a5efaf64ad8ccda7e0d00354" name="a48ca1fb6a5efaf64ad8ccda7e0d00354"></a>
@@ -1183,8 +833,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00268">268</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a053cfd2f779fd04ec99fac73a3515f6c" name="a053cfd2f779fd04ec99fac73a3515f6c"></a>
@@ -1218,8 +866,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00454">454</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a0320812ff2bec94f0d4073ca5f19339d" name="a0320812ff2bec94f0d4073ca5f19339d"></a>
@@ -1245,8 +891,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00207">207</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ab4eea632f086eaeed1b1a82b9d71cfbe" name="ab4eea632f086eaeed1b1a82b9d71cfbe"></a>
@@ -1270,168 +914,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00409">409</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="acf796746a16f8af6794ef411325d764d" name="acf796746a16f8af6794ef411325d764d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf796746a16f8af6794ef411325d764d">&#9670;&nbsp;</a></span>editor_list</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* editor_list[]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00758">758</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a5a42421b0311e4b603861e5b1e809ea5" name="a5a42421b0311e4b603861e5b1e809ea5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a42421b0311e4b603861e5b1e809ea5">&#9670;&nbsp;</a></span>exitApp</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool exitApp = false</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00140">140</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a5318d7b599615c831722d3102eb2db49" name="a5318d7b599615c831722d3102eb2db49"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5318d7b599615c831722d3102eb2db49">&#9670;&nbsp;</a></span>extensions</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* extensions[]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00701">701</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a8c215bf314407f4630ca90b40873cd5e" name="a8c215bf314407f4630ca90b40873cd5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c215bf314407f4630ca90b40873cd5e">&#9670;&nbsp;</a></span>fieldNewText</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbString fieldNewText</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00981">981</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a0d7c2f1bde9e2d18081d2abe85207cb6" name="a0d7c2f1bde9e2d18081d2abe85207cb6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0d7c2f1bde9e2d18081d2abe85207cb6">&#9670;&nbsp;</a></span>fieldNoText</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbString fieldNoText</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00984">984</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a0fa29dcbdb3c004f944955fe765924eb" name="a0fa29dcbdb3c004f944955fe765924eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0fa29dcbdb3c004f944955fe765924eb">&#9670;&nbsp;</a></span>fieldOffText</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbString fieldOffText</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00986">986</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a6b509d483a54a25d6c0a01b0e6eaad3a" name="a6b509d483a54a25d6c0a01b0e6eaad3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b509d483a54a25d6c0a01b0e6eaad3a">&#9670;&nbsp;</a></span>fieldOldText</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbString fieldOldText</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00980">980</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a92c287cd0a4d7dca134ce672385237df" name="a92c287cd0a4d7dca134ce672385237df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92c287cd0a4d7dca134ce672385237df">&#9670;&nbsp;</a></span>fieldOnText</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbString fieldOnText</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00985">985</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ac9de3ce9d5579cd578f6e028f8104693" name="ac9de3ce9d5579cd578f6e028f8104693"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac9de3ce9d5579cd578f6e028f8104693">&#9670;&nbsp;</a></span>fieldVariesText</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbString fieldVariesText</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00982">982</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ab4fffaa306829e97d5bfdc098f22eca1" name="ab4fffaa306829e97d5bfdc098f22eca1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4fffaa306829e97d5bfdc098f22eca1">&#9670;&nbsp;</a></span>fieldYesText</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">EmbString fieldYesText</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00983">983</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ac357896c24b9d6a4936ac5168089589d" name="ac357896c24b9d6a4936ac5168089589d"></a>
@@ -1464,8 +946,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00188">188</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a6984d41d6a486baf438b9e158da6f241" name="a6984d41d6a486baf438b9e158da6f241"></a>
@@ -1489,40 +969,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00399">399</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="abb7584e990a5c015e27d818426be9bb8" name="abb7584e990a5c015e27d818426be9bb8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb7584e990a5c015e27d818426be9bb8">&#9670;&nbsp;</a></span>formatFilterOpen</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char formatFilterOpen[MAX_LONG_STRING]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00061">61</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a62d59a7cd32d6c4444e37db908264183" name="a62d59a7cd32d6c4444e37db908264183"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62d59a7cd32d6c4444e37db908264183">&#9670;&nbsp;</a></span>formatFilterSave</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char formatFilterSave[MAX_LONG_STRING]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00062">62</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="afc4858f95488d9905bcd127b8e74e47b" name="afc4858f95488d9905bcd127b8e74e47b"></a>
@@ -1566,24 +1012,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01848">1848</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="af35025f46345dc5ebff750296f91b6f5" name="af35025f46345dc5ebff750296f91b6f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af35025f46345dc5ebff750296f91b6f5">&#9670;&nbsp;</a></span>global</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ScriptEnv* global</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00057">57</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a775bd0d7c9e845b51040579619b63852" name="a775bd0d7c9e845b51040579619b63852"></a>
@@ -1612,24 +1040,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01793">1793</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a053018510e43ec601ac079a174b41c01" name="a053018510e43ec601ac079a174b41c01"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a053018510e43ec601ac079a174b41c01">&#9670;&nbsp;</a></span>grid_gb_data</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structWidgetData__.html">WidgetData</a> grid_gb_data[]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01013">1013</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aa2ff7213399a2fc2342865248d6c2f67" name="aa2ff7213399a2fc2342865248d6c2f67"></a>
@@ -1659,8 +1069,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01823">1823</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aaad9842869c08f01359ad821acde8f34" name="aaad9842869c08f01359ad821acde8f34"></a>
@@ -1691,24 +1099,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00517">517</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="aa45e5da31f2ac1c3723a67f5537e454e" name="aa45e5da31f2ac1c3723a67f5537e454e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa45e5da31f2ac1c3723a67f5537e454e">&#9670;&nbsp;</a></span>group_box_list</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structGroupBoxData__.html">GroupBoxData</a> group_box_list[]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01148">1148</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a80a473bc1769e58031a0876fc183810d" name="a80a473bc1769e58031a0876fc183810d"></a>
@@ -1735,8 +1125,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00255">255</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ac03b92128ebf551ebf85e7aec6938794" name="ac03b92128ebf551ebf85e7aec6938794"></a>
@@ -1758,8 +1146,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00446">446</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="adceddebe6b84bd0fd0d1096eb8b423ba" name="adceddebe6b84bd0fd0d1096eb8b423ba"></a>
@@ -1783,24 +1169,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00436">436</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a69e645ac34ef17670c8d6efe067f2a85" name="a69e645ac34ef17670c8d6efe067f2a85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69e645ac34ef17670c8d6efe067f2a85">&#9670;&nbsp;</a></span>iconSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int iconSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00961">961</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ada9a45809ad8d080be53e71517a5de65" name="ada9a45809ad8d080be53e71517a5de65"></a>
@@ -1824,8 +1192,6 @@ Variables</h2></td></tr>
 <div class="line">    <span class="stringliteral">&quot;seven&quot;</span></div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00091">91</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ad0f3049630c91238c39d2cb194c48e60" name="ad0f3049630c91238c39d2cb194c48e60"></a>
@@ -1849,8 +1215,6 @@ Variables</h2></td></tr>
 <div class="line">    <span class="stringliteral">&quot;seventh&quot;</span></div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00101">101</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a3b027c84263f8fdfd626928c30ddcc81" name="a3b027c84263f8fdfd626928c30ddcc81"></a>
@@ -1870,24 +1234,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00474">474</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a2f7636df8b2a22914ee5e8a96139b655" name="a2f7636df8b2a22914ee5e8a96139b655"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f7636df8b2a22914ee5e8a96139b655">&#9670;&nbsp;</a></span>isBlinking</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool isBlinking = false</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00074">74</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aacba5c5d4669c6cec368ff6ab1bc8c0f" name="aacba5c5d4669c6cec368ff6ab1bc8c0f"></a>
@@ -1909,24 +1255,6 @@ Variables</h2></td></tr>
 <div class="line">    <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">false</span></div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00079">79</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ab109c307200cba3a4a63923a645ef6fc" name="ab109c307200cba3a4a63923a645ef6fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab109c307200cba3a4a63923a645ef6fc">&#9670;&nbsp;</a></span>lastCmd</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char lastCmd[MAX_STRING_LENGTH] = &quot;help&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01845">1845</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a7ca53b64c6b27fcfd59a232426e1d021" name="a7ca53b64c6b27fcfd59a232426e1d021"></a>
@@ -1954,8 +1282,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL, END_SYMBOL, END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00866">866</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aa5cb14f037f43d222ae481c38adf12fa" name="aa5cb14f037f43d222ae481c38adf12fa"></a>
@@ -1973,8 +1299,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00499">499</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a3c9000190d35aed74ab855a3cb0e157a" name="a3c9000190d35aed74ab855a3cb0e157a"></a>
@@ -1995,8 +1319,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00367">367</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a027baa8163b2cbe38849c0a571f290e4" name="a027baa8163b2cbe38849c0a571f290e4"></a>
@@ -2020,8 +1342,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00894">894</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a4561b9fec01952f029a71e4247cde242" name="a4561b9fec01952f029a71e4247cde242"></a>
@@ -2066,8 +1386,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL, END_SYMBOL, END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00905">905</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a670f970f156bd690c5f0c2cae3a75730" name="a670f970f156bd690c5f0c2cae3a75730"></a>
@@ -2098,8 +1416,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00149">149</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a961be0295c346ca2579f9f2990147511" name="a961be0295c346ca2579f9f2990147511"></a>
@@ -2127,8 +1443,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00166">166</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a63926e21fe0cc749afb092ac1068eacc" name="a63926e21fe0cc749afb092ac1068eacc"></a>
@@ -2150,8 +1464,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00180">180</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ab643077dca567cfe0288dd6324187783" name="ab643077dca567cfe0288dd6324187783"></a>
@@ -2173,8 +1485,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00295">295</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aa8632c68032ac283d36b69dccd348f18" name="aa8632c68032ac283d36b69dccd348f18"></a>
@@ -2197,168 +1507,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00480">480</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="aa2bcc9894846f1e1e8fd1509f1eb4698" name="aa2bcc9894846f1e1e8fd1509f1eb4698"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2bcc9894846f1e1e8fd1509f1eb4698">&#9670;&nbsp;</a></span>n_actions</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int n_actions = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00973">973</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="af212424f77b3e5d1376bcc2dae8786bf" name="af212424f77b3e5d1376bcc2dae8786bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af212424f77b3e5d1376bcc2dae8786bf">&#9670;&nbsp;</a></span>n_aliases</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int n_aliases = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00970">970</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a4b20d9bbde54f55c1111fa181a1f4725" name="a4b20d9bbde54f55c1111fa181a1f4725"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b20d9bbde54f55c1111fa181a1f4725">&#9670;&nbsp;</a></span>n_objects</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int n_objects = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00971">971</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a697cff18529a6237f3972e48d540eddd" name="a697cff18529a6237f3972e48d540eddd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a697cff18529a6237f3972e48d540eddd">&#9670;&nbsp;</a></span>n_variables</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int n_variables = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00059">59</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="affe288f3f22973c4471aa9a271a53c77" name="affe288f3f22973c4471aa9a271a53c77"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#affe288f3f22973c4471aa9a271a53c77">&#9670;&nbsp;</a></span>n_widgets</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int n_widgets = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00972">972</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a3c0e2bc6cc4deb130635b69023080d80" name="a3c0e2bc6cc4deb130635b69023080d80"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c0e2bc6cc4deb130635b69023080d80">&#9670;&nbsp;</a></span>numOfDocs</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int numOfDocs = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00075">75</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a60c4f9a7c4a4d065aae6637cf8c74915" name="a60c4f9a7c4a4d065aae6637cf8c74915"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60c4f9a7c4a4d065aae6637cf8c74915">&#9670;&nbsp;</a></span>obj_index</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">IntMap obj_index[MAX_OBJECTS]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00955">955</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a34076a0637953b98847e8a4fd11459ca" name="a34076a0637953b98847e8a4fd11459ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34076a0637953b98847e8a4fd11459ca">&#9670;&nbsp;</a></span>object_names</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* object_names[]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00634">634</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a89d470a26e6c9ba7c3185693840f386c" name="a89d470a26e6c9ba7c3185693840f386c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89d470a26e6c9ba7c3185693840f386c">&#9670;&nbsp;</a></span>open_files_path</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char open_files_path[MAX_STRING_LENGTH]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00063">63</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ab7c99743c4b122cc43bd67ba4d1cac03" name="ab7c99743c4b122cc43bd67ba4d1cac03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7c99743c4b122cc43bd67ba4d1cac03">&#9670;&nbsp;</a></span>os</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* os = &quot;Unknown Operating System&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00040">40</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a4dbd60e152fe0e93613d36172aa0bf35" name="a4dbd60e152fe0e93613d36172aa0bf35"></a>
@@ -2383,8 +1531,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00244">244</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a0f765b9c68e11bb825de59d2970c1d19" name="a0f765b9c68e11bb825de59d2970c1d19"></a>
@@ -2414,72 +1560,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01107">1107</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a1a75a2a25a6094bc638240f9fe178621" name="a1a75a2a25a6094bc638240f9fe178621"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a75a2a25a6094bc638240f9fe178621">&#9670;&nbsp;</a></span>pickAdd</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool pickAdd</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00963">963</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a67bcdae431fd4c2babe0c045dfb68cd7" name="a67bcdae431fd4c2babe0c045dfb68cd7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67bcdae431fd4c2babe0c045dfb68cd7">&#9670;&nbsp;</a></span>precisionAngle</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int precisionAngle</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00967">967</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a9e42212d5fa5815bc291e26e83df4239" name="a9e42212d5fa5815bc291e26e83df4239"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e42212d5fa5815bc291e26e83df4239">&#9670;&nbsp;</a></span>precisionLength</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int precisionLength</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00968">968</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a32fe6bd71d63678c8f07cd224f3581cb" name="a32fe6bd71d63678c8f07cd224f3581cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32fe6bd71d63678c8f07cd224f3581cb">&#9670;&nbsp;</a></span>prefix</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char prefix[200]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00144">144</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a806548fc35ec13e3f9a38623f4d56979" name="a806548fc35ec13e3f9a38623f4d56979"></a>
@@ -2507,72 +1587,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00592">592</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a6ae3868a32ea5ec594ea8c28472d9588" name="a6ae3868a32ea5ec594ea8c28472d9588"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ae3868a32ea5ec594ea8c28472d9588">&#9670;&nbsp;</a></span>prompt_bg_color_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char prompt_bg_color_[MAX_STRING_LENGTH]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00066">66</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a629185a2c86e82c070bc42db2e73bde1" name="a629185a2c86e82c070bc42db2e73bde1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a629185a2c86e82c070bc42db2e73bde1">&#9670;&nbsp;</a></span>prompt_color_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char prompt_color_[MAX_STRING_LENGTH]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00064">64</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ad966e2e054810a3c5ccd1a442d402494" name="ad966e2e054810a3c5ccd1a442d402494"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad966e2e054810a3c5ccd1a442d402494">&#9670;&nbsp;</a></span>prompt_selection_bg_color_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char prompt_selection_bg_color_[MAX_STRING_LENGTH]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00065">65</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a98423167898a9a35d715f6c298c4f2c7" name="a98423167898a9a35d715f6c298c4f2c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98423167898a9a35d715f6c298c4f2c7">&#9670;&nbsp;</a></span>prompt_selection_color_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char prompt_selection_color_[MAX_STRING_LENGTH]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00067">67</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a42afc9e754bf477628e429fa2cec602d" name="a42afc9e754bf477628e429fa2cec602d"></a>
@@ -2590,8 +1604,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00511">511</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a00a359c9663a77ac1553353ac1297f1c" name="a00a359c9663a77ac1553353ac1297f1c"></a>
@@ -2611,40 +1623,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01134">1134</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ad7c57cde5c49ed0e512dee028a6c4ed0" name="ad7c57cde5c49ed0e512dee028a6c4ed0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7c57cde5c49ed0e512dee028a6c4ed0">&#9670;&nbsp;</a></span>promptHistoryData</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char promptHistoryData[MAX_LONG_STRING]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00977">977</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a74505d10227dcd378095afb41fc3f612" name="a74505d10227dcd378095afb41fc3f612"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74505d10227dcd378095afb41fc3f612">&#9670;&nbsp;</a></span>promptInputNum</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int promptInputNum = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00965">965</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a0ede572b55118f6b4b153cdd47dd1a26" name="a0ede572b55118f6b4b153cdd47dd1a26"></a>
@@ -2662,24 +1640,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00503">503</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="ad651d258c5fe49323b105b1b23d64777" name="ad651d258c5fe49323b105b1b23d64777"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad651d258c5fe49323b105b1b23d64777">&#9670;&nbsp;</a></span>rapidFireEnabled</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool rapidFireEnabled = false</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00073">73</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a8aa09582dbe11119f9401a173c6971c3" name="a8aa09582dbe11119f9401a173c6971c3"></a>
@@ -2697,8 +1657,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00087">87</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a840383f5d9926e2801b8397c97179c40" name="a840383f5d9926e2801b8397c97179c40"></a>
@@ -2716,8 +1674,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00324">324</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a0206db0cd6bb69d5d27596809543f54e" name="a0206db0cd6bb69d5d27596809543f54e"></a>
@@ -2743,8 +1699,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00546">546</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a36c3ec1ab01d66ab2b31c065c3366d00" name="a36c3ec1ab01d66ab2b31c065c3366d00"></a>
@@ -2766,8 +1720,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01808">1808</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="abd14d6bf0db0f2553abaa090160f3bb6" name="abd14d6bf0db0f2553abaa090160f3bb6"></a>
@@ -2791,24 +1743,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00622">622</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a6ab564d41e31041cac6b26b7087917de" name="a6ab564d41e31041cac6b26b7087917de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ab564d41e31041cac6b26b7087917de">&#9670;&nbsp;</a></span>root</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ScriptValue* root</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00056">56</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aef0c9145ad56318d8351d07ae484dee8" name="aef0c9145ad56318d8351d07ae484dee8"></a>
@@ -2827,8 +1761,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01140">1140</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ad8b9d152fab1274686af8fb1a65d8408" name="ad8b9d152fab1274686af8fb1a65d8408"></a>
@@ -2858,8 +1790,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00308">308</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a02ac0b3c386d0aff5f7754a964c88f57" name="a02ac0b3c386d0aff5f7754a964c88f57"></a>
@@ -2878,8 +1808,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00494">494</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a424d5624a77d4626360afa1e14633c54" name="a424d5624a77d4626360afa1e14633c54"></a>
@@ -2902,8 +1830,6 @@ Variables</h2></td></tr>
 <div class="line">    .type = SCRIPT_BOOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00129">129</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a221780b3c065147a633883cf9546a92d" name="a221780b3c065147a633883cf9546a92d"></a>
@@ -2926,8 +1852,6 @@ Variables</h2></td></tr>
 <div class="line">    .type = SCRIPT_NULL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00111">111</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a5a49cc14328f6948aa9a4be0702123f4" name="a5a49cc14328f6948aa9a4be0702123f4"></a>
@@ -2950,8 +1874,6 @@ Variables</h2></td></tr>
 <div class="line">    .type = SCRIPT_BOOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00120">120</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a2afa46997732153e90db15349d8b8847" name="a2afa46997732153e90db15349d8b8847"></a>
@@ -2976,56 +1898,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01123">1123</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="af1b9b04f8ae7283a897a8eb9fe0e9e8d" name="af1b9b04f8ae7283a897a8eb9fe0e9e8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1b9b04f8ae7283a897a8eb9fe0e9e8d">&#9670;&nbsp;</a></span>setting</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structSetting__.html">Setting</a> setting[N_SETTINGS]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00086">86</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a481b3bdac5703ab4bd50dacc048e1350" name="a481b3bdac5703ab4bd50dacc048e1350"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a481b3bdac5703ab4bd50dacc048e1350">&#9670;&nbsp;</a></span>settings_data</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* settings_data[]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01539">1539</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a58d95e2b310a39fb791005e81f3bf6cc" name="a58d95e2b310a39fb791005e81f3bf6cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58d95e2b310a39fb791005e81f3bf6cc">&#9670;&nbsp;</a></span>settings_file</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char settings_file[MAX_STRING_LENGTH] = &quot;settings.ini&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00078">78</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a82d5278ad164a571ce03950c04b6103e" name="a82d5278ad164a571ce03950c04b6103e"></a>
@@ -3056,40 +1928,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00575">575</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a1378a2dd56cbdc33ba254356eac946c9" name="a1378a2dd56cbdc33ba254356eac946c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1378a2dd56cbdc33ba254356eac946c9">&#9670;&nbsp;</a></span>shiftKeyPressedState</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool shiftKeyPressedState = false</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00071">71</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
-</div>
-</div>
-<a id="a20820415ca05720c97b77275fb424e11" name="a20820415ca05720c97b77275fb424e11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20820415ca05720c97b77275fb424e11">&#9670;&nbsp;</a></span>testing_mode</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int testing_mode = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00141">141</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ab75914ab7fb0e6afb87175e88627b9c8" name="ab75914ab7fb0e6afb87175e88627b9c8"></a>
@@ -3121,8 +1959,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL, END_SYMBOL, END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00936">936</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a1c5334902b229d61b8707b61e58852f5" name="a1c5334902b229d61b8707b61e58852f5"></a>
@@ -3140,8 +1976,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00507">507</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="afe61f345e586218cca3fc329e805a530" name="afe61f345e586218cca3fc329e805a530"></a>
@@ -3174,8 +2008,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00682">682</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a93324f13b6ba5c57028e85cb128a632d" name="a93324f13b6ba5c57028e85cb128a632d"></a>
@@ -3198,8 +2030,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00379">379</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a372182cf0e7f936d9229396fcce9d2b0" name="a372182cf0e7f936d9229396fcce9d2b0"></a>
@@ -3231,8 +2061,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00334">334</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="af2aebe5a43713e69037f150e857b9fe0" name="af2aebe5a43713e69037f150e857b9fe0"></a>
@@ -3257,8 +2085,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00388">388</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aa5a0531e09085822d6b624fd4a3da8ea" name="aa5a0531e09085822d6b624fd4a3da8ea"></a>
@@ -3279,8 +2105,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00288">288</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ac9c075520114240653ea93b873c7d11f" name="ac9c075520114240653ea93b873c7d11f"></a>
@@ -3309,8 +2133,6 @@ Variables</h2></td></tr>
 <div class="line">    TERMINATOR_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00352">352</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a1d142b796ea87cf0535b077ad3590671" name="a1d142b796ea87cf0535b077ad3590671"></a>
@@ -3353,8 +2175,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01078">1078</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a70fc74a2a274409e42d4e6851a043e11" name="a70fc74a2a274409e42d4e6851a043e11"></a>
@@ -3378,8 +2198,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00219">219</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a17ef08c8878e493d1a3893323cab4f88" name="a17ef08c8878e493d1a3893323cab4f88"></a>
@@ -3410,8 +2228,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00419">419</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="a79fd60242b688ed1fbbf3831e7beead1" name="a79fd60242b688ed1fbbf3831e7beead1"></a>
@@ -3429,8 +2245,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00328">328</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="ad7279bc30bc53005c580fb71af5b9b27" name="ad7279bc30bc53005c580fb71af5b9b27"></a>
@@ -3462,8 +2276,6 @@ Variables</h2></td></tr>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00995">995</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="adeb1199c85d400672e7a49dc9832820d" name="adeb1199c85d400672e7a49dc9832820d"></a>
@@ -3483,8 +2295,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l01839">1839</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 <a id="aac04b572a04a6102021bd2678c026981" name="aac04b572a04a6102021bd2678c026981"></a>
@@ -3513,8 +2323,6 @@ Variables</h2></td></tr>
 <div class="line">    END_SYMBOL</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="state_8c_source.html#l00229">229</a> of file <a class="el" href="state_8c_source.html">state.c</a>.</p>
-
 </div>
 </div>
 </div><!-- contents -->

@@ -9,331 +9,36 @@ Inheritance diagram for Cmd\+Prompt\+Input\+:\begin{figure}[H]
 \doxysubsubsection*{Public Slots}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{classCmdPromptInput_a2be1fca1da1ed5b339c3335a223ece81}{check\+Selection}} ()
+\mbox{\Hypertarget{classCmdPromptInput_a2be1fca1da1ed5b339c3335a223ece81}\label{classCmdPromptInput_a2be1fca1da1ed5b339c3335a223ece81}} 
+void {\bfseries check\+Selection} ()
 \item 
-void \mbox{\hyperlink{classCmdPromptInput_a559e541a20430b50d4ff24e90a68ec28}{update\+Current\+Text}} (QString txt)
+\mbox{\Hypertarget{classCmdPromptInput_a559e541a20430b50d4ff24e90a68ec28}\label{classCmdPromptInput_a559e541a20430b50d4ff24e90a68ec28}} 
+void {\bfseries update\+Current\+Text} (QString txt)
 \item 
-void \mbox{\hyperlink{classCmdPromptInput_a1b9f857a63a7b65cbf9a2dd6864d0d21}{check\+Edited\+Text}} (QString txt)
+\mbox{\Hypertarget{classCmdPromptInput_a1b9f857a63a7b65cbf9a2dd6864d0d21}\label{classCmdPromptInput_a1b9f857a63a7b65cbf9a2dd6864d0d21}} 
+void {\bfseries check\+Edited\+Text} (QString txt)
 \item 
-void \mbox{\hyperlink{classCmdPromptInput_a7bb7310c9b9e3a951da5894defb190a8}{check\+Changed\+Text}} (QString txt)
+\mbox{\Hypertarget{classCmdPromptInput_a7bb7310c9b9e3a951da5894defb190a8}\label{classCmdPromptInput_a7bb7310c9b9e3a951da5894defb190a8}} 
+void {\bfseries check\+Changed\+Text} (QString txt)
 \item 
-void \mbox{\hyperlink{classCmdPromptInput_ac986f1f0354aca73d048b0f85ae1f64a}{check\+Cursor\+Position}} (int oldpos, int newpos)
+\mbox{\Hypertarget{classCmdPromptInput_ac986f1f0354aca73d048b0f85ae1f64a}\label{classCmdPromptInput_ac986f1f0354aca73d048b0f85ae1f64a}} 
+void {\bfseries check\+Cursor\+Position} (int oldpos, int newpos)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classCmdPromptInput_a53174192c24f70912e0e3486880fb746}{Cmd\+Prompt\+Input}} (QWidget $\ast$parent=0)
+\mbox{\Hypertarget{classCmdPromptInput_a53174192c24f70912e0e3486880fb746}\label{classCmdPromptInput_a53174192c24f70912e0e3486880fb746}} 
+{\bfseries Cmd\+Prompt\+Input} (QWidget $\ast$parent=0)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{classCmdPromptInput_a16bd568cccd511564959d1ecbcac3bdb}{context\+Menu\+Event}} (QContext\+Menu\+Event $\ast$event)
-\item 
-bool \mbox{\hyperlink{classCmdPromptInput_a18434b6113db1a10f3e8dc04477c096a}{event\+Filter}} (QObject $\ast$obj, QEvent $\ast$event)
-\end{DoxyCompactItemize}
-
-
-\doxysubsubsection{Detailed Description}
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00305}{305}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
-
-
-\doxysubsubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classCmdPromptInput_a53174192c24f70912e0e3486880fb746}\label{classCmdPromptInput_a53174192c24f70912e0e3486880fb746}} 
-\index{CmdPromptInput@{CmdPromptInput}!CmdPromptInput@{CmdPromptInput}}
-\index{CmdPromptInput@{CmdPromptInput}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{CmdPromptInput()}{CmdPromptInput()}}
-{\footnotesize\ttfamily Cmd\+Prompt\+Input\+::\+Cmd\+Prompt\+Input (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05178}{5178}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05178                                               : QLineEdit(parent)}
-\DoxyCodeLine{05179 \{}
-\DoxyCodeLine{05180     debug\_message(\textcolor{stringliteral}{"{}CmdPromptInput Constructor"{}});}
-\DoxyCodeLine{05181     setObjectName(\textcolor{stringliteral}{"{}Command Prompt Input"{}});}
-\DoxyCodeLine{05182 }
-\DoxyCodeLine{05183     strcpy(defaultPrefix, translate(\textcolor{stringliteral}{"{}Command: "{}}));}
-\DoxyCodeLine{05184     strcpy(prefix, defaultPrefix);}
-\DoxyCodeLine{05185     strcpy(curText, prefix);}
-\DoxyCodeLine{05186 }
-\DoxyCodeLine{05187     strcpy(lastCmd, \textcolor{stringliteral}{"{}help"{}});}
-\DoxyCodeLine{05188     strcpy(curCmd, \textcolor{stringliteral}{"{}help"{}});}
-\DoxyCodeLine{05189     cmdActive = \textcolor{keyword}{false};}
-\DoxyCodeLine{05190 }
-\DoxyCodeLine{05191     rapidFireEnabled = \textcolor{keyword}{false};}
-\DoxyCodeLine{05192 }
-\DoxyCodeLine{05193     isBlinking = \textcolor{keyword}{false};}
-\DoxyCodeLine{05194 }
-\DoxyCodeLine{05195     this-\/>setText(prefix);}
-\DoxyCodeLine{05196     this-\/>setFrame(\textcolor{keyword}{false});}
-\DoxyCodeLine{05197     this-\/>setMaxLength(266);}
-\DoxyCodeLine{05198     this-\/>setMaximumSize(5000, 25);}
-\DoxyCodeLine{05199     this-\/>setDragEnabled(\textcolor{keyword}{false});}
-\DoxyCodeLine{05200 }
-\DoxyCodeLine{05201     QObject::connect(\textcolor{keyword}{this}, SIGNAL(cursorPositionChanged(\textcolor{keywordtype}{int}, \textcolor{keywordtype}{int})), \textcolor{keyword}{this}, SLOT(checkCursorPosition(\textcolor{keywordtype}{int}, \textcolor{keywordtype}{int})));}
-\DoxyCodeLine{05202     QObject::connect(\textcolor{keyword}{this}, SIGNAL(textEdited(QString )), \textcolor{keyword}{this}, SLOT(checkEditedText(QString )));}
-\DoxyCodeLine{05203     QObject::connect(\textcolor{keyword}{this}, SIGNAL(textChanged(QString )), \textcolor{keyword}{this}, SLOT(checkChangedText(QString )));}
-\DoxyCodeLine{05204     QObject::connect(\textcolor{keyword}{this}, SIGNAL(selectionChanged()), \textcolor{keyword}{this}, SLOT(checkSelection()));}
-\DoxyCodeLine{05205 }
-\DoxyCodeLine{05206     this-\/>installEventFilter(\textcolor{keyword}{this});}
-\DoxyCodeLine{05207     this-\/>setFocus(Qt::OtherFocusReason);}
-\DoxyCodeLine{05208 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classCmdPromptInput_a2098b98d27ab0174448de307d2158122}\label{classCmdPromptInput_a2098b98d27ab0174448de307d2158122}} 
-\index{CmdPromptInput@{CmdPromptInput}!````~CmdPromptInput@{$\sim$CmdPromptInput}}
-\index{````~CmdPromptInput@{$\sim$CmdPromptInput}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{$\sim$CmdPromptInput()}{~CmdPromptInput()}}
-{\footnotesize\ttfamily Cmd\+Prompt\+Input\+::$\sim$\+Cmd\+Prompt\+Input (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Definition at line \mbox{\hyperlink{qt_8h_source_l00311}{311}} of file \mbox{\hyperlink{qt_8h_source}{qt.\+h}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00311 \{\}}
-
-\end{DoxyCode}
-
-
-\doxysubsubsection{Member Function Documentation}
-\mbox{\Hypertarget{classCmdPromptInput_a7bb7310c9b9e3a951da5894defb190a8}\label{classCmdPromptInput_a7bb7310c9b9e3a951da5894defb190a8}} 
-\index{CmdPromptInput@{CmdPromptInput}!checkChangedText@{checkChangedText}}
-\index{checkChangedText@{checkChangedText}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{checkChangedText}{checkChangedText}}
-{\footnotesize\ttfamily void Cmd\+Prompt\+Input\+::check\+Changed\+Text (\begin{DoxyParamCaption}\item[{QString}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05353}{5353}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05354 \{}
-\DoxyCodeLine{05355     updateCurrentText(txt);}
-\DoxyCodeLine{05356 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classCmdPromptInput_ac986f1f0354aca73d048b0f85ae1f64a}\label{classCmdPromptInput_ac986f1f0354aca73d048b0f85ae1f64a}} 
-\index{CmdPromptInput@{CmdPromptInput}!checkCursorPosition@{checkCursorPosition}}
-\index{checkCursorPosition@{checkCursorPosition}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{checkCursorPosition}{checkCursorPosition}}
-{\footnotesize\ttfamily void Cmd\+Prompt\+Input\+::check\+Cursor\+Position (\begin{DoxyParamCaption}\item[{int}]{oldpos,  }\item[{int}]{newpos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05305}{5305}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05306 \{}
-\DoxyCodeLine{05307     debug\_message(\textcolor{stringliteral}{"{}CmdPromptInput::checkCursorPosition -\/ \%d \%d"{}}, oldpos, newpos);}
-\DoxyCodeLine{05308     \textcolor{keywordflow}{if} (this-\/>hasSelectedText()) \{}
-\DoxyCodeLine{05309         this-\/>deselect();}
-\DoxyCodeLine{05310     \}}
-\DoxyCodeLine{05311     \textcolor{keywordflow}{if} (newpos < strlen(prefix)) \{}
-\DoxyCodeLine{05312         this-\/>setCursorPosition(strlen(prefix));}
-\DoxyCodeLine{05313     \}}
-\DoxyCodeLine{05314 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classCmdPromptInput_a1b9f857a63a7b65cbf9a2dd6864d0d21}\label{classCmdPromptInput_a1b9f857a63a7b65cbf9a2dd6864d0d21}} 
-\index{CmdPromptInput@{CmdPromptInput}!checkEditedText@{checkEditedText}}
-\index{checkEditedText@{checkEditedText}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{checkEditedText}{checkEditedText}}
-{\footnotesize\ttfamily void Cmd\+Prompt\+Input\+::check\+Edited\+Text (\begin{DoxyParamCaption}\item[{QString}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05342}{5342}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05343 \{}
-\DoxyCodeLine{05344     updateCurrentText(txt);}
-\DoxyCodeLine{05345 }
-\DoxyCodeLine{05346     \textcolor{keywordflow}{if} (rapidFireEnabled) \{}
-\DoxyCodeLine{05347         process\_input(\textcolor{charliteral}{' '});}
-\DoxyCodeLine{05348     \}}
-\DoxyCodeLine{05349 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classCmdPromptInput_a2be1fca1da1ed5b339c3335a223ece81}\label{classCmdPromptInput_a2be1fca1da1ed5b339c3335a223ece81}} 
-\index{CmdPromptInput@{CmdPromptInput}!checkSelection@{checkSelection}}
-\index{checkSelection@{checkSelection}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{checkSelection}{checkSelection}}
-{\footnotesize\ttfamily void Cmd\+Prompt\+Input\+::check\+Selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05295}{5295}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05296 \{}
-\DoxyCodeLine{05297     debug\_message(\textcolor{stringliteral}{"{}CmdPromptInput::checkSelection"{}});}
-\DoxyCodeLine{05298     \textcolor{keywordflow}{if} (this-\/>hasSelectedText()) \{}
-\DoxyCodeLine{05299         this-\/>deselect();}
-\DoxyCodeLine{05300     \}}
-\DoxyCodeLine{05301 \}}
-
-\end{DoxyCode}
 \mbox{\Hypertarget{classCmdPromptInput_a16bd568cccd511564959d1ecbcac3bdb}\label{classCmdPromptInput_a16bd568cccd511564959d1ecbcac3bdb}} 
-\index{CmdPromptInput@{CmdPromptInput}!contextMenuEvent@{contextMenuEvent}}
-\index{contextMenuEvent@{contextMenuEvent}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{contextMenuEvent()}{contextMenuEvent()}}
-{\footnotesize\ttfamily void Cmd\+Prompt\+Input\+::context\+Menu\+Event (\begin{DoxyParamCaption}\item[{QContext\+Menu\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05375}{5375}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05376 \{}
-\DoxyCodeLine{05377     QMenu menu(\textcolor{keyword}{this});}
-\DoxyCodeLine{05378 }
-\DoxyCodeLine{05379     QAction* copyAction = \textcolor{keyword}{new} QAction(\textcolor{stringliteral}{"{}\&Copy"{}}, \textcolor{keyword}{this});}
-\DoxyCodeLine{05380     copyAction-\/>setStatusTip(\textcolor{stringliteral}{"{}Copies the command prompt text to the clipboard."{}});}
-\DoxyCodeLine{05381     QObject::connect(copyAction, SIGNAL(triggered()), \textcolor{keyword}{this}, SLOT(copyClip()));}
-\DoxyCodeLine{05382     menu.addAction(copyAction);}
-\DoxyCodeLine{05383 }
-\DoxyCodeLine{05384     QAction* pasteAction = \textcolor{keyword}{new} QAction(\textcolor{stringliteral}{"{}\&Paste"{}}, \textcolor{keyword}{this});}
-\DoxyCodeLine{05385     pasteAction-\/>setStatusTip(\textcolor{stringliteral}{"{}Inserts the clipboard's text into the command prompt at the cursor position."{}});}
-\DoxyCodeLine{05386     QObject::connect(pasteAction, SIGNAL(triggered()), \textcolor{keyword}{this}, SLOT(pasteClip()));}
-\DoxyCodeLine{05387     menu.addAction(pasteAction);}
-\DoxyCodeLine{05388 }
-\DoxyCodeLine{05389     menu.addSeparator();}
-\DoxyCodeLine{05390 }
-\DoxyCodeLine{05391     QAction* settingsAction = \textcolor{keyword}{new} QAction(\textcolor{stringliteral}{"{}\&Settings..."{}}, \textcolor{keyword}{this});}
-\DoxyCodeLine{05392     settingsAction-\/>setStatusTip(\textcolor{stringliteral}{"{}Opens settings for the command prompt."{}});}
-\DoxyCodeLine{05393     QObject::connect(settingsAction, SIGNAL(triggered()), \textcolor{keyword}{this}, SIGNAL(showSettings()));}
-\DoxyCodeLine{05394     menu.addAction(settingsAction);}
-\DoxyCodeLine{05395 }
-\DoxyCodeLine{05396     menu.exec(event-\/>globalPos());}
-\DoxyCodeLine{05397 \}}
-
-\end{DoxyCode}
+void {\bfseries context\+Menu\+Event} (QContext\+Menu\+Event $\ast$event)
+\item 
 \mbox{\Hypertarget{classCmdPromptInput_a18434b6113db1a10f3e8dc04477c096a}\label{classCmdPromptInput_a18434b6113db1a10f3e8dc04477c096a}} 
-\index{CmdPromptInput@{CmdPromptInput}!eventFilter@{eventFilter}}
-\index{eventFilter@{eventFilter}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{eventFilter()}{eventFilter()}}
-{\footnotesize\ttfamily bool Cmd\+Prompt\+Input\+::event\+Filter (\begin{DoxyParamCaption}\item[{QObject $\ast$}]{obj,  }\item[{QEvent $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05404}{5404}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05405 \{}
-\DoxyCodeLine{05406     \textcolor{keywordflow}{if} (event-\/>type() == QEvent::KeyPress) \{}
-\DoxyCodeLine{05407         \textcolor{keywordflow}{if} (isBlinking) \{}
-\DoxyCodeLine{05408             stop\_blinking();}
-\DoxyCodeLine{05409         \}}
-\DoxyCodeLine{05410 }
-\DoxyCodeLine{05411         QKeyEvent* pressedKey = (QKeyEvent*)event;}
-\DoxyCodeLine{05412         \textcolor{keywordtype}{int} key = pressedKey-\/>key();}
-\DoxyCodeLine{05413         \textcolor{keywordtype}{int} found = find\_int\_map(key\_map, key);}
-\DoxyCodeLine{05414         \textcolor{keywordflow}{if} (found != -\/1) \{}
-\DoxyCodeLine{05415             \textcolor{keywordflow}{if} (key != (\textcolor{keywordtype}{int})Qt::Key\_Shift) \{}
-\DoxyCodeLine{05416                 pressedKey-\/>accept();}
-\DoxyCodeLine{05417             \}}
-\DoxyCodeLine{05418         \}}
-\DoxyCodeLine{05419         \textcolor{keywordflow}{switch} (key) \{}
-\DoxyCodeLine{05420         \textcolor{keywordflow}{case} Qt::Key\_Enter:}
-\DoxyCodeLine{05421         \textcolor{keywordflow}{case} Qt::Key\_Return: \{}
-\DoxyCodeLine{05422             process\_input(\textcolor{charliteral}{'\(\backslash\)n'});}
-\DoxyCodeLine{05423             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{05424         \}}
-\DoxyCodeLine{05425         \textcolor{keywordflow}{case} Qt::Key\_Space: \{}
-\DoxyCodeLine{05426             process\_input(\textcolor{charliteral}{' '});}
-\DoxyCodeLine{05427             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{05428         \}}
-\DoxyCodeLine{05429         \textcolor{keywordflow}{case} Qt::Key\_Delete: \{}
-\DoxyCodeLine{05430             del();}
-\DoxyCodeLine{05431             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{05432         \}}
-\DoxyCodeLine{05433         \textcolor{keywordflow}{case} Qt::Key\_Escape: \{}
-\DoxyCodeLine{05434             EmbString msg;}
-\DoxyCodeLine{05435             strcpy(prefix, defaultPrefix);}
-\DoxyCodeLine{05436             clear();}
-\DoxyCodeLine{05437             sprintf(msg, \textcolor{stringliteral}{"{}\%s\%s"{}}, curText, translate(\textcolor{stringliteral}{"{}*Cancel*"{}}));}
-\DoxyCodeLine{05438             prompt\_output(msg);}
-\DoxyCodeLine{05439             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{05440         \}}
-\DoxyCodeLine{05441         \textcolor{keywordflow}{default}: \{}
-\DoxyCodeLine{05442             pressedKey-\/>ignore();}
-\DoxyCodeLine{05443             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{05444         \}}
-\DoxyCodeLine{05445         \}}
-\DoxyCodeLine{05446         \textcolor{keywordflow}{if} (found != -\/1) \{}
-\DoxyCodeLine{05447             \textcolor{keywordflow}{if} (key != (\textcolor{keywordtype}{int})Qt::Key\_Shift) \{}
-\DoxyCodeLine{05448                 key\_state[found] = \textcolor{keyword}{true};}
-\DoxyCodeLine{05449                 \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
-\DoxyCodeLine{05450             \}}
-\DoxyCodeLine{05451             \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{05452                 \textcolor{comment}{/* we don't want to eat it, we just want to keep track of it */}}
-\DoxyCodeLine{05453                 pressedKey-\/>ignore();}
-\DoxyCodeLine{05454             \}}
-\DoxyCodeLine{05455         \}}
-\DoxyCodeLine{05456     \}}
-\DoxyCodeLine{05457 }
-\DoxyCodeLine{05458     \textcolor{keywordflow}{if} (event-\/>type() == QEvent::KeyRelease) \{}
-\DoxyCodeLine{05459         QKeyEvent* releasedKey = (QKeyEvent*)event;}
-\DoxyCodeLine{05460         \textcolor{keywordtype}{int} key = releasedKey-\/>key();}
-\DoxyCodeLine{05461         \textcolor{comment}{/* We don't want to eat it, we just want to keep track of it. */}}
-\DoxyCodeLine{05462         releasedKey-\/>ignore();}
-\DoxyCodeLine{05463         \textcolor{keywordtype}{int} found = find\_int\_map(key\_map, key);}
-\DoxyCodeLine{05464         \textcolor{keywordflow}{if} (found != -\/1) \{}
-\DoxyCodeLine{05465             key\_state[found] = \textcolor{keyword}{false};}
-\DoxyCodeLine{05466         \}}
-\DoxyCodeLine{05467     \}}
-\DoxyCodeLine{05468     \textcolor{keywordflow}{return} QObject::eventFilter(obj, event);}
-\DoxyCodeLine{05469 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{classCmdPromptInput_a559e541a20430b50d4ff24e90a68ec28}\label{classCmdPromptInput_a559e541a20430b50d4ff24e90a68ec28}} 
-\index{CmdPromptInput@{CmdPromptInput}!updateCurrentText@{updateCurrentText}}
-\index{updateCurrentText@{updateCurrentText}!CmdPromptInput@{CmdPromptInput}}
-\doxyparagraph{\texorpdfstring{updateCurrentText}{updateCurrentText}}
-{\footnotesize\ttfamily void Cmd\+Prompt\+Input\+::update\+Current\+Text (\begin{DoxyParamCaption}\item[{QString}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-
-
-Definition at line \mbox{\hyperlink{commands_8cpp_source_l05318}{5318}} of file \mbox{\hyperlink{commands_8cpp_source}{commands.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{05319 \{}
-\DoxyCodeLine{05320     \textcolor{keywordtype}{int} cursorPos = cursorPosition();}
-\DoxyCodeLine{05321     \textcolor{keywordflow}{if} (!txt.startsWith(prefix)) \{}
-\DoxyCodeLine{05322         \textcolor{keywordflow}{if} (txt.length() < strlen(prefix)) \{}
-\DoxyCodeLine{05323             this-\/>setText(prefix);}
-\DoxyCodeLine{05324         \}}
-\DoxyCodeLine{05325         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (txt.length() != strlen(prefix)) \{}
-\DoxyCodeLine{05326             this-\/>setText(prefix + txt);}
-\DoxyCodeLine{05327         \}}
-\DoxyCodeLine{05328         \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{05329             this-\/>setText(curText);}
-\DoxyCodeLine{05330         \}}
-\DoxyCodeLine{05331     \}}
-\DoxyCodeLine{05332     \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{05333         \textcolor{comment}{/* input is okay so update curText */}}
-\DoxyCodeLine{05334         strcpy(curText, qPrintable(txt));}
-\DoxyCodeLine{05335         this-\/>setText(curText);}
-\DoxyCodeLine{05336     \}}
-\DoxyCodeLine{05337     setCursorPosition(cursorPos);}
-\DoxyCodeLine{05338 \}}
-
-\end{DoxyCode}
+bool {\bfseries event\+Filter} (QObject $\ast$obj, QEvent $\ast$event)
+\end{DoxyCompactItemize}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

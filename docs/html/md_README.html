@@ -78,7 +78,7 @@ $(function() {
 <li>run on Windows, Mac and Linux</li>
 </ul>
 <p >For more information, see <a href="http://www.libembroidery.org">our website</a>.</p>
-<h1><a class="anchor" id="autotoc_md81"></a>
+<h1><a class="anchor" id="autotoc_md0"></a>
 Dependencies</h1>
 <p >To build Embroidermodder 2 from source you will need at least:</p>
 <ul>
@@ -97,17 +97,17 @@ Dependencies</h1>
 <div class="line">    valgrind cmake</div>
 </div><!-- fragment --><p >Fedora repository packages: The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:</p>
 <div class="fragment"><div class="line">sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md82"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md1"></a>
 Included</h2>
 <p >Some of the dependencies have been included and CMake will default to these versions.</p>
 <ul>
 <li><a href="http://www.glfw.org">GLFW</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md83"></a>
+<h1><a class="anchor" id="autotoc_md2"></a>
 Building</h1>
 <p >Various methods of building can be found in the project-files subfolder. For most builds, it is as simple as opening a terminal in the project folder and typing:</p>
 <div class="fragment"><div class="line">./needle -b</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md84"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
 Building Without Bash</h2>
 <div class="fragment"><div class="line">git clone https://github.com/embroidermodder/embroidermodder</div>
 <div class="line">cd embroidermodder</div>
@@ -118,27 +118,27 @@ Building Without Bash</h2>
 <div class="line">cmake --build .</div>
 </div><!-- fragment --><p >Then run with</p>
 <div class="fragment"><div class="line">./embroidermodder2</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md85"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md4"></a>
 Building Without Cmake</h2>
 <p >We're working on a one-liner for systems without cmake.</p>
 <div class="fragment"><div class="line"># FIXME:</div>
 <div class="line">$(CC) -o embroidermodder2 \</div>
 <div class="line">    src/*.c src/*/*.c src/*.h src/*/*.h \</div>
 <div class="line">    -lglfw -lGL -lm</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md86"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md5"></a>
 Testing One-liner (Bash-only)</h2>
 <p >Sometimes an issue you're having is fixed in the current version: it is recommended that you use a fresh build to ensure that the problem is still present before reporting this. This one-liner helps with this: place it in your <code>.bashrc</code> for future use.</p>
 <div class="fragment"><div class="line">alias run_current_em2=&quot;rm -f build.sh &amp;&amp; wget https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/refs/heads/main/build.sh &amp;&amp; bash build.sh --current&quot;</div>
 </div><!-- fragment --><p >Then, if you have issues, you can capture the terminal output like this.</p>
 <div class="fragment"><div class="line">run_current_em2 &amp;&gt; build.log</div>
 </div><!-- fragment --><p >If there is a new issue arising from this test script itself, this is also valuable to create an <a href="https://github.com/embroidermodder/embroidermodder/issues">issue</a> for.</p>
-<h1><a class="anchor" id="autotoc_md87"></a>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Help Files</h1>
 <p >A copy of the reference manual and user manual will be included in the source code in <code>docs/</code> folder. Currently these are works in progress and aren't usable. Some notes that may be helpful are in markdown files in this directory.</p>
-<h1><a class="anchor" id="autotoc_md88"></a>
+<h1><a class="anchor" id="autotoc_md7"></a>
 Sample Files</h1>
 <p >Various sample embroidery design files can be found in the <code>embroidermodder2/docs/samples</code> folder.</p>
-<h1><a class="anchor" id="autotoc_md89"></a>
+<h1><a class="anchor" id="autotoc_md8"></a>
 Install/Uninstall</h1>
 <p >Embroidermodder 2 is self contained, so it does not need to be installed. If you move the <code>embroidermodder2</code> executable to any other folder it should run exactly the same. </p>
 </div></div><!-- contents -->

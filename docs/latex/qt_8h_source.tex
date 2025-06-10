@@ -2,353 +2,353 @@
 \label{qt_8h_source}\index{src/qt.h@{src/qt.h}}
 \mbox{\hyperlink{qt_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00001}00001 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00015}00015 \textcolor{preprocessor}{\#ifndef EMBROIDERMODDER\_GUI\_HEADER}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00016}00016 \textcolor{preprocessor}{\#define EMBROIDERMODDER\_GUI\_HEADER}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00017}00017 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00018}00018 \textcolor{preprocessor}{\#include "{}core.h"{}}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00019}00019 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00020}00020 \textcolor{preprocessor}{\#include <QAction>}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00021}00021 \textcolor{preprocessor}{\#include <QApplication>}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00022}00022 \textcolor{preprocessor}{\#include <QGraphicsPathItem>}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00023}00023 \textcolor{preprocessor}{\#include <QtPrintSupport>}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00024}00024 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00025}\mbox{\hyperlink{classObject}{00025}} \textcolor{keyword}{class }\mbox{\hyperlink{classObject}{Object}}: \textcolor{keyword}{public} QGraphicsPathItem}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00026}00026 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00027}00027 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00028}00028     \mbox{\hyperlink{structObjectCore__}{ObjectCore}} *core;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00029}00029 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00030}00030     QGraphicsPathItem path\_;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00031}00031     QPen objPen;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00032}00032     QPen lwtPen;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00033}00033     QLineF objLine;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00034}00034     QPainter* obj\_painter;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00035}00035 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00036}00036     QPainterPath textPath;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00037}00037     QPainterPath lineStylePath;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00038}00038     QPainterPath arrowStylePath;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00039}00039     QPainterPath normalPath;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00040}00040 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00041}00041     \mbox{\hyperlink{classObject}{Object}}(\textcolor{keywordtype}{int} type\_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00042}00042     \mbox{\hyperlink{classObject}{\string~Object}}() \{ free\_object(core); \}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00043}00043 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00044}00044     \textcolor{keywordtype}{void} gripEdit(EmbVector before, EmbVector after);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00045}00045     QPainterPath shape()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} path(); \}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00046}00046 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00047}00047     \textcolor{keywordtype}{void} drawRubberLine(QLineF rubLine, QPainter* painter = 0, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* colorFromScene = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00048}00048 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00049}00049     \textcolor{keywordtype}{void} setObjectSize(\textcolor{keywordtype}{double} width, EmbReal height);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00050}00050 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00051}00051     QPainterPath objectCopyPath() \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00052}00052     QPainterPath objectSavePath() \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00053}00053     QList<QPainterPath> objectSavePathList()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} subPathList(); \}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00054}00054     QList<QPainterPath> subPathList() \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00055}00055 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00056}00056 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00057}00057     \textcolor{keywordtype}{void} paint(QPainter*, \textcolor{keyword}{const} QStyleOptionGraphicsItem*, QWidget*);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00058}00058 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00059}00059 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00060}\mbox{\hyperlink{classSelectBox}{00060}} \textcolor{keyword}{class }\mbox{\hyperlink{classSelectBox}{SelectBox}}: \textcolor{keyword}{public} QRubberBand}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00061}00061 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00062}00062     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00063}00063 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00064}00064 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00065}00065     \mbox{\hyperlink{classSelectBox}{SelectBox}}(Shape s, QWidget* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00066}00066 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00067}00067 \textcolor{keyword}{public} slots:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00068}00068     \textcolor{keywordtype}{void} setDirection(\textcolor{keywordtype}{int} dir);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00069}00069     \textcolor{keywordtype}{void} setColors(\textcolor{keyword}{const} QColor\& colorL, \textcolor{keyword}{const} QColor\& fillL, \textcolor{keyword}{const} QColor\& colorR, \textcolor{keyword}{const} QColor\& fillR, \textcolor{keywordtype}{int} newAlpha);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00070}00070 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00071}00071 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00072}00072     \textcolor{keywordtype}{void} paintEvent(QPaintEvent*);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00073}00073 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00074}00074 \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00075}00075     QColor leftBrushColor;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00076}00076     QColor rightBrushColor;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00077}00077     QColor leftPenColor;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00078}00078     QColor rightPenColor;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00079}00079     uint8\_t alpha;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00080}00080 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00081}00081     QBrush dirBrush;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00082}00082     QBrush leftBrush;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00083}00083     QBrush rightBrush;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00084}00084 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00085}00085     QPen dirPen;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00086}00086     QPen leftPen;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00087}00087     QPen rightPen;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00088}00088 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00089}00089     \textcolor{keywordtype}{bool} boxDir;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00090}00090 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00091}00091     \textcolor{keywordtype}{void} forceRepaint();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00092}00092 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00093}00093 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00094}\mbox{\hyperlink{classLayerManager}{00094}} \textcolor{keyword}{class }\mbox{\hyperlink{classLayerManager}{LayerManager}}: \textcolor{keyword}{public} QDialog}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00095}00095 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00096}00096     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00097}00097 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00098}00098 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00099}00099     \mbox{\hyperlink{classLayerManager}{LayerManager}}(QWidget *parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00100}00100     \mbox{\hyperlink{classLayerManager}{\string~LayerManager}}() \{ restore\_cursor(); \}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00101}00101     \mbox{\hyperlink{structLayerData__}{LayerData}} data[MAX\_LAYERS];}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00102}00102 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00103}00103     \textcolor{keywordtype}{void} addLayer(\textcolor{keywordtype}{char} *name, \textcolor{keywordtype}{bool} visible, \textcolor{keywordtype}{bool} frozen, EmbReal zValue,}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00104}00104         QRgb color, \textcolor{keywordtype}{char} *lineType, \textcolor{keywordtype}{char} *lineWeight, \textcolor{keywordtype}{bool} print);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00105}00105 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00106}00106     QStandardItemModel* layerModel;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00107}00107     QSortFilterProxyModel* layerModelSorted;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00108}00108     QTreeView* treeView;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00109}00109 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00110}00110 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00111}\mbox{\hyperlink{classMdiArea}{00111}} \textcolor{keyword}{class }\mbox{\hyperlink{classMdiArea}{MdiArea}}: \textcolor{keyword}{public} QMdiArea}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00112}00112 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00113}00113     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00114}00114 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00115}00115 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00116}00116     \mbox{\hyperlink{classMdiArea}{MdiArea}}(QWidget* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00117}00117     \mbox{\hyperlink{classMdiArea}{\string~MdiArea}}() \{\}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00118}00118 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00119}00119     \textcolor{keywordtype}{bool} useLogo;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00120}00120     \textcolor{keywordtype}{bool} useTexture;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00121}00121     \textcolor{keywordtype}{bool} useColor;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00122}00122 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00123}00123     QPixmap bgLogo;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00124}00124     QPixmap bgTexture;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00125}00125     QColor bgColor;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00126}00126 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00127}00127     \textcolor{keywordtype}{void} forceRepaint();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00128}00128 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00129}00129 \textcolor{keyword}{public} slots:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00130}00130     \textcolor{keywordtype}{void} cascade();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00131}00131     \textcolor{keywordtype}{void} tile();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00132}00132 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00133}00133     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} mouseDoubleClickEvent(QMouseEvent* e);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00134}00134     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} paintEvent(QPaintEvent* e);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00135}00135 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00136}00136 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00137}00137 \textcolor{comment}{/* . */}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00138}\mbox{\hyperlink{classDocument}{00138}} \textcolor{keyword}{class }\mbox{\hyperlink{classDocument}{Document}}: \textcolor{keyword}{public} QGraphicsView}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00139}00139 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00140}00140     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00141}00141 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00142}00142 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00143}00143     \mbox{\hyperlink{classDocument}{Document}}(QGraphicsScene* theScene, QWidget* parent);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00144}00144     \mbox{\hyperlink{classDocument}{\string~Document}}() \{ free\_doc(data-\/>id); \}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00145}00145 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00146}00146     \mbox{\hyperlink{structDocumentData__}{DocumentData}} *data;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00147}00147 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00148}00148     QVector<int64\_t> hashDeletedObjects;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00149}00149     QPainterPath gridPath;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00150}00150     QPainterPath originPath;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00151}00151 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00152}00152     QPainter* scene\_painter;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00153}00153 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00154}00154     \mbox{\hyperlink{classObject}{Object}}* gripBaseObj;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00155}00155 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00156}00156     QGraphicsScene* gscene;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00157}00157     QUndoStack* undoStack;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00158}00158 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00159}00159     \mbox{\hyperlink{classSelectBox}{SelectBox}}* selectBox;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00160}00160     QGraphicsItemGroup* pasteObjectItemGroup;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00161}00161 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00162}00162 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00163}00163     \textcolor{keywordtype}{void} mouseDoubleClickEvent(QMouseEvent* event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00164}00164     \textcolor{keywordtype}{void} mousePressEvent(QMouseEvent* event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00165}00165     \textcolor{keywordtype}{void} mouseMoveEvent(QMouseEvent* event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00166}00166     \textcolor{keywordtype}{void} mouseReleaseEvent(QMouseEvent* event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00167}00167     \textcolor{keywordtype}{void} wheelEvent(QWheelEvent* event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00168}00168     \textcolor{keywordtype}{void} contextMenuEvent(QContextMenuEvent* event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00169}00169     \textcolor{keywordtype}{void} drawBackground(QPainter* painter, \textcolor{keyword}{const} QRectF\& rect);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00170}00170     \textcolor{keywordtype}{void} draw\_rulers(QPainter* painter, \textcolor{keyword}{const} QRectF\& rect);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00171}00171     \textcolor{keywordtype}{void} drawForeground(QPainter* painter, \textcolor{keyword}{const} QRectF\& rect);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00172}00172     \textcolor{keywordtype}{void} enterEvent(QEvent* event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00173}00173 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00174}00174 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00175}00175 \textcolor{keyword}{extern} \mbox{\hyperlink{classDocument}{Document}} *documents[MAX\_OPEN\_FILES];}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00176}00176 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00177}\mbox{\hyperlink{classUndoableCommand}{00177}} \textcolor{keyword}{class }\mbox{\hyperlink{classUndoableCommand}{UndoableCommand}} : \textcolor{keyword}{public} QUndoCommand}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00178}00178 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00179}00179 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00180}00180     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, QString text, \mbox{\hyperlink{classObject}{Object}}* obj, int32\_t v,}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00181}00181         QUndoCommand* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00182}00182     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, EmbVector delta, QString text, \mbox{\hyperlink{classObject}{Object}}* obj,}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00183}00183         int32\_t v, QUndoCommand* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00184}00184     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, EmbVector pivot, EmbReal rotAngle, QString text,}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00185}00185         \mbox{\hyperlink{classObject}{Object}}* obj, int32\_t v, QUndoCommand* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00186}00186     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, QString type, int32\_t v, QUndoCommand* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00187}00187     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, EmbVector start, EmbVector end, QString text,}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00188}00188         \mbox{\hyperlink{classObject}{Object}}* obj, int32\_t v, QUndoCommand* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00189}00189 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00190}00190     \textcolor{keywordtype}{void} undo();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00191}00191     \textcolor{keywordtype}{void} redo();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00192}00192     \textcolor{keywordtype}{void} rotate(\textcolor{keywordtype}{double} x, EmbReal y, EmbReal rot);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00193}00193     \textcolor{keywordtype}{int} id()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} 1234; \}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00194}00194     \textcolor{keywordtype}{bool} mergeWith(\textcolor{keyword}{const} QUndoCommand* command);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00195}00195     \textcolor{keywordtype}{void} mirror();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00196}00196 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00197}00197     \mbox{\hyperlink{structUndoData__}{UndoData}} data;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00198}00198     \mbox{\hyperlink{classObject}{Object}} *object;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00199}00199     QTransform toTransform;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00200}00200     QTransform fromTransform;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00201}00201 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00202}00202 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00203}\mbox{\hyperlink{classUndoEditor}{00203}} \textcolor{keyword}{class }\mbox{\hyperlink{classUndoEditor}{UndoEditor}} : \textcolor{keyword}{public} QDockWidget}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00204}00204 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00205}00205     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00206}00206 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00207}00207 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00208}00208     \mbox{\hyperlink{classUndoEditor}{UndoEditor}}(QString iconDirectory = \textcolor{stringliteral}{"{}"{}}, QWidget* widgetToFocus = 0,}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00209}00209         QWidget* parent = 0); \textcolor{comment}{/*, Qt::WindowFlags flags = 0); */}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00210}00210     \mbox{\hyperlink{classUndoEditor}{\string~UndoEditor}}() \{\}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00211}00211 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00212}00212     \textcolor{keywordtype}{void} addStack(QUndoStack* stack);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00213}00213 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00214}00214     \textcolor{keywordtype}{bool} canUndo() \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00215}00215     \textcolor{keywordtype}{bool} canRedo() \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00216}00216 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00217}00217     QString undoText() \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00218}00218     QString redoText() \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00219}00219 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00220}00220 \textcolor{keyword}{public} slots:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00221}00221     \textcolor{keywordtype}{void} undo();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00222}00222     \textcolor{keywordtype}{void} redo();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00223}00223 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00224}00224     \textcolor{keywordtype}{void} updateCleanIcon(\textcolor{keywordtype}{bool} opened);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00225}00225 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00226}00226 \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00227}00227     QWidget* focusWidget;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00228}00228 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00229}00229     QString iconDir;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00230}00230     \textcolor{keywordtype}{int} iconSize;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00231}00231 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00232}00232     QUndoGroup* undoGroup;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00233}00233     QUndoView*  undoView;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00234}00234 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00235}00235 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00236}\mbox{\hyperlink{classPropertyEditor}{00236}} \textcolor{keyword}{class }\mbox{\hyperlink{classPropertyEditor}{PropertyEditor}}: \textcolor{keyword}{public} QDockWidget}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00237}00237 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00238}00238     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00239}00239 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00240}00240 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00241}00241     \mbox{\hyperlink{classPropertyEditor}{PropertyEditor}}(QString iconDirectory = \textcolor{stringliteral}{"{}"{}}, \textcolor{keywordtype}{bool} pickAddMode = \textcolor{keyword}{true},}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00242}00242         QWidget* widgetToFocus = 0, QWidget* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00243}00243         \textcolor{comment}{/*, Qt::WindowFlags flags = 0); */}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00244}00244     \mbox{\hyperlink{classPropertyEditor}{\string~PropertyEditor}}() \{\}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00245}00245 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00246}00246     \textcolor{keywordtype}{void} togglePickAddMode();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00247}00247 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00248}00248 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00249}00249     \textcolor{keywordtype}{bool} eventFilter(QObject *obj, QEvent *event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00250}00250 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00251}00251 signals:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00252}00252     \textcolor{keywordtype}{void} pick\_add\_mode\_toggled();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00253}00253 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00254}00254 \textcolor{keyword}{public} slots:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00255}00255     \textcolor{keywordtype}{void} setSelectedItems(QList<QGraphicsItem*> itemList);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00256}00256     \textcolor{keywordtype}{void} update\_pick\_add\_modeButton(\textcolor{keywordtype}{bool} pickAddMode);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00257}00257 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00258}00258 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00259}\mbox{\hyperlink{classMdiWindow}{00259}} \textcolor{keyword}{class }\mbox{\hyperlink{classMdiWindow}{MdiWindow}}: \textcolor{keyword}{public} QMdiSubWindow}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00260}00260 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00261}00261     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00262}00262 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00263}00263 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00264}00264     \mbox{\hyperlink{classMdiWindow}{MdiWindow}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} theIndex, QMdiArea* parent, Qt::WindowFlags wflags);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00265}00265     \mbox{\hyperlink{classMdiWindow}{\string~MdiWindow}}() \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00266}00266         debug\_message(\textcolor{stringliteral}{"{}MdiWindow Destructor()"{}});}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00267}00267         emb\_pattern\_free(documents[doc\_index]-\/>data-\/>pattern);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00268}00268     \}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00269}00269 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00270}00270     QMdiArea* mdiArea;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00271}00271     QGraphicsScene* gscene;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00272}00272     int32\_t doc\_index;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00273}00273 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00274}00274     QPrinter printer;}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00275}00275 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00276}00276     \textcolor{keyword}{virtual} QSize sizeHint() \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00277}00277     QString getShortCurrentFile();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00278}00278     \textcolor{keywordtype}{bool} loadFile(\textcolor{keywordtype}{char} *fileName);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00279}00279 signals:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00280}00280     \textcolor{keywordtype}{void} sendCloseMdiWin(\mbox{\hyperlink{classMdiWindow}{MdiWindow}}*);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00281}00281 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00282}00282 \textcolor{keyword}{public} slots:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00283}00283     \textcolor{keywordtype}{void} closeEvent(QCloseEvent* e);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00284}00284     \textcolor{keywordtype}{void} onWindowActivated();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00285}00285 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00286}00286     \textcolor{keywordtype}{void} print();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00287}00287     \textcolor{keywordtype}{void} saveBMC();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00288}00288 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00289}00289 \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00290}00290     \textcolor{keywordtype}{void} setCurrentFile(\textcolor{keywordtype}{char} *fileName);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00291}00291 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00292}00292 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00293}00293 \textcolor{comment}{/* On Mac, if the user drops a file on the app's Dock icon, or uses Open As,}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00294}00294 \textcolor{comment}{ * then this is how the app actually opens the file.}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00295}00295 \textcolor{comment}{ */}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00296}\mbox{\hyperlink{classApplication}{00296}} \textcolor{keyword}{class }\mbox{\hyperlink{classApplication}{Application}} : \textcolor{keyword}{public} QApplication}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00297}00297 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00298}00298     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00299}00299 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00300}00300     \mbox{\hyperlink{classApplication}{Application}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} **argv);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00301}00301 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00302}00302     \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} event(QEvent *e);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00303}00303 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00304}00304 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00305}\mbox{\hyperlink{classCmdPromptInput}{00305}} \textcolor{keyword}{class }\mbox{\hyperlink{classCmdPromptInput}{CmdPromptInput}}: \textcolor{keyword}{public} QLineEdit}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00306}00306 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00307}00307     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00308}00308 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00309}00309 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00310}00310     \mbox{\hyperlink{classCmdPromptInput}{CmdPromptInput}}(QWidget* parent = 0);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00311}00311     \mbox{\hyperlink{classCmdPromptInput}{\string~CmdPromptInput}}() \{\}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00312}00312 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00313}00313 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00314}00314     \textcolor{keywordtype}{void} contextMenuEvent(QContextMenuEvent *event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00315}00315     \textcolor{keywordtype}{bool} eventFilter(QObject *obj, QEvent *event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00316}00316 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00317}00317 \textcolor{keyword}{public} slots:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00318}00318     \textcolor{keywordtype}{void} checkSelection();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00319}00319     \textcolor{keywordtype}{void} updateCurrentText(QString txt);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00320}00320     \textcolor{keywordtype}{void} checkEditedText(QString txt);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00321}00321     \textcolor{keywordtype}{void} checkChangedText(QString txt);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00322}00322     \textcolor{keywordtype}{void} checkCursorPosition(\textcolor{keywordtype}{int} oldpos, \textcolor{keywordtype}{int} newpos);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00323}00323 \textcolor{keyword}{private} slots:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00324}00324     \textcolor{keywordtype}{void} copyClip();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00325}00325     \textcolor{keywordtype}{void} pasteClip();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00326}00326 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00327}00327 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00328}\mbox{\hyperlink{classMainWindow}{00328}} \textcolor{keyword}{class }\mbox{\hyperlink{classMainWindow}{MainWindow}}: \textcolor{keyword}{public} QMainWindow}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00329}00329 \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00330}00330     Q\_OBJECT}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00331}00331 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00332}00332 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00333}00333     \mbox{\hyperlink{classMainWindow}{MainWindow}}();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00334}00334     \mbox{\hyperlink{classMainWindow}{\string~MainWindow}}() \{}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00335}00335         debug\_message(\textcolor{stringliteral}{"{}Destructor()"{}});}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00336}00336 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00337}00337         \textcolor{comment}{/* Prevent memory leaks by deleting any unpasted objects. */}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00338}00338         free\_objects(cutCopyObjectList);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00339}00339         free\_id\_list(cutCopyObjectList);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00340}00340     \}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00341}00341 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00342}00342     \textcolor{keywordtype}{void} add\_toolbar\_to\_window(Qt::ToolBarArea area, \textcolor{keywordtype}{int} data[]);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00343}00343 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00344}00344 \textcolor{keyword}{public} slots:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00345}00345     \textcolor{keywordtype}{void} recentMenuAboutToShow();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00346}00346     \textcolor{keywordtype}{void} windowMenuActivated(\textcolor{keywordtype}{bool} checked \textcolor{comment}{/*, int id*/});}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00347}00347 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00348}00348     \textcolor{keywordtype}{void} closeToolBar(QAction*);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00349}00349     \textcolor{keywordtype}{void} floatingChangedToolBar(\textcolor{keywordtype}{bool});}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00350}00350 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00351}00351     \textcolor{keywordtype}{void} runCommand();}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00352}00352 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00353}00353     \textcolor{keywordtype}{void} colorSelectorIndexChanged(\textcolor{keywordtype}{int} index);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00354}00354 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00355}00355 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00356}00356     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} resizeEvent(QResizeEvent*);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00357}00357     \textcolor{keywordtype}{void} closeEvent(QCloseEvent *event);}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00358}00358 \};}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00359}00359 }
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00360}00360 \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{\Hypertarget{qt_8h_source_l00361}00361 }
+\DoxyCodeLine{1 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef EMBROIDERMODDER\_GUI\_HEADER}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define EMBROIDERMODDER\_GUI\_HEADER}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}core.h"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include <QAction>}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#include <QApplication>}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include <QGraphicsPathItem>}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#include <QtPrintSupport>}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 \textcolor{keyword}{class }\mbox{\hyperlink{classObject}{Object}}: \textcolor{keyword}{public} QGraphicsPathItem}
+\DoxyCodeLine{26 \{}
+\DoxyCodeLine{27 \textcolor{keyword}{public}:}
+\DoxyCodeLine{28     \mbox{\hyperlink{structObjectCore__}{ObjectCore}} *core;}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30     QGraphicsPathItem path\_;}
+\DoxyCodeLine{31     QPen objPen;}
+\DoxyCodeLine{32     QPen lwtPen;}
+\DoxyCodeLine{33     QLineF objLine;}
+\DoxyCodeLine{34     QPainter* obj\_painter;}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36     QPainterPath textPath;}
+\DoxyCodeLine{37     QPainterPath lineStylePath;}
+\DoxyCodeLine{38     QPainterPath arrowStylePath;}
+\DoxyCodeLine{39     QPainterPath normalPath;}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41     \mbox{\hyperlink{classObject}{Object}}(\textcolor{keywordtype}{int} type\_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);}
+\DoxyCodeLine{42     \mbox{\hyperlink{classObject}{\string~Object}}() \{ free\_object(core); \}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44     \textcolor{keywordtype}{void} gripEdit(EmbVector before, EmbVector after);}
+\DoxyCodeLine{45     QPainterPath shape()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} path(); \}}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47     \textcolor{keywordtype}{void} drawRubberLine(QLineF rubLine, QPainter* painter = 0, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* colorFromScene = 0);}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49     \textcolor{keywordtype}{void} setObjectSize(\textcolor{keywordtype}{double} width, EmbReal height);}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51     QPainterPath objectCopyPath() \textcolor{keyword}{const};}
+\DoxyCodeLine{52     QPainterPath objectSavePath() \textcolor{keyword}{const};}
+\DoxyCodeLine{53     QList<QPainterPath> objectSavePathList()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} subPathList(); \}}
+\DoxyCodeLine{54     QList<QPainterPath> subPathList() \textcolor{keyword}{const};}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{56 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{57     \textcolor{keywordtype}{void} paint(QPainter*, \textcolor{keyword}{const} QStyleOptionGraphicsItem*, QWidget*);}
+\DoxyCodeLine{58 \};}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60 \textcolor{keyword}{class }\mbox{\hyperlink{classSelectBox}{SelectBox}}: \textcolor{keyword}{public} QRubberBand}
+\DoxyCodeLine{61 \{}
+\DoxyCodeLine{62     Q\_OBJECT}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64 \textcolor{keyword}{public}:}
+\DoxyCodeLine{65     \mbox{\hyperlink{classSelectBox}{SelectBox}}(Shape s, QWidget* parent = 0);}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 \textcolor{keyword}{public} slots:}
+\DoxyCodeLine{68     \textcolor{keywordtype}{void} setDirection(\textcolor{keywordtype}{int} dir);}
+\DoxyCodeLine{69     \textcolor{keywordtype}{void} setColors(\textcolor{keyword}{const} QColor\& colorL, \textcolor{keyword}{const} QColor\& fillL, \textcolor{keyword}{const} QColor\& colorR, \textcolor{keyword}{const} QColor\& fillR, \textcolor{keywordtype}{int} newAlpha);}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{72     \textcolor{keywordtype}{void} paintEvent(QPaintEvent*);}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74 \textcolor{keyword}{private}:}
+\DoxyCodeLine{75     QColor leftBrushColor;}
+\DoxyCodeLine{76     QColor rightBrushColor;}
+\DoxyCodeLine{77     QColor leftPenColor;}
+\DoxyCodeLine{78     QColor rightPenColor;}
+\DoxyCodeLine{79     uint8\_t alpha;}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81     QBrush dirBrush;}
+\DoxyCodeLine{82     QBrush leftBrush;}
+\DoxyCodeLine{83     QBrush rightBrush;}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85     QPen dirPen;}
+\DoxyCodeLine{86     QPen leftPen;}
+\DoxyCodeLine{87     QPen rightPen;}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89     \textcolor{keywordtype}{bool} boxDir;}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91     \textcolor{keywordtype}{void} forceRepaint();}
+\DoxyCodeLine{92 \};}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94 \textcolor{keyword}{class }\mbox{\hyperlink{classLayerManager}{LayerManager}}: \textcolor{keyword}{public} QDialog}
+\DoxyCodeLine{95 \{}
+\DoxyCodeLine{96     Q\_OBJECT}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98 \textcolor{keyword}{public}:}
+\DoxyCodeLine{99     \mbox{\hyperlink{classLayerManager}{LayerManager}}(QWidget *parent = 0);}
+\DoxyCodeLine{100     \mbox{\hyperlink{classLayerManager}{\string~LayerManager}}() \{ restore\_cursor(); \}}
+\DoxyCodeLine{101     \mbox{\hyperlink{structLayerData__}{LayerData}} data[MAX\_LAYERS];}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103     \textcolor{keywordtype}{void} addLayer(\textcolor{keywordtype}{char} *name, \textcolor{keywordtype}{bool} visible, \textcolor{keywordtype}{bool} frozen, EmbReal zValue,}
+\DoxyCodeLine{104         QRgb color, \textcolor{keywordtype}{char} *lineType, \textcolor{keywordtype}{char} *lineWeight, \textcolor{keywordtype}{bool} print);}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106     QStandardItemModel* layerModel;}
+\DoxyCodeLine{107     QSortFilterProxyModel* layerModelSorted;}
+\DoxyCodeLine{108     QTreeView* treeView;}
+\DoxyCodeLine{109 \};}
+\DoxyCodeLine{110 }
+\DoxyCodeLine{111 \textcolor{keyword}{class }\mbox{\hyperlink{classMdiArea}{MdiArea}}: \textcolor{keyword}{public} QMdiArea}
+\DoxyCodeLine{112 \{}
+\DoxyCodeLine{113     Q\_OBJECT}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115 \textcolor{keyword}{public}:}
+\DoxyCodeLine{116     \mbox{\hyperlink{classMdiArea}{MdiArea}}(QWidget* parent = 0);}
+\DoxyCodeLine{117     \mbox{\hyperlink{classMdiArea}{\string~MdiArea}}() \{\}}
+\DoxyCodeLine{118 }
+\DoxyCodeLine{119     \textcolor{keywordtype}{bool} useLogo;}
+\DoxyCodeLine{120     \textcolor{keywordtype}{bool} useTexture;}
+\DoxyCodeLine{121     \textcolor{keywordtype}{bool} useColor;}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123     QPixmap bgLogo;}
+\DoxyCodeLine{124     QPixmap bgTexture;}
+\DoxyCodeLine{125     QColor bgColor;}
+\DoxyCodeLine{126 }
+\DoxyCodeLine{127     \textcolor{keywordtype}{void} forceRepaint();}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{129 \textcolor{keyword}{public} slots:}
+\DoxyCodeLine{130     \textcolor{keywordtype}{void} cascade();}
+\DoxyCodeLine{131     \textcolor{keywordtype}{void} tile();}
+\DoxyCodeLine{132 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{133     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} mouseDoubleClickEvent(QMouseEvent* e);}
+\DoxyCodeLine{134     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} paintEvent(QPaintEvent* e);}
+\DoxyCodeLine{135 \};}
+\DoxyCodeLine{136 }
+\DoxyCodeLine{137 \textcolor{comment}{/* . */}}
+\DoxyCodeLine{138 \textcolor{keyword}{class }\mbox{\hyperlink{classDocument}{Document}}: \textcolor{keyword}{public} QGraphicsView}
+\DoxyCodeLine{139 \{}
+\DoxyCodeLine{140     Q\_OBJECT}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142 \textcolor{keyword}{public}:}
+\DoxyCodeLine{143     \mbox{\hyperlink{classDocument}{Document}}(QGraphicsScene* theScene, QWidget* parent);}
+\DoxyCodeLine{144     \mbox{\hyperlink{classDocument}{\string~Document}}() \{ free\_doc(data-\/>id); \}}
+\DoxyCodeLine{145 }
+\DoxyCodeLine{146     \mbox{\hyperlink{structDocumentData__}{DocumentData}} *data;}
+\DoxyCodeLine{147 }
+\DoxyCodeLine{148     QVector<int64\_t> hashDeletedObjects;}
+\DoxyCodeLine{149     QPainterPath gridPath;}
+\DoxyCodeLine{150     QPainterPath originPath;}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{152     QPainter* scene\_painter;}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154     \mbox{\hyperlink{classObject}{Object}}* gripBaseObj;}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156     QGraphicsScene* gscene;}
+\DoxyCodeLine{157     QUndoStack* undoStack;}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159     \mbox{\hyperlink{classSelectBox}{SelectBox}}* selectBox;}
+\DoxyCodeLine{160     QGraphicsItemGroup* pasteObjectItemGroup;}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{163     \textcolor{keywordtype}{void} mouseDoubleClickEvent(QMouseEvent* event);}
+\DoxyCodeLine{164     \textcolor{keywordtype}{void} mousePressEvent(QMouseEvent* event);}
+\DoxyCodeLine{165     \textcolor{keywordtype}{void} mouseMoveEvent(QMouseEvent* event);}
+\DoxyCodeLine{166     \textcolor{keywordtype}{void} mouseReleaseEvent(QMouseEvent* event);}
+\DoxyCodeLine{167     \textcolor{keywordtype}{void} wheelEvent(QWheelEvent* event);}
+\DoxyCodeLine{168     \textcolor{keywordtype}{void} contextMenuEvent(QContextMenuEvent* event);}
+\DoxyCodeLine{169     \textcolor{keywordtype}{void} drawBackground(QPainter* painter, \textcolor{keyword}{const} QRectF\& rect);}
+\DoxyCodeLine{170     \textcolor{keywordtype}{void} draw\_rulers(QPainter* painter, \textcolor{keyword}{const} QRectF\& rect);}
+\DoxyCodeLine{171     \textcolor{keywordtype}{void} drawForeground(QPainter* painter, \textcolor{keyword}{const} QRectF\& rect);}
+\DoxyCodeLine{172     \textcolor{keywordtype}{void} enterEvent(QEvent* event);}
+\DoxyCodeLine{173 \};}
+\DoxyCodeLine{174 }
+\DoxyCodeLine{175 \textcolor{keyword}{extern} \mbox{\hyperlink{classDocument}{Document}} *documents[MAX\_OPEN\_FILES];}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177 \textcolor{keyword}{class }\mbox{\hyperlink{classUndoableCommand}{UndoableCommand}} : \textcolor{keyword}{public} QUndoCommand}
+\DoxyCodeLine{178 \{}
+\DoxyCodeLine{179 \textcolor{keyword}{public}:}
+\DoxyCodeLine{180     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, QString text, \mbox{\hyperlink{classObject}{Object}}* obj, int32\_t v,}
+\DoxyCodeLine{181         QUndoCommand* parent = 0);}
+\DoxyCodeLine{182     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, EmbVector delta, QString text, \mbox{\hyperlink{classObject}{Object}}* obj,}
+\DoxyCodeLine{183         int32\_t v, QUndoCommand* parent = 0);}
+\DoxyCodeLine{184     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, EmbVector pivot, EmbReal rotAngle, QString text,}
+\DoxyCodeLine{185         \mbox{\hyperlink{classObject}{Object}}* obj, int32\_t v, QUndoCommand* parent = 0);}
+\DoxyCodeLine{186     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, QString type, int32\_t v, QUndoCommand* parent = 0);}
+\DoxyCodeLine{187     \mbox{\hyperlink{classUndoableCommand}{UndoableCommand}}(\textcolor{keywordtype}{int} type\_, EmbVector start, EmbVector end, QString text,}
+\DoxyCodeLine{188         \mbox{\hyperlink{classObject}{Object}}* obj, int32\_t v, QUndoCommand* parent = 0);}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190     \textcolor{keywordtype}{void} undo();}
+\DoxyCodeLine{191     \textcolor{keywordtype}{void} redo();}
+\DoxyCodeLine{192     \textcolor{keywordtype}{void} rotate(\textcolor{keywordtype}{double} x, EmbReal y, EmbReal rot);}
+\DoxyCodeLine{193     \textcolor{keywordtype}{int} id()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} 1234; \}}
+\DoxyCodeLine{194     \textcolor{keywordtype}{bool} mergeWith(\textcolor{keyword}{const} QUndoCommand* command);}
+\DoxyCodeLine{195     \textcolor{keywordtype}{void} mirror();}
+\DoxyCodeLine{196 }
+\DoxyCodeLine{197     \mbox{\hyperlink{structUndoData__}{UndoData}} data;}
+\DoxyCodeLine{198     \mbox{\hyperlink{classObject}{Object}} *object;}
+\DoxyCodeLine{199     QTransform toTransform;}
+\DoxyCodeLine{200     QTransform fromTransform;}
+\DoxyCodeLine{201 \};}
+\DoxyCodeLine{202 }
+\DoxyCodeLine{203 \textcolor{keyword}{class }\mbox{\hyperlink{classUndoEditor}{UndoEditor}} : \textcolor{keyword}{public} QDockWidget}
+\DoxyCodeLine{204 \{}
+\DoxyCodeLine{205     Q\_OBJECT}
+\DoxyCodeLine{206 }
+\DoxyCodeLine{207 \textcolor{keyword}{public}:}
+\DoxyCodeLine{208     \mbox{\hyperlink{classUndoEditor}{UndoEditor}}(QString iconDirectory = \textcolor{stringliteral}{"{}"{}}, QWidget* widgetToFocus = 0,}
+\DoxyCodeLine{209         QWidget* parent = 0); \textcolor{comment}{/*, Qt::WindowFlags flags = 0); */}}
+\DoxyCodeLine{210     \mbox{\hyperlink{classUndoEditor}{\string~UndoEditor}}() \{\}}
+\DoxyCodeLine{211 }
+\DoxyCodeLine{212     \textcolor{keywordtype}{void} addStack(QUndoStack* stack);}
+\DoxyCodeLine{213 }
+\DoxyCodeLine{214     \textcolor{keywordtype}{bool} canUndo() \textcolor{keyword}{const};}
+\DoxyCodeLine{215     \textcolor{keywordtype}{bool} canRedo() \textcolor{keyword}{const};}
+\DoxyCodeLine{216 }
+\DoxyCodeLine{217     QString undoText() \textcolor{keyword}{const};}
+\DoxyCodeLine{218     QString redoText() \textcolor{keyword}{const};}
+\DoxyCodeLine{219 }
+\DoxyCodeLine{220 \textcolor{keyword}{public} slots:}
+\DoxyCodeLine{221     \textcolor{keywordtype}{void} undo();}
+\DoxyCodeLine{222     \textcolor{keywordtype}{void} redo();}
+\DoxyCodeLine{223 }
+\DoxyCodeLine{224     \textcolor{keywordtype}{void} updateCleanIcon(\textcolor{keywordtype}{bool} opened);}
+\DoxyCodeLine{225 }
+\DoxyCodeLine{226 \textcolor{keyword}{private}:}
+\DoxyCodeLine{227     QWidget* focusWidget;}
+\DoxyCodeLine{228 }
+\DoxyCodeLine{229     QString iconDir;}
+\DoxyCodeLine{230     \textcolor{keywordtype}{int} iconSize;}
+\DoxyCodeLine{231 }
+\DoxyCodeLine{232     QUndoGroup* undoGroup;}
+\DoxyCodeLine{233     QUndoView*  undoView;}
+\DoxyCodeLine{234 \};}
+\DoxyCodeLine{235 }
+\DoxyCodeLine{236 \textcolor{keyword}{class }\mbox{\hyperlink{classPropertyEditor}{PropertyEditor}}: \textcolor{keyword}{public} QDockWidget}
+\DoxyCodeLine{237 \{}
+\DoxyCodeLine{238     Q\_OBJECT}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240 \textcolor{keyword}{public}:}
+\DoxyCodeLine{241     \mbox{\hyperlink{classPropertyEditor}{PropertyEditor}}(QString iconDirectory = \textcolor{stringliteral}{"{}"{}}, \textcolor{keywordtype}{bool} pickAddMode = \textcolor{keyword}{true},}
+\DoxyCodeLine{242         QWidget* widgetToFocus = 0, QWidget* parent = 0);}
+\DoxyCodeLine{243         \textcolor{comment}{/*, Qt::WindowFlags flags = 0); */}}
+\DoxyCodeLine{244     \mbox{\hyperlink{classPropertyEditor}{\string~PropertyEditor}}() \{\}}
+\DoxyCodeLine{245 }
+\DoxyCodeLine{246     \textcolor{keywordtype}{void} togglePickAddMode();}
+\DoxyCodeLine{247 }
+\DoxyCodeLine{248 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{249     \textcolor{keywordtype}{bool} eventFilter(QObject *obj, QEvent *event);}
+\DoxyCodeLine{250 }
+\DoxyCodeLine{251 signals:}
+\DoxyCodeLine{252     \textcolor{keywordtype}{void} pick\_add\_mode\_toggled();}
+\DoxyCodeLine{253 }
+\DoxyCodeLine{254 \textcolor{keyword}{public} slots:}
+\DoxyCodeLine{255     \textcolor{keywordtype}{void} setSelectedItems(QList<QGraphicsItem*> itemList);}
+\DoxyCodeLine{256     \textcolor{keywordtype}{void} update\_pick\_add\_modeButton(\textcolor{keywordtype}{bool} pickAddMode);}
+\DoxyCodeLine{257 \};}
+\DoxyCodeLine{258 }
+\DoxyCodeLine{259 \textcolor{keyword}{class }\mbox{\hyperlink{classMdiWindow}{MdiWindow}}: \textcolor{keyword}{public} QMdiSubWindow}
+\DoxyCodeLine{260 \{}
+\DoxyCodeLine{261     Q\_OBJECT}
+\DoxyCodeLine{262 }
+\DoxyCodeLine{263 \textcolor{keyword}{public}:}
+\DoxyCodeLine{264     \mbox{\hyperlink{classMdiWindow}{MdiWindow}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} theIndex, QMdiArea* parent, Qt::WindowFlags wflags);}
+\DoxyCodeLine{265     \mbox{\hyperlink{classMdiWindow}{\string~MdiWindow}}() \{}
+\DoxyCodeLine{266         debug\_message(\textcolor{stringliteral}{"{}MdiWindow Destructor()"{}});}
+\DoxyCodeLine{267         emb\_pattern\_free(documents[doc\_index]-\/>data-\/>pattern);}
+\DoxyCodeLine{268     \}}
+\DoxyCodeLine{269 }
+\DoxyCodeLine{270     QMdiArea* mdiArea;}
+\DoxyCodeLine{271     QGraphicsScene* gscene;}
+\DoxyCodeLine{272     int32\_t doc\_index;}
+\DoxyCodeLine{273 }
+\DoxyCodeLine{274     QPrinter printer;}
+\DoxyCodeLine{275 }
+\DoxyCodeLine{276     \textcolor{keyword}{virtual} QSize sizeHint() \textcolor{keyword}{const};}
+\DoxyCodeLine{277     QString getShortCurrentFile();}
+\DoxyCodeLine{278     \textcolor{keywordtype}{bool} loadFile(\textcolor{keywordtype}{char} *fileName);}
+\DoxyCodeLine{279 signals:}
+\DoxyCodeLine{280     \textcolor{keywordtype}{void} sendCloseMdiWin(\mbox{\hyperlink{classMdiWindow}{MdiWindow}}*);}
+\DoxyCodeLine{281 }
+\DoxyCodeLine{282 \textcolor{keyword}{public} slots:}
+\DoxyCodeLine{283     \textcolor{keywordtype}{void} closeEvent(QCloseEvent* e);}
+\DoxyCodeLine{284     \textcolor{keywordtype}{void} onWindowActivated();}
+\DoxyCodeLine{285 }
+\DoxyCodeLine{286     \textcolor{keywordtype}{void} print();}
+\DoxyCodeLine{287     \textcolor{keywordtype}{void} saveBMC();}
+\DoxyCodeLine{288 }
+\DoxyCodeLine{289 \textcolor{keyword}{private}:}
+\DoxyCodeLine{290     \textcolor{keywordtype}{void} setCurrentFile(\textcolor{keywordtype}{char} *fileName);}
+\DoxyCodeLine{291 \};}
+\DoxyCodeLine{292 }
+\DoxyCodeLine{293 \textcolor{comment}{/* On Mac, if the user drops a file on the app's Dock icon, or uses Open As,}}
+\DoxyCodeLine{294 \textcolor{comment}{ * then this is how the app actually opens the file.}}
+\DoxyCodeLine{295 \textcolor{comment}{ */}}
+\DoxyCodeLine{296 \textcolor{keyword}{class }\mbox{\hyperlink{classApplication}{Application}} : \textcolor{keyword}{public} QApplication}
+\DoxyCodeLine{297 \{}
+\DoxyCodeLine{298     Q\_OBJECT}
+\DoxyCodeLine{299 \textcolor{keyword}{public}:}
+\DoxyCodeLine{300     \mbox{\hyperlink{classApplication}{Application}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char} **argv);}
+\DoxyCodeLine{301 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{302     \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} event(QEvent *e);}
+\DoxyCodeLine{303 \};}
+\DoxyCodeLine{304 }
+\DoxyCodeLine{305 \textcolor{keyword}{class }\mbox{\hyperlink{classCmdPromptInput}{CmdPromptInput}}: \textcolor{keyword}{public} QLineEdit}
+\DoxyCodeLine{306 \{}
+\DoxyCodeLine{307     Q\_OBJECT}
+\DoxyCodeLine{308 }
+\DoxyCodeLine{309 \textcolor{keyword}{public}:}
+\DoxyCodeLine{310     \mbox{\hyperlink{classCmdPromptInput}{CmdPromptInput}}(QWidget* parent = 0);}
+\DoxyCodeLine{311     \mbox{\hyperlink{classCmdPromptInput}{\string~CmdPromptInput}}() \{\}}
+\DoxyCodeLine{312 }
+\DoxyCodeLine{313 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{314     \textcolor{keywordtype}{void} contextMenuEvent(QContextMenuEvent *event);}
+\DoxyCodeLine{315     \textcolor{keywordtype}{bool} eventFilter(QObject *obj, QEvent *event);}
+\DoxyCodeLine{316 }
+\DoxyCodeLine{317 \textcolor{keyword}{public} slots:}
+\DoxyCodeLine{318     \textcolor{keywordtype}{void} checkSelection();}
+\DoxyCodeLine{319     \textcolor{keywordtype}{void} updateCurrentText(QString txt);}
+\DoxyCodeLine{320     \textcolor{keywordtype}{void} checkEditedText(QString txt);}
+\DoxyCodeLine{321     \textcolor{keywordtype}{void} checkChangedText(QString txt);}
+\DoxyCodeLine{322     \textcolor{keywordtype}{void} checkCursorPosition(\textcolor{keywordtype}{int} oldpos, \textcolor{keywordtype}{int} newpos);}
+\DoxyCodeLine{323 \textcolor{keyword}{private} slots:}
+\DoxyCodeLine{324     \textcolor{keywordtype}{void} copyClip();}
+\DoxyCodeLine{325     \textcolor{keywordtype}{void} pasteClip();}
+\DoxyCodeLine{326 \};}
+\DoxyCodeLine{327 }
+\DoxyCodeLine{328 \textcolor{keyword}{class }\mbox{\hyperlink{classMainWindow}{MainWindow}}: \textcolor{keyword}{public} QMainWindow}
+\DoxyCodeLine{329 \{}
+\DoxyCodeLine{330     Q\_OBJECT}
+\DoxyCodeLine{331 }
+\DoxyCodeLine{332 \textcolor{keyword}{public}:}
+\DoxyCodeLine{333     \mbox{\hyperlink{classMainWindow}{MainWindow}}();}
+\DoxyCodeLine{334     \mbox{\hyperlink{classMainWindow}{\string~MainWindow}}() \{}
+\DoxyCodeLine{335         debug\_message(\textcolor{stringliteral}{"{}Destructor()"{}});}
+\DoxyCodeLine{336 }
+\DoxyCodeLine{337         \textcolor{comment}{/* Prevent memory leaks by deleting any unpasted objects. */}}
+\DoxyCodeLine{338         free\_objects(cutCopyObjectList);}
+\DoxyCodeLine{339         free\_id\_list(cutCopyObjectList);}
+\DoxyCodeLine{340     \}}
+\DoxyCodeLine{341 }
+\DoxyCodeLine{342     \textcolor{keywordtype}{void} add\_toolbar\_to\_window(Qt::ToolBarArea area, \textcolor{keywordtype}{int} data[]);}
+\DoxyCodeLine{343 }
+\DoxyCodeLine{344 \textcolor{keyword}{public} slots:}
+\DoxyCodeLine{345     \textcolor{keywordtype}{void} recentMenuAboutToShow();}
+\DoxyCodeLine{346     \textcolor{keywordtype}{void} windowMenuActivated(\textcolor{keywordtype}{bool} checked \textcolor{comment}{/*, int id*/});}
+\DoxyCodeLine{347 }
+\DoxyCodeLine{348     \textcolor{keywordtype}{void} closeToolBar(QAction*);}
+\DoxyCodeLine{349     \textcolor{keywordtype}{void} floatingChangedToolBar(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{350 }
+\DoxyCodeLine{351     \textcolor{keywordtype}{void} runCommand();}
+\DoxyCodeLine{352 }
+\DoxyCodeLine{353     \textcolor{keywordtype}{void} colorSelectorIndexChanged(\textcolor{keywordtype}{int} index);}
+\DoxyCodeLine{354 }
+\DoxyCodeLine{355 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{356     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} resizeEvent(QResizeEvent*);}
+\DoxyCodeLine{357     \textcolor{keywordtype}{void} closeEvent(QCloseEvent *event);}
+\DoxyCodeLine{358 \};}
+\DoxyCodeLine{359 }
+\DoxyCodeLine{360 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{361 }
 
 \end{DoxyCode}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2025.1.25)  3 JUN 2025 14:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2025.1.25)  10 JUN 2025 17:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -874,102 +874,21 @@ LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 (Font)              scaled to size 6.29996pt on input line 169.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 6.29996pt on input line 169.
- [1] [2] [3]
+ [1]
 Package hyperref Info: Option `pageanchor' set `true' on input line 171.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 12.9599pt on input line 173.
 
-(./md_docs_CODE_OF_CONDUCT.tex
-LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 1.
- [1]
-LaTeX Font Info:    Trying to load font information for TS1+phv on input line 9
+(./md_LICENSE.tex
+LaTeX Font Info:    Trying to load font information for TS1+phv on input line 3
 .
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1phv.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1phv.fd
 File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
 )
 LaTeX Font Info:    Font shape `TS1/phv/m/n' will be
-(Font)              scaled to size 8.99994pt on input line 9.
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 30
-.
+(Font)              scaled to size 8.99994pt on input line 3.
 
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-) [2]
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 4
-8.
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1pcr.fd
-File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
-)
-Underfull \hbox (badness 7047) in paragraph at lines 48--49
-[]\T1/phv/m/n/10 Community Im-pact Guide-lines were in-spired by [][] \T1/pcr/m
-/n/10 Mozilla\TS1/pcr/m/n/10 '\T1/pcr/m/n/10 s code of conduct enforcement
- []
-
-)
-Underfull \hbox (badness 1888) in paragraph at lines 50--177
-[]\T1/phv/m/n/10 For an-swers to com-mon ques-tions about this code of con-duct
-, see the FAQ at [][] \T1/pcr/m/n/10 https[]://www.[]
- []
-
-
-Overfull \hbox (42.05121pt too wide) in paragraph at lines 50--177
-\T1/pcr/m/n/10 contributor-covenant.[]org/faq[][]\T1/phv/m/n/10 . Trans-la-tion
-s are avail-able at [][] \T1/pcr/m/n/10 https[]://www.[]contributor-covenant.[]
-
- []
-
-(./md_docs_man_CODE_OF_CONDUCT.tex [3] [4] [5]
-Underfull \hbox (badness 7047) in paragraph at lines 48--49
-[]\T1/phv/m/n/10 Community Im-pact Guide-lines were in-spired by [][] \T1/pcr/m
-/n/10 Mozilla\TS1/pcr/m/n/10 '\T1/pcr/m/n/10 s code of conduct enforcement
- []
-
-)
-Underfull \hbox (badness 1888) in paragraph at lines 50--181
-[]\T1/phv/m/n/10 For an-swers to com-mon ques-tions about this code of con-duct
-, see the FAQ at [][] \T1/pcr/m/n/10 https[]://www.[]
- []
-
-
-Overfull \hbox (42.05121pt too wide) in paragraph at lines 50--181
-\T1/pcr/m/n/10 contributor-covenant.[]org/faq[][]\T1/phv/m/n/10 . Trans-la-tion
-s are avail-able at [][] \T1/pcr/m/n/10 https[]://www.[]contributor-covenant.[]
-
- []
-
-(./md_docs_man_fonts_source_code_pro_license.tex
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 8.
-
-[6]) (./md_docs_man_fonts_source_code_pro_readme.tex [7])
-(./md_docs_man_fonts_source_sans_license.tex
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 8.
-
-) (./md_docs_man_fonts_source_sans_readme.tex [8])
-(./md_docs_man_images_credits.tex) (./md_docs_man_LICENSE.tex [9] [10] [11]
-[12]
-LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 7.19995pt on input line 103.
- [13]) (./md_docs_man_privacy_policy.tex
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 9.
-
-) (./md_docs_man_README.tex) (./md_docs_man_samples_index.tex [14])
-(./md_docs_privacy_policy.tex
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 9.
-
-) (./md_docs_refman_images_credits.tex) (./md_docs_refman_license.tex [15]
-[16] [17] [18] [19]) (./md_docs_refman_README.tex [20])
-(./md_docs_samples_README.tex) (./md_LICENSE.tex) (./md_README.tex
+[1]) (./md_README.tex
 LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10> not available
 (Font)              Font shape `T1/phv/m/sl' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
@@ -978,154 +897,171 @@ LaTeX Font Info:    Font shape `T1/phv/m/it' in size <7> not available
 (Font)              Font shape `T1/phv/m/sl' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
 (Font)              scaled to size 6.29996pt on input line 1.
- [21]
-[22]) (./md_thumbnailer_README.tex) (./todo.tex) (./hierarchy.tex [23])
-(./annotated.tex [24]) (./files.tex) (./classApplication.tex <./classApplicatio
-n.pdf>
-<classApplication.pdf, id=1292, 501.875pt x 431.7229pt>
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 3.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+)
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 10.79993pt on input line 16.
+[2]) (./md_thumbnailer_README.tex) [3] (./todo.tex) (./hierarchy.tex [4])
+(./annotated.tex [5]) (./files.tex [6]) (./classApplication.tex <./classApplica
+tion.pdf>
+<classApplication.pdf, id=563, 501.875pt x 431.7229pt>
 File: classApplication.pdf Graphic file (type pdf)
 <use classApplication.pdf>
 Package pdftex.def Info: classApplication.pdf  used on input line 6.
 (pdftex.def)             Requested size: 66.14967pt x 56.9055pt.
- [25]) (./structButton__.tex) (./classCmdPromptInput.tex <./classCmdPromptInput
-.pdf>
-<classCmdPromptInput.pdf, id=1327, 501.875pt x 361.71133pt>
+) (./structButton__.tex) (./classCmdPromptInput.tex <./classCmdPromptInput.pdf>
+<classCmdPromptInput.pdf, id=569, 501.875pt x 361.71133pt>
 File: classCmdPromptInput.pdf Graphic file (type pdf)
 <use classCmdPromptInput.pdf>
 Package pdftex.def Info: classCmdPromptInput.pdf  used on input line 6.
 (pdftex.def)             Requested size: 78.95383pt x 56.9055pt.
- [26]) (./structCommandData__.tex) (./classDocument.tex <./classDocument.pdf>
-<classDocument.pdf, id=1359, 501.875pt x 368.34615pt>
+ [7]) (./structCommandData__.tex) (./classDocument.tex <./classDocument.pdf>
+<classDocument.pdf, id=598, 501.875pt x 368.34615pt>
 File: classDocument.pdf Graphic file (type pdf)
 <use classDocument.pdf>
 Package pdftex.def Info: classDocument.pdf  used on input line 6.
 (pdftex.def)             Requested size: 77.52943pt x 56.9055pt.
- [27]) (./structDocumentData__.tex [28])
+ [8]) (./structDocumentData__.tex [9] [10])
 (./classEmbroideryThumbnailer.tex <./classEmbroideryThumbnailer.pdf>
-<classEmbroideryThumbnailer.pdf, id=1453, 501.875pt x 260.71402pt>
+<classEmbroideryThumbnailer.pdf, id=719, 501.875pt x 260.71402pt>
 File: classEmbroideryThumbnailer.pdf Graphic file (type pdf)
 <use classEmbroideryThumbnailer.pdf>
 Package pdftex.def Info: classEmbroideryThumbnailer.pdf  used on input line 6.
 (pdftex.def)             Requested size: 109.53983pt x 56.9055pt.
 )
-(./structGroupBoxData__.tex) (./structLayerData__.tex [29])
-(./classLayerManager.tex <./classLayerManager.pdf>
-<classLayerManager.pdf, id=1492, 501.875pt x 386.06232pt>
+(./structGroupBoxData__.tex) (./structLayerData__.tex) (./classLayerManager.tex
+ <./classLayerManager.pdf>
+<classLayerManager.pdf, id=724, 501.875pt x 386.06232pt>
 File: classLayerManager.pdf Graphic file (type pdf)
 <use classLayerManager.pdf>
 Package pdftex.def Info: classLayerManager.pdf  used on input line 6.
 (pdftex.def)             Requested size: 73.97614pt x 56.9055pt.
-) (./classMainWindow.tex <./classMainWindow.pdf>
-<classMainWindow.pdf, id=1499, 501.875pt x 393.6306pt>
+ [11]) (./classMainWindow.tex <./classMainWindow.pdf>
+<classMainWindow.pdf, id=750, 501.875pt x 393.6306pt>
 File: classMainWindow.pdf Graphic file (type pdf)
 <use classMainWindow.pdf>
 Package pdftex.def Info: classMainWindow.pdf  used on input line 6.
 (pdftex.def)             Requested size: 72.55176pt x 56.9055pt.
- [30]) (./classMdiArea.tex <./classMdiArea.pdf>
-<classMdiArea.pdf, id=1528, 501.875pt x 508.22873pt>
+[12]) (./classMdiArea.tex <./classMdiArea.pdf>
+<classMdiArea.pdf, id=778, 501.875pt x 508.22873pt>
 File: classMdiArea.pdf Graphic file (type pdf)
 <use classMdiArea.pdf>
 Package pdftex.def Info: classMdiArea.pdf  used on input line 6.
 (pdftex.def)             Requested size: 56.18663pt x 56.9055pt.
-)
-(./classMdiWindow.tex <./classMdiWindow.pdf>
-<classMdiWindow.pdf, id=1534, 501.875pt x 343.16205pt>
+ [13]) (./classMdiWindow.tex <./classMdiWindow.pdf>
+<classMdiWindow.pdf, id=806, 501.875pt x 343.16205pt>
 File: classMdiWindow.pdf Graphic file (type pdf)
 <use classMdiWindow.pdf>
 Package pdftex.def Info: classMdiWindow.pdf  used on input line 6.
 (pdftex.def)             Requested size: 83.21933pt x 56.9055pt.
- [31]) (./classObject.tex <./classObject.pdf>
-<classObject.pdf, id=1574, 501.875pt x 313.67188pt>
+ [14]) (./classObject.tex <./classObject.pdf>
+<classObject.pdf, id=838, 501.875pt x 313.67188pt>
 File: classObject.pdf Graphic file (type pdf)
 <use classObject.pdf>
 Package pdftex.def Info: classObject.pdf  used on input line 6.
 (pdftex.def)             Requested size: 91.04579pt x 56.9055pt.
- [32]) (./structObjectCore__.tex [33]) (./classPropertyEditor.tex <./classPrope
-rtyEditor.pdf>
-<classPropertyEditor.pdf, id=1660, 501.875pt x 393.6306pt>
+ [15])
+(./structObjectCore__.tex) (./classPropertyEditor.tex <./classPropertyEditor.pd
+f>
+<classPropertyEditor.pdf, id=881, 501.875pt x 393.6306pt>
 File: classPropertyEditor.pdf Graphic file (type pdf)
 <use classPropertyEditor.pdf>
 Package pdftex.def Info: classPropertyEditor.pdf  used on input line 6.
 (pdftex.def)             Requested size: 72.55176pt x 56.9055pt.
-) (./classSelectBox.tex <./classSelectBox.pdf>
-<classSelectBox.pdf, id=1666, 501.875pt x 401.5pt>
+ [16])
+(./structQT__WARNING__DISABLE__DEPRECATED_1_1qt__meta__stringdata__SelectBox__t
+.tex) (./classSelectBox.tex <./classSelectBox.pdf>
+<classSelectBox.pdf, id=926, 501.875pt x 401.5pt>
 File: classSelectBox.pdf Graphic file (type pdf)
 <use classSelectBox.pdf>
 Package pdftex.def Info: classSelectBox.pdf  used on input line 6.
 (pdftex.def)             Requested size: 71.12737pt x 56.9055pt.
- [34])
-(./structSetting__.tex) (./structTab__.tex) (./structTranslation__.tex)
+ [17]) (./structSetting__.tex) (./structTab__.tex) (./structTranslation__.tex [
+18])
 (./classUndoableCommand.tex <./classUndoableCommand.pdf>
-<classUndoableCommand.pdf, id=1697, 501.875pt x 313.67188pt>
+<classUndoableCommand.pdf, id=978, 501.875pt x 313.67188pt>
 File: classUndoableCommand.pdf Graphic file (type pdf)
 <use classUndoableCommand.pdf>
 Package pdftex.def Info: classUndoableCommand.pdf  used on input line 6.
 (pdftex.def)             Requested size: 91.04579pt x 56.9055pt.
- [35])
+ [19])
 (./structUndoData__.tex) (./classUndoEditor.tex <./classUndoEditor.pdf>
-<classUndoEditor.pdf, id=1734, 501.875pt x 413.91638pt>
+<classUndoEditor.pdf, id=1018, 501.875pt x 413.91638pt>
 File: classUndoEditor.pdf Graphic file (type pdf)
 <use classUndoEditor.pdf>
 Package pdftex.def Info: classUndoEditor.pdf  used on input line 6.
 (pdftex.def)             Requested size: 68.99078pt x 56.9055pt.
 
-[36]) (./structViewData__.tex [37]) (./structWidget__.tex)
-(./structWidgetData__.tex [38]) (./structWidgetDesc__.tex)
-(./core_8h_source.tex [39] [40] [41] [42] [43] [44] [45] [46] [47] [48]
-[49] [50] [51] [52] [53] [54] [55] [56] [57] [58] [59] [60] [61])
+[20]) (./structViewData__.tex
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 7.19995pt on input line 59.
+) (./structWidget__.tex [21])
+(./structWidgetData__.tex [22]) (./structWidgetDesc__.tex)
+(./moc__predefs_8h_source.tex [23] [24] [25] [26] [27] [28])
+(./core_8h_source.tex [29] [30] [31] [32] [33] [34] [35] [36] [37] [38]
+[39] [40] [41] [42] [43] [44] [45] [46] [47] [48] [49] [50] [51])
 (./interface_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--23
 
  []
 
-[62] [63]
+[52] [53]
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 (Font)              scaled to size 8.09995pt on input line 358.
 LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
 (Font)              Font shape `T1/phv/m/sl' tried instead on input line 358.
 LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
 (Font)              scaled to size 8.09995pt on input line 358.
- [64] [65] [66]) (./objects_8c.tex
+ [54] [55] [56]) (./objects_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[67]) (./qt_8h.tex
+[57] [58]) (./qt_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[68]) (./qt_8h_source.tex [69] [70] [71] [72]) (./state_8c.tex
+) (./qt_8h_source.tex [59] [60] [61] [62] [63]) (./state_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[73] [74] [75]
+[64] [65] [66]
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <8> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 362.
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 361.
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <7> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 368.
- [76] [77] [78] [79] [80] [81] [82] [83] [84] [85] [86] [87]
-[88] [89] [90]) (./libembroidery-thumbnailer-kde4_8h_source.tex) [91] [92
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 371.
+ [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78]
+[79] [80] [81] [82] [83] [84]) (./libembroidery-thumbnailer-kde4_8h_source.tex)
+[85] [86
 
-]
-(./refman.ind
+] (./refman.ind
 LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
 (Font)              scaled to size 12.9599pt on input line 1.
- [93
+ [87
 
-] [94] [95]) (./refman.aux)
+]
+Overfull \hbox (83.81313pt too wide) in paragraph at lines 184--186
+[]\T1/phv/m/n/10 QT_WARNING_DISABLE_DEPRECATED::qt_meta_stringdata_SelectBox_t,
+
+ []
+
+[88] [89]) (./refman.aux)
 Package rerunfilecheck Info: File `refman.out' has not changed.
-(rerunfilecheck)             Checksum: BC5DBD468AD828FD60AAB460AD798D12;29578.
+(rerunfilecheck)             Checksum: 1C6D4A622C2D28C80039E7CAA14C83AA;14244.
  ) 
 Here is how much of TeX's memory you used:
- 20341 strings out of 478008
- 377937 string characters out of 5839802
- 1900330 words of memory out of 5000000
- 38776 multiletter control sequences out of 15000+600000
- 557992 words of font info for 94 fonts, out of 8000000 for 9000
+ 19927 strings out of 478008
+ 368844 string characters out of 5839802
+ 1905330 words of memory out of 5000000
+ 38565 multiletter control sequences out of 15000+600000
+ 557699 words of font info for 93 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 101i,16n,117p,1132b,629s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 101i,16n,117p,1445b,590s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/
@@ -1137,10 +1073,10 @@ fb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8ac.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (99 pages, 419391 bytes).
+Output written on refman.pdf (91 pages, 354599 bytes).
 PDF statistics:
- 3379 PDF objects out of 3580 (max. 8388607)
- 3197 compressed objects within 32 object streams
- 1236 named destinations out of 1440 (max. 500000)
- 1274 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2677 PDF objects out of 2984 (max. 8388607)
+ 2509 compressed objects within 26 object streams
+ 1081 named destinations out of 1200 (max. 500000)
+ 634 words of extra memory for PDF output out of 10000 (max. 10000000)
 

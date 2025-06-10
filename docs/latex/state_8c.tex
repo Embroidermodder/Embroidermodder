@@ -6,64 +6,88 @@
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \mbox{\hyperlink{state_8c_a55ab32599d2d57410df9a74ad67fd6da}{emb\+\_\+set\+\_\+var}} (Script\+Value $\ast$node, const char $\ast$key, Script\+Value value)
+\mbox{\Hypertarget{state_8c_a55ab32599d2d57410df9a74ad67fd6da}\label{state_8c_a55ab32599d2d57410df9a74ad67fd6da}} 
+int {\bfseries emb\+\_\+set\+\_\+var} (Script\+Value $\ast$node, const char $\ast$key, Script\+Value value)
 \item 
-Script\+Value $\ast$ \mbox{\hyperlink{state_8c_a901278b059b7d658fbe1da517e0736fd}{emb\+\_\+get\+\_\+var}} (Script\+Value $\ast$node, const char $\ast$key)
-\item 
-const char $\ast$ \mbox{\hyperlink{state_8c_aca9f9bea5ee5776b7849559d22040947}{emb\+\_\+get\+\_\+str}} (Script\+Value $\ast$node, const char $\ast$key)
-\item 
+\mbox{\Hypertarget{state_8c_a901278b059b7d658fbe1da517e0736fd}\label{state_8c_a901278b059b7d658fbe1da517e0736fd}} 
+Script\+Value $\ast$ {\bfseries emb\+\_\+get\+\_\+var} (Script\+Value $\ast$node, const char $\ast$key)
+\begin{DoxyCompactList}\small\item\em Load a Script\+Value from the environment using the key supplied. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{state_8c_aca9f9bea5ee5776b7849559d22040947}\label{state_8c_aca9f9bea5ee5776b7849559d22040947}} 
+const char $\ast$ {\bfseries emb\+\_\+get\+\_\+str} (Script\+Value $\ast$node, const char $\ast$key)
+\begin{DoxyCompactList}\small\item\em Load a char array from the environment using the key supplied. \end{DoxyCompactList}\item 
 size\+\_\+t \mbox{\hyperlink{state_8c_ae0324dd47ecf95c8590df27917f69efa}{load\+\_\+file\+\_\+to\+\_\+buffer}} (char $\ast$fname, char $\ast$buffer)
-\item 
-toml\+\_\+table\+\_\+t $\ast$ \mbox{\hyperlink{state_8c_ad1b6433aaee85b9e210b23f7f6e95bf3}{load\+\_\+script}} (char $\ast$asset\+\_\+dir, char $\ast$fname)
-\item 
+\begin{DoxyCompactList}\small\item\em Load the entire file with path fname into the buffer passed in. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{state_8c_a0c19f7ac884ab029c9933ffb0bd498fc}{load\+\_\+script}} (char $\ast$asset\+\_\+dir, char $\ast$fname)
+\begin{DoxyCompactList}\small\item\em Loads init\+\_\+script 1 Mb buffer to chain together all of the strings in the init\+\_\+script string table. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{state_8c_a165e76f9c2ca5ff9569a4cb373fe9d25}{load\+\_\+global\+\_\+state}} (Script\+Value $\ast$root, char $\ast$asset\+\_\+dir)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Load our basic tree structure of data for all of our data structures above. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-char $\ast$ \mbox{\hyperlink{state_8c_ab7c99743c4b122cc43bd67ba4d1cac03}{os}} = \char`\"{}Unknown Operating System\char`\"{}
+\mbox{\Hypertarget{state_8c_ab7c99743c4b122cc43bd67ba4d1cac03}\label{state_8c_ab7c99743c4b122cc43bd67ba4d1cac03}} 
+char $\ast$ {\bfseries os} = \char`\"{}Unknown Operating System\char`\"{}
 \item 
-Script\+Value $\ast$ \mbox{\hyperlink{state_8c_a6ab564d41e31041cac6b26b7087917de}{root}}
+\mbox{\Hypertarget{state_8c_a6ab564d41e31041cac6b26b7087917de}\label{state_8c_a6ab564d41e31041cac6b26b7087917de}} 
+Script\+Value $\ast$ {\bfseries root}
 \item 
-Script\+Env $\ast$ \mbox{\hyperlink{state_8c_af35025f46345dc5ebff750296f91b6f5}{global}}
+\mbox{\Hypertarget{state_8c_af35025f46345dc5ebff750296f91b6f5}\label{state_8c_af35025f46345dc5ebff750296f91b6f5}} 
+Script\+Env $\ast$ {\bfseries global}
 \item 
-Script\+Value $\ast$ \mbox{\hyperlink{state_8c_aad97895c3132cb92504e469b710ee3f2}{config}}
+\mbox{\Hypertarget{state_8c_aad97895c3132cb92504e469b710ee3f2}\label{state_8c_aad97895c3132cb92504e469b710ee3f2}} 
+Script\+Value $\ast$ {\bfseries config}
 \item 
-int \mbox{\hyperlink{state_8c_a697cff18529a6237f3972e48d540eddd}{n\+\_\+variables}} = 0
+\mbox{\Hypertarget{state_8c_a697cff18529a6237f3972e48d540eddd}\label{state_8c_a697cff18529a6237f3972e48d540eddd}} 
+int {\bfseries n\+\_\+variables} = 0
 \item 
-char \mbox{\hyperlink{state_8c_abb7584e990a5c015e27d818426be9bb8}{format\+Filter\+Open}} \mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}
+\mbox{\Hypertarget{state_8c_abb7584e990a5c015e27d818426be9bb8}\label{state_8c_abb7584e990a5c015e27d818426be9bb8}} 
+char {\bfseries format\+Filter\+Open} \mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_a62d59a7cd32d6c4444e37db908264183}{format\+Filter\+Save}} \mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}
+\mbox{\Hypertarget{state_8c_a62d59a7cd32d6c4444e37db908264183}\label{state_8c_a62d59a7cd32d6c4444e37db908264183}} 
+char {\bfseries format\+Filter\+Save} \mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_a89d470a26e6c9ba7c3185693840f386c}{open\+\_\+files\+\_\+path}} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
+\mbox{\Hypertarget{state_8c_a89d470a26e6c9ba7c3185693840f386c}\label{state_8c_a89d470a26e6c9ba7c3185693840f386c}} 
+char {\bfseries open\+\_\+files\+\_\+path} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_a629185a2c86e82c070bc42db2e73bde1}{prompt\+\_\+color\+\_\+}} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
+\mbox{\Hypertarget{state_8c_a629185a2c86e82c070bc42db2e73bde1}\label{state_8c_a629185a2c86e82c070bc42db2e73bde1}} 
+char {\bfseries prompt\+\_\+color\+\_\+} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_ad966e2e054810a3c5ccd1a442d402494}{prompt\+\_\+selection\+\_\+bg\+\_\+color\+\_\+}} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
+\mbox{\Hypertarget{state_8c_ad966e2e054810a3c5ccd1a442d402494}\label{state_8c_ad966e2e054810a3c5ccd1a442d402494}} 
+char {\bfseries prompt\+\_\+selection\+\_\+bg\+\_\+color\+\_\+} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_a6ae3868a32ea5ec594ea8c28472d9588}{prompt\+\_\+bg\+\_\+color\+\_\+}} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
+\mbox{\Hypertarget{state_8c_a6ae3868a32ea5ec594ea8c28472d9588}\label{state_8c_a6ae3868a32ea5ec594ea8c28472d9588}} 
+char {\bfseries prompt\+\_\+bg\+\_\+color\+\_\+} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_a98423167898a9a35d715f6c298c4f2c7}{prompt\+\_\+selection\+\_\+color\+\_\+}} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
+\mbox{\Hypertarget{state_8c_a98423167898a9a35d715f6c298c4f2c7}\label{state_8c_a98423167898a9a35d715f6c298c4f2c7}} 
+char {\bfseries prompt\+\_\+selection\+\_\+color\+\_\+} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
 \item 
-bool \mbox{\hyperlink{state_8c_ac3c933ba8bd7986bb8e6a6f3d82e8028}{document\+\_\+memory}} \mbox{[}MAX\+\_\+\+OPEN\+\_\+\+FILES\mbox{]}
+\mbox{\Hypertarget{state_8c_ac3c933ba8bd7986bb8e6a6f3d82e8028}\label{state_8c_ac3c933ba8bd7986bb8e6a6f3d82e8028}} 
+bool {\bfseries document\+\_\+memory} \mbox{[}MAX\+\_\+\+OPEN\+\_\+\+FILES\mbox{]}
 \item 
-bool \mbox{\hyperlink{state_8c_a1378a2dd56cbdc33ba254356eac946c9}{shift\+Key\+Pressed\+State}} = false
+\mbox{\Hypertarget{state_8c_a1378a2dd56cbdc33ba254356eac946c9}\label{state_8c_a1378a2dd56cbdc33ba254356eac946c9}} 
+bool {\bfseries shift\+Key\+Pressed\+State} = false
 \item 
-bool \mbox{\hyperlink{state_8c_a5b910e1bf795b20bdb8b51f09fae8e45}{cmd\+Active}}
+\mbox{\Hypertarget{state_8c_a5b910e1bf795b20bdb8b51f09fae8e45}\label{state_8c_a5b910e1bf795b20bdb8b51f09fae8e45}} 
+bool {\bfseries cmd\+Active}
 \item 
-bool \mbox{\hyperlink{state_8c_ad651d258c5fe49323b105b1b23d64777}{rapid\+Fire\+Enabled}} = false
+\mbox{\Hypertarget{state_8c_ad651d258c5fe49323b105b1b23d64777}\label{state_8c_ad651d258c5fe49323b105b1b23d64777}} 
+bool {\bfseries rapid\+Fire\+Enabled} = false
 \item 
-bool \mbox{\hyperlink{state_8c_a2f7636df8b2a22914ee5e8a96139b655}{is\+Blinking}} = false
+\mbox{\Hypertarget{state_8c_a2f7636df8b2a22914ee5e8a96139b655}\label{state_8c_a2f7636df8b2a22914ee5e8a96139b655}} 
+bool {\bfseries is\+Blinking} = false
 \item 
-int \mbox{\hyperlink{state_8c_a3c0e2bc6cc4deb130635b69023080d80}{num\+Of\+Docs}} = 0
+\mbox{\Hypertarget{state_8c_a3c0e2bc6cc4deb130635b69023080d80}\label{state_8c_a3c0e2bc6cc4deb130635b69023080d80}} 
+int {\bfseries num\+Of\+Docs} = 0
 \item 
-int \mbox{\hyperlink{state_8c_aa430e53ebc7388c2664394eaf934ebe2}{doc\+Index}} = 0
+\mbox{\Hypertarget{state_8c_aa430e53ebc7388c2664394eaf934ebe2}\label{state_8c_aa430e53ebc7388c2664394eaf934ebe2}} 
+int {\bfseries doc\+Index} = 0
 \item 
-char \mbox{\hyperlink{state_8c_a58d95e2b310a39fb791005e81f3bf6cc}{settings\+\_\+file}} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]} = \char`\"{}settings.\+ini\char`\"{}
+\mbox{\Hypertarget{state_8c_a58d95e2b310a39fb791005e81f3bf6cc}\label{state_8c_a58d95e2b310a39fb791005e81f3bf6cc}} 
+char {\bfseries settings\+\_\+file} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]} = \char`\"{}settings.\+ini\char`\"{}
 \item 
 bool \mbox{\hyperlink{state_8c_aacba5c5d4669c6cec368ff6ab1bc8c0f}{key\+\_\+state}} \mbox{[}N\+\_\+\+KEY\+\_\+\+SEQUENCES\mbox{]}
 \item 
-\mbox{\hyperlink{structSetting__}{Setting}} \mbox{\hyperlink{state_8c_af1b9b04f8ae7283a897a8eb9fe0e9e8d}{setting}} \mbox{[}N\+\_\+\+SETTINGS\mbox{]}
+\mbox{\Hypertarget{state_8c_af1b9b04f8ae7283a897a8eb9fe0e9e8d}\label{state_8c_af1b9b04f8ae7283a897a8eb9fe0e9e8d}} 
+\mbox{\hyperlink{structSetting__}{Setting}} {\bfseries setting} \mbox{[}N\+\_\+\+SETTINGS\mbox{]}
 \item 
 char \mbox{\hyperlink{state_8c_a8aa09582dbe11119f9401a173c6971c3}{recent\+\_\+files}} \mbox{[}MAX\+\_\+\+FILES\mbox{]}\mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}
 \item 
@@ -77,19 +101,26 @@ const Script\+Value \mbox{\hyperlink{state_8c_a5a49cc14328f6948aa9a4be0702123f4}
 \item 
 const Script\+Value \mbox{\hyperlink{state_8c_a424d5624a77d4626360afa1e14633c54}{script\+\_\+false}}
 \item 
-char $\ast$ \mbox{\hyperlink{state_8c_aceaae8d607fdbcd696797239ac027560}{\+\_\+app\+Name\+\_\+}} = \char`\"{}Embroidermodder\char`\"{}
+\mbox{\Hypertarget{state_8c_aceaae8d607fdbcd696797239ac027560}\label{state_8c_aceaae8d607fdbcd696797239ac027560}} 
+char $\ast$ {\bfseries \+\_\+app\+Name\+\_\+} = \char`\"{}Embroidermodder\char`\"{}
 \item 
-char $\ast$ \mbox{\hyperlink{state_8c_ab4a48c9fc749ca785389d7b102bb3c6a}{\+\_\+app\+Ver\+\_\+}} = \char`\"{}v2.\+0 alpha\char`\"{}
+\mbox{\Hypertarget{state_8c_ab4a48c9fc749ca785389d7b102bb3c6a}\label{state_8c_ab4a48c9fc749ca785389d7b102bb3c6a}} 
+char $\ast$ {\bfseries \+\_\+app\+Ver\+\_\+} = \char`\"{}v2.\+0 alpha\char`\"{}
 \item 
-bool \mbox{\hyperlink{state_8c_a5a42421b0311e4b603861e5b1e809ea5}{exit\+App}} = false
+\mbox{\Hypertarget{state_8c_a5a42421b0311e4b603861e5b1e809ea5}\label{state_8c_a5a42421b0311e4b603861e5b1e809ea5}} 
+bool {\bfseries exit\+App} = false
 \item 
-int \mbox{\hyperlink{state_8c_a20820415ca05720c97b77275fb424e11}{testing\+\_\+mode}} = 0
+\mbox{\Hypertarget{state_8c_a20820415ca05720c97b77275fb424e11}\label{state_8c_a20820415ca05720c97b77275fb424e11}} 
+int {\bfseries testing\+\_\+mode} = 0
 \item 
-char \mbox{\hyperlink{state_8c_a5c916f4cc685690b44731ba0f7c3e06d}{default\+Prefix}} \mbox{[}200\mbox{]}
+\mbox{\Hypertarget{state_8c_a5c916f4cc685690b44731ba0f7c3e06d}\label{state_8c_a5c916f4cc685690b44731ba0f7c3e06d}} 
+char {\bfseries default\+Prefix} \mbox{[}200\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_a32fe6bd71d63678c8f07cd224f3581cb}{prefix}} \mbox{[}200\mbox{]}
+\mbox{\Hypertarget{state_8c_a32fe6bd71d63678c8f07cd224f3581cb}\label{state_8c_a32fe6bd71d63678c8f07cd224f3581cb}} 
+char {\bfseries prefix} \mbox{[}200\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_a498e67d156e17351bf58dd2a40299852}{cur\+Cmd}} \mbox{[}200\mbox{]}
+\mbox{\Hypertarget{state_8c_a498e67d156e17351bf58dd2a40299852}\label{state_8c_a498e67d156e17351bf58dd2a40299852}} 
+char {\bfseries cur\+Cmd} \mbox{[}200\mbox{]}
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_a670f970f156bd690c5f0c2cae3a75730}{menu\+\_\+list}} \mbox{[}$\,$\mbox{]}
 \item 
@@ -181,15 +212,18 @@ int \mbox{\hyperlink{state_8c_a6437cd5623d756cad708949f690dae1e}{accept\+\_\+to\
 \item 
 int \mbox{\hyperlink{state_8c_abd14d6bf0db0f2553abaa090160f3bb6}{render\+\_\+hints}} \mbox{[}$\,$\mbox{]}
 \item 
-char $\ast$ \mbox{\hyperlink{state_8c_a34076a0637953b98847e8a4fd11459ca}{object\+\_\+names}} \mbox{[}$\,$\mbox{]}
+\mbox{\Hypertarget{state_8c_a34076a0637953b98847e8a4fd11459ca}\label{state_8c_a34076a0637953b98847e8a4fd11459ca}} 
+char $\ast$ {\bfseries object\+\_\+names} \mbox{[}$\,$\mbox{]}
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_a7013bddd1c4531493f5626f7bb028164}{coverage\+\_\+test}} \mbox{[}$\,$\mbox{]}
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_afe61f345e586218cca3fc329e805a530}{tips}} \mbox{[}$\,$\mbox{]}
 \item 
-char $\ast$ \mbox{\hyperlink{state_8c_a5318d7b599615c831722d3102eb2db49}{extensions}} \mbox{[}$\,$\mbox{]}
+\mbox{\Hypertarget{state_8c_a5318d7b599615c831722d3102eb2db49}\label{state_8c_a5318d7b599615c831722d3102eb2db49}} 
+char $\ast$ {\bfseries extensions} \mbox{[}$\,$\mbox{]}
 \item 
-char $\ast$ \mbox{\hyperlink{state_8c_acf796746a16f8af6794ef411325d764d}{editor\+\_\+list}} \mbox{[}$\,$\mbox{]}
+\mbox{\Hypertarget{state_8c_acf796746a16f8af6794ef411325d764d}\label{state_8c_acf796746a16f8af6794ef411325d764d}} 
+char $\ast$ {\bfseries editor\+\_\+list} \mbox{[}$\,$\mbox{]}
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_a9e5d04b0fbebb1afe6c9367d703926ca}{combobox\+\_\+list}} \mbox{[}$\,$\mbox{]}
 \item 
@@ -203,53 +237,76 @@ char $\ast$ \mbox{\hyperlink{state_8c_a4561b9fec01952f029a71e4247cde242}{line\+\
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_ab75914ab7fb0e6afb87175e88627b9c8}{text\+\_\+size\+\_\+list}} \mbox{[}$\,$\mbox{]}
 \item 
-String\+Map \mbox{\hyperlink{state_8c_a0dfb3ec65d05692dd0ad1de6bf3d0b1f}{alias\+Hash}} \mbox{[}MAX\+\_\+\+ALIASES\mbox{]}
+\mbox{\Hypertarget{state_8c_a0dfb3ec65d05692dd0ad1de6bf3d0b1f}\label{state_8c_a0dfb3ec65d05692dd0ad1de6bf3d0b1f}} 
+String\+Map {\bfseries alias\+Hash} \mbox{[}MAX\+\_\+\+ALIASES\mbox{]}
 \item 
-Int\+Map \mbox{\hyperlink{state_8c_a60c4f9a7c4a4d065aae6637cf8c74915}{obj\+\_\+index}} \mbox{[}MAX\+\_\+\+OBJECTS\mbox{]}
+\mbox{\Hypertarget{state_8c_a60c4f9a7c4a4d065aae6637cf8c74915}\label{state_8c_a60c4f9a7c4a4d065aae6637cf8c74915}} 
+Int\+Map {\bfseries obj\+\_\+index} \mbox{[}MAX\+\_\+\+OBJECTS\mbox{]}
 \item 
-Emb\+Id\+List $\ast$ \mbox{\hyperlink{state_8c_afd92c1feeabfe68dd5fbe3c0a535bb11}{cut\+Copy\+Object\+List}}
+\mbox{\Hypertarget{state_8c_afd92c1feeabfe68dd5fbe3c0a535bb11}\label{state_8c_afd92c1feeabfe68dd5fbe3c0a535bb11}} 
+Emb\+Id\+List $\ast$ {\bfseries cut\+Copy\+Object\+List}
 \item 
-bool \mbox{\hyperlink{state_8c_a08dbc8fa8eee6ad95aa230b9a5d10d25}{blink\+State}}
+\mbox{\Hypertarget{state_8c_a08dbc8fa8eee6ad95aa230b9a5d10d25}\label{state_8c_a08dbc8fa8eee6ad95aa230b9a5d10d25}} 
+bool {\bfseries blink\+State}
 \item 
-int \mbox{\hyperlink{state_8c_a69e645ac34ef17670c8d6efe067f2a85}{icon\+Size}}
+\mbox{\Hypertarget{state_8c_a69e645ac34ef17670c8d6efe067f2a85}\label{state_8c_a69e645ac34ef17670c8d6efe067f2a85}} 
+int {\bfseries icon\+Size}
 \item 
-bool \mbox{\hyperlink{state_8c_a1a75a2a25a6094bc638240f9fe178621}{pick\+Add}}
+\mbox{\Hypertarget{state_8c_a1a75a2a25a6094bc638240f9fe178621}\label{state_8c_a1a75a2a25a6094bc638240f9fe178621}} 
+bool {\bfseries pick\+Add}
 \item 
-int \mbox{\hyperlink{state_8c_a74505d10227dcd378095afb41fc3f612}{prompt\+Input\+Num}} = 0
+\mbox{\Hypertarget{state_8c_a74505d10227dcd378095afb41fc3f612}\label{state_8c_a74505d10227dcd378095afb41fc3f612}} 
+int {\bfseries prompt\+Input\+Num} = 0
 \item 
-int \mbox{\hyperlink{state_8c_a67bcdae431fd4c2babe0c045dfb68cd7}{precision\+Angle}}
+\mbox{\Hypertarget{state_8c_a67bcdae431fd4c2babe0c045dfb68cd7}\label{state_8c_a67bcdae431fd4c2babe0c045dfb68cd7}} 
+int {\bfseries precision\+Angle}
 \item 
-int \mbox{\hyperlink{state_8c_a9e42212d5fa5815bc291e26e83df4239}{precision\+Length}}
+\mbox{\Hypertarget{state_8c_a9e42212d5fa5815bc291e26e83df4239}\label{state_8c_a9e42212d5fa5815bc291e26e83df4239}} 
+int {\bfseries precision\+Length}
 \item 
-int \mbox{\hyperlink{state_8c_af212424f77b3e5d1376bcc2dae8786bf}{n\+\_\+aliases}} = 0
+\mbox{\Hypertarget{state_8c_af212424f77b3e5d1376bcc2dae8786bf}\label{state_8c_af212424f77b3e5d1376bcc2dae8786bf}} 
+int {\bfseries n\+\_\+aliases} = 0
 \item 
-int \mbox{\hyperlink{state_8c_a4b20d9bbde54f55c1111fa181a1f4725}{n\+\_\+objects}} = 0
+\mbox{\Hypertarget{state_8c_a4b20d9bbde54f55c1111fa181a1f4725}\label{state_8c_a4b20d9bbde54f55c1111fa181a1f4725}} 
+int {\bfseries n\+\_\+objects} = 0
 \item 
-int \mbox{\hyperlink{state_8c_affe288f3f22973c4471aa9a271a53c77}{n\+\_\+widgets}} = 0
+\mbox{\Hypertarget{state_8c_affe288f3f22973c4471aa9a271a53c77}\label{state_8c_affe288f3f22973c4471aa9a271a53c77}} 
+int {\bfseries n\+\_\+widgets} = 0
 \item 
-int \mbox{\hyperlink{state_8c_aa2bcc9894846f1e1e8fd1509f1eb4698}{n\+\_\+actions}} = 0
+\mbox{\Hypertarget{state_8c_aa2bcc9894846f1e1e8fd1509f1eb4698}\label{state_8c_aa2bcc9894846f1e1e8fd1509f1eb4698}} 
+int {\bfseries n\+\_\+actions} = 0
 \item 
-Emb\+String \mbox{\hyperlink{state_8c_a1687ac5c17f9944c6da26a5e9ba03648}{cur\+Text}}
+\mbox{\Hypertarget{state_8c_a1687ac5c17f9944c6da26a5e9ba03648}\label{state_8c_a1687ac5c17f9944c6da26a5e9ba03648}} 
+Emb\+String {\bfseries cur\+Text}
 \item 
-char \mbox{\hyperlink{state_8c_ad7c57cde5c49ed0e512dee028a6c4ed0}{prompt\+History\+Data}} \mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}
+\mbox{\Hypertarget{state_8c_ad7c57cde5c49ed0e512dee028a6c4ed0}\label{state_8c_ad7c57cde5c49ed0e512dee028a6c4ed0}} 
+char {\bfseries prompt\+History\+Data} \mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}
 \item 
-Emb\+String \mbox{\hyperlink{state_8c_a6b509d483a54a25d6c0a01b0e6eaad3a}{field\+Old\+Text}}
+\mbox{\Hypertarget{state_8c_a6b509d483a54a25d6c0a01b0e6eaad3a}\label{state_8c_a6b509d483a54a25d6c0a01b0e6eaad3a}} 
+Emb\+String {\bfseries field\+Old\+Text}
 \item 
-Emb\+String \mbox{\hyperlink{state_8c_a8c215bf314407f4630ca90b40873cd5e}{field\+New\+Text}}
+\mbox{\Hypertarget{state_8c_a8c215bf314407f4630ca90b40873cd5e}\label{state_8c_a8c215bf314407f4630ca90b40873cd5e}} 
+Emb\+String {\bfseries field\+New\+Text}
 \item 
-Emb\+String \mbox{\hyperlink{state_8c_ac9de3ce9d5579cd578f6e028f8104693}{field\+Varies\+Text}}
+\mbox{\Hypertarget{state_8c_ac9de3ce9d5579cd578f6e028f8104693}\label{state_8c_ac9de3ce9d5579cd578f6e028f8104693}} 
+Emb\+String {\bfseries field\+Varies\+Text}
 \item 
-Emb\+String \mbox{\hyperlink{state_8c_ab4fffaa306829e97d5bfdc098f22eca1}{field\+Yes\+Text}}
+\mbox{\Hypertarget{state_8c_ab4fffaa306829e97d5bfdc098f22eca1}\label{state_8c_ab4fffaa306829e97d5bfdc098f22eca1}} 
+Emb\+String {\bfseries field\+Yes\+Text}
 \item 
-Emb\+String \mbox{\hyperlink{state_8c_a0d7c2f1bde9e2d18081d2abe85207cb6}{field\+No\+Text}}
+\mbox{\Hypertarget{state_8c_a0d7c2f1bde9e2d18081d2abe85207cb6}\label{state_8c_a0d7c2f1bde9e2d18081d2abe85207cb6}} 
+Emb\+String {\bfseries field\+No\+Text}
 \item 
-Emb\+String \mbox{\hyperlink{state_8c_a92c287cd0a4d7dca134ce672385237df}{field\+On\+Text}}
+\mbox{\Hypertarget{state_8c_a92c287cd0a4d7dca134ce672385237df}\label{state_8c_a92c287cd0a4d7dca134ce672385237df}} 
+Emb\+String {\bfseries field\+On\+Text}
 \item 
-Emb\+String \mbox{\hyperlink{state_8c_a0fa29dcbdb3c004f944955fe765924eb}{field\+Off\+Text}}
+\mbox{\Hypertarget{state_8c_a0fa29dcbdb3c004f944955fe765924eb}\label{state_8c_a0fa29dcbdb3c004f944955fe765924eb}} 
+Emb\+String {\bfseries field\+Off\+Text}
 \item 
 \mbox{\hyperlink{structWidgetData__}{Widget\+Data}} \mbox{\hyperlink{state_8c_ad7279bc30bc53005c580fb71af5b9b27}{zoom\+\_\+gb\+\_\+data}} \mbox{[}$\,$\mbox{]}
 \item 
-\mbox{\hyperlink{structWidgetData__}{Widget\+Data}} \mbox{\hyperlink{state_8c_a053018510e43ec601ac079a174b41c01}{grid\+\_\+gb\+\_\+data}} \mbox{[}$\,$\mbox{]}
+\mbox{\Hypertarget{state_8c_a053018510e43ec601ac079a174b41c01}\label{state_8c_a053018510e43ec601ac079a174b41c01}} 
+\mbox{\hyperlink{structWidgetData__}{Widget\+Data}} {\bfseries grid\+\_\+gb\+\_\+data} \mbox{[}$\,$\mbox{]}
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_adc92ec7dcda8b335c3c9cb456ab56cb9}{button\+\_\+list}} \mbox{[}$\,$\mbox{]}
 \item 
@@ -263,9 +320,11 @@ char $\ast$ \mbox{\hyperlink{state_8c_a00a359c9663a77ac1553353ac1297f1c}{prompt\
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_aef0c9145ad56318d8351d07ae484dee8}{ruler\+Layout}} \mbox{[}$\,$\mbox{]}
 \item 
-\mbox{\hyperlink{structGroupBoxData__}{Group\+Box\+Data}} \mbox{\hyperlink{state_8c_aa45e5da31f2ac1c3723a67f5537e454e}{group\+\_\+box\+\_\+list}} \mbox{[}$\,$\mbox{]}
+\mbox{\Hypertarget{state_8c_aa45e5da31f2ac1c3723a67f5537e454e}\label{state_8c_aa45e5da31f2ac1c3723a67f5537e454e}} 
+\mbox{\hyperlink{structGroupBoxData__}{Group\+Box\+Data}} {\bfseries group\+\_\+box\+\_\+list} \mbox{[}$\,$\mbox{]}
 \item 
-char $\ast$ \mbox{\hyperlink{state_8c_a481b3bdac5703ab4bd50dacc048e1350}{settings\+\_\+data}} \mbox{[}$\,$\mbox{]}
+\mbox{\Hypertarget{state_8c_a481b3bdac5703ab4bd50dacc048e1350}\label{state_8c_a481b3bdac5703ab4bd50dacc048e1350}} 
+char $\ast$ {\bfseries settings\+\_\+data} \mbox{[}$\,$\mbox{]}
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_a775bd0d7c9e845b51040579619b63852}{grid\+\_\+enabled\+\_\+group}} \mbox{[}$\,$\mbox{]}
 \item 
@@ -277,11 +336,13 @@ char $\ast$ \mbox{\hyperlink{state_8c_aa2ff7213399a2fc2342865248d6c2f67}{grid\+\
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_adeb1199c85d400672e7a49dc9832820d}{zoom\+\_\+layout}} \mbox{[}$\,$\mbox{]}
 \item 
-char \mbox{\hyperlink{state_8c_ab109c307200cba3a4a63923a645ef6fc}{last\+Cmd}} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]} = \char`\"{}help\char`\"{}
+\mbox{\Hypertarget{state_8c_ab109c307200cba3a4a63923a645ef6fc}\label{state_8c_ab109c307200cba3a4a63923a645ef6fc}} 
+char {\bfseries last\+Cmd} \mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]} = \char`\"{}help\char`\"{}
 \item 
 char $\ast$ \mbox{\hyperlink{state_8c_afc4858f95488d9905bcd127b8e74e47b}{geometry\+\_\+type\+\_\+keys}} \mbox{[}$\,$\mbox{]}
 \item 
-\mbox{\hyperlink{structCommandData__}{Command\+Data}} \mbox{\hyperlink{state_8c_ac1b4ab3cfbdb1cc54f0a159c9161bcdc}{command\+\_\+data}} \mbox{[}MAX\+\_\+\+COMMANDS\mbox{]}
+\mbox{\Hypertarget{state_8c_ac1b4ab3cfbdb1cc54f0a159c9161bcdc}\label{state_8c_ac1b4ab3cfbdb1cc54f0a159c9161bcdc}} 
+\mbox{\hyperlink{structCommandData__}{Command\+Data}} {\bfseries command\+\_\+data} \mbox{[}MAX\+\_\+\+COMMANDS\mbox{]}
 \end{DoxyCompactItemize}
 
 
@@ -292,74 +353,7 @@ Copyright 2011-\/2025 The Embroidermodder Team Embroidermodder 2 is Open Source 
 
 Read the reference manual (\href{https://www.libembroidery.org/downloads/emrm.pdf}{\texttt{ https\+://www.\+libembroidery.\+org/downloads/emrm.\+pdf}}) for advice on altering this file. 
 
-Definition in file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-
-
 \doxysubsubsection{Function Documentation}
-\mbox{\Hypertarget{state_8c_aca9f9bea5ee5776b7849559d22040947}\label{state_8c_aca9f9bea5ee5776b7849559d22040947}} 
-\index{state.c@{state.c}!emb\_get\_str@{emb\_get\_str}}
-\index{emb\_get\_str@{emb\_get\_str}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{emb\_get\_str()}{emb\_get\_str()}}
-{\footnotesize\ttfamily const char $\ast$ emb\+\_\+get\+\_\+str (\begin{DoxyParamCaption}\item[{Script\+Value $\ast$}]{node,  }\item[{const char $\ast$}]{key }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l03505}{3505}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{03506 \{}
-\DoxyCodeLine{03507     \textcolor{keywordflow}{return} emb\_get\_var(node, key)-\/>s;}
-\DoxyCodeLine{03508 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{state_8c_a901278b059b7d658fbe1da517e0736fd}\label{state_8c_a901278b059b7d658fbe1da517e0736fd}} 
-\index{state.c@{state.c}!emb\_get\_var@{emb\_get\_var}}
-\index{emb\_get\_var@{emb\_get\_var}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{emb\_get\_var()}{emb\_get\_var()}}
-{\footnotesize\ttfamily Script\+Value $\ast$ emb\+\_\+get\+\_\+var (\begin{DoxyParamCaption}\item[{Script\+Value $\ast$}]{node,  }\item[{const char $\ast$}]{key }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l03492}{3492}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{03493 \{}
-\DoxyCodeLine{03494     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<node-\/>n\_leaves; i++) \{}
-\DoxyCodeLine{03495         \textcolor{keywordflow}{if} (!strncmp(node-\/>leaves[i].label, key, MAX\_STRING\_LENGTH)) \{}
-\DoxyCodeLine{03496             \textcolor{keywordflow}{return} node-\/>leaves + i;}
-\DoxyCodeLine{03497         \}}
-\DoxyCodeLine{03498     \}}
-\DoxyCodeLine{03499     \textcolor{comment}{/* This shows we failed to find the variable. */}}
-\DoxyCodeLine{03500     \textcolor{keywordflow}{return} \&script\_null;}
-\DoxyCodeLine{03501 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{state_8c_a55ab32599d2d57410df9a74ad67fd6da}\label{state_8c_a55ab32599d2d57410df9a74ad67fd6da}} 
-\index{state.c@{state.c}!emb\_set\_var@{emb\_set\_var}}
-\index{emb\_set\_var@{emb\_set\_var}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{emb\_set\_var()}{emb\_set\_var()}}
-{\footnotesize\ttfamily int emb\+\_\+set\+\_\+var (\begin{DoxyParamCaption}\item[{Script\+Value $\ast$}]{node,  }\item[{const char $\ast$}]{key,  }\item[{Script\+Value}]{value }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l03479}{3479}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{03480 \{}
-\DoxyCodeLine{03481     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<node-\/>n\_leaves; i++) \{}
-\DoxyCodeLine{03482         \textcolor{keywordflow}{if} (!strncmp(node-\/>leaves[i].label, key, MAX\_STRING\_LENGTH)) \{}
-\DoxyCodeLine{03483             memcpy(node-\/>leaves + i, \&value, \textcolor{keyword}{sizeof}(value));}
-\DoxyCodeLine{03484             \textcolor{keywordflow}{return} 1;}
-\DoxyCodeLine{03485         \}}
-\DoxyCodeLine{03486     \}}
-\DoxyCodeLine{03487     \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{03488 \}}
-
-\end{DoxyCode}
 \mbox{\Hypertarget{state_8c_ae0324dd47ecf95c8590df27917f69efa}\label{state_8c_ae0324dd47ecf95c8590df27917f69efa}} 
 \index{state.c@{state.c}!load\_file\_to\_buffer@{load\_file\_to\_buffer}}
 \index{load\_file\_to\_buffer@{load\_file\_to\_buffer}!state.c@{state.c}}
@@ -368,30 +362,9 @@ Definition at line \mbox{\hyperlink{state_8c_source_l03479}{3479}} of file \mbox
 
 
 
-Definition at line \mbox{\hyperlink{state_8c_source_l03512}{3512}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
+Load the entire file with path fname into the buffer passed in. 
 
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{03513 \{}
-\DoxyCodeLine{03514     FILE *f = fopen(fname, \textcolor{stringliteral}{"{}r"{}});}
-\DoxyCodeLine{03515     \textcolor{keywordflow}{if} (!f) \{}
-\DoxyCodeLine{03516         printf(\textcolor{stringliteral}{"{}ERROR: Failed to open configuration file \(\backslash\)"{}\%s\(\backslash\)"{}.\(\backslash\)n"{}}, fname);}
-\DoxyCodeLine{03517         \textcolor{keywordflow}{return} 0;        }
-\DoxyCodeLine{03518     \}}
-\DoxyCodeLine{03519     fseek(f, 0, SEEK\_END);}
-\DoxyCodeLine{03520     \textcolor{keywordtype}{size\_t} size = ftell(f);}
-\DoxyCodeLine{03521     fseek(f, 0, SEEK\_SET);}
-\DoxyCodeLine{03522     \textcolor{keywordtype}{size\_t} bytes\_read = fread(buffer, 1, size, f);}
-\DoxyCodeLine{03523     fclose(f);}
-\DoxyCodeLine{03524     \textcolor{keywordflow}{if} (bytes\_read != size) \{}
-\DoxyCodeLine{03525         printf(\textcolor{stringliteral}{"{}ERROR: Failed to read configuration file \(\backslash\)"{}\%s\(\backslash\)"{}.\(\backslash\)n"{}}, fname);}
-\DoxyCodeLine{03526         \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{03527     \}}
-\DoxyCodeLine{03528     \textcolor{keywordflow}{return} 1;}
-\DoxyCodeLine{03529 \}}
-
-\end{DoxyCode}
-\mbox{\Hypertarget{state_8c_a165e76f9c2ca5ff9569a4cb373fe9d25}\label{state_8c_a165e76f9c2ca5ff9569a4cb373fe9d25}} 
+Caller is responsible for reporting the error, as we use this to determine if the file exists as well as if it can be read. \mbox{\Hypertarget{state_8c_a165e76f9c2ca5ff9569a4cb373fe9d25}\label{state_8c_a165e76f9c2ca5ff9569a4cb373fe9d25}} 
 \index{state.c@{state.c}!load\_global\_state@{load\_global\_state}}
 \index{load\_global\_state@{load\_global\_state}!state.c@{state.c}}
 \doxyparagraph{\texorpdfstring{load\_global\_state()}{load\_global\_state()}}
@@ -399,105 +372,34 @@ Definition at line \mbox{\hyperlink{state_8c_source_l03512}{3512}} of file \mbox
 
 
 
-Definition at line \mbox{\hyperlink{state_8c_source_l03599}{3599}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
+Load our basic tree structure of data for all of our data structures above. 
 
+EXAMPLE We want access to the {\ttfamily os} string, it is a static in this file. The command would be {\ttfamily get\+\_\+env\+\_\+var(global, \char`\"{}os\char`\"{}).s}.
 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{03600 \{}
-\DoxyCodeLine{03601     \textcolor{keywordtype}{int} error;}
-\DoxyCodeLine{03602     emb\_create\_leaf(root, EMB\_DATATYPE\_STR, \textcolor{stringliteral}{"{}os"{}}, os);}
-\DoxyCodeLine{03603     emb\_create\_leaf(root, EMB\_DATATYPE\_STR, \textcolor{stringliteral}{"{}asset\_dir"{}}, asset\_dir);}
-\DoxyCodeLine{03604 }
-\DoxyCodeLine{03605     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; strncmp(manifest, \textcolor{stringliteral}{"{}END"{}}, 200); i++) \{}
-\DoxyCodeLine{03606         printf(\textcolor{stringliteral}{"{}Loading \(\backslash\)"{}\%s\(\backslash\)"{}...\(\backslash\)n"{}}, manifest[i]);}
-\DoxyCodeLine{03607         error = \mbox{\hyperlink{state_8c_ad1b6433aaee85b9e210b23f7f6e95bf3}{load\_script}}(asset\_dir, manifest[i]);}
-\DoxyCodeLine{03608         \textcolor{keywordflow}{if} (error) \{}
-\DoxyCodeLine{03609             \textcolor{keywordflow}{return} error;}
-\DoxyCodeLine{03610         \}}
-\DoxyCodeLine{03611     \}}
-\DoxyCodeLine{03612     \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{03613 \}}
+To access something deeper in the tree we use the dot operator, which allows searches to run faster by encapsulating data into structures. Like \char`\"{}file\+\_\+menu.\+4\char`\"{} to give the 4th element in the file\+\_\+menu array.
 
-\end{DoxyCode}
-\mbox{\Hypertarget{state_8c_ad1b6433aaee85b9e210b23f7f6e95bf3}\label{state_8c_ad1b6433aaee85b9e210b23f7f6e95bf3}} 
+For accessing data at speed we can keep the parent node pointer available, so for example\+: \begin{DoxyVerb}ScriptValue *file_menu = get_var(root, "file_menu");
+for (int i=0; i<file_menu->n_leaves; i++) {
+    printf("%s\n", file_menu->leaves[i].s);
+}
+\end{DoxyVerb}
+ To get the length of an array we . Hard capped at 1000 configuration files.\mbox{\Hypertarget{state_8c_a0c19f7ac884ab029c9933ffb0bd498fc}\label{state_8c_a0c19f7ac884ab029c9933ffb0bd498fc}} 
 \index{state.c@{state.c}!load\_script@{load\_script}}
 \index{load\_script@{load\_script}!state.c@{state.c}}
 \doxyparagraph{\texorpdfstring{load\_script()}{load\_script()}}
-{\footnotesize\ttfamily toml\+\_\+table\+\_\+t $\ast$ load\+\_\+script (\begin{DoxyParamCaption}\item[{char $\ast$}]{asset\+\_\+dir,  }\item[{char $\ast$}]{fname }\end{DoxyParamCaption})}
-
-Loads init\+\_\+script 1 Mb buffer to chain together all of the strings in the init\+\_\+script string table.
-
-TODO\+: could reuse buffer safely between script loads. \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000001}{Todo}}]loading of nested structures like arrays of dicts etc. \end{DoxyRefDesc}
+{\footnotesize\ttfamily int load\+\_\+script (\begin{DoxyParamCaption}\item[{char $\ast$}]{asset\+\_\+dir,  }\item[{char $\ast$}]{fname }\end{DoxyParamCaption})}
 
 
-Definition at line \mbox{\hyperlink{state_8c_source_l03537}{3537}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
 
+Loads init\+\_\+script 1 Mb buffer to chain together all of the strings in the init\+\_\+script string table. 
 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{03538 \{}
-\DoxyCodeLine{03539     \textcolor{keywordtype}{char} full\_fname[400];}
-\DoxyCodeLine{03540     snprintf(full\_fname, 400, \textcolor{stringliteral}{"{}\%s/\%s"{}}, asset\_dir, fname);}
-\DoxyCodeLine{03541     \textcolor{keywordtype}{char} *buffer = malloc(1000*1000);}
-\DoxyCodeLine{03542     \textcolor{keywordtype}{char} error\_buffer[200];}
-\DoxyCodeLine{03543     buffer[0] = 0;}
-\DoxyCodeLine{03544 }
-\DoxyCodeLine{03545     \textcolor{keywordflow}{if} (!\mbox{\hyperlink{state_8c_ae0324dd47ecf95c8590df27917f69efa}{load\_file\_to\_buffer}}(full\_fname, buffer)) \{}
-\DoxyCodeLine{03546         free(buffer);}
-\DoxyCodeLine{03547         \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{03548     \}}
-\DoxyCodeLine{03549 }
-\DoxyCodeLine{03550     toml\_table\_t *table = toml\_parse(buffer, error\_buffer, 200);}
-\DoxyCodeLine{03551     \textcolor{keywordflow}{if} (!table) \{}
-\DoxyCodeLine{03552         printf(\textcolor{stringliteral}{"{}ERROR: \%s\(\backslash\)n"{}}, error\_buffer);}
-\DoxyCodeLine{03553     \}}
-\DoxyCodeLine{03554     free(buffer);}
-\DoxyCodeLine{03555     \textcolor{keywordflow}{if} (!table) \{}
-\DoxyCodeLine{03556         toml\_free(table);}
-\DoxyCodeLine{03557         \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{03558     \}}
-\DoxyCodeLine{03560     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; ; i++) \{}
-\DoxyCodeLine{03561         \textcolor{keyword}{const} \textcolor{keywordtype}{char} *key = toml\_key\_in(table, i);}
-\DoxyCodeLine{03562         \textcolor{keywordflow}{if} (!key) \{}
-\DoxyCodeLine{03563             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{03564         \}}
-\DoxyCodeLine{03565         toml\_datum\_t s = toml\_string\_in(table, key);}
-\DoxyCodeLine{03566         \textcolor{keywordflow}{if} (s.ok) \{}
-\DoxyCodeLine{03567             emb\_create\_leaf(root, EMB\_DATATYPE\_STR, key, s.u.s);}
-\DoxyCodeLine{03568         \}}
-\DoxyCodeLine{03569         \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{03570             printf(\textcolor{stringliteral}{"{}ERROR: failed to load \%s\(\backslash\)n"{}}, key);}
-\DoxyCodeLine{03571         \}}
-\DoxyCodeLine{03572         free(s.u.s);}
-\DoxyCodeLine{03573     \}}
-\DoxyCodeLine{03574     toml\_free(table);}
-\DoxyCodeLine{03575     \textcolor{keywordflow}{return} 1;}
-\DoxyCodeLine{03576 \}}
-
-\end{DoxyCode}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000002}{Todo}}]could reuse buffer safely between script loads. \end{DoxyRefDesc}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000003}{Todo}}]loading of nested structures like arrays of dicts etc. \end{DoxyRefDesc}
 
 
 \doxysubsubsection{Variable Documentation}
-\mbox{\Hypertarget{state_8c_aceaae8d607fdbcd696797239ac027560}\label{state_8c_aceaae8d607fdbcd696797239ac027560}} 
-\index{state.c@{state.c}!\_appName\_@{\_appName\_}}
-\index{\_appName\_@{\_appName\_}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{\_appName\_}{\_appName\_}}
-{\footnotesize\ttfamily char$\ast$ \+\_\+app\+Name\+\_\+ = \char`\"{}Embroidermodder\char`\"{}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00138}{138}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ab4a48c9fc749ca785389d7b102bb3c6a}\label{state_8c_ab4a48c9fc749ca785389d7b102bb3c6a}} 
-\index{state.c@{state.c}!\_appVer\_@{\_appVer\_}}
-\index{\_appVer\_@{\_appVer\_}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{\_appVer\_}{\_appVer\_}}
-{\footnotesize\ttfamily char$\ast$ \+\_\+app\+Ver\+\_\+ = \char`\"{}v2.\+0 alpha\char`\"{}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00139}{139}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a6437cd5623d756cad708949f690dae1e}\label{state_8c_a6437cd5623d756cad708949f690dae1e}} 
 \index{state.c@{state.c}!accept\_to\_dialog@{accept\_to\_dialog}}
 \index{accept\_to\_dialog@{accept\_to\_dialog}!state.c@{state.c}}
@@ -523,30 +425,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00139}{139}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00606}{606}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a0dfb3ec65d05692dd0ad1de6bf3d0b1f}\label{state_8c_a0dfb3ec65d05692dd0ad1de6bf3d0b1f}} 
-\index{state.c@{state.c}!aliasHash@{aliasHash}}
-\index{aliasHash@{aliasHash}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{aliasHash}{aliasHash}}
-{\footnotesize\ttfamily String\+Map alias\+Hash\mbox{[}MAX\+\_\+\+ALIASES\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00954}{954}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a08dbc8fa8eee6ad95aa230b9a5d10d25}\label{state_8c_a08dbc8fa8eee6ad95aa230b9a5d10d25}} 
-\index{state.c@{state.c}!blinkState@{blinkState}}
-\index{blinkState@{blinkState}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{blinkState}{blinkState}}
-{\footnotesize\ttfamily bool blink\+State}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00959}{959}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ad4212555a435619d573169b7f5adf808}\label{state_8c_ad4212555a435619d573169b7f5adf808}} 
 \index{state.c@{state.c}!bottom\_toolbar@{bottom\_toolbar}}
 \index{bottom\_toolbar@{bottom\_toolbar}!state.c@{state.c}}
@@ -561,10 +439,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00959}{959}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00374}{374}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_adc92ec7dcda8b335c3c9cb456ab56cb9}\label{state_8c_adc92ec7dcda8b335c3c9cb456ab56cb9}} 
 \index{state.c@{state.c}!button\_list@{button\_list}}
 \index{button\_list@{button\_list}!state.c@{state.c}}
@@ -586,10 +460,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00374}{374}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01066}{1066}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a0f22739d5c874a9c72a221223027b6f9}\label{state_8c_a0f22739d5c874a9c72a221223027b6f9}} 
 \index{state.c@{state.c}!center\_on\_origin\_group@{center\_on\_origin\_group}}
 \index{center\_on\_origin\_group@{center\_on\_origin\_group}!state.c@{state.c}}
@@ -603,10 +473,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01066}{1066}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00569}{569}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a8fbcc6ce664bb6945e8906eca245163a}\label{state_8c_a8fbcc6ce664bb6945e8906eca245163a}} 
 \index{state.c@{state.c}!circular\_grid\_group@{circular\_grid\_group}}
 \index{circular\_grid\_group@{circular\_grid\_group}!state.c@{state.c}}
@@ -626,10 +492,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00569}{569}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00558}{558}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ae937997e33b4156a615fe08b58860ec7}\label{state_8c_ae937997e33b4156a615fe08b58860ec7}} 
 \index{state.c@{state.c}!circular\_grid\_visible\_group@{circular\_grid\_visible\_group}}
 \index{circular\_grid\_visible\_group@{circular\_grid\_visible\_group}!state.c@{state.c}}
@@ -646,20 +508,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00558}{558}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01816}{1816}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a5b910e1bf795b20bdb8b51f09fae8e45}\label{state_8c_a5b910e1bf795b20bdb8b51f09fae8e45}} 
-\index{state.c@{state.c}!cmdActive@{cmdActive}}
-\index{cmdActive@{cmdActive}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{cmdActive}{cmdActive}}
-{\footnotesize\ttfamily bool cmd\+Active}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00072}{72}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aa106da98d305d523e894306dc35844e5}\label{state_8c_aa106da98d305d523e894306dc35844e5}} 
 \index{state.c@{state.c}!color\_list@{color\_list}}
 \index{color\_list@{color\_list}!state.c@{state.c}}
@@ -683,10 +531,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00072}{72}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00880}{880}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a9e5d04b0fbebb1afe6c9367d703926ca}\label{state_8c_a9e5d04b0fbebb1afe6c9367d703926ca}} 
 \index{state.c@{state.c}!combobox\_list@{combobox\_list}}
 \index{combobox\_list@{combobox\_list}!state.c@{state.c}}
@@ -712,30 +556,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00880}{880}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00850}{850}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ac1b4ab3cfbdb1cc54f0a159c9161bcdc}\label{state_8c_ac1b4ab3cfbdb1cc54f0a159c9161bcdc}} 
-\index{state.c@{state.c}!command\_data@{command\_data}}
-\index{command\_data@{command\_data}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{command\_data}{command\_data}}
-{\footnotesize\ttfamily \mbox{\hyperlink{structCommandData__}{Command\+Data}} command\+\_\+data\mbox{[}MAX\+\_\+\+COMMANDS\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01885}{1885}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_aad97895c3132cb92504e469b710ee3f2}\label{state_8c_aad97895c3132cb92504e469b710ee3f2}} 
-\index{state.c@{state.c}!config@{config}}
-\index{config@{config}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{config}{config}}
-{\footnotesize\ttfamily Script\+Value$\ast$ config}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00058}{58}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a7013bddd1c4531493f5626f7bb028164}\label{state_8c_a7013bddd1c4531493f5626f7bb028164}} 
 \index{state.c@{state.c}!coverage\_test@{coverage\_test}}
 \index{coverage\_test@{coverage\_test}!state.c@{state.c}}
@@ -754,50 +574,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00058}{58}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00671}{671}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a498e67d156e17351bf58dd2a40299852}\label{state_8c_a498e67d156e17351bf58dd2a40299852}} 
-\index{state.c@{state.c}!curCmd@{curCmd}}
-\index{curCmd@{curCmd}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{curCmd}{curCmd}}
-{\footnotesize\ttfamily char cur\+Cmd\mbox{[}200\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00145}{145}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a1687ac5c17f9944c6da26a5e9ba03648}\label{state_8c_a1687ac5c17f9944c6da26a5e9ba03648}} 
-\index{state.c@{state.c}!curText@{curText}}
-\index{curText@{curText}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{curText}{curText}}
-{\footnotesize\ttfamily Emb\+String cur\+Text}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00975}{975}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_afd92c1feeabfe68dd5fbe3c0a535bb11}\label{state_8c_afd92c1feeabfe68dd5fbe3c0a535bb11}} 
-\index{state.c@{state.c}!cutCopyObjectList@{cutCopyObjectList}}
-\index{cutCopyObjectList@{cutCopyObjectList}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{cutCopyObjectList}{cutCopyObjectList}}
-{\footnotesize\ttfamily Emb\+Id\+List$\ast$ cut\+Copy\+Object\+List}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00957}{957}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a5c916f4cc685690b44731ba0f7c3e06d}\label{state_8c_a5c916f4cc685690b44731ba0f7c3e06d}} 
-\index{state.c@{state.c}!defaultPrefix@{defaultPrefix}}
-\index{defaultPrefix@{defaultPrefix}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{defaultPrefix}{defaultPrefix}}
-{\footnotesize\ttfamily char default\+Prefix\mbox{[}200\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00143}{143}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a27f461bf53bc129f1b6ce8365d951977}\label{state_8c_a27f461bf53bc129f1b6ce8365d951977}} 
 \index{state.c@{state.c}!defined\_origin\_group@{defined\_origin\_group}}
 \index{defined\_origin\_group@{defined\_origin\_group}!state.c@{state.c}}
@@ -819,10 +595,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00143}{143}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00534}{534}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a99d16446d2f11c59244ad2dd133bece5}\label{state_8c_a99d16446d2f11c59244ad2dd133bece5}} 
 \index{state.c@{state.c}!dimension\_menu@{dimension\_menu}}
 \index{dimension\_menu@{dimension\_menu}!state.c@{state.c}}
@@ -837,10 +609,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00534}{534}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00303}{303}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a6006ac91b6cef4ce1b9ad58233c05fe9}\label{state_8c_a6006ac91b6cef4ce1b9ad58233c05fe9}} 
 \index{state.c@{state.c}!dimension\_toolbar@{dimension\_toolbar}}
 \index{dimension\_toolbar@{dimension\_toolbar}!state.c@{state.c}}
@@ -855,30 +623,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00303}{303}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00489}{489}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_aa430e53ebc7388c2664394eaf934ebe2}\label{state_8c_aa430e53ebc7388c2664394eaf934ebe2}} 
-\index{state.c@{state.c}!docIndex@{docIndex}}
-\index{docIndex@{docIndex}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{docIndex}{docIndex}}
-{\footnotesize\ttfamily int doc\+Index = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00076}{76}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ac3c933ba8bd7986bb8e6a6f3d82e8028}\label{state_8c_ac3c933ba8bd7986bb8e6a6f3d82e8028}} 
-\index{state.c@{state.c}!document\_memory@{document\_memory}}
-\index{document\_memory@{document\_memory}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{document\_memory}{document\_memory}}
-{\footnotesize\ttfamily bool document\+\_\+memory\mbox{[}MAX\+\_\+\+OPEN\+\_\+\+FILES\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00069}{69}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a48ca1fb6a5efaf64ad8ccda7e0d00354}\label{state_8c_a48ca1fb6a5efaf64ad8ccda7e0d00354}} 
 \index{state.c@{state.c}!draw\_menu@{draw\_menu}}
 \index{draw\_menu@{draw\_menu}!state.c@{state.c}}
@@ -908,10 +652,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00069}{69}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00268}{268}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a053cfd2f779fd04ec99fac73a3515f6c}\label{state_8c_a053cfd2f779fd04ec99fac73a3515f6c}} 
 \index{state.c@{state.c}!draw\_toolbar@{draw\_toolbar}}
 \index{draw\_toolbar@{draw\_toolbar}!state.c@{state.c}}
@@ -941,10 +681,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00268}{268}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00454}{454}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a0320812ff2bec94f0d4073ca5f19339d}\label{state_8c_a0320812ff2bec94f0d4073ca5f19339d}} 
 \index{state.c@{state.c}!edit\_menu@{edit\_menu}}
 \index{edit\_menu@{edit\_menu}!state.c@{state.c}}
@@ -966,10 +702,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00454}{454}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00207}{207}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ab4eea632f086eaeed1b1a82b9d71cfbe}\label{state_8c_ab4eea632f086eaeed1b1a82b9d71cfbe}} 
 \index{state.c@{state.c}!edit\_toolbar@{edit\_toolbar}}
 \index{edit\_toolbar@{edit\_toolbar}!state.c@{state.c}}
@@ -989,110 +721,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00207}{207}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00409}{409}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_acf796746a16f8af6794ef411325d764d}\label{state_8c_acf796746a16f8af6794ef411325d764d}} 
-\index{state.c@{state.c}!editor\_list@{editor\_list}}
-\index{editor\_list@{editor\_list}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{editor\_list}{editor\_list}}
-{\footnotesize\ttfamily char$\ast$ editor\+\_\+list\mbox{[}$\,$\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00758}{758}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a5a42421b0311e4b603861e5b1e809ea5}\label{state_8c_a5a42421b0311e4b603861e5b1e809ea5}} 
-\index{state.c@{state.c}!exitApp@{exitApp}}
-\index{exitApp@{exitApp}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{exitApp}{exitApp}}
-{\footnotesize\ttfamily bool exit\+App = false}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00140}{140}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a5318d7b599615c831722d3102eb2db49}\label{state_8c_a5318d7b599615c831722d3102eb2db49}} 
-\index{state.c@{state.c}!extensions@{extensions}}
-\index{extensions@{extensions}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{extensions}{extensions}}
-{\footnotesize\ttfamily char$\ast$ extensions\mbox{[}$\,$\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00701}{701}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a8c215bf314407f4630ca90b40873cd5e}\label{state_8c_a8c215bf314407f4630ca90b40873cd5e}} 
-\index{state.c@{state.c}!fieldNewText@{fieldNewText}}
-\index{fieldNewText@{fieldNewText}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{fieldNewText}{fieldNewText}}
-{\footnotesize\ttfamily Emb\+String field\+New\+Text}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00981}{981}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a0d7c2f1bde9e2d18081d2abe85207cb6}\label{state_8c_a0d7c2f1bde9e2d18081d2abe85207cb6}} 
-\index{state.c@{state.c}!fieldNoText@{fieldNoText}}
-\index{fieldNoText@{fieldNoText}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{fieldNoText}{fieldNoText}}
-{\footnotesize\ttfamily Emb\+String field\+No\+Text}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00984}{984}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a0fa29dcbdb3c004f944955fe765924eb}\label{state_8c_a0fa29dcbdb3c004f944955fe765924eb}} 
-\index{state.c@{state.c}!fieldOffText@{fieldOffText}}
-\index{fieldOffText@{fieldOffText}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{fieldOffText}{fieldOffText}}
-{\footnotesize\ttfamily Emb\+String field\+Off\+Text}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00986}{986}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a6b509d483a54a25d6c0a01b0e6eaad3a}\label{state_8c_a6b509d483a54a25d6c0a01b0e6eaad3a}} 
-\index{state.c@{state.c}!fieldOldText@{fieldOldText}}
-\index{fieldOldText@{fieldOldText}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{fieldOldText}{fieldOldText}}
-{\footnotesize\ttfamily Emb\+String field\+Old\+Text}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00980}{980}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a92c287cd0a4d7dca134ce672385237df}\label{state_8c_a92c287cd0a4d7dca134ce672385237df}} 
-\index{state.c@{state.c}!fieldOnText@{fieldOnText}}
-\index{fieldOnText@{fieldOnText}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{fieldOnText}{fieldOnText}}
-{\footnotesize\ttfamily Emb\+String field\+On\+Text}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00985}{985}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ac9de3ce9d5579cd578f6e028f8104693}\label{state_8c_ac9de3ce9d5579cd578f6e028f8104693}} 
-\index{state.c@{state.c}!fieldVariesText@{fieldVariesText}}
-\index{fieldVariesText@{fieldVariesText}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{fieldVariesText}{fieldVariesText}}
-{\footnotesize\ttfamily Emb\+String field\+Varies\+Text}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00982}{982}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ab4fffaa306829e97d5bfdc098f22eca1}\label{state_8c_ab4fffaa306829e97d5bfdc098f22eca1}} 
-\index{state.c@{state.c}!fieldYesText@{fieldYesText}}
-\index{fieldYesText@{fieldYesText}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{fieldYesText}{fieldYesText}}
-{\footnotesize\ttfamily Emb\+String field\+Yes\+Text}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00983}{983}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ac357896c24b9d6a4936ac5168089589d}\label{state_8c_ac357896c24b9d6a4936ac5168089589d}} 
 \index{state.c@{state.c}!file\_menu@{file\_menu}}
 \index{file\_menu@{file\_menu}!state.c@{state.c}}
@@ -1121,10 +749,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00983}{983}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00188}{188}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a6984d41d6a486baf438b9e158da6f241}\label{state_8c_a6984d41d6a486baf438b9e158da6f241}} 
 \index{state.c@{state.c}!file\_toolbar@{file\_toolbar}}
 \index{file\_toolbar@{file\_toolbar}!state.c@{state.c}}
@@ -1144,30 +768,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00188}{188}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00399}{399}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_abb7584e990a5c015e27d818426be9bb8}\label{state_8c_abb7584e990a5c015e27d818426be9bb8}} 
-\index{state.c@{state.c}!formatFilterOpen@{formatFilterOpen}}
-\index{formatFilterOpen@{formatFilterOpen}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{formatFilterOpen}{formatFilterOpen}}
-{\footnotesize\ttfamily char format\+Filter\+Open\mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00061}{61}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a62d59a7cd32d6c4444e37db908264183}\label{state_8c_a62d59a7cd32d6c4444e37db908264183}} 
-\index{state.c@{state.c}!formatFilterSave@{formatFilterSave}}
-\index{formatFilterSave@{formatFilterSave}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{formatFilterSave}{formatFilterSave}}
-{\footnotesize\ttfamily char format\+Filter\+Save\mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00062}{62}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_afc4858f95488d9905bcd127b8e74e47b}\label{state_8c_afc4858f95488d9905bcd127b8e74e47b}} 
 \index{state.c@{state.c}!geometry\_type\_keys@{geometry\_type\_keys}}
 \index{geometry\_type\_keys@{geometry\_type\_keys}!state.c@{state.c}}
@@ -1207,20 +807,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00062}{62}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01848}{1848}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_af35025f46345dc5ebff750296f91b6f5}\label{state_8c_af35025f46345dc5ebff750296f91b6f5}} 
-\index{state.c@{state.c}!global@{global}}
-\index{global@{global}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{global}{global}}
-{\footnotesize\ttfamily Script\+Env$\ast$ global}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00057}{57}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a775bd0d7c9e845b51040579619b63852}\label{state_8c_a775bd0d7c9e845b51040579619b63852}} 
 \index{state.c@{state.c}!grid\_enabled\_group@{grid\_enabled\_group}}
 \index{grid\_enabled\_group@{grid\_enabled\_group}!state.c@{state.c}}
@@ -1245,20 +831,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00057}{57}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01793}{1793}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a053018510e43ec601ac079a174b41c01}\label{state_8c_a053018510e43ec601ac079a174b41c01}} 
-\index{state.c@{state.c}!grid\_gb\_data@{grid\_gb\_data}}
-\index{grid\_gb\_data@{grid\_gb\_data}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{grid\_gb\_data}{grid\_gb\_data}}
-{\footnotesize\ttfamily \mbox{\hyperlink{structWidgetData__}{Widget\+Data}} grid\+\_\+gb\+\_\+data\mbox{[}$\,$\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01013}{1013}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aa2ff7213399a2fc2342865248d6c2f67}\label{state_8c_aa2ff7213399a2fc2342865248d6c2f67}} 
 \index{state.c@{state.c}!grid\_layout@{grid\_layout}}
 \index{grid\_layout@{grid\_layout}!state.c@{state.c}}
@@ -1284,10 +856,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01013}{1013}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01823}{1823}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aaad9842869c08f01359ad821acde8f34}\label{state_8c_aaad9842869c08f01359ad821acde8f34}} 
 \index{state.c@{state.c}!grid\_load\_from\_file\_group@{grid\_load\_from\_file\_group}}
 \index{grid\_load\_from\_file\_group@{grid\_load\_from\_file\_group}!state.c@{state.c}}
@@ -1314,20 +882,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01823}{1823}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00517}{517}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_aa45e5da31f2ac1c3723a67f5537e454e}\label{state_8c_aa45e5da31f2ac1c3723a67f5537e454e}} 
-\index{state.c@{state.c}!group\_box\_list@{group\_box\_list}}
-\index{group\_box\_list@{group\_box\_list}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{group\_box\_list}{group\_box\_list}}
-{\footnotesize\ttfamily \mbox{\hyperlink{structGroupBoxData__}{Group\+Box\+Data}} group\+\_\+box\+\_\+list\mbox{[}$\,$\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01148}{1148}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a80a473bc1769e58031a0876fc183810d}\label{state_8c_a80a473bc1769e58031a0876fc183810d}} 
 \index{state.c@{state.c}!help\_menu@{help\_menu}}
 \index{help\_menu@{help\_menu}!state.c@{state.c}}
@@ -1350,10 +904,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01148}{1148}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00255}{255}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ac03b92128ebf551ebf85e7aec6938794}\label{state_8c_ac03b92128ebf551ebf85e7aec6938794}} 
 \index{state.c@{state.c}!help\_toolbar@{help\_toolbar}}
 \index{help\_toolbar@{help\_toolbar}!state.c@{state.c}}
@@ -1371,10 +921,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00255}{255}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00446}{446}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_adceddebe6b84bd0fd0d1096eb8b423ba}\label{state_8c_adceddebe6b84bd0fd0d1096eb8b423ba}} 
 \index{state.c@{state.c}!icon\_toolbar@{icon\_toolbar}}
 \index{icon\_toolbar@{icon\_toolbar}!state.c@{state.c}}
@@ -1394,20 +940,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00446}{446}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00436}{436}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a69e645ac34ef17670c8d6efe067f2a85}\label{state_8c_a69e645ac34ef17670c8d6efe067f2a85}} 
-\index{state.c@{state.c}!iconSize@{iconSize}}
-\index{iconSize@{iconSize}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{iconSize}{iconSize}}
-{\footnotesize\ttfamily int icon\+Size}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00961}{961}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ada9a45809ad8d080be53e71517a5de65}\label{state_8c_ada9a45809ad8d080be53e71517a5de65}} 
 \index{state.c@{state.c}!index\_name@{index\_name}}
 \index{index\_name@{index\_name}!state.c@{state.c}}
@@ -1427,10 +959,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00961}{961}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00091}{91}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ad0f3049630c91238c39d2cb194c48e60}\label{state_8c_ad0f3049630c91238c39d2cb194c48e60}} 
 \index{state.c@{state.c}!index\_th\_name@{index\_th\_name}}
 \index{index\_th\_name@{index\_th\_name}!state.c@{state.c}}
@@ -1450,10 +978,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00091}{91}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00101}{101}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a3b027c84263f8fdfd626928c30ddcc81}\label{state_8c_a3b027c84263f8fdfd626928c30ddcc81}} 
 \index{state.c@{state.c}!inquiry\_toolbar@{inquiry\_toolbar}}
 \index{inquiry\_toolbar@{inquiry\_toolbar}!state.c@{state.c}}
@@ -1469,20 +993,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00101}{101}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00474}{474}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a2f7636df8b2a22914ee5e8a96139b655}\label{state_8c_a2f7636df8b2a22914ee5e8a96139b655}} 
-\index{state.c@{state.c}!isBlinking@{isBlinking}}
-\index{isBlinking@{isBlinking}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{isBlinking}{isBlinking}}
-{\footnotesize\ttfamily bool is\+Blinking = false}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00074}{74}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aacba5c5d4669c6cec368ff6ab1bc8c0f}\label{state_8c_aacba5c5d4669c6cec368ff6ab1bc8c0f}} 
 \index{state.c@{state.c}!key\_state@{key\_state}}
 \index{key\_state@{key\_state}!state.c@{state.c}}
@@ -1500,20 +1010,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00074}{74}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00079}{79}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ab109c307200cba3a4a63923a645ef6fc}\label{state_8c_ab109c307200cba3a4a63923a645ef6fc}} 
-\index{state.c@{state.c}!lastCmd@{lastCmd}}
-\index{lastCmd@{lastCmd}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{lastCmd}{lastCmd}}
-{\footnotesize\ttfamily char last\+Cmd\mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]} = \char`\"{}help\char`\"{}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01845}{1845}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a7ca53b64c6b27fcfd59a232426e1d021}\label{state_8c_a7ca53b64c6b27fcfd59a232426e1d021}} 
 \index{state.c@{state.c}!layer\_list@{layer\_list}}
 \index{layer\_list@{layer\_list}!state.c@{state.c}}
@@ -1537,10 +1033,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01845}{1845}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00866}{866}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aa5cb14f037f43d222ae481c38adf12fa}\label{state_8c_aa5cb14f037f43d222ae481c38adf12fa}} 
 \index{state.c@{state.c}!layer\_toolbar@{layer\_toolbar}}
 \index{layer\_toolbar@{layer\_toolbar}!state.c@{state.c}}
@@ -1554,10 +1046,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00866}{866}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00499}{499}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a3c9000190d35aed74ab855a3cb0e157a}\label{state_8c_a3c9000190d35aed74ab855a3cb0e157a}} 
 \index{state.c@{state.c}!left\_toolbar@{left\_toolbar}}
 \index{left\_toolbar@{left\_toolbar}!state.c@{state.c}}
@@ -1574,10 +1062,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00499}{499}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00367}{367}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a027baa8163b2cbe38849c0a571f290e4}\label{state_8c_a027baa8163b2cbe38849c0a571f290e4}} 
 \index{state.c@{state.c}!line\_type\_list@{line\_type\_list}}
 \index{line\_type\_list@{line\_type\_list}!state.c@{state.c}}
@@ -1597,10 +1081,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00367}{367}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00894}{894}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a4561b9fec01952f029a71e4247cde242}\label{state_8c_a4561b9fec01952f029a71e4247cde242}} 
 \index{state.c@{state.c}!line\_weight\_list@{line\_weight\_list}}
 \index{line\_weight\_list@{line\_weight\_list}!state.c@{state.c}}
@@ -1641,10 +1121,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00894}{894}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00905}{905}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a670f970f156bd690c5f0c2cae3a75730}\label{state_8c_a670f970f156bd690c5f0c2cae3a75730}} 
 \index{state.c@{state.c}!menu\_list@{menu\_list}}
 \index{menu\_list@{menu\_list}!state.c@{state.c}}
@@ -1671,10 +1147,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00905}{905}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00149}{149}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a961be0295c346ca2579f9f2990147511}\label{state_8c_a961be0295c346ca2579f9f2990147511}} 
 \index{state.c@{state.c}!menubar\_full\_list@{menubar\_full\_list}}
 \index{menubar\_full\_list@{menubar\_full\_list}!state.c@{state.c}}
@@ -1698,10 +1170,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00149}{149}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00166}{166}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a63926e21fe0cc749afb092ac1068eacc}\label{state_8c_a63926e21fe0cc749afb092ac1068eacc}} 
 \index{state.c@{state.c}!menubar\_no\_docs@{menubar\_no\_docs}}
 \index{menubar\_no\_docs@{menubar\_no\_docs}!state.c@{state.c}}
@@ -1719,10 +1187,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00166}{166}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00180}{180}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ab643077dca567cfe0288dd6324187783}\label{state_8c_ab643077dca567cfe0288dd6324187783}} 
 \index{state.c@{state.c}!modify\_menu@{modify\_menu}}
 \index{modify\_menu@{modify\_menu}!state.c@{state.c}}
@@ -1740,10 +1204,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00180}{180}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00295}{295}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aa8632c68032ac283d36b69dccd348f18}\label{state_8c_aa8632c68032ac283d36b69dccd348f18}} 
 \index{state.c@{state.c}!modify\_toolbar@{modify\_toolbar}}
 \index{modify\_toolbar@{modify\_toolbar}!state.c@{state.c}}
@@ -1762,110 +1222,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00295}{295}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00480}{480}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_aa2bcc9894846f1e1e8fd1509f1eb4698}\label{state_8c_aa2bcc9894846f1e1e8fd1509f1eb4698}} 
-\index{state.c@{state.c}!n\_actions@{n\_actions}}
-\index{n\_actions@{n\_actions}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{n\_actions}{n\_actions}}
-{\footnotesize\ttfamily int n\+\_\+actions = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00973}{973}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_af212424f77b3e5d1376bcc2dae8786bf}\label{state_8c_af212424f77b3e5d1376bcc2dae8786bf}} 
-\index{state.c@{state.c}!n\_aliases@{n\_aliases}}
-\index{n\_aliases@{n\_aliases}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{n\_aliases}{n\_aliases}}
-{\footnotesize\ttfamily int n\+\_\+aliases = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00970}{970}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a4b20d9bbde54f55c1111fa181a1f4725}\label{state_8c_a4b20d9bbde54f55c1111fa181a1f4725}} 
-\index{state.c@{state.c}!n\_objects@{n\_objects}}
-\index{n\_objects@{n\_objects}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{n\_objects}{n\_objects}}
-{\footnotesize\ttfamily int n\+\_\+objects = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00971}{971}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a697cff18529a6237f3972e48d540eddd}\label{state_8c_a697cff18529a6237f3972e48d540eddd}} 
-\index{state.c@{state.c}!n\_variables@{n\_variables}}
-\index{n\_variables@{n\_variables}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{n\_variables}{n\_variables}}
-{\footnotesize\ttfamily int n\+\_\+variables = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00059}{59}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_affe288f3f22973c4471aa9a271a53c77}\label{state_8c_affe288f3f22973c4471aa9a271a53c77}} 
-\index{state.c@{state.c}!n\_widgets@{n\_widgets}}
-\index{n\_widgets@{n\_widgets}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{n\_widgets}{n\_widgets}}
-{\footnotesize\ttfamily int n\+\_\+widgets = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00972}{972}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a3c0e2bc6cc4deb130635b69023080d80}\label{state_8c_a3c0e2bc6cc4deb130635b69023080d80}} 
-\index{state.c@{state.c}!numOfDocs@{numOfDocs}}
-\index{numOfDocs@{numOfDocs}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{numOfDocs}{numOfDocs}}
-{\footnotesize\ttfamily int num\+Of\+Docs = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00075}{75}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a60c4f9a7c4a4d065aae6637cf8c74915}\label{state_8c_a60c4f9a7c4a4d065aae6637cf8c74915}} 
-\index{state.c@{state.c}!obj\_index@{obj\_index}}
-\index{obj\_index@{obj\_index}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{obj\_index}{obj\_index}}
-{\footnotesize\ttfamily Int\+Map obj\+\_\+index\mbox{[}MAX\+\_\+\+OBJECTS\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00955}{955}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a34076a0637953b98847e8a4fd11459ca}\label{state_8c_a34076a0637953b98847e8a4fd11459ca}} 
-\index{state.c@{state.c}!object\_names@{object\_names}}
-\index{object\_names@{object\_names}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{object\_names}{object\_names}}
-{\footnotesize\ttfamily char$\ast$ object\+\_\+names\mbox{[}$\,$\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00634}{634}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a89d470a26e6c9ba7c3185693840f386c}\label{state_8c_a89d470a26e6c9ba7c3185693840f386c}} 
-\index{state.c@{state.c}!open\_files\_path@{open\_files\_path}}
-\index{open\_files\_path@{open\_files\_path}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{open\_files\_path}{open\_files\_path}}
-{\footnotesize\ttfamily char open\+\_\+files\+\_\+path\mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00063}{63}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ab7c99743c4b122cc43bd67ba4d1cac03}\label{state_8c_ab7c99743c4b122cc43bd67ba4d1cac03}} 
-\index{state.c@{state.c}!os@{os}}
-\index{os@{os}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{os}{os}}
-{\footnotesize\ttfamily char$\ast$ os = \char`\"{}Unknown Operating System\char`\"{}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00040}{40}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a4dbd60e152fe0e93613d36172aa0bf35}\label{state_8c_a4dbd60e152fe0e93613d36172aa0bf35}} 
 \index{state.c@{state.c}!pan\_menu@{pan\_menu}}
 \index{pan\_menu@{pan\_menu}!state.c@{state.c}}
@@ -1886,10 +1242,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00040}{40}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00244}{244}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a0f765b9c68e11bb825de59d2970c1d19}\label{state_8c_a0f765b9c68e11bb825de59d2970c1d19}} 
 \index{state.c@{state.c}!patternDetailsBox@{patternDetailsBox}}
 \index{patternDetailsBox@{patternDetailsBox}!state.c@{state.c}}
@@ -1915,50 +1267,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00244}{244}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01107}{1107}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a1a75a2a25a6094bc638240f9fe178621}\label{state_8c_a1a75a2a25a6094bc638240f9fe178621}} 
-\index{state.c@{state.c}!pickAdd@{pickAdd}}
-\index{pickAdd@{pickAdd}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{pickAdd}{pickAdd}}
-{\footnotesize\ttfamily bool pick\+Add}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00963}{963}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a67bcdae431fd4c2babe0c045dfb68cd7}\label{state_8c_a67bcdae431fd4c2babe0c045dfb68cd7}} 
-\index{state.c@{state.c}!precisionAngle@{precisionAngle}}
-\index{precisionAngle@{precisionAngle}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{precisionAngle}{precisionAngle}}
-{\footnotesize\ttfamily int precision\+Angle}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00967}{967}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a9e42212d5fa5815bc291e26e83df4239}\label{state_8c_a9e42212d5fa5815bc291e26e83df4239}} 
-\index{state.c@{state.c}!precisionLength@{precisionLength}}
-\index{precisionLength@{precisionLength}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{precisionLength}{precisionLength}}
-{\footnotesize\ttfamily int precision\+Length}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00968}{968}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a32fe6bd71d63678c8f07cd224f3581cb}\label{state_8c_a32fe6bd71d63678c8f07cd224f3581cb}} 
-\index{state.c@{state.c}!prefix@{prefix}}
-\index{prefix@{prefix}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{prefix}{prefix}}
-{\footnotesize\ttfamily char prefix\mbox{[}200\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00144}{144}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a806548fc35ec13e3f9a38623f4d56979}\label{state_8c_a806548fc35ec13e3f9a38623f4d56979}} 
 \index{state.c@{state.c}!preview\_to\_dialog@{preview\_to\_dialog}}
 \index{preview\_to\_dialog@{preview\_to\_dialog}!state.c@{state.c}}
@@ -1982,50 +1290,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00144}{144}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00592}{592}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a6ae3868a32ea5ec594ea8c28472d9588}\label{state_8c_a6ae3868a32ea5ec594ea8c28472d9588}} 
-\index{state.c@{state.c}!prompt\_bg\_color\_@{prompt\_bg\_color\_}}
-\index{prompt\_bg\_color\_@{prompt\_bg\_color\_}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{prompt\_bg\_color\_}{prompt\_bg\_color\_}}
-{\footnotesize\ttfamily char prompt\+\_\+bg\+\_\+color\+\_\+\mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00066}{66}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a629185a2c86e82c070bc42db2e73bde1}\label{state_8c_a629185a2c86e82c070bc42db2e73bde1}} 
-\index{state.c@{state.c}!prompt\_color\_@{prompt\_color\_}}
-\index{prompt\_color\_@{prompt\_color\_}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{prompt\_color\_}{prompt\_color\_}}
-{\footnotesize\ttfamily char prompt\+\_\+color\+\_\+\mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00064}{64}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ad966e2e054810a3c5ccd1a442d402494}\label{state_8c_ad966e2e054810a3c5ccd1a442d402494}} 
-\index{state.c@{state.c}!prompt\_selection\_bg\_color\_@{prompt\_selection\_bg\_color\_}}
-\index{prompt\_selection\_bg\_color\_@{prompt\_selection\_bg\_color\_}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{prompt\_selection\_bg\_color\_}{prompt\_selection\_bg\_color\_}}
-{\footnotesize\ttfamily char prompt\+\_\+selection\+\_\+bg\+\_\+color\+\_\+\mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00065}{65}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a98423167898a9a35d715f6c298c4f2c7}\label{state_8c_a98423167898a9a35d715f6c298c4f2c7}} 
-\index{state.c@{state.c}!prompt\_selection\_color\_@{prompt\_selection\_color\_}}
-\index{prompt\_selection\_color\_@{prompt\_selection\_color\_}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{prompt\_selection\_color\_}{prompt\_selection\_color\_}}
-{\footnotesize\ttfamily char prompt\+\_\+selection\+\_\+color\+\_\+\mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00067}{67}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a42afc9e754bf477628e429fa2cec602d}\label{state_8c_a42afc9e754bf477628e429fa2cec602d}} 
 \index{state.c@{state.c}!prompt\_toolbar@{prompt\_toolbar}}
 \index{prompt\_toolbar@{prompt\_toolbar}!state.c@{state.c}}
@@ -2039,10 +1303,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00067}{67}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00511}{511}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a00a359c9663a77ac1553353ac1297f1c}\label{state_8c_a00a359c9663a77ac1553353ac1297f1c}} 
 \index{state.c@{state.c}!promptColorLayout@{promptColorLayout}}
 \index{promptColorLayout@{promptColorLayout}!state.c@{state.c}}
@@ -2058,30 +1318,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00511}{511}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01134}{1134}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ad7c57cde5c49ed0e512dee028a6c4ed0}\label{state_8c_ad7c57cde5c49ed0e512dee028a6c4ed0}} 
-\index{state.c@{state.c}!promptHistoryData@{promptHistoryData}}
-\index{promptHistoryData@{promptHistoryData}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{promptHistoryData}{promptHistoryData}}
-{\footnotesize\ttfamily char prompt\+History\+Data\mbox{[}MAX\+\_\+\+LONG\+\_\+\+STRING\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00977}{977}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a74505d10227dcd378095afb41fc3f612}\label{state_8c_a74505d10227dcd378095afb41fc3f612}} 
-\index{state.c@{state.c}!promptInputNum@{promptInputNum}}
-\index{promptInputNum@{promptInputNum}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{promptInputNum}{promptInputNum}}
-{\footnotesize\ttfamily int prompt\+Input\+Num = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00965}{965}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a0ede572b55118f6b4b153cdd47dd1a26}\label{state_8c_a0ede572b55118f6b4b153cdd47dd1a26}} 
 \index{state.c@{state.c}!properties\_toolbar@{properties\_toolbar}}
 \index{properties\_toolbar@{properties\_toolbar}!state.c@{state.c}}
@@ -2095,20 +1331,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00965}{965}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00503}{503}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_ad651d258c5fe49323b105b1b23d64777}\label{state_8c_ad651d258c5fe49323b105b1b23d64777}} 
-\index{state.c@{state.c}!rapidFireEnabled@{rapidFireEnabled}}
-\index{rapidFireEnabled@{rapidFireEnabled}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{rapidFireEnabled}{rapidFireEnabled}}
-{\footnotesize\ttfamily bool rapid\+Fire\+Enabled = false}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00073}{73}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a8aa09582dbe11119f9401a173c6971c3}\label{state_8c_a8aa09582dbe11119f9401a173c6971c3}} 
 \index{state.c@{state.c}!recent\_files@{recent\_files}}
 \index{recent\_files@{recent\_files}!state.c@{state.c}}
@@ -2122,10 +1344,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00073}{73}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00087}{87}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a840383f5d9926e2801b8397c97179c40}\label{state_8c_a840383f5d9926e2801b8397c97179c40}} 
 \index{state.c@{state.c}!recent\_menu@{recent\_menu}}
 \index{recent\_menu@{recent\_menu}!state.c@{state.c}}
@@ -2139,10 +1357,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00087}{87}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00324}{324}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a0206db0cd6bb69d5d27596809543f54e}\label{state_8c_a0206db0cd6bb69d5d27596809543f54e}} 
 \index{state.c@{state.c}!rectangular\_grid\_group@{rectangular\_grid\_group}}
 \index{rectangular\_grid\_group@{rectangular\_grid\_group}!state.c@{state.c}}
@@ -2164,10 +1378,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00324}{324}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00546}{546}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a36c3ec1ab01d66ab2b31c065c3366d00}\label{state_8c_a36c3ec1ab01d66ab2b31c065c3366d00}} 
 \index{state.c@{state.c}!rectangular\_grid\_visible\_group@{rectangular\_grid\_visible\_group}}
 \index{rectangular\_grid\_visible\_group@{rectangular\_grid\_visible\_group}!state.c@{state.c}}
@@ -2185,10 +1395,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00546}{546}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01808}{1808}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_abd14d6bf0db0f2553abaa090160f3bb6}\label{state_8c_abd14d6bf0db0f2553abaa090160f3bb6}} 
 \index{state.c@{state.c}!render\_hints@{render\_hints}}
 \index{render\_hints@{render\_hints}!state.c@{state.c}}
@@ -2208,20 +1414,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01808}{1808}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00622}{622}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a6ab564d41e31041cac6b26b7087917de}\label{state_8c_a6ab564d41e31041cac6b26b7087917de}} 
-\index{state.c@{state.c}!root@{root}}
-\index{root@{root}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{root}{root}}
-{\footnotesize\ttfamily Script\+Value$\ast$ root}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00056}{56}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aef0c9145ad56318d8351d07ae484dee8}\label{state_8c_aef0c9145ad56318d8351d07ae484dee8}} 
 \index{state.c@{state.c}!rulerLayout@{rulerLayout}}
 \index{rulerLayout@{rulerLayout}!state.c@{state.c}}
@@ -2236,10 +1428,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00056}{56}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01140}{1140}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ad8b9d152fab1274686af8fb1a65d8408}\label{state_8c_ad8b9d152fab1274686af8fb1a65d8408}} 
 \index{state.c@{state.c}!sandbox\_menu@{sandbox\_menu}}
 \index{sandbox\_menu@{sandbox\_menu}!state.c@{state.c}}
@@ -2265,10 +1453,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01140}{1140}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00308}{308}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a02ac0b3c386d0aff5f7754a964c88f57}\label{state_8c_a02ac0b3c386d0aff5f7754a964c88f57}} 
 \index{state.c@{state.c}!sandbox\_toolbar@{sandbox\_toolbar}}
 \index{sandbox\_toolbar@{sandbox\_toolbar}!state.c@{state.c}}
@@ -2283,10 +1467,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00308}{308}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00494}{494}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a424d5624a77d4626360afa1e14633c54}\label{state_8c_a424d5624a77d4626360afa1e14633c54}} 
 \index{state.c@{state.c}!script\_false@{script\_false}}
 \index{script\_false@{script\_false}!state.c@{state.c}}
@@ -2305,10 +1485,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00494}{494}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00129}{129}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a221780b3c065147a633883cf9546a92d}\label{state_8c_a221780b3c065147a633883cf9546a92d}} 
 \index{state.c@{state.c}!script\_null@{script\_null}}
 \index{script\_null@{script\_null}!state.c@{state.c}}
@@ -2327,10 +1503,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00129}{129}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00111}{111}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a5a49cc14328f6948aa9a4be0702123f4}\label{state_8c_a5a49cc14328f6948aa9a4be0702123f4}} 
 \index{state.c@{state.c}!script\_true@{script\_true}}
 \index{script\_true@{script\_true}!state.c@{state.c}}
@@ -2349,10 +1521,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00111}{111}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00120}{120}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a2afa46997732153e90db15349d8b8847}\label{state_8c_a2afa46997732153e90db15349d8b8847}} 
 \index{state.c@{state.c}!selectionBoxLayout@{selectionBoxLayout}}
 \index{selectionBoxLayout@{selectionBoxLayout}!state.c@{state.c}}
@@ -2373,40 +1541,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00120}{120}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01123}{1123}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_af1b9b04f8ae7283a897a8eb9fe0e9e8d}\label{state_8c_af1b9b04f8ae7283a897a8eb9fe0e9e8d}} 
-\index{state.c@{state.c}!setting@{setting}}
-\index{setting@{setting}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{setting}{setting}}
-{\footnotesize\ttfamily \mbox{\hyperlink{structSetting__}{Setting}} setting\mbox{[}N\+\_\+\+SETTINGS\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00086}{86}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a481b3bdac5703ab4bd50dacc048e1350}\label{state_8c_a481b3bdac5703ab4bd50dacc048e1350}} 
-\index{state.c@{state.c}!settings\_data@{settings\_data}}
-\index{settings\_data@{settings\_data}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{settings\_data}{settings\_data}}
-{\footnotesize\ttfamily char$\ast$ settings\+\_\+data\mbox{[}$\,$\mbox{]}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01539}{1539}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a58d95e2b310a39fb791005e81f3bf6cc}\label{state_8c_a58d95e2b310a39fb791005e81f3bf6cc}} 
-\index{state.c@{state.c}!settings\_file@{settings\_file}}
-\index{settings\_file@{settings\_file}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{settings\_file}{settings\_file}}
-{\footnotesize\ttfamily char settings\+\_\+file\mbox{[}MAX\+\_\+\+STRING\+\_\+\+LENGTH\mbox{]} = \char`\"{}settings.\+ini\char`\"{}}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00078}{78}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a82d5278ad164a571ce03950c04b6103e}\label{state_8c_a82d5278ad164a571ce03950c04b6103e}} 
 \index{state.c@{state.c}!settings\_tab\_labels@{settings\_tab\_labels}}
 \index{settings\_tab\_labels@{settings\_tab\_labels}!state.c@{state.c}}
@@ -2433,30 +1567,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00078}{78}} of file \mbox{\
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00575}{575}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a1378a2dd56cbdc33ba254356eac946c9}\label{state_8c_a1378a2dd56cbdc33ba254356eac946c9}} 
-\index{state.c@{state.c}!shiftKeyPressedState@{shiftKeyPressedState}}
-\index{shiftKeyPressedState@{shiftKeyPressedState}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{shiftKeyPressedState}{shiftKeyPressedState}}
-{\footnotesize\ttfamily bool shift\+Key\+Pressed\+State = false}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00071}{71}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
-\mbox{\Hypertarget{state_8c_a20820415ca05720c97b77275fb424e11}\label{state_8c_a20820415ca05720c97b77275fb424e11}} 
-\index{state.c@{state.c}!testing\_mode@{testing\_mode}}
-\index{testing\_mode@{testing\_mode}!state.c@{state.c}}
-\doxyparagraph{\texorpdfstring{testing\_mode}{testing\_mode}}
-{\footnotesize\ttfamily int testing\+\_\+mode = 0}
-
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00141}{141}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ab75914ab7fb0e6afb87175e88627b9c8}\label{state_8c_ab75914ab7fb0e6afb87175e88627b9c8}} 
 \index{state.c@{state.c}!text\_size\_list@{text\_size\_list}}
 \index{text\_size\_list@{text\_size\_list}!state.c@{state.c}}
@@ -2484,10 +1594,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00141}{141}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00936}{936}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a1c5334902b229d61b8707b61e58852f5}\label{state_8c_a1c5334902b229d61b8707b61e58852f5}} 
 \index{state.c@{state.c}!text\_toolbar@{text\_toolbar}}
 \index{text\_toolbar@{text\_toolbar}!state.c@{state.c}}
@@ -2501,10 +1607,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00936}{936}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00507}{507}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_afe61f345e586218cca3fc329e805a530}\label{state_8c_afe61f345e586218cca3fc329e805a530}} 
 \index{state.c@{state.c}!tips@{tips}}
 \index{tips@{tips}!state.c@{state.c}}
@@ -2533,10 +1635,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00507}{507}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00682}{682}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a93324f13b6ba5c57028e85cb128a632d}\label{state_8c_a93324f13b6ba5c57028e85cb128a632d}} 
 \index{state.c@{state.c}!toolbar\_horizontal@{toolbar\_horizontal}}
 \index{toolbar\_horizontal@{toolbar\_horizontal}!state.c@{state.c}}
@@ -2555,10 +1653,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00682}{682}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00379}{379}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a372182cf0e7f936d9229396fcce9d2b0}\label{state_8c_a372182cf0e7f936d9229396fcce9d2b0}} 
 \index{state.c@{state.c}!toolbar\_list@{toolbar\_list}}
 \index{toolbar\_list@{toolbar\_list}!state.c@{state.c}}
@@ -2586,10 +1680,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00379}{379}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00334}{334}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_af2aebe5a43713e69037f150e857b9fe0}\label{state_8c_af2aebe5a43713e69037f150e857b9fe0}} 
 \index{state.c@{state.c}!toolbars\_when\_docs@{toolbars\_when\_docs}}
 \index{toolbars\_when\_docs@{toolbars\_when\_docs}!state.c@{state.c}}
@@ -2610,10 +1700,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00334}{334}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00388}{388}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aa5a0531e09085822d6b624fd4a3da8ea}\label{state_8c_aa5a0531e09085822d6b624fd4a3da8ea}} 
 \index{state.c@{state.c}!tools\_menu@{tools\_menu}}
 \index{tools\_menu@{tools\_menu}!state.c@{state.c}}
@@ -2630,10 +1716,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00388}{388}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00288}{288}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ac9c075520114240653ea93b873c7d11f}\label{state_8c_ac9c075520114240653ea93b873c7d11f}} 
 \index{state.c@{state.c}!top\_toolbar@{top\_toolbar}}
 \index{top\_toolbar@{top\_toolbar}!state.c@{state.c}}
@@ -2658,10 +1740,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00288}{288}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00352}{352}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a1d142b796ea87cf0535b077ad3590671}\label{state_8c_a1d142b796ea87cf0535b077ad3590671}} 
 \index{state.c@{state.c}!ui\_labels@{ui\_labels}}
 \index{ui\_labels@{ui\_labels}!state.c@{state.c}}
@@ -2700,10 +1778,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00352}{352}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01078}{1078}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a70fc74a2a274409e42d4e6851a043e11}\label{state_8c_a70fc74a2a274409e42d4e6851a043e11}} 
 \index{state.c@{state.c}!view\_menu@{view\_menu}}
 \index{view\_menu@{view\_menu}!state.c@{state.c}}
@@ -2723,10 +1797,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01078}{1078}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00219}{219}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a17ef08c8878e493d1a3893323cab4f88}\label{state_8c_a17ef08c8878e493d1a3893323cab4f88}} 
 \index{state.c@{state.c}!view\_toolbar@{view\_toolbar}}
 \index{view\_toolbar@{view\_toolbar}!state.c@{state.c}}
@@ -2753,10 +1823,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00219}{219}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00419}{419}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_a79fd60242b688ed1fbbf3831e7beead1}\label{state_8c_a79fd60242b688ed1fbbf3831e7beead1}} 
 \index{state.c@{state.c}!window\_menu@{window\_menu}}
 \index{window\_menu@{window\_menu}!state.c@{state.c}}
@@ -2770,10 +1836,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00419}{419}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00328}{328}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_ad7279bc30bc53005c580fb71af5b9b27}\label{state_8c_ad7279bc30bc53005c580fb71af5b9b27}} 
 \index{state.c@{state.c}!zoom\_gb\_data@{zoom\_gb\_data}}
 \index{zoom\_gb\_data@{zoom\_gb\_data}!state.c@{state.c}}
@@ -2801,10 +1863,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00328}{328}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00995}{995}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_adeb1199c85d400672e7a49dc9832820d}\label{state_8c_adeb1199c85d400672e7a49dc9832820d}} 
 \index{state.c@{state.c}!zoom\_layout@{zoom\_layout}}
 \index{zoom\_layout@{zoom\_layout}!state.c@{state.c}}
@@ -2820,10 +1878,6 @@ Definition at line \mbox{\hyperlink{state_8c_source_l00995}{995}} of file \mbox{
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l01839}{1839}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-
 \mbox{\Hypertarget{state_8c_aac04b572a04a6102021bd2678c026981}\label{state_8c_aac04b572a04a6102021bd2678c026981}} 
 \index{state.c@{state.c}!zoom\_menu@{zoom\_menu}}
 \index{zoom\_menu@{zoom\_menu}!state.c@{state.c}}
@@ -2848,7 +1902,3 @@ Definition at line \mbox{\hyperlink{state_8c_source_l01839}{1839}} of file \mbox
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{state_8c_source_l00229}{229}} of file \mbox{\hyperlink{state_8c_source}{state.\+c}}.
-

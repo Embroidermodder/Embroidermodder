@@ -1840,243 +1840,243 @@ $(function() {
 <div class="line"><a id="l01771" name="l01771"></a><span class="lineno"> 1771</span><span class="keywordtype">char</span> *qcolor_from_uint32_t(uint32_t color);</div>
 <div class="line"><a id="l01772" name="l01772"></a><span class="lineno"> 1772</span>ScriptValue allow_rubber_command(ScriptEnv *context);</div>
 <div class="line"><a id="l01773" name="l01773"></a><span class="lineno"> 1773</span> </div>
-<div class="line"><a id="l01774" name="l01774"></a><span class="lineno"> 1774</span><span class="comment">/* ---------------------- Script Environment management -------------------- */</span></div>
-<div class="line"><a id="l01775" name="l01775"></a><span class="lineno"> 1775</span><span class="keywordtype">int</span> load_global_state(ScriptValue *root, <span class="keywordtype">char</span> *asset_dir);</div>
-<div class="line"><a id="l01776" name="l01776"></a><span class="lineno"> 1776</span> </div>
-<div class="line"><a id="l01777" name="l01777"></a><span class="lineno"> 1777</span>ScriptValue *emb_create_root(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l01778" name="l01778"></a><span class="lineno"> 1778</span><span class="keywordtype">int</span> emb_create_leaf(ScriptValue *branch, <span class="keywordtype">int</span> type, <span class="keywordtype">char</span> *label, <span class="keywordtype">char</span> *data);</div>
-<div class="line"><a id="l01779" name="l01779"></a><span class="lineno"> 1779</span>ScriptValue *emb_get_var(ScriptValue *node, <span class="keyword">const</span> <span class="keywordtype">char</span> *key);</div>
-<div class="line"><a id="l01780" name="l01780"></a><span class="lineno"> 1780</span><span class="keyword">const</span> <span class="keywordtype">char</span> *emb_get_str(ScriptValue *node, <span class="keyword">const</span> <span class="keywordtype">char</span> *key);</div>
-<div class="line"><a id="l01781" name="l01781"></a><span class="lineno"> 1781</span><span class="keywordtype">void</span> emb_free_root(ScriptValue *root);</div>
-<div class="line"><a id="l01782" name="l01782"></a><span class="lineno"> 1782</span><span class="keywordtype">void</span> emb_print_tree(ScriptValue *tree, <span class="keywordtype">int</span> indent);</div>
-<div class="line"><a id="l01783" name="l01783"></a><span class="lineno"> 1783</span> </div>
-<div class="line"><a id="l01784" name="l01784"></a><span class="lineno"> 1784</span><span class="comment">/* ---------------------------- Global Variables --------------------------- */</span></div>
-<div class="line"><a id="l01785" name="l01785"></a><span class="lineno"> 1785</span><span class="comment">/* Global variables and constants we need to access anywhere in the program</span></div>
-<div class="line"><a id="l01786" name="l01786"></a><span class="lineno"> 1786</span><span class="comment"> * with minimal overhead.</span></div>
-<div class="line"><a id="l01787" name="l01787"></a><span class="lineno"> 1787</span><span class="comment"> */</span></div>
-<div class="line"><a id="l01788" name="l01788"></a><span class="lineno"> 1788</span> </div>
-<div class="line"><a id="l01789" name="l01789"></a><span class="lineno"> 1789</span><span class="keyword">extern</span> <a class="code hl_struct" href="structWidget__.html">Widget</a> widget_list[MAX_WIDGETS];</div>
-<div class="line"><a id="l01790" name="l01790"></a><span class="lineno"> 1790</span><span class="keyword">extern</span> <a class="code hl_struct" href="structCommandData__.html">CommandData</a> command_data[MAX_COMMANDS];</div>
-<div class="line"><a id="l01791" name="l01791"></a><span class="lineno"> 1791</span><span class="keyword">extern</span> StringMap aliases[MAX_ALIASES];</div>
-<div class="line"><a id="l01792" name="l01792"></a><span class="lineno"> 1792</span><span class="keyword">extern</span> <a class="code hl_struct" href="structSetting__.html">Setting</a> setting[N_SETTINGS];</div>
-<div class="line"><a id="l01793" name="l01793"></a><span class="lineno"> 1793</span><span class="keyword">extern</span> <a class="code hl_struct" href="structGroupBoxData__.html">GroupBoxData</a> group_box_list[];</div>
-<div class="line"><a id="l01794" name="l01794"></a><span class="lineno"> 1794</span><span class="keyword">extern</span> <a class="code hl_struct" href="structTranslation__.html">Translation</a> translations[];</div>
-<div class="line"><a id="l01795" name="l01795"></a><span class="lineno"> 1795</span><span class="keyword">extern</span> Design designs[];</div>
-<div class="line"><a id="l01796" name="l01796"></a><span class="lineno"> 1796</span><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *svgs[];</div>
-<div class="line"><a id="l01797" name="l01797"></a><span class="lineno"> 1797</span><span class="keyword">extern</span> ScriptValue *root;</div>
-<div class="line"><a id="l01798" name="l01798"></a><span class="lineno"> 1798</span> </div>
-<div class="line"><a id="l01799" name="l01799"></a><span class="lineno"> 1799</span><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *config_table[];</div>
-<div class="line"><a id="l01800" name="l01800"></a><span class="lineno"> 1800</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *settings_data[];</div>
-<div class="line"><a id="l01801" name="l01801"></a><span class="lineno"> 1801</span> </div>
-<div class="line"><a id="l01802" name="l01802"></a><span class="lineno"> 1802</span><span class="keyword">extern</span> ScriptValue *config;</div>
-<div class="line"><a id="l01803" name="l01803"></a><span class="lineno"> 1803</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_variables;</div>
-<div class="line"><a id="l01804" name="l01804"></a><span class="lineno"> 1804</span> </div>
-<div class="line"><a id="l01805" name="l01805"></a><span class="lineno"> 1805</span><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *index_th_name[];</div>
-<div class="line"><a id="l01806" name="l01806"></a><span class="lineno"> 1806</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> exitApp;</div>
-<div class="line"><a id="l01807" name="l01807"></a><span class="lineno"> 1807</span> </div>
-<div class="line"><a id="l01808" name="l01808"></a><span class="lineno"> 1808</span><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *circle_origin_path;</div>
-<div class="line"><a id="l01809" name="l01809"></a><span class="lineno"> 1809</span> </div>
-<div class="line"><a id="l01810" name="l01810"></a><span class="lineno"> 1810</span><span class="comment">/* Menus */</span></div>
-<div class="line"><a id="l01811" name="l01811"></a><span class="lineno"> 1811</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *menu_list[];</div>
-<div class="line"><a id="l01812" name="l01812"></a><span class="lineno"> 1812</span><span class="keyword">extern</span> <span class="keywordtype">int</span> menubar_full_list[];</div>
-<div class="line"><a id="l01813" name="l01813"></a><span class="lineno"> 1813</span><span class="keyword">extern</span> <span class="keywordtype">int</span> menubar_no_docs[];</div>
-<div class="line"><a id="l01814" name="l01814"></a><span class="lineno"> 1814</span> </div>
-<div class="line"><a id="l01815" name="l01815"></a><span class="lineno"> 1815</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *file_menu[];</div>
-<div class="line"><a id="l01816" name="l01816"></a><span class="lineno"> 1816</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *edit_menu[];</div>
-<div class="line"><a id="l01817" name="l01817"></a><span class="lineno"> 1817</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *view_menu[];</div>
-<div class="line"><a id="l01818" name="l01818"></a><span class="lineno"> 1818</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *zoom_menu[];</div>
-<div class="line"><a id="l01819" name="l01819"></a><span class="lineno"> 1819</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *pan_menu[];</div>
-<div class="line"><a id="l01820" name="l01820"></a><span class="lineno"> 1820</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *help_menu[];</div>
-<div class="line"><a id="l01821" name="l01821"></a><span class="lineno"> 1821</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *draw_menu[];</div>
-<div class="line"><a id="l01822" name="l01822"></a><span class="lineno"> 1822</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *tools_menu[];</div>
-<div class="line"><a id="l01823" name="l01823"></a><span class="lineno"> 1823</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *modify_menu[];</div>
-<div class="line"><a id="l01824" name="l01824"></a><span class="lineno"> 1824</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *dimension_menu[];</div>
-<div class="line"><a id="l01825" name="l01825"></a><span class="lineno"> 1825</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *sandbox_menu[];</div>
-<div class="line"><a id="l01826" name="l01826"></a><span class="lineno"> 1826</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *recent_menu[];</div>
-<div class="line"><a id="l01827" name="l01827"></a><span class="lineno"> 1827</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *window_menu[];</div>
-<div class="line"><a id="l01828" name="l01828"></a><span class="lineno"> 1828</span> </div>
-<div class="line"><a id="l01829" name="l01829"></a><span class="lineno"> 1829</span><span class="comment">/* Toolbars */</span></div>
-<div class="line"><a id="l01830" name="l01830"></a><span class="lineno"> 1830</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *toolbar_list[];</div>
-<div class="line"><a id="l01831" name="l01831"></a><span class="lineno"> 1831</span><span class="keyword">extern</span> <span class="keywordtype">int</span> toolbars_when_docs[];</div>
-<div class="line"><a id="l01832" name="l01832"></a><span class="lineno"> 1832</span> </div>
-<div class="line"><a id="l01833" name="l01833"></a><span class="lineno"> 1833</span><span class="keyword">extern</span> <span class="keywordtype">int</span> top_toolbar[];</div>
-<div class="line"><a id="l01834" name="l01834"></a><span class="lineno"> 1834</span><span class="keyword">extern</span> <span class="keywordtype">int</span> left_toolbar[];</div>
-<div class="line"><a id="l01835" name="l01835"></a><span class="lineno"> 1835</span><span class="keyword">extern</span> <span class="keywordtype">int</span> bottom_toolbar[];</div>
-<div class="line"><a id="l01836" name="l01836"></a><span class="lineno"> 1836</span><span class="keyword">extern</span> <span class="keywordtype">int</span> toolbar_horizontal[];</div>
-<div class="line"><a id="l01837" name="l01837"></a><span class="lineno"> 1837</span> </div>
-<div class="line"><a id="l01838" name="l01838"></a><span class="lineno"> 1838</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *file_toolbar[];</div>
-<div class="line"><a id="l01839" name="l01839"></a><span class="lineno"> 1839</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *edit_toolbar[];</div>
-<div class="line"><a id="l01840" name="l01840"></a><span class="lineno"> 1840</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *view_toolbar[];</div>
-<div class="line"><a id="l01841" name="l01841"></a><span class="lineno"> 1841</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *zoom_toolbar[];</div>
-<div class="line"><a id="l01842" name="l01842"></a><span class="lineno"> 1842</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *pan_toolbar[];</div>
-<div class="line"><a id="l01843" name="l01843"></a><span class="lineno"> 1843</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *icon_toolbar[];</div>
-<div class="line"><a id="l01844" name="l01844"></a><span class="lineno"> 1844</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *help_toolbar[];</div>
-<div class="line"><a id="l01845" name="l01845"></a><span class="lineno"> 1845</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *draw_toolbar[];</div>
-<div class="line"><a id="l01846" name="l01846"></a><span class="lineno"> 1846</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *inquiry_toolbar[];</div>
-<div class="line"><a id="l01847" name="l01847"></a><span class="lineno"> 1847</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *modify_toolbar[];</div>
-<div class="line"><a id="l01848" name="l01848"></a><span class="lineno"> 1848</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *dimension_toolbar[];</div>
-<div class="line"><a id="l01849" name="l01849"></a><span class="lineno"> 1849</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *sandbox_toolbar[];</div>
-<div class="line"><a id="l01850" name="l01850"></a><span class="lineno"> 1850</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *layer_toolbar[];</div>
-<div class="line"><a id="l01851" name="l01851"></a><span class="lineno"> 1851</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *properties_toolbar[];</div>
-<div class="line"><a id="l01852" name="l01852"></a><span class="lineno"> 1852</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *text_toolbar[];</div>
-<div class="line"><a id="l01853" name="l01853"></a><span class="lineno"> 1853</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *prompt_toolbar[];</div>
-<div class="line"><a id="l01854" name="l01854"></a><span class="lineno"> 1854</span> </div>
-<div class="line"><a id="l01855" name="l01855"></a><span class="lineno"> 1855</span><span class="comment">/* Widget Groups */</span></div>
-<div class="line"><a id="l01856" name="l01856"></a><span class="lineno"> 1856</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *grid_load_from_file_group[];</div>
-<div class="line"><a id="l01857" name="l01857"></a><span class="lineno"> 1857</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *defined_origin_group[];</div>
-<div class="line"><a id="l01858" name="l01858"></a><span class="lineno"> 1858</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *rectangular_grid_group[];</div>
-<div class="line"><a id="l01859" name="l01859"></a><span class="lineno"> 1859</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *circular_grid_group[];</div>
-<div class="line"><a id="l01860" name="l01860"></a><span class="lineno"> 1860</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *center_on_origin_group[];</div>
-<div class="line"><a id="l01861" name="l01861"></a><span class="lineno"> 1861</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *grid_enabled_group[];</div>
-<div class="line"><a id="l01862" name="l01862"></a><span class="lineno"> 1862</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *rectangular_grid_visible_group[];</div>
-<div class="line"><a id="l01863" name="l01863"></a><span class="lineno"> 1863</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *circular_grid_visible_group[];</div>
-<div class="line"><a id="l01864" name="l01864"></a><span class="lineno"> 1864</span> </div>
-<div class="line"><a id="l01865" name="l01865"></a><span class="lineno"> 1865</span><span class="comment">/* Settings */</span></div>
-<div class="line"><a id="l01866" name="l01866"></a><span class="lineno"> 1866</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *settings_tab_labels[];</div>
-<div class="line"><a id="l01867" name="l01867"></a><span class="lineno"> 1867</span><span class="keyword">extern</span> <span class="keywordtype">int</span> preview_to_dialog[];</div>
-<div class="line"><a id="l01868" name="l01868"></a><span class="lineno"> 1868</span><span class="keyword">extern</span> <span class="keywordtype">int</span> accept_to_dialog[];</div>
-<div class="line"><a id="l01869" name="l01869"></a><span class="lineno"> 1869</span><span class="keyword">extern</span> <span class="keywordtype">int</span> render_hints[];</div>
-<div class="line"><a id="l01870" name="l01870"></a><span class="lineno"> 1870</span> </div>
-<div class="line"><a id="l01871" name="l01871"></a><span class="lineno"> 1871</span><span class="comment">/* Objects */</span></div>
-<div class="line"><a id="l01872" name="l01872"></a><span class="lineno"> 1872</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *object_names[];</div>
-<div class="line"><a id="l01873" name="l01873"></a><span class="lineno"> 1873</span> </div>
-<div class="line"><a id="l01874" name="l01874"></a><span class="lineno"> 1874</span><span class="comment">/* Testing */</span></div>
-<div class="line"><a id="l01875" name="l01875"></a><span class="lineno"> 1875</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *coverage_test[];</div>
-<div class="line"><a id="l01876" name="l01876"></a><span class="lineno"> 1876</span> </div>
-<div class="line"><a id="l01877" name="l01877"></a><span class="lineno"> 1877</span><span class="comment">/* Misc */</span></div>
-<div class="line"><a id="l01878" name="l01878"></a><span class="lineno"> 1878</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *tips[];</div>
-<div class="line"><a id="l01879" name="l01879"></a><span class="lineno"> 1879</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *extensions[];</div>
-<div class="line"><a id="l01880" name="l01880"></a><span class="lineno"> 1880</span> </div>
-<div class="line"><a id="l01881" name="l01881"></a><span class="lineno"> 1881</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> document_memory[MAX_OPEN_FILES];</div>
-<div class="line"><a id="l01882" name="l01882"></a><span class="lineno"> 1882</span> </div>
-<div class="line"><a id="l01883" name="l01883"></a><span class="lineno"> 1883</span><span class="keyword">extern</span> <span class="keywordtype">char</span> formatFilterOpen[MAX_LONG_STRING];</div>
-<div class="line"><a id="l01884" name="l01884"></a><span class="lineno"> 1884</span><span class="keyword">extern</span> <span class="keywordtype">char</span> formatFilterSave[MAX_LONG_STRING];</div>
-<div class="line"><a id="l01885" name="l01885"></a><span class="lineno"> 1885</span><span class="keyword">extern</span> <span class="keywordtype">char</span> open_files_path[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01886" name="l01886"></a><span class="lineno"> 1886</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prompt_color_[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01887" name="l01887"></a><span class="lineno"> 1887</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prompt_selection_bg_color_[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01888" name="l01888"></a><span class="lineno"> 1888</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prompt_bg_color_[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01889" name="l01889"></a><span class="lineno"> 1889</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prompt_selection_color_[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01890" name="l01890"></a><span class="lineno"> 1890</span> </div>
-<div class="line"><a id="l01891" name="l01891"></a><span class="lineno"> 1891</span><span class="keyword">extern</span> <span class="keywordtype">char</span> lastCmd[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01892" name="l01892"></a><span class="lineno"> 1892</span> </div>
-<div class="line"><a id="l01893" name="l01893"></a><span class="lineno"> 1893</span><span class="keyword">extern</span> ScriptEnv *global;</div>
-<div class="line"><a id="l01894" name="l01894"></a><span class="lineno"> 1894</span> </div>
-<div class="line"><a id="l01895" name="l01895"></a><span class="lineno"> 1895</span><span class="keyword">extern</span> <span class="keyword">const</span> ScriptValue script_null;</div>
-<div class="line"><a id="l01896" name="l01896"></a><span class="lineno"> 1896</span><span class="keyword">extern</span> <span class="keyword">const</span> ScriptValue script_true;</div>
-<div class="line"><a id="l01897" name="l01897"></a><span class="lineno"> 1897</span><span class="keyword">extern</span> <span class="keyword">const</span> ScriptValue script_false;</div>
-<div class="line"><a id="l01898" name="l01898"></a><span class="lineno"> 1898</span> </div>
-<div class="line"><a id="l01899" name="l01899"></a><span class="lineno"> 1899</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> blinkState;</div>
-<div class="line"><a id="l01900" name="l01900"></a><span class="lineno"> 1900</span> </div>
-<div class="line"><a id="l01901" name="l01901"></a><span class="lineno"> 1901</span><span class="keyword">extern</span> <span class="keywordtype">int</span> testing_mode;</div>
-<div class="line"><a id="l01902" name="l01902"></a><span class="lineno"> 1902</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *button_list[];</div>
-<div class="line"><a id="l01903" name="l01903"></a><span class="lineno"> 1903</span> </div>
-<div class="line"><a id="l01904" name="l01904"></a><span class="lineno"> 1904</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *_appName_;</div>
-<div class="line"><a id="l01905" name="l01905"></a><span class="lineno"> 1905</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *_appVer_;</div>
-<div class="line"><a id="l01906" name="l01906"></a><span class="lineno"> 1906</span><span class="keyword">extern</span> <span class="keywordtype">char</span> settings_file[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01907" name="l01907"></a><span class="lineno"> 1907</span> </div>
-<div class="line"><a id="l01908" name="l01908"></a><span class="lineno"> 1908</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *layer_list[];</div>
-<div class="line"><a id="l01909" name="l01909"></a><span class="lineno"> 1909</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *color_list[];</div>
-<div class="line"><a id="l01910" name="l01910"></a><span class="lineno"> 1910</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *line_type_list[];</div>
-<div class="line"><a id="l01911" name="l01911"></a><span class="lineno"> 1911</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *line_weight_list[];</div>
-<div class="line"><a id="l01912" name="l01912"></a><span class="lineno"> 1912</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *text_size_list[];</div>
-<div class="line"><a id="l01913" name="l01913"></a><span class="lineno"> 1913</span> </div>
-<div class="line"><a id="l01914" name="l01914"></a><span class="lineno"> 1914</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *geometry_type_keys[];</div>
-<div class="line"><a id="l01915" name="l01915"></a><span class="lineno"> 1915</span> </div>
-<div class="line"><a id="l01916" name="l01916"></a><span class="lineno"> 1916</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *editor_list[];</div>
-<div class="line"><a id="l01917" name="l01917"></a><span class="lineno"> 1917</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *combobox_list[];</div>
-<div class="line"><a id="l01918" name="l01918"></a><span class="lineno"> 1918</span> </div>
-<div class="line"><a id="l01919" name="l01919"></a><span class="lineno"> 1919</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *grid_layout[];</div>
-<div class="line"><a id="l01920" name="l01920"></a><span class="lineno"> 1920</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *zoom_layout[];</div>
-<div class="line"><a id="l01921" name="l01921"></a><span class="lineno"> 1921</span> </div>
-<div class="line"><a id="l01922" name="l01922"></a><span class="lineno"> 1922</span><span class="keyword">extern</span> <span class="keywordtype">char</span> **xpm_icons[];</div>
-<div class="line"><a id="l01923" name="l01923"></a><span class="lineno"> 1923</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *xpm_icon_labels[];</div>
-<div class="line"><a id="l01924" name="l01924"></a><span class="lineno"> 1924</span> </div>
-<div class="line"><a id="l01925" name="l01925"></a><span class="lineno"> 1925</span><span class="keyword">extern</span> <span class="keywordtype">char</span> recent_files[MAX_FILES][MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01926" name="l01926"></a><span class="lineno"> 1926</span> </div>
-<div class="line"><a id="l01927" name="l01927"></a><span class="lineno"> 1927</span><span class="keyword">extern</span> <span class="keywordtype">int</span> numOfDocs;</div>
-<div class="line"><a id="l01928" name="l01928"></a><span class="lineno"> 1928</span><span class="keyword">extern</span> <span class="keywordtype">int</span> docIndex;</div>
-<div class="line"><a id="l01929" name="l01929"></a><span class="lineno"> 1929</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> shiftKeyPressedState;</div>
-<div class="line"><a id="l01930" name="l01930"></a><span class="lineno"> 1930</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> cmdActive;</div>
-<div class="line"><a id="l01931" name="l01931"></a><span class="lineno"> 1931</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> rapidFireEnabled;</div>
-<div class="line"><a id="l01932" name="l01932"></a><span class="lineno"> 1932</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> isBlinking;</div>
-<div class="line"><a id="l01933" name="l01933"></a><span class="lineno"> 1933</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> key_state[N_KEY_SEQUENCES];</div>
-<div class="line"><a id="l01934" name="l01934"></a><span class="lineno"> 1934</span> </div>
-<div class="line"><a id="l01935" name="l01935"></a><span class="lineno"> 1935</span><span class="keyword">extern</span> StringMap aliasHash[MAX_ALIASES];</div>
-<div class="line"><a id="l01936" name="l01936"></a><span class="lineno"> 1936</span><span class="keyword">extern</span> IntMap obj_index[MAX_OBJECTS];</div>
+<div class="line"><a id="l01774" name="l01774"></a><span class="lineno"> 1774</span><span class="keywordtype">size_t</span> <a class="code hl_function" href="state_8c.html#ae0324dd47ecf95c8590df27917f69efa">load_file_to_buffer</a>(<span class="keywordtype">char</span> *fname, <span class="keywordtype">char</span> *buffer);</div>
+<div class="line"><a id="l01775" name="l01775"></a><span class="lineno"> 1775</span> </div>
+<div class="line"><a id="l01776" name="l01776"></a><span class="lineno"> 1776</span><span class="comment">/* ---------------------- Script Environment management -------------------- */</span></div>
+<div class="line"><a id="l01777" name="l01777"></a><span class="lineno"> 1777</span><span class="keywordtype">int</span> <a class="code hl_function" href="state_8c.html#a165e76f9c2ca5ff9569a4cb373fe9d25">load_global_state</a>(ScriptValue *root, <span class="keywordtype">char</span> *asset_dir);</div>
+<div class="line"><a id="l01778" name="l01778"></a><span class="lineno"> 1778</span> </div>
+<div class="line"><a id="l01779" name="l01779"></a><span class="lineno"> 1779</span>ScriptValue *emb_create_root(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l01780" name="l01780"></a><span class="lineno"> 1780</span><span class="keywordtype">int</span> emb_create_leaf(ScriptValue *branch, <span class="keywordtype">int</span> type, <span class="keywordtype">char</span> *label, <span class="keywordtype">char</span> *data);</div>
+<div class="line"><a id="l01781" name="l01781"></a><span class="lineno"> 1781</span>ScriptValue *<a class="code hl_function" href="state_8c.html#a901278b059b7d658fbe1da517e0736fd">emb_get_var</a>(ScriptValue *node, <span class="keyword">const</span> <span class="keywordtype">char</span> *key);</div>
+<div class="line"><a id="l01782" name="l01782"></a><span class="lineno"> 1782</span><span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="state_8c.html#aca9f9bea5ee5776b7849559d22040947">emb_get_str</a>(ScriptValue *node, <span class="keyword">const</span> <span class="keywordtype">char</span> *key);</div>
+<div class="line"><a id="l01783" name="l01783"></a><span class="lineno"> 1783</span><span class="keywordtype">void</span> emb_free_root(ScriptValue *root);</div>
+<div class="line"><a id="l01784" name="l01784"></a><span class="lineno"> 1784</span><span class="keywordtype">void</span> emb_print_tree(ScriptValue *tree, <span class="keywordtype">int</span> indent);</div>
+<div class="line"><a id="l01785" name="l01785"></a><span class="lineno"> 1785</span> </div>
+<div class="line"><a id="l01786" name="l01786"></a><span class="lineno"> 1786</span><span class="comment">/* ---------------------------- Global Variables --------------------------- */</span></div>
+<div class="line"><a id="l01787" name="l01787"></a><span class="lineno"> 1787</span><span class="comment">/* Global variables and constants we need to access anywhere in the program</span></div>
+<div class="line"><a id="l01788" name="l01788"></a><span class="lineno"> 1788</span><span class="comment"> * with minimal overhead.</span></div>
+<div class="line"><a id="l01789" name="l01789"></a><span class="lineno"> 1789</span><span class="comment"> */</span></div>
+<div class="line"><a id="l01790" name="l01790"></a><span class="lineno"> 1790</span> </div>
+<div class="line"><a id="l01791" name="l01791"></a><span class="lineno"> 1791</span><span class="keyword">extern</span> <a class="code hl_struct" href="structWidget__.html">Widget</a> widget_list[MAX_WIDGETS];</div>
+<div class="line"><a id="l01792" name="l01792"></a><span class="lineno"> 1792</span><span class="keyword">extern</span> <a class="code hl_struct" href="structCommandData__.html">CommandData</a> command_data[MAX_COMMANDS];</div>
+<div class="line"><a id="l01793" name="l01793"></a><span class="lineno"> 1793</span><span class="keyword">extern</span> StringMap aliases[MAX_ALIASES];</div>
+<div class="line"><a id="l01794" name="l01794"></a><span class="lineno"> 1794</span><span class="keyword">extern</span> <a class="code hl_struct" href="structSetting__.html">Setting</a> setting[N_SETTINGS];</div>
+<div class="line"><a id="l01795" name="l01795"></a><span class="lineno"> 1795</span><span class="keyword">extern</span> <a class="code hl_struct" href="structGroupBoxData__.html">GroupBoxData</a> group_box_list[];</div>
+<div class="line"><a id="l01796" name="l01796"></a><span class="lineno"> 1796</span><span class="keyword">extern</span> <a class="code hl_struct" href="structTranslation__.html">Translation</a> translations[];</div>
+<div class="line"><a id="l01797" name="l01797"></a><span class="lineno"> 1797</span><span class="keyword">extern</span> Design designs[];</div>
+<div class="line"><a id="l01798" name="l01798"></a><span class="lineno"> 1798</span><span class="keyword">extern</span> ScriptValue *root;</div>
+<div class="line"><a id="l01799" name="l01799"></a><span class="lineno"> 1799</span> </div>
+<div class="line"><a id="l01800" name="l01800"></a><span class="lineno"> 1800</span><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *config_table[];</div>
+<div class="line"><a id="l01801" name="l01801"></a><span class="lineno"> 1801</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *settings_data[];</div>
+<div class="line"><a id="l01802" name="l01802"></a><span class="lineno"> 1802</span> </div>
+<div class="line"><a id="l01803" name="l01803"></a><span class="lineno"> 1803</span><span class="keyword">extern</span> ScriptValue *config;</div>
+<div class="line"><a id="l01804" name="l01804"></a><span class="lineno"> 1804</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_variables;</div>
+<div class="line"><a id="l01805" name="l01805"></a><span class="lineno"> 1805</span> </div>
+<div class="line"><a id="l01806" name="l01806"></a><span class="lineno"> 1806</span><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *index_th_name[];</div>
+<div class="line"><a id="l01807" name="l01807"></a><span class="lineno"> 1807</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> exitApp;</div>
+<div class="line"><a id="l01808" name="l01808"></a><span class="lineno"> 1808</span> </div>
+<div class="line"><a id="l01809" name="l01809"></a><span class="lineno"> 1809</span><span class="comment">/* Menus */</span></div>
+<div class="line"><a id="l01810" name="l01810"></a><span class="lineno"> 1810</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *menu_list[];</div>
+<div class="line"><a id="l01811" name="l01811"></a><span class="lineno"> 1811</span><span class="keyword">extern</span> <span class="keywordtype">int</span> menubar_full_list[];</div>
+<div class="line"><a id="l01812" name="l01812"></a><span class="lineno"> 1812</span><span class="keyword">extern</span> <span class="keywordtype">int</span> menubar_no_docs[];</div>
+<div class="line"><a id="l01813" name="l01813"></a><span class="lineno"> 1813</span> </div>
+<div class="line"><a id="l01814" name="l01814"></a><span class="lineno"> 1814</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *file_menu[];</div>
+<div class="line"><a id="l01815" name="l01815"></a><span class="lineno"> 1815</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *edit_menu[];</div>
+<div class="line"><a id="l01816" name="l01816"></a><span class="lineno"> 1816</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *view_menu[];</div>
+<div class="line"><a id="l01817" name="l01817"></a><span class="lineno"> 1817</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *zoom_menu[];</div>
+<div class="line"><a id="l01818" name="l01818"></a><span class="lineno"> 1818</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *pan_menu[];</div>
+<div class="line"><a id="l01819" name="l01819"></a><span class="lineno"> 1819</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *help_menu[];</div>
+<div class="line"><a id="l01820" name="l01820"></a><span class="lineno"> 1820</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *draw_menu[];</div>
+<div class="line"><a id="l01821" name="l01821"></a><span class="lineno"> 1821</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *tools_menu[];</div>
+<div class="line"><a id="l01822" name="l01822"></a><span class="lineno"> 1822</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *modify_menu[];</div>
+<div class="line"><a id="l01823" name="l01823"></a><span class="lineno"> 1823</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *dimension_menu[];</div>
+<div class="line"><a id="l01824" name="l01824"></a><span class="lineno"> 1824</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *sandbox_menu[];</div>
+<div class="line"><a id="l01825" name="l01825"></a><span class="lineno"> 1825</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *recent_menu[];</div>
+<div class="line"><a id="l01826" name="l01826"></a><span class="lineno"> 1826</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *window_menu[];</div>
+<div class="line"><a id="l01827" name="l01827"></a><span class="lineno"> 1827</span> </div>
+<div class="line"><a id="l01828" name="l01828"></a><span class="lineno"> 1828</span><span class="comment">/* Toolbars */</span></div>
+<div class="line"><a id="l01829" name="l01829"></a><span class="lineno"> 1829</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *toolbar_list[];</div>
+<div class="line"><a id="l01830" name="l01830"></a><span class="lineno"> 1830</span><span class="keyword">extern</span> <span class="keywordtype">int</span> toolbars_when_docs[];</div>
+<div class="line"><a id="l01831" name="l01831"></a><span class="lineno"> 1831</span> </div>
+<div class="line"><a id="l01832" name="l01832"></a><span class="lineno"> 1832</span><span class="keyword">extern</span> <span class="keywordtype">int</span> top_toolbar[];</div>
+<div class="line"><a id="l01833" name="l01833"></a><span class="lineno"> 1833</span><span class="keyword">extern</span> <span class="keywordtype">int</span> left_toolbar[];</div>
+<div class="line"><a id="l01834" name="l01834"></a><span class="lineno"> 1834</span><span class="keyword">extern</span> <span class="keywordtype">int</span> bottom_toolbar[];</div>
+<div class="line"><a id="l01835" name="l01835"></a><span class="lineno"> 1835</span><span class="keyword">extern</span> <span class="keywordtype">int</span> toolbar_horizontal[];</div>
+<div class="line"><a id="l01836" name="l01836"></a><span class="lineno"> 1836</span> </div>
+<div class="line"><a id="l01837" name="l01837"></a><span class="lineno"> 1837</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *file_toolbar[];</div>
+<div class="line"><a id="l01838" name="l01838"></a><span class="lineno"> 1838</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *edit_toolbar[];</div>
+<div class="line"><a id="l01839" name="l01839"></a><span class="lineno"> 1839</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *view_toolbar[];</div>
+<div class="line"><a id="l01840" name="l01840"></a><span class="lineno"> 1840</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *zoom_toolbar[];</div>
+<div class="line"><a id="l01841" name="l01841"></a><span class="lineno"> 1841</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *pan_toolbar[];</div>
+<div class="line"><a id="l01842" name="l01842"></a><span class="lineno"> 1842</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *icon_toolbar[];</div>
+<div class="line"><a id="l01843" name="l01843"></a><span class="lineno"> 1843</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *help_toolbar[];</div>
+<div class="line"><a id="l01844" name="l01844"></a><span class="lineno"> 1844</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *draw_toolbar[];</div>
+<div class="line"><a id="l01845" name="l01845"></a><span class="lineno"> 1845</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *inquiry_toolbar[];</div>
+<div class="line"><a id="l01846" name="l01846"></a><span class="lineno"> 1846</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *modify_toolbar[];</div>
+<div class="line"><a id="l01847" name="l01847"></a><span class="lineno"> 1847</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *dimension_toolbar[];</div>
+<div class="line"><a id="l01848" name="l01848"></a><span class="lineno"> 1848</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *sandbox_toolbar[];</div>
+<div class="line"><a id="l01849" name="l01849"></a><span class="lineno"> 1849</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *layer_toolbar[];</div>
+<div class="line"><a id="l01850" name="l01850"></a><span class="lineno"> 1850</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *properties_toolbar[];</div>
+<div class="line"><a id="l01851" name="l01851"></a><span class="lineno"> 1851</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *text_toolbar[];</div>
+<div class="line"><a id="l01852" name="l01852"></a><span class="lineno"> 1852</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *prompt_toolbar[];</div>
+<div class="line"><a id="l01853" name="l01853"></a><span class="lineno"> 1853</span> </div>
+<div class="line"><a id="l01854" name="l01854"></a><span class="lineno"> 1854</span><span class="comment">/* Widget Groups */</span></div>
+<div class="line"><a id="l01855" name="l01855"></a><span class="lineno"> 1855</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *grid_load_from_file_group[];</div>
+<div class="line"><a id="l01856" name="l01856"></a><span class="lineno"> 1856</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *defined_origin_group[];</div>
+<div class="line"><a id="l01857" name="l01857"></a><span class="lineno"> 1857</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *rectangular_grid_group[];</div>
+<div class="line"><a id="l01858" name="l01858"></a><span class="lineno"> 1858</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *circular_grid_group[];</div>
+<div class="line"><a id="l01859" name="l01859"></a><span class="lineno"> 1859</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *center_on_origin_group[];</div>
+<div class="line"><a id="l01860" name="l01860"></a><span class="lineno"> 1860</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *grid_enabled_group[];</div>
+<div class="line"><a id="l01861" name="l01861"></a><span class="lineno"> 1861</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *rectangular_grid_visible_group[];</div>
+<div class="line"><a id="l01862" name="l01862"></a><span class="lineno"> 1862</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *circular_grid_visible_group[];</div>
+<div class="line"><a id="l01863" name="l01863"></a><span class="lineno"> 1863</span> </div>
+<div class="line"><a id="l01864" name="l01864"></a><span class="lineno"> 1864</span><span class="comment">/* Settings */</span></div>
+<div class="line"><a id="l01865" name="l01865"></a><span class="lineno"> 1865</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *settings_tab_labels[];</div>
+<div class="line"><a id="l01866" name="l01866"></a><span class="lineno"> 1866</span><span class="keyword">extern</span> <span class="keywordtype">int</span> preview_to_dialog[];</div>
+<div class="line"><a id="l01867" name="l01867"></a><span class="lineno"> 1867</span><span class="keyword">extern</span> <span class="keywordtype">int</span> accept_to_dialog[];</div>
+<div class="line"><a id="l01868" name="l01868"></a><span class="lineno"> 1868</span><span class="keyword">extern</span> <span class="keywordtype">int</span> render_hints[];</div>
+<div class="line"><a id="l01869" name="l01869"></a><span class="lineno"> 1869</span> </div>
+<div class="line"><a id="l01870" name="l01870"></a><span class="lineno"> 1870</span><span class="comment">/* Objects */</span></div>
+<div class="line"><a id="l01871" name="l01871"></a><span class="lineno"> 1871</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *object_names[];</div>
+<div class="line"><a id="l01872" name="l01872"></a><span class="lineno"> 1872</span> </div>
+<div class="line"><a id="l01873" name="l01873"></a><span class="lineno"> 1873</span><span class="comment">/* Testing */</span></div>
+<div class="line"><a id="l01874" name="l01874"></a><span class="lineno"> 1874</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *coverage_test[];</div>
+<div class="line"><a id="l01875" name="l01875"></a><span class="lineno"> 1875</span> </div>
+<div class="line"><a id="l01876" name="l01876"></a><span class="lineno"> 1876</span><span class="comment">/* Misc */</span></div>
+<div class="line"><a id="l01877" name="l01877"></a><span class="lineno"> 1877</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *tips[];</div>
+<div class="line"><a id="l01878" name="l01878"></a><span class="lineno"> 1878</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *extensions[];</div>
+<div class="line"><a id="l01879" name="l01879"></a><span class="lineno"> 1879</span> </div>
+<div class="line"><a id="l01880" name="l01880"></a><span class="lineno"> 1880</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> document_memory[MAX_OPEN_FILES];</div>
+<div class="line"><a id="l01881" name="l01881"></a><span class="lineno"> 1881</span> </div>
+<div class="line"><a id="l01882" name="l01882"></a><span class="lineno"> 1882</span><span class="keyword">extern</span> <span class="keywordtype">char</span> formatFilterOpen[MAX_LONG_STRING];</div>
+<div class="line"><a id="l01883" name="l01883"></a><span class="lineno"> 1883</span><span class="keyword">extern</span> <span class="keywordtype">char</span> formatFilterSave[MAX_LONG_STRING];</div>
+<div class="line"><a id="l01884" name="l01884"></a><span class="lineno"> 1884</span><span class="keyword">extern</span> <span class="keywordtype">char</span> open_files_path[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01885" name="l01885"></a><span class="lineno"> 1885</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prompt_color_[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01886" name="l01886"></a><span class="lineno"> 1886</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prompt_selection_bg_color_[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01887" name="l01887"></a><span class="lineno"> 1887</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prompt_bg_color_[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01888" name="l01888"></a><span class="lineno"> 1888</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prompt_selection_color_[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01889" name="l01889"></a><span class="lineno"> 1889</span> </div>
+<div class="line"><a id="l01890" name="l01890"></a><span class="lineno"> 1890</span><span class="keyword">extern</span> <span class="keywordtype">char</span> lastCmd[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01891" name="l01891"></a><span class="lineno"> 1891</span> </div>
+<div class="line"><a id="l01892" name="l01892"></a><span class="lineno"> 1892</span><span class="keyword">extern</span> ScriptEnv *global;</div>
+<div class="line"><a id="l01893" name="l01893"></a><span class="lineno"> 1893</span> </div>
+<div class="line"><a id="l01894" name="l01894"></a><span class="lineno"> 1894</span><span class="keyword">extern</span> <span class="keyword">const</span> ScriptValue script_null;</div>
+<div class="line"><a id="l01895" name="l01895"></a><span class="lineno"> 1895</span><span class="keyword">extern</span> <span class="keyword">const</span> ScriptValue script_true;</div>
+<div class="line"><a id="l01896" name="l01896"></a><span class="lineno"> 1896</span><span class="keyword">extern</span> <span class="keyword">const</span> ScriptValue script_false;</div>
+<div class="line"><a id="l01897" name="l01897"></a><span class="lineno"> 1897</span> </div>
+<div class="line"><a id="l01898" name="l01898"></a><span class="lineno"> 1898</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> blinkState;</div>
+<div class="line"><a id="l01899" name="l01899"></a><span class="lineno"> 1899</span> </div>
+<div class="line"><a id="l01900" name="l01900"></a><span class="lineno"> 1900</span><span class="keyword">extern</span> <span class="keywordtype">int</span> testing_mode;</div>
+<div class="line"><a id="l01901" name="l01901"></a><span class="lineno"> 1901</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *button_list[];</div>
+<div class="line"><a id="l01902" name="l01902"></a><span class="lineno"> 1902</span> </div>
+<div class="line"><a id="l01903" name="l01903"></a><span class="lineno"> 1903</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *_appName_;</div>
+<div class="line"><a id="l01904" name="l01904"></a><span class="lineno"> 1904</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *_appVer_;</div>
+<div class="line"><a id="l01905" name="l01905"></a><span class="lineno"> 1905</span><span class="keyword">extern</span> <span class="keywordtype">char</span> settings_file[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01906" name="l01906"></a><span class="lineno"> 1906</span> </div>
+<div class="line"><a id="l01907" name="l01907"></a><span class="lineno"> 1907</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *layer_list[];</div>
+<div class="line"><a id="l01908" name="l01908"></a><span class="lineno"> 1908</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *color_list[];</div>
+<div class="line"><a id="l01909" name="l01909"></a><span class="lineno"> 1909</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *line_type_list[];</div>
+<div class="line"><a id="l01910" name="l01910"></a><span class="lineno"> 1910</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *line_weight_list[];</div>
+<div class="line"><a id="l01911" name="l01911"></a><span class="lineno"> 1911</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *text_size_list[];</div>
+<div class="line"><a id="l01912" name="l01912"></a><span class="lineno"> 1912</span> </div>
+<div class="line"><a id="l01913" name="l01913"></a><span class="lineno"> 1913</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *geometry_type_keys[];</div>
+<div class="line"><a id="l01914" name="l01914"></a><span class="lineno"> 1914</span> </div>
+<div class="line"><a id="l01915" name="l01915"></a><span class="lineno"> 1915</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *editor_list[];</div>
+<div class="line"><a id="l01916" name="l01916"></a><span class="lineno"> 1916</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *combobox_list[];</div>
+<div class="line"><a id="l01917" name="l01917"></a><span class="lineno"> 1917</span> </div>
+<div class="line"><a id="l01918" name="l01918"></a><span class="lineno"> 1918</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *grid_layout[];</div>
+<div class="line"><a id="l01919" name="l01919"></a><span class="lineno"> 1919</span><span class="keyword">extern</span> <span class="keywordtype">char</span> *zoom_layout[];</div>
+<div class="line"><a id="l01920" name="l01920"></a><span class="lineno"> 1920</span> </div>
+<div class="line"><a id="l01921" name="l01921"></a><span class="lineno"> 1921</span><span class="keyword">extern</span> <span class="keywordtype">char</span> recent_files[MAX_FILES][MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01922" name="l01922"></a><span class="lineno"> 1922</span> </div>
+<div class="line"><a id="l01923" name="l01923"></a><span class="lineno"> 1923</span><span class="keyword">extern</span> <span class="keywordtype">int</span> numOfDocs;</div>
+<div class="line"><a id="l01924" name="l01924"></a><span class="lineno"> 1924</span><span class="keyword">extern</span> <span class="keywordtype">int</span> docIndex;</div>
+<div class="line"><a id="l01925" name="l01925"></a><span class="lineno"> 1925</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> shiftKeyPressedState;</div>
+<div class="line"><a id="l01926" name="l01926"></a><span class="lineno"> 1926</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> cmdActive;</div>
+<div class="line"><a id="l01927" name="l01927"></a><span class="lineno"> 1927</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> rapidFireEnabled;</div>
+<div class="line"><a id="l01928" name="l01928"></a><span class="lineno"> 1928</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> isBlinking;</div>
+<div class="line"><a id="l01929" name="l01929"></a><span class="lineno"> 1929</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> key_state[N_KEY_SEQUENCES];</div>
+<div class="line"><a id="l01930" name="l01930"></a><span class="lineno"> 1930</span> </div>
+<div class="line"><a id="l01931" name="l01931"></a><span class="lineno"> 1931</span><span class="keyword">extern</span> StringMap aliasHash[MAX_ALIASES];</div>
+<div class="line"><a id="l01932" name="l01932"></a><span class="lineno"> 1932</span><span class="keyword">extern</span> IntMap obj_index[MAX_OBJECTS];</div>
+<div class="line"><a id="l01933" name="l01933"></a><span class="lineno"> 1933</span> </div>
+<div class="line"><a id="l01934" name="l01934"></a><span class="lineno"> 1934</span><span class="keyword">extern</span> EmbIdList *cutCopyObjectList;</div>
+<div class="line"><a id="l01935" name="l01935"></a><span class="lineno"> 1935</span> </div>
+<div class="line"><a id="l01936" name="l01936"></a><span class="lineno"> 1936</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> blinkState;</div>
 <div class="line"><a id="l01937" name="l01937"></a><span class="lineno"> 1937</span> </div>
-<div class="line"><a id="l01938" name="l01938"></a><span class="lineno"> 1938</span><span class="keyword">extern</span> EmbIdList *cutCopyObjectList;</div>
+<div class="line"><a id="l01938" name="l01938"></a><span class="lineno"> 1938</span><span class="keyword">extern</span> <span class="keywordtype">int</span> iconSize;</div>
 <div class="line"><a id="l01939" name="l01939"></a><span class="lineno"> 1939</span> </div>
-<div class="line"><a id="l01940" name="l01940"></a><span class="lineno"> 1940</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> blinkState;</div>
+<div class="line"><a id="l01940" name="l01940"></a><span class="lineno"> 1940</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> pickAdd;</div>
 <div class="line"><a id="l01941" name="l01941"></a><span class="lineno"> 1941</span> </div>
-<div class="line"><a id="l01942" name="l01942"></a><span class="lineno"> 1942</span><span class="keyword">extern</span> <span class="keywordtype">int</span> iconSize;</div>
+<div class="line"><a id="l01942" name="l01942"></a><span class="lineno"> 1942</span><span class="keyword">extern</span> <span class="keywordtype">int</span> promptInputNum;</div>
 <div class="line"><a id="l01943" name="l01943"></a><span class="lineno"> 1943</span> </div>
-<div class="line"><a id="l01944" name="l01944"></a><span class="lineno"> 1944</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> pickAdd;</div>
-<div class="line"><a id="l01945" name="l01945"></a><span class="lineno"> 1945</span> </div>
-<div class="line"><a id="l01946" name="l01946"></a><span class="lineno"> 1946</span><span class="keyword">extern</span> <span class="keywordtype">int</span> promptInputNum;</div>
-<div class="line"><a id="l01947" name="l01947"></a><span class="lineno"> 1947</span> </div>
-<div class="line"><a id="l01948" name="l01948"></a><span class="lineno"> 1948</span><span class="keyword">extern</span> <span class="keywordtype">int</span> precisionAngle;</div>
-<div class="line"><a id="l01949" name="l01949"></a><span class="lineno"> 1949</span><span class="keyword">extern</span> <span class="keywordtype">int</span> precisionLength;</div>
-<div class="line"><a id="l01950" name="l01950"></a><span class="lineno"> 1950</span> </div>
-<div class="line"><a id="l01951" name="l01951"></a><span class="lineno"> 1951</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_aliases;</div>
-<div class="line"><a id="l01952" name="l01952"></a><span class="lineno"> 1952</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_objects;</div>
-<div class="line"><a id="l01953" name="l01953"></a><span class="lineno"> 1953</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_commands;</div>
-<div class="line"><a id="l01954" name="l01954"></a><span class="lineno"> 1954</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_widgets;</div>
-<div class="line"><a id="l01955" name="l01955"></a><span class="lineno"> 1955</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_actions;</div>
+<div class="line"><a id="l01944" name="l01944"></a><span class="lineno"> 1944</span><span class="keyword">extern</span> <span class="keywordtype">int</span> precisionAngle;</div>
+<div class="line"><a id="l01945" name="l01945"></a><span class="lineno"> 1945</span><span class="keyword">extern</span> <span class="keywordtype">int</span> precisionLength;</div>
+<div class="line"><a id="l01946" name="l01946"></a><span class="lineno"> 1946</span> </div>
+<div class="line"><a id="l01947" name="l01947"></a><span class="lineno"> 1947</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_aliases;</div>
+<div class="line"><a id="l01948" name="l01948"></a><span class="lineno"> 1948</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_objects;</div>
+<div class="line"><a id="l01949" name="l01949"></a><span class="lineno"> 1949</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_commands;</div>
+<div class="line"><a id="l01950" name="l01950"></a><span class="lineno"> 1950</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_widgets;</div>
+<div class="line"><a id="l01951" name="l01951"></a><span class="lineno"> 1951</span><span class="keyword">extern</span> <span class="keywordtype">int</span> n_actions;</div>
+<div class="line"><a id="l01952" name="l01952"></a><span class="lineno"> 1952</span> </div>
+<div class="line"><a id="l01953" name="l01953"></a><span class="lineno"> 1953</span><span class="keyword">extern</span> <span class="keywordtype">char</span> curText[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01954" name="l01954"></a><span class="lineno"> 1954</span> </div>
+<div class="line"><a id="l01955" name="l01955"></a><span class="lineno"> 1955</span><span class="keyword">extern</span> <span class="keywordtype">char</span> promptHistoryData[MAX_LONG_STRING];</div>
 <div class="line"><a id="l01956" name="l01956"></a><span class="lineno"> 1956</span> </div>
-<div class="line"><a id="l01957" name="l01957"></a><span class="lineno"> 1957</span><span class="keyword">extern</span> <span class="keywordtype">char</span> curText[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01958" name="l01958"></a><span class="lineno"> 1958</span> </div>
-<div class="line"><a id="l01959" name="l01959"></a><span class="lineno"> 1959</span><span class="keyword">extern</span> <span class="keywordtype">char</span> promptHistoryData[MAX_LONG_STRING];</div>
+<div class="line"><a id="l01957" name="l01957"></a><span class="lineno"> 1957</span><span class="keyword">extern</span> <span class="keywordtype">char</span> defaultPrefix[200];</div>
+<div class="line"><a id="l01958" name="l01958"></a><span class="lineno"> 1958</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prefix[200];</div>
+<div class="line"><a id="l01959" name="l01959"></a><span class="lineno"> 1959</span><span class="keyword">extern</span> <span class="keywordtype">char</span> curCmd[200];</div>
 <div class="line"><a id="l01960" name="l01960"></a><span class="lineno"> 1960</span> </div>
-<div class="line"><a id="l01961" name="l01961"></a><span class="lineno"> 1961</span><span class="keyword">extern</span> <span class="keywordtype">char</span> defaultPrefix[200];</div>
-<div class="line"><a id="l01962" name="l01962"></a><span class="lineno"> 1962</span><span class="keyword">extern</span> <span class="keywordtype">char</span> prefix[200];</div>
-<div class="line"><a id="l01963" name="l01963"></a><span class="lineno"> 1963</span><span class="keyword">extern</span> <span class="keywordtype">char</span> curCmd[200];</div>
-<div class="line"><a id="l01964" name="l01964"></a><span class="lineno"> 1964</span> </div>
-<div class="line"><a id="l01965" name="l01965"></a><span class="lineno"> 1965</span><span class="comment">/* Used when checking if fields vary. */</span></div>
-<div class="line"><a id="l01966" name="l01966"></a><span class="lineno"> 1966</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldOldText[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01967" name="l01967"></a><span class="lineno"> 1967</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldNewText[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01968" name="l01968"></a><span class="lineno"> 1968</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldVariesText[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01969" name="l01969"></a><span class="lineno"> 1969</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldYesText[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01970" name="l01970"></a><span class="lineno"> 1970</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldNoText[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01971" name="l01971"></a><span class="lineno"> 1971</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldOnText[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01972" name="l01972"></a><span class="lineno"> 1972</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldOffText[MAX_STRING_LENGTH];</div>
-<div class="line"><a id="l01973" name="l01973"></a><span class="lineno"> 1973</span> </div>
-<div class="line"><a id="l01974" name="l01974"></a><span class="lineno"> 1974</span><span class="keyword">extern</span> <a class="code hl_struct" href="structWidgetData__.html">WidgetData</a> grid_gb_data[];</div>
-<div class="line"><a id="l01975" name="l01975"></a><span class="lineno"> 1975</span><span class="keyword">extern</span> <a class="code hl_struct" href="structWidgetData__.html">WidgetData</a> zoom_gb_data[];</div>
+<div class="line"><a id="l01961" name="l01961"></a><span class="lineno"> 1961</span><span class="comment">/* Used when checking if fields vary. */</span></div>
+<div class="line"><a id="l01962" name="l01962"></a><span class="lineno"> 1962</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldOldText[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01963" name="l01963"></a><span class="lineno"> 1963</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldNewText[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01964" name="l01964"></a><span class="lineno"> 1964</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldVariesText[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01965" name="l01965"></a><span class="lineno"> 1965</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldYesText[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01966" name="l01966"></a><span class="lineno"> 1966</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldNoText[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01967" name="l01967"></a><span class="lineno"> 1967</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldOnText[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01968" name="l01968"></a><span class="lineno"> 1968</span><span class="keyword">extern</span> <span class="keywordtype">char</span> fieldOffText[MAX_STRING_LENGTH];</div>
+<div class="line"><a id="l01969" name="l01969"></a><span class="lineno"> 1969</span> </div>
+<div class="line"><a id="l01970" name="l01970"></a><span class="lineno"> 1970</span><span class="keyword">extern</span> <a class="code hl_struct" href="structWidgetData__.html">WidgetData</a> grid_gb_data[];</div>
+<div class="line"><a id="l01971" name="l01971"></a><span class="lineno"> 1971</span><span class="keyword">extern</span> <a class="code hl_struct" href="structWidgetData__.html">WidgetData</a> zoom_gb_data[];</div>
+<div class="line"><a id="l01972" name="l01972"></a><span class="lineno"> 1972</span> </div>
+<div class="line"><a id="l01973" name="l01973"></a><span class="lineno"> 1973</span><span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a id="l01974" name="l01974"></a><span class="lineno"> 1974</span>}</div>
+<div class="line"><a id="l01975" name="l01975"></a><span class="lineno"> 1975</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l01976" name="l01976"></a><span class="lineno"> 1976</span> </div>
-<div class="line"><a id="l01977" name="l01977"></a><span class="lineno"> 1977</span><span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a id="l01978" name="l01978"></a><span class="lineno"> 1978</span>}</div>
-<div class="line"><a id="l01979" name="l01979"></a><span class="lineno"> 1979</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l01980" name="l01980"></a><span class="lineno"> 1980</span> </div>
-<div class="line"><a id="l01981" name="l01981"></a><span class="lineno"> 1981</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l01982" name="l01982"></a><span class="lineno"> 1982</span> </div>
-<div class="ttc" id="ainterface_8c_html_a387e41157d0d9a4754f595da1edc34cb"><div class="ttname"><a href="interface_8c.html#a387e41157d0d9a4754f595da1edc34cb">doc_set_attr</a></div><div class="ttdeci">void doc_set_attr(int32_t doc, uint32_t key, ScriptValue value)</div><div class="ttdoc">Helper function to set a document level attribute.</div><div class="ttdef"><b>Definition:</b> <a href="interface_8c_source.html#l02523">interface.c:2523</a></div></div>
-<div class="ttc" id="ainterface_8c_html_a5053f6f075d900f322604397448d8321"><div class="ttname"><a href="interface_8c.html#a5053f6f075d900f322604397448d8321">doc_get_bool</a></div><div class="ttdeci">bool doc_get_bool(int32_t doc, uint32_t key)</div><div class="ttdoc">Helper function to gain access to the document level boolean attribute.</div><div class="ttdef"><b>Definition:</b> <a href="interface_8c_source.html#l02505">interface.c:2505</a></div></div>
-<div class="ttc" id="ainterface_8c_html_a6b3c29687305f6ce0266551569ff8bde"><div class="ttname"><a href="interface_8c.html#a6b3c29687305f6ce0266551569ff8bde">doc_set_bool</a></div><div class="ttdeci">void doc_set_bool(int32_t doc, uint32_t key, bool value)</div><div class="ttdoc">Helper function to set a document-level boolean attribute.</div><div class="ttdef"><b>Definition:</b> <a href="interface_8c_source.html#l02532">interface.c:2532</a></div></div>
-<div class="ttc" id="ainterface_8c_html_a7c983dcc0ae7727cf182ff9a027e529f"><div class="ttname"><a href="interface_8c.html#a7c983dcc0ae7727cf182ff9a027e529f">doc_set_int</a></div><div class="ttdeci">void doc_set_int(int32_t doc, uint32_t key, int32_t value)</div><div class="ttdoc">Helper function to set a document-level integer attribute.</div><div class="ttdef"><b>Definition:</b> <a href="interface_8c_source.html#l02541">interface.c:2541</a></div></div>
-<div class="ttc" id="ainterface_8c_html_a83e2045d48a396072bea533bf01486ea"><div class="ttname"><a href="interface_8c.html#a83e2045d48a396072bea533bf01486ea">doc_get_attr</a></div><div class="ttdeci">ScriptValue * doc_get_attr(int32_t doc, uint32_t key)</div><div class="ttdoc">Helper function to gain access to the document level attributes.</div><div class="ttdef"><b>Definition:</b> <a href="interface_8c_source.html#l02495">interface.c:2495</a></div></div>
-<div class="ttc" id="ainterface_8c_html_acaf6713ddc511d9d8d5f7c307fa8837e"><div class="ttname"><a href="interface_8c.html#acaf6713ddc511d9d8d5f7c307fa8837e">doc_get_int</a></div><div class="ttdeci">int32_t doc_get_int(int32_t doc, uint32_t key)</div><div class="ttdoc">Helper function to gain access to the document level integer attribute.</div><div class="ttdef"><b>Definition:</b> <a href="interface_8c_source.html#l02515">interface.c:2515</a></div></div>
-<div class="ttc" id="astructButton___html"><div class="ttname"><a href="structButton__.html">Button_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01005">core.h:1005</a></div></div>
-<div class="ttc" id="astructCommandData___html"><div class="ttname"><a href="structCommandData__.html">CommandData_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l00815">core.h:815</a></div></div>
-<div class="ttc" id="astructDocumentData___html"><div class="ttname"><a href="structDocumentData__.html">DocumentData_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l00920">core.h:920</a></div></div>
-<div class="ttc" id="astructGroupBoxData___html"><div class="ttname"><a href="structGroupBoxData__.html">GroupBoxData_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l00848">core.h:848</a></div></div>
-<div class="ttc" id="astructLayerData___html"><div class="ttname"><a href="structLayerData__.html">LayerData_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l00829">core.h:829</a></div></div>
-<div class="ttc" id="astructObjectCore___html"><div class="ttname"><a href="structObjectCore__.html">ObjectCore_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l00857">core.h:857</a></div></div>
-<div class="ttc" id="astructSetting___html"><div class="ttname"><a href="structSetting__.html">Setting_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l00840">core.h:840</a></div></div>
-<div class="ttc" id="astructTab___html"><div class="ttname"><a href="structTab__.html">Tab_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01015">core.h:1015</a></div></div>
-<div class="ttc" id="astructTranslation___html"><div class="ttname"><a href="structTranslation__.html">Translation_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01019">core.h:1019</a></div></div>
-<div class="ttc" id="astructUndoData___html"><div class="ttname"><a href="structUndoData__.html">UndoData_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l00901">core.h:901</a></div></div>
-<div class="ttc" id="astructViewData___html"><div class="ttname"><a href="structViewData__.html">ViewData_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01045">core.h:1045</a></div></div>
-<div class="ttc" id="astructViewData___html_a703b1cd4a62952b59ef932d5ee6b2f42"><div class="ttname"><a href="structViewData__.html#a703b1cd4a62952b59ef932d5ee6b2f42">ViewData_::medium</a></div><div class="ttdeci">double medium</div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01048">core.h:1048</a></div></div>
-<div class="ttc" id="astructViewData___html_ad2d98378041007ffc2adf8320f7a4069"><div class="ttname"><a href="structViewData__.html#ad2d98378041007ffc2adf8320f7a4069">ViewData_::little</a></div><div class="ttdeci">double little</div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01047">core.h:1047</a></div></div>
-<div class="ttc" id="astructViewData___html_af8522757ffa3b5930ab09ff8336a5d40"><div class="ttname"><a href="structViewData__.html#af8522757ffa3b5930ab09ff8336a5d40">ViewData_::lines</a></div><div class="ttdeci">EmbLine * lines</div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01049">core.h:1049</a></div></div>
-<div class="ttc" id="astructWidgetData___html"><div class="ttname"><a href="structWidgetData__.html">WidgetData_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01036">core.h:1036</a></div></div>
-<div class="ttc" id="astructWidgetData___html_a3de99bf4464eccb14f92e25ec9b09084"><div class="ttname"><a href="structWidgetData__.html#a3de99bf4464eccb14f92e25ec9b09084">WidgetData_::id</a></div><div class="ttdeci">int id</div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01039">core.h:1039</a></div></div>
-<div class="ttc" id="astructWidgetData___html_a4767dfd8b65ac1993e35fd6a2aa1f957"><div class="ttname"><a href="structWidgetData__.html#a4767dfd8b65ac1993e35fd6a2aa1f957">WidgetData_::type</a></div><div class="ttdeci">int type</div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01040">core.h:1040</a></div></div>
-<div class="ttc" id="astructWidgetData___html_ae855e2da06b7603becf17dde271dea4f"><div class="ttname"><a href="structWidgetData__.html#ae855e2da06b7603becf17dde271dea4f">WidgetData_::label</a></div><div class="ttdeci">char * label</div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01038">core.h:1038</a></div></div>
-<div class="ttc" id="astructWidgetDesc___html"><div class="ttname"><a href="structWidgetDesc__.html">WidgetDesc_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l00994">core.h:994</a></div></div>
-<div class="ttc" id="astructWidget___html"><div class="ttname"><a href="structWidget__.html">Widget_</a></div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01030">core.h:1030</a></div></div>
-<div class="ttc" id="astructWidget___html_a05eea34d2d0d68d7d72e9c00afe5b626"><div class="ttname"><a href="structWidget__.html#a05eea34d2d0d68d7d72e9c00afe5b626">Widget_::widget</a></div><div class="ttdeci">void * widget</div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01032">core.h:1032</a></div></div>
-<div class="ttc" id="astructWidget___html_a5bbd6cd170d97a685aa17cc407205457"><div class="ttname"><a href="structWidget__.html#a5bbd6cd170d97a685aa17cc407205457">Widget_::key</a></div><div class="ttdeci">EmbString key</div><div class="ttdef"><b>Definition:</b> <a href="core_8h_source.html#l01031">core.h:1031</a></div></div>
+<div class="line"><a id="l01977" name="l01977"></a><span class="lineno"> 1977</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l01978" name="l01978"></a><span class="lineno"> 1978</span> </div>
+<div class="ttc" id="ainterface_8c_html_a387e41157d0d9a4754f595da1edc34cb"><div class="ttname"><a href="interface_8c.html#a387e41157d0d9a4754f595da1edc34cb">doc_set_attr</a></div><div class="ttdeci">void doc_set_attr(int32_t doc, uint32_t key, ScriptValue value)</div><div class="ttdoc">Helper function to set a document level attribute.</div><div class="ttdef"><b>Definition:</b> interface.c:2540</div></div>
+<div class="ttc" id="ainterface_8c_html_a5053f6f075d900f322604397448d8321"><div class="ttname"><a href="interface_8c.html#a5053f6f075d900f322604397448d8321">doc_get_bool</a></div><div class="ttdeci">bool doc_get_bool(int32_t doc, uint32_t key)</div><div class="ttdoc">Helper function to gain access to the document level boolean attribute.</div><div class="ttdef"><b>Definition:</b> interface.c:2522</div></div>
+<div class="ttc" id="ainterface_8c_html_a6b3c29687305f6ce0266551569ff8bde"><div class="ttname"><a href="interface_8c.html#a6b3c29687305f6ce0266551569ff8bde">doc_set_bool</a></div><div class="ttdeci">void doc_set_bool(int32_t doc, uint32_t key, bool value)</div><div class="ttdoc">Helper function to set a document-level boolean attribute.</div><div class="ttdef"><b>Definition:</b> interface.c:2549</div></div>
+<div class="ttc" id="ainterface_8c_html_a7c983dcc0ae7727cf182ff9a027e529f"><div class="ttname"><a href="interface_8c.html#a7c983dcc0ae7727cf182ff9a027e529f">doc_set_int</a></div><div class="ttdeci">void doc_set_int(int32_t doc, uint32_t key, int32_t value)</div><div class="ttdoc">Helper function to set a document-level integer attribute.</div><div class="ttdef"><b>Definition:</b> interface.c:2558</div></div>
+<div class="ttc" id="ainterface_8c_html_a83e2045d48a396072bea533bf01486ea"><div class="ttname"><a href="interface_8c.html#a83e2045d48a396072bea533bf01486ea">doc_get_attr</a></div><div class="ttdeci">ScriptValue * doc_get_attr(int32_t doc, uint32_t key)</div><div class="ttdoc">Helper function to gain access to the document level attributes.</div><div class="ttdef"><b>Definition:</b> interface.c:2512</div></div>
+<div class="ttc" id="ainterface_8c_html_acaf6713ddc511d9d8d5f7c307fa8837e"><div class="ttname"><a href="interface_8c.html#acaf6713ddc511d9d8d5f7c307fa8837e">doc_get_int</a></div><div class="ttdeci">int32_t doc_get_int(int32_t doc, uint32_t key)</div><div class="ttdoc">Helper function to gain access to the document level integer attribute.</div><div class="ttdef"><b>Definition:</b> interface.c:2532</div></div>
+<div class="ttc" id="astate_8c_html_a165e76f9c2ca5ff9569a4cb373fe9d25"><div class="ttname"><a href="state_8c.html#a165e76f9c2ca5ff9569a4cb373fe9d25">load_global_state</a></div><div class="ttdeci">int load_global_state(ScriptValue *root, char *asset_dir)</div><div class="ttdoc">Load our basic tree structure of data for all of our data structures above.</div><div class="ttdef"><b>Definition:</b> state.c:3603</div></div>
+<div class="ttc" id="astate_8c_html_a901278b059b7d658fbe1da517e0736fd"><div class="ttname"><a href="state_8c.html#a901278b059b7d658fbe1da517e0736fd">emb_get_var</a></div><div class="ttdeci">ScriptValue * emb_get_var(ScriptValue *node, const char *key)</div><div class="ttdoc">Load a ScriptValue from the environment using the key supplied.</div><div class="ttdef"><b>Definition:</b> state.c:3492</div></div>
+<div class="ttc" id="astate_8c_html_aca9f9bea5ee5776b7849559d22040947"><div class="ttname"><a href="state_8c.html#aca9f9bea5ee5776b7849559d22040947">emb_get_str</a></div><div class="ttdeci">const char * emb_get_str(ScriptValue *node, const char *key)</div><div class="ttdoc">Load a char array from the environment using the key supplied.</div><div class="ttdef"><b>Definition:</b> state.c:3507</div></div>
+<div class="ttc" id="astate_8c_html_ae0324dd47ecf95c8590df27917f69efa"><div class="ttname"><a href="state_8c.html#ae0324dd47ecf95c8590df27917f69efa">load_file_to_buffer</a></div><div class="ttdeci">size_t load_file_to_buffer(char *fname, char *buffer)</div><div class="ttdoc">Load the entire file with path fname into the buffer passed in.</div><div class="ttdef"><b>Definition:</b> state.c:3518</div></div>
+<div class="ttc" id="astructButton___html"><div class="ttname"><a href="structButton__.html">Button_</a></div><div class="ttdef"><b>Definition:</b> core.h:1005</div></div>
+<div class="ttc" id="astructCommandData___html"><div class="ttname"><a href="structCommandData__.html">CommandData_</a></div><div class="ttdef"><b>Definition:</b> core.h:815</div></div>
+<div class="ttc" id="astructDocumentData___html"><div class="ttname"><a href="structDocumentData__.html">DocumentData_</a></div><div class="ttdef"><b>Definition:</b> core.h:920</div></div>
+<div class="ttc" id="astructGroupBoxData___html"><div class="ttname"><a href="structGroupBoxData__.html">GroupBoxData_</a></div><div class="ttdef"><b>Definition:</b> core.h:848</div></div>
+<div class="ttc" id="astructLayerData___html"><div class="ttname"><a href="structLayerData__.html">LayerData_</a></div><div class="ttdef"><b>Definition:</b> core.h:829</div></div>
+<div class="ttc" id="astructObjectCore___html"><div class="ttname"><a href="structObjectCore__.html">ObjectCore_</a></div><div class="ttdef"><b>Definition:</b> core.h:857</div></div>
+<div class="ttc" id="astructSetting___html"><div class="ttname"><a href="structSetting__.html">Setting_</a></div><div class="ttdef"><b>Definition:</b> core.h:840</div></div>
+<div class="ttc" id="astructTab___html"><div class="ttname"><a href="structTab__.html">Tab_</a></div><div class="ttdef"><b>Definition:</b> core.h:1015</div></div>
+<div class="ttc" id="astructTranslation___html"><div class="ttname"><a href="structTranslation__.html">Translation_</a></div><div class="ttdef"><b>Definition:</b> core.h:1019</div></div>
+<div class="ttc" id="astructUndoData___html"><div class="ttname"><a href="structUndoData__.html">UndoData_</a></div><div class="ttdef"><b>Definition:</b> core.h:901</div></div>
+<div class="ttc" id="astructViewData___html"><div class="ttname"><a href="structViewData__.html">ViewData_</a></div><div class="ttdef"><b>Definition:</b> core.h:1045</div></div>
+<div class="ttc" id="astructViewData___html_a703b1cd4a62952b59ef932d5ee6b2f42"><div class="ttname"><a href="structViewData__.html#a703b1cd4a62952b59ef932d5ee6b2f42">ViewData_::medium</a></div><div class="ttdeci">double medium</div><div class="ttdef"><b>Definition:</b> core.h:1048</div></div>
+<div class="ttc" id="astructViewData___html_ad2d98378041007ffc2adf8320f7a4069"><div class="ttname"><a href="structViewData__.html#ad2d98378041007ffc2adf8320f7a4069">ViewData_::little</a></div><div class="ttdeci">double little</div><div class="ttdef"><b>Definition:</b> core.h:1047</div></div>
+<div class="ttc" id="astructViewData___html_af8522757ffa3b5930ab09ff8336a5d40"><div class="ttname"><a href="structViewData__.html#af8522757ffa3b5930ab09ff8336a5d40">ViewData_::lines</a></div><div class="ttdeci">EmbLine * lines</div><div class="ttdef"><b>Definition:</b> core.h:1049</div></div>
+<div class="ttc" id="astructWidgetData___html"><div class="ttname"><a href="structWidgetData__.html">WidgetData_</a></div><div class="ttdef"><b>Definition:</b> core.h:1036</div></div>
+<div class="ttc" id="astructWidgetData___html_a3de99bf4464eccb14f92e25ec9b09084"><div class="ttname"><a href="structWidgetData__.html#a3de99bf4464eccb14f92e25ec9b09084">WidgetData_::id</a></div><div class="ttdeci">int id</div><div class="ttdef"><b>Definition:</b> core.h:1039</div></div>
+<div class="ttc" id="astructWidgetData___html_a4767dfd8b65ac1993e35fd6a2aa1f957"><div class="ttname"><a href="structWidgetData__.html#a4767dfd8b65ac1993e35fd6a2aa1f957">WidgetData_::type</a></div><div class="ttdeci">int type</div><div class="ttdef"><b>Definition:</b> core.h:1040</div></div>
+<div class="ttc" id="astructWidgetData___html_ae855e2da06b7603becf17dde271dea4f"><div class="ttname"><a href="structWidgetData__.html#ae855e2da06b7603becf17dde271dea4f">WidgetData_::label</a></div><div class="ttdeci">char * label</div><div class="ttdef"><b>Definition:</b> core.h:1038</div></div>
+<div class="ttc" id="astructWidgetDesc___html"><div class="ttname"><a href="structWidgetDesc__.html">WidgetDesc_</a></div><div class="ttdef"><b>Definition:</b> core.h:994</div></div>
+<div class="ttc" id="astructWidget___html"><div class="ttname"><a href="structWidget__.html">Widget_</a></div><div class="ttdef"><b>Definition:</b> core.h:1030</div></div>
+<div class="ttc" id="astructWidget___html_a05eea34d2d0d68d7d72e9c00afe5b626"><div class="ttname"><a href="structWidget__.html#a05eea34d2d0d68d7d72e9c00afe5b626">Widget_::widget</a></div><div class="ttdeci">void * widget</div><div class="ttdef"><b>Definition:</b> core.h:1032</div></div>
+<div class="ttc" id="astructWidget___html_a5bbd6cd170d97a685aa17cc407205457"><div class="ttname"><a href="structWidget__.html#a5bbd6cd170d97a685aa17cc407205457">Widget_::key</a></div><div class="ttdeci">EmbString key</div><div class="ttdef"><b>Definition:</b> core.h:1031</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.9.4-->
 <!-- start footer part -->
