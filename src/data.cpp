@@ -112,6 +112,23 @@ load_file_to_buffer(char *fname, char *buffer)
     return 1;
 }
 
+std::vector<std::string> variables_ = {
+    "file_toolbar",
+    "edit_toolbar",
+    "view_toolbar",
+    "icon_toolbar",
+    "help_toolbar",
+    "draw_toolbar",
+    "inquiry_toolbar",
+    "modify_toolbar",
+    "dimension_toolbar",
+    "sandbox_toolbar",
+    "layer_toolbar",
+    "properties_toolbar",
+    "text_toolbar",
+    "prompt_toolbar"
+};
+
 /*! \brief Loads init_script 1 Mb buffer to chain together all of the
  *         strings in the init_script string table.
  *
@@ -120,11 +137,13 @@ load_file_to_buffer(char *fname, char *buffer)
 int
 load_script(std::string fname)
 {
-    auto loaded_config = toml::parse(fname, toml::spec::v(1,1,0));
-    if (fname == "assets/ui/toolbars.toml") {
-        StrList a = toml::find<StrList>(loaded_config, "file_toolbar");
-        /* TODO: Check for failure here . */
-        state["file_toolbar"] = a;
+    auto config = toml::parse(fname, toml::spec::v(1,1,0));
+    for (int i=0; i<variables_.size(); i++) {
+        if (config.contains(variables_[i])) {
+            StrList a = toml::find<StrList>(config, variables_[i]);
+            /* TODO: Check for failure here . */
+            state[variables_[i]] = a;
+        }
     }
 
     return 0;
@@ -183,84 +202,6 @@ load_global_state(ScriptValue *root, char *asset_dir)
     state["os"] = std::string(OS_STR__);
     //emb_create_leaf(root, EMB_DATATYPE_STR, "asset_dir", asset_dir);
     std::string asset_dir_(asset_dir);
-
-    state["edit_toolbar"] = StrList({
-        "undo",
-        "redo",
-        "---",
-        "cut",
-        "copy",
-        "paste"
-    });
-    state["view_toolbar"] = StrList({
-        "zoomin",
-        "zoomout",
-        "zoomextents",
-        "---",
-        "panrealtime",
-        "panpoint",
-        "panleft",
-        "panright",
-        "panup",
-        "pandown",
-        "---",
-        "day",
-        "night"
-    });
-    state["icon_toolbar"] = StrList({
-        "icon16",
-        "icon24",
-        "icon32",
-        "icon48",
-        "icon64",
-        "icon128"
-    });
-    state["help_toolbar"] = StrList({
-        "help",
-        "changelog",
-        "about",
-        "whatsthis"
-    });
-    state["draw_toolbar"] = StrList({
-        "path",
-        "polyline",
-        "---",
-        "arc",
-        "circle",
-        "ellipse",
-        "line",
-        "point",
-        "polygon",
-        "rectangle",
-        "singlelinetext",
-        "---",
-        "dolphin",
-        "heart",
-        "snowflake",
-        "star"
-    });
-    state["inquiry_toolbar"] = StrList({
-        "distance",
-        "locatepoint"
-    });
-    state["modify_toolbar"] = StrList({
-        "erase",
-        "move",
-        "rotate",
-        "scale",
-        "selectall"
-    });
-    state["dimension_toolbar"] = StrList({
-        "quickleader"
-    });
-    state["sandbox_toolbar"] = StrList({
-        "sandbox"
-    });
-    std::vector<std::string> empty;
-    state["layer_toolbar"] = empty;
-    state["properties_toolbar"] = empty;
-    state["text_toolbar"] = empty;
-    state["prompt_toolbar"] = empty;
 
     for (int i=0; i<manifest.size(); i++) {
         std::string fname = manifest[i];
