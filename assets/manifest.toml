@@ -1,4 +1,17 @@
-
+#
+# Embroidermodder 2.
+#
+# Copyright 2011-2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
+# This file is loaded before any other configuration and it tells
+# embroidermodder what to load.
+#
+# ------------------------------------------------------------------------------
+#
 # The list of all the asset files used by Embroidermodder.
 #
 # The manifest is fixed: user overrides to the set files are available
@@ -7,13 +20,34 @@
 # parent assets folder containing all these using the --assets flag.
 #
 manifest = [
-    "assets/data/versions.toml",
-    "assets/data/paths.toml",
-    "assets/ui/toolbars.toml"
+    "data/versions.toml",
+    "data/paths.toml",
+    "data/settings.toml",
+    "ui/toolbars.toml",
+    "ui/menus.toml",
+    "ui/widgets.toml",
+    "tips.toml",
+    "coverage_test.toml"
 ]
 
 variables = [
-    "manifest",
+    "menu_list",
+
+    "file_menu",
+    "edit_menu",
+    "view_menu",
+    "zoom_menu",
+    "pan_menu",
+    "help_menu",
+    "draw_menu",
+    "tools_menu",
+    "modify_menu",
+    "dimension_menu",
+    "sandbox_menu",
+    "recent_menu",
+    "window_menu",
+
+    "toolbar_list",
 
     "file_toolbar",
     "edit_toolbar",
@@ -28,6 +62,18 @@ variables = [
     "layer_toolbar",
     "properties_toolbar",
     "text_toolbar",
-    "prompt_toolbar"
+    "prompt_toolbar",
+
+    "settings_data",
+    "tips",
+    "coverage_test",
+    
+    "editor_list",
+    "combobox_list",
+    "layer_list",
+    "color_list",
+    "line_type_list",
+    "line_weight_list",
+    "text_size_list"
 ]
 

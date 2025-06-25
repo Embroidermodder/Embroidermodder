@@ -1,3 +1,12 @@
+#
+# Embroidermodder 2.
+#
+# Copyright 2011-2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
 
 editor_list = [
     "ArcCenterX",
@@ -186,5 +195,33 @@ text_size_list = [
     "48 pt", "48", "",
     "60 pt", "60", "",
     "72 pt", "72", ""
+]
+
+ui_labels = [
+    "labelTextColor", "Text Color",
+    "labelBackgroundColor", "Background Color",
+
+    "labelTotalStitches", "Total Stitches:",
+    "labelRealStitches", "Real Stitches:",
+    "labelJumpStitches", "Jump Stitches:",
+    "labelTrimStitches", "Trim Stitches:",
+    "labelTotalColors", "Total Colors:",
+    "labelColorChanges", "Color Changes:",
+    "labelRectLeft", "Left:",
+    "labelRectTop", "Top:",
+    "labelRectRight", "Right:",
+    "labelRectBottom", "Bottom:",
+    "labelRectWidth", "Width:",
+    "labelRectHeight", "Height:",
+
+    "labelCrosshairColor", "Crosshair Color",
+    "labelBackgroundColor", "Background Color",
+    "labelSelectionColorCrossing", "Selection Box Color (Crossing)",
+    "labelSelectionFillCrossing", "Selection Box Fill (Crossing)",
+    "labelSelectionColorWindow", "Selection Box Color (Window)",
+    "labelSelectionFillWindow", "Selection Box Fill (Window)",
+    "labelSelectionFillAlpha", "Selection Box Fill Alpha",
+
+    "labelRulerPixelSize", "Ruler Pixel Size"
 ]
 

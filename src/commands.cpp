@@ -7723,9 +7723,9 @@ createTabOpenSave(void)
         ));
 
     int i;
-    int n_extensions = table_length(extensions);
-    for (i=0; i<n_extensions; i++) {
-        const char *extension = extensions[i];
+    StrList extensions = get_sl("extensions");
+    for (size_t i=0; i<extensions.size(); i++) {
+        const char *extension = extensions[i].c_str();
         custom_filter[i] = new QCheckBox(extension, groupbox_custom_filter);
         custom_filter[i]->setChecked(QString(setting[OPENSAVE_CUSTOM_FILTER].dialog.s).contains("*." + QString(extension), Qt::CaseInsensitive));
         QObject::connect(custom_filter[i], SIGNAL(stateChanged(int)), set_dialog,
@@ -7741,8 +7741,8 @@ createTabOpenSave(void)
     QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupbox_custom_filter);
     int row = 0;
     int column = 0;
-    for (i=0; i<n_extensions; i++) {
-        const char *extension = extensions[i];
+    for (size_t i=0; i<extensions.size(); i++) {
+        const char *extension = extensions[i].c_str();
         gridLayoutCustomFilter->addWidget(custom_filter[i], row, column, Qt::AlignLeft);
         row++;
         if (row == 10) {

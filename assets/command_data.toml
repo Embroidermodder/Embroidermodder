@@ -1,0 +1,1597 @@
+#
+# Embroidermodder 2.
+#
+# Copyright 2011-2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
+# ------------------------------------------------------------------------------
+#
+# Command Data: interface to command function pointers and necessary data
+# for the menu and toolbar presentation of the commands.
+#
+# Shortcuts should match:
+#     https://doc.qt.io/qt-6/qkeysequence.html#standard-shortcuts
+# Apple platforms may need an additional argument like ".apple_shortcut".
+#
+
+[[command_data]]
+# PLACEHOLDER (0)
+command = "donothing"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = [
+    "do_nothing"
+]
+
+[[command_data]]
+#  DO NOTHING (1)
+command = "donothing"
+arguments = ""
+icon = "x_circle"
+tooltip = "&Do Nothing"
+statustip = "Does Nothing. Command: DONOTHING."
+alias = "DONOTHING"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = [
+    "do_nothing"
+]
+
+[[command_data]]
+#  2
+command = "new"
+arguments = ""
+icon = "document"
+tooltip = "&New"
+statustip = "Create a new file. Command: NEW."
+alias = "NEW"
+shortcut = "Ctrl+N"
+flags = "CONTEXT_FREE | CLEAR_SELECTION"
+action = "new_command"
+
+[[command_data]]
+#  3
+command = "open"
+arguments = ""
+icon = "folder_open"
+tooltip = "&Open"
+statustip = "Open an existing file. Command: OPEN."
+alias = "OPEN"
+shortcut = "Ctrl+O"
+flags = "REQUIRED_VIEW"
+action = "open_command"
+
+[[command_data]]
+#  4
+command = "save"
+arguments = ""
+icon = "arrow_down_on_square"
+tooltip = "&Save"
+statustip = "Save the design to disk. Command: SAVE."
+alias = "SAVE"
+shortcut = "Ctrl+S"
+flags = "REQUIRED_VIEW"
+action = "save_command"
+
+[[command_data]]
+#  5
+command = "saveas"
+arguments = ""
+icon = "arrow_down_on_square_stack"
+tooltip = "Save &As"
+statustip = "Save the design under a new name. Command: SAVEAS."
+alias = "SAVEAS"
+shortcut = "Ctrl+Shift+S"
+flags = "REQUIRED_VIEW"
+action = "save_as_command"
+
+[[command_data]]
+#  6
+command = "print"
+arguments = ""
+icon = "printer"
+tooltip = "&Print"
+statustip = "Print the design. Command: PRINT."
+alias = "PRINT"
+shortcut = "Ctrl+P"
+flags = "REQUIRED_VIEW"
+action = "print_command"
+
+[[command_data]]
+#  7
+command = "designdetails"
+arguments = ""
+icon = "chart_bar"
+tooltip = "&Details"
+statustip = "Details of the current design. Command: DETAILS"
+alias = "details"
+shortcut = "Ctrl+D"
+flags = "REQUIRED_VIEW"
+action = "details_command"
+
+[[command_data]]
+#  8
+command = "exit"
+arguments = ""
+icon = "power"
+tooltip = "E&xit"
+statustip = "Exit the application:  EXIT"
+alias = "quit"
+shortcut = "Ctrl+Q"
+flags = "REQUIRED_VIEW"
+action = "exit_command"
+
+[[command_data]]
+#  9
+command = "cut"
+arguments = ""
+icon = "scissors"
+tooltip = "Cu&t"
+statustip = "Cut the current selection's contents to the clipboard. Command: CUT."
+alias = "CUT"
+shortcut = "Ctrl+X"
+flags = "REQUIRED_VIEW"
+action = "cut_command"
+
+[[command_data]]
+#  10
+command = "copy"
+arguments = ""
+icon = "document_duplicate"
+tooltip = "&Copy"
+statustip = "Copy the current selection's contents to the clipboard. Command: COPY."
+alias = ""
+shortcut = "Ctrl+C"
+flags = "REQUIRED_VIEW"
+action = "copy_command"
+
+[[command_data]]
+#  11
+command = "copy-selected"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "copy_selected_command"
+
+[[command_data]]
+#  12
+command = "paste"
+arguments = ""
+icon = "clipboard_document"
+tooltip = "&Paste"
+statustip = "Paste the clipboard's contents into the current selection. Command: PASTE."
+alias = "PASTE"
+shortcut = "Ctrl+V"
+flags = "REQUIRED_VIEW"
+action = "paste_command"
+
+[[command_data]]
+#  13
+command = "paste-selected"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "paste_selected_command"
+
+[[command_data]]
+#  14
+command = "undo"
+arguments = ""
+icon = "arrow_uturn_left"
+tooltip = "&Undo"
+statustip = "Reverses the most recent action. Command: UNDO."
+alias = "U"
+shortcut = "Ctrl+Z"
+flags = "REQUIRED_VIEW"
+action = "undo_command"
+
+[[command_data]]
+#  15
+command = "redo"
+arguments = ""
+icon = "arrow_uturn_right"
+tooltip = "&Redo"
+statustip = "Reverses the effects of the previous undo action. Command: REDO."
+alias = "REDO"
+shortcut = "Ctrl+Shift+Z"
+flags = "REQUIRED_VIEW"
+action = "redo_command"
+
+[[command_data]]
+#  16
+command = "windowclose"
+arguments = ""
+icon = "x_mark"
+tooltip = "Cl&ose"
+statustip = "Close the active window. Command: CLOSE."
+alias = "CLOSE"
+shortcut = "Ctrl+W"
+flags = "REQUIRED_VIEW"
+action = "window_close_command"
+
+[[command_data]]
+#  17
+command = "windowcloseall"
+arguments = ""
+icon = "windowcloseall"
+tooltip = "Close &All"
+statustip = "Close all the windows. Command: CLOSEALL"
+alias = "CLOSEALL"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "window_close_all_command"
+
+[[command_data]]
+#  18
+command = "windowcascade"
+arguments = ""
+icon = "windowcascade"
+tooltip = "&Cascade"
+statustip = "Cascade the windows. Command: CASCADE."
+alias = "CASCADE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "window_cascade_command"
+
+[[command_data]]
+#  19
+command = "windowtile"
+arguments = ""
+icon = "windowtile"
+tooltip = "&Tile"
+statustip = "Tile the windows:  TILE"
+alias = "TILE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "window_tile_command"
+
+[[command_data]]
+#  20
+command = "windownext"
+arguments = ""
+icon = "windownext"
+tooltip = "Ne&xt"
+statustip = "Move the focus to the next window:  NEXT"
+alias = "NEXT"
+shortcut = "Ctrl+Tab"
+flags = "REQUIRED_VIEW"
+action = "window_next_command"
+
+[[command_data]]
+#  21
+command = "windowprevious"
+arguments = ""
+icon = "windowprevious"
+tooltip = "Pre&vious"
+statustip = "Move the focus to the previous window:  PREVIOUS"
+alias = "PREV,PREVIOUS"
+shortcut = "Ctrl+Shift+Tab"
+flags = "REQUIRED_VIEW"
+action = [
+            "window_previous_command"
+        ]
+
+[[command_data]]
+#  22
+command = "help"
+arguments = ""
+icon = "question_mark_circle"
+tooltip = "&Help"
+statustip = "Displays help. Command: HELP"
+alias = "?,HELP"
+shortcut = "F1"
+flags = "CONTEXT_FREE"
+action = "help_command"
+
+[[command_data]]
+#  23
+command = "changelog"
+arguments = ""
+icon = "queue_list"
+tooltip = "&Changelog"
+statustip = "Describes new features in this product. Command: CHANGELOG."
+alias = "CHANGELOG"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "changelog_command"
+
+[[command_data]]
+#  24
+command = "tipoftheday"
+arguments = ""
+icon = "light_bulb"
+tooltip = "&Tip Of The Day"
+statustip = "Displays a dialog with useful tips:  TIPS"
+alias = "TIPS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "tip_of_the_day_command"
+
+[[command_data]]
+#  25
+command = "about"
+arguments = ""
+icon = "information_circle"
+tooltip = "&About Embroidermodder 2"
+statustip = "Displays information about this product. Command: ABOUT."
+alias = "ABOUT"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "about_command"
+
+[[command_data]]
+#  26
+command = "whatsthis"
+arguments = ""
+icon = "lifebuoy"
+tooltip = "&What's This?"
+statustip = "What's This? Context Help! Command: WHATSTHIS."
+alias = "WHATSTHIS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "whats_this_command"
+
+[[command_data]]
+#  27
+command = "icon16"
+arguments = ""
+icon = "icon16"
+tooltip = "Icon&16"
+statustip = "Sets the toolbar icon size to 16x16:  ICON16"
+alias = "ICON16"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "icon16_command"
+
+[[command_data]]
+#  28
+command = "icon24"
+arguments = ""
+icon = "icon24"
+tooltip = "Icon&24"
+statustip = "Sets the toolbar icon size to 24x24:  ICON24"
+alias = "ICON24"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "icon24_command"
+
+[[command_data]]
+#  29
+command = "icon32"
+arguments = ""
+icon = "icon32"
+tooltip = "Icon&32"
+statustip = "Sets the toolbar icon size to 32x32:  ICON32"
+alias = "ICON32"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "icon32_command"
+
+[[command_data]]
+#  30
+command = "icon48"
+arguments = ""
+icon = "icon48"
+tooltip = "Icon&48"
+statustip = "Sets the toolbar icon size to 48x48:  ICON48"
+alias = "ICON48"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "icon48_command"
+
+[[command_data]]
+#  31
+command = "icon64"
+arguments = ""
+icon = "icon64"
+tooltip = "Icon&64"
+statustip = "Sets the toolbar icon size to 64x64:  ICON64"
+alias = "ICON64"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "icon64_command"
+
+[[command_data]]
+#  32
+command = "icon128"
+arguments = ""
+icon = "icon128"
+tooltip = "Icon12&8"
+statustip = "Sets the toolbar icon size to 128x128:  ICON128"
+alias = "ICON128"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "icon128_command"
+
+[[command_data]]
+#  33
+command = "settingsdialog"
+arguments = ""
+icon = "cog-8-tooth"
+tooltip = "&Settings"
+statustip = "Configure settings specific to this product. Command: SETTINGS."
+alias = "SETTINGS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "settings_command"
+
+[[command_data]]
+#  34
+command = "makelayercurrent"
+arguments = ""
+icon = "makelayercurrent"
+tooltip = "&Make Layer Active"
+statustip = "Makes the layer of a selected object the active layer"
+alias = "MAKELAYERCURRENT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "make_layer_active_command"
+
+[[command_data]]
+#  35
+command = "layers"
+arguments = ""
+icon = "layers"
+tooltip = "&Layers"
+statustip = "Manages layers and layer properties:  LAYER"
+alias = "LAYER"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "layers_command"
+
+[[command_data]]
+#  36
+command = "layerselector"
+arguments = ""
+icon = "layerselector"
+tooltip = "&Layer Selector"
+statustip = "Dropdown selector for changing the current layer"
+alias = "LAYERSELECTOR"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "layer_selector_command"
+
+[[command_data]]
+#  37
+command = "layerprevious"
+arguments = ""
+icon = "layerprevious"
+tooltip = "&Layer Previous"
+statustip = "Restores the previous layer settings:  LAYERP"
+alias = "LAYERP"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "layer_previous_command"
+
+[[command_data]]
+#  38
+command = "colorselector"
+arguments = ""
+icon = "colorselector"
+tooltip = "&Color Selector"
+statustip = "Dropdown selector for changing the current thread color"
+alias = "COLORSELECTOR"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "color_selector_command"
+
+[[command_data]]
+#  39
+command = "linetypeselector"
+arguments = ""
+icon = "linetypeselector"
+tooltip = "&Stitchtype Selector"
+statustip = "Dropdown selector for changing the current stitch type"
+alias = "LINETYPESELECTOR"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "line_type_selector_command"
+
+[[command_data]]
+#  40
+command = "lineweightselector"
+arguments = ""
+icon = "lineweightselector"
+tooltip = "&Threadweight Selector"
+statustip = "Dropdown selector for changing the current thread weight"
+alias = "LINEWEIGHTSELECTOR"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "line_weight_selector_command"
+
+[[command_data]]
+#  41
+command = "hidealllayers"
+arguments = ""
+icon = "hidealllayers"
+tooltip = "&Hide All Layers"
+statustip = "Turns the visibility off for all layers in the current drawing:  HIDEALL"
+alias = "HIDEALLLAYERS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "hide_all_layers_command"
+
+[[command_data]]
+#  42
+command = "showalllayers"
+arguments = ""
+icon = "showalllayers"
+tooltip = "&Show All Layers"
+statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL"
+alias = "SHOWALLLAYERS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "show_all_layers_command"
+
+[[command_data]]
+#  43
+command = "freezealllayers"
+arguments = ""
+icon = "freezealllayers"
+tooltip = "&Freeze All Layers"
+statustip = "Freezes all layers in the current drawing:  FREEZEALL"
+alias = "FREEZEALLLAYERS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "freeze_all_layers_command"
+
+[[command_data]]
+#  44
+command = "thawalllayers"
+arguments = ""
+icon = "thawalllayers"
+tooltip = "&Thaw All Layers"
+statustip = "Thaws all layers in the current drawing:  THAWALL"
+alias = "THAWALL"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "thaw_all_layers_command"
+
+[[command_data]]
+#  45
+command = "lockalllayers"
+arguments = ""
+icon = "lock_closed"
+tooltip = "&Lock All Layers"
+statustip = "Locks all layers in the current drawing:  LOCKALL"
+alias = "LOCKALL"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "lock_all_layers_command"
+
+[[command_data]]
+#  46
+command = "unlockalllayers"
+arguments = ""
+icon = "lock_open"
+tooltip = "&Unlock All Layers"
+statustip = "Unlocks all layers in the current drawing:  UNLOCKALL"
+alias = "UNLOCKALL"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "unlock_all_layers_command"
+
+[[command_data]]
+#  47
+command = "textbold"
+arguments = ""
+icon = "bold"
+tooltip = "&Bold Text"
+statustip = "Sets text to be bold. Command: BOLD."
+alias = "BOLD"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "text_bold_command"
+
+[[command_data]]
+#  48
+command = "textitalic"
+arguments = ""
+icon = "italic"
+tooltip = "&Italic Text"
+statustip = "Sets text to be italic. Command: ITALIC."
+alias = "ITALIC"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "text_italic_command"
+
+[[command_data]]
+#  49
+command = "textunderline"
+arguments = ""
+icon = "underline"
+tooltip = "&Underline Text"
+statustip = "Sets text to be underlined. Command: UNDERLINE."
+alias = "UNDERLINE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "text_underline_command"
+
+[[command_data]]
+#  50
+command = "textstrikeout"
+arguments = ""
+icon = "strikethrough"
+tooltip = "&StrikeOut Text"
+statustip = "Sets text to be striked out. Command: STRIKEOUT."
+alias = "STRIKEOUT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "text_strikeout_command"
+
+[[command_data]]
+#  51
+command = "textoverline"
+arguments = ""
+icon = "overline"
+tooltip = "&Overline Text"
+statustip = "Sets text to be overlined. Command: OVERLINE."
+alias = "OVERLINE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "text_overline_command"
+
+[[command_data]]
+#  52
+command = "zoomrealtime"
+arguments = ""
+icon = "magnifying_glass"
+tooltip = "Zoom &Real Time"
+statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport. Command: ZOOMREALTIME"
+alias = "ZOOMREALTIME"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_real_time_command"
+
+[[command_data]]
+#  53
+command = "zoomprevious"
+arguments = ""
+icon = "magnifying_glass"
+tooltip = "Zoom &Previous"
+statustip = "Zooms to display the previous view. Command: ZOOMPREVIOUS."
+alias = "ZOOMPREVIOUS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_previous_command"
+
+[[command_data]]
+#  54
+command = "zoomwindow"
+arguments = ""
+icon = "magnifying_glass"
+tooltip = "Zoom &Window"
+statustip = "Zooms to display an area specified by a rectangular window. Command: ZOOMIN"
+alias = "ZOOMWINDOW"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_window_command"
+
+[[command_data]]
+#  55
+command = "zoomdynamic"
+arguments = ""
+icon = "magnifying_glass"
+tooltip = "Zoom &Dynamic"
+statustip = "Zooms to display the generated portion of the drawing. Command: ZOOMDYNAMIC."
+alias = "ZOOMDYNAMIC"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_dynamic_command"
+
+[[command_data]]
+#  56
+command = "zoomscale"
+arguments = ""
+icon = "magnifying_glass"
+tooltip = "Zoom &Scale"
+statustip = "Zooms the display using a specified scale factor. Command: ZOOMSCALE."
+alias = "ZOOMSCALE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_scale_command"
+
+[[command_data]]
+#  57
+command = "zoomcenter"
+arguments = ""
+icon = "magnifying_glass"
+tooltip = "Zoom &Center"
+statustip = "Zooms to display a view specified by a center point and magnification or height. Command: ZOOMCENTER."
+alias = "ZOOMCENTER"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_center_command"
+
+[[command_data]]
+#  58
+command = "zoomin"
+arguments = ""
+icon = "magnifying_glass_plus"
+tooltip = "Zoom &In"
+statustip = "Zooms to increase the apparent size of objects. Command: zoomin."
+alias = "zoomin"
+shortcut = "Ctrl+Plus"
+flags = "REQUIRED_VIEW"
+action = "zoom_in_command"
+
+[[command_data]]
+#  59
+command = "zoomout"
+arguments = ""
+icon = "magnifying_glass_minus"
+tooltip = "Zoom &Out"
+statustip = "Zooms to decrease the apparent size of objects. Command: ZOOMOUT"
+alias = "ZOOMOUT"
+shortcut = "Ctrl+Minus"
+flags = "REQUIRED_VIEW"
+action = "zoom_out_command"
+
+[[command_data]]
+#  60
+command = "zoomselected"
+arguments = ""
+icon = "magnifying_glass"
+tooltip = "Zoom Selec&ted"
+statustip = "Zooms to display the selected objects. Command: ZOOMSELECTED."
+alias = "ZOOMSELECTED"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_selected_command"
+
+[[command_data]]
+#  61
+command = "zoomall"
+arguments = ""
+icon = "magnifying_glass"
+tooltip = "Zoom &All"
+statustip = "Zooms to display the drawing extents or the grid limits. Command: ZOOMALL."
+alias = "ZOOMALL"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_all_command"
+
+[[command_data]]
+#  62
+command = "zoomextents"
+arguments = ""
+icon = "zoom"
+tooltip = "Zoom &Extents"
+statustip = "Zooms to display the drawing extents. Command: ZOOMEXTENTS"
+alias = "ZOOMEXTENTS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "zoom_extents_command"
+
+[[command_data]]
+#  63
+command = "panrealtime"
+arguments = ""
+icon = "panrealtime"
+tooltip = "&Pan Realtime"
+statustip = "Moves the view in the current viewport. Command: PANREALTIME"
+alias = "PANREALTIME"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "panrealtime_command"
+
+[[command_data]]
+#  64
+command = "panpoint"
+arguments = ""
+icon = "viewfinder_circle"
+tooltip = "&Pan Point"
+statustip = "Moves the view by the specified distance."
+alias = "PANPOINT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "panpoint_command"
+
+[[command_data]]
+#  65
+command = "panleft"
+arguments = ""
+icon = "chevron_left"
+tooltip = "&Pan Left"
+statustip = "Moves the view to the left:  PANLEFT"
+alias = "PANLEFT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "panleft_command"
+
+[[command_data]]
+#  66
+command = "panright"
+arguments = ""
+icon = "chevron_right"
+tooltip = "&Pan Right"
+statustip = "Moves the view to the right:  PANRIGHT"
+alias = "PANRIGHT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "panright_command"
+
+[[command_data]]
+#  67
+command = "panup"
+arguments = ""
+icon = "chevron_up"
+tooltip = "&Pan Up"
+statustip = "Moves the view up:  PANUP"
+alias = "PANUP"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "panup_command"
+
+[[command_data]]
+#  68
+command = "pandown"
+arguments = ""
+icon = "chevron_down"
+tooltip = "&Pan Down"
+statustip = "Moves the view down:  PANDOWN"
+alias = "PANDOWN"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "pandown_command"
+
+[[command_data]]
+#  69
+command = "day"
+arguments = ""
+icon = "sun"
+tooltip = "&Day"
+statustip = "Updates the current view using day vision settings. Command: DAY"
+alias = "DAY"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "day_command"
+
+[[command_data]]
+#  70
+command = "night"
+arguments = ""
+icon = "moon"
+tooltip = "&Night"
+statustip = "Updates the current view using night vision settings. Command: NIGHT."
+alias = "NIGHT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "night_command"
+
+[[command_data]]
+#  71
+command = "alert"
+arguments = "s"
+icon = "warning"
+tooltip = "&Alert"
+statustip = "Creates a dialog to alert the user. Command: ALERT."
+alias = "ALERT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "alert_command"
+
+[[command_data]]
+#  72
+command = "get"
+arguments = ""
+icon = "get"
+tooltip = "&Get"
+statustip = "Print a value to one of the pre-defined global variables."
+alias = "GET"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "get_command"
+
+[[command_data]]
+#  73
+command = "set"
+arguments = ""
+icon = "set"
+tooltip = "&Set"
+statustip = "Assign a value to one of the pre-defined global variables."
+alias = "SET"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "set_command"
+
+[[command_data]]
+#  74: ACTION_CLEAR is covered by the flags, so the function pointer is
+# * do_nothing_command.
+command = "clear"
+arguments = ""
+icon = "clear"
+tooltip = "&Do Nothing"
+statustip = "Does Nothing. Command: DONOTHING."
+alias = "DONOTHING"
+shortcut = ""
+flags = "REQUIRED_VIEW | CLEAR_SELECTION"
+action = "do_nothing_command"
+
+[[command_data]]
+#  75
+command = "angle"
+arguments = "rrr"
+icon = "angle"
+tooltip = "&Angle"
+statustip = "Calculate the angle between two lines and display it. Command: ANGLE, CALCANGLE"
+alias = "CALCANGLE"
+shortcut = ""
+flags = "REQUIRED_VIEW | CLEAR_SELECTION"
+action = "angle_command"
+
+[[command_data]]
+#  76
+command = "circle"
+arguments = "rrr"
+icon = "circle"
+tooltip = "&Circle"
+statustip = "Creates a circle. Command: CIRCLE."
+alias = "C"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "circle_command"
+
+[[command_data]]
+#  77
+command = "debug"
+arguments = "s"
+icon = "debug"
+tooltip = "Debug"
+statustip = "Displays information about this product:  ABOUT"
+alias = "DEBUG"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "debug_command"
+
+[[command_data]]
+#  ACTION_DIM_LEADER             78
+command = "donothing"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "dimleader_command"
+
+[[command_data]]
+#  79
+command = "disable"
+arguments = ""
+icon = "disable"
+tooltip = "&Disable"
+statustip = "Disable one of the pre-defined global boolean variables."
+alias = "DISABLE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "disable_command"
+
+[[command_data]]
+#  80
+command = "distance"
+arguments = "rrrr"
+icon = "distance"
+tooltip = "&Distance"
+statustip = "Measures the distance and angle between two points. Command: DIST"
+alias = "DI,DIST"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "distance_command"
+
+[[command_data]]
+#  81
+command = "dolphin"
+arguments = ""
+icon = "dolphin"
+tooltip = "&Dolphin"
+statustip = "Creates a dolphin. Command: DOLPHIN."
+alias = "DOLPHIN"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "dolphin_command"
+
+[[command_data]]
+#  82
+command = "ellipse"
+arguments = ""
+icon = "ellipse"
+tooltip = "&Ellipse"
+statustip = "Creates an ellipse. Command: ELLIPSE."
+alias = "EL"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "ellipse_command"
+
+[[command_data]]
+#  83
+command = "enable"
+arguments = ""
+icon = "enable"
+tooltip = "&Enable"
+statustip = "Enable a pre-defined global variables."
+alias = "ENABLE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "enable_command"
+
+[[command_data]]
+#  84
+command = "erase"
+arguments = ""
+icon = "trash"
+tooltip = "D&elete"
+statustip = "Removes objects from a drawing. Command: DELETE."
+alias = "e,erase,del,delete"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "erase_command"
+
+[[command_data]]
+#  85
+command = "error"
+arguments = ""
+icon = "error"
+tooltip = "Error"
+statustip = "Sends an error message to the user. Command: ERROR"
+alias = "ERROR"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "error_command"
+
+[[command_data]]
+#  86
+command = "heart"
+arguments = ""
+icon = "heart"
+tooltip = "&Heart"
+statustip = "Creates a heart:  HEART"
+alias = "HEART"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "heart_command"
+
+[[command_data]]
+#  87
+command = "line"
+arguments = ""
+icon = "line"
+tooltip = "&Line"
+statustip = "Creates straight line segments:  LINE"
+alias = "L,LINE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "line_command"
+
+[[command_data]]
+#  88
+command = "locatepoint"
+arguments = ""
+icon = "locatepoint"
+tooltip = "&Locate Point"
+statustip = "Displays the coordinate values of a location:  ID"
+alias = "ID"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "located_point_command"
+
+[[command_data]]
+#  89
+command = "mirrorselected"
+arguments = ""
+icon = "mirror"
+tooltip = "&Mirror Selected"
+statustip = "Command: MIRRORSELECTED."
+alias = "MIRRORSELECTED"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "mirror_selected_command"
+
+[[command_data]]
+#  90
+command = "move"
+arguments = ""
+icon = "move"
+tooltip = "&Move"
+statustip = "Displaces objects a specified distance in a specified direction:  MOVE"
+alias = "M,MOVE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "move_command"
+
+[[command_data]]
+#  91
+command = "moveselected"
+arguments = ""
+icon = "moveselected"
+tooltip = "&Do Nothing"
+statustip = "Does Nothing."
+alias = "DONOTHING"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "move_selected_command"
+
+[[command_data]]
+#  92
+command = "path"
+arguments = ""
+icon = "path"
+tooltip = "&Path"
+statustip = "Creates a 2D path:  PATH"
+alias = "PA,PATH"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "path_command"
+
+[[command_data]]
+#  93
+command = "platform"
+arguments = ""
+icon = "platform"
+tooltip = "&Platform"
+statustip = "List which platform is in use. Command: PLATFORM."
+alias = "PLATFORM"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "platform_command"
+
+[[command_data]]
+#  94
+command = "point"
+arguments = ""
+icon = "point"
+tooltip = "&Point"
+statustip = "Creates multiple points:  POINT"
+alias = "PO,POINT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "point_command"
+
+[[command_data]]
+#  95
+command = "polygon"
+arguments = ""
+icon = "polygon"
+tooltip = "Pol&ygon"
+statustip = "Creates a regular polygon. Command: POLYGON."
+alias = "POL,POLYGON"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "polygon_command"
+
+[[command_data]]
+#  96
+command = "polyline"
+arguments = ""
+icon = "polyline"
+tooltip = "&Polyline"
+statustip = "Creates a 2D polyline:  PLINE"
+alias = "PL,PLINE,POLYLINE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "polyline_command"
+
+[[command_data]]
+#  97
+command = "previewoff"
+arguments = ""
+icon = "previewoff"
+tooltip = "&Do Nothing"
+statustip = "Does Nothing."
+alias = "DONOTHING"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "previewoff_command"
+
+[[command_data]]
+#  98
+command = "previewon"
+arguments = ""
+icon = "previewon"
+tooltip = "&Preview On"
+statustip = "Preview on."
+alias = "PREVIEWON"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "previewon_command"
+
+[[command_data]]
+#  99
+command = "quickleader"
+arguments = ""
+icon = "quickleader"
+tooltip = "&QuickLeader"
+statustip = "Creates a leader and annotation:  QUICKLEADER"
+alias = "LE,LEADER,QLEADER"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "quickleader_command"
+
+[[command_data]]
+#  100
+command = "rectangle"
+arguments = ""
+icon = "rectangle"
+tooltip = "&Rectangle"
+statustip = "Creates a rectangular polyline. Command: RECTANGLE."
+alias = "REC,RECT,RECTANG,RECTANGLE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "rectangle_command"
+
+[[command_data]]
+#  101
+command = "rgb"
+arguments = ""
+icon = "rgb"
+tooltip = "Icon&24"
+statustip = "Sets the toolbar icon size to 24x24:  ICON24"
+alias = "ICON24"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "rgb_command"
+
+[[command_data]]
+#  102
+command = "rotate"
+arguments = ""
+icon = "arrow_path"
+tooltip = "&Rotate"
+statustip = "Rotates objects about a base point:  ROTATE"
+alias = "RO,ROTATE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "rotate_command"
+
+[[command_data]]
+#  103
+command = "donothing"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "do_nothing_command"
+
+[[command_data]]
+#  104
+command = "scale"
+arguments = ""
+icon = "scale"
+tooltip = "Sca&le"
+statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions:  SCALE"
+alias = "SC,SCALE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "scale_command"
+
+[[command_data]]
+#  105
+command = "scaleselected"
+arguments = ""
+icon = "scaleselected"
+tooltip = "&Do Nothing"
+statustip = "Does Nothing."
+alias = "SCALESELECTED"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "scale_selected_command"
+
+[[command_data]]
+#  106
+command = "selectall"
+arguments = ""
+icon = "selectall"
+tooltip = "&Select All"
+statustip = "Selects all objects:  SELECTALL"
+alias = "AI_SELALL,SELALL,SELECTALL"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "select_all_command"
+
+[[command_data]]
+#  107
+command = "singlelinetext"
+arguments = ""
+icon = "singlelinetext"
+tooltip = "&Single Line Text"
+statustip = "Creates single-line text objects:  TEXT"
+alias = "DT,DTEXT,TEXT,SINGLELINETEXT"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "single_line_text_command"
+
+[[command_data]]
+#  108
+command = "snowflake"
+arguments = ""
+icon = "snowflake"
+tooltip = "&Snowflake"
+statustip = "Creates a snowflake:  SNOWFLAKE"
+alias = "SNOWFLAKE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "snowflake_command"
+
+[[command_data]]
+#  109
+command = "star"
+arguments = ""
+icon = "star"
+tooltip = "&Star"
+statustip = "Creates a star:  STAR"
+alias = "STAR"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "star_command"
+
+[[command_data]]
+#  110
+command = "syswindows"
+arguments = ""
+icon = "syswindows"
+tooltip = "&SysWindows"
+statustip = "Arrange the windows. Command: SYSWINDOWS"
+alias = "WINDOWS"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "syswindows_command"
+
+[[command_data]]
+#  111
+command = "todo"
+arguments = ""
+icon = "todo"
+tooltip = "&About"
+statustip = "Displays information about this product:  ABOUT"
+alias = "TODO"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "todo_command"
+
+[[command_data]]
+#  112
+command = "vulcanize"
+arguments = ""
+icon = "vulcanize"
+tooltip = "&Undo"
+statustip = "Reverses the most recent action:  UNDO"
+alias = "VULCANIZE"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "vulcanize_command"
+
+[[command_data]]
+#  113
+command = "add"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "add_geometry_command"
+
+[[command_data]]
+#  114
+command = "delete"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "delete_command"
+
+[[command_data]]
+#  ACTION_GRIP_EDIT             115
+command = "donothing"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "grip_edit_command"
+
+[[command_data]]
+#  ACTION_NAV                   116
+command = "donothing"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "nav_command"
+
+[[command_data]]
+#  ACTION_MIRROR                117
+command = "donothing"
+arguments = ""
+icon = "no-symbol"
+tooltip = "This action is unfinished."
+statustip = "This action is unfinished."
+alias = ""
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "mirror_command"
+
+[[command_data]]
+#  118
+command = "test"
+arguments = ""
+icon = "test"
+tooltip = "&Test"
+statustip = "Run a sequence of commands for QA. Command: TEST."
+alias = "TEST"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "test_command"
+
+[[command_data]]
+#  119
+command = "simulate"
+arguments = ""
+icon = "simulate"
+tooltip = "Show Simulation Controls"
+statustip = "Show simulation controls."
+alias = "SIMULATE,SIM"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "simulate_command"
+
+[[command_data]]
+#  120
+command = "play"
+arguments = ""
+icon = "play"
+tooltip = "Play"
+statustip = "Start/resume the simulation."
+alias = "PLAY"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "play_command"
+
+[[command_data]]
+#  121
+command = "stop"
+arguments = ""
+icon = "stop"
+tooltip = "Stop simulation"
+statustip = "Stop the active simulation."
+alias = "STOP"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "stop_command"
+
+[[command_data]]
+#  122
+command = "pause"
+arguments = ""
+icon = "pause"
+tooltip = "Pause"
+statustip = "Simulate the current pattern."
+alias = "PAUSE"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "pause_command"
+
+[[command_data]]
+#  123
+command = "fast-forward"
+arguments = ""
+icon = "simulate"
+tooltip = "Fast-forward"
+statustip = "Simulate the current pattern."
+alias = "FAST_FORWARD,FF"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "fast_forward_command"
+
+[[command_data]]
+#  124
+command = "rewind"
+arguments = ""
+icon = "simulate"
+tooltip = "Rewind"
+statustip = "Rewind the active simulation."
+alias = "REWIND,REW"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "simulate_command"
+
+[[command_data]]
+#  125
+command = "export-video"
+arguments = ""
+icon = "film"
+tooltip = "Export simulation video"
+statustip = "Export the simulation as a *.gif or *.mp4 file."
+alias = "export-video"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "export_command"
+
+[[command_data]]
+#  126
+command = "qr"
+arguments = ""
+icon = "qr_code"
+tooltip = "Generate QR code"
+statustip = "Generate a QR code."
+alias = "QR"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "qr_command"
+
+[[command_data]]
+#  127
+command = "lettering"
+arguments = ""
+icon = "lettering"
+tooltip = "Generate stitched lettering"
+statustip = "Generate a lettering as stitches for machines without fonts."
+alias = "LETTERING"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "lettering_command"
+
+[[command_data]]
+#  128
+command = "pattern"
+arguments = "s"
+icon = "pattern"
+tooltip = "Paste stitch pattern..."
+statustip = "Paste one of the included designs to the stitch layer."
+alias = "PATTERN"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "pattern_command"
+
+[[command_data]]
+#  129
+command = "design"
+arguments = "s"
+icon = "design"
+tooltip = "Paste vector design..."
+statustip = "Paste one of the included designs to the vector layer."
+alias = "DESIGN"
+shortcut = ""
+flags = "CONTEXT_FREE"
+action = "design_command"
+
+[[command_data]]
+#  130
+command = "arc"
+icon = "arc"
+tooltip = "&Arc"
+statustip = "Displays information about this product:  ARC"
+alias = "ARC"
+shortcut = ""
+flags = "REQUIRED_VIEW"
+action = "do_nothing_command"
+

@@ -834,6 +834,11 @@
  */
 #define TWO_CHAR_INDEX(A)             (0x100*A[0] + A[1])
 
+class Variable;
+class Environment;
+
+typedef struct std::vector<std::string> StrList;
+
 /*!
  *
  */
@@ -898,14 +903,29 @@ typedef std::unordered_map<std::string, Variable> Dictionary;
 
 typedef ScriptValue (*Command)(ScriptEnv *context);
 
+class Environment {
+public:
+    std::string mode;
+    std::string context;
+    std::string error;
+
+    Environment()
+    {
+    }
+
+    ~Environment()
+    {
+    }
+};
+
 typedef struct CommandData_ {
-    char *command;
-    char *arguments;
-    char *icon;
-    char *tooltip;
-    char *statustip;
-    char *alias;
-    char *shortcut;
+    char command[1000];
+    char arguments[1000];
+    char icon[1000];
+    char tooltip[1000];
+    char statustip[1000];
+    char alias[1000];
+    char shortcut[1000];
     int32_t flags;
     Command action;
 } CommandData;
@@ -1864,7 +1884,7 @@ int load_global_state(char *asset_dir);
  */
 
 extern Widget widget_list[MAX_WIDGETS];
-extern CommandData command_data[MAX_COMMANDS];
+extern CommandData command_data[N_ACTIONS];
 extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
 extern GroupBoxData group_box_list[];
@@ -1872,7 +1892,6 @@ extern Translation translations[];
 extern Design designs[];
 
 extern char *object_names[];
-extern char *extensions[];
 extern const char *index_th_name[];
 
 extern int menubar_full_list[];
