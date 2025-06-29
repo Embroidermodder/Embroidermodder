@@ -1,0 +1,9 @@
+{
+  "name": "nuklear",
+  "version": "4.12.7",
+  "repo": "Immediate-Mode-UI/Nuklear",
+  "description": "A small ANSI C gui toolkit",
+  "keywords": ["gl", "ui", "toolkit"],
+  "license": "MIT, Unlicense",
+  "src": ["nuklear.h"]
+}

@@ -571,7 +571,6 @@ mirror_command(ScriptEnv *context)
 ScriptValue
 simulate_command(ScriptEnv *context)
 {
-    glfw_application(0, NULL);
     return script_true;
 }
 

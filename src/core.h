@@ -1214,7 +1214,7 @@ bool loadFile(const char *fileName);
 
 int32_t free_glfw(void);
 
-int glfw_application(int argc, char *argv[]);
+int glfw_application(char *layout_file);
 
 int find_int_map(IntMap *, int);
 

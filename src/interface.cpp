@@ -63,6 +63,17 @@
 #define NANOSVG_IMPLEMENTATION
 #include "nanosvg.h"
 
+/*
+#define NK_INCLUDE_FIXED_TYPES
+#define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+#define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_DEFAULT_FONT
+*/
+#define NK_IMPLEMENTATION
+#include "../extern/nuklear/nuklear.h"
+
 #include "core.h"
 
 #define MAX_HISTORY            300
@@ -176,6 +187,7 @@ main(int argc, char* argv[])
     int i;
     int n_files = 0;
     int test = 0;
+    int glfw_mode = 0;
     std::vector<std::string> files_to_open;
 
     for (i = 1; i < argc; i++) {
@@ -187,6 +199,10 @@ main(int argc, char* argv[])
         }
         if (string_equal(argv[i], "--test")) {
             test = 1;
+            continue;
+        }
+        if (string_equal(argv[i], "--glfw")) {
+            glfw_mode = 1;
             continue;
         }
         if (string_equal(argv[i], "-d") || string_equal(argv[i], "--debug")) {
@@ -226,13 +242,19 @@ main(int argc, char* argv[])
         return 1;
     }
 
-    if (!glfwInit()) {
-        puts("Failed to run glfwInit.");
-        return 3;
-    }
-
     load_global_state(asset_dir);
-    int result = make_application(n_files, files_to_open);
+    int result = 0;
+    if (!glfw_mode) {
+        result = make_application(n_files, files_to_open);
+    }
+    else {
+        if (!glfwInit()) {
+            puts("Failed to run glfwInit.");
+            free_script_env(global);
+            return 3;
+        }
+        glfw_application("");
+    }
     free_script_env(global);
 
     return result;
@@ -535,36 +557,6 @@ draw_interface(NVGcontext *vg)
     svg_test();
 }
 
-/* Set delta time, clear frame and resize. */
-int
-start_frame(GLFWwindow *window, EmbReal *prevt)
-{
-    EmbReal t = glfwGetTime();
-    EmbReal dt = t - *prevt;
-
-    /* Cap at 120 updates a second. */
-    if (dt < 1.0/120) {
-        return 0;
-    }
-    *prevt = t;
-
-    glfwGetWindowSize(window, &window_width, &window_height);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glViewport(0, 0, window_width, window_height);
-    nvgBeginFrame(vg, window_width, window_height, 1.0);
-    return 1;
-}
-
-/* Swap buffers and poll events. */
-void
-end_frame(GLFWwindow *window)
-{
-    nvgEndFrame(vg);
-
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-}
-
 /* FIXME: error code
  *
  * NOTE: translation is the repsonisbility of the caller, because some reports
@@ -577,26 +569,18 @@ end_frame(GLFWwindow *window)
 void
 messagebox(const char *logo, const char *title, const char *text)
 {
-    GLFWwindow* window = create_window(480, 200, title);
-
-    EmbReal prevt = glfwGetTime();
-    while (!glfwWindowShouldClose(window)) {
-        if (!start_frame(window, &prevt)) {
-            continue;
-        }
-        float bounds[5];
-        EmbRect sb_rect = emb_rect(0, 0, window_width, window_height);
-        draw_rect(vg, sb_rect, prompt_bg_color);
-        //FIXME:draw_text(vg, 10, 40, "sans", title, prompt_color, bounds);
-        //FIXME:draw_text(vg, 10, 80, "sans", text, prompt_color, bounds);
-        end_frame(window);
-    }
+    /* Build the layout file for calling with glfw_application here. */
+    /* glfw_application(tmp_fname); */
 }
 
-/* . */
-GLFWwindow*
-create_window(int32_t width, int32_t height, const char *title)
+/* Using "../extern/nuklear/example/skinning.c" as the key example for reference.
+ */
+int
+glfw_application(char *fname)
 {
+    int width = 640;
+    int height = 480;
+    const char *title = "Embroidermodder 2 (GLFW/nuklear)";
     GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!window) {
         glfwTerminate();
@@ -636,31 +620,38 @@ create_window(int32_t width, int32_t height, const char *title)
         puts("Font failed to load.");
         return NULL;
     }
-    return window;
-}
 
-int32_t
-free_glfw(void)
-{
-    nvgDeleteGLES2(vg);
-    glfwTerminate();
-    return 0;
-}
+#if 0
+    struct nk_font font;
+    struct nk_context ctx;
+    font = nk_font_atlas_add_default(&atlas, 13, 0);
+    nk_init_default(&ctx, &font->handle);
 
-/* . */
-int
-glfw_application(int argc, char *argv[])
-{
-    GLFWwindow* window = create_window(640, 480, "Embroidermodder 2 (GLFW)");
-
-    EmbReal prevt = glfwGetTime();
+    glEnable(GL_TEXTURE_2D);
     while (!glfwWindowShouldClose(window)) {
-        if (!start_frame(window, &prevt)) {
-            continue;
-        }
+        glfwGetWindowSize(window, &window_width, &window_height);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glViewport(0, 0, window_width, window_height);
+        nvgBeginFrame(vg, window_width, window_height, 1.0);
+
         draw_interface(vg);
-        end_frame(window);
+
+        nk_begin(&ctx, "Window", nk_rect(0, 0, 640, 480), NK_WINDOW_NO_SCROLLBAR);
+        nk_fill_rect(canvas.painter, nk_rect(15, 15, 210, 210), 5, nk_rgb(247, 230, 154));
+        nk_end(&ctx);
+
+        nvgEndFrame(vg);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
+
+    nk_font_atlas_clear(&atlas);
+    nk_free(&ctx);
+
+    nvgDeleteGLES2(vg);
+#endif
+    glfwTerminate();
     return 0;
 }
 
@@ -2817,7 +2808,6 @@ run_cmd(ScriptEnv *context, const char *cmd)
  * Wrapper for system-specific UI features.
  * This is an alternative approach to using GLFW.
  */
-
 void
 draw_frame(void)
 {
