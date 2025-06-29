@@ -835,7 +835,6 @@
 #define TWO_CHAR_INDEX(A)             (0x100*A[0] + A[1])
 
 class Variable;
-class Environment;
 
 typedef struct std::vector<std::string> StrList;
 
@@ -900,35 +899,6 @@ public:
 };
 
 typedef std::unordered_map<std::string, Variable> Dictionary;
-
-typedef ScriptValue (*Command)(ScriptEnv *context);
-
-class Environment {
-public:
-    std::string mode;
-    std::string context;
-    std::string error;
-
-    Environment()
-    {
-    }
-
-    ~Environment()
-    {
-    }
-};
-
-typedef struct CommandData_ {
-    char command[1000];
-    char arguments[1000];
-    char icon[1000];
-    char tooltip[1000];
-    char statustip[1000];
-    char alias[1000];
-    char shortcut[1000];
-    int32_t flags;
-    Command action;
-} CommandData;
 
 #define MAX_LAYERS 20
 
@@ -1169,10 +1139,6 @@ typedef struct ViewData_ {
  * This is gradually growing to incorporate our full data structure so
  * no global data is stored as externs.
  */
-ScriptEnv *create_script_env(void);
-void free_script_env(ScriptEnv *);
-ScriptEnv *pack(ScriptEnv *context, const char *fmt, ...);
-ScriptValue call(ScriptEnv *context, char *function, ...);
 ScriptValue run_cmd(ScriptEnv *context, const char *line);
 
 ScriptValue command_prompt(ScriptEnv *context, const char *line);
@@ -1882,17 +1848,14 @@ int load_global_state(char *asset_dir);
 /* Global variables and constants we need to access anywhere in the program
  * with minimal overhead.
  */
-
 extern Widget widget_list[MAX_WIDGETS];
 extern CommandData command_data[N_ACTIONS];
-extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
 extern GroupBoxData group_box_list[];
 extern Translation translations[];
 extern Design designs[];
 
 extern char *object_names[];
-extern const char *index_th_name[];
 
 extern int menubar_full_list[];
 extern int menubar_no_docs[];
@@ -1934,10 +1897,6 @@ extern char lastCmd[MAX_STRING_LENGTH];
 
 extern ScriptEnv *global;
 
-extern const ScriptValue script_null;
-extern const ScriptValue script_true;
-extern const ScriptValue script_false;
-
 extern bool blinkState;
 
 extern int testing_mode;
@@ -1978,7 +1937,6 @@ extern int promptInputNum;
 extern int precisionAngle;
 extern int precisionLength;
 
-extern int n_aliases;
 extern int n_objects;
 extern int n_commands;
 extern int n_widgets;

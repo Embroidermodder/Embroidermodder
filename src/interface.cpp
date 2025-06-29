@@ -987,178 +987,11 @@ test_command(ScriptEnv *context)
     return script_true;
 }
 
-/* TODO: remove args command, use the command_data table
- */
-int
-argument_checks(ScriptEnv *context, int id)
-{
-    char s[200];
-    int i;
-    const char *function = command_data[id].command;
-    const char *args = command_data[id].arguments;
-    if (context->argumentCount != strlen(args)) {
-        sprintf(s, "%s() requires %d arguments.", function, context->argumentCount);
-        prompt_output(s);
-        return 0;
-    }
-    for (i=0; args[i]; i++) {
-        if (args[i] == 'r') {
-            if (context->argument[i].type != SCRIPT_REAL) {
-                sprintf(s,
-                    "TYPE_ERROR, %s(): %s argument is not a real number.",
-                    function, index_th_name[i]);
-                prompt_output(s);
-                return 0;
-            }
-            float variable = context->argument[i].r;
-            if (isnan(variable)) {
-                sprintf(s,
-                    "TYPE_ERROR, %s(): %s argument is not a real number.",
-                    function, index_th_name[i]);
-                prompt_output(s);
-                return 0;
-            }
-        }
-        if (args[i] == 'i') {
-            if (context->argument[i].type != SCRIPT_INT) {
-                sprintf(s,
-                    "TYPE_ERROR, %s(): %s argument is not an integer.",
-                    function, index_th_name[i]);
-                prompt_output(s);
-                return 0;
-            }
-        }
-        if (args[i] == 'b') {
-            if (context->argument[i].type != SCRIPT_BOOL) {
-                sprintf(s,
-                    "TYPE_ERROR, %s(): %s argument is not a boolean.",
-                    function, index_th_name[i]);
-                prompt_output(s);
-                return 0;
-            }
-        }
-        if (args[i] == 's') {
-            if (context->argument[i].type != SCRIPT_STRING) {
-                sprintf(s,
-                    "TYPE_ERROR, %s(): %s argument is not a string.",
-                    function, index_th_name[i]);
-                prompt_output(s);
-                return 0;
-            }
-        }
-    }
-    return 1;
-}
-
 /* . */
 char *
 translate(const char *msg)
 {
     return (char*)msg;
-}
-
-ScriptEnv *
-create_script_env()
-{
-    ScriptEnv *context = (ScriptEnv*)malloc(sizeof(ScriptEnv));
-    context->argumentCount = 0;
-    return context;
-}
-
-/* . */
-void
-free_script_env(ScriptEnv* context)
-{
-    free(context);
-}
-
-/* Using stdarg we can pack arguments into the context using the above functions.
- *
- * https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdarg.h.html
- */
-ScriptEnv *
-pack(ScriptEnv *context, const char *fmt, ...)
-{
-    va_list a;
-    int argno;
-    context->argumentCount = 0;
-    va_start(a, fmt);
-    for (argno = 0; fmt[argno]; argno++) {
-        switch (fmt[argno]) {
-        case 's': {
-            const char *s = va_arg(a, const char *);
-            strncpy(context->argument[context->argumentCount].s, s, MAX_STRING_LENGTH);
-            context->argument[context->argumentCount].type = SCRIPT_STRING;
-            break;
-        }
-        case 'i': {
-            int i = va_arg(a, int);
-            context->argument[context->argumentCount].i = i;
-            context->argument[context->argumentCount].type = SCRIPT_INT;
-            break;
-        }
-        case 'r': {
-            EmbReal r = va_arg(a, double);
-            context->argument[context->argumentCount].r = r;
-            context->argument[context->argumentCount].type = SCRIPT_REAL;
-            break;
-        }
-        default:
-            break;
-        }
-        context->argumentCount++;
-    }
-    va_end(a);
-    return context;
-}
-
-/* Using a similar approach to pack we can now create a caller that also packs
- * the arguments.
- */
-ScriptValue
-call(ScriptEnv *context, char *cmd, ...)
-{
-    int id = get_command_id((char*)cmd);
-    if (id < 0) {
-        debug_message("ERROR: failed to find function %s", cmd);
-        return script_false;
-    }
-    va_list a;
-    int argno;
-    context->argumentCount = 0;
-    const char *fmt = command_data[id].arguments;
-    va_start(a, cmd);
-    for (argno = 0; fmt[argno]; argno++) {
-        switch (fmt[argno]) {
-        case 's': {
-            const char *s = va_arg(a, const char *);
-            strncpy(context->argument[context->argumentCount].s, s, MAX_STRING_LENGTH);
-            context->argument[context->argumentCount].type = SCRIPT_STRING;
-            break;
-        }
-        case 'i': {
-            int i = va_arg(a, int);
-            context->argument[context->argumentCount].i = i;
-            context->argument[context->argumentCount].type = SCRIPT_INT;
-            break;
-        }
-        case 'r': {
-            EmbReal r = va_arg(a, double);
-            context->argument[context->argumentCount].r = r;
-            context->argument[context->argumentCount].type = SCRIPT_REAL;
-            break;
-        }
-        default:
-            break;
-        }
-        context->argumentCount++;
-    }
-    va_end(a);
-    if (!argument_checks(context, id)) {
-        debug_message("Failed argument checks.");
-        return script_false;
-    }
-    return command_data[id].action(context);
 }
 
 int
@@ -2950,10 +2783,12 @@ run_cmd(ScriptEnv *context, const char *cmd)
         return script_false;
     }
 
+    /* TODO: Pointer missing.
     if (!argument_checks(context, id)) {
         debug_message("Failed argument checks.");
         return script_false;
     }
+    */
 
     if (command_data[id].flags & REQUIRED_VIEW) {
         int doc_index = active_document();
@@ -2970,7 +2805,8 @@ run_cmd(ScriptEnv *context, const char *cmd)
         }
     }
 
-    ScriptValue value = command_data[id].action(context);
+    Command *command = (Command*)command_data[id].action;
+    ScriptValue value = command(context);
     if (!(command_data[id].flags & DONT_END_COMMAND)) {
         end_command();
     }

@@ -22,6 +22,9 @@
 
 #include "qt.h"
 
+StringMap aliasHash[MAX_ALIASES];
+int n_aliases = 0;
+
 void report_sl(std::string key);
 int get_index(std::vector<std::string> table, std::string key);
 
@@ -786,7 +789,8 @@ MainWindow::colorSelectorIndexChanged(int index)
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        call(global, "current_color_changed", "i", newColor);
+        pack(global, "current_color_changed", "i", newColor);
+        call(global, "current_color_changed");
     }
 }
 

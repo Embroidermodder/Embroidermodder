@@ -70,7 +70,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/data.cpp
 	${SRC}/interface.cpp
 	${SRC}/objects.cpp
-	${SRC}/state.cpp
 	${SRC}/widgets.cpp
 
 	${SRC}/core.h

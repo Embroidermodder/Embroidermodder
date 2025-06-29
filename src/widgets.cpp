@@ -1766,27 +1766,33 @@ add_rubber_command(ScriptEnv* context)
 
     switch (type) {
     case EMB_CIRCLE: {
-        call(context, "add-circle", mx, my, 0, false, RUBBER_ON);
+        pack(context, "add-circle", mx, my, 0, false, RUBBER_ON);
+        call(context, "add-circle");
         break;
     }
     case EMB_DIM_LEADER: {
-        call(context, "add-dim-leader", mx, my, mx, my, 0, RUBBER_ON);
+        pack(context, "add-dim-leader", mx, my, mx, my, 0, RUBBER_ON);
+        call(context, "add-dim-leader");
         break;
     }
     case EMB_ELLIPSE: {
-        call(context, "add-ellipse", mx, my, 0, 0, 0, 0, RUBBER_ON);
+        pack(context, "add-ellipse", mx, my, 0, 0, 0, 0, RUBBER_ON);
+        call(context, "add-ellipse");
         break;
     }
     case EMB_LINE: {
-        call(context, "add-line", mx, my, mx, my, 0, RUBBER_ON);
+        pack(context, "add-line", mx, my, mx, my, 0, RUBBER_ON);
+        call(context, "add-line");
         break;
     }
     case EMB_RECT: {
-        call(context, "add-rectangle", mx, my, mx, my, 0, 0, RUBBER_ON);
+        pack(context, "add-rectangle", mx, my, mx, my, 0, 0, RUBBER_ON);
+        call(context, "add-rectangle");
         break;
     }
     case EMB_TEXT_SINGLE: {
-        call(context, "add-text-single", "", mx, my, 0, false, RUBBER_ON);
+        pack(context, "add-text-single", "", mx, my, 0, false, RUBBER_ON);
+        call(context, "add-text-single");
         break;
     }
     default: {
