@@ -1,0 +1,15 @@
+# FIXME: this hasn't worked in testing.
+
+[Desktop Entry]
+Name=Embroidermodder 2
+Comment=Editor for Machine Embroidery Files
+GenericName=Machine Embroidery Editor
+Path=$HOME/.embroidermodder2
+Exec=$HOME/.embroidermodder2/embroidermodder2 %f
+Icon=embroidermodder2
+Type=Application
+Terminal=false
+Categories=Office;
+MimeType=application/x-embroidermodder
+Version=2.0.0-alpha
+Keywords=embroidery;
