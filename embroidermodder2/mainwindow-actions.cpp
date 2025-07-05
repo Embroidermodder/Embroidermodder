@@ -179,7 +179,6 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
 
     else if(scripted)
     {
-                                                  ACTION->setIcon(QIcon(appDir + "/commands/" + icon + "/" + icon + ".png"));
                                                   connect(ACTION, SIGNAL(triggered()), this, SLOT(runCommand()));
     }
     else

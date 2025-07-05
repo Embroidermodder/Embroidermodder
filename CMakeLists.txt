@@ -3,16 +3,25 @@ cmake_minimum_required(VERSION 3.16)
 project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
-find_package(Qt6 COMPONENTS Core Widgets PrintSupport Svg REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport Svg)
 
 if(WIN32)
 else(WIN32)
 find_package(X11 REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
 endif(WIN32)
+
+set(TARGET embroidermodder2)
 
 set(SRC ${CMAKE_SOURCE_DIR}/embroidermodder2)
 set(LIB ${CMAKE_SOURCE_DIR}/libembroidery)
-set(TARGET embroidermodder2)
+
+set(CMDS ${CMAKE_SOURCE_DIR}/assets/commands)
+set(ICONS ${CMAKE_SOURCE_DIR}/assets/icons)
+set(IMAGES ${CMAKE_SOURCE_DIR}/assets/images)
+set(SAMPLES ${CMAKE_SOURCE_DIR}/assets/samples)
+set(HELP ${CMAKE_SOURCE_DIR}/assets/help)
+set(TS ${CMAKE_SOURCE_DIR}/assets/translations)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
@@ -116,21 +125,25 @@ qt_add_executable(${TARGET}
 	${SRC}/statusbar.cpp
 	${SRC}/object-arc.cpp
 	${SRC}/statusbar.h
+	${SRC}/undo-commands.cpp
+	${SRC}/undo-commands.h
+	${SRC}/undo-editor.cpp
+	${SRC}/object-data.h
 	${SRC}/object-arc.h
 	${SRC}/object-base.cpp
 	${SRC}/object-base.h
-	${SRC}/undo-commands.cpp
 	${SRC}/object-circle.cpp
-	${SRC}/undo-commands.h
 	${SRC}/object-circle.h
-	${SRC}/undo-editor.cpp
-	${SRC}/object-data.h
-	${SRC}/undo-editor.h
 	${SRC}/object-dimleader.cpp
-	${SRC}/view.cpp
 	${SRC}/object-dimleader.h
-	${SRC}/view.h
 	${SRC}/object-ellipse.cpp
+	${SRC}/undo-editor.h
+	${SRC}/view.cpp
+	${SRC}/view.h
+
+# C CORE
+	${SRC}/script.c
+	${SRC}/script.h
 
 	${LIB}/api-start.h
 	${LIB}/api-stop.h
@@ -141,44 +154,44 @@ qt_add_executable(${TARGET}
 	${LIB}/compound-file-directory.c
 	${LIB}/compound-file-directory.h
 	${LIB}/compound-file-fat.c
-    ${LIB}/compound-file-fat.h
-    ${LIB}/compound-file.h
-    ${LIB}/compound-file-header.c
-    ${LIB}/compound-file-header.h
-    ${LIB}/emb-arc.c
-    ${LIB}/emb-arc.h
-    ${LIB}/emb-circle.c
-    ${LIB}/emb-circle.h
-    ${LIB}/emb-color.c
-    ${LIB}/emb-color.h
-    ${LIB}/emb-compress.c
-    ${LIB}/emb-compress.h
-    ${LIB}/emb-ellipse.c
-    ${LIB}/emb-ellipse.h
-    ${LIB}/emb-file.c
-    ${LIB}/emb-file.h
-    ${LIB}/emb-flag.c
-    ${LIB}/emb-flag.h
+	${LIB}/compound-file-fat.h
+	${LIB}/compound-file.h
+	${LIB}/compound-file-header.c
+	${LIB}/compound-file-header.h
+	${LIB}/emb-arc.c
+	${LIB}/emb-arc.h
+	${LIB}/emb-circle.c
+	${LIB}/emb-circle.h
+	${LIB}/emb-color.c
+	${LIB}/emb-color.h
+	${LIB}/emb-compress.c
+	${LIB}/emb-compress.h
+	${LIB}/emb-ellipse.c
+	${LIB}/emb-ellipse.h
+	${LIB}/emb-file.c
+	${LIB}/emb-file.h
+	${LIB}/emb-flag.c
+	${LIB}/emb-flag.h
 	${LIB}/emb-format.c
-    ${LIB}/emb-format.h
-    ${LIB}/emb-hash.c
+	${LIB}/emb-format.h
+	${LIB}/emb-hash.c
 	${LIB}/emb-hash.h
-    ${LIB}/emb-hoop.c
-    ${LIB}/emb-hoop.h
-    ${LIB}/emb-layer.c
-    ${LIB}/emb-layer.h
-    ${LIB}/emb-line.c
-    ${LIB}/emb-line.h
-    ${LIB}/emb-logging.c
-    ${LIB}/emb-logging.h
+	${LIB}/emb-hoop.c
+	${LIB}/emb-hoop.h
+	${LIB}/emb-layer.c
+	${LIB}/emb-layer.h
+	${LIB}/emb-line.c
+	${LIB}/emb-line.h
+	${LIB}/emb-logging.c
+	${LIB}/emb-logging.h
 #    ${LIB}/emb-outline.c
 #    ${LIB}/emb-outline.h
-    ${LIB}/emb-path.c
-    ${LIB}/emb-path.h
-    ${LIB}/emb-pattern.c
-    ${LIB}/emb-pattern.h
-    ${LIB}/emb-point.c
-    ${LIB}/emb-point.h
+        ${LIB}/emb-path.c
+	${LIB}/emb-path.h
+	${LIB}/emb-pattern.c
+	${LIB}/emb-pattern.h
+	${LIB}/emb-point.c
+	${LIB}/emb-point.h
 	${LIB}/emb-polygon.c
 	${LIB}/emb-polygon.h
 	${LIB}/emb-polyline.c
@@ -341,21 +354,62 @@ qt_add_executable(${TARGET}
 	${LIB}/thread-color.h
 )
 
+qt_add_translations(embroidermodder2 TS_FILES
+	${TS}/afrikaans/commands_afrikaans.ts
+	${TS}/afrikaans/embroidermodder2_afrikaans.ts
+	${TS}/arabic/commands_arabic.ts
+	${TS}/arabic/embroidermodder2_arabic.ts
+	${TS}/chinese/commands_chinese.ts
+	${TS}/chinese/embroidermodder2_chinese.ts
+	${TS}/czech/commands_czech.ts
+	${TS}/czech/embroidermodder2_czech.ts
+	${TS}/danish/commands_danish.ts
+	${TS}/danish/embroidermodder2_danish.ts
+	${TS}/dutch/commands_dutch.ts
+	${TS}/dutch/embroidermodder2_dutch.ts
+	${TS}/english/commands_english.ts
+	${TS}/english/embroidermodder2_english.ts
+	${TS}/finnish/commands_finnish.ts
+	${TS}/finnish/embroidermodder2_finnish.ts
+	${TS}/french/commands_french.ts
+	${TS}/french/embroidermodder2_french.ts
+	${TS}/german/commands_german.ts
+	${TS}/german/embroidermodder2_german.ts
+	${TS}/greek/commands_greek.ts
+	${TS}/greek/embroidermodder2_greek.ts
+	${TS}/italian/commands_italian.ts
+	${TS}/italian/embroidermodder2_italian.ts
+	${TS}/japanese/commands_japanese.ts
+	${TS}/japanese/embroidermodder2_japanese.ts
+	${TS}/korean/commands_korean.ts
+	${TS}/korean/embroidermodder2_korean.ts
+	${TS}/latin/commands_latin.ts
+	${TS}/latin/embroidermodder2_latin.ts
+	${TS}/polish/commands_polish.ts
+	${TS}/polish/embroidermodder2_polish.ts
+	${TS}/portuguese/commands_portuguese.ts
+	${TS}/portuguese/embroidermodder2_portuguese.ts
+	${TS}/romanian/commands_romanian.ts
+	${TS}/romanian/embroidermodder2_romanian.ts
+	${TS}/russian/commands_russian.ts
+	${TS}/russian/embroidermodder2_russian.ts
+	${TS}/spanish/commands_spanish.ts
+	${TS}/spanish/embroidermodder2_spanish.ts
+	${TS}/swedish/commands_swedish.ts
+	${TS}/swedish/embroidermodder2_swedish.ts
+	${TS}/turkish/commands_turkish.ts
+	${TS}/turkish/embroidermodder2_turkish.ts
+)
+
 # WARNING: This does NOT regenerate when the assets change, so you have to
 # rerun cmake to ensure that this retriggers.
 #
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/commands"
-	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons"
-	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/images"
-	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/samples"
-	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/help"
-	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/translations"
-	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${CMDS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${ICONS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${IMAGES}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${SAMPLES}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${HELP}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${TS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/tips.txt"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 

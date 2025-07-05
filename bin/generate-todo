@@ -1,10 +1,10 @@
 #!/bin/sh
 
-OUTPUTFILE="TODO"
+OUTPUTFILE="TODO.txt"
 #include the line number in output
 #do not search temporary, object, and moc files
-GREPCMD="grep --line-number --recursive --exclude=*.*~ --exclude=*.o --exclude=moc*.cpp --exclude=*Makefile* --exclude=*TODO* --exclude=*generate-todo* --exclude=*_memleak*"
-DIRECTORY="./"
+GREPCMD="grep --line-number --recursive --exclude=*.*~ --exclude=moc*.cpp --exclude=*_memleak*"
+DIRECTORY="./embroidermodder2 ./libembroidery"
 TODOSTRING="TODO"
 BUGSTRING="BUG"
 HACKSTRING="HACK"

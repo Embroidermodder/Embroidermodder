@@ -5,13 +5,18 @@
 #include <QList>
 #include <QHash>
 #include <QDir>
-//#include <QtScript>
-//#include <QtScriptTools>
+
+#include <unordered_map>
+#include <vector>
+#include <string>
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
 #include "mainwindow-actions.h"
 #include "cmdprompt.h"
+
+#include "script.h"
+#include "native-scripting.h"
 
 class MdiArea;
 class MdiWindow;
@@ -34,11 +39,38 @@ class QScriptProgram;
 class QUndoStack;
 QT_END_NAMESPACE
 
+/*!
+ * If the function is an in-built then the flag is set to 1 and main, click,
+ * move and context arrays don't contain the function definition: instead
+ * the function pointer to command contains the definition.
+ */
+class Command {
+public:
+    std::string name;
+    std::string menu_name;
+    int menu_pos;
+    std::string toolbar_name;
+    int toolbar_pos;
+    std::string tooltip;
+    std::string statustip;
+    std::string aliases;
+    std::string main;
+    std::string click;
+    std::string move;
+    std::string context;
+    int builtin;
+    QAction *action;
+};
+
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
 
 public:
+    std::unordered_map<std::string, Command> command_list;
+    void loadToolbars(void);
+    void loadMenus(void);
+
     MainWindow();
     ~MainWindow();
 
@@ -650,11 +682,7 @@ public slots:
 
     void doNothing();
 
-private:
-    QScriptEngine*         engine;
-    QScriptEngineDebugger* debugger;
-    void                   javaInitNatives(QScriptEngine* engine);
-    void                   javaLoadCommand(const QString& cmdName);
+    void loadCommands(void);
 
 public:
     //Natives
