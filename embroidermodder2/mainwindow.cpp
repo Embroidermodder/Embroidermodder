@@ -159,7 +159,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(runCommandMain(const QString&)));
-    connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), this, SLOT(runCommandPrompt(const QString&, const QString&)));
+    connect(prompt, SIGNAL(runCommand(const QString&)), this, SLOT(runCommandPrompt(const QString&)));
 
             connect(prompt, SIGNAL(deletePressed()),    this, SLOT(deletePressed()));
     //TODO: connect(prompt, SIGNAL(tabPressed()),       this, SLOT(someUnknownSlot()));

@@ -748,11 +748,14 @@ MainWindow::loadCommands(void)
 
     /* Load all command data in a loop. */
     QDir commandDir(appDir + "/commands");
-    QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach(QString cmdName, cmdList) {
+    QStringList format;
+    format << "*.ini";
+    QStringList cmdList = commandDir.entryList(format, QDir::Files);
+    foreach(QString cmdFile, cmdList) {
+        QString fname = appDir + "/commands/" + cmdFile;
+        QString cmdName = cmdFile.replace(".ini", "");
         Command command;
-        QSettings settings(appDir + "/commands/" + cmdName + "/" + cmdName + ".ini",
-            QSettings::IniFormat);
+        QSettings settings(fname, QSettings::IniFormat);
         command.menu_name = qPrintable(settings.value("Menu/Name", "Lost & Found").toString());
         command.menu_pos = settings.value("Menu/Position", 0).toInt();
         command.toolbar_name = qPrintable(settings.value("ToolBar/Name", "Lost & Found").toString());

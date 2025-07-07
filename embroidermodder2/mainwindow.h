@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QDir>
 
+#include <algorithm>
 #include <unordered_map>
 #include <vector>
 #include <string>
@@ -568,7 +569,7 @@ public slots:
     void runCommandClick(const QString& cmd,  qreal x, qreal y);
     void runCommandMove(const QString& cmd,  qreal x, qreal y);
     void runCommandContext(const QString& cmd, const QString& str);
-    void runCommandPrompt(const QString& cmd, const QString& str);
+    void runCommandPrompt(const QString& line);
 
     void newFile();
     void openFile(bool recent = false, const QString& recentFile = "");
