@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "helpers-misc.h"
-#include "emb-logging.h"
+#include "embroidery.h"
 
 /*! Rounds a double (\a src) and returns it as an \c int. */
 int roundDouble(double src)

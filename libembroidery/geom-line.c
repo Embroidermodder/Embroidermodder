@@ -30,3 +30,4 @@ void getLineIntersection(double  lineAx1,    double  lineAy1,
         *intersectY = (A1*C2 - A2*C1)/det;
     }
 }
+

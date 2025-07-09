@@ -1,5 +1,5 @@
-#include "emb-arc.h"
-#include "emb-logging.h"
+#include "embroidery.h"
+
 #include <stdlib.h>
 
 /* Returns an EmbArcObject. It is created on the stack. */

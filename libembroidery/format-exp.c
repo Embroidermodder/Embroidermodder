@@ -1,9 +1,5 @@
-#include "format-exp.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "emb-stitch.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
+#include "embroidery.h"
+
 #include <stdio.h>
 
 static char expDecode(unsigned char a1)
@@ -189,4 +185,3 @@ return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
 #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

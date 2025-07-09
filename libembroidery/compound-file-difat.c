@@ -1,7 +1,5 @@
-#include "compound-file-difat.h"
-#include "compound-file-common.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
+#include "embroidery.h"
+
 #include <stdlib.h>
 
 static const unsigned int sizeOfDifatEntry = 4;

@@ -1,12 +1,8 @@
-#include "format-jef.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "emb-time.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
-#include "emb-stitch.h"
+#include "embroidery.h"
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 static char sewDecode(unsigned char inputByte)
 {
@@ -166,7 +162,7 @@ int writeSew(EmbPattern* pattern, const char* fileName)
     }
 
     colorlistSize = embThreadList_count(pattern->threadList);
-    minColors = max(colorlistSize, 6);
+    minColors = EMB_MAX(colorlistSize, 6);
     binaryWriteInt(file, 0x74 + (minColors * 4));
     binaryWriteInt(file, 0x0A);
 

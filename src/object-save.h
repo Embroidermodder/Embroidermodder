@@ -1,7 +1,7 @@
 #ifndef OBJECT_SAVE_H
 #define OBJECT_SAVE_H
 
-#include "emb-reader-writer.h"
+#include "embroidery.h"
 
 #include <QObject>
 #include <QPainterPath>
@@ -59,4 +59,3 @@ private:
 
 #endif
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

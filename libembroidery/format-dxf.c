@@ -1,10 +1,4 @@
-#include "format-dxf.h"
-#include "helpers-misc.h"
-#include "emb-hash.h"
-#include "emb-logging.h"
-
-#include "geom-arc.h"
-/*#include "geom-line.h" */
+#include "embroidery.h"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,4 +1,4 @@
-#include "emb-spline.h"
+#include "embroidery.h"
 
 int embSplineObjectList_count(EmbSplineObjectList* pointer)
 {
@@ -19,4 +19,3 @@ int embSplineObjectList_empty(EmbSplineObjectList* pointer)
     return 0;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

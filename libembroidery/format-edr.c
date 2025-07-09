@@ -1,7 +1,4 @@
-#include "format-edr.h"
-#include "helpers-binary.h"
-#include "emb-file.h"
-#include "emb-logging.h"
+#include "embroidery.h"
 #include <stdlib.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
@@ -75,4 +72,3 @@ int writeEdr(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

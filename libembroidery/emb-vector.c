@@ -1,5 +1,4 @@
-#include "emb-vector.h"
-#include "emb-logging.h"
+#include "embroidery.h"
 #include <math.h>
 #include <stdlib.h>
 

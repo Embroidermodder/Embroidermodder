@@ -1,4 +1,4 @@
-#include "emb-hash.h"
+#include "embroidery.h"
 
 /* This file contains wrapper functions around Keith Pomakis' HashTable Library */
 
@@ -13,5 +13,3 @@ void embHash_clear(EmbHash* hash) { HashTableRemoveAll(hash); }
 int embHash_empty(const EmbHash* hash) { return HashTableIsEmpty(hash); }
 long embHash_count(const EmbHash* hash) { return HashTableSize(hash); }
 void embHash_rehash(EmbHash* hash, long numOfBuckets) { HashTableRehash(hash, numOfBuckets); }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

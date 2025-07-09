@@ -1,10 +1,5 @@
-#include "format-jef.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "emb-time.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
-#include "emb-stitch.h"
+#include "embroidery.h"
+
 #include <stdio.h>
 
 #define HOOP_110X110 0
@@ -316,12 +311,12 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     binaryWriteInt(file, (int) (designHeight / 2)); /* bottom */
 
     /* Distance from default 110 x 110 Hoop */
-    if(min(550 - designWidth / 2, 550 - designHeight / 2) >= 0)
+    if (EMB_MIN(550 - designWidth / 2, 550 - designHeight / 2) >= 0)
     {
-        binaryWriteInt(file, (int) max(-1, (1100 - designWidth) / 2));  /* left */
-		binaryWriteInt(file, (int)max(-1, (1100 - designWidth) / 2));  /* right */
-        binaryWriteInt(file, (int) max(-1, (1100 - designHeight) / 2)); /* top */
-        binaryWriteInt(file, (int) max(-1, (1100 - designHeight) / 2)); /* bottom */
+        binaryWriteInt(file, (int) EMB_MAX(-1, (1100 - designWidth) / 2));  /* left */
+		binaryWriteInt(file, (int) EMB_MAX(-1, (1100 - designWidth) / 2));  /* right */
+        binaryWriteInt(file, (int) EMB_MAX(-1, (1100 - designHeight) / 2)); /* top */
+        binaryWriteInt(file, (int) EMB_MAX(-1, (1100 - designHeight) / 2)); /* bottom */
     }
     else
     {
@@ -332,12 +327,12 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     }
 
     /* Distance from default 50 x 50 Hoop */
-    if(min((500 - designWidth) / 2, (500 - designHeight) / 2) >= 0)
+    if (EMB_MIN((500 - designWidth) / 2, (500 - designHeight) / 2) >= 0)
     {
-        binaryWriteInt(file, (int) max(-1, (500 - designWidth) / 2));  /* left */
-		binaryWriteInt(file, (int)max(-1, (500 - designWidth) / 2));  /* right */
-        binaryWriteInt(file, (int) max(-1, (500 - designHeight) / 2)); /* top */
-        binaryWriteInt(file, (int) max(-1, (500 - designHeight) / 2)); /* bottom */
+        binaryWriteInt(file, (int) EMB_MAX(-1, (500 - designWidth) / 2));  /* left */
+		binaryWriteInt(file, (int) EMB_MAX(-1, (500 - designWidth) / 2));  /* right */
+        binaryWriteInt(file, (int) EMB_MAX(-1, (500 - designHeight) / 2)); /* top */
+        binaryWriteInt(file, (int) EMB_MAX(-1, (500 - designHeight) / 2)); /* bottom */
     }
     else
     {
@@ -348,17 +343,17 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     }
 
     /* Distance from default 140 x 200 Hoop */
-    binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));   /* left */
-    binaryWriteInt(file, (int)max(-1, ((2000 - designHeight) / 2))); /* top */
-	binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));   /* right */
-    binaryWriteInt(file, (int)max(-1, ((2000 - designHeight) / 2))); /* bottom */
+    binaryWriteInt(file, (int)EMB_MAX(-1, ((1400 - designWidth) / 2)));   /* left */
+    binaryWriteInt(file, (int)EMB_MAX(-1, ((2000 - designHeight) / 2))); /* top */
+	binaryWriteInt(file, (int)EMB_MAX(-1, ((1400 - designWidth) / 2)));   /* right */
+    binaryWriteInt(file, (int)EMB_MAX(-1, ((2000 - designHeight) / 2))); /* bottom */
 
     /* repeated Distance from default 140 x 200 Hoop */
     /* TODO: Actually should be distance to custom hoop */
-    binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));  /* left */
-    binaryWriteInt(file, (int)max(-1, ((2000 - designHeight) / 2))); /* top */
-	binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));  /* right */
-    binaryWriteInt(file, (int)max(-1, ((2000 - designHeight) / 2))); /* bottom */
+    binaryWriteInt(file, (int)EMB_MAX(-1, ((1400 - designWidth) / 2)));  /* left */
+    binaryWriteInt(file, (int)EMB_MAX(-1, ((2000 - designHeight) / 2))); /* top */
+	binaryWriteInt(file, (int)EMB_MAX(-1, ((1400 - designWidth) / 2)));  /* right */
+    binaryWriteInt(file, (int)EMB_MAX(-1, ((2000 - designHeight) / 2))); /* bottom */
 
     threadPointer = pattern->threadList;
 
@@ -397,4 +392,3 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -3,11 +3,8 @@
  * notes appeared at http://www.wotsit.org under Tajima Format.
  */
 
-#include "format-dst.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
+#include "embroidery.h"
+
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>

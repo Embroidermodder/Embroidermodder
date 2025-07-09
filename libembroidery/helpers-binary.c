@@ -1,4 +1,4 @@
-#include "helpers-binary.h"
+#include "embroidery.h"
 
 char binaryReadByte(EmbFile* file)
 {

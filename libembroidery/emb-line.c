@@ -1,9 +1,7 @@
-#include "emb-line.h"
-#include "emb-logging.h"
-#include "emb-vector.h"
+#include "embroidery.h"
+
 #include <stdlib.h>
 
-/**************************************************/
 /* EmbLine                                        */
 /**************************************************/
 
@@ -27,7 +25,6 @@ double embLine_y2(EmbLine line)
     return line.y2;
 }
 
-/**************************************************/
 /* EmbLineObject                                  */
 /**************************************************/
 

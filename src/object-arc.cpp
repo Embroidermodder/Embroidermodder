@@ -1,6 +1,7 @@
 #include "object-arc.h"
 #include "object-data.h"
-#include "geom-arc.h"
+
+#include "embroidery.h"
 
 #include <QPainter>
 #include <QStyleOption>

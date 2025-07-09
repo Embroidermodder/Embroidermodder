@@ -1,7 +1,5 @@
-#include "emb-satin-line.h"
-#include "emb-line.h"
-#include "emb-logging.h"
-#include "emb-vector.h"
+#include "embroidery.h"
+
 #include <math.h>
 #include <stdlib.h>
 

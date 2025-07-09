@@ -1,5 +1,5 @@
 /* Computational Geometry for Circles */
-#include "geom-circle.h"
+#include "embroidery.h"
 #include <math.h>
 
 /****************************************************************

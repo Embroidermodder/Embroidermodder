@@ -1,6 +1,5 @@
 /* Computational Geometry for Arcs */
-#include "geom-arc.h"
-#include "geom-line.h"
+#include "embroidery.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979

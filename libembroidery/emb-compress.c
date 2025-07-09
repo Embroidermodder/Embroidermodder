@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "emb-compress.h"
-#include "emb-thread.h"
+
+#include "embroidery.h"
 
 
 /*****************************************

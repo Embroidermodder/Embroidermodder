@@ -1,6 +1,4 @@
-#include "format-exy.h"
-#include "emb-file.h"
-#include "emb-logging.h"
+#include "embroidery.h"
 
 static int exyDecodeFlags(unsigned char b2)
 {
@@ -121,4 +119,3 @@ int writeExy(EmbPattern* pattern, const char* fileName)
     return 0; /*TODO: finish writeExy */
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -76,7 +76,7 @@ qt_add_executable(${TARGET}
 	${SRC}/object-line.cpp
 	${SRC}/object-line.h
 	${SRC}/dialog.cpp
-	${SRC}/embdetails-dialog.h
+	${SRC}/dialog.h
 	${SRC}/object-path.cpp
 	${SRC}/object-path.h
 	${SRC}/embroidermodder2.icns
@@ -146,213 +146,110 @@ qt_add_executable(${TARGET}
 	${SRC}/script.c
 	${SRC}/script.h
 
-	${LIB}/api-start.h
-	${LIB}/api-stop.h
 	${LIB}/compound-file.c
-	${LIB}/compound-file-common.h
 	${LIB}/compound-file-difat.c
-	${LIB}/compound-file-difat.h
 	${LIB}/compound-file-directory.c
-	${LIB}/compound-file-directory.h
 	${LIB}/compound-file-fat.c
-	${LIB}/compound-file-fat.h
-	${LIB}/compound-file.h
 	${LIB}/compound-file-header.c
-	${LIB}/compound-file-header.h
 	${LIB}/emb-arc.c
-	${LIB}/emb-arc.h
 	${LIB}/emb-circle.c
-	${LIB}/emb-circle.h
 	${LIB}/emb-color.c
-	${LIB}/emb-color.h
 	${LIB}/emb-compress.c
-	${LIB}/emb-compress.h
 	${LIB}/emb-ellipse.c
-	${LIB}/emb-ellipse.h
 	${LIB}/emb-file.c
-	${LIB}/emb-file.h
 	${LIB}/emb-flag.c
-	${LIB}/emb-flag.h
 	${LIB}/emb-format.c
-	${LIB}/emb-format.h
 	${LIB}/emb-hash.c
-	${LIB}/emb-hash.h
 	${LIB}/emb-hoop.c
-	${LIB}/emb-hoop.h
 	${LIB}/emb-layer.c
-	${LIB}/emb-layer.h
 	${LIB}/emb-line.c
-	${LIB}/emb-line.h
 	${LIB}/emb-logging.c
-	${LIB}/emb-logging.h
 #    ${LIB}/emb-outline.c
-#    ${LIB}/emb-outline.h
         ${LIB}/emb-path.c
-	${LIB}/emb-path.h
 	${LIB}/emb-pattern.c
-	${LIB}/emb-pattern.h
 	${LIB}/emb-point.c
-	${LIB}/emb-point.h
 	${LIB}/emb-polygon.c
-	${LIB}/emb-polygon.h
 	${LIB}/emb-polyline.c
-	${LIB}/emb-polyline.h
 	${LIB}/emb-reader-writer.c
-	${LIB}/emb-reader-writer.h
 	${LIB}/emb-rect.c
-	${LIB}/emb-rect.h
 	${LIB}/emb-satin-line.c
-	${LIB}/emb-satin-line.h
 	${LIB}/emb-settings.c
-	${LIB}/emb-settings.h
 	${LIB}/emb-spline.c
-	${LIB}/emb-spline.h
 	${LIB}/emb-stitch.c
-	${LIB}/emb-stitch.h
 	${LIB}/emb-thread.c
-	${LIB}/emb-thread.h
 	${LIB}/emb-time.c
-	${LIB}/emb-time.h
 	${LIB}/emb-vector.c
-	${LIB}/emb-vector.h
 	${LIB}/format-100.c
-	${LIB}/format-100.h
 	${LIB}/format-10o.c
-	${LIB}/format-10o.h
 	${LIB}/format-art.c
-	${LIB}/format-art.h
 	${LIB}/format-bmc.c
-	${LIB}/format-bmc.h
 	${LIB}/format-bro.c
-	${LIB}/format-bro.h
 	${LIB}/format-cnd.c
-	${LIB}/format-cnd.h
 	${LIB}/format-col.c
-	${LIB}/format-col.h
 	${LIB}/format-csd.c
-	${LIB}/format-csd.h
 	${LIB}/format-csv.c
-	${LIB}/format-csv.h
 	${LIB}/format-dat.c
-	${LIB}/format-dat.h
 	${LIB}/format-dem.c
-	${LIB}/format-dem.h
 	${LIB}/format-dsb.c
-	${LIB}/format-dsb.h
 	${LIB}/format-dst.c
-	${LIB}/format-dst.h
 	${LIB}/format-dsz.c
-	${LIB}/format-dsz.h
 	${LIB}/format-dxf.c
-	${LIB}/format-dxf.h
 	${LIB}/format-edr.c
-	${LIB}/format-edr.h
 	${LIB}/format-emd.c
-	${LIB}/format-emd.h
 	${LIB}/format-exp.c
-	${LIB}/format-exp.h
 	${LIB}/format-exy.c
-	${LIB}/format-exy.h
 	${LIB}/format-eys.c
-	${LIB}/format-eys.h
 	${LIB}/format-fxy.c
-	${LIB}/format-fxy.h
 	${LIB}/format-gc.c
-	${LIB}/format-gc.h
 	${LIB}/format-gnc.c
-	${LIB}/format-gnc.h
 	${LIB}/format-gt.c
-	${LIB}/format-gt.h
 	${LIB}/format-hus.c
-	${LIB}/format-hus.h
 	${LIB}/format-inb.c
-	${LIB}/format-inb.h
 	${LIB}/format-inf.c
-	${LIB}/format-inf.h
 	${LIB}/format-jef.c
-	${LIB}/format-jef.h
 	${LIB}/format-ksm.c
-	${LIB}/format-ksm.h
 	${LIB}/format-max.c
-	${LIB}/format-max.h
 	${LIB}/format-mit.c
-	${LIB}/format-mit.h
 	${LIB}/format-new.c
-	${LIB}/format-new.h
 	${LIB}/format-ofm.c
-	${LIB}/format-ofm.h
 	${LIB}/format-pcd.c
-	${LIB}/format-pcd.h
 	${LIB}/format-pcm.c
-	${LIB}/format-pcm.h
 	${LIB}/format-pcq.c
-	${LIB}/format-pcq.h
 	${LIB}/format-pcs.c
-	${LIB}/format-pcs.h
 	${LIB}/format-pec.c
-	${LIB}/format-pec.h
 	${LIB}/format-pel.c
-	${LIB}/format-pel.h
 	${LIB}/format-pem.c
-	${LIB}/format-pem.h
 	${LIB}/format-pes.c
-	${LIB}/format-pes.h
 	${LIB}/format-phb.c
-	${LIB}/format-phb.h
 	${LIB}/format-phc.c
-	${LIB}/format-phc.h
 	${LIB}/format-plt.c
-	${LIB}/format-plt.h
 	${LIB}/format-rgb.c
-	${LIB}/format-rgb.h
 	${LIB}/format-sew.c
-	${LIB}/format-sew.h
-	${LIB}/formats.h
 	${LIB}/format-shv.c
-	${LIB}/format-shv.h
 	${LIB}/format-sst.c
-	${LIB}/format-sst.h
 	${LIB}/format-stx.c
-	${LIB}/format-stx.h
 	${LIB}/format-svg.c
-	${LIB}/format-svg.h
 	${LIB}/format-t01.c
-	${LIB}/format-t01.h
 	${LIB}/format-t09.c
-	${LIB}/format-t09.h
 	${LIB}/format-tap.c
-	${LIB}/format-tap.h
 	${LIB}/format-thr.c
-	${LIB}/format-thr.h
 	${LIB}/format-txt.c
-	${LIB}/format-txt.h
 	${LIB}/format-u00.c
-	${LIB}/format-u00.h
 	${LIB}/format-u01.c
-	${LIB}/format-u01.h
 	${LIB}/format-vip.c
-	${LIB}/format-vip.h
 	${LIB}/format-vp3.c
-	${LIB}/format-vp3.h
 	${LIB}/format-xxx.c
-	${LIB}/format-xxx.h
 	${LIB}/format-zsk.c
-	${LIB}/format-zsk.h
 	${LIB}/geom-arc.c
-	${LIB}/geom-arc.h
 	${LIB}/geom-circle.c
-	${LIB}/geom-circle.h
 	${LIB}/geom-line.c
-	${LIB}/geom-line.h
 	${LIB}/hashtable.c
-	${LIB}/hashtable.h
 	${LIB}/helpers-binary.c
-	${LIB}/helpers-binary.h
 	${LIB}/helpers-misc.c
-	${LIB}/helpers-misc.h
-	${LIB}/helpers-unused.h
 	${LIB}/thread-color.c
-	${LIB}/thread-color.h
+
+	${LIB}/embroidery.h
+	${LIB}/hashtable.h
 )
 
 qt_add_translations(embroidermodder2 TS_FILES
@@ -395,7 +292,7 @@ file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/tips.txt"
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/src
-	${CMAKE_SOURCE_DIR}/libembroidery
+	${LIB}
 	${OPENGL_INCLUDE_DIRS}
 	${SRC}
 )

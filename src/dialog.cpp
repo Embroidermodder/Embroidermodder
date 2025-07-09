@@ -23,9 +23,8 @@
 
 using namespace Qt::StringLiterals;
 
-#include "embdetails-dialog.h"
-#include "emb-pattern.h"
-#include "emb-reader-writer.h"
+#include "dialog.h"
+#include "embroidery.h"
 
 int make_dialog(const char *fname);
 

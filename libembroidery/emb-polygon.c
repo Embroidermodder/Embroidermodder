@@ -1,5 +1,5 @@
-#include "emb-polygon.h"
-#include "emb-logging.h"
+#include "embroidery.h"
+
 #include <stdlib.h>
 
 /**************************************************/

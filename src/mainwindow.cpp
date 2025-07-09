@@ -10,12 +10,9 @@
 #include "property-editor.h"
 #include "undo-editor.h"
 
-//#include "native-scripting.h"
-//#include "native-javascript.h"
-
 #include "preview-dialog.h"
 
-#include "emb-format.h"
+#include "embroidery.h"
 
 #include <stdlib.h>
 

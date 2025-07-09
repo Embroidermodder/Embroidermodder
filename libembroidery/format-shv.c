@@ -1,8 +1,5 @@
-#include "format-shv.h"
-#include "format-jef.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
+#include "embroidery.h"
+
 #include <string.h>
 
 static char shvDecode(unsigned char inputByte)

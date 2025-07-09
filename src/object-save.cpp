@@ -12,9 +12,6 @@
 #include "object-rect.h"
 #include "object-textsingle.h"
 
-#include "emb-color.h"
-#include "emb-format.h"
-
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 

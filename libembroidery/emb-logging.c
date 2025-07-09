@@ -1,4 +1,4 @@
-#include "emb-logging.h"
+#include "embroidery.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -44,4 +44,3 @@ void embLog_error(const char* format, ...)
 #endif /* ARDUINO */
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

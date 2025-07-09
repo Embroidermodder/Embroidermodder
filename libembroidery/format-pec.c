@@ -1,8 +1,5 @@
-#include "format-pec.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
+#include "embroidery.h"
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -426,4 +423,3 @@ int writePec(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

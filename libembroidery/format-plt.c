@@ -1,7 +1,5 @@
-#include "format-plt.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
+#include "embroidery.h"
+
 #include <stdio.h>
 #include <string.h>
 
