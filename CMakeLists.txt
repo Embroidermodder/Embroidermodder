@@ -16,13 +16,13 @@ set(TARGET embroidermodder2)
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(LIB ${CMAKE_SOURCE_DIR}/libembroidery)
 
-set(CMDS ${CMAKE_SOURCE_DIR}/assets/commands)
-set(DIALOGS ${CMAKE_SOURCE_DIR}/assets/dialogs)
-set(ICONS ${CMAKE_SOURCE_DIR}/assets/icons)
-set(IMAGES ${CMAKE_SOURCE_DIR}/assets/images)
-set(SAMPLES ${CMAKE_SOURCE_DIR}/assets/samples)
-set(HELP ${CMAKE_SOURCE_DIR}/assets/help)
-set(TS ${CMAKE_SOURCE_DIR}/assets/translations)
+set(CMDS ${CMAKE_SOURCE_DIR}/commands)
+set(DIALOGS ${CMAKE_SOURCE_DIR}/dialogs)
+set(ICONS ${CMAKE_SOURCE_DIR}/icons)
+set(IMAGES ${CMAKE_SOURCE_DIR}/images)
+set(SAMPLES ${CMAKE_SOURCE_DIR}/samples)
+set(HELP ${CMAKE_SOURCE_DIR}/help)
+set(TS ${CMAKE_SOURCE_DIR}/translations)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
@@ -287,7 +287,7 @@ file(COPY "${IMAGES}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${SAMPLES}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${HELP}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${TS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets/tips.txt"
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/tips.txt"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Service
-Name=Embroidery Files
-X-KDE-ServiceTypes=ThumbCreator
-MimeType=application/x-embroidermodder;
-X-KDE-Library=libembroidery-thumbnailer-kde4
-CacheThumbnail=true
-IgnoreMaximumSize=true
