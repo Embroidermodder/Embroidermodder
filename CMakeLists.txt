@@ -14,7 +14,7 @@ endif(WIN32)
 set(TARGET embroidermodder2)
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
-set(LIB ${CMAKE_SOURCE_DIR}/libembroidery)
+set(LIB ${CMAKE_SOURCE_DIR}/extern/libembroidery)
 
 set(CMDS ${CMAKE_SOURCE_DIR}/commands)
 set(DIALOGS ${CMAKE_SOURCE_DIR}/dialogs)
