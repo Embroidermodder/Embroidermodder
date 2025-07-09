@@ -6,13 +6,113 @@
 #include <QScrollArea>
 #include <QApplication>
 #include <QGroupBox>
+#include <QFile>
+#include <QXmlStreamReader>
+#include <QFileDialog>
+#include <QPushButton>
+#include <QHeaderView>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QStatusBar>
+#include <QAction>
+#include <QDesktopServices>
+#include <QApplication>
+#include <QScreen>
+
+#include <QStyle>
+
+using namespace Qt::StringLiterals;
+
 #include "embdetails-dialog.h"
 #include "emb-pattern.h"
 #include "emb-reader-writer.h"
 
+int make_dialog(const char *fname);
+
+int
+make_dialog(const char *fname)
+{
+    QXmlStreamReader xml;
+    QDialog *dialog = new QDialog();
+
+    dialog->setMinimumSize(750,550);
+
+    const QString fileName = "dialogs/" + QString(fname);
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        return false;
+    }
+
+    xml.setDevice(&file);
+
+    if (xml.readNextStartElement()) {
+        if (!(xml.name() == "xml"_L1 && xml.attributes().value("version"_L1) == "1.0"_L1)) {
+            xml.raiseError(QObject::tr("The file is not an XML version 1.0 file."));
+        }
+    }
+
+    Q_ASSERT(xml.isStartElement() && xml.name() == "xml"_L1);
+
+    QWidget* widget = new QWidget(dialog);
+    QGroupBox *gb;
+    QGridLayout *grid;
+    while (!xml.atEnd()) {
+        xml.readNext();
+        if (xml.isStartElement()) {
+            if (xml.name() == "groupbox"_L1) {
+                QString title = xml.attributes().value("title"_L1).toString();
+                gb = new QGroupBox(title, widget);
+            }
+            else if (xml.name() == "grid"_L1) {
+                grid = new QGridLayout(gb);
+            }
+            else if (xml.name() == "label"_L1) {
+                QString label = xml.attributes().value("text"_L1).toString();
+                int row = xml.attributes().value("row"_L1).toInt();
+                int column = xml.attributes().value("column"_L1).toInt();
+                QLabel *label_ = new QLabel(label, dialog);
+                grid->addWidget(label_, row, column, Qt::AlignLeft);
+            }
+            else if (xml.name() == "button"_L1) {
+                QString label = xml.attributes().value("text"_L1).toString();
+                int row = xml.attributes().value("row"_L1).toInt();
+                int column = xml.attributes().value("column"_L1).toInt();
+                QPushButton *button = new QPushButton(dialog);
+                button->setText(label);
+                grid->addWidget(button, row, column, Qt::AlignLeft);
+            }
+            else {
+                qDebug("folder");
+            }
+        }
+        else {
+            if (xml.name() == "grid"_L1) {
+                grid->setColumnStretch(1,1);
+                gb->setLayout(grid);
+                break;
+            }
+        }
+    }
+
+    //Widget Layout
+    QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
+    vboxLayoutMain->addWidget(gb);
+    vboxLayoutMain->addStretch(1);
+    widget->setLayout(vboxLayoutMain);
+
+    QScrollArea* scrollArea = new QScrollArea(dialog);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(widget);
+
+    dialog->show();
+    return 1;
+}
+
 EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
+
+    make_dialog("details.xml");
 
     getInfo();
     mainWidget = createMainWidget();

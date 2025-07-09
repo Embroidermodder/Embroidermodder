@@ -4,117 +4,117 @@
 <context>
     <name>circle</name>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="36"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="212"/>
+        <location filename="../../src/commands/circle.cpp" line="36"/>
+        <location filename="../../src/commands/circle.cpp" line="212"/>
         <source>Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="56"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="223"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="242"/>
+        <location filename="../../src/commands/circle.cpp" line="56"/>
+        <location filename="../../src/commands/circle.cpp" line="223"/>
+        <location filename="../../src/commands/circle.cpp" line="242"/>
         <source>Specify radius of circle or [Diameter]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="72"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="107"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="141"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="260"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="283"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="327"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="388"/>
+        <location filename="../../src/commands/circle.cpp" line="72"/>
+        <location filename="../../src/commands/circle.cpp" line="107"/>
+        <location filename="../../src/commands/circle.cpp" line="141"/>
+        <location filename="../../src/commands/circle.cpp" line="260"/>
+        <location filename="../../src/commands/circle.cpp" line="283"/>
+        <location filename="../../src/commands/circle.cpp" line="327"/>
+        <location filename="../../src/commands/circle.cpp" line="388"/>
         <source>This should never happen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="94"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="304"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="314"/>
+        <location filename="../../src/commands/circle.cpp" line="94"/>
+        <location filename="../../src/commands/circle.cpp" line="304"/>
+        <location filename="../../src/commands/circle.cpp" line="314"/>
         <source>Specify second end point of circle&apos;s diameter: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="117"/>
+        <location filename="../../src/commands/circle.cpp" line="117"/>
         <source>Specify second point on circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="128"/>
+        <location filename="../../src/commands/circle.cpp" line="128"/>
         <source>Specify third point on circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="151"/>
+        <location filename="../../src/commands/circle.cpp" line="151"/>
         <source>Specify point on object for second tangent of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="158"/>
+        <location filename="../../src/commands/circle.cpp" line="158"/>
         <source>Specify radius of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="165"/>
+        <location filename="../../src/commands/circle.cpp" line="165"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="193"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="295"/>
+        <location filename="../../src/commands/circle.cpp" line="193"/>
+        <location filename="../../src/commands/circle.cpp" line="295"/>
         <source>Specify first end point of circle&apos;s diameter: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="198"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="339"/>
+        <location filename="../../src/commands/circle.cpp" line="198"/>
+        <location filename="../../src/commands/circle.cpp" line="339"/>
         <source>Specify first point of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="203"/>
+        <location filename="../../src/commands/circle.cpp" line="203"/>
         <source>Specify point on object for first tangent of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="210"/>
+        <location filename="../../src/commands/circle.cpp" line="210"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="233"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="269"/>
+        <location filename="../../src/commands/circle.cpp" line="233"/>
+        <location filename="../../src/commands/circle.cpp" line="269"/>
         <source>Specify diameter of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="240"/>
+        <location filename="../../src/commands/circle.cpp" line="240"/>
         <source>Requires numeric radius, point on circumference, or &quot;D&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="267"/>
+        <location filename="../../src/commands/circle.cpp" line="267"/>
         <source>Requires numeric distance or second point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="293"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="312"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="337"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="353"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="373"/>
+        <location filename="../../src/commands/circle.cpp" line="293"/>
+        <location filename="../../src/commands/circle.cpp" line="312"/>
+        <location filename="../../src/commands/circle.cpp" line="337"/>
+        <location filename="../../src/commands/circle.cpp" line="353"/>
+        <location filename="../../src/commands/circle.cpp" line="373"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="345"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="355"/>
+        <location filename="../../src/commands/circle.cpp" line="345"/>
+        <location filename="../../src/commands/circle.cpp" line="355"/>
         <source>Specify second point of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="365"/>
-        <location filename="../../embroidermodder2/commands/circle.cpp" line="375"/>
+        <location filename="../../src/commands/circle.cpp" line="365"/>
+        <location filename="../../src/commands/circle.cpp" line="375"/>
         <source>Specify third point of circle: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -122,41 +122,41 @@
 <context>
     <name>distance</name>
     <message>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="19"/>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="66"/>
+        <location filename="../../src/commands/distance.cpp" line="19"/>
+        <location filename="../../src/commands/distance.cpp" line="66"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="35"/>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="75"/>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="84"/>
+        <location filename="../../src/commands/distance.cpp" line="35"/>
+        <location filename="../../src/commands/distance.cpp" line="75"/>
+        <location filename="../../src/commands/distance.cpp" line="84"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="64"/>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="82"/>
+        <location filename="../../src/commands/distance.cpp" line="64"/>
+        <location filename="../../src/commands/distance.cpp" line="82"/>
         <source>Requires numeric distance or two points.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="114"/>
+        <location filename="../../src/commands/distance.cpp" line="114"/>
         <source>Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="114"/>
+        <location filename="../../src/commands/distance.cpp" line="114"/>
         <source>Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="116"/>
+        <location filename="../../src/commands/distance.cpp" line="116"/>
         <source>Delta X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/distance.cpp" line="116"/>
+        <location filename="../../src/commands/distance.cpp" line="116"/>
         <source>Delta Y</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,74 +164,74 @@
 <context>
     <name>ellipse</name>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="35"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="179"/>
+        <location filename="../../src/commands/ellipse.cpp" line="35"/>
+        <location filename="../../src/commands/ellipse.cpp" line="179"/>
         <source>Specify first axis start point or [Center]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="53"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="100"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="188"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="199"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="267"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="277"/>
+        <location filename="../../src/commands/ellipse.cpp" line="53"/>
+        <location filename="../../src/commands/ellipse.cpp" line="100"/>
+        <location filename="../../src/commands/ellipse.cpp" line="188"/>
+        <location filename="../../src/commands/ellipse.cpp" line="199"/>
+        <location filename="../../src/commands/ellipse.cpp" line="267"/>
+        <location filename="../../src/commands/ellipse.cpp" line="277"/>
         <source>Specify first axis end point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="70"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="113"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="215"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="232"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="289"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="306"/>
+        <location filename="../../src/commands/ellipse.cpp" line="70"/>
+        <location filename="../../src/commands/ellipse.cpp" line="113"/>
+        <location filename="../../src/commands/ellipse.cpp" line="215"/>
+        <location filename="../../src/commands/ellipse.cpp" line="232"/>
+        <location filename="../../src/commands/ellipse.cpp" line="289"/>
+        <location filename="../../src/commands/ellipse.cpp" line="306"/>
         <source>Specify second axis end point or [Rotation]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="84"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="127"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="134"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="138"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="324"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="328"/>
+        <location filename="../../src/commands/ellipse.cpp" line="84"/>
+        <location filename="../../src/commands/ellipse.cpp" line="127"/>
+        <location filename="../../src/commands/ellipse.cpp" line="134"/>
+        <location filename="../../src/commands/ellipse.cpp" line="138"/>
+        <location filename="../../src/commands/ellipse.cpp" line="324"/>
+        <location filename="../../src/commands/ellipse.cpp" line="328"/>
         <source>This should never happen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="170"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="255"/>
+        <location filename="../../src/commands/ellipse.cpp" line="170"/>
+        <location filename="../../src/commands/ellipse.cpp" line="255"/>
         <source>Specify center point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="177"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="230"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="304"/>
+        <location filename="../../src/commands/ellipse.cpp" line="177"/>
+        <location filename="../../src/commands/ellipse.cpp" line="230"/>
+        <location filename="../../src/commands/ellipse.cpp" line="304"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="197"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="253"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="275"/>
+        <location filename="../../src/commands/ellipse.cpp" line="197"/>
+        <location filename="../../src/commands/ellipse.cpp" line="253"/>
+        <location filename="../../src/commands/ellipse.cpp" line="275"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="223"/>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="336"/>
+        <location filename="../../src/commands/ellipse.cpp" line="223"/>
+        <location filename="../../src/commands/ellipse.cpp" line="336"/>
         <source>Specify rotation: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="297"/>
+        <location filename="../../src/commands/ellipse.cpp" line="297"/>
         <source>Specify ellipse rotation: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/ellipse.cpp" line="334"/>
+        <location filename="../../src/commands/ellipse.cpp" line="334"/>
         <source>Invalid angle. Input a numeric angle or pick a point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -239,13 +239,13 @@
 <context>
     <name>erase</name>
     <message>
-        <location filename="../../embroidermodder2/commands/erase/erase.cpp" line="12"/>
-        <location filename="../../embroidermodder2/commands/erase/erase.cpp" line="15"/>
+        <location filename="../../src/commands/erase/erase.cpp" line="12"/>
+        <location filename="../../src/commands/erase/erase.cpp" line="15"/>
         <source>Preselect objects before invoking the delete command.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/erase/erase.cpp" line="15"/>
+        <location filename="../../src/commands/erase/erase.cpp" line="15"/>
         <source>Delete Preselect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -253,26 +253,26 @@
 <context>
     <name>line</name>
     <message>
-        <location filename="../../embroidermodder2/commands/line/line.cpp" line="21"/>
-        <location filename="../../embroidermodder2/commands/line/line.cpp" line="74"/>
+        <location filename="../../src/commands/line/line.cpp" line="21"/>
+        <location filename="../../src/commands/line/line.cpp" line="74"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/line/line.cpp" line="40"/>
-        <location filename="../../embroidermodder2/commands/line/line.cpp" line="86"/>
-        <location filename="../../embroidermodder2/commands/line/line.cpp" line="102"/>
-        <location filename="../../embroidermodder2/commands/line/line.cpp" line="115"/>
+        <location filename="../../src/commands/line/line.cpp" line="40"/>
+        <location filename="../../src/commands/line/line.cpp" line="86"/>
+        <location filename="../../src/commands/line/line.cpp" line="102"/>
+        <location filename="../../src/commands/line/line.cpp" line="115"/>
         <source>Specify next point or [Undo]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/line/line.cpp" line="72"/>
+        <location filename="../../src/commands/line/line.cpp" line="72"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/line/line.cpp" line="100"/>
+        <location filename="../../src/commands/line/line.cpp" line="100"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -280,13 +280,13 @@
 <context>
     <name>locatepoint</name>
     <message>
-        <location filename="../../embroidermodder2/commands/locatepoint/locatepoint.cpp" line="9"/>
-        <location filename="../../embroidermodder2/commands/locatepoint/locatepoint.cpp" line="40"/>
+        <location filename="../../src/commands/locatepoint/locatepoint.cpp" line="9"/>
+        <location filename="../../src/commands/locatepoint/locatepoint.cpp" line="40"/>
         <source>Specify point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/locatepoint/locatepoint.cpp" line="38"/>
+        <location filename="../../src/commands/locatepoint/locatepoint.cpp" line="38"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,32 +294,32 @@
 <context>
     <name>move</name>
     <message>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="28"/>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="31"/>
+        <location filename="../../src/commands/move/move.cpp" line="28"/>
+        <location filename="../../src/commands/move/move.cpp" line="31"/>
         <source>Preselect objects before invoking the move command.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="31"/>
+        <location filename="../../src/commands/move/move.cpp" line="31"/>
         <source>Move Preselect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="35"/>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="87"/>
+        <location filename="../../src/commands/move/move.cpp" line="35"/>
+        <location filename="../../src/commands/move/move.cpp" line="87"/>
         <source>Specify base point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="54"/>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="98"/>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="108"/>
+        <location filename="../../src/commands/move/move.cpp" line="54"/>
+        <location filename="../../src/commands/move/move.cpp" line="98"/>
+        <location filename="../../src/commands/move/move.cpp" line="108"/>
         <source>Specify destination point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="85"/>
-        <location filename="../../embroidermodder2/commands/move/move.cpp" line="106"/>
+        <location filename="../../src/commands/move/move.cpp" line="85"/>
+        <location filename="../../src/commands/move/move.cpp" line="106"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -327,19 +327,19 @@
 <context>
     <name>path</name>
     <message>
-        <location filename="../../embroidermodder2/commands/path/path.cpp" line="23"/>
+        <location filename="../../src/commands/path/path.cpp" line="23"/>
         <source>Specify start point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/path/path.cpp" line="40"/>
-        <location filename="../../embroidermodder2/commands/path/path.cpp" line="78"/>
-        <location filename="../../embroidermodder2/commands/path/path.cpp" line="92"/>
+        <location filename="../../src/commands/path/path.cpp" line="40"/>
+        <location filename="../../src/commands/path/path.cpp" line="78"/>
+        <location filename="../../src/commands/path/path.cpp" line="92"/>
         <source>Specify next point or [Arc/Undo]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/path/path.cpp" line="76"/>
+        <location filename="../../src/commands/path/path.cpp" line="76"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -347,7 +347,7 @@
 <context>
     <name>platform</name>
     <message>
-        <location filename="../../embroidermodder2/commands/platform/platform.cpp" line="41"/>
+        <location filename="../../src/commands/platform/platform.cpp" line="41"/>
         <source>Platform</source>
         <translation type="unfinished"></translation>
     </message>
@@ -355,22 +355,22 @@
 <context>
     <name>point</name>
     <message>
-        <location filename="../../embroidermodder2/commands/point/point.cpp" line="15"/>
-        <location filename="../../embroidermodder2/commands/point/point.cpp" line="64"/>
+        <location filename="../../src/commands/point/point.cpp" line="15"/>
+        <location filename="../../src/commands/point/point.cpp" line="64"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/point/point.cpp" line="27"/>
-        <location filename="../../embroidermodder2/commands/point/point.cpp" line="71"/>
-        <location filename="../../embroidermodder2/commands/point/point.cpp" line="82"/>
-        <location filename="../../embroidermodder2/commands/point/point.cpp" line="88"/>
+        <location filename="../../src/commands/point/point.cpp" line="27"/>
+        <location filename="../../src/commands/point/point.cpp" line="71"/>
+        <location filename="../../src/commands/point/point.cpp" line="82"/>
+        <location filename="../../src/commands/point/point.cpp" line="88"/>
         <source>Specify next point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/point/point.cpp" line="62"/>
-        <location filename="../../embroidermodder2/commands/point/point.cpp" line="80"/>
+        <location filename="../../src/commands/point/point.cpp" line="62"/>
+        <location filename="../../src/commands/point/point.cpp" line="80"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -378,76 +378,76 @@
 <context>
     <name>polygon</name>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="44"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="119"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="44"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="119"/>
         <source>Enter number of sides</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="61"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="150"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="225"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="61"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="150"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="225"/>
         <source>Specify polygon type [Inscribed in circle/Circumscribed around circle]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="109"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="124"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="143"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="109"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="124"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="143"/>
         <source>Specify center point or [Sidelength]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="117"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="117"/>
         <source>Requires an integer between 3 and 1024.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="134"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="134"/>
         <source>Specify start point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="141"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="240"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="266"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="141"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="240"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="266"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="168"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="201"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="242"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="168"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="201"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="242"/>
         <source>Specify polygon corner point or [Distance]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="190"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="210"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="268"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="190"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="210"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="268"/>
         <source>Specify polygon side point or [Distance]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="218"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="308"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="218"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="308"/>
         <source>Polygon type is not Inscribed or Circumscribed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="223"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="223"/>
         <source>Invalid option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="233"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="259"/>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="286"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="233"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="259"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="286"/>
         <source>Specify distance: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polygon/polygon.cpp" line="284"/>
+        <location filename="../../src/commands/polygon/polygon.cpp" line="284"/>
         <source>Requires valid numeric distance.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -455,26 +455,26 @@
 <context>
     <name>polyline</name>
     <message>
-        <location filename="../../embroidermodder2/commands/polyline/polyline.cpp" line="23"/>
-        <location filename="../../embroidermodder2/commands/polyline/polyline.cpp" line="75"/>
+        <location filename="../../src/commands/polyline/polyline.cpp" line="23"/>
+        <location filename="../../src/commands/polyline/polyline.cpp" line="75"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polyline/polyline.cpp" line="42"/>
-        <location filename="../../embroidermodder2/commands/polyline/polyline.cpp" line="87"/>
-        <location filename="../../embroidermodder2/commands/polyline/polyline.cpp" line="103"/>
-        <location filename="../../embroidermodder2/commands/polyline/polyline.cpp" line="115"/>
+        <location filename="../../src/commands/polyline/polyline.cpp" line="42"/>
+        <location filename="../../src/commands/polyline/polyline.cpp" line="87"/>
+        <location filename="../../src/commands/polyline/polyline.cpp" line="103"/>
+        <location filename="../../src/commands/polyline/polyline.cpp" line="115"/>
         <source>Specify next point or [Undo]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polyline/polyline.cpp" line="73"/>
+        <location filename="../../src/commands/polyline/polyline.cpp" line="73"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/polyline/polyline.cpp" line="101"/>
+        <location filename="../../src/commands/polyline/polyline.cpp" line="101"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -482,21 +482,21 @@
 <context>
     <name>quickleader</name>
     <message>
-        <location filename="../../embroidermodder2/commands/quickleader/quickleader.cpp" line="21"/>
-        <location filename="../../embroidermodder2/commands/quickleader/quickleader.cpp" line="69"/>
+        <location filename="../../src/commands/quickleader/quickleader.cpp" line="21"/>
+        <location filename="../../src/commands/quickleader/quickleader.cpp" line="69"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/quickleader/quickleader.cpp" line="37"/>
-        <location filename="../../embroidermodder2/commands/quickleader/quickleader.cpp" line="78"/>
-        <location filename="../../embroidermodder2/commands/quickleader/quickleader.cpp" line="87"/>
+        <location filename="../../src/commands/quickleader/quickleader.cpp" line="37"/>
+        <location filename="../../src/commands/quickleader/quickleader.cpp" line="78"/>
+        <location filename="../../src/commands/quickleader/quickleader.cpp" line="87"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/quickleader/quickleader.cpp" line="67"/>
-        <location filename="../../embroidermodder2/commands/quickleader/quickleader.cpp" line="85"/>
+        <location filename="../../src/commands/quickleader/quickleader.cpp" line="67"/>
+        <location filename="../../src/commands/quickleader/quickleader.cpp" line="85"/>
         <source>Requires two points.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -504,23 +504,23 @@
 <context>
     <name>rectangle</name>
     <message>
-        <location filename="../../embroidermodder2/commands/rectangle/rectangle.cpp" line="21"/>
+        <location filename="../../src/commands/rectangle/rectangle.cpp" line="21"/>
         <source>Specify first corner point or [Chamfer/Fillet]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rectangle/rectangle.cpp" line="37"/>
-        <location filename="../../embroidermodder2/commands/rectangle/rectangle.cpp" line="95"/>
+        <location filename="../../src/commands/rectangle/rectangle.cpp" line="37"/>
+        <location filename="../../src/commands/rectangle/rectangle.cpp" line="95"/>
         <source>Specify other corner point or [Dimensions]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rectangle/rectangle.cpp" line="79"/>
+        <location filename="../../src/commands/rectangle/rectangle.cpp" line="79"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rectangle/rectangle.cpp" line="81"/>
+        <location filename="../../src/commands/rectangle/rectangle.cpp" line="81"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -528,31 +528,31 @@
 <context>
     <name>rgb</name>
     <message>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="18"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="18"/>
         <source>Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="46"/>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="82"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="46"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="82"/>
         <source>Specify crosshair color: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="51"/>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="100"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="51"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="100"/>
         <source>Specify grid color: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="61"/>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="80"/>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="98"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="61"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="80"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="98"/>
         <source>Invalid color. R,G,B values must be in the range of 0-255.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rgb/rgb.cpp" line="63"/>
+        <location filename="../../src/commands/rgb/rgb.cpp" line="63"/>
         <source>Specify background color: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -560,69 +560,69 @@
 <context>
     <name>rotate</name>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="47"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="50"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="47"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="50"/>
         <source>Preselect objects before invoking the rotate command.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="50"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="50"/>
         <source>Rotate Preselect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="54"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="141"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="54"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="141"/>
         <source>Specify base point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="75"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="152"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="170"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="75"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="152"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="170"/>
         <source>Specify rotation angle or [Reference]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="98"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="202"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="230"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="98"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="202"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="230"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="108"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="218"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="239"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="252"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="264"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="108"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="218"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="239"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="252"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="264"/>
         <source>Specify the new angle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="139"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="139"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="160"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="193"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="160"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="193"/>
         <source>Specify the reference angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="168"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="168"/>
         <source>Requires valid numeric angle, second point, or option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="191"/>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="228"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="191"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="228"/>
         <source>Requires valid numeric angle or two points.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/rotate/rotate.cpp" line="262"/>
+        <location filename="../../src/commands/rotate/rotate.cpp" line="262"/>
         <source>Requires valid numeric angle or second point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -630,87 +630,87 @@
 <context>
     <name>scale</name>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="47"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="50"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="47"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="50"/>
         <source>Preselect objects before invoking the scale command.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="50"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="50"/>
         <source>Scale Preselect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="54"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="164"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="54"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="164"/>
         <source>Specify base point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="75"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="175"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="193"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="75"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="175"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="193"/>
         <source>Specify scale factor or [Reference]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="98"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="112"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="225"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="267"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="281"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="307"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="98"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="112"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="225"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="267"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="281"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="307"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="110"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="128"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="244"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="279"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="305"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="336"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="354"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="110"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="128"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="244"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="279"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="305"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="336"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="354"/>
         <source>Value must be positive and nonzero.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="119"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="130"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="254"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="287"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="313"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="326"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="338"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="356"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="119"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="130"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="254"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="287"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="313"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="326"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="338"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="356"/>
         <source>Specify new length: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="162"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="162"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="183"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="216"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="246"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="183"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="216"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="246"/>
         <source>Specify reference length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="191"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="191"/>
         <source>Requires valid numeric distance, second point, or option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="214"/>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="265"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="214"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="265"/>
         <source>Requires valid numeric distance or two points.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/scale/scale.cpp" line="324"/>
+        <location filename="../../src/commands/scale/scale.cpp" line="324"/>
         <source>Requires valid numeric distance or second point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -718,134 +718,134 @@
 <context>
     <name>singlelinetext</name>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="33"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="33"/>
         <source>Current font: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="33"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="33"/>
         <source>Text height: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="35"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="118"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="132"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="210"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="233"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="35"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="118"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="132"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="210"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="233"/>
         <source>Specify start point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="53"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="242"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="257"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="53"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="242"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="257"/>
         <source>Specify text height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="60"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="251"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="263"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="287"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="60"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="251"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="263"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="287"/>
         <source>Specify text angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="66"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="271"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="293"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="66"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="271"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="293"/>
         <source>Enter text: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="104"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="104"/>
         <source>Specify center point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="111"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="111"/>
         <source>Specify right-end point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="125"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="125"/>
         <source>Specify middle point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="139"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="139"/>
         <source>Specify top-left point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="146"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="146"/>
         <source>Specify top-center point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="153"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="153"/>
         <source>Specify top-right point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="160"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="160"/>
         <source>Specify middle-left point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="167"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="167"/>
         <source>Specify middle-center point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="174"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="174"/>
         <source>Specify middle-right point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="181"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="181"/>
         <source>Specify bottom-left point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="188"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="188"/>
         <source>Specify bottom-center point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="195"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="195"/>
         <source>Specify bottom-right point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="199"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="199"/>
         <source>Invalid option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="201"/>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="219"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="201"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="219"/>
         <source>Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="224"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="224"/>
         <source>Specify font name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="231"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="231"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="255"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="255"/>
         <source>Requires valid numeric distance or second point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/singlelinetext/singlelinetext.cpp" line="285"/>
+        <location filename="../../src/commands/singlelinetext/singlelinetext.cpp" line="285"/>
         <source>Requires valid numeric angle or second point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -853,41 +853,41 @@
 <context>
     <name>star</name>
     <message>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="32"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="124"/>
+        <location filename="../../src/commands/star/star.cpp" line="32"/>
+        <location filename="../../src/commands/star/star.cpp" line="124"/>
         <source>Enter number of star points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="49"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="148"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="162"/>
+        <location filename="../../src/commands/star/star.cpp" line="49"/>
+        <location filename="../../src/commands/star/star.cpp" line="148"/>
+        <location filename="../../src/commands/star/star.cpp" line="162"/>
         <source>Specify outer radius of star: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="60"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="169"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="180"/>
+        <location filename="../../src/commands/star/star.cpp" line="60"/>
+        <location filename="../../src/commands/star/star.cpp" line="169"/>
+        <location filename="../../src/commands/star/star.cpp" line="180"/>
         <source>Specify inner radius of star: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="114"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="129"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="141"/>
+        <location filename="../../src/commands/star/star.cpp" line="114"/>
+        <location filename="../../src/commands/star/star.cpp" line="129"/>
+        <location filename="../../src/commands/star/star.cpp" line="141"/>
         <source>Specify center point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="122"/>
+        <location filename="../../src/commands/star/star.cpp" line="122"/>
         <source>Requires an integer between 3 and 1024.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="139"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="160"/>
-        <location filename="../../embroidermodder2/commands/star/star.cpp" line="178"/>
+        <location filename="../../src/commands/star/star.cpp" line="139"/>
+        <location filename="../../src/commands/star/star.cpp" line="160"/>
+        <location filename="../../src/commands/star/star.cpp" line="178"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -895,13 +895,13 @@
 <context>
     <name>syswindows</name>
     <message>
-        <location filename="../../embroidermodder2/commands/syswindows/syswindows.cpp" line="9"/>
-        <location filename="../../embroidermodder2/commands/syswindows/syswindows.cpp" line="46"/>
+        <location filename="../../src/commands/syswindows/syswindows.cpp" line="9"/>
+        <location filename="../../src/commands/syswindows/syswindows.cpp" line="46"/>
         <source>Enter an option [Cascade/Tile]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/commands/syswindows/syswindows.cpp" line="44"/>
+        <location filename="../../src/commands/syswindows/syswindows.cpp" line="44"/>
         <source>Invalid option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -959,37 +959,37 @@
         <translation>Hoeveelheid Kleure:</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/embdetails-dialog.cpp" line="65"/>
+        <location filename="../../src/embdetails-dialog.cpp" line="65"/>
         <source>Color Changes:</source>
         <translation>Kleur Veranderings:</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/embdetails-dialog.cpp" line="66"/>
+        <location filename="../../src/embdetails-dialog.cpp" line="66"/>
         <source>Left:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/embdetails-dialog.cpp" line="67"/>
+        <location filename="../../src/embdetails-dialog.cpp" line="67"/>
         <source>Top:</source>
         <translation>Bopunt:</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/embdetails-dialog.cpp" line="68"/>
+        <location filename="../../src/embdetails-dialog.cpp" line="68"/>
         <source>Right:</source>
         <translation>Regs:</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/embdetails-dialog.cpp" line="69"/>
+        <location filename="../../src/embdetails-dialog.cpp" line="69"/>
         <source>Bottom:</source>
         <translation>Onderpunt:</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/embdetails-dialog.cpp" line="70"/>
+        <location filename="../../src/embdetails-dialog.cpp" line="70"/>
         <source>Width:</source>
         <translation>Wydte:</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/embdetails-dialog.cpp" line="71"/>
+        <location filename="../../src/embdetails-dialog.cpp" line="71"/>
         <source>Height:</source>
         <translation>Hoogte:</translation>
     </message>
@@ -997,22 +997,22 @@
 <context>
     <name>LayerManager</name>
     <message>
-        <location filename="../../embroidermodder2/layer-manager.cpp" line="24"/>
+        <location filename="../../src/layer-manager.cpp" line="24"/>
         <source>Layer Manager</source>
         <translation>Laag Beheer</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/layer-manager.cpp" line="27"/>
+        <location filename="../../src/layer-manager.cpp" line="27"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/layer-manager.cpp" line="28"/>
+        <location filename="../../src/layer-manager.cpp" line="28"/>
         <source>Visible</source>
         <translation>Sigbaar</translation>
     </message>
     <message>
-        <location filename="../../embroidermodder2/layer-manager.cpp" line="29"/>
+        <location filename="../../src/layer-manager.cpp" line="29"/>
         <source>Frozen</source>
         <translation>Gevries</translation>
     </message>

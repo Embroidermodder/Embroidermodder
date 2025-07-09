@@ -4,117 +4,117 @@
 <context>
     <name>circle</name>
     <message>
-        <location filename="../../commands/circle/circle.js" line="36"/>
-        <location filename="../../commands/circle/circle.js" line="212"/>
+        <location filename="../../src/commands/circle.cpp" line="36"/>
+        <location filename="../../src/commands/circle.cpp" line="212"/>
         <source>Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="56"/>
-        <location filename="../../commands/circle/circle.js" line="223"/>
-        <location filename="../../commands/circle/circle.js" line="242"/>
+        <location filename="../../src/commands/circle.cpp" line="56"/>
+        <location filename="../../src/commands/circle.cpp" line="223"/>
+        <location filename="../../src/commands/circle.cpp" line="242"/>
         <source>Specify radius of circle or [Diameter]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="72"/>
-        <location filename="../../commands/circle/circle.js" line="107"/>
-        <location filename="../../commands/circle/circle.js" line="141"/>
-        <location filename="../../commands/circle/circle.js" line="260"/>
-        <location filename="../../commands/circle/circle.js" line="283"/>
-        <location filename="../../commands/circle/circle.js" line="327"/>
-        <location filename="../../commands/circle/circle.js" line="388"/>
+        <location filename="../../src/commands/circle.cpp" line="72"/>
+        <location filename="../../src/commands/circle.cpp" line="107"/>
+        <location filename="../../src/commands/circle.cpp" line="141"/>
+        <location filename="../../src/commands/circle.cpp" line="260"/>
+        <location filename="../../src/commands/circle.cpp" line="283"/>
+        <location filename="../../src/commands/circle.cpp" line="327"/>
+        <location filename="../../src/commands/circle.cpp" line="388"/>
         <source>This should never happen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="94"/>
-        <location filename="../../commands/circle/circle.js" line="304"/>
-        <location filename="../../commands/circle/circle.js" line="314"/>
+        <location filename="../../src/commands/circle.cpp" line="94"/>
+        <location filename="../../src/commands/circle.cpp" line="304"/>
+        <location filename="../../src/commands/circle.cpp" line="314"/>
         <source>Specify second end point of circle&apos;s diameter: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="117"/>
+        <location filename="../../src/commands/circle.cpp" line="117"/>
         <source>Specify second point on circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="128"/>
+        <location filename="../../src/commands/circle.cpp" line="128"/>
         <source>Specify third point on circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="151"/>
+        <location filename="../../src/commands/circle.cpp" line="151"/>
         <source>Specify point on object for second tangent of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="158"/>
+        <location filename="../../src/commands/circle.cpp" line="158"/>
         <source>Specify radius of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="165"/>
+        <location filename="../../src/commands/circle.cpp" line="165"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="193"/>
-        <location filename="../../commands/circle/circle.js" line="295"/>
+        <location filename="../../src/commands/circle.cpp" line="193"/>
+        <location filename="../../src/commands/circle.cpp" line="295"/>
         <source>Specify first end point of circle&apos;s diameter: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="198"/>
-        <location filename="../../commands/circle/circle.js" line="339"/>
+        <location filename="../../src/commands/circle.cpp" line="198"/>
+        <location filename="../../src/commands/circle.cpp" line="339"/>
         <source>Specify first point of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="203"/>
+        <location filename="../../src/commands/circle.cpp" line="203"/>
         <source>Specify point on object for first tangent of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="210"/>
+        <location filename="../../src/commands/circle.cpp" line="210"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="233"/>
-        <location filename="../../commands/circle/circle.js" line="269"/>
+        <location filename="../../src/commands/circle.cpp" line="233"/>
+        <location filename="../../src/commands/circle.cpp" line="269"/>
         <source>Specify diameter of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="240"/>
+        <location filename="../../src/commands/circle.cpp" line="240"/>
         <source>Requires numeric radius, point on circumference, or &quot;D&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="267"/>
+        <location filename="../../src/commands/circle.cpp" line="267"/>
         <source>Requires numeric distance or second point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="293"/>
-        <location filename="../../commands/circle/circle.js" line="312"/>
-        <location filename="../../commands/circle/circle.js" line="337"/>
-        <location filename="../../commands/circle/circle.js" line="353"/>
-        <location filename="../../commands/circle/circle.js" line="373"/>
+        <location filename="../../src/commands/circle.cpp" line="293"/>
+        <location filename="../../src/commands/circle.cpp" line="312"/>
+        <location filename="../../src/commands/circle.cpp" line="337"/>
+        <location filename="../../src/commands/circle.cpp" line="353"/>
+        <location filename="../../src/commands/circle.cpp" line="373"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="345"/>
-        <location filename="../../commands/circle/circle.js" line="355"/>
+        <location filename="../../src/commands/circle.cpp" line="345"/>
+        <location filename="../../src/commands/circle.cpp" line="355"/>
         <source>Specify second point of circle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/circle/circle.js" line="365"/>
-        <location filename="../../commands/circle/circle.js" line="375"/>
+        <location filename="../../src/commands/circle.cpp" line="365"/>
+        <location filename="../../src/commands/circle.cpp" line="375"/>
         <source>Specify third point of circle: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -122,41 +122,41 @@
 <context>
     <name>distance</name>
     <message>
-        <location filename="../../commands/distance/distance.js" line="19"/>
-        <location filename="../../commands/distance/distance.js" line="66"/>
+        <location filename="../../src/commands/distance.cpp" line="19"/>
+        <location filename="../../src/commands/distance.cpp" line="66"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/distance/distance.js" line="35"/>
-        <location filename="../../commands/distance/distance.js" line="75"/>
-        <location filename="../../commands/distance/distance.js" line="84"/>
+        <location filename="../../src/commands/distance.cpp" line="35"/>
+        <location filename="../../src/commands/distance.cpp" line="75"/>
+        <location filename="../../src/commands/distance.cpp" line="84"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/distance/distance.js" line="64"/>
-        <location filename="../../commands/distance/distance.js" line="82"/>
+        <location filename="../../src/commands/distance.cpp" line="64"/>
+        <location filename="../../src/commands/distance.cpp" line="82"/>
         <source>Requires numeric distance or two points.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/distance/distance.js" line="114"/>
+        <location filename="../../src/commands/distance.cpp" line="114"/>
         <source>Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/distance/distance.js" line="114"/>
+        <location filename="../../src/commands/distance.cpp" line="114"/>
         <source>Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/distance/distance.js" line="116"/>
+        <location filename="../../src/commands/distance.cpp" line="116"/>
         <source>Delta X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/distance/distance.js" line="116"/>
+        <location filename="../../src/commands/distance.cpp" line="116"/>
         <source>Delta Y</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,74 +164,74 @@
 <context>
     <name>ellipse</name>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="35"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="179"/>
+        <location filename="../../src/commands/ellipse.cpp" line="35"/>
+        <location filename="../../src/commands/ellipse.cpp" line="179"/>
         <source>Specify first axis start point or [Center]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="53"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="100"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="188"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="199"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="267"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="277"/>
+        <location filename="../../src/commands/ellipse.cpp" line="53"/>
+        <location filename="../../src/commands/ellipse.cpp" line="100"/>
+        <location filename="../../src/commands/ellipse.cpp" line="188"/>
+        <location filename="../../src/commands/ellipse.cpp" line="199"/>
+        <location filename="../../src/commands/ellipse.cpp" line="267"/>
+        <location filename="../../src/commands/ellipse.cpp" line="277"/>
         <source>Specify first axis end point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="70"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="113"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="215"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="232"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="289"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="306"/>
+        <location filename="../../src/commands/ellipse.cpp" line="70"/>
+        <location filename="../../src/commands/ellipse.cpp" line="113"/>
+        <location filename="../../src/commands/ellipse.cpp" line="215"/>
+        <location filename="../../src/commands/ellipse.cpp" line="232"/>
+        <location filename="../../src/commands/ellipse.cpp" line="289"/>
+        <location filename="../../src/commands/ellipse.cpp" line="306"/>
         <source>Specify second axis end point or [Rotation]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="84"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="127"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="134"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="138"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="324"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="328"/>
+        <location filename="../../src/commands/ellipse.cpp" line="84"/>
+        <location filename="../../src/commands/ellipse.cpp" line="127"/>
+        <location filename="../../src/commands/ellipse.cpp" line="134"/>
+        <location filename="../../src/commands/ellipse.cpp" line="138"/>
+        <location filename="../../src/commands/ellipse.cpp" line="324"/>
+        <location filename="../../src/commands/ellipse.cpp" line="328"/>
         <source>This should never happen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="170"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="255"/>
+        <location filename="../../src/commands/ellipse.cpp" line="170"/>
+        <location filename="../../src/commands/ellipse.cpp" line="255"/>
         <source>Specify center point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="177"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="230"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="304"/>
+        <location filename="../../src/commands/ellipse.cpp" line="177"/>
+        <location filename="../../src/commands/ellipse.cpp" line="230"/>
+        <location filename="../../src/commands/ellipse.cpp" line="304"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="197"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="253"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="275"/>
+        <location filename="../../src/commands/ellipse.cpp" line="197"/>
+        <location filename="../../src/commands/ellipse.cpp" line="253"/>
+        <location filename="../../src/commands/ellipse.cpp" line="275"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="223"/>
-        <location filename="../../commands/ellipse/ellipse.js" line="336"/>
+        <location filename="../../src/commands/ellipse.cpp" line="223"/>
+        <location filename="../../src/commands/ellipse.cpp" line="336"/>
         <source>Specify rotation: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="297"/>
+        <location filename="../../src/commands/ellipse.cpp" line="297"/>
         <source>Specify ellipse rotation: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/ellipse/ellipse.js" line="334"/>
+        <location filename="../../src/commands/ellipse.cpp" line="334"/>
         <source>Invalid angle. Input a numeric angle or pick a point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -239,13 +239,13 @@
 <context>
     <name>erase</name>
     <message>
-        <location filename="../../commands/erase/erase.js" line="12"/>
-        <location filename="../../commands/erase/erase.js" line="15"/>
+        <location filename="../../src/commands/erase.cpp" line="12"/>
+        <location filename="../../src/commands/erase.cpp" line="15"/>
         <source>Preselect objects before invoking the delete command.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/erase/erase.js" line="15"/>
+        <location filename="../../src/commands/erase.cpp" line="15"/>
         <source>Delete Preselect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -253,26 +253,26 @@
 <context>
     <name>line</name>
     <message>
-        <location filename="../../commands/line/line.js" line="21"/>
-        <location filename="../../commands/line/line.js" line="74"/>
+        <location filename="../../src/commands/line.cpp" line="21"/>
+        <location filename="../../src/commands/line.cpp" line="74"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/line/line.js" line="40"/>
-        <location filename="../../commands/line/line.js" line="86"/>
-        <location filename="../../commands/line/line.js" line="102"/>
-        <location filename="../../commands/line/line.js" line="115"/>
+        <location filename="../../src/commands/line.cpp" line="40"/>
+        <location filename="../../src/commands/line.cpp" line="86"/>
+        <location filename="../../src/commands/line.cpp" line="102"/>
+        <location filename="../../src/commands/line.cpp" line="115"/>
         <source>Specify next point or [Undo]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/line/line.js" line="72"/>
+        <location filename="../../src/commands/line.cpp" line="72"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/line/line.js" line="100"/>
+        <location filename="../../src/commands/line.cpp" line="100"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -280,13 +280,13 @@
 <context>
     <name>locatepoint</name>
     <message>
-        <location filename="../../commands/locatepoint/locatepoint.js" line="9"/>
-        <location filename="../../commands/locatepoint/locatepoint.js" line="40"/>
+        <location filename="../../src/commands/locatepoint.cpp" line="9"/>
+        <location filename="../../src/commands/locatepoint.cpp" line="40"/>
         <source>Specify point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/locatepoint/locatepoint.js" line="38"/>
+        <location filename="../../src/commands/locatepoint.cpp" line="38"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,32 +294,32 @@
 <context>
     <name>move</name>
     <message>
-        <location filename="../../commands/move/move.js" line="28"/>
-        <location filename="../../commands/move/move.js" line="31"/>
+        <location filename="../../src/commands/move.cpp" line="28"/>
+        <location filename="../../src/commands/move.cpp" line="31"/>
         <source>Preselect objects before invoking the move command.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/move/move.js" line="31"/>
+        <location filename="../../src/commands/move.cpp" line="31"/>
         <source>Move Preselect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/move/move.js" line="35"/>
-        <location filename="../../commands/move/move.js" line="87"/>
+        <location filename="../../src/commands/move.cpp" line="35"/>
+        <location filename="../../src/commands/move.cpp" line="87"/>
         <source>Specify base point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/move/move.js" line="54"/>
-        <location filename="../../commands/move/move.js" line="98"/>
-        <location filename="../../commands/move/move.js" line="108"/>
+        <location filename="../../src/commands/move.cpp" line="54"/>
+        <location filename="../../src/commands/move.cpp" line="98"/>
+        <location filename="../../src/commands/move.cpp" line="108"/>
         <source>Specify destination point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/move/move.js" line="85"/>
-        <location filename="../../commands/move/move.js" line="106"/>
+        <location filename="../../src/commands/move.cpp" line="85"/>
+        <location filename="../../src/commands/move.cpp" line="106"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -327,19 +327,19 @@
 <context>
     <name>path</name>
     <message>
-        <location filename="../../commands/path/path.js" line="23"/>
+        <location filename="../../src/commands/path.cpp" line="23"/>
         <source>Specify start point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/path/path.js" line="40"/>
-        <location filename="../../commands/path/path.js" line="78"/>
-        <location filename="../../commands/path/path.js" line="92"/>
+        <location filename="../../src/commands/path.cpp" line="40"/>
+        <location filename="../../src/commands/path.cpp" line="78"/>
+        <location filename="../../src/commands/path.cpp" line="92"/>
         <source>Specify next point or [Arc/Undo]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/path/path.js" line="76"/>
+        <location filename="../../src/commands/path.cpp" line="76"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -347,7 +347,7 @@
 <context>
     <name>platform</name>
     <message>
-        <location filename="../../commands/platform/platform.js" line="41"/>
+        <location filename="../../src/commands/platform.cpp" line="41"/>
         <source>Platform</source>
         <translation type="unfinished"></translation>
     </message>
@@ -355,22 +355,22 @@
 <context>
     <name>point</name>
     <message>
-        <location filename="../../commands/point/point.js" line="15"/>
-        <location filename="../../commands/point/point.js" line="64"/>
+        <location filename="../../src/commands/point.cpp" line="15"/>
+        <location filename="../../src/commands/point.cpp" line="64"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/point/point.js" line="27"/>
-        <location filename="../../commands/point/point.js" line="71"/>
-        <location filename="../../commands/point/point.js" line="82"/>
-        <location filename="../../commands/point/point.js" line="88"/>
+        <location filename="../../src/commands/point.cpp" line="27"/>
+        <location filename="../../src/commands/point.cpp" line="71"/>
+        <location filename="../../src/commands/point.cpp" line="82"/>
+        <location filename="../../src/commands/point.cpp" line="88"/>
         <source>Specify next point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/point/point.js" line="62"/>
-        <location filename="../../commands/point/point.js" line="80"/>
+        <location filename="../../src/commands/point.cpp" line="62"/>
+        <location filename="../../src/commands/point.cpp" line="80"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -378,76 +378,76 @@
 <context>
     <name>polygon</name>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="44"/>
-        <location filename="../../commands/polygon/polygon.js" line="119"/>
+        <location filename="../../src/commands/polygon.cpp" line="44"/>
+        <location filename="../../src/commands/polygon.cpp" line="119"/>
         <source>Enter number of sides</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="61"/>
-        <location filename="../../commands/polygon/polygon.js" line="150"/>
-        <location filename="../../commands/polygon/polygon.js" line="225"/>
+        <location filename="../../src/commands/polygon.cpp" line="61"/>
+        <location filename="../../src/commands/polygon.cpp" line="150"/>
+        <location filename="../../src/commands/polygon.cpp" line="225"/>
         <source>Specify polygon type [Inscribed in circle/Circumscribed around circle]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="109"/>
-        <location filename="../../commands/polygon/polygon.js" line="124"/>
-        <location filename="../../commands/polygon/polygon.js" line="143"/>
+        <location filename="../../src/commands/polygon.cpp" line="109"/>
+        <location filename="../../src/commands/polygon.cpp" line="124"/>
+        <location filename="../../src/commands/polygon.cpp" line="143"/>
         <source>Specify center point or [Sidelength]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="117"/>
+        <location filename="../../src/commands/polygon.cpp" line="117"/>
         <source>Requires an integer between 3 and 1024.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="134"/>
+        <location filename="../../src/commands/polygon.cpp" line="134"/>
         <source>Specify start point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="141"/>
-        <location filename="../../commands/polygon/polygon.js" line="240"/>
-        <location filename="../../commands/polygon/polygon.js" line="266"/>
+        <location filename="../../src/commands/polygon.cpp" line="141"/>
+        <location filename="../../src/commands/polygon.cpp" line="240"/>
+        <location filename="../../src/commands/polygon.cpp" line="266"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="168"/>
-        <location filename="../../commands/polygon/polygon.js" line="201"/>
-        <location filename="../../commands/polygon/polygon.js" line="242"/>
+        <location filename="../../src/commands/polygon.cpp" line="168"/>
+        <location filename="../../src/commands/polygon.cpp" line="201"/>
+        <location filename="../../src/commands/polygon.cpp" line="242"/>
         <source>Specify polygon corner point or [Distance]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="190"/>
-        <location filename="../../commands/polygon/polygon.js" line="210"/>
-        <location filename="../../commands/polygon/polygon.js" line="268"/>
+        <location filename="../../src/commands/polygon.cpp" line="190"/>
+        <location filename="../../src/commands/polygon.cpp" line="210"/>
+        <location filename="../../src/commands/polygon.cpp" line="268"/>
         <source>Specify polygon side point or [Distance]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="218"/>
-        <location filename="../../commands/polygon/polygon.js" line="308"/>
+        <location filename="../../src/commands/polygon.cpp" line="218"/>
+        <location filename="../../src/commands/polygon.cpp" line="308"/>
         <source>Polygon type is not Inscribed or Circumscribed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="223"/>
+        <location filename="../../src/commands/polygon.cpp" line="223"/>
         <source>Invalid option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="233"/>
-        <location filename="../../commands/polygon/polygon.js" line="259"/>
-        <location filename="../../commands/polygon/polygon.js" line="286"/>
+        <location filename="../../src/commands/polygon.cpp" line="233"/>
+        <location filename="../../src/commands/polygon.cpp" line="259"/>
+        <location filename="../../src/commands/polygon.cpp" line="286"/>
         <source>Specify distance: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polygon/polygon.js" line="284"/>
+        <location filename="../../src/commands/polygon.cpp" line="284"/>
         <source>Requires valid numeric distance.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -455,26 +455,26 @@
 <context>
     <name>polyline</name>
     <message>
-        <location filename="../../commands/polyline/polyline.js" line="23"/>
-        <location filename="../../commands/polyline/polyline.js" line="75"/>
+        <location filename="../../src/commands/polyline.cpp" line="23"/>
+        <location filename="../../src/commands/polyline.cpp" line="75"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polyline/polyline.js" line="42"/>
-        <location filename="../../commands/polyline/polyline.js" line="87"/>
-        <location filename="../../commands/polyline/polyline.js" line="103"/>
-        <location filename="../../commands/polyline/polyline.js" line="115"/>
+        <location filename="../../src/commands/polyline.cpp" line="42"/>
+        <location filename="../../src/commands/polyline.cpp" line="87"/>
+        <location filename="../../src/commands/polyline.cpp" line="103"/>
+        <location filename="../../src/commands/polyline.cpp" line="115"/>
         <source>Specify next point or [Undo]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polyline/polyline.js" line="73"/>
+        <location filename="../../src/commands/polyline.cpp" line="73"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/polyline/polyline.js" line="101"/>
+        <location filename="../../src/commands/polyline.cpp" line="101"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -482,21 +482,21 @@
 <context>
     <name>quickleader</name>
     <message>
-        <location filename="../../commands/quickleader/quickleader.js" line="21"/>
-        <location filename="../../commands/quickleader/quickleader.js" line="69"/>
+        <location filename="../../src/commands/quickleader.cpp" line="21"/>
+        <location filename="../../src/commands/quickleader.cpp" line="69"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/quickleader/quickleader.js" line="37"/>
-        <location filename="../../commands/quickleader/quickleader.js" line="78"/>
-        <location filename="../../commands/quickleader/quickleader.js" line="87"/>
+        <location filename="../../src/commands/quickleader.cpp" line="37"/>
+        <location filename="../../src/commands/quickleader.cpp" line="78"/>
+        <location filename="../../src/commands/quickleader.cpp" line="87"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/quickleader/quickleader.js" line="67"/>
-        <location filename="../../commands/quickleader/quickleader.js" line="85"/>
+        <location filename="../../src/commands/quickleader.cpp" line="67"/>
+        <location filename="../../src/commands/quickleader.cpp" line="85"/>
         <source>Requires two points.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -504,23 +504,23 @@
 <context>
     <name>rectangle</name>
     <message>
-        <location filename="../../commands/rectangle/rectangle.js" line="21"/>
+        <location filename="../../src/commands/rectangle.cpp" line="21"/>
         <source>Specify first corner point or [Chamfer/Fillet]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rectangle/rectangle.js" line="37"/>
-        <location filename="../../commands/rectangle/rectangle.js" line="95"/>
+        <location filename="../../src/commands/rectangle.cpp" line="37"/>
+        <location filename="../../src/commands/rectangle.cpp" line="95"/>
         <source>Specify other corner point or [Dimensions]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rectangle/rectangle.js" line="79"/>
+        <location filename="../../src/commands/rectangle.cpp" line="79"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rectangle/rectangle.js" line="81"/>
+        <location filename="../../src/commands/rectangle.cpp" line="81"/>
         <source>Specify first point: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -528,31 +528,31 @@
 <context>
     <name>rgb</name>
     <message>
-        <location filename="../../commands/rgb/rgb.js" line="18"/>
+        <location filename="../../src/commands/rgb.cpp" line="18"/>
         <source>Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rgb/rgb.js" line="46"/>
-        <location filename="../../commands/rgb/rgb.js" line="82"/>
+        <location filename="../../src/commands/rgb.cpp" line="46"/>
+        <location filename="../../src/commands/rgb.cpp" line="82"/>
         <source>Specify crosshair color: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rgb/rgb.js" line="51"/>
-        <location filename="../../commands/rgb/rgb.js" line="100"/>
+        <location filename="../../src/commands/rgb.cpp" line="51"/>
+        <location filename="../../src/commands/rgb.cpp" line="100"/>
         <source>Specify grid color: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rgb/rgb.js" line="61"/>
-        <location filename="../../commands/rgb/rgb.js" line="80"/>
-        <location filename="../../commands/rgb/rgb.js" line="98"/>
+        <location filename="../../src/commands/rgb.cpp" line="61"/>
+        <location filename="../../src/commands/rgb.cpp" line="80"/>
+        <location filename="../../src/commands/rgb.cpp" line="98"/>
         <source>Invalid color. R,G,B values must be in the range of 0-255.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rgb/rgb.js" line="63"/>
+        <location filename="../../src/commands/rgb.cpp" line="63"/>
         <source>Specify background color: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -560,69 +560,69 @@
 <context>
     <name>rotate</name>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="47"/>
-        <location filename="../../commands/rotate/rotate.js" line="50"/>
+        <location filename="../../src/commands/rotate.cpp" line="47"/>
+        <location filename="../../src/commands/rotate.cpp" line="50"/>
         <source>Preselect objects before invoking the rotate command.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="50"/>
+        <location filename="../../src/commands/rotate.cpp" line="50"/>
         <source>Rotate Preselect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="54"/>
-        <location filename="../../commands/rotate/rotate.js" line="141"/>
+        <location filename="../../src/commands/rotate.cpp" line="54"/>
+        <location filename="../../src/commands/rotate.cpp" line="141"/>
         <source>Specify base point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="75"/>
-        <location filename="../../commands/rotate/rotate.js" line="152"/>
-        <location filename="../../commands/rotate/rotate.js" line="170"/>
+        <location filename="../../src/commands/rotate.cpp" line="75"/>
+        <location filename="../../src/commands/rotate.cpp" line="152"/>
+        <location filename="../../src/commands/rotate.cpp" line="170"/>
         <source>Specify rotation angle or [Reference]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="98"/>
-        <location filename="../../commands/rotate/rotate.js" line="202"/>
-        <location filename="../../commands/rotate/rotate.js" line="230"/>
+        <location filename="../../src/commands/rotate.cpp" line="98"/>
+        <location filename="../../src/commands/rotate.cpp" line="202"/>
+        <location filename="../../src/commands/rotate.cpp" line="230"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="108"/>
-        <location filename="../../commands/rotate/rotate.js" line="218"/>
-        <location filename="../../commands/rotate/rotate.js" line="239"/>
-        <location filename="../../commands/rotate/rotate.js" line="252"/>
-        <location filename="../../commands/rotate/rotate.js" line="264"/>
+        <location filename="../../src/commands/rotate.cpp" line="108"/>
+        <location filename="../../src/commands/rotate.cpp" line="218"/>
+        <location filename="../../src/commands/rotate.cpp" line="239"/>
+        <location filename="../../src/commands/rotate.cpp" line="252"/>
+        <location filename="../../src/commands/rotate.cpp" line="264"/>
         <source>Specify the new angle: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="139"/>
+        <location filename="../../src/commands/rotate.cpp" line="139"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="160"/>
-        <location filename="../../commands/rotate/rotate.js" line="193"/>
+        <location filename="../../src/commands/rotate.cpp" line="160"/>
+        <location filename="../../src/commands/rotate.cpp" line="193"/>
         <source>Specify the reference angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="168"/>
+        <location filename="../../src/commands/rotate.cpp" line="168"/>
         <source>Requires valid numeric angle, second point, or option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="191"/>
-        <location filename="../../commands/rotate/rotate.js" line="228"/>
+        <location filename="../../src/commands/rotate.cpp" line="191"/>
+        <location filename="../../src/commands/rotate.cpp" line="228"/>
         <source>Requires valid numeric angle or two points.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/rotate/rotate.js" line="262"/>
+        <location filename="../../src/commands/rotate.cpp" line="262"/>
         <source>Requires valid numeric angle or second point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -630,87 +630,87 @@
 <context>
     <name>scale</name>
     <message>
-        <location filename="../../commands/scale/scale.js" line="47"/>
-        <location filename="../../commands/scale/scale.js" line="50"/>
+        <location filename="../../src/commands/scale.cpp" line="47"/>
+        <location filename="../../src/commands/scale.cpp" line="50"/>
         <source>Preselect objects before invoking the scale command.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="50"/>
+        <location filename="../../src/commands/scale.cpp" line="50"/>
         <source>Scale Preselect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="54"/>
-        <location filename="../../commands/scale/scale.js" line="164"/>
+        <location filename="../../src/commands/scale.cpp" line="54"/>
+        <location filename="../../src/commands/scale.cpp" line="164"/>
         <source>Specify base point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="75"/>
-        <location filename="../../commands/scale/scale.js" line="175"/>
-        <location filename="../../commands/scale/scale.js" line="193"/>
+        <location filename="../../src/commands/scale.cpp" line="75"/>
+        <location filename="../../src/commands/scale.cpp" line="175"/>
+        <location filename="../../src/commands/scale.cpp" line="193"/>
         <source>Specify scale factor or [Reference]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="98"/>
-        <location filename="../../commands/scale/scale.js" line="112"/>
-        <location filename="../../commands/scale/scale.js" line="225"/>
-        <location filename="../../commands/scale/scale.js" line="267"/>
-        <location filename="../../commands/scale/scale.js" line="281"/>
-        <location filename="../../commands/scale/scale.js" line="307"/>
+        <location filename="../../src/commands/scale.cpp" line="98"/>
+        <location filename="../../src/commands/scale.cpp" line="112"/>
+        <location filename="../../src/commands/scale.cpp" line="225"/>
+        <location filename="../../src/commands/scale.cpp" line="267"/>
+        <location filename="../../src/commands/scale.cpp" line="281"/>
+        <location filename="../../src/commands/scale.cpp" line="307"/>
         <source>Specify second point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="110"/>
-        <location filename="../../commands/scale/scale.js" line="128"/>
-        <location filename="../../commands/scale/scale.js" line="244"/>
-        <location filename="../../commands/scale/scale.js" line="279"/>
-        <location filename="../../commands/scale/scale.js" line="305"/>
-        <location filename="../../commands/scale/scale.js" line="336"/>
-        <location filename="../../commands/scale/scale.js" line="354"/>
+        <location filename="../../src/commands/scale.cpp" line="110"/>
+        <location filename="../../src/commands/scale.cpp" line="128"/>
+        <location filename="../../src/commands/scale.cpp" line="244"/>
+        <location filename="../../src/commands/scale.cpp" line="279"/>
+        <location filename="../../src/commands/scale.cpp" line="305"/>
+        <location filename="../../src/commands/scale.cpp" line="336"/>
+        <location filename="../../src/commands/scale.cpp" line="354"/>
         <source>Value must be positive and nonzero.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="119"/>
-        <location filename="../../commands/scale/scale.js" line="130"/>
-        <location filename="../../commands/scale/scale.js" line="254"/>
-        <location filename="../../commands/scale/scale.js" line="287"/>
-        <location filename="../../commands/scale/scale.js" line="313"/>
-        <location filename="../../commands/scale/scale.js" line="326"/>
-        <location filename="../../commands/scale/scale.js" line="338"/>
-        <location filename="../../commands/scale/scale.js" line="356"/>
+        <location filename="../../src/commands/scale.cpp" line="119"/>
+        <location filename="../../src/commands/scale.cpp" line="130"/>
+        <location filename="../../src/commands/scale.cpp" line="254"/>
+        <location filename="../../src/commands/scale.cpp" line="287"/>
+        <location filename="../../src/commands/scale.cpp" line="313"/>
+        <location filename="../../src/commands/scale.cpp" line="326"/>
+        <location filename="../../src/commands/scale.cpp" line="338"/>
+        <location filename="../../src/commands/scale.cpp" line="356"/>
         <source>Specify new length: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="162"/>
+        <location filename="../../src/commands/scale.cpp" line="162"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="183"/>
-        <location filename="../../commands/scale/scale.js" line="216"/>
-        <location filename="../../commands/scale/scale.js" line="246"/>
+        <location filename="../../src/commands/scale.cpp" line="183"/>
+        <location filename="../../src/commands/scale.cpp" line="216"/>
+        <location filename="../../src/commands/scale.cpp" line="246"/>
         <source>Specify reference length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="191"/>
+        <location filename="../../src/commands/scale.cpp" line="191"/>
         <source>Requires valid numeric distance, second point, or option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="214"/>
-        <location filename="../../commands/scale/scale.js" line="265"/>
+        <location filename="../../src/commands/scale.cpp" line="214"/>
+        <location filename="../../src/commands/scale.cpp" line="265"/>
         <source>Requires valid numeric distance or two points.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/scale/scale.js" line="324"/>
+        <location filename="../../src/commands/scale.cpp" line="324"/>
         <source>Requires valid numeric distance or second point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -718,134 +718,134 @@
 <context>
     <name>singlelinetext</name>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="33"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="33"/>
         <source>Current font: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="33"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="33"/>
         <source>Text height: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="35"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="118"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="132"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="210"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="233"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="35"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="118"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="132"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="210"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="233"/>
         <source>Specify start point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="53"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="242"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="257"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="53"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="242"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="257"/>
         <source>Specify text height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="60"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="251"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="263"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="287"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="60"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="251"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="263"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="287"/>
         <source>Specify text angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="66"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="271"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="293"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="66"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="271"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="293"/>
         <source>Enter text: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="104"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="104"/>
         <source>Specify center point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="111"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="111"/>
         <source>Specify right-end point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="125"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="125"/>
         <source>Specify middle point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="139"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="139"/>
         <source>Specify top-left point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="146"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="146"/>
         <source>Specify top-center point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="153"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="153"/>
         <source>Specify top-right point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="160"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="160"/>
         <source>Specify middle-left point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="167"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="167"/>
         <source>Specify middle-center point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="174"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="174"/>
         <source>Specify middle-right point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="181"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="181"/>
         <source>Specify bottom-left point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="188"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="188"/>
         <source>Specify bottom-center point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="195"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="195"/>
         <source>Specify bottom-right point of text or [Justify/Setfont]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="199"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="199"/>
         <source>Invalid option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="201"/>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="219"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="201"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="219"/>
         <source>Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="224"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="224"/>
         <source>Specify font name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="231"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="231"/>
         <source>Point or option keyword required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="255"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="255"/>
         <source>Requires valid numeric distance or second point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/singlelinetext/singlelinetext.js" line="285"/>
+        <location filename="../../src/commands/singlelinetext.cpp" line="285"/>
         <source>Requires valid numeric angle or second point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -853,41 +853,41 @@
 <context>
     <name>star</name>
     <message>
-        <location filename="../../commands/star/star.js" line="32"/>
-        <location filename="../../commands/star/star.js" line="124"/>
+        <location filename="../../src/commands/star.cpp" line="32"/>
+        <location filename="../../src/commands/star.cpp" line="124"/>
         <source>Enter number of star points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/star/star.js" line="49"/>
-        <location filename="../../commands/star/star.js" line="148"/>
-        <location filename="../../commands/star/star.js" line="162"/>
+        <location filename="../../src/commands/star.cpp" line="49"/>
+        <location filename="../../src/commands/star.cpp" line="148"/>
+        <location filename="../../src/commands/star.cpp" line="162"/>
         <source>Specify outer radius of star: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/star/star.js" line="60"/>
-        <location filename="../../commands/star/star.js" line="169"/>
-        <location filename="../../commands/star/star.js" line="180"/>
+        <location filename="../../src/commands/star.cpp" line="60"/>
+        <location filename="../../src/commands/star.cpp" line="169"/>
+        <location filename="../../src/commands/star.cpp" line="180"/>
         <source>Specify inner radius of star: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/star/star.js" line="114"/>
-        <location filename="../../commands/star/star.js" line="129"/>
-        <location filename="../../commands/star/star.js" line="141"/>
+        <location filename="../../src/commands/star.cpp" line="114"/>
+        <location filename="../../src/commands/star.cpp" line="129"/>
+        <location filename="../../src/commands/star.cpp" line="141"/>
         <source>Specify center point: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/star/star.js" line="122"/>
+        <location filename="../../src/commands/star.cpp" line="122"/>
         <source>Requires an integer between 3 and 1024.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/star/star.js" line="139"/>
-        <location filename="../../commands/star/star.js" line="160"/>
-        <location filename="../../commands/star/star.js" line="178"/>
+        <location filename="../../src/commands/star.cpp" line="139"/>
+        <location filename="../../src/commands/star.cpp" line="160"/>
+        <location filename="../../src/commands/star.cpp" line="178"/>
         <source>Invalid point.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -895,13 +895,13 @@
 <context>
     <name>syswindows</name>
     <message>
-        <location filename="../../commands/syswindows/syswindows.js" line="9"/>
-        <location filename="../../commands/syswindows/syswindows.js" line="46"/>
+        <location filename="../../src/commands/syswindows.cpp" line="9"/>
+        <location filename="../../src/commands/syswindows.cpp" line="46"/>
         <source>Enter an option [Cascade/Tile]: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../commands/syswindows/syswindows.js" line="44"/>
+        <location filename="../../src/commands/syswindows.cpp" line="44"/>
         <source>Invalid option keyword.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1070,931 +1070,931 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="11"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="11"/>
         <source>&amp;Do Nothing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="11"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="11"/>
         <source>Does Nothing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="13"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="13"/>
         <source>&amp;Cascade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="13"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="13"/>
         <source>Cascade the windows.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="14"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="14"/>
         <source>&amp;Tile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="14"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="14"/>
         <source>Tile the windows.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="15"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="15"/>
         <source>Cl&amp;ose</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="15"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="15"/>
         <source>Close the active window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="16"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="16"/>
         <source>Close &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="16"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="16"/>
         <source>Close all the windows.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="17"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="17"/>
         <source>Ne&amp;xt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="17"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="17"/>
         <source>Move the focus to the next window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="18"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="18"/>
         <source>Pre&amp;vious</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="18"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="18"/>
         <source>Move the focus to the previous window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="20"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="20"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="20"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="20"/>
         <source>Create a new file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="21"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="21"/>
         <source>&amp;Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="21"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="21"/>
         <source>Open an existing file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="22"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="22"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="22"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="22"/>
         <source>Save the design to disk.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="23"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="23"/>
         <source>Save &amp;As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="23"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="23"/>
         <source>Save the design under a new name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="24"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="24"/>
         <source>&amp;Print</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="24"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="24"/>
         <source>Print the design.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="25"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="25"/>
         <source>&amp;Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="25"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="25"/>
         <source>Details of the current design.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="26"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="26"/>
         <source>E&amp;xit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="26"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="26"/>
         <source>Exit the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="28"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="28"/>
         <source>Cu&amp;t</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="28"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="28"/>
         <source>Cut the current selection&apos;s contents to the clipboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="29"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="29"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="29"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="29"/>
         <source>Copy the current selection&apos;s contents to the clipboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="30"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="30"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="30"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="30"/>
         <source>Paste the clipboard&apos;s contents into the current selection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="32"/>
-        <location filename="../../mainwindow.cpp" line="50"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="32"/>
+        <location filename="../../src/mainwindow.cpp" line="50"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="32"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="32"/>
         <source>Displays help.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="33"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="33"/>
         <source>&amp;Changelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="33"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="33"/>
         <source>Describes new features in this product.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="34"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="34"/>
         <source>&amp;Tip Of The Day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="34"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="34"/>
         <source>Displays a dialog with useful tips</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="35"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="35"/>
         <source>&amp;About </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="35"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="35"/>
         <source>Displays information about this product.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="37"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="37"/>
         <source>&amp;Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="37"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="37"/>
         <source>Reverses the most recent action.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="38"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="38"/>
         <source>&amp;Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="38"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="38"/>
         <source>Reverses the effects of the previous undo action.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="40"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="40"/>
         <source>Icon&amp;16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="40"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="40"/>
         <source>Sets the toolbar icon size to 16x16.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="41"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="41"/>
         <source>Icon&amp;24</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="41"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="41"/>
         <source>Sets the toolbar icon size to 24x24.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="42"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="42"/>
         <source>Icon&amp;32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="42"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="42"/>
         <source>Sets the toolbar icon size to 32x32.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="43"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="43"/>
         <source>Icon&amp;48</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="43"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="43"/>
         <source>Sets the toolbar icon size to 48x48.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="44"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="44"/>
         <source>Icon&amp;64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="44"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="44"/>
         <source>Sets the toolbar icon size to 64x64.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="45"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="45"/>
         <source>Icon12&amp;8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="45"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="45"/>
         <source>Sets the toolbar icon size to 128x128.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="47"/>
-        <location filename="../../mainwindow.cpp" line="48"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="47"/>
+        <location filename="../../src/mainwindow.cpp" line="48"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="47"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="47"/>
         <source>Configure settings specific to this product.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="49"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="49"/>
         <source>&amp;Make Layer Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="49"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="49"/>
         <source>Makes the layer of a selected object the active layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="50"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="50"/>
         <source>&amp;Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="50"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="50"/>
         <source>Manages layers and layer properties:  LAYER</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="51"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="51"/>
         <source>&amp;Layer Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="51"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="51"/>
         <source>Dropdown selector for changing the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="52"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="52"/>
         <source>&amp;Layer Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="52"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="52"/>
         <source>Restores the previous layer settings:  LAYERP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="53"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="53"/>
         <source>&amp;Color Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="53"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="53"/>
         <source>Dropdown selector for changing the current thread color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="54"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="54"/>
         <source>&amp;Stitchtype Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="54"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="54"/>
         <source>Dropdown selector for changing the current stitch type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="55"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="55"/>
         <source>&amp;Threadweight Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="55"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="55"/>
         <source>Dropdown selector for changing the current thread weight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="56"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="56"/>
         <source>&amp;Hide All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="56"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="56"/>
         <source>Turns the visibility off for all layers in the current drawing:  HIDEALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="57"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="57"/>
         <source>&amp;Show All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="57"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="57"/>
         <source>Turns the visibility on for all layers in the current drawing:  SHOWALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="58"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="58"/>
         <source>&amp;Freeze All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="58"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="58"/>
         <source>Freezes all layers in the current drawing:  FREEZEALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="59"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="59"/>
         <source>&amp;Thaw All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="59"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="59"/>
         <source>Thaws all layers in the current drawing:  THAWALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="60"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="60"/>
         <source>&amp;Lock All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="60"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="60"/>
         <source>Locks all layers in the current drawing:  LOCKALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="61"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="61"/>
         <source>&amp;Unlock All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="61"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="61"/>
         <source>Unlocks all layers in the current drawing:  UNLOCKALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="63"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="63"/>
         <source>&amp;Bold Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="63"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="63"/>
         <source>Sets text to be bold.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="64"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="64"/>
         <source>&amp;Italic Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="64"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="64"/>
         <source>Sets text to be italic.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="65"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="65"/>
         <source>&amp;Underline Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="65"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="65"/>
         <source>Sets text to be underlined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="66"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="66"/>
         <source>&amp;StrikeOut Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="66"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="66"/>
         <source>Sets text to be striked out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="67"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="67"/>
         <source>&amp;Overline Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="67"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="67"/>
         <source>Sets text to be overlined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="69"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="69"/>
         <source>Zoom &amp;Realtime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="69"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="69"/>
         <source>Zooms to increase or decrease the apparent size of objects in the current viewport.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="70"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="70"/>
         <source>Zoom &amp;Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="70"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="70"/>
         <source>Zooms to display the previous view.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="71"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="71"/>
         <source>Zoom &amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="71"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="71"/>
         <source>Zooms to display an area specified by a rectangular window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="72"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="72"/>
         <source>Zoom &amp;Dynamic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="72"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="72"/>
         <source>Zooms to display the generated portion of the drawing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="73"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="73"/>
         <source>Zoom &amp;Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="73"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="73"/>
         <source>Zooms the display using a specified scale factor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="74"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="74"/>
         <source>Zoom &amp;Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="74"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="74"/>
         <source>Zooms to display a view specified by a center point and magnification or height.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="75"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="75"/>
         <source>Zoom &amp;In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="75"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="75"/>
         <source>Zooms to increase the apparent size of objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="76"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="76"/>
         <source>Zoom &amp;Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="76"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="76"/>
         <source>Zooms to decrease the apparent size of objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="77"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="77"/>
         <source>Zoom Selec&amp;ted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="77"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="77"/>
         <source>Zooms to display the selected objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="78"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="78"/>
         <source>Zoom &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="78"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="78"/>
         <source>Zooms to display the drawing extents or the grid limits.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="79"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="79"/>
         <source>Zoom &amp;Extents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="79"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="79"/>
         <source>Zooms to display the drawing extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="81"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="81"/>
         <source>&amp;Pan Realtime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="81"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="81"/>
         <source>Moves the view in the current viewport.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="82"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="82"/>
         <source>&amp;Pan Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="82"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="82"/>
         <source>Moves the view by the specified distance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="83"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="83"/>
         <source>&amp;Pan Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="83"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="83"/>
         <source>Moves the view to the left.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="84"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="84"/>
         <source>&amp;Pan Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="84"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="84"/>
         <source>Moves the view to the right.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="85"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="85"/>
         <source>&amp;Pan Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="85"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="85"/>
         <source>Moves the view up.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="86"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="86"/>
         <source>&amp;Pan Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="86"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="86"/>
         <source>Moves the view down.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="88"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="88"/>
         <source>&amp;Day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="88"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="88"/>
         <source>Updates the current view using day vision settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="89"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="89"/>
         <source>&amp;Night</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-actions.cpp" line="89"/>
+        <location filename="../../src/mainwindow-actions.cpp" line="89"/>
         <source>Updates the current view using night vision settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="45"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="45"/>
         <source>Testing Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="45"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="45"/>
         <source>&lt;b&gt;This feature is in testing.&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="188"/>
-        <location filename="../../mainwindow-commands.cpp" line="190"/>
-        <location filename="../../mainwindow-commands.cpp" line="192"/>
-        <location filename="../../mainwindow-commands.cpp" line="196"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="188"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="190"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="192"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="196"/>
         <source>
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="189"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="189"/>
         <source>http://embroidermodder.sourceforge.net</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="191"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="191"/>
         <source>Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="193"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="193"/>
         <source>Embroidery formats by Josh Varga.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="194"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="194"/>
         <source>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="195"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="195"/>
         <source>User Interface by Jonathan Greig.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="197"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="197"/>
         <source>Free under the zlib/libpng license.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="246"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="246"/>
         <source>&amp;Show tips on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="265"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="265"/>
         <source>&amp;Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="266"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="266"/>
         <source>&amp;Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="267"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="267"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="746"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="746"/>
         <source>Color Selector Conversion Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="746"/>
-        <location filename="../../mainwindow-commands.cpp" line="749"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="746"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="749"/>
         <source>&lt;b&gt;An error has occured while changing colors.&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="749"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="749"/>
         <source>Color Selector Pointer Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="1122"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="1122"/>
         <source>Native MessageBox Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="1122"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="1122"/>
         <source>Incorrect use of the native messageBox function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="1732"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="1732"/>
         <source>ScaleFactor Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="1733"/>
+        <location filename="../../src/mainwindow-commands.cpp" line="1733"/>
         <source>Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-toolbars.cpp" line="157"/>
+        <location filename="../../src/mainwindow-toolbars.cpp" line="157"/>
         <source>Red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-toolbars.cpp" line="158"/>
+        <location filename="../../src/mainwindow-toolbars.cpp" line="158"/>
         <source>Yellow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-toolbars.cpp" line="159"/>
+        <location filename="../../src/mainwindow-toolbars.cpp" line="159"/>
         <source>Green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-toolbars.cpp" line="160"/>
+        <location filename="../../src/mainwindow-toolbars.cpp" line="160"/>
         <source>Cyan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-toolbars.cpp" line="161"/>
+        <location filename="../../src/mainwindow-toolbars.cpp" line="161"/>
         <source>Blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-toolbars.cpp" line="162"/>
+        <location filename="../../src/mainwindow-toolbars.cpp" line="162"/>
         <source>Magenta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-toolbars.cpp" line="163"/>
+        <location filename="../../src/mainwindow-toolbars.cpp" line="163"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-toolbars.cpp" line="164"/>
+        <location filename="../../src/mainwindow-toolbars.cpp" line="164"/>
         <source>Other...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="45"/>
+        <location filename="../../src/mainwindow.cpp" line="45"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="46"/>
+        <location filename="../../src/mainwindow.cpp" line="46"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="47"/>
+        <location filename="../../src/mainwindow.cpp" line="47"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="49"/>
+        <location filename="../../src/mainwindow.cpp" line="49"/>
         <source>&amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="52"/>
+        <location filename="../../src/mainwindow.cpp" line="52"/>
         <source>Open &amp;Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="53"/>
+        <location filename="../../src/mainwindow.cpp" line="53"/>
         <source>&amp;Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="54"/>
+        <location filename="../../src/mainwindow.cpp" line="54"/>
         <source>&amp;Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="56"/>
+        <location filename="../../src/mainwindow.cpp" line="56"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="57"/>
+        <location filename="../../src/mainwindow.cpp" line="57"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="58"/>
+        <location filename="../../src/mainwindow.cpp" line="58"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="59"/>
+        <location filename="../../src/mainwindow.cpp" line="59"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="60"/>
+        <location filename="../../src/mainwindow.cpp" line="60"/>
         <source>Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="61"/>
+        <location filename="../../src/mainwindow.cpp" line="61"/>
         <source>Icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="62"/>
+        <location filename="../../src/mainwindow.cpp" line="62"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="63"/>
+        <location filename="../../src/mainwindow.cpp" line="63"/>
         <source>Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="64"/>
+        <location filename="../../src/mainwindow.cpp" line="64"/>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="65"/>
+        <location filename="../../src/mainwindow.cpp" line="65"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="66"/>
+        <location filename="../../src/mainwindow.cpp" line="66"/>
         <source>Command Prompt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="340"/>
+        <location filename="../../src/mainwindow.cpp" line="340"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="345"/>
+        <location filename="../../src/mainwindow.cpp" line="345"/>
         <source>Open w/Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="384"/>
+        <location filename="../../src/mainwindow.cpp" line="384"/>
         <source>File(s) loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="446"/>
+        <location filename="../../src/mainwindow.cpp" line="446"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>

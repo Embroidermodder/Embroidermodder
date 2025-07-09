@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport Svg)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport Svg Xml)
 
 if(WIN32)
 else(WIN32)
@@ -13,10 +13,11 @@ endif(WIN32)
 
 set(TARGET embroidermodder2)
 
-set(SRC ${CMAKE_SOURCE_DIR}/embroidermodder2)
+set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(LIB ${CMAKE_SOURCE_DIR}/libembroidery)
 
 set(CMDS ${CMAKE_SOURCE_DIR}/assets/commands)
+set(DIALOGS ${CMAKE_SOURCE_DIR}/assets/dialogs)
 set(ICONS ${CMAKE_SOURCE_DIR}/assets/icons)
 set(IMAGES ${CMAKE_SOURCE_DIR}/assets/images)
 set(SAMPLES ${CMAKE_SOURCE_DIR}/assets/samples)
@@ -74,7 +75,7 @@ qt_add_executable(${TARGET}
 	${SRC}/object-image.h
 	${SRC}/object-line.cpp
 	${SRC}/object-line.h
-	${SRC}/embdetails-dialog.cpp
+	${SRC}/dialog.cpp
 	${SRC}/embdetails-dialog.h
 	${SRC}/object-path.cpp
 	${SRC}/object-path.h
@@ -383,6 +384,7 @@ qt_add_translations(embroidermodder2 TS_FILES
 # rerun cmake to ensure that this retriggers.
 #
 file(COPY "${CMDS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${DIALOGS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${ICONS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${IMAGES}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${SAMPLES}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
@@ -403,6 +405,7 @@ target_link_libraries(${TARGET} PRIVATE
 	Qt6::Widgets
 	Qt6::PrintSupport
 	Qt6::Svg
+	Qt6::Xml
 	${OPENGL_LIBRARIES}
 )
 
