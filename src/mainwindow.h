@@ -17,7 +17,6 @@
 #include "cmdprompt.h"
 
 #include "script.h"
-#include "native-scripting.h"
 
 class MdiArea;
 class MdiWindow;
@@ -40,35 +39,12 @@ class QScriptProgram;
 class QUndoStack;
 QT_END_NAMESPACE
 
-/*!
- * If the function is an in-built then the flag is set to 1 and main, click,
- * move and context arrays don't contain the function definition: instead
- * the function pointer to command contains the definition.
- */
-class Command {
-public:
-    std::string name;
-    std::string menu_name;
-    int menu_pos;
-    std::string toolbar_name;
-    int toolbar_pos;
-    std::string tooltip;
-    std::string statustip;
-    std::string aliases;
-    std::string main;
-    std::string click;
-    std::string move;
-    std::string context;
-    int builtin;
-    QAction *action;
-};
-
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
 
 public:
-    std::unordered_map<std::string, Command> command_list;
+    void loadCommands(void);
     void loadToolbars(void);
     void loadMenus(void);
 
@@ -659,8 +635,6 @@ public slots:
     // Pan SubMenu
     void panrealtime();
     void panpoint();
-
-    void loadCommands(void);
 };
 
 #endif

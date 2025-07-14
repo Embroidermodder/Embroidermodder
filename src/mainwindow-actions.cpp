@@ -3,6 +3,168 @@
 #include <QApplication>
 #include <QMdiArea>
 
+#include <iostream>
+
+/*!
+ * If the function is an in-built then the flag is set to 1 and main, click,
+ * move and context arrays don't contain the function definition: instead
+ * the function pointer to command contains the definition.
+ */
+class Command {
+public:
+    std::string name;
+    std::string menu_name;
+    int menu_pos;
+    std::string toolbar_name;
+    int toolbar_pos;
+    std::string tooltip;
+    std::string statustip;
+    std::string aliases;
+    std::string main;
+    std::string click;
+    std::string move;
+    std::string context;
+    int builtin;
+    QAction *action;
+};
+
+extern MainWindow *_mainWin;
+
+std::unordered_map<std::string, Command> command_list;
+
+/*!
+ * \brief loadCommands
+ *
+ * For external (not built-in) commands.
+ *
+ * \note Every QScriptProgram must have a unique function name to call. If every function was called main(), then
+ *       the ScriptEngine would only call the last script evaluated (which happens to be main() in another script).
+ *       Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
+ *       Do not change this code unless you really know what you are doing. I mean it.
+ */
+void
+MainWindow::loadCommands(void)
+{
+    qDebug("loadCommands()");
+    /*!
+     * \brief Initiate the MainWin pointer.
+     *
+     * \note qthelp://com.trolltech.qt.470/qdoc/scripting.html
+     * \note Wrapping a Native Function
+     * \note It is currently not possible to wrap member functions; i.e., methods of
+     *       a C++ class that require a this object.
+     */
+    _mainWin = this;
+
+    QString appDir = qApp->applicationDirPath();
+
+    /* Load all command data in a loop. */
+    QDir commandDir(appDir + "/commands");
+    QStringList format;
+    format << "*.ini";
+    QStringList cmdList = commandDir.entryList(format, QDir::Files);
+    foreach(QString cmdFile, cmdList) {
+        QString fname = appDir + "/commands/" + cmdFile;
+        QString cmdName = cmdFile.replace(".ini", "");
+        Command command;
+        QSettings settings(fname, QSettings::IniFormat);
+        command.menu_name = qPrintable(settings.value("Menu/Name", "Lost & Found").toString());
+        command.menu_pos = settings.value("Menu/Position", 0).toInt();
+        command.toolbar_name = qPrintable(settings.value("ToolBar/Name", "Lost & Found").toString());
+        command.toolbar_pos = settings.value("ToolBar/Position", 0).toInt();
+        command.tooltip = qPrintable(settings.value("Tips/ToolTip", "").toString());
+        command.statustip = qPrintable(settings.value("Tips/StatusTip", "").toString());
+        command.aliases = qPrintable(settings.value("Prompt/Alias").toString());
+        command.main = qPrintable(settings.value("Functions/Main", "").toString());
+        command.click = qPrintable(settings.value("Functions/Click",
+            "").toString());
+        command.move = qPrintable(settings.value("Functions/Move",
+            "").toString());
+        command.context = qPrintable(settings.value("Functions/Context",
+            "").toString());
+        command.builtin = settings.value("Functions/Builtin", 0).toInt();
+        command.action = createAction(cmdName, QString(command.tooltip.c_str()),
+            QString(command.statustip.c_str()), true);
+        command_list[qPrintable(cmdName)] = command;
+
+        QStringList aliases = settings.value("Prompt/Alias").toStringList();
+
+        foreach(QString alias, aliases) {
+            prompt->addCommand(alias, cmdName);
+        }
+    }
+}
+
+bool
+comp(std::pair<std::string, int> a, std::pair<std::string, int> b)
+{
+    return a.second < b.second;
+}
+
+/* Populate Toolbars */
+void
+MainWindow::loadToolbars(void)
+{
+    qDebug("loadToolbars()");
+    std::vector<std::pair<std::string, int>> order;
+    for (const auto &iter : command_list) {
+        order.push_back({iter.first, iter.second.toolbar_pos});
+    }
+
+    std::sort(order.begin(), order.end(), comp);
+
+    for (const auto &iter : order) {
+        Command command = command_list[iter.first];
+        QString name = QString(command.toolbar_name.c_str());
+        if (name.toUpper() != "NONE") {
+            std::cout << qPrintable(name) << "  " << iter.first << "  " << iter.second << std::endl;
+
+            /* If the toolbar doesn't exist, create it. */
+            if (!toolbarHash.value(name)) {
+                QToolBar* tb = new QToolBar(name, this);
+                tb->setObjectName("toolbar" + name);
+                connect(tb, SIGNAL(topLevelChanged(bool)), this,
+                    SLOT(floatingChangedToolBar(bool)));
+                addToolBar(Qt::LeftToolBarArea, tb);
+                addToolBarBreak(Qt::LeftToolBarArea);
+                toolbarHash.insert(name, tb);
+            }
+
+            toolbarHash.value(name)->addAction(command.action);
+        }
+    }
+}
+
+/* Populate Menus */
+void
+MainWindow::loadMenus(void)
+{
+    qDebug("loadMenus()");
+    std::vector<std::pair<std::string, int>> order;
+    for (const auto &iter : command_list) {
+        order.push_back({iter.first, iter.second.menu_pos});
+    }
+
+    std::sort(order.begin(), order.end(), comp);
+
+    for (const auto &iter : order) {
+        Command command = command_list[iter.first];
+        QString name = QString(command.menu_name.c_str());
+        if (name.toUpper() != "NONE") {
+            std::cout << "  " << iter.first << "  " << iter.second << std::endl;
+
+            /* If the menu doesn't exist, create it. */
+            if (!menuHash.value(name)) {
+                QMenu* menu = new QMenu(name, this);
+                menu->setTearOffEnabled(true);
+                menuBar()->addMenu(menu);
+                menuHash.insert(name, menu);
+            }
+            menuHash.value(name)->addAction(command.action);
+        }
+    }
+}
+
 void MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");

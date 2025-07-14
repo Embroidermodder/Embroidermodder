@@ -4,708 +4,1358 @@
 
 #include "script.h"
 
+#include "scheme-private.h"
+
+#include <iostream>
+#include <map>
+
+#include "mainwindow.h"
+#include "view.h"
+#include "statusbar.h"
+#include "statusbar-button.h"
+#include "imagewidget.h"
+#include "layer-manager.h"
+#include "object-data.h"
+#include "object-arc.h"
+#include "object-circle.h"
+#include "object-dimleader.h"
+#include "object-ellipse.h"
+#include "object-image.h"
+#include "object-line.h"
+#include "object-path.h"
+#include "object-point.h"
+#include "object-polygon.h"
+#include "object-polyline.h"
+#include "object-rect.h"
+#include "object-textsingle.h"
+
+#include "embroidery.h"
+#include "property-editor.h"
+#include "undo-editor.h"
+#include "undo-commands.h"
+#include "dialog.h"
+
+#include <QLabel>
+#include <QDesktopServices>
+#include <QApplication>
+#include <QUrl>
+#include <QProcess>
+#include <QMessageBox>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QMdiArea>
+#include <QGraphicsScene>
+#include <QComboBox>
+#include <QWhatsThis>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
-#define STR(index) context->arguments[index].s
-#define REAL(index) context->arguments[index].r
-#define INT(index) context->arguments[index].i
-#define BOOL(index) context->arguments[index].b
+extern MainWindow* _mainWin;
 
-typedef struct CommandMap_ {
+typedef pointer SchemeFunction(scheme *, pointer);
+
+typedef struct SchemeData_ {
     const char name[100];
-    CommandPtr *command;
-} CommandMap;
+    SchemeFunction *function;
+} SchemeData;
 
-ScriptValue about_command(ScriptContext* context);
-ScriptValue alert_command(ScriptContext* context);
-ScriptValue blink_command(ScriptContext* context);
-ScriptValue debug_command(ScriptContext* context);
-ScriptValue day_command(ScriptContext* context);
-ScriptValue do_nothing_command(ScriptContext* context);
-ScriptValue error_command(ScriptContext* context);
-ScriptValue icon16_command(ScriptContext* context);
-ScriptValue icon24_command(ScriptContext* context);
-ScriptValue icon32_command(ScriptContext* context);
-ScriptValue icon48_command(ScriptContext* context);
-ScriptValue icon64_command(ScriptContext* context);
-ScriptValue icon128_command(ScriptContext* context);
-ScriptValue new_command(ScriptContext* context);
-ScriptValue night_command(ScriptContext* context);
-ScriptValue open_command(ScriptContext* context);
-ScriptValue pan_down_command(ScriptContext* context);
-ScriptValue pan_left_command(ScriptContext* context);
-ScriptValue pan_point_command(ScriptContext* context);
-ScriptValue pan_real_time_command(ScriptContext* context);
-ScriptValue pan_right_command(ScriptContext* context);
-ScriptValue pan_up_command(ScriptContext* context);
-ScriptValue todo_command(ScriptContext* context);
-ScriptValue window_cascade_command(ScriptContext* context);
-ScriptValue window_tile_command(ScriptContext* context);
-ScriptValue window_close_command(ScriptContext* context);
-ScriptValue window_close_all_command(ScriptContext* context);
-ScriptValue window_next_command(ScriptContext* context);
-ScriptValue window_previous_command(ScriptContext* context);
-ScriptValue zoom_all_command(ScriptContext* context);
-ScriptValue zoom_center_command(ScriptContext* context);
-ScriptValue zoom_dynamic_command(ScriptContext* context);
-ScriptValue zoom_extents_command(ScriptContext* context);
-ScriptValue zoom_in_command(ScriptContext* context);
-ScriptValue zoom_out_command(ScriptContext* context);
-ScriptValue zoom_scale_command(ScriptContext* context);
-ScriptValue zoom_previous_command(ScriptContext* context);
-ScriptValue zoom_real_time_command(ScriptContext* context);
-ScriptValue zoom_selected_command(ScriptContext* context);
-ScriptValue zoom_window_command(ScriptContext* context);
+int context_flag = CONTEXT_MAIN;
+scheme sc = { 0 };
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+pointer about_f(scheme *sc, pointer args);
+pointer alert_f(scheme* sc, pointer args);
+pointer blink_f(scheme* sc, pointer args);
+pointer debug_f(scheme* sc, pointer args);
+pointer day_f(scheme* sc, pointer args);
+pointer do_nothing_f(scheme* sc, pointer args);
+pointer error_f(scheme* sc, pointer args);
+pointer exit_f(scheme* sc, pointer args);
+pointer help_f(scheme* sc, pointer args);
+pointer icon128_f(scheme *sc, pointer args);
+pointer icon16_f(scheme *sc, pointer args);
+pointer icon24_f(scheme *sc, pointer args);
+pointer icon32_f(scheme *sc, pointer args);
+pointer icon48_f(scheme *sc, pointer args);
+pointer icon64_f(scheme *sc, pointer args);
+pointer new_f(scheme* sc, pointer args);
+pointer night_f(scheme* sc, pointer args);
+pointer open_f(scheme* sc, pointer args);
+pointer pan_down_f(scheme* sc, pointer args);
+pointer pan_left_f(scheme* sc, pointer args);
+pointer pan_point_f(scheme* sc, pointer args);
+pointer pan_real_time_f(scheme* sc, pointer args);
+pointer pan_right_f(scheme* sc, pointer args);
+pointer pan_up_f(scheme* sc, pointer args);
+pointer redo_f(scheme* sc, pointer args);
+pointer todo_f(scheme* sc, pointer args);
+pointer undo_f(scheme* sc, pointer args);
+pointer window_cascade_f(scheme* sc, pointer args);
+pointer window_tile_f(scheme* sc, pointer args);
+pointer window_close_f(scheme* sc, pointer args);
+pointer window_close_all_f(scheme* sc, pointer args);
+pointer window_next_f(scheme* sc, pointer args);
+pointer window_previous_f(scheme* sc, pointer args);
+pointer zoom_all_f(scheme* sc, pointer args);
+pointer zoom_center_f(scheme* sc, pointer args);
+pointer zoom_dynamic_f(scheme* sc, pointer args);
+pointer zoom_extents_f(scheme* sc, pointer args);
+pointer zoom_in_f(scheme* sc, pointer args);
+pointer zoom_out_f(scheme* sc, pointer args);
+pointer zoom_scale_f(scheme* sc, pointer args);
+pointer zoom_previous_f(scheme* sc, pointer args);
+pointer zoom_real_time_f(scheme* sc, pointer args);
+pointer zoom_selected_f(scheme* sc, pointer args);
+pointer zoom_window_f(scheme* sc, pointer args);
 
 /*
-ScriptValue set_prompt_prefix_command(ScriptContext* context);
-ScriptValue append_prompt_history_command(ScriptContext* context);
-ScriptValue init_command(ScriptContext* context);
-ScriptValue end_command(ScriptContext* context);
-ScriptValue exit_command(ScriptContext* context);
-ScriptValue help_command(ScriptContext* context);
-ScriptValue tip_of_the_day_command(ScriptContext* context);
-ScriptValue platform_command(ScriptContext* context);
-ScriptValue messagebox_command(ScriptContext* context);
-ScriptValue is_int_command(ScriptContext* context);
-ScriptValue undo_command(ScriptContext* context);
-ScriptValue redo_command(ScriptContext* context);
-ScriptValue print_area_command(ScriptContext* context);
-ScriptValue set_background_color_command(ScriptContext* context);
-ScriptValue set_crosshair_color_command(ScriptContext* context);
-ScriptValue set_grid_color_command(ScriptContext* context);
-ScriptValue text_angle_command(ScriptContext* context);
-ScriptValue text_bold_command(ScriptContext* context);
-ScriptValue text_font_command(ScriptContext* context);
-ScriptValue text_italic_command(ScriptContext* context);
-ScriptValue text_overline_command(ScriptContext* context);
-ScriptValue text_size_command(ScriptContext* context);
-ScriptValue text_strikeout_command(ScriptContext* context);
-ScriptValue text_underline_command(ScriptContext* context);
-ScriptValue set_textFont(ScriptContext* context);
-ScriptValue set_textSize(ScriptContext* context);
-ScriptValue set_textAngle(ScriptContext* context);
-ScriptValue set_textBold(ScriptContext* context);
-ScriptValue set_textItalic(ScriptContext* context);
-ScriptValue set_textUnderline(ScriptContext* context);
-ScriptValue set_textStrikeOut(ScriptContext* context);
-ScriptValue set_textOverline(ScriptContext* context);
-ScriptValue previewOn(ScriptContext* context);
-ScriptValue previewOff(ScriptContext* context);
-ScriptValue Vulcanize(ScriptContext* context);
-ScriptValue AllowRubber(ScriptContext* context);
-ScriptValue SetRubberMode(ScriptContext* context);
-ScriptValue SetRubberPoint(ScriptContext* context);
-ScriptValue SetRubberText(ScriptContext* context);
-ScriptValue AddRubber(ScriptContext* context);
-ScriptValue ClearRubber(ScriptContext* context);
-ScriptValue SpareRubber(ScriptContext* context);
-ScriptValue addTextMulti(ScriptContext* context);
-ScriptValue addTextSingle(ScriptContext* context);
-ScriptValue addInfiniteLine(ScriptContext* context);
-ScriptValue addRay(ScriptContext* context);
-ScriptValue addLine(ScriptContext* context);
-ScriptValue addTriangle(ScriptContext* context);
-ScriptValue addRectangle(ScriptContext* context);
-ScriptValue addRoundedRectangle(ScriptContext* context);
-ScriptValue addArc(ScriptContext* context);
-ScriptValue addCircle(ScriptContext* context);
-ScriptValue addSlot(ScriptContext* context);
-ScriptValue addEllipse(ScriptContext* context);
-ScriptValue addPoint(ScriptContext* context);
-ScriptValue addRegularPolygon(ScriptContext* context);
-ScriptValue addPolygon(ScriptContext* context);
-ScriptValue addPolyline(ScriptContext* context);
-ScriptValue addPath(ScriptContext* context);
-ScriptValue addHorizontalDimension_command(ScriptContext* context);
-ScriptValue addVerticalDimension_command(ScriptContext* context);
-ScriptValue addImage_command(ScriptContext* context);
-ScriptValue addDimLeader_command(ScriptContext* context);
-ScriptValue SetCursorShape_command(ScriptContext* context);
-ScriptValue CalculateAngle_command(ScriptContext* context);
-ScriptValue CalculateDistance_command(ScriptContext* context);
-ScriptValue PerpendicularDistance_command(ScriptContext* context);
-ScriptValue NumSelected_command(ScriptContext* context);
-ScriptValue SelectAll_command(ScriptContext* context);
-ScriptValue add_to_selection_command(ScriptContext* context);
-ScriptValue clear_selection_command(ScriptContext* context);
-ScriptValue delete_selected_command(ScriptContext* context);
-ScriptValue cut_selected_command(ScriptContext* context);
-ScriptValue copy_selected_command(ScriptContext* context);
-ScriptValue paste_selected_command(ScriptContext* context);
-ScriptValue move_selected_command(ScriptContext* context);
-ScriptValue scale_selected_command(ScriptContext* context);
-ScriptValue rotate_selected_command(ScriptContext* context);
-ScriptValue mirror_selected_command(ScriptContext* context);
-ScriptValue qsnapx_command(ScriptContext* context);
-ScriptValue qsnapy_command(ScriptContext* context);
-ScriptValue mousex_command(ScriptContext* context);
-ScriptValue mousey_command(ScriptContext* context);
-ScriptValue include_command(ScriptContext* context);
+pointer set_prompt_prefix_f(scheme* sc, pointer args);
+pointer append_prompt_history_f(scheme* sc, pointer args);
+pointer init_f(scheme* sc, pointer args);
+pointer end_f(scheme* sc, pointer args);
+pointer tip_of_the_day_f(scheme* sc, pointer args);
+pointer platform_f(scheme* sc, pointer args);
+pointer messagebox_f(scheme* sc, pointer args);
+pointer is_int_f(scheme* sc, pointer args);
+pointer print_area_f(scheme* sc, pointer args);
+pointer set_background_color_f(scheme* sc, pointer args);
+pointer set_crosshair_color_f(scheme* sc, pointer args);
+pointer set_grid_color_f(scheme* sc, pointer args);
+pointer text_angle_f(scheme* sc, pointer args);
+pointer text_bold_f(scheme* sc, pointer args);
+pointer text_font_f(scheme* sc, pointer args);
+pointer text_italic_f(scheme* sc, pointer args);
+pointer text_overline_f(scheme* sc, pointer args);
+pointer text_size_f(scheme* sc, pointer args);
+pointer text_strikeout_f(scheme* sc, pointer args);
+pointer text_underline_f(scheme* sc, pointer args);
+pointer set_text_font(scheme* sc, pointer args);
+pointer set_text_size(scheme* sc, pointer args);
+pointer set_text_angle(scheme* sc, pointer args);
+pointer set_text_bold(scheme* sc, pointer args);
+pointer set_text_italic(scheme* sc, pointer args);
+pointer set_text_underline(scheme* sc, pointer args);
+pointer set_text_strikeOut(scheme* sc, pointer args);
+pointer set_text_overline(scheme* sc, pointer args);
+pointer previewOn(scheme* sc, pointer args);
+pointer previewOff(scheme* sc, pointer args);
+pointer Vulcanize(scheme* sc, pointer args);
+pointer AllowRubber(scheme* sc, pointer args);
+pointer SetRubberMode(scheme* sc, pointer args);
+pointer SetRubberPoint(scheme* sc, pointer args);
+pointer SetRubberText(scheme* sc, pointer args);
+pointer AddRubber(scheme* sc, pointer args);
+pointer ClearRubber(scheme* sc, pointer args);
+pointer SpareRubber(scheme* sc, pointer args);
+pointer addTextMulti(scheme* sc, pointer args);
+pointer addTextSingle(scheme* sc, pointer args);
+pointer addInfiniteLine(scheme* sc, pointer args);
+pointer addRay(scheme* sc, pointer args);
+pointer addLine(scheme* sc, pointer args);
+pointer addTriangle(scheme* sc, pointer args);
+pointer addRectangle(scheme* sc, pointer args);
+pointer addRoundedRectangle(scheme* sc, pointer args);
+pointer addArc(scheme* sc, pointer args);
+pointer addCircle(scheme* sc, pointer args);
+pointer addSlot(scheme* sc, pointer args);
+pointer addEllipse(scheme* sc, pointer args);
+pointer addPoint(scheme* sc, pointer args);
+pointer addRegularPolygon(scheme* sc, pointer args);
+pointer addPolygon(scheme* sc, pointer args);
+pointer addPolyline(scheme* sc, pointer args);
+pointer addPath(scheme* sc, pointer args);
+pointer addHorizontalDimension_f(scheme* sc, pointer args);
+pointer addVerticalDimension_f(scheme* sc, pointer args);
+pointer addImage_f(scheme* sc, pointer args);
+pointer addDimLeader_f(scheme* sc, pointer args);
+pointer SetCursorShape_f(scheme* sc, pointer args);
+pointer CalculateAngle_f(scheme* sc, pointer args);
+pointer CalculateDistance_f(scheme* sc, pointer args);
+pointer PerpendicularDistance_f(scheme* sc, pointer args);
+pointer NumSelected_f(scheme* sc, pointer args);
+pointer SelectAll_f(scheme* sc, pointer args);
+pointer add_to_selection_f(scheme* sc, pointer args);
+pointer clear_selection_f(scheme* sc, pointer args);
+pointer delete_selected_f(scheme* sc, pointer args);
+pointer cut_selected_f(scheme* sc, pointer args);
+pointer copy_selected_f(scheme* sc, pointer args);
+pointer paste_selected_f(scheme* sc, pointer args);
+pointer move_selected_f(scheme* sc, pointer args);
+pointer scale_selected_f(scheme* sc, pointer args);
+pointer rotate_selected_f(scheme* sc, pointer args);
+pointer mirror_selected_f(scheme* sc, pointer args);
+pointer qsnapx_f(scheme* sc, pointer args);
+pointer qsnapy_f(scheme* sc, pointer args);
+pointer mousex_f(scheme* sc, pointer args);
+pointer mousey_f(scheme* sc, pointer args);
+pointer include_f(scheme* sc, pointer args);
 */
 
-static const CommandMap command_map[] = {
+#ifdef __cplusplus
+}
+#endif
+
+const SchemeData builtin_map[] = {
     {
         .name = "about",
-        .command = about_command
+        .function = about_f
     },
     {
         .name = "alert",
-        .command = alert_command
+        .function = alert_f
     },
     {
         .name = "blink",
-        .command = blink_command
+        .function = blink_f
     },
     {
         .name = "debug",
-        .command = debug_command
+        .function = debug_f
     },
     {
         .name = "day",
-        .command = day_command
+        .function = day_f
     },
     {
         .name = "donothing",
-        .command = do_nothing_command
+        .function = do_nothing_f
     },
     {
         .name = "error",
-        .command = error_command
+        .function = error_f
+    },
+    {
+        .name = "exit",
+        .function = exit_f
+    },
+    {
+        .name = "help",
+        .function = help_f
     },
     {
         .name = "icon128",
-        .command = icon128_command
+        .function = icon128_f
     },
     {
         .name = "icon16",
-        .command = icon16_command
+        .function = icon16_f
     },
     {
         .name = "icon24",
-        .command = icon24_command
+        .function = icon24_f
     },
     {
         .name = "icon32",
-        .command = icon32_command
+        .function = icon32_f
     },
     {
         .name = "icon64",
-        .command = icon64_command
+        .function = icon64_f
     },
     {
         .name = "new",
-        .command = new_command
+        .function = new_f
     },
     {
         .name = "night",
-        .command = night_command
+        .function = night_f
     },
     {
         .name = "open",
-        .command = open_command
+        .function = open_f
     },
     {
         .name = "pandown",
-        .command = pan_down_command
+        .function = pan_down_f
     },
     {
         .name = "panleft",
-        .command = pan_left_command
+        .function = pan_left_f
     },
     {
         .name = "panpoint",
-        .command = pan_point_command
+        .function = pan_point_f
     },
     {
         .name = "panrealtime",
-        .command = pan_real_time_command
+        .function = pan_real_time_f
     },
     {
         .name = "panright",
-        .command = pan_right_command
+        .function = pan_right_f
     },
     {
         .name = "panup",
-        .command = pan_up_command
+        .function = pan_up_f
     },
     {
         .name = "todo",
-        .command = todo_command
+        .function = todo_f
     },
     {
         .name = "zoomall",
-        .command = zoom_all_command
+        .function = zoom_all_f
     },
     {
         .name = "zoomcenter",
-        .command = zoom_center_command
+        .function = zoom_center_f
     },
     {
         .name = "zoomdynamic",
-        .command = zoom_dynamic_command
+        .function = zoom_dynamic_f
     },
     {
         .name = "zoomextents",
-        .command = zoom_extents_command
+        .function = zoom_extents_f
     },
     {
         .name = "zoomin",
-        .command = zoom_in_command
+        .function = zoom_in_f
     },
     {
         .name = "zoomout",
-        .command = zoom_out_command
+        .function = zoom_out_f
     },
     {
         .name = "zoomscale",
-        .command = zoom_scale_command
+        .function = zoom_scale_f
     },
     {
         .name = "zoomprevious",
-        .command = zoom_previous_command
+        .function = zoom_previous_f
     },
     {
         .name = "zoomrealtime",
-        .command = zoom_real_time_command
+        .function = zoom_real_time_f
     },
     {
         .name = "zoomselected",
-        .command = zoom_selected_command
+        .function = zoom_selected_f
     },
     {
         .name = "zoomwindow",
-        .command = zoom_window_command
+        .function = zoom_window_f
     },
     {
         .name = "^END",
-        .command = do_nothing_command
+        .function = do_nothing_f
     }
 };
 
-/*! \brief Check that the context is properly packed for the function usage given.
+/*!
  */
 int
-argument_checks(ScriptContext* context, const char *name, const char *args)
+load_scheme(void)
 {
-    char error_msg[1000];
-    if (context->argument_count != strlen(args)) {
-        sprintf(error_msg, "%s() requires %d arguments", name,
-            (int)strlen(args));
-        throwError(GeneralError, error_msg);
+    scheme_init(&sc);
+    FILE *f = fopen("load.scm", "r");
+    if (!f) {
         return 0;
     }
-    for (int i=0; args[i]; i++) {
-        switch (args[i]) {
-        case 's': {
-            if (!is_string(context->arguments[i])) {
-                sprintf(error_msg, "%s(): argument %d is not a string",
-                    name, i);
-                throwError(TypeError, error_msg);
-                return 0;
-            }
-            break;
-        }
-        case 'i': {
-            if (!is_int(context->arguments[i])) {
-                sprintf(error_msg, "%s(): argument %d is not an integer",
-                    name, i);
-                throwError(TypeError, error_msg);
-                return 0;
-            }
-            break;
-        }
-        case 'f': {
-            if (!is_real(context->arguments[i])) {
-                sprintf(error_msg, "%s(): argument %d is not a real number",
-                    name, i);
-                throwError(TypeError, error_msg);
-                return 0;
-            }
-            if (isnan(context->arguments[i].r)) {
-                sprintf(error_msg, "%s(): argument %d has the value NaN",
-                    name, i);
-                throwError(TypeError, error_msg);
-                return 0;
-            }
-            break;
-        }
-        case 'b': {
-            if (!is_bool(context->arguments[i])) {
-                sprintf(error_msg, "%s(): argument %d is not a boolean value",
-                    name, i);
-                throwError(TypeError, error_msg);
-                return 0;
-            }
-            break;
-        }
-        default:
-            break;
-        }
+    scheme_load_file(&sc, f);
+    fclose(f);
+    for (int i=0; builtin_map[i].name[0] != '^'; i++) {
+        printf("Loading %s\n", builtin_map[i].name);
+        scheme_define(&sc, sc.global_env,
+            mk_symbol(&sc, builtin_map[i].name),
+            mk_foreign_func(&sc, builtin_map[i].function));
     }
     return 1;
 }
 
-/*!
- * \brief script_null
- */
-ScriptValue script_null = {
-    .s = "null",
-    .i = 0,
-    .r = 0.0,
-    .b = false,
-    .type = '0'
-};
+void add_polygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+void add_polyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
 
-/*!
- * \brief script_true
- */
-ScriptValue script_true = {
-    .s = "true",
-    .i = 1,
-    .r = 1.0,
-    .b = true,
-    .type = 'b'
-};
+MainWindow* _mainWin = 0;
 
-/*!
- * \brief script_false
- */
-ScriptValue script_false = {
-    .s = "false",
-    .i = 0,
-    .r = 0.0,
-    .b = false,
-    .type = 'b'
-};
-
-/*!
- * \brief script_bool
- * \param b
- * \return
- */
-ScriptValue
-script_bool(bool b)
+View*
+activeView(void)
 {
-    if (b) {
-        return script_true;
-    }
-    return script_false;
+    return _mainWin->activeView();
 }
 
-/*!
- * \brief script_int
- * \param i
- * \return
- */
-ScriptValue
-script_int(int i)
+QGraphicsScene*
+activeScene(void)
 {
-    ScriptValue v;
-    v.i = i;
-    v.type = 'i';
-    return v;
+    return activeView()->scene();
 }
 
-/*!
- * \brief script_real
- * \param r
- * \return
- */
-ScriptValue
-script_real(double r)
+QRgb
+getCurrentColor(void)
 {
-    ScriptValue v;
-    v.r = r;
-    v.type = 'r';
-    return v;
+    return _mainWin->getCurrentColor();
 }
 
-/*!
- * \brief script_command
- * \param c The command function pointer.
- * \return
- */
-ScriptValue
-script_command(CommandPtr *c)
+const char *
+getSettingsTextFont()
 {
-    ScriptValue v;
-    v.c = c;
-    v.type = 'c';
-    return v;
+    return qPrintable(_mainWin->getSettingsTextFont());
 }
 
-/*!
- * \brief script_str
- * \param s
- * \return
- */
-ScriptValue
-script_str(const char *s)
-{
-    ScriptValue v;
-    strncpy(v.s, s, 999);
-    v.type = 's';
-    return v;
-}
-
-/*!
- * \brief Determines whether the supplied variable v is marked as a string so it is
- *        definately safe rely on as_string.
- */
-int
-is_string(ScriptValue v)
-{
-    return (v.type == 's');
-}
-
-/*!
- * \brief Determines whether the supplied variable v is marked as an integer so it is
- *        definately safe rely on as_int.
- */
-int
-is_int(ScriptValue v)
-{
-    return (v.type == 'i');
-}
-
-/*!
- * \brief Determines whether the supplied variable v is marked as real so it is
- *        definately safe rely on as_real.
- */
-int
-is_real(ScriptValue v)
-{
-    return (v.type == 'r');
-}
-
-/*!
- * \brief Determines whether the supplied variable v is marked as a boolean so it is
- *        definately safe rely on as_bool.
- */
-int
-is_bool(ScriptValue v)
-{
-    return (v.type == 'b');
-}
-
-/*!
- * \brief Determines whether the supplied variable v is marked as null.
- */
-int
-is_null(ScriptValue v)
-{
-    return (v.type == '0');
-}
-
-/*!
- * \brief is_command
- */
-int
-is_command(ScriptValue v)
-{
-    return (v.type == 'c');
-}
-
-/*!
- * \brief as_string
- */
-char *
-as_string(ScriptValue *v)
-{
-    switch (v->type) {
-    case 's':
-        return v->s;
-    case 'r':
-        sprintf(v->s, "%f", v->r);
-        break;
-    case 'i':
-        sprintf(v->s, "%d", v->i);
-        break;
-    case 'b':
-        if (v->b) {
-            sprintf(v->s, "true");
-        }
-        else {
-            sprintf(v->s, "false");
-        }
-        break;
-    default:
-    case '0':
-        sprintf(v->s, "NULL");
-        break;
-    }
-    return v->s;
-}
-
-/*!
- * \brief as_int
- */
-int
-as_int(ScriptValue v)
-{
-    switch (v.type) {
-    case 'i':
-        return v.i;
-    case 'r':
-        return (int)floor(v.r);
-    case 's':
-        return atoi(v.s);
-    default:
-        break;
-    }
-    throwError(GeneralError, "as_real(): Failed to convert to real number.");
-    return 0.0;
-}
-
-/*!
- * \brief The ScriptValue as a real number.
- *
- * Returns either v->r or the string value converted to a real using atof.
- */
 double
-as_real(ScriptValue v)
+getSettingsTextSize()
 {
-    switch (v.type) {
-    case 'r':
-        return v.r;
-    case 'i':
-        return 1.0 * v.i;
-    case 's':
-        return atof(v.s);
-    default:
-        break;
-    }
-    throwError(GeneralError, "as_real(): Failed to convert to real number.");
-    return 0.0;
+    return _mainWin->getSettingsTextSize();
+}
+
+bool
+getSettingsTextStyleBold(void)
+{
+    return _mainWin->getSettingsTextStyleBold();
+}
+
+bool
+getSettingsTextStyleItalic(void)
+{
+    return _mainWin->getSettingsTextStyleItalic();
+}
+
+bool
+getSettingsTextStyleUnderline() {
+    return _mainWin->getSettingsTextStyleUnderline();
+}
+
+bool
+getSettingsTextStyleStrikeOut(void)
+{
+    return _mainWin->getSettingsTextStyleStrikeOut();
+}
+
+bool
+getSettingsTextStyleOverline()
+{
+    return _mainWin->getSettingsTextStyleOverline();
 }
 
 /*!
- * \brief The script value as a boolean value.
- * \param v
- * \return
+ * \brief throwError
  */
-bool
-as_bool(ScriptValue v)
+pointer
+throwError(int type, const char *message)
 {
-    switch (v.type) {
-    case 'b':
-        return v.b;
-    case 'i':
-        if (v.i) {
-            return true;
-        }
-        break;
-    case 's':
-        if (strncmp(v.s, "true", 999)) {
-            return true;
-        }
-        break;
-    default:
-        break;
+    qDebug("ERROR %d: %s", type, message);
+    return sc.NIL;
+}
+
+int
+streq(char *a, const char *b)
+{
+    return !strncmp(a, b, 200);
+}
+
+void
+debug(const char *s)
+{
+    qDebug(s);
+}
+
+/* C-linkage compatible wrappers of the natives. */
+void
+alert(const char *s)
+{
+    _mainWin->prompt->alert(s);
+}
+
+void
+append_prompt_history(const char *s)
+{
+    _mainWin->prompt->appendHistory(s);
+}
+
+void
+init_command(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
     }
-    throwError(GeneralError, "as_bool(): Failed to convert to boolean value.");
+}
+
+void
+end_command(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
+        gview->previewOff();
+        gview->disableMoveRapidFire();
+    }
+    _mainWin->prompt->endCommand();
+}
+
+const char *
+platform_string(void)
+{
+    return qPrintable(_mainWin->platformString());
+}
+
+void
+message_box(const char *type, const char *title, const char *text)
+{
+    QString msgType = QString(type).toLower();
+    if (msgType == "critical") {
+        QMessageBox::critical(_mainWin, _mainWin->tr(title), _mainWin->tr(text));
+    }
+    else if (msgType == "information") {
+        QMessageBox::information(_mainWin, _mainWin->tr(title), _mainWin->tr(text));
+    }
+    else if (msgType == "question") {
+        QMessageBox::question(_mainWin, _mainWin->tr(title), _mainWin->tr(text));
+    }
+    else if (msgType == "warning") {
+        QMessageBox::warning(_mainWin, _mainWin->tr(title), _mainWin->tr(text));
+    }
+    else {
+        QMessageBox::critical(_mainWin,
+            _mainWin->tr("Native MessageBox Error"),
+            _mainWin->tr("Incorrect use of the native messageBox function."));
+    }
+}
+
+void
+print_area(double x, double y, double w, double h)
+{
+    qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
+    //TODO: Print Setup Stuff
+    _mainWin->print();
+}
+
+void
+set_background_color(uint8_t r, uint8_t g, uint8_t b)
+{
+    _mainWin->setSettingsDisplayBGColor(qRgb(r,g,b));
+    _mainWin->updateAllViewBackgroundColors(qRgb(r,g,b));
+}
+
+void
+set_crosshair_color(uint8_t r, uint8_t g, uint8_t b)
+{
+    _mainWin->setSettingsDisplayCrossHairColor(qRgb(r,g,b));
+    _mainWin->updateAllViewCrossHairColors(qRgb(r,g,b));
+}
+
+void
+set_grid_color(uint8_t r, uint8_t g, uint8_t b)
+{
+    _mainWin->setSettingsGridColor(qRgb(r,g,b));
+    _mainWin->updateAllViewGridColors(qRgb(r,g,b));
+}
+
+const char *
+text_font(void)
+{
+    return qPrintable(_mainWin->textFont());
+}
+
+double
+text_size(void)
+{
+    return _mainWin->textSize();
+}
+
+double
+text_angle(void)
+{
+    return _mainWin->textAngle();
+}
+
+bool
+text_bold(void)
+{
+    return _mainWin->textBold();
+}
+
+bool
+text_italic(void)
+{
+    return _mainWin->textItalic();
+}
+
+bool
+text_underline(void)
+{
+    return _mainWin->textUnderline();
+}
+
+bool
+text_strikeout(void)
+{
+    return _mainWin->textStrikeOut();
+}
+
+bool
+text_overline(void)
+{
+    return _mainWin->textOverline();
+}
+
+void
+set_text_font(const char *s)
+{
+    _mainWin->setTextFont(s);
+}
+
+void
+set_text_size(double size)
+{
+    _mainWin->setTextSize(size);
+}
+
+void
+set_text_angle(double angle)
+{
+    _mainWin->setTextAngle(angle);
+}
+
+void
+set_text_bold(bool bold)
+{
+    _mainWin->setTextBold(bold);
+}
+
+void
+set_text_italic(bool italic)
+{
+    _mainWin->setTextItalic(italic);
+}
+
+void
+set_text_underline(bool underline)
+{
+    _mainWin->setTextUnderline(underline);
+}
+
+void
+set_text_strikeout(bool strikeout)
+{
+    _mainWin->setTextStrikeOut(strikeout);
+}
+
+void
+set_text_overline(bool overline)
+{
+    _mainWin->setTextOverline(overline);
+}
+
+void
+preview_on(int clone, int mode, double x, double y, double data)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->previewOn(clone, mode, x, -y, data);
+    }
+}
+
+void
+preview_off(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->previewOff();
+    }
+}
+
+void
+vulcanize(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->vulcanizeRubberRoom();
+    }
+}
+
+void
+clear_rubber(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
+    }
+}
+
+bool
+allow_rubber(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        return gview->allowRubber();
+    }
     return false;
 }
 
-/*!
- */
-ScriptValue
-run_command(const char *line)
+void
+spare_rubber(int64_t id)
 {
-    ScriptContext context;
-    char *cmd = (char*)line;
-    sprintf(context.command, line);
-    context.context = CONTEXT_PROMPT;
-    context.argument_count = 0;
-    for (int i=0; command_map[i].name[0] != '^'; i++) {
-        if (streq(line, command_map[i].name)) {
-            return command_map[i].command(&context);
+    View* gview = activeView();
+    if (gview) {
+        gview->spareRubber(id);
+    }
+}
+
+void
+set_rubber_filter(int64_t id)
+{
+    //TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
+}
+
+void
+set_rubber_mode(int mode)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->setRubberMode(mode);
+    }
+}
+
+void
+set_rubber_point(const char *key, double x, double y)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->setRubberPoint(key, QPointF(x, -y));
+    }
+}
+
+void
+set_rubber_text(const char *key, const char *txt)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->setRubberText(key, txt);
+    }
+}
+
+void
+add_text_multi(const char *s, double x, double y, double rot, bool fill, int rubberMode)
+{
+    /* TODO */
+}
+
+void
+add_text_single(const char *s, double x, double y, double rot, bool fill, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && gscene && stack) {
+        TextSingleObject* obj = new TextSingleObject(s, x, -y, getCurrentColor());
+        obj->setObjectTextFont(getSettingsTextFont());
+        obj->setObjectTextSize(getSettingsTextSize());
+        obj->setObjectTextStyle(getSettingsTextStyleBold(),
+                                getSettingsTextStyleItalic(),
+                                getSettingsTextStyleUnderline(),
+                                getSettingsTextStyleStrikeOut(),
+                                getSettingsTextStyleOverline());
+        obj->setObjectTextBackward(false);
+        obj->setObjectTextUpsideDown(false);
+        obj->setRotation(-rot);
+        //TODO: single line text fill
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
         }
     }
-    return script_null;
+}
+
+void
+add_infinite_line(double x1, double y1, double x2, double y2, double rot)
+{
+    /* TODO */
+}
+
+void
+add_ray(double x1, double y1, double x2, double y2, double rot)
+{
+    /* TODO */
+}
+
+void
+add_line(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && gscene && stack) {
+        LineObject* obj = new LineObject(x1, -y1, x2, -y2, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        if (rubberMode) {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void
+add_triangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
+{
+    /* TODO */
+}
+
+void
+add_rectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && gscene && stack) {
+        RectObject* obj = new RectObject(x, -y, w, -h, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: rect fill
+        if(rubberMode) {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void
+add_rounded_rectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
+{
+    /* TODO */
+}
+
+void
+add_arc(double startX, double startY, double midX, double midY, double endX, double endY, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* scene = activeScene();
+    if (gview && scene) {
+        ArcObject* arcObj = new ArcObject(startX, -startY, midX, -midY, endX, -endY, getCurrentColor());
+        arcObj->setObjectRubberMode(rubberMode);
+        if(rubberMode) gview->addToRubberRoom(arcObj);
+        scene->addItem(arcObj);
+        scene->update();
+    }
+}
+
+void
+add_circle(double centerX, double centerY, double radius, bool fill, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack)
+    {
+        CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: circle fill
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void
+add_slot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
+{
+    //TODO: Use UndoableAddCommand for slots
+    /*
+    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length, getCurrentColor());
+    slotObj->setRotation(-rot);
+    slotObj->setObjectRubberMode(rubberMode);
+    if(rubberMode) gview->addToRubberRoom(slotObj);
+    scene->addItem(slotObj);
+    //TODO: slot fill
+    scene->update();
+    */
+}
+
+void
+add_ellipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack) {
+        EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: ellipse fill
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void
+add_point(double x, double y)
+{
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && stack)
+    {
+        PointObject* obj = new PointObject(x, -y, getCurrentColor());
+        UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+        stack->push(cmd);
+    }
+}
+
+void
+add_regular_polygon(double centerX, double centerY, int sides, int mode, double rad, double rot, bool fill)
+{
+
+}
+
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+void
+add_polygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack)
+    {
+        PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+void
+add_polyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && gscene && stack) {
+        PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode) {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+/*
+void nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+*/
+void
+add_path(double startX, double startY, int rubberMode)
+{
+    /* TODO */
+}
+
+void
+add_horizontal_dimension(double x1, double y1, double x2, double y2, double legHeight)
+{
+    /* TODO */
+}
+
+void
+add_veritical_dimension(double x1, double y1, double x2, double y2, double legHeight)
+{
+    /* TODO */
+}
+
+void
+add_image(const char *img, double x, double y, double w, double h, double rot)
+{
+    /* TODO */
+}
+
+void
+add_dimleader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && gscene && stack) {
+        DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode) {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void
+set_cursor_shape(const char *str)
+{
+    View* gview = activeView();
+    if (!gview) {
+        return;
+    }
+    QString shape = QString(str).toLower();
+    if (shape == "arrow")
+        gview->setCursor(QCursor(Qt::ArrowCursor));
+    else if (shape == "uparrow")
+        gview->setCursor(QCursor(Qt::UpArrowCursor));
+    else if (shape == "cross")
+        gview->setCursor(QCursor(Qt::CrossCursor));
+    else if (shape == "wait")
+        gview->setCursor(QCursor(Qt::WaitCursor));
+    else if (shape == "ibeam")
+        gview->setCursor(QCursor(Qt::IBeamCursor));
+    else if (shape == "resizevert")
+        gview->setCursor(QCursor(Qt::SizeVerCursor));
+    else if (shape == "resizehoriz")
+        gview->setCursor(QCursor(Qt::SizeHorCursor));
+    else if (shape == "resizediagleft")
+        gview->setCursor(QCursor(Qt::SizeBDiagCursor));
+    else if (shape == "resizediagright")
+        gview->setCursor(QCursor(Qt::SizeFDiagCursor));
+    else if (shape == "move")
+        gview->setCursor(QCursor(Qt::SizeAllCursor));
+    else if (shape == "blank")
+        gview->setCursor(QCursor(Qt::BlankCursor));
+    else if (shape == "splitvert")
+        gview->setCursor(QCursor(Qt::SplitVCursor));
+    else if (shape == "splithoriz")
+        gview->setCursor(QCursor(Qt::SplitHCursor));
+    else if (shape == "handpointing")
+        gview->setCursor(QCursor(Qt::PointingHandCursor));
+    else if (shape == "forbidden")
+        gview->setCursor(QCursor(Qt::ForbiddenCursor));
+    else if (shape == "handopen")
+        gview->setCursor(QCursor(Qt::OpenHandCursor));
+    else if (shape == "handclosed")
+        gview->setCursor(QCursor(Qt::ClosedHandCursor));
+    else if (shape == "whatsthis")
+        gview->setCursor(QCursor(Qt::WhatsThisCursor));
+    else if (shape == "busy")
+        gview->setCursor(QCursor(Qt::BusyCursor));
+    else if (shape == "dragmove")
+        gview->setCursor(QCursor(Qt::DragMoveCursor));
+    else if (shape == "dragcopy")
+        gview->setCursor(QCursor(Qt::DragCopyCursor));
+    else if (shape == "draglink")
+        gview->setCursor(QCursor(Qt::DragLinkCursor));
+}
+
+double
+calculate_angle(double x1, double y1, double x2, double y2)
+{
+    return QLineF(x1, -y1, x2, -y2).angle();
+}
+
+double
+calculate_distance(double x1, double y1, double x2, double y2)
+{
+    return QLineF(x1, y1, x2, y2).length();
+}
+
+double
+perpendicular_distance(double px, double py, double x1, double y1, double x2, double y2)
+{
+    QLineF line(x1, y1, x2, y2);
+    QLineF norm = line.normalVector();
+    qreal dx = px-x1;
+    qreal dy = py-y1;
+    norm.translate(dx, dy);
+    QPointF iPoint;
+    norm.intersects(line, &iPoint);
+    return QLineF(px, py, iPoint.x(), iPoint.y()).length();
+}
+
+int
+num_selected(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        return gview->numSelected();
+    }
+    return 0;
+}
+
+void
+select_all(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->selectAll();
+    }
+}
+
+void
+add_to_selection(void)
+{
+    /* TODO (const QPainterPath path, Qt::ItemSelectionMode mode) */
+}
+
+void
+clear_selection(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->clearSelection();
+    }
+}
+
+void
+delete_selected(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->deleteSelected();
+    }
+}
+
+void
+cut_selected(double x, double y)
+{
+    /* TODO */
+}
+
+void
+copy_selected(double x, double y)
+{
+    /* TODO */
+}
+
+void
+paste_selected(double x, double y)
+{
+    /* TODO */
+}
+
+void
+move_selected(double dx, double dy)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->moveSelected(dx, -dy);
+    }
+}
+
+void
+scale_selected(double x, double y, double factor)
+{
+    if (factor <= 0.0) {
+        message_box("critical", "ScaleFactor Error",
+            "Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too.");
+    }
+
+    View* gview = activeView();
+    if (gview) {
+        gview->scaleSelected(x, -y, factor);
+    }
+}
+
+void
+rotate_selected(double x, double y, double rot)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->rotateSelected(x, -y, -rot);
+    }
+}
+
+void
+mirror_selected(double x1, double y1, double x2, double y2)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->mirrorSelected(x1, -y1, x2, -y2);
+    }
+}
+
+double
+qsnapx(void)
+{
+    QGraphicsScene* scene = activeScene();
+    if (scene) {
+        return scene->property(SCENE_QSNAP_POINT).toPointF().x();
+    }
+    return 0.0;
+}
+
+double
+qsnapy(void)
+{
+    QGraphicsScene* scene = activeScene();
+    if (scene) {
+        return -scene->property(SCENE_QSNAP_POINT).toPointF().y();
+    }
+    return 0.0;
+}
+
+double
+mousex(void)
+{
+    QGraphicsScene* scene = activeScene();
+    if (scene) {
+        double x = scene->property(SCENE_MOUSE_POINT).toPointF().x();
+        qDebug("mouseX: %.50f", x);
+        return x;
+    }
+    return 0.0;
+}
+
+double
+mousey(void)
+{
+    QGraphicsScene* scene = activeScene();
+    if (scene) {
+        double y = -scene->property(SCENE_MOUSE_POINT).toPointF().y();
+        qDebug("mouseY: %.50f", y);
+        return y;
+    }
+    return 0.0;
+}
+
+/*! TODO: call on shutdown scheme_deinit(&sc);
+ */
+int
+run_command(const char *line)
+{
+    char cmd[1000];
+    sprintf(cmd, "(%s)", line);
+    scheme_load_string(&sc, cmd);
+    return 1;
 }
 
 /*!
- * \brief about_command
+ * \brief about_f
  */
-ScriptValue
-about_command(ScriptContext* context)
+pointer
+about_f(scheme *sc, pointer args)
 {
-    if (!argument_checks(context, "about", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: about takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    about();
+    _mainWin->about();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
- * \brief alert_command
- * \param context
- * \return null
+ * \brief alert_f
  */
-ScriptValue
-alert_command(ScriptContext* context)
+pointer
+alert_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "alert", "s")) {
-        return script_null;
+    pointer arg = pair_car(args);
+    if (!is_string(arg)) {
+        debug("WARNING: string value not passed to alert.");
+        return sc->NIL;
     }
-    alert(STR(0));
-    return script_null;
+    alert(string_value(arg));
+    return sc->NIL;
 }
 
 /*!
- * \brief blink_prompt_command
+ * \brief blink_prompt_f
  * \param context
  * \return null
  */
-ScriptValue
-blink_command(ScriptContext* context)
+pointer
+blink_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "blink", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: blink takes no arguments but one or more were passed.");
     }
-    blink_prompt();
-    return script_null;
+    _mainWin->prompt->startBlinking();
+    return sc->NIL;
 }
 
 /*!
  * 
  */
-ScriptValue
-day_command(ScriptContext* context)
+pointer
+day_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "day", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: day takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    day();
+    /* TODO: Make day vision color settings. */
+    View* gview = activeView();
+    if (gview) {
+        gview->setBackgroundColor(qRgb(255,255,255));
+        gview->setCrossHairColor(qRgb(0,0,0));
+        gview->setGridColor(qRgb(0,0,0));
+    }
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
- * \brief debug_command
+ * \brief debug_f
  */
-ScriptValue
-debug_command(ScriptContext* context)
+pointer
+debug_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "debug", "s")) {
-        return script_null;
+    pointer arg = pair_car(args);
+    if (!is_string(arg)) {
+        debug("WARNING: string value not passed to alert.");
+        return sc->NIL;
     }
-    debug(STR(0));
-    return script_null;
+    debug(string_value(0));
+    return sc->NIL;
 }
 
 /*!
@@ -713,20 +1363,25 @@ debug_command(ScriptContext* context)
  * \param context
  * \return
  */
-ScriptValue
-disable_command(ScriptContext* context)
+pointer
+disable_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "disable", "s")) {
-        return script_null;
+    pointer arg = pair_car(args);
+    if (!is_string(arg)) {
+        debug("WARNING: string value not passed to disable.");
+        return sc->NIL;
     }
-    const char *line = context->arguments[0].s;
+    char *line = string_value(arg);
     if (!strcmp(line, "prompt-rapid-fire")) {
-        disable_prompt_rapid_fire();
+        _mainWin->prompt->disableRapidFire();
     }
     if (!strcmp(line, "move-rapid-fire")) {
-        disable_move_rapid_fire();
+        View* gview = activeView();
+        if (gview) {
+            gview->disableMoveRapidFire();
+        }
     }
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
@@ -734,13 +1389,13 @@ disable_command(ScriptContext* context)
  * \param context
  * \return
  */
-ScriptValue
-do_nothing_command(ScriptContext* context)
+pointer
+do_nothing_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "donothing", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: donothing takes no arguments but one or more were passed.");
     }
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
@@ -748,328 +1403,378 @@ do_nothing_command(ScriptContext* context)
  * \param context
  * \return
  */
-ScriptValue
-enable_command(ScriptContext* context)
+pointer
+enable_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "enable", "s")) {
-        return script_null;
+    pointer arg = pair_car(args);
+    if (!is_string(arg)) {
+        debug("WARNING: string value not passed to enable.");
+        return sc->NIL;
     }
-    const char *line = context->arguments[0].s;
+    char *line = string_value(arg);
     if (!strcmp(line, "prompt-rapid-fire")) {
-        enable_prompt_rapid_fire();
+        _mainWin->prompt->enableRapidFire();
     }
     if (!strcmp(line, "move-rapid-fire")) {
-        enable_move_rapid_fire();
+        View* gview = activeView();
+        if (gview) {
+            gview->enableMoveRapidFire();
+        }
     }
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
  */
-ScriptValue
-error_command(ScriptContext* context)
+pointer
+error_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "error", "s")) {
-        return script_null;
+    pointer arg = pair_car(args);
+    if (!is_string(arg)) {
+        debug("WARNING: string value not passed to alert.");
+        return sc->NIL;
     }
     char message[1000];
-    sprintf(message, "ERROR: %s", STR(0));
+    sprintf(message, "ERROR: %s", string_value(arg));
     alert(message);
     end_command();
-    return script_null;
+    return sc->NIL;
+}
+
+/*!
+ */
+pointer
+exit_f(scheme* sc, pointer args)
+{
+    if (args != sc->NIL) {
+        return sc->NIL;
+    }
+    _mainWin->exit();
+    return sc->NIL;
+}
+
+/*!
+ */
+pointer
+help_f(scheme* sc, pointer args)
+{
+    if (args != sc->NIL) {
+        return sc->NIL;
+    }
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
+    _mainWin->help();
+    end_command();
+    return sc->NIL;
+}
+
+/*!
+ */
+pointer
+icon128_f(scheme *sc, pointer args)
+{
+    if (args != sc->NIL) {
+        debug("WARNING: icon128 takes no arguments but one or more were passed.");
+    }
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
+    _mainWin->iconResize(128);
+    end_command();
+    return sc->NIL;
 }
 
 /*!
  * 
  */
-ScriptValue
-help_command(ScriptContext* context)
+pointer
+icon16_f(scheme *sc, pointer args)
 {
-    if (!argument_checks(context, "help", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: icon16 takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    help();
+    _mainWin->iconResize(16);
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
  * 
  */
-ScriptValue
-icon128_command(ScriptContext* context)
+pointer
+icon24_f(scheme *sc, pointer args)
 {
-    if (!argument_checks(context, "icon128", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: icon24 takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    icon128();
+    _mainWin->iconResize(24);
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
  * 
  */
-ScriptValue
-icon16_command(ScriptContext* context)
+pointer
+icon32_f(scheme *sc, pointer args)
 {
-    if (!argument_checks(context, "icon16", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: icon32 takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    icon16();
+    _mainWin->iconResize(32);
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
  * 
  */
-ScriptValue
-icon24_command(ScriptContext* context)
+pointer
+icon48_f(scheme *sc, pointer args)
 {
-    if (!argument_checks(context, "icon24", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: icon48 takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    icon24();
+    _mainWin->iconResize(48);
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
  * 
  */
-ScriptValue
-icon32_command(ScriptContext* context)
+pointer
+icon64_f(scheme *sc, pointer args)
 {
-    if (!argument_checks(context, "icon32", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: icon64 takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    icon32();
+    _mainWin->iconResize(64);
     end_command();
-    return script_null;
-}
-
-/*!
- * 
- */
-ScriptValue
-icon48_command(ScriptContext* context)
-{
-    if (!argument_checks(context, "icon48", "")) {
-        return script_null;
-    }
-    if (context->context == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    icon48();
-    end_command();
-    return script_null;
-}
-
-/*!
- * 
- */
-ScriptValue
-icon64_command(ScriptContext* context)
-{
-    if (!argument_checks(context, "icon64", "")) {
-        return script_null;
-    }
-    if (context->context == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    icon64();
-    end_command();
-    return script_null;
-}
-
-/*!
- * 
- */
-ScriptValue
-new_command(ScriptContext* context)
-{
-    if (!argument_checks(context, "new_file", "")) {
-        return script_null;
-    }
-    if (context->context == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    new_file();
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-open_command(ScriptContext* context)
-{
-    if (!argument_checks(context, "open_file", "")) {
-        return script_null;
-    }
-    if (context->context == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    open_file();
-    end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
  */
-ScriptValue
-night_command(ScriptContext* context)
+pointer
+new_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "night", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: new takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    night();
+    _mainWin->newFile();
     end_command();
-    return script_null;
+    return sc->NIL;
+}
+
+/*! Open an existing file using the open dialog.
+ */
+pointer
+open_f(scheme* sc, pointer args)
+{
+    if (args != sc->NIL) {
+        debug("WARNING: open takes no arguments but one or more were passed.");
+    }
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
+    _mainWin->openFile();
+    end_command();
+    return sc->NIL;
 }
 
 /*!
  */
-ScriptValue
-pan_down_command(ScriptContext* context)
+pointer
+night_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "pan_down", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: night takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
+        clear_selection();
     }
-    pan_down();
+    /* TODO: Make night vision color settings. */
+    View* gview = activeView();
+    if (gview) {
+        gview->setBackgroundColor(qRgb(0,0,0));
+        gview->setCrossHairColor(qRgb(255,255,255));
+        gview->setGridColor(qRgb(255,255,255));
+    }
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
  */
-ScriptValue
-pan_left_command(ScriptContext* context)
+pointer
+pan_down_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "pan_left", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: pandown takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    pan_left();
+    qDebug("panDown()");
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+        stack->push(cmd);
+    }
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-pan_point_command(ScriptContext* context)
+/*!
+ */
+pointer
+pan_left_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "pan_point", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: panleft takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+    }
+    qDebug("panLeft()");
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+        stack->push(cmd);
+    }
+    end_command();
+    return sc->NIL;
+}
+
+pointer
+pan_point_f(scheme* sc, pointer args)
+{
+    if (args != sc->NIL) {
+        debug("WARNING: panpoint takes no arguments but one or more were passed.");
+    }
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
     /* FIXME: pan_point(); */
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-pan_real_time_command(ScriptContext* context)
+pointer
+pan_real_time_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "pan_real_time", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: panrealtime takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
     /* FIXME: pan_real_time(); */
     end_command();
-    return script_null;
-}
-ScriptValue
-pan_right_command(ScriptContext* context)
-{
-    if (!argument_checks(context, "pan_right", "")) {
-        return script_null;
-    }
-    if (context->context == CONTEXT_MAIN) {
-        init_command();
-    }
-    pan_right();
-    end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-pan_up_command(ScriptContext* context)
+pointer
+pan_right_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "pan_up", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: panright takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    pan_up();
+    qDebug("panRight()");
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+        stack->push(cmd);
+    }
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-redo_command(ScriptContext* context)
+pointer
+pan_up_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "redo", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: panup takes no arguments but one or more were passed.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+    }
+    qDebug("panUp()");
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
+        stack->push(cmd);
+    }
+    end_command();
+    return sc->NIL;
+}
+
+pointer
+redo_f(scheme* sc, pointer args)
+{
+    if (args != sc->NIL) {
+        debug("WARNING: redo takes no arguments but one or more were passed.");
+    }
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    redo();
+    _mainWin->redo();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 #if 0
-ScriptValue
-SetPromptPrefix(ScriptContext* context)
+pointer
+set_prompt_prefix_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "set_prompt_prefix", "s")) {
-        return script_null;
+    if (!(sc, "set_prompt_prefix", "s")) {
+        return sc->NIL;
     }
     set_prompt_prefix(STR(0));
-    return script_null;
+    _mainWin->prompt->setPrefix(s);
+    return sc->NIL;
 }
 
-ScriptValue
-AppendPromptHistory(ScriptContext* context)
+pointer
+AppendPromptHistory(scheme* sc, pointer args)
 {
     int args = context->argument_count;
     if (args == 0) {
@@ -1081,109 +1786,98 @@ AppendPromptHistory(ScriptContext* context)
     else {
         return context->throwError("appendPromptHistory() requires one or zero arguments");
     }
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-EnablePromptRapidFire(ScriptContext* context)
+pointer
+EnablePromptRapidFire(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) {
         return context->throwError("enablePromptRapidFire() requires zero arguments");
     }
     mainWin()->nativeEnablePromptRapidFire();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-DisablePromptRapidFire(ScriptContext* context)
+pointer
+DisablePromptRapidFire(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) {
         return context->throwError("disablePromptRapidFire() requires zero arguments");
     }
     mainWin()->nativeDisablePromptRapidFire();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-EnableMoveRapidFire(ScriptContext* context)
+pointer
+EnableMoveRapidFire(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("enableMoveRapidFire() requires zero arguments");
 
     mainWin()->nativeEnableMoveRapidFire();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-DisableMoveRapidFire(ScriptContext* context)
+pointer
+DisableMoveRapidFire(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("disableMoveRapidFire() requires zero arguments");
 
     mainWin()->nativeDisableMoveRapidFire();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-InitCommand(ScriptContext* context)
+pointer
+InitCommand(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("initCommand() requires zero arguments");
 
     mainWin()->nativeInitCommand();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-EndCommand(ScriptContext* context)
+pointer
+EndCommand(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) {
         return context->throwError("endCommand() requires zero arguments");
     }
     mainWin()->nativeEndCommand();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-Exit(ScriptContext* context)
+pointer
+Exit(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0)
         return context->throwError("exit() requires zero arguments");
 
     mainWin()->nativeExit();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-Help(ScriptContext* context)
-{
-    if (context->argumentCount() != 0)
-        return context->throwError("help() requires zero arguments");
-
-    mainWin()->nativeHelp();
-    return script_null;
-}
-
-
-ScriptValue
-TipOfTheDay(ScriptContext* context)
+pointer
+TipOfTheDay(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0)
         return context->throwError("tipOfTheDay() requires zero arguments");
 
     mainWin()->nativeTipOfTheDay();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-PlatformString(ScriptContext* context)
+pointer
+PlatformString(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("platformString() requires zero arguments");
     return script_str(mainWin()->nativePlatformString());
 }
 
-ScriptValue
-MessageBox(ScriptContext* context)
+pointer
+MessageBox(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "pan_up", "sss")) {
-        return script_null;
+    if (!(sc, "pan_up", "sss")) {
+        return sc->NIL;
     }
 
     QString type  = context->argument(0).toString().toLower();
@@ -1191,17 +1885,17 @@ MessageBox(ScriptContext* context)
     QString text  = context->argument(2).toString();
 
     if (type != "critical" && type != "information" && type != "question" && type != "warning")
-        return context->throwError(ScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+        return context->throwError(GeneralError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
     mainWin()->nativeMessageBox(type, title, text);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-IsInt(ScriptContext* context)
+pointer
+IsInt(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "pan_up", "i")) {
-        return script_null;
+    if (!(sc, "pan_up", "i")) {
+        return sc->NIL;
     }
 
     qreal num = context->argument(0).r;
@@ -1212,143 +1906,149 @@ IsInt(ScriptContext* context)
     return script_false;
 }
 
-ScriptValue
-print_area_command(ScriptContext* context)
+pointer
+print_area_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "print_area", "rrrr")) {
-        return script_null;
+    if (!(sc, "print_area", "rrrr")) {
+        return sc->NIL;
     }
     print_area(REAL(0), REAL(1), REAL(2), REAL(3));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetBackgroundColor(ScriptContext* context)
+pointer
+SetBackgroundColor(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "set_background_color", "iii")) {
-        return script_null;
+    if (!(sc, "set_background_color", "iii")) {
+        return sc->NIL;
     }
 
     qreal r = context->argument(0).r;
     qreal g = context->argument(1).r;
     qreal b = context->argument(2).r;
 
-    if (r < 0 || r > 255) { return context->throwError(ScriptContext::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return context->throwError(ScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return context->throwError(ScriptContext::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) {
+        return context->throwError(GeneralError, "setBackgroundColor(): r value must be in range 0-255");
+    }
+    if (g < 0 || g > 255) {
+        return context->throwError(GeneralError, "setBackgroundColor(): g value must be in range 0-255");
+    }
+    if (b < 0 || b > 255) {
+        return context->throwError(GeneralError, "setBackgroundColor(): b value must be in range 0-255");
+    }
 
-    mainWin()->nativeSetBackgroundColor(INT(0), INT(1), INT(2));
-    return script_null;
+    mainWin()->setBackgroundColor(INT(0), INT(1), INT(2));
+    return sc->NIL;
 }
 
-ScriptValue
-SetCrossHairColor(ScriptContext* context)
+pointer
+SetCrossHairColor(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "set_crosshair_color", "iii")) {
-        return script_null;
+    if (!(sc, "set_crosshair_color", "iii")) {
+        return sc->NIL;
     }
 
     qreal r = context->argument(0).r;
     qreal g = context->argument(1).r;
     qreal b = context->argument(2).r;
 
-    if (r < 0 || r > 255) { return context->throwError(ScriptContext::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return context->throwError(ScriptContext::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return context->throwError(ScriptContext::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) { return context->throwError(GeneralError, "setCrossHairColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return context->throwError(GeneralError, "setCrossHairColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return context->throwError(GeneralError, "setCrossHairColor(): b value must be in range 0-255"); }
 
     mainWin()->nativeSetCrossHairColor(INT(0), INT(1), INT(2));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetGridColor(ScriptContext* context)
+pointer
+SetGridColor(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "set_grid_color", "iii")) {
-        return script_null;
+    if (!(sc, "set_grid_color", "iii")) {
+        return sc->NIL;
     }
 
     qreal r = context->argument(0).r;
     qreal g = context->argument(1).r;
     qreal b = context->argument(2).r;
 
-    if (r < 0 || r > 255) { return context->throwError(ScriptContext::UnknownError, "setGridColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return context->throwError(ScriptContext::UnknownError, "setGridColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return context->throwError(ScriptContext::UnknownError, "setGridColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) { return context->throwError(GeneralError, "setGridColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return context->throwError(GeneralError, "setGridColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return context->throwError(GeneralError, "setGridColor(): b value must be in range 0-255"); }
 
     mainWin()->nativeSetGridColor(INT(0), INT(1), INT(2));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-TextFont(ScriptContext* context)
+pointer
+TextFont(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "text_font", "")) {
-        return script_null;
+    if (!(sc, "text_font", "")) {
+        return sc->NIL;
     }
     return script_str(mainWin()->nativeTextFont());
 }
 
-ScriptValue
-TextSize(ScriptContext* context)
+pointer
+TextSize(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("textSize() requires zero arguments");
-    return ScriptValue(mainWin()->nativeTextSize());
+    return pointer(mainWin()->nativeTextSize());
 }
 
-ScriptValue
-TextAngle(ScriptContext* context)
+pointer
+TextAngle(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("textAngle() requires zero arguments");
-    return ScriptValue(mainWin()->nativeTextAngle());
+    return pointer(mainWin()->nativeTextAngle());
 }
 
-ScriptValue
-TextBold(ScriptContext* context)
+pointer
+TextBold(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("textBold() requires zero arguments");
-    return ScriptValue(mainWin()->nativeTextBold());
+    return pointer(mainWin()->nativeTextBold());
 }
 
-ScriptValue
-TextItalic(ScriptContext* context)
+pointer
+TextItalic(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("textItalic() requires zero arguments");
-    return ScriptValue(mainWin()->nativeTextItalic());
+    return pointer(mainWin()->nativeTextItalic());
 }
 
-ScriptValue
-TextUnderline(ScriptContext* context)
+pointer
+TextUnderline(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("textUnderline() requires zero arguments");
-    return ScriptValue(mainWin()->nativeTextUnderline());
+    return pointer(mainWin()->nativeTextUnderline());
 }
 
-ScriptValue
-TextStrikeOut(ScriptContext* context)
+pointer
+TextStrikeOut(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("textStrikeOut() requires zero arguments");
-    return ScriptValue(mainWin()->nativeTextStrikeOut());
+    return pointer(mainWin()->nativeTextStrikeOut());
 }
 
-ScriptValue
-TextOverline(ScriptContext* context)
+pointer
+TextOverline(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("textOverline() requires zero arguments");
-    return ScriptValue(mainWin()->nativeTextOverline());
+    return pointer(mainWin()->nativeTextOverline());
 }
 
-ScriptValue
-SetTextFont(ScriptContext* context)
+pointer
+SetTextFont(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setTextFont() requires one argument");
     if (!context->argument(0).isString()) return context->throwError(TypeError, "setTextFont(): first argument is not a string");
 
     mainWin()->nativeSetTextFont(context->argument(0).toString());
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetTextSize(ScriptContext* context)
+pointer
+SetTextSize(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setTextSize() requires one argument");
     if (!context->argument(0).isNumber()) return context->throwError(TypeError, "setTextSize(): first argument is not a number");
@@ -1356,11 +2056,11 @@ SetTextSize(ScriptContext* context)
     qreal num = context->argument(0).r;
 
     mainWin()->nativeSetTextSize(num);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetTextAngle(ScriptContext* context)
+pointer
+SetTextAngle(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setTextAngle() requires one argument");
     if (!context->argument(0).isNumber()) return context->throwError(TypeError, "setTextAngle(): first argument is not a number");
@@ -1368,64 +2068,64 @@ SetTextAngle(ScriptContext* context)
     qreal num = context->argument(0).r;
 
     mainWin()->nativeSetTextAngle(num);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetTextBold(ScriptContext* context)
+pointer
+SetTextBold(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setTextBold() requires one argument");
     if (!context->argument(0).isBool()) return context->throwError(TypeError, "setTextBold(): first argument is not a bool");
 
     mainWin()->nativeSetTextBold(context->argument(0).toBool());
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetTextItalic(ScriptContext* context)
+pointer
+SetTextItalic(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setTextItalic() requires one argument");
     if (!context->argument(0).isBool()) return context->throwError(TypeError, "setTextItalic(): first argument is not a bool");
 
     mainWin()->nativeSetTextItalic(context->argument(0).toBool());
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetTextUnderline(ScriptContext* context)
+pointer
+SetTextUnderline(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setTextUnderline() requires one argument");
     if (!context->argument(0).isBool()) return context->throwError(TypeError, "setTextUnderline(): first argument is not a bool");
 
     mainWin()->nativeSetTextUnderline(context->argument(0).toBool());
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetTextStrikeOut(ScriptContext* context)
+pointer
+SetTextStrikeOut(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setTextStrikeOut() requires one argument");
     if (!context->argument(0).isBool()) return context->throwError(TypeError, "setTextStrikeOut(): first argument is not a bool");
 
     mainWin()->nativeSetTextStrikeOut(BOOL(0));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetTextOverline(ScriptContext* context)
+pointer
+SetTextOverline(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setTextOverline() requires one argument");
     if (!context->argument(0).isBool()) return context->throwError(TypeError, "setTextOverline(): first argument is not a bool");
 
     mainWin()->nativeSetTextOverline(BOOL(0));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-PreviewOn(ScriptContext* context)
+pointer
+PreviewOn(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "preview_on", "ssrrr")) {
-        return script_null;
+    if (!(sc, "preview_on", "ssrrr")) {
+        return sc->NIL;
     }
 
     QString cloneStr = context->argument(0).toString().toUpper();
@@ -1441,46 +2141,46 @@ PreviewOn(ScriptContext* context)
         clone = PREVIEW_CLONE_RUBBER;
     }
     else {
-        return context->throwError(ScriptContext::UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
+        return context->throwError(GeneralError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
     }
 
     if     (modeStr == "MOVE") { mode = PREVIEW_MODE_MOVE;   }
     else if (modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
     else if (modeStr == "SCALE") { mode = PREVIEW_MODE_SCALE;  }
-    else { return context->throwError(ScriptContext::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
+    else { return context->throwError(GeneralError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
     mainWin()->nativePreviewOn(clone, mode, x, y, data);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-PreviewOff(ScriptContext* context)
+pointer
+PreviewOff(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("previewOff() requires zero arguments");
 
     mainWin()->nativePreviewOff();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-Vulcanize(ScriptContext* context)
+pointer
+Vulcanize(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("vulcanize() requires zero arguments");
 
     mainWin()->nativeVulcanize();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AllowRubber(ScriptContext* context)
+pointer
+AllowRubber(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("allowRubber() requires zero arguments");
 
-    return ScriptValue(allowRubber());
+    return pointer(allowRubber());
 }
 
-ScriptValue
-SetRubberMode(ScriptContext* context)
+pointer
+SetRubberMode(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("setRubberMode() requires one argument");
     if (!context->argument(0).isString()) return context->throwError(TypeError, "setRubberMode(): first argument is not a string");
@@ -1513,16 +2213,16 @@ SetRubberMode(ScriptContext* context)
 
     else if (mode == "TEXTSINGLE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
-    else              { return context->throwError(ScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value"); }
+    else              { return context->throwError(GeneralError, "setRubberMode(): unknown rubberMode value"); }
 
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetRubberPoint(ScriptContext* context)
+pointer
+SetRubberPoint(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "set_rubber_point", "srr")) {
-        return script_null;
+    if (!(sc, "set_rubber_point", "srr")) {
+        return sc->NIL;
     }
 
     QString key = context->argument(0).toString().toUpper();
@@ -1530,21 +2230,21 @@ SetRubberPoint(ScriptContext* context)
     qreal y     = context->argument(2).r;
 
     mainWin()->nativeSetRubberPoint(key, x, y);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetRubberText(ScriptContext* context)
+pointer
+SetRubberText(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "set_rubber_text", "ss")) {
-        return script_null;
+    if (!(sc, "set_rubber_text", "ss")) {
+        return sc->NIL;
     }
     set_rubber_text(STR(0), STR(1));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddRubber(ScriptContext* context)
+pointer
+AddRubber(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("addRubber() requires one argument");
     if (!context->argument(0).isString()) return context->throwError(TypeError, "addRubber(): first argument is not a string");
@@ -1552,7 +2252,7 @@ AddRubber(ScriptContext* context)
     QString objType = context->argument(0).toString().toUpper();
 
     if (!allowRubber())
-        return context->throwError(ScriptContext::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
+        return context->throwError(GeneralError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
     qreal mx = mainWin()->nativeMouseX();
     qreal my = mainWin()->nativeMouseY();
@@ -1584,20 +2284,20 @@ AddRubber(ScriptContext* context)
     else if (objType == "TEXTMULTI") {} //TODO: handle this type
     else if (objType == "TEXTSINGLE") { addTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
 
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-ClearRubber(ScriptContext* context)
+pointer
+ClearRubber(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("clearRubber() requires zero arguments");
 
     mainWin()->nativeClearRubber();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SpareRubber(ScriptContext* context)
+pointer
+SpareRubber(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)    return context->throwError("spareRubber() requires one argument");
     if (!context->argument(0).isString()) return context->throwError(TypeError, "spareRubber(): first argument is not a string");
@@ -1614,74 +2314,74 @@ SpareRubber(ScriptContext* context)
         mainWin()->nativeSpareRubber(id);
     }
 
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddTextMulti(ScriptContext* context)
+pointer
+AddTextMulti(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_text_multi", "srrrb")) {
-        return script_null;
+    if (!(sc, "add_text_multi", "srrrb")) {
+        return sc->NIL;
     }
     addTextMulti(STR(0), REAL(1), REAL(2), REAL(3), BOOL(4),
         OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddTextSingle(ScriptContext* context)
+pointer
+AddTextSingle(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_text_multi", "srrrb")) {
-        return script_null;
+    if (!(sc, "add_text_multi", "srrrb")) {
+        return sc->NIL;
     }
     addTextSingle(STR(0), REAL(1), REAL(2), REAL(3), BOOL(4),
         OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddInfiniteLine(ScriptContext* context)
+pointer
+AddInfiniteLine(scheme* sc, pointer args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addInfiniteLine command");
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddRay(ScriptContext* context)
+pointer
+AddRay(scheme* sc, pointer args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addRay command");
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddLine(ScriptContext* context)
+pointer
+AddLine(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_text_multi", "rrrrr")) {
-        return script_null;
+    if (!(sc, "add_text_multi", "rrrrr")) {
+        return sc->NIL;
     }
     addLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4),
         OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-add_triangle_command(ScriptContext* context)
+pointer
+add_triangle_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_triangle", "rrrrrrrb")) {
-        return script_null;
+    if (!(sc, "add_triangle", "rrrrrrrb")) {
+        return sc->NIL;
     }
     add_triangle(REAL(0), REAL(1), REAL(2), REAL(3),
         REAL(4), REAL(5), REAL(6), BOOL(7));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddRectangle(ScriptContext* context)
+pointer
+AddRectangle(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_text_multi", "rrrrrb")) {
-        return script_null;
+    if (!(sc, "add_text_multi", "rrrrrb")) {
+        return sc->NIL;
     }
 
     qreal x    = context->argument(0).r;
@@ -1692,14 +2392,14 @@ AddRectangle(ScriptContext* context)
     bool  fill = context->argument(5).toBool();
 
     addRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddRoundedRectangle(ScriptContext* context)
+pointer
+AddRoundedRectangle(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_text_multi", "rrrrrrb")) {
-        return script_null;
+    if (!(sc, "add_text_multi", "rrrrrrb")) {
+        return sc->NIL;
     }
 
     qreal x    = context->argument(0).r;
@@ -1711,14 +2411,14 @@ AddRoundedRectangle(ScriptContext* context)
     bool  fill = context->argument(6).toBool();
 
     addRoundedRectangle(x, y, w, h, rad, rot, fill);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddArc(ScriptContext* context)
+pointer
+AddArc(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_text_multi", "rrrrrr")) {
-        return script_null;
+    if (!(sc, "add_text_multi", "rrrrrr")) {
+        return sc->NIL;
     }
 
     qreal startX = context->argument(0).r;
@@ -1729,14 +2429,14 @@ AddArc(ScriptContext* context)
     qreal endY   = context->argument(5).r;
 
     addArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddCircle(ScriptContext* context)
+pointer
+AddCircle(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_text_multi", "rrrb")) {
-        return script_null;
+    if (!(sc, "add_text_multi", "rrrb")) {
+        return sc->NIL;
     }
 
     qreal centerX = context->argument(0).r;
@@ -1745,14 +2445,14 @@ AddCircle(ScriptContext* context)
     bool  fill    = context->argument(3).toBool();
 
     addCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddSlot(ScriptContext* context)
+pointer
+AddSlot(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_slot", "rrrrrb")) {
-        return script_null;
+    if (!(sc, "add_slot", "rrrrrb")) {
+        return sc->NIL;
     }
 
     qreal centerX  = context->argument(0).r;
@@ -1763,14 +2463,14 @@ AddSlot(ScriptContext* context)
     bool  fill     = context->argument(5).toBool();
 
     addSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddEllipse(ScriptContext* context)
+pointer
+AddEllipse(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_ellipse", "rrrrrb")) {
-        return script_null;
+    if (!(sc, "add_ellipse", "rrrrrb")) {
+        return sc->NIL;
     }
 
     qreal centerX = context->argument(0).r;
@@ -1781,11 +2481,11 @@ AddEllipse(ScriptContext* context)
     bool  fill    = context->argument(5).toBool();
 
     addEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddPoint(ScriptContext* context)
+pointer
+AddPoint(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 2)    return context->throwError("addPoint() requires two arguments");
     if (!context->argument(0).isNumber()) return context->throwError(TypeError, "addPoint(): first argument is not a number");
@@ -1795,19 +2495,19 @@ AddPoint(ScriptContext* context)
     qreal y = context->argument(1).r;
 
     addPoint(x,y);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddRegularPolygon(ScriptContext* context)
+pointer
+AddRegularPolygon(scheme* sc, pointer args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addRegularPolygon command");
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddPolygon(ScriptContext* context)
+pointer
+AddPolygon(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)   return context->throwError("addPolygon() requires one argument");
     if (!context->argument(0).isArray()) return context->throwError(TypeError, "addPolygon(): first argument is not an array");
@@ -1848,11 +2548,11 @@ AddPolygon(ScriptContext* context)
     path.translate(-startX, -startY);
 
     addPolygon(startX, startY, path, OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddPolyline(ScriptContext* context)
+pointer
+AddPolyline(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 1)   return context->throwError("addPolyline() requires one argument");
     if (!context->argument(0).isArray()) return context->throwError(TypeError, "addPolyline(): first argument is not an array");
@@ -1890,46 +2590,46 @@ AddPolyline(ScriptContext* context)
     path.translate(-startX, -startY);
 
     addPolyline(startX, startY, path, OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddPath(ScriptContext* context)
+pointer
+AddPath(scheme* sc, pointer args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addPath command");
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddHorizontalDimension(ScriptContext* context)
+pointer
+AddHorizontalDimension(scheme* sc, pointer args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addHorizontalDimension command");
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddVerticalDimension(ScriptContext* context)
+pointer
+AddVerticalDimension(scheme* sc, pointer args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addVerticalDimension command");
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-addImage(ScriptContext* context)
+pointer
+addImage(scheme* sc, pointer args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addImage command");
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-addDimLeader(ScriptContext* context)
+pointer
+addDimLeader(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "add_ellipse", "rrrrr")) {
-        return script_null;
+    if (!(sc, "add_ellipse", "rrrrr")) {
+        return sc->NIL;
     }
 
     qreal x1  = context->argument(0).r;
@@ -1939,115 +2639,115 @@ addDimLeader(ScriptContext* context)
     qreal rot = context->argument(4).r;
 
     addDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-SetCursorShape(ScriptContext* context)
+pointer
+SetCursorShape(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "set_cursor_shape", "s")) {
-        return script_null;
+    if (!(sc, "set_cursor_shape", "s")) {
+        return sc->NIL;
     }
 
     QString shape = context->argument(0).s;
     mainWin()->nativeSetCursorShape(shape);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-CalculateAngle(ScriptContext* context)
+pointer
+CalculateAngle(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "calculate_angle", "rrrr")) {
-        return script_null;
+    if (!(sc, "calculate_angle", "rrrr")) {
+        return sc->NIL;
     }
     double result = calculateAngle(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_real(result);
 }
 
-ScriptValue
-CalculateDistance(ScriptContext* context)
+pointer
+CalculateDistance(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "calculate_angle", "rrrr")) {
-        return script_null;
+    if (!(sc, "calculate_angle", "rrrr")) {
+        return sc->NIL;
     }
     double result = calculate_distance(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_real(result);
 }
 
-ScriptValue
-PerpendicularDistance(ScriptContext* context)
+pointer
+PerpendicularDistance(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "calculate_angle", "rrrrrr")) {
-        return script_null;
+    if (!(sc, "calculate_angle", "rrrrrr")) {
+        return sc->NIL;
     }
     double result = perpendicular_distance(REAL(0), REAL(1), REAL(2), REAL(3),
         REAL(4), REAL(5));
     return script_real(result);
 }
 
-ScriptValue
-NumSelected(ScriptContext* context)
+pointer
+NumSelected(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("numSelected() requires zero arguments");
-    return ScriptValue(mainWin()->nativeNumSelected());
+    return pointer(mainWin()->nativeNumSelected());
 }
 
-ScriptValue
-SelectAll(ScriptContext* context)
+pointer
+SelectAll(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("selectAll() requires zero arguments");
 
     mainWin()->nativeSelectAll();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-AddToSelection(ScriptContext* context)
+pointer
+AddToSelection(scheme* sc, pointer args)
 {
     //TODO: finish
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-ClearSelection(ScriptContext* context)
+pointer
+ClearSelection(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("clearSelection() requires zero arguments");
 
     mainWin()->nativeClearSelection();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-DeleteSelected(ScriptContext* context)
+pointer
+DeleteSelected(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 0) return context->throwError("deleteSelected() requires zero arguments");
 
     mainWin()->nativeDeleteSelected();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-CutSelected(ScriptContext* context)
+pointer
+CutSelected(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "cut_selected", "rr")) {
-        return script_null;
+    if (!(sc, "cut_selected", "rr")) {
+        return sc->NIL;
     }
     cut_selected(REAL(0), REAL(1));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-CopySelected(ScriptContext* context)
+pointer
+CopySelected(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "cut_selected", "rr")) {
-        return script_null;
+    if (!(sc, "cut_selected", "rr")) {
+        return sc->NIL;
     }
     copy_selected(REAL(0), REAL(1));
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-PasteSelected(ScriptContext* context)
+pointer
+PasteSelected(scheme* sc, pointer args)
 {
     if (context->argumentCount() != 2)    return context->throwError("pasteSelected() requires two arguments");
     if (!context->argument(0).isNumber()) return context->throwError(TypeError, "pasteSelected(): first argument is not a number");
@@ -2057,106 +2757,122 @@ PasteSelected(ScriptContext* context)
     qreal y = context->argument(1).r;
 
     mainWin()->nativePasteSelected(x, y);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-MoveSelected(ScriptContext* context)
+pointer
+MoveSelected(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "move_selected", "rr")) {
-        return script_null;
+    if (!(sc, "move_selected", "rr")) {
+        return sc->NIL;
     }
 
     qreal dx = context->argument(0).r;
     qreal dy = context->argument(1).r;
 
     mainWin()->nativeMoveSelected(dx, dy);
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-scale_selected_command(ScriptContext* context)
+pointer
+scale_selected_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "scale_selected", "rrr")) {
-        return script_null;
+    if (!(sc, "scale_selected", "rrr")) {
+        return sc->NIL;
     }
 
     qreal x      = context->argument(0).r;
     qreal y      = context->argument(1).r;
     qreal factor = context->argument(2).r;
 
-    if (factor <= 0.0) return context->throwError(ScriptContext::UnknownError, "scaleSelected(): scale factor must be greater than zero");
+    if (factor <= 0.0) return context->throwError(GeneralError, "scaleSelected(): scale factor must be greater than zero");
 
     scale_selected(x, y, factor);
-    return script_null;
+    return sc->NIL;
 }
 #endif
 
-ScriptValue
-rotate_selected_command(ScriptContext* context)
+pointer
+rotate_selected_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "rotate_selected", "rrr")) {
-        return script_null;
+    /*
+    if (!(sc, "rotate_selected", "rrr")) {
+        return sc->NIL;
     }
     rotate_selected(
         context->arguments[0].r,
         context->arguments[1].r,
         context->arguments[2].r);
-    return script_null;
+        */
+    return sc->NIL;
 }
 
-ScriptValue
-mirror_selected_command(ScriptContext* context)
+pointer
+mirror_selected_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "mirror_selected", "rrrr")) {
-        return script_null;
+    /*
+    if (!(sc, "mirror_selected", "rrrr")) {
+        return sc->NIL;
     }
     mirror_selected(
         context->arguments[0].r,
         context->arguments[1].r,
         context->arguments[2].r,
         context->arguments[3].r);
-    return script_null;
+        */
+    return sc->NIL;
 }
 
 /* Report the x-position of the current quicksnap point. */
-ScriptValue
-qsnap_x_command(ScriptContext* context)
+pointer
+qsnap_x_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "qsnapx", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: qsnapx takes no arguments but one or more were passed.");
     }
+    /* FIXME
     return script_real(qsnapx());
+    */
+        return sc->NIL;
 }
 
 /* Report the y-position of the current quicksnap point. */
-ScriptValue
-qsnap_y_command(ScriptContext* context)
+pointer
+qsnap_y_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "qsnapy", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: qsnapy takes no arguments but one or more were passed.");
     }
+    /*
     return script_real(qsnapy());
+    */
+    return sc->NIL;
 }
 
 /* Report the x-position of the mouse. */
-ScriptValue
-mouse_x_command(ScriptContext* context)
+pointer
+mouse_x_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "mousex", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: mousex takes no arguments but one or more were passed.");
     }
+    /*
     return script_real(mousex());
+    */
+        return sc->NIL;
 }
 
 /* Report the y-position of the mouse. */
-ScriptValue
-mouse_y_command(ScriptContext* context)
+pointer
+mouse_y_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "mousey", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: mousey takes no arguments but one or more were passed.");
     }
+    /*
     return script_real(mousey());
+    */
+        return sc->NIL;
 }
 
 #if 0
@@ -3274,45 +3990,6 @@ function updateHeart(style, numPts, xScale, yScale)
     }
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
-}
-
-==> commands/help.cpp <==
-//Command: Help
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
-function main()
-{
-    initCommand();
-    clearSelection();
-    help();
-    endCommand();
-}
-
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
-{
-    help();
-    endCommand();
-}
-
-//NOTE: context() is run when a context menu entry is chosen.
-function context(str)
-{
-    help();
-    endCommand();
-}
-
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text is in the command prompt is sent as an uppercase string.
-function prompt(str)
-{
-    help();
-    endCommand();
 }
 
 ==> commands/line.cpp <==
@@ -6405,298 +7082,335 @@ function prompt(str)
 
 #endif
 
-ScriptValue
-tip_of_the_day_command(ScriptContext *context)
+pointer
+tip_of_the_day_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "tip_of_the_day", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        return sc->NIL;
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    tip_of_the_day();
+    _mainWin->tipOfTheDay();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
- *
  */
-ScriptValue
-undo_command(ScriptContext *context)
+pointer
+undo_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "undo", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        return sc->NIL;
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    undo();
+    _mainWin->undo();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
 /*!
  * \brief Report on incomplete features inside commands to developers.
  */
-ScriptValue
-todo_command(ScriptContext* context)
+pointer
+todo_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "todo", "s")) {
-        return script_null;
+    pointer arg = pair_car(args);
+    if (!is_string(arg)) {
+        return sc->NIL;
+    }
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
     }
     char message[1000];
-    sprintf(message, "TODO: %s", context->arguments[0].s);
+    char *s = string_value(arg);
+    sprintf(message, "TODO: %s", s);
     alert(message);
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-window_cascade_command(ScriptContext *context)
+/*!
+ */
+pointer
+window_cascade_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "window_cascade", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        return sc->NIL;
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    window_cascade();
+    _mainWin->mdiArea->cascade();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-window_close_all_command(ScriptContext *context)
+/*!
+ */
+pointer
+window_close_all_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "window_close_all", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        return sc->NIL;
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    window_close_all();
+    _mainWin->mdiArea->closeAllSubWindows();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-
-ScriptValue
-window_close_command(ScriptContext *context)
+/*!
+ */
+pointer
+window_close_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "window_close", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        return sc->NIL;
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    window_close();
+    _mainWin->onCloseWindow();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-window_next_command(ScriptContext *context)
+/*!
+ */
+pointer
+window_next_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "window_next", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        return sc->NIL;
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    window_next();
+    _mainWin->mdiArea->activateNextSubWindow();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-window_previous_command(ScriptContext *context)
+/*!
+ */
+pointer
+window_previous_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "window_previous", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        return sc->NIL;
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    window_previous();
+    _mainWin->mdiArea->activatePreviousSubWindow();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-window_tile_command(ScriptContext *context)
+/*!
+ */
+pointer
+window_tile_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "window_tile", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        return sc->NIL;
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    window_tile();
+    _mainWin->mdiArea->tile();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_all_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_all_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_all", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomall when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    /* FIXME: zoom_all(); */
+    _mainWin->zoomAll();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_center_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_center_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_center", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomcenter when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    /* FIXME: zoom_all(); */
+    _mainWin->zoomCenter();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_dynamic_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_dynamic_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_dynamic", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomdynamic when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    /* FIXME: zoom_all(); */
+    _mainWin->zoomDynamic();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_extents_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_extents_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_extents", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomextents when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    zoom_extents();
+    _mainWin->zoomExtents();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_in_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_in_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_in", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomin when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    zoom_in();
+    _mainWin->zoomIn();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_out_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_out_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_out", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomout when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    zoom_out();
+    _mainWin->zoomOut();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_previous_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_previous_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_previous", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomprevious when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    /* FIXME: zoom_scale(); */
+    _mainWin->zoomPrevious();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_real_time_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_real_time_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_real_time", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomrealtime when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    /* FIXME: zoom_scale(); */
+    _mainWin->zoomRealtime();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_scale_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_scale_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_scale", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomscale when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    /* FIXME: zoom_scale(); */
+    _mainWin->zoomScale();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-ScriptValue
-zoom_selected_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_selected_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_selected", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomselected when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    /* FIXME: zoom_scale(); */
+    _mainWin->zoomSelected();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 
-
-ScriptValue
-zoom_window_command(ScriptContext *context)
+/*!
+ */
+pointer
+zoom_window_f(scheme* sc, pointer args)
 {
-    if (!argument_checks(context, "zoom_window", "")) {
-        return script_null;
+    if (args != sc->NIL) {
+        debug("WARNING: Argument passed to zoomwindow when none are required.");
     }
-    if (context->context == CONTEXT_MAIN) {
+    if (context_flag == CONTEXT_MAIN) {
         init_command();
     }
-    /* FIXME: zoom_window(); */
+    _mainWin->zoomWindow();
     end_command();
-    return script_null;
+    return sc->NIL;
 }
 

@@ -14,6 +14,7 @@ endif(WIN32)
 set(TARGET embroidermodder2)
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
+set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(LIB ${CMAKE_SOURCE_DIR}/extern/libembroidery)
 
 set(CMDS ${CMAKE_SOURCE_DIR}/commands)
@@ -96,14 +97,14 @@ qt_add_executable(${TARGET}
 	${SRC}/layer-manager.h
 	${SRC}/object-save.cpp
 	${SRC}/main.cpp
-	${SRC}/object-save.h
-	${SRC}/mainwindow-actions.cpp
-	${SRC}/object-textsingle.cpp
-	${SRC}/mainwindow-actions.h
-	${SRC}/object-textsingle.h
-	${SRC}/mainwindow-commands.cpp
-	${SRC}/preview-dialog.cpp
 	${SRC}/mainwindow.cpp
+	${SRC}/mainwindow-actions.cpp
+	${SRC}/mainwindow-actions.h
+	${SRC}/mainwindow-commands.cpp
+	${SRC}/object-save.h
+	${SRC}/object-textsingle.cpp
+	${SRC}/object-textsingle.h
+	${SRC}/preview-dialog.cpp
 	${SRC}/preview-dialog.h
 	${SRC}/mainwindow.h
 	${SRC}/property-editor.cpp
@@ -120,9 +121,7 @@ qt_add_executable(${TARGET}
 	${SRC}/settings-dialog.h
 	${SRC}/mdiwindow.h
 	${SRC}/statusbar-button.cpp
-	${SRC}/native-scripting.cpp
 	${SRC}/statusbar-button.h
-	${SRC}/native-scripting.h
 	${SRC}/statusbar.cpp
 	${SRC}/object-arc.cpp
 	${SRC}/statusbar.h
@@ -141,11 +140,10 @@ qt_add_executable(${TARGET}
 	${SRC}/undo-editor.h
 	${SRC}/view.cpp
 	${SRC}/view.h
-
-# C CORE
-	${SRC}/script.c
+	${SRC}/script.cpp
 	${SRC}/script.h
 
+# libembroidery
 	${LIB}/compound-file.c
 	${LIB}/compound-file-difat.c
 	${LIB}/compound-file-directory.c
@@ -250,6 +248,10 @@ qt_add_executable(${TARGET}
 
 	${LIB}/embroidery.h
 	${LIB}/hashtable.h
+
+	${EXTERN}/tinyscheme/source/scheme.c
+	${EXTERN}/tinyscheme/source/dynload.c
+	${EXTERN}/tinyscheme/source/mod_json.c
 )
 
 qt_add_translations(embroidermodder2 TS_FILES
@@ -289,10 +291,13 @@ file(COPY "${HELP}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${TS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/tips.txt"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/load.scm"
+	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/src
 	${LIB}
+	${EXTERN}/tinyscheme/include
 	${OPENGL_INCLUDE_DIRS}
 	${SRC}
 )

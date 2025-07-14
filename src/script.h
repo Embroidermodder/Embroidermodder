@@ -9,6 +9,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "scheme.h"
+#include "scheme-private.h"
+#include "dynload.h"
+
 #define TypeError                 0
 #define NotEnoughArgumentsError   1
 #define GeneralError              2
@@ -35,64 +39,8 @@
 
 #define MAX_ARGS                 50
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct ScriptValue_ ScriptValue;
-typedef struct ScriptContext_ ScriptContext;
-typedef ScriptValue CommandPtr(ScriptContext *context);
-
-/*!
- * \brief General script value to allow for argument packing in scripts.
- *
- * For strings longer than 1000 characters, we require a list of strings.
- */
-struct ScriptValue_ {
-    char s[1000];
-    int i;
-    double r;
-    bool b;
-    CommandPtr *c;
-    unsigned char type;
-};
-
-/*!
- * \brief
- */
-struct ScriptContext_ {
-    char command[100];
-    ScriptValue arguments[MAX_ARGS];
-    int argument_count;
-    ScriptValue *command_list;
-    int command_count;
-    int context;
-    int mode;
-};
-
-extern ScriptValue script_null;
-extern ScriptValue script_true;
-extern ScriptValue script_false;
-
-ScriptValue script_bool(bool b);
-ScriptValue script_int(int i);
-ScriptValue script_real(double r);
-ScriptValue script_command(CommandPtr *c);
-ScriptValue script_str(const char *s);
-
-int is_string(ScriptValue v);
-int is_int(ScriptValue v);
-int is_real(ScriptValue v);
-int is_bool(ScriptValue v);
-int is_command(ScriptValue v);
-int is_null(ScriptValue v);
-
-char *as_string(ScriptValue *v);
-int as_int(ScriptValue v);
-double as_real(ScriptValue v);
-bool as_bool(ScriptValue v);
-
-ScriptValue throwError(int type, const char *);
+int load_scheme(void);
+int run_command(const char *line);
 
 int streq(char *, const char *);
 
@@ -103,56 +51,16 @@ void alert(const char *s);
 void blink_prompt(void);
 void set_prompt_prefix(const char *s);
 void append_prompt_history(const char *s);
-void enable_prompt_rapid_fire(void);
-void disable_prompt_rapid_fire(void);
 
 void init_command(void);
+void clear_selection(void);
 void end_command(void);
-
-void enable_move_rapid_fire(void);
-void disable_move_rapid_fire(void);
-void new_file(void);
-void open_file(void);
-void exit_program(void);
-void help(void);
-
-void about(void);
-void tip_of_the_day(void);
-
-void window_cascade(void);
-void window_tile(void);
-void window_close(void);
-void window_close_all(void);
-void window_next(void);
-void window_previous(void);
 
 const char *platform_string(void);
 
 void message_box(const char *type, const char *title, const char *text);
 
-void undo(void);
-void redo(void);
-
-void icon16(void);
-void icon24(void);
-void icon32(void);
-void icon48(void);
-void icon64(void);
-void icon128(void);
-
-void pan_left(void);
-void pan_right(void);
-void pan_up(void);
-void pan_down(void);
-
-void zoom_in(void);
-void zoom_out(void);
-void zoom_extents(void);
-
 void print_area(double x, double y, double w, double h);
-
-void day(void);
-void night(void);
 
 void set_background_color(uint8_t r, uint8_t g, uint8_t b);
 void set_crosshair_color(uint8_t r, uint8_t g, uint8_t b);
@@ -219,7 +127,6 @@ double perpendicular_distance(double px, double py, double x1, double y1, double
 int num_selected(void);
 void select_all(void);
 void add_to_selection(void);
-void clear_selection(void);
 void delete_selected(void);
 void cut_selected(double x, double y);
 void copy_selected(double x, double y);
@@ -233,12 +140,6 @@ double qsnapx(void);
 double qsnapy(void);
 double mousex(void);
 double mousey(void);
-
-ScriptValue run_command(const char *line);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // SCRIPT_H
 

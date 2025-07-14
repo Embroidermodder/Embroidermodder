@@ -39,6 +39,12 @@
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    if (!load_scheme()) {
+        QMessageBox::critical(this, tr("Scheme Error"),
+            tr("Failed to boot scheme."));
+        return;
+    }
+
     readSettings();
 
     QString appDir = qApp->applicationDirPath();
