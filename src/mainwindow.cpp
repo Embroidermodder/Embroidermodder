@@ -44,22 +44,22 @@ MainWindow::MainWindow() : QMainWindow(0)
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
     QFileInfo check(appDir + "/commands");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/help");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/icons");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/images");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/samples");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/translations");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
     QString lang = getSettingsGeneralLanguage();

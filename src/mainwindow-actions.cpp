@@ -3,34 +3,6 @@
 #include <QApplication>
 #include <QMdiArea>
 
-std::vector<QString> cmd_list = {
-    "icon16",
-    "icon24",
-    "icon32",
-    "icon48",
-    "icon64",
-    "icon128",
-    "zoomrealtime",
-    "zoomprevious",
-    "zoomwindow",
-    "zoomdynamic",
-    "zoomscale",
-    "zoomcenter",
-    "zoomin",
-    "zoomout",
-    "zoomselected",
-    "zoomall",
-    "zoomextents",
-    "panrealtime",
-    "panpoint",
-    "panleft",
-    "panright",
-    "panup",
-    "pandown",
-    "day",
-    "night"
-};
-
 void MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");
@@ -133,92 +105,73 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     ACTION->setWhatsThis(statusTip);
     // TODO: Finish All Commands ... <.<
 
-    if (std::find(cmd_list.begin(), cmd_list.end(), icon) != cmd_list.end()) {
+    if (icon == "textbold") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));
+    }
+    else if (icon == "textitalic") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextItalic(bool)));
+    }
+    else if (icon == "textunderline") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextUnderline(bool)));
+    }
+    else if (icon == "textstrikeout") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextStrikeOut(bool)));
+    }
+    else if (icon == "textoverline") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextOverline(bool)));
+    }
+    else {
         connect(ACTION, &QAction::triggered, this, [=]() { runCommandPrompt(icon); });
     }
-    else if (icon == "new") {
+
+    if (icon == "new") {
         ACTION->setShortcut(QKeySequence::New);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(newFile()));
     }
     else if (icon == "open") {
         ACTION->setShortcut(QKeySequence::Open);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(openFile()));
     }
     else if (icon == "save") {
         ACTION->setShortcut(QKeySequence::Save);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(savefile()));
     }
     else if (icon == "saveas") {
         ACTION->setShortcut(QKeySequence::SaveAs);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(saveasfile()));
     }
     else if (icon == "print") {
         ACTION->setShortcut(QKeySequence::Print);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(print()));
     }
     else if (icon == "designdetails") {
         ACTION->setShortcut(QKeySequence("Ctrl+D"));
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(designDetails()));
     }
     else if (icon == "exit") {
         ACTION->setShortcut(QKeySequence("Ctrl+Q"));
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(exit()));
     }
     else if (icon == "cut") {
         ACTION->setShortcut(QKeySequence::Cut);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(cut()));
     }
     else if (icon == "copy") {
         ACTION->setShortcut(QKeySequence::Copy);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(copy()));
     }
     else if (icon == "paste") {
         ACTION->setShortcut(QKeySequence::Paste);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(paste()));
     }
-    else if (icon == "windowcascade") {
-        connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(cascade()));
+    else if (icon == "windownext") {
+        ACTION->setShortcut(QKeySequence::NextChild);
     }
-    else if (icon == "windowtile") {
-        connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(tile()));
+    else if (icon == "windowprevious") {
+        ACTION->setShortcut(QKeySequence::PreviousChild);
     }
-    else if (icon == "windowclose") {
-        ACTION->setShortcut(QKeySequence::Close);
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(onCloseWindow()));
-    }
-    else if (icon == "windowcloseall") {
-        connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
-    }
-    else if (icon == "windownext")
-    { ACTION->setShortcut(QKeySequence::NextChild);     connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activateNextSubWindow()));     }
-    else if (icon == "windowprevious")
-    { ACTION->setShortcut(QKeySequence::PreviousChild); connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activatePreviousSubWindow())); }
 
-    else if (icon == "help")                       connect(ACTION, SIGNAL(triggered()), this, SLOT(help()));
-    else if (icon == "changelog")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(changelog()));
-    else if (icon == "tipoftheday")                connect(ACTION, SIGNAL(triggered()), this, SLOT(tipOfTheDay()));
-    else if (icon == "about")                      connect(ACTION, SIGNAL(triggered()), this, SLOT(about()));
-    else if (icon == "whatsthis")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(whatsThisContextHelp()));
-
-    else if (icon == "settingsdialog")             connect(ACTION, SIGNAL(triggered()), this, SLOT(settingsDialog()));
-
-    else if (icon == "undo")                       connect(ACTION, SIGNAL(triggered()), this, SLOT(undo()));
-    else if (icon == "redo")                       connect(ACTION, SIGNAL(triggered()), this, SLOT(redo()));
-
-    else if (icon == "makelayercurrent")           connect(ACTION, SIGNAL(triggered()), this, SLOT(makeLayerActive()));
-    else if (icon == "layers")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(layerManager()));
-    else if (icon == "layerprevious")              connect(ACTION, SIGNAL(triggered()), this, SLOT(layerPrevious()));
-
-    else if (icon == "textbold")                 { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));   }
-    else if (icon == "textitalic")               { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextItalic(bool))); }
-    else if (icon == "textunderline")            { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextUnderline(bool))); }
-    else if (icon == "textstrikeout")            { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextStrikeOut(bool))); }
-    else if (icon == "textoverline")             { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextOverline(bool))); }
-
+    /*
     else {
         ACTION->setEnabled(false);
         connect(ACTION, SIGNAL(triggered()), this, SLOT(stub_implement()));
     }
+    */
     return ACTION;
 }
 
@@ -227,93 +180,10 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
  * \param line
  */
 void
-MainWindow::runCommandPrompt(const QString& line)
+MainWindow::runCommandPrompt(const QString &line)
 {
-    qDebug("runCommandPrompt(%s)", qPrintable(line));
-    QString cmd = line;
-    nativeAppendPromptHistory(line);
-    if (cmd == "doNothing") {
-        doNothing();
-    }
-    else if (cmd == "icon16") {
-        iconResize(16);
-    }
-    else if (cmd == "icon24") {
-        iconResize(24);
-    }
-    else if (cmd == "icon32") {
-        iconResize(32);
-    }
-    else if (cmd == "icon48") {
-        iconResize(48);
-    }
-    else if (cmd == "icon64") {
-        iconResize(64);
-    }
-    else if (cmd == "icon128") {
-        iconResize(128);
-    }
-
-    else if (cmd == "zoomrealtime") {
-        zoomRealtime();
-    }
-    else if (cmd == "zoomprevious") {
-        zoomPrevious();
-    }
-    else if (cmd == "zoomwindow") {
-        zoomWindow();
-    }
-    else if (cmd == "zoomdynamic") {
-        zoomDynamic();
-    }
-    else if (cmd == "zoomscale") {
-        zoomScale();
-    }
-    else if (cmd == "zoomcenter") {
-        zoomCenter();
-    }
-    else if (cmd == "zoomin") {
-        zoomIn();
-    }
-    else if (cmd == "zoomout") {
-        zoomOut();
-    }
-    else if (cmd == "zoomselected") {
-        zoomSelected();
-    }
-    else if (cmd == "zoomall") {
-        zoomAll();
-    }
-    else if (cmd == "zoomextents") {
-        zoomExtents();
-    }
-
-    else if (cmd == "panrealtime") {
-        panrealtime();
-    }
-    else if (cmd == "panpoint") {
-        panpoint();
-    }
-    else if (cmd == "panleft") {
-        panLeft();
-    }
-    else if (line == "panright") {
-        panRight();
-    }
-    else if (line == "panup") {
-        panUp();
-    }
-    else if (line == "pandown") {
-        panDown();
-    }
-
-    else if (line == "day") {
-        dayVision();
-    }
-    else if (line == "night") {
-        nightVision();
-    }
-
+    QString cmd(line);
+    append_prompt_history(qPrintable(line));
     /*
     if (prompt->isRapidFireEnabled()) {
         engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName);
@@ -322,4 +192,6 @@ MainWindow::runCommandPrompt(const QString& line)
         engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName);
     }
     */
+    run_command(qPrintable(line));
 }
+

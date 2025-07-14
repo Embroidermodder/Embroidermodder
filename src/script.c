@@ -14,6 +14,280 @@
 #define INT(index) context->arguments[index].i
 #define BOOL(index) context->arguments[index].b
 
+typedef struct CommandMap_ {
+    const char name[100];
+    CommandPtr *command;
+} CommandMap;
+
+ScriptValue about_command(ScriptContext* context);
+ScriptValue alert_command(ScriptContext* context);
+ScriptValue blink_command(ScriptContext* context);
+ScriptValue debug_command(ScriptContext* context);
+ScriptValue day_command(ScriptContext* context);
+ScriptValue do_nothing_command(ScriptContext* context);
+ScriptValue error_command(ScriptContext* context);
+ScriptValue icon16_command(ScriptContext* context);
+ScriptValue icon24_command(ScriptContext* context);
+ScriptValue icon32_command(ScriptContext* context);
+ScriptValue icon48_command(ScriptContext* context);
+ScriptValue icon64_command(ScriptContext* context);
+ScriptValue icon128_command(ScriptContext* context);
+ScriptValue new_command(ScriptContext* context);
+ScriptValue night_command(ScriptContext* context);
+ScriptValue open_command(ScriptContext* context);
+ScriptValue pan_down_command(ScriptContext* context);
+ScriptValue pan_left_command(ScriptContext* context);
+ScriptValue pan_point_command(ScriptContext* context);
+ScriptValue pan_real_time_command(ScriptContext* context);
+ScriptValue pan_right_command(ScriptContext* context);
+ScriptValue pan_up_command(ScriptContext* context);
+ScriptValue todo_command(ScriptContext* context);
+ScriptValue window_cascade_command(ScriptContext* context);
+ScriptValue window_tile_command(ScriptContext* context);
+ScriptValue window_close_command(ScriptContext* context);
+ScriptValue window_close_all_command(ScriptContext* context);
+ScriptValue window_next_command(ScriptContext* context);
+ScriptValue window_previous_command(ScriptContext* context);
+ScriptValue zoom_all_command(ScriptContext* context);
+ScriptValue zoom_center_command(ScriptContext* context);
+ScriptValue zoom_dynamic_command(ScriptContext* context);
+ScriptValue zoom_extents_command(ScriptContext* context);
+ScriptValue zoom_in_command(ScriptContext* context);
+ScriptValue zoom_out_command(ScriptContext* context);
+ScriptValue zoom_scale_command(ScriptContext* context);
+ScriptValue zoom_previous_command(ScriptContext* context);
+ScriptValue zoom_real_time_command(ScriptContext* context);
+ScriptValue zoom_selected_command(ScriptContext* context);
+ScriptValue zoom_window_command(ScriptContext* context);
+
+/*
+ScriptValue set_prompt_prefix_command(ScriptContext* context);
+ScriptValue append_prompt_history_command(ScriptContext* context);
+ScriptValue init_command(ScriptContext* context);
+ScriptValue end_command(ScriptContext* context);
+ScriptValue exit_command(ScriptContext* context);
+ScriptValue help_command(ScriptContext* context);
+ScriptValue tip_of_the_day_command(ScriptContext* context);
+ScriptValue platform_command(ScriptContext* context);
+ScriptValue messagebox_command(ScriptContext* context);
+ScriptValue is_int_command(ScriptContext* context);
+ScriptValue undo_command(ScriptContext* context);
+ScriptValue redo_command(ScriptContext* context);
+ScriptValue print_area_command(ScriptContext* context);
+ScriptValue set_background_color_command(ScriptContext* context);
+ScriptValue set_crosshair_color_command(ScriptContext* context);
+ScriptValue set_grid_color_command(ScriptContext* context);
+ScriptValue text_angle_command(ScriptContext* context);
+ScriptValue text_bold_command(ScriptContext* context);
+ScriptValue text_font_command(ScriptContext* context);
+ScriptValue text_italic_command(ScriptContext* context);
+ScriptValue text_overline_command(ScriptContext* context);
+ScriptValue text_size_command(ScriptContext* context);
+ScriptValue text_strikeout_command(ScriptContext* context);
+ScriptValue text_underline_command(ScriptContext* context);
+ScriptValue set_textFont(ScriptContext* context);
+ScriptValue set_textSize(ScriptContext* context);
+ScriptValue set_textAngle(ScriptContext* context);
+ScriptValue set_textBold(ScriptContext* context);
+ScriptValue set_textItalic(ScriptContext* context);
+ScriptValue set_textUnderline(ScriptContext* context);
+ScriptValue set_textStrikeOut(ScriptContext* context);
+ScriptValue set_textOverline(ScriptContext* context);
+ScriptValue previewOn(ScriptContext* context);
+ScriptValue previewOff(ScriptContext* context);
+ScriptValue Vulcanize(ScriptContext* context);
+ScriptValue AllowRubber(ScriptContext* context);
+ScriptValue SetRubberMode(ScriptContext* context);
+ScriptValue SetRubberPoint(ScriptContext* context);
+ScriptValue SetRubberText(ScriptContext* context);
+ScriptValue AddRubber(ScriptContext* context);
+ScriptValue ClearRubber(ScriptContext* context);
+ScriptValue SpareRubber(ScriptContext* context);
+ScriptValue addTextMulti(ScriptContext* context);
+ScriptValue addTextSingle(ScriptContext* context);
+ScriptValue addInfiniteLine(ScriptContext* context);
+ScriptValue addRay(ScriptContext* context);
+ScriptValue addLine(ScriptContext* context);
+ScriptValue addTriangle(ScriptContext* context);
+ScriptValue addRectangle(ScriptContext* context);
+ScriptValue addRoundedRectangle(ScriptContext* context);
+ScriptValue addArc(ScriptContext* context);
+ScriptValue addCircle(ScriptContext* context);
+ScriptValue addSlot(ScriptContext* context);
+ScriptValue addEllipse(ScriptContext* context);
+ScriptValue addPoint(ScriptContext* context);
+ScriptValue addRegularPolygon(ScriptContext* context);
+ScriptValue addPolygon(ScriptContext* context);
+ScriptValue addPolyline(ScriptContext* context);
+ScriptValue addPath(ScriptContext* context);
+ScriptValue addHorizontalDimension_command(ScriptContext* context);
+ScriptValue addVerticalDimension_command(ScriptContext* context);
+ScriptValue addImage_command(ScriptContext* context);
+ScriptValue addDimLeader_command(ScriptContext* context);
+ScriptValue SetCursorShape_command(ScriptContext* context);
+ScriptValue CalculateAngle_command(ScriptContext* context);
+ScriptValue CalculateDistance_command(ScriptContext* context);
+ScriptValue PerpendicularDistance_command(ScriptContext* context);
+ScriptValue NumSelected_command(ScriptContext* context);
+ScriptValue SelectAll_command(ScriptContext* context);
+ScriptValue add_to_selection_command(ScriptContext* context);
+ScriptValue clear_selection_command(ScriptContext* context);
+ScriptValue delete_selected_command(ScriptContext* context);
+ScriptValue cut_selected_command(ScriptContext* context);
+ScriptValue copy_selected_command(ScriptContext* context);
+ScriptValue paste_selected_command(ScriptContext* context);
+ScriptValue move_selected_command(ScriptContext* context);
+ScriptValue scale_selected_command(ScriptContext* context);
+ScriptValue rotate_selected_command(ScriptContext* context);
+ScriptValue mirror_selected_command(ScriptContext* context);
+ScriptValue qsnapx_command(ScriptContext* context);
+ScriptValue qsnapy_command(ScriptContext* context);
+ScriptValue mousex_command(ScriptContext* context);
+ScriptValue mousey_command(ScriptContext* context);
+ScriptValue include_command(ScriptContext* context);
+*/
+
+static const CommandMap command_map[] = {
+    {
+        .name = "about",
+        .command = about_command
+    },
+    {
+        .name = "alert",
+        .command = alert_command
+    },
+    {
+        .name = "blink",
+        .command = blink_command
+    },
+    {
+        .name = "debug",
+        .command = debug_command
+    },
+    {
+        .name = "day",
+        .command = day_command
+    },
+    {
+        .name = "donothing",
+        .command = do_nothing_command
+    },
+    {
+        .name = "error",
+        .command = error_command
+    },
+    {
+        .name = "icon128",
+        .command = icon128_command
+    },
+    {
+        .name = "icon16",
+        .command = icon16_command
+    },
+    {
+        .name = "icon24",
+        .command = icon24_command
+    },
+    {
+        .name = "icon32",
+        .command = icon32_command
+    },
+    {
+        .name = "icon64",
+        .command = icon64_command
+    },
+    {
+        .name = "new",
+        .command = new_command
+    },
+    {
+        .name = "night",
+        .command = night_command
+    },
+    {
+        .name = "open",
+        .command = open_command
+    },
+    {
+        .name = "pandown",
+        .command = pan_down_command
+    },
+    {
+        .name = "panleft",
+        .command = pan_left_command
+    },
+    {
+        .name = "panpoint",
+        .command = pan_point_command
+    },
+    {
+        .name = "panrealtime",
+        .command = pan_real_time_command
+    },
+    {
+        .name = "panright",
+        .command = pan_right_command
+    },
+    {
+        .name = "panup",
+        .command = pan_up_command
+    },
+    {
+        .name = "todo",
+        .command = todo_command
+    },
+    {
+        .name = "zoomall",
+        .command = zoom_all_command
+    },
+    {
+        .name = "zoomcenter",
+        .command = zoom_center_command
+    },
+    {
+        .name = "zoomdynamic",
+        .command = zoom_dynamic_command
+    },
+    {
+        .name = "zoomextents",
+        .command = zoom_extents_command
+    },
+    {
+        .name = "zoomin",
+        .command = zoom_in_command
+    },
+    {
+        .name = "zoomout",
+        .command = zoom_out_command
+    },
+    {
+        .name = "zoomscale",
+        .command = zoom_scale_command
+    },
+    {
+        .name = "zoomprevious",
+        .command = zoom_previous_command
+    },
+    {
+        .name = "zoomrealtime",
+        .command = zoom_real_time_command
+    },
+    {
+        .name = "zoomselected",
+        .command = zoom_selected_command
+    },
+    {
+        .name = "zoomwindow",
+        .command = zoom_window_command
+    },
+    {
+        .name = "^END",
+        .command = do_nothing_command
+    }
+};
+
+/*! \brief Check that the context is properly packed for the function usage given.
+ */
 int
 argument_checks(ScriptContext* context, const char *name, const char *args)
 {
@@ -338,6 +612,24 @@ as_bool(ScriptValue v)
 }
 
 /*!
+ */
+ScriptValue
+run_command(const char *line)
+{
+    ScriptContext context;
+    char *cmd = (char*)line;
+    sprintf(context.command, line);
+    context.context = CONTEXT_PROMPT;
+    context.argument_count = 0;
+    for (int i=0; command_map[i].name[0] != '^'; i++) {
+        if (streq(line, command_map[i].name)) {
+            return command_map[i].command(&context);
+        }
+    }
+    return script_null;
+}
+
+/*!
  * \brief about_command
  */
 ScriptValue
@@ -376,9 +668,9 @@ alert_command(ScriptContext* context)
  * \return null
  */
 ScriptValue
-blink_prompt_command(ScriptContext* context)
+blink_command(ScriptContext* context)
 {
-    if (!argument_checks(context, "blinkPrompt", "s")) {
+    if (!argument_checks(context, "blink", "")) {
         return script_null;
     }
     blink_prompt();
@@ -433,6 +725,20 @@ disable_command(ScriptContext* context)
     }
     if (!strcmp(line, "move-rapid-fire")) {
         disable_move_rapid_fire();
+    }
+    return script_null;
+}
+
+/*!
+ * \brief donothing Do nothing: for dummy commands like the terminator symbol.
+ * \param context
+ * \return
+ */
+ScriptValue
+do_nothing_command(ScriptContext* context)
+{
+    if (!argument_checks(context, "donothing", "")) {
+        return script_null;
     }
     return script_null;
 }
@@ -603,7 +909,7 @@ icon64_command(ScriptContext* context)
  * 
  */
 ScriptValue
-new_file_command(ScriptContext* context)
+new_command(ScriptContext* context)
 {
     if (!argument_checks(context, "new_file", "")) {
         return script_null;
@@ -618,7 +924,7 @@ new_file_command(ScriptContext* context)
 }
 
 ScriptValue
-open_file_command(ScriptContext* context)
+open_command(ScriptContext* context)
 {
     if (!argument_checks(context, "open_file", "")) {
         return script_null;
@@ -681,6 +987,33 @@ pan_left_command(ScriptContext* context)
     return script_null;
 }
 
+ScriptValue
+pan_point_command(ScriptContext* context)
+{
+    if (!argument_checks(context, "pan_point", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: pan_point(); */
+    end_command();
+    return script_null;
+}
+
+ScriptValue
+pan_real_time_command(ScriptContext* context)
+{
+    if (!argument_checks(context, "pan_real_time", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: pan_real_time(); */
+    end_command();
+    return script_null;
+}
 ScriptValue
 pan_right_command(ScriptContext* context)
 {
@@ -886,24 +1219,6 @@ print_area_command(ScriptContext* context)
         return script_null;
     }
     print_area(REAL(0), REAL(1), REAL(2), REAL(3));
-    return script_null;
-}
-
-ScriptValue
-DayVision(ScriptContext* context)
-{
-    if (context->argumentCount() != 0) return context->throwError("dayVision() requires zero arguments");
-
-    mainWin()->nativeDayVision();
-    return script_null;
-}
-
-ScriptValue
-NightVision(ScriptContext* context)
-{
-    if (context->argumentCount() != 0) return context->throwError("nightVision() requires zero arguments");
-
-    mainWin()->nativeNightVision();
     return script_null;
 }
 
@@ -6231,6 +6546,48 @@ window_tile_command(ScriptContext *context)
 }
 
 ScriptValue
+zoom_all_command(ScriptContext *context)
+{
+    if (!argument_checks(context, "zoom_all", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: zoom_all(); */
+    end_command();
+    return script_null;
+}
+
+ScriptValue
+zoom_center_command(ScriptContext *context)
+{
+    if (!argument_checks(context, "zoom_center", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: zoom_all(); */
+    end_command();
+    return script_null;
+}
+
+ScriptValue
+zoom_dynamic_command(ScriptContext *context)
+{
+    if (!argument_checks(context, "zoom_dynamic", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: zoom_all(); */
+    end_command();
+    return script_null;
+}
+
+ScriptValue
 zoom_extents_command(ScriptContext *context)
 {
     if (!argument_checks(context, "zoom_extents", "")) {
@@ -6268,6 +6625,77 @@ zoom_out_command(ScriptContext *context)
         init_command();
     }
     zoom_out();
+    end_command();
+    return script_null;
+}
+
+ScriptValue
+zoom_previous_command(ScriptContext *context)
+{
+    if (!argument_checks(context, "zoom_previous", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: zoom_scale(); */
+    end_command();
+    return script_null;
+}
+
+ScriptValue
+zoom_real_time_command(ScriptContext *context)
+{
+    if (!argument_checks(context, "zoom_real_time", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: zoom_scale(); */
+    end_command();
+    return script_null;
+}
+
+ScriptValue
+zoom_scale_command(ScriptContext *context)
+{
+    if (!argument_checks(context, "zoom_scale", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: zoom_scale(); */
+    end_command();
+    return script_null;
+}
+
+ScriptValue
+zoom_selected_command(ScriptContext *context)
+{
+    if (!argument_checks(context, "zoom_selected", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: zoom_scale(); */
+    end_command();
+    return script_null;
+}
+
+
+ScriptValue
+zoom_window_command(ScriptContext *context)
+{
+    if (!argument_checks(context, "zoom_window", "")) {
+        return script_null;
+    }
+    if (context->context == CONTEXT_MAIN) {
+        init_command();
+    }
+    /* FIXME: zoom_window(); */
     end_command();
     return script_null;
 }

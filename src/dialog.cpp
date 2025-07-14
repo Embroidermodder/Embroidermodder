@@ -34,7 +34,7 @@ make_dialog(const char *fname)
     QXmlStreamReader xml;
     QDialog *dialog = new QDialog();
 
-    dialog->setMinimumSize(750,550);
+    dialog->setMinimumSize(750, 550);
 
     const QString fileName = "dialogs/" + QString(fname);
     QFile file(fileName);
@@ -45,7 +45,8 @@ make_dialog(const char *fname)
     xml.setDevice(&file);
 
     if (xml.readNextStartElement()) {
-        if (!(xml.name() == "xml"_L1 && xml.attributes().value("version"_L1) == "1.0"_L1)) {
+        int version_check = xml.attributes().value("version"_L1) == "1.0"_L1;
+        if (!(xml.name() == "xml"_L1 && version_check)) {
             xml.raiseError(QObject::tr("The file is not an XML version 1.0 file."));
         }
     }
@@ -442,5 +443,3 @@ void MainWindow::designDetails()
 }
 */
 
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
