@@ -1,0 +1,26 @@
+{
+  "name": "tinyscheme.c",
+  "version": "2.3.0",
+  "description": "Scheme interpreter implementing R5RS being minimalistic and embeddable in C",
+  "main": "scheme.c",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zpl-c/tinyscheme.git"
+  },
+  "keywords": [
+    "scheme",
+    "R5RS",
+    "c",
+    "embed"
+  ],
+  "author": "D. Souflis (dsouflis@acm.org)",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/zpl-c/tinyscheme/issues"
+  },
+  "homepage": "https://github.com/zpl-c/tinyscheme#readme",
+  "dependencies": {}
+}
