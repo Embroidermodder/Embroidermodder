@@ -1,9 +1,4 @@
-#include "object-line.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+#include "embroidermodder.h"
 
 LineObject::LineObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -210,4 +205,3 @@ QPainterPath LineObject::objectSavePath() const
     return path;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

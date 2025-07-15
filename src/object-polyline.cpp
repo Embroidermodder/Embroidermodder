@@ -1,10 +1,4 @@
-#include "object-polyline.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
-#include <QMessageBox>
+#include "embroidermodder.h"
 
 PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -220,4 +214,3 @@ QPainterPath PolylineObject::objectSavePath() const
     return trans.map(normalPath);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

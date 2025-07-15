@@ -1,9 +1,4 @@
-#include "object-ellipse.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+#include "embroidermodder.h"
 
 EllipseObject::EllipseObject(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -312,4 +307,3 @@ QPainterPath EllipseObject::objectSavePath() const
     return trans.map(path);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

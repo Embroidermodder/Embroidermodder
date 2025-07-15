@@ -1,10 +1,4 @@
-#include "object-polygon.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
-#include <QMessageBox>
+#include "embroidermodder.h"
 
 PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -278,4 +272,3 @@ QPainterPath PolygonObject::objectSavePath() const
     return trans.map(closedPath);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

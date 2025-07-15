@@ -1,9 +1,4 @@
-#include "object-rect.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+#include "embroidermodder.h"
 
 RectObject::RectObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -249,4 +244,3 @@ QPainterPath RectObject::objectSavePath() const
     return trans.map(path);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

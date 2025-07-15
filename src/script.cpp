@@ -2,351 +2,1052 @@
  * \brief C Core of all non-scripted commands.
  */
 
-#include "script.h"
+#include "embroidermodder.h"
 
-#include "scheme-private.h"
-
-#include <iostream>
 #include <map>
 
-#include "mainwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "imagewidget.h"
-#include "layer-manager.h"
-#include "object-data.h"
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-image.h"
-#include "object-line.h"
-#include "object-path.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
-
-#include "embroidery.h"
-#include "property-editor.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
-#include "dialog.h"
-
-#include <QLabel>
-#include <QDesktopServices>
-#include <QApplication>
-#include <QUrl>
-#include <QProcess>
-#include <QMessageBox>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QMdiArea>
-#include <QGraphicsScene>
-#include <QComboBox>
-#include <QWhatsThis>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
 extern MainWindow* _mainWin;
-
-typedef pointer SchemeFunction(scheme *, pointer);
-
-typedef struct SchemeData_ {
-    const char name[100];
-    SchemeFunction *function;
-} SchemeData;
 
 int context_flag = CONTEXT_MAIN;
 scheme sc = { 0 };
 
-#ifdef __cplusplus
 extern "C" {
-#endif
+    pointer about_f(scheme *sc, pointer args);
+    pointer alert_f(scheme* sc, pointer args);
+    pointer blink_f(scheme* sc, pointer args);
+    pointer changelog_f(scheme *sc, pointer args);
+    pointer color_selector_f(scheme *sc, pointer args);
+    pointer copy_f(scheme *sc, pointer args);
+    pointer cut_f(scheme *sc, pointer args);
+    pointer day_f(scheme* sc, pointer args);
+    pointer debug_f(scheme* sc, pointer args);
+    pointer design_details_f(scheme *sc, pointer args);
+    pointer do_nothing_f(scheme* sc, pointer args);
+    pointer error_f(scheme* sc, pointer args);
+    pointer exit_f(scheme* sc, pointer args);
+    pointer freeze_all_layers_f(scheme *sc, pointer args);
+    pointer help_f(scheme* sc, pointer args);
+    pointer hide_all_layers_f(scheme *sc, pointer args);
+    pointer icon128_f(scheme *sc, pointer args);
+    pointer icon16_f(scheme *sc, pointer args);
+    pointer icon24_f(scheme *sc, pointer args);
+    pointer icon32_f(scheme *sc, pointer args);
+    pointer icon48_f(scheme *sc, pointer args);
+    pointer icon64_f(scheme *sc, pointer args);
+    pointer layers_f(scheme *sc, pointer args);
+    pointer layer_previous_f(scheme *sc, pointer args);
+    pointer layer_selector_f(scheme *sc, pointer args);
+    pointer line_type_selector_f(scheme *sc, pointer args);
+    pointer line_weight_selector_f(scheme *sc, pointer args);
+    pointer lock_all_layers_f(scheme *sc, pointer args);
+    pointer make_layer_current_f(scheme *sc, pointer args);
+    pointer new_f(scheme* sc, pointer args);
+    pointer night_f(scheme* sc, pointer args);
+    pointer open_f(scheme* sc, pointer args);
+    pointer pan_down_f(scheme* sc, pointer args);
+    pointer pan_left_f(scheme* sc, pointer args);
+    pointer pan_point_f(scheme* sc, pointer args);
+    pointer pan_real_time_f(scheme* sc, pointer args);
+    pointer pan_right_f(scheme* sc, pointer args);
+    pointer pan_up_f(scheme* sc, pointer args);
+    pointer paste_f(scheme *sc, pointer args);
+    pointer print_f(scheme *sc, pointer args);
+    pointer redo_f(scheme* sc, pointer args);
+    pointer save_f(scheme *sc, pointer args);
+    pointer saveas_f(scheme *sc, pointer args);
+    pointer settings_dialog_f(scheme *sc, pointer args);
+    pointer show_all_layers_f(scheme *sc, pointer args);
+    pointer text_angle_f(scheme* sc, pointer args);
+    pointer text_bold_f(scheme* sc, pointer args);
+    pointer text_font_f(scheme* sc, pointer args);
+    pointer text_italic_f(scheme* sc, pointer args);
+    pointer text_overline_f(scheme* sc, pointer args);
+    pointer text_size_f(scheme* sc, pointer args);
+    pointer text_strikeout_f(scheme* sc, pointer args);
+    pointer text_underline_f(scheme* sc, pointer args);
+    pointer tip_of_the_day_f(scheme *sc, pointer args);
+    pointer thaw_all_layers_f(scheme *sc, pointer args);
+    pointer todo_f(scheme* sc, pointer args);
+    pointer undo_f(scheme* sc, pointer args);
+    pointer unlock_all_layers_f(scheme *sc, pointer args);
+    pointer whats_this_f(scheme *sc, pointer args);
+    pointer window_cascade_f(scheme* sc, pointer args);
+    pointer window_tile_f(scheme* sc, pointer args);
+    pointer window_close_f(scheme* sc, pointer args);
+    pointer window_close_all_f(scheme* sc, pointer args);
+    pointer window_next_f(scheme* sc, pointer args);
+    pointer window_previous_f(scheme* sc, pointer args);
+    pointer zoom_all_f(scheme* sc, pointer args);
+    pointer zoom_center_f(scheme* sc, pointer args);
+    pointer zoom_dynamic_f(scheme* sc, pointer args);
+    pointer zoom_extents_f(scheme* sc, pointer args);
+    pointer zoom_in_f(scheme* sc, pointer args);
+    pointer zoom_out_f(scheme* sc, pointer args);
+    pointer zoom_scale_f(scheme* sc, pointer args);
+    pointer zoom_previous_f(scheme* sc, pointer args);
+    pointer zoom_real_time_f(scheme* sc, pointer args);
+    pointer zoom_selected_f(scheme* sc, pointer args);
+    pointer zoom_window_f(scheme* sc, pointer args);
 
-pointer about_f(scheme *sc, pointer args);
-pointer alert_f(scheme* sc, pointer args);
-pointer blink_f(scheme* sc, pointer args);
-pointer debug_f(scheme* sc, pointer args);
-pointer day_f(scheme* sc, pointer args);
-pointer do_nothing_f(scheme* sc, pointer args);
-pointer error_f(scheme* sc, pointer args);
-pointer exit_f(scheme* sc, pointer args);
-pointer help_f(scheme* sc, pointer args);
-pointer icon128_f(scheme *sc, pointer args);
-pointer icon16_f(scheme *sc, pointer args);
-pointer icon24_f(scheme *sc, pointer args);
-pointer icon32_f(scheme *sc, pointer args);
-pointer icon48_f(scheme *sc, pointer args);
-pointer icon64_f(scheme *sc, pointer args);
-pointer new_f(scheme* sc, pointer args);
-pointer night_f(scheme* sc, pointer args);
-pointer open_f(scheme* sc, pointer args);
-pointer pan_down_f(scheme* sc, pointer args);
-pointer pan_left_f(scheme* sc, pointer args);
-pointer pan_point_f(scheme* sc, pointer args);
-pointer pan_real_time_f(scheme* sc, pointer args);
-pointer pan_right_f(scheme* sc, pointer args);
-pointer pan_up_f(scheme* sc, pointer args);
-pointer redo_f(scheme* sc, pointer args);
-pointer todo_f(scheme* sc, pointer args);
-pointer undo_f(scheme* sc, pointer args);
-pointer window_cascade_f(scheme* sc, pointer args);
-pointer window_tile_f(scheme* sc, pointer args);
-pointer window_close_f(scheme* sc, pointer args);
-pointer window_close_all_f(scheme* sc, pointer args);
-pointer window_next_f(scheme* sc, pointer args);
-pointer window_previous_f(scheme* sc, pointer args);
-pointer zoom_all_f(scheme* sc, pointer args);
-pointer zoom_center_f(scheme* sc, pointer args);
-pointer zoom_dynamic_f(scheme* sc, pointer args);
-pointer zoom_extents_f(scheme* sc, pointer args);
-pointer zoom_in_f(scheme* sc, pointer args);
-pointer zoom_out_f(scheme* sc, pointer args);
-pointer zoom_scale_f(scheme* sc, pointer args);
-pointer zoom_previous_f(scheme* sc, pointer args);
-pointer zoom_real_time_f(scheme* sc, pointer args);
-pointer zoom_selected_f(scheme* sc, pointer args);
-pointer zoom_window_f(scheme* sc, pointer args);
+    pointer circle_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer distance_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer dolphin_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer ellipse_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer erase_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer heart_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer line_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer locatepoint_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer move_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer path_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer platform_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer point_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer polygon_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer polyline_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer quickleader_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer rectangle_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer rgb_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer rotate_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer selectall_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer singlelinetext_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer scale_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer snowflake_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer star_f(scheme* sc, pointer args) { return sc->NIL; }
+    pointer syswindows_f(scheme* sc, pointer args) { return sc->NIL; }
 
-/*
-pointer set_prompt_prefix_f(scheme* sc, pointer args);
-pointer append_prompt_history_f(scheme* sc, pointer args);
-pointer init_f(scheme* sc, pointer args);
-pointer end_f(scheme* sc, pointer args);
-pointer tip_of_the_day_f(scheme* sc, pointer args);
-pointer platform_f(scheme* sc, pointer args);
-pointer messagebox_f(scheme* sc, pointer args);
-pointer is_int_f(scheme* sc, pointer args);
-pointer print_area_f(scheme* sc, pointer args);
-pointer set_background_color_f(scheme* sc, pointer args);
-pointer set_crosshair_color_f(scheme* sc, pointer args);
-pointer set_grid_color_f(scheme* sc, pointer args);
-pointer text_angle_f(scheme* sc, pointer args);
-pointer text_bold_f(scheme* sc, pointer args);
-pointer text_font_f(scheme* sc, pointer args);
-pointer text_italic_f(scheme* sc, pointer args);
-pointer text_overline_f(scheme* sc, pointer args);
-pointer text_size_f(scheme* sc, pointer args);
-pointer text_strikeout_f(scheme* sc, pointer args);
-pointer text_underline_f(scheme* sc, pointer args);
-pointer set_text_font(scheme* sc, pointer args);
-pointer set_text_size(scheme* sc, pointer args);
-pointer set_text_angle(scheme* sc, pointer args);
-pointer set_text_bold(scheme* sc, pointer args);
-pointer set_text_italic(scheme* sc, pointer args);
-pointer set_text_underline(scheme* sc, pointer args);
-pointer set_text_strikeOut(scheme* sc, pointer args);
-pointer set_text_overline(scheme* sc, pointer args);
-pointer previewOn(scheme* sc, pointer args);
-pointer previewOff(scheme* sc, pointer args);
-pointer Vulcanize(scheme* sc, pointer args);
-pointer AllowRubber(scheme* sc, pointer args);
-pointer SetRubberMode(scheme* sc, pointer args);
-pointer SetRubberPoint(scheme* sc, pointer args);
-pointer SetRubberText(scheme* sc, pointer args);
-pointer AddRubber(scheme* sc, pointer args);
-pointer ClearRubber(scheme* sc, pointer args);
-pointer SpareRubber(scheme* sc, pointer args);
-pointer addTextMulti(scheme* sc, pointer args);
-pointer addTextSingle(scheme* sc, pointer args);
-pointer addInfiniteLine(scheme* sc, pointer args);
-pointer addRay(scheme* sc, pointer args);
-pointer addLine(scheme* sc, pointer args);
-pointer addTriangle(scheme* sc, pointer args);
-pointer addRectangle(scheme* sc, pointer args);
-pointer addRoundedRectangle(scheme* sc, pointer args);
-pointer addArc(scheme* sc, pointer args);
-pointer addCircle(scheme* sc, pointer args);
-pointer addSlot(scheme* sc, pointer args);
-pointer addEllipse(scheme* sc, pointer args);
-pointer addPoint(scheme* sc, pointer args);
-pointer addRegularPolygon(scheme* sc, pointer args);
-pointer addPolygon(scheme* sc, pointer args);
-pointer addPolyline(scheme* sc, pointer args);
-pointer addPath(scheme* sc, pointer args);
-pointer addHorizontalDimension_f(scheme* sc, pointer args);
-pointer addVerticalDimension_f(scheme* sc, pointer args);
-pointer addImage_f(scheme* sc, pointer args);
-pointer addDimLeader_f(scheme* sc, pointer args);
-pointer SetCursorShape_f(scheme* sc, pointer args);
-pointer CalculateAngle_f(scheme* sc, pointer args);
-pointer CalculateDistance_f(scheme* sc, pointer args);
-pointer PerpendicularDistance_f(scheme* sc, pointer args);
-pointer NumSelected_f(scheme* sc, pointer args);
-pointer SelectAll_f(scheme* sc, pointer args);
-pointer add_to_selection_f(scheme* sc, pointer args);
-pointer clear_selection_f(scheme* sc, pointer args);
-pointer delete_selected_f(scheme* sc, pointer args);
-pointer cut_selected_f(scheme* sc, pointer args);
-pointer copy_selected_f(scheme* sc, pointer args);
-pointer paste_selected_f(scheme* sc, pointer args);
-pointer move_selected_f(scheme* sc, pointer args);
-pointer scale_selected_f(scheme* sc, pointer args);
-pointer rotate_selected_f(scheme* sc, pointer args);
-pointer mirror_selected_f(scheme* sc, pointer args);
-pointer qsnapx_f(scheme* sc, pointer args);
-pointer qsnapy_f(scheme* sc, pointer args);
-pointer mousex_f(scheme* sc, pointer args);
-pointer mousey_f(scheme* sc, pointer args);
-pointer include_f(scheme* sc, pointer args);
-*/
-
-#ifdef __cplusplus
+    /*
+    pointer set_prompt_prefix_f(scheme* sc, pointer args);
+    pointer append_prompt_history_f(scheme* sc, pointer args);
+    pointer init_f(scheme* sc, pointer args);
+    pointer end_f(scheme* sc, pointer args);
+    pointer platform_f(scheme* sc, pointer args);
+    pointer messagebox_f(scheme* sc, pointer args);
+    pointer is_int_f(scheme* sc, pointer args);
+    pointer print_area_f(scheme* sc, pointer args);
+    pointer set_background_color_f(scheme* sc, pointer args);
+    pointer set_crosshair_color_f(scheme* sc, pointer args);
+    pointer set_grid_color_f(scheme* sc, pointer args);
+    pointer set_text_font(scheme* sc, pointer args);
+    pointer set_text_size(scheme* sc, pointer args);
+    pointer set_text_angle(scheme* sc, pointer args);
+    pointer set_text_bold(scheme* sc, pointer args);
+    pointer set_text_italic(scheme* sc, pointer args);
+    pointer set_text_underline(scheme* sc, pointer args);
+    pointer set_text_strikeOut(scheme* sc, pointer args);
+    pointer set_text_overline(scheme* sc, pointer args);
+    pointer preview_on_f(scheme* sc, pointer args);
+    pointer preview_off_f(scheme* sc, pointer args);
+    pointer vulcanize_f(scheme* sc, pointer args);
+    pointer AllowRubber(scheme* sc, pointer args);
+    pointer SetRubberMode(scheme* sc, pointer args);
+    pointer SetRubberPoint(scheme* sc, pointer args);
+    pointer SetRubberText(scheme* sc, pointer args);
+    pointer AddRubber(scheme* sc, pointer args);
+    pointer ClearRubber(scheme* sc, pointer args);
+    pointer SpareRubber(scheme* sc, pointer args);
+    pointer addTextMulti(scheme* sc, pointer args);
+    pointer addTextSingle(scheme* sc, pointer args);
+    pointer addInfiniteLine(scheme* sc, pointer args);
+    pointer addRay(scheme* sc, pointer args);
+    pointer addLine(scheme* sc, pointer args);
+    pointer addTriangle(scheme* sc, pointer args);
+    pointer addRectangle(scheme* sc, pointer args);
+    pointer addRoundedRectangle(scheme* sc, pointer args);
+    pointer addArc(scheme* sc, pointer args);
+    pointer addCircle(scheme* sc, pointer args);
+    pointer addSlot(scheme* sc, pointer args);
+    pointer addEllipse(scheme* sc, pointer args);
+    pointer addPoint(scheme* sc, pointer args);
+    pointer addRegularPolygon(scheme* sc, pointer args);
+    pointer addPolygon(scheme* sc, pointer args);
+    pointer addPolyline(scheme* sc, pointer args);
+    pointer addPath(scheme* sc, pointer args);
+    pointer addHorizontalDimension_f(scheme* sc, pointer args);
+    pointer addVerticalDimension_f(scheme* sc, pointer args);
+    pointer addImage_f(scheme* sc, pointer args);
+    pointer addDimLeader_f(scheme* sc, pointer args);
+    pointer SetCursorShape_f(scheme* sc, pointer args);
+    pointer CalculateAngle_f(scheme* sc, pointer args);
+    pointer CalculateDistance_f(scheme* sc, pointer args);
+    pointer PerpendicularDistance_f(scheme* sc, pointer args);
+    pointer NumSelected_f(scheme* sc, pointer args);
+    pointer SelectAll_f(scheme* sc, pointer args);
+    pointer add_to_selection_f(scheme* sc, pointer args);
+    pointer clear_selection_f(scheme* sc, pointer args);
+    pointer delete_selected_f(scheme* sc, pointer args);
+    pointer cut_selected_f(scheme* sc, pointer args);
+    pointer copy_selected_f(scheme* sc, pointer args);
+    pointer paste_selected_f(scheme* sc, pointer args);
+    pointer move_selected_f(scheme* sc, pointer args);
+    pointer scale_selected_f(scheme* sc, pointer args);
+    pointer rotate_selected_f(scheme* sc, pointer args);
+    pointer mirror_selected_f(scheme* sc, pointer args);
+    pointer qsnapx_f(scheme* sc, pointer args);
+    pointer qsnapy_f(scheme* sc, pointer args);
+    pointer mousex_f(scheme* sc, pointer args);
+    pointer mousey_f(scheme* sc, pointer args);
+    pointer include_f(scheme* sc, pointer args);
+    */
 }
-#endif
+
+std::vector<std::string> draw_toolbar = {
+    "line",
+    "polyline",
+    "path",
+    "polygon",
+    "---",
+    "circle",
+    "ellipse",
+    "rectangle",
+    "point",
+    "---",
+    "heart",
+    "dolphin",
+    "snowflake",
+    "star",
+    "---",
+    "singlelinetext"
+};
+
+std::vector<std::string> draw_menu = {
+    "line",
+    "polyline",
+    "path",
+    "polygon",
+    "---",
+    "circle",
+    "ellipse",
+    "rectangle",
+    "point",
+    "---",
+    "heart",
+    "dolphin",
+    "snowflake",
+    "star",
+    "---",
+    "singlelinetext"
+};
+
+std::vector<std::string> tools_menu = {
+    "distance"
+};
+
+std::vector<std::string> inquiry_toolbar = {
+    "distance"
+};
+
+std::vector<std::string> modify_menu = {
+    "erase",
+    "move",
+    "rotate",
+    "scale",
+    "---",
+    "locatepoint"
+};
+
+std::vector<std::string> modify_toolbar = {
+    "erase",
+    "move",
+    "rotate",
+    "scale",
+    "---",
+    "locatepoint"
+};
+
+std::vector<std::string> dimension_menu = {
+    "quickleader"
+};
+
+std::vector<std::string> dimension_toolbar = {
+    "quickleader"
+};
 
 const SchemeData builtin_map[] = {
     {
         .name = "about",
+        .tooltip = "&About Embroidermodder 2",
+        .statustip = "Displays information about this product.",
         .function = about_f
     },
     {
         .name = "alert",
+        .tooltip = "",
+        .statustip = "",
         .function = alert_f
     },
     {
         .name = "blink",
+        .tooltip = "",
+        .statustip = "",
         .function = blink_f
     },
     {
+        .name = "changelog",
+        .tooltip = "&Changelog",
+        .statustip = "Describes new features in this product.",
+        .function = changelog_f
+    },
+    {
+        .name = "circle",
+        .tooltip = "Circle",
+        .statustip = "Creates a circle.",
+        .function = circle_f
+    },
+    {
+        .name = "colorselector",
+        .tooltip = "&Color Selector",
+        .statustip = "Dropdown selector for changing the current thread color",
+        .function = color_selector_f
+    },
+    {
+        .name = "copy",
+        .tooltip = "&Copy",
+        .statustip = "Copy the current selection's contents to the clipboard.",
+        .function = copy_f
+    },
+    {
+        .name = "cut",
+        .tooltip = "Cu&t",
+        .statustip = "Cut the current selection's contents to the clipboard.",
+        .function = cut_f
+    },
+    {
         .name = "debug",
+        .tooltip = "",
+        .statustip = "",
         .function = debug_f
     },
     {
         .name = "day",
+        .tooltip = "&Day",
+        .statustip = "Updates the current view using day vision settings.",
         .function = day_f
     },
     {
+        .name = "designdetails",
+        .tooltip = "&Details",
+        .statustip = "Details of the current design.",
+        .function = design_details_f
+    },
+    {
+        .name = "distance",
+        .tooltip = "&Distance",
+        .statustip = "Measures the distance and angle between two points.",
+        .function = distance_f
+    },
+    {
+        .name = "dolphin",
+        .tooltip = "&Dolphin",
+        .statustip = "Creates a dolphin:  DOLPHIN",
+        .function = dolphin_f
+    },
+    {
         .name = "donothing",
+        .tooltip = "&Do Nothing",
+        .statustip = "Does Nothing",
         .function = do_nothing_f
     },
     {
+        .name = "ellipse",
+        .tooltip = "Ellipse",
+        .statustip = "Creates an ellipse.",
+        .function = ellipse_f
+    },
+    {
+        .name = "erase",
+        .tooltip = "D&elete",
+        .statustip = "Removes objects from a drawing.",
+        .function = erase_f
+    },
+    {
         .name = "error",
+        .tooltip = "",
+        .statustip = "",
         .function = error_f
     },
     {
         .name = "exit",
+        .tooltip = "E&xit",
+        .statustip = "Exit the application.",
         .function = exit_f
     },
     {
+        .name = "freezealllayers",
+        .tooltip = "&Freeze All Layers",
+        .statustip = "Freezes all layers in the current drawing.",
+        .function = freeze_all_layers_f
+    },
+    {
+        .name = "heart",
+        .tooltip = "&Heart",
+        .statustip = "Creates a heart.",
+        .function = heart_f
+    },
+    {
         .name = "help",
+        .tooltip = "&Help",
+        .statustip = "Displays the help file.",
         .function = help_f
     },
     {
+        .name = "help",
+        .tooltip = "&Help",
+        .statustip = "Displays help.",
+        .function = help_f
+    },
+    {
+        .name = "hidealllayers",
+        .tooltip = "&Hide All Layers",
+        .statustip = "Turns the visibility off for all layers in the current drawing.",
+        .function = hide_all_layers_f
+    },
+    {
         .name = "icon128",
+        .tooltip = "Icon12&8",
+        .statustip = "Sets the toolbar icon size to 128x128.",
         .function = icon128_f
     },
     {
         .name = "icon16",
+        .tooltip = "Icon&16",
+        .statustip = "Sets the toolbar icon size to 16x16.",
         .function = icon16_f
     },
     {
         .name = "icon24",
+        .tooltip = "Icon&24",
+        .statustip = "Sets the toolbar icon size to 24x24.",
         .function = icon24_f
     },
     {
         .name = "icon32",
+        .tooltip = "Icon&32",
+        .statustip = "Sets the toolbar icon size to 32x32.",
         .function = icon32_f
     },
     {
+        .name = "icon48",
+        .tooltip = "Icon&48",
+        .statustip = "Sets the toolbar icon size to 48x48.",
+        .function = icon48_f
+    },
+    {
         .name = "icon64",
+        .tooltip = "Icon&64",
+        .statustip = "Sets the toolbar icon size to 64x64.",
         .function = icon64_f
     },
     {
+        .name = "layers",
+        .tooltip = "&Layers",
+        .statustip = "Manages layers and layer properties:  LAYER",
+        .function = layers_f
+    },
+    {
+        .name = "layerprevious",
+        .tooltip = "&Layer Previous",
+        .statustip = "Restores the previous layer settings:  LAYERP",
+        .function = layer_previous_f
+    },
+    {
+        .name = "layerselector",
+        .tooltip = "&Layer Selector",
+        .statustip = "Dropdown selector for changing the current layer",
+        .function = layer_selector_f
+    },
+    {
+        .name = "line",
+        .tooltip = "&Line",
+        .statustip = "Creates straight line segments.",
+        .function = line_f
+    },
+    {
+        .name = "linetypeselector",
+        .tooltip = "&Stitchtype Selector",
+        .statustip = "Dropdown selector for changing the current stitch type",
+        .function = line_type_selector_f
+    },
+    {
+        .name = "lineweightselector",
+        .tooltip = "&Threadweight Selector",
+        .statustip = "Dropdown selector for changing the current thread weight",
+        .function = line_weight_selector_f
+    },
+    {
+        .name = "locatepoint",
+        .tooltip = "&Locate Point",
+        .statustip = "Displays the coordinate values of a location.",
+        .function = locatepoint_f
+    },
+    {
+        .name = "lockalllayers",
+        .tooltip = "&Lock All Layers",
+        .statustip = "Locks all layers in the current drawing.",
+        .function = lock_all_layers_f
+    },
+    {
+        .name = "makelayercurrent",
+        .tooltip = "&Make Layer Active",
+        .statustip = "Makes the layer of a selected object the active layer.",
+        .function = make_layer_current_f
+    },
+    {
+        .name = "move",
+        .tooltip = "&Move",
+        .statustip = "Displaces objects a specified distance in a specified direction:  MOVE",
+        .function = move_f
+    },
+    {
         .name = "new",
+        .tooltip = "&New",
+        .statustip = "Create a new file.",
         .function = new_f
     },
     {
         .name = "night",
+        .tooltip = "&Night",
+        .statustip = "Updates the current view using night vision settings.",
         .function = night_f
     },
     {
         .name = "open",
+        .tooltip = "&Open",
+        .statustip = "Open an existing file.",
         .function = open_f
     },
     {
+        .name = "path",
+        .tooltip = "&Path",
+        .statustip = "Creates a 2D path.",
+        .function = path_f
+    },
+    {
+        .name = "platform",
+        .tooltip = "&Platform",
+        .statustip = "List which platform is in use.",
+        .function = platform_f
+    },
+    {
+        .name = "point",
+        .tooltip = "&Point",
+        .statustip = "Creates multiple points.",
+        .function = point_f
+    },
+    {
+        .name = "polygon",
+        .tooltip = "Pol&ygon",
+        .statustip = "Creates a regular polygon.",
+        .function = polygon_f
+    },
+    {
+        .name = "polyline",
+        .tooltip = "&Polyline",
+        .statustip = "Creates a 2D polyline.",
+        .function = polyline_f
+    },
+    {
+        .name = "quickleader",
+        .tooltip = "&QuickLeader",
+        .statustip = "Creates a leader and annotation.",
+        .function = quickleader_f
+    },
+    {
+        .name = "rectangle",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline.",
+        .function = rectangle_f
+    },
+    {
+        .name = "redo",
+        .tooltip = "&Redo",
+        .statustip = "Reverses the effects of the previous undo action.",
+        .function = redo_f
+    },
+    {
+        .name = "rgb",
+        .tooltip = "&RGB",
+        .statustip = "Updates the current view colors.",
+        .function = rgb_f
+    },
+    {
+        .name = "rotate",
+        .tooltip = "&Rotate",
+        .statustip = "Rotates objects about a base point.",
+        .function = rotate_f
+    },
+    {
+        .name = "selectall",
+        .tooltip = "&Select All",
+        .statustip = "Selects all objects:  SELECTALL",
+        .function = selectall_f
+    },
+    {
+        .name = "singlelinetext",
+        .tooltip = "&Single Line Text",
+        .statustip = "Creates single-line text objects:  TEXT",
+        .function = singlelinetext_f
+    },
+    {
         .name = "pandown",
+        .tooltip = "&Pan Down",
+        .statustip = "Moves the view down.",
         .function = pan_down_f
     },
     {
         .name = "panleft",
+        .tooltip = "&Pan Left",
+        .statustip = "Moves the view to the left.",
         .function = pan_left_f
     },
     {
         .name = "panpoint",
+        .tooltip = "&Pan Point",
+        .statustip = "Moves the view by the specified distance.",
         .function = pan_point_f
     },
     {
         .name = "panrealtime",
+        .tooltip = "&Pan Realtime",
+        .statustip = "Moves the view in the current viewport.",
         .function = pan_real_time_f
     },
     {
         .name = "panright",
+        .tooltip = "&Pan Right",
+        .statustip = "Moves the view to the right.",
         .function = pan_right_f
     },
     {
         .name = "panup",
+        .tooltip = "&Pan Up",
+        .statustip = "Moves the view up.",
         .function = pan_up_f
     },
     {
+        .name = "paste",
+        .tooltip = "&Paste",
+        .statustip = "Paste the clipboard's contents into the current selection.",
+        .function = paste_f
+    },
+    {
+        .name = "print",
+        .tooltip = "&Print",
+        .statustip = "Print the design.",
+        .function = print_f
+    },
+    {
+        .name = "redo",
+        .tooltip = "&Redo",
+        .statustip = "Reverses the effects of the previous undo action.",
+        .function = redo_f
+    },
+    {
+        .name = "save",
+        .tooltip = "&Save",
+        .statustip = "Save the design to disk.",
+        .function = save_f
+    },
+    {
+        .name = "saveas",
+        .tooltip = "Save &As",
+        .statustip = "Save the design under a new name.",
+        .function = saveas_f
+    },
+    {
+        .name = "scale",
+        .tooltip = "Sca&le",
+        .statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions.",
+        .function = scale_f
+    },
+    {
+        .name = "settingsdialog",
+        .tooltip = "&Settings",
+        .statustip = "Configure settings specific to this product.",
+        .function = settings_dialog_f
+    },
+    {
+        .name = "showalllayers",
+        .tooltip = "&Show All Layers",
+        .statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL",
+        .function = show_all_layers_f
+    },
+    {
+        .name = "snowflake",
+        .tooltip = "&Snowflake",
+        .statustip = "Creates a snowflake.",
+        .function = snowflake_f
+    },
+    {
+        .name = "star",
+        .tooltip = "&Star",
+        .statustip = "Creates a star.",
+        .function = star_f
+    },
+    {
+        .name = "syswindows",
+        .tooltip = "&SysWindows",
+        .statustip = "Arrange the windows.",
+        .function = syswindows_f
+    },
+    {
+        .name = "textbold",
+        .tooltip = "&Bold Text",
+        .statustip = "Sets text to be bold.",
+        .function = text_bold_f
+    },
+    {
+        .name = "textitalic",
+        .tooltip = "&Italic Text",
+        .statustip = "Sets text to be italic.",
+        .function = text_italic_f
+    },
+    {
+        .name = "textoverline",
+        .tooltip = "&Overline Text",
+        .statustip = "Sets text to be overlined.",
+        .function = text_overline_f
+    },
+    {
+        .name = "textstrikeout",
+        .tooltip = "&StrikeOut Text",
+        .statustip = "Sets text to be striked out.",
+        .function = text_strikeout_f
+    },
+    {
+        .name = "textunderline",
+        .tooltip = "&Underline Text",
+        .statustip = "Sets text to be underlined.",
+        .function = text_underline_f
+    },
+    {
+        .name = "thawalllayers",
+        .tooltip = "&Thaw All Layers",
+        .statustip = "Thaws all layers in the current drawing:  THAWALL",
+        .function = thaw_all_layers_f
+    },
+    {
+        .name = "tipoftheday",
+        .tooltip = "&Tip Of The Day",
+        .statustip = "Displays a dialog with useful tips",
+        .function = tip_of_the_day_f
+    },
+    {
         .name = "todo",
+        .tooltip = "",
+        .statustip = "",
         .function = todo_f
     },
     {
+        .name = "undo",
+        .tooltip = "&Undo",
+        .statustip = "Reverses the most recent action.",
+        .function = undo_f
+    },
+    {
+        .name = "unlockalllayers",
+        .tooltip = "&Unlock All Layers",
+        .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
+        .function = unlock_all_layers_f
+    },
+    {
+        .name = "whatsthis",
+        .tooltip = "&What's This?",
+        .statustip = "What's This? Context Help!",
+        .function = whats_this_f
+    },
+    {
+        .name = "windowcascade",
+        .tooltip = "&Cascade",
+        .statustip = "Cascade the windows.",
+        .function = window_cascade_f
+    },
+    {
+        .name = "windowclose",
+        .tooltip = "Cl&ose",
+        .statustip = "Close the active window.",
+        .function = window_close_f
+    },
+    {
+        .name = "windowcloseall",
+        .tooltip = "Close &All",
+        .statustip = "Close all the windows.",
+        .function = window_close_all_f
+    },
+    {
+        .name = "windownext",
+        .tooltip = "Ne&xt",
+        .statustip = "Move the focus to the next window.",
+        .function = window_next_f
+    },
+    {
+        .name = "windowprevious",
+        .tooltip = "Pre&vious",
+        .statustip = "Move the focus to the previous window.",
+        .function = window_previous_f
+    },
+    {
+        .name = "windowtile",
+        .tooltip = "&Tile",
+        .statustip = "Tile the windows.",
+        .function = window_tile_f
+    },
+    {
         .name = "zoomall",
+        .tooltip = "Zoom &All",
+        .statustip = "Zooms to display the drawing extents or the grid limits.",
         .function = zoom_all_f
     },
     {
         .name = "zoomcenter",
+        .tooltip = "Zoom &Center",
+        .statustip = "Zooms to display a view specified by a center point and magnification or height.",
         .function = zoom_center_f
     },
     {
         .name = "zoomdynamic",
+        .tooltip = "Zoom &Dynamic",
+        .statustip = "Zooms to display the generated portion of the drawing.",
         .function = zoom_dynamic_f
     },
     {
         .name = "zoomextents",
+        .tooltip = "Zoom &Extents",
+        .statustip = "Zooms to display the drawing extents.",
         .function = zoom_extents_f
     },
     {
         .name = "zoomin",
+        .tooltip = "Zoom &In",
+        .statustip = "Zooms to increase the apparent size of objects.",
         .function = zoom_in_f
     },
     {
         .name = "zoomout",
+        .tooltip = "Zoom &Out",
+        .statustip = "Zooms to decrease the apparent size of objects.",
         .function = zoom_out_f
     },
     {
         .name = "zoomscale",
+        .tooltip = "Zoom &Scale",
+        .statustip = "Zooms the display using a specified scale factor.",
         .function = zoom_scale_f
     },
     {
         .name = "zoomprevious",
+        .tooltip = "Zoom &Previous",
+        .statustip = "Zooms to display the previous view.",
         .function = zoom_previous_f
     },
     {
         .name = "zoomrealtime",
+        .tooltip = "Zoom &Realtime",
+        .statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport.",
         .function = zoom_real_time_f
     },
     {
         .name = "zoomselected",
+        .tooltip = "Zoom Selec&ted",
+        .statustip = "Zooms to display the selected objects.",
         .function = zoom_selected_f
     },
     {
         .name = "zoomwindow",
+        .tooltip = "Zoom &Window",
+        .statustip = "Zooms to display an area specified by a rectangular window.",
         .function = zoom_window_f
     },
     {
         .name = "^END",
+        .tooltip = "^END",
+        .statustip = "^END",
         .function = do_nothing_f
     }
 };
+
+extern MainWindow *_mainWin;
+
+std::map<std::string, std::vector<std::string>> toolbars = {
+    {"Draw", draw_toolbar},
+    {"Inquiry", inquiry_toolbar},
+    {"Modify", modify_toolbar},
+    {"Dimension", dimension_toolbar}
+};
+
+std::map<std::string, std::vector<std::string>> menus = {
+    {"Draw", draw_menu},
+    {"Tools", tools_menu},
+    {"Modify", modify_menu},
+    {"Dimension", dimension_menu}
+};
+
+/* Populate Toolbars */
+void
+MainWindow::loadToolbars(void)
+{
+    qDebug("loadToolbars()");
+    for (std::map<std::string, std::vector<std::string>>::iterator i=toolbars.begin();
+            i != toolbars.end(); i++) {
+        QString name(i->first.c_str());
+        QToolBar* tb = new QToolBar(name, this);
+        tb->setObjectName("toolbar" + name);
+        connect(tb, SIGNAL(topLevelChanged(bool)), this,
+            SLOT(floatingChangedToolBar(bool)));
+        addToolBar(Qt::LeftToolBarArea, tb);
+        toolbarHash[name] = tb;
+
+        std::vector<std::string> sl = i->second;
+        for (int j=0; j < sl.size(); j++) {
+            QString command(sl[j].c_str());
+            if (command == "---") {
+                toolbarHash.value(name)->addSeparator();
+                continue;
+            }
+            toolbarHash.value(name)->addAction(actionHash[qPrintable(command)]);
+        }
+    }
+}
+
+/* Populate Menus */
+void
+MainWindow::loadMenus(void)
+{
+    qDebug("loadMenus()");
+    for (std::map<std::string, std::vector<std::string>>::iterator i=menus.begin();
+            i != menus.end(); i++) {
+        QString name(i->first.c_str());
+        QMenu* menu = new QMenu(name, this);
+        menu->setTearOffEnabled(true);
+        menuBar()->addMenu(menu);
+        menuHash[name] = menu;
+
+        std::vector<std::string> sl = i->second;
+        for (int j=0; j < sl.size(); j++) {
+            QString command(sl[j].c_str());
+            if (command == "---") {
+                menuHash.value(name)->addSeparator();
+                continue;
+            }
+            menuHash.value(name)->addAction(actionHash[qPrintable(command)]);
+        }
+    }
+}
+
+void MainWindow::createAllActions()
+{
+    qDebug("Creating All Actions...");
+    for (int i=0; builtin_map[i].name[0] != '^'; i++) {
+        actionHash[builtin_map[i].name] = createAction(builtin_map[i].name,
+            tr(builtin_map[i].tooltip),
+            tr(builtin_map[i].statustip));
+    }
+
+    actionHash["windowclose"]->setEnabled(numOfDocs > 0);
+    actionHash["designdetails"]->setEnabled(numOfDocs > 0);
+}
+
+QAction *MainWindow::createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted)
+{
+    QString appDir = qApp->applicationDirPath();
+
+    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
+    ACTION->setStatusTip(statusTip);
+    ACTION->setObjectName(icon);
+    // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
+    // Make custom whats this context help popup with more descriptive help than just
+    // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+    // at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+    ACTION->setWhatsThis(statusTip);
+    // TODO: Finish All Commands ... <.<
+
+    if (icon == "textbold") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));
+    }
+    else if (icon == "textitalic") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextItalic(bool)));
+    }
+    else if (icon == "textunderline") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextUnderline(bool)));
+    }
+    else if (icon == "textstrikeout") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextStrikeOut(bool)));
+    }
+    else if (icon == "textoverline") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextOverline(bool)));
+    }
+    else {
+        connect(ACTION, &QAction::triggered, this, [=]() { runCommandPrompt(icon); });
+    }
+
+    if (icon == "new") {
+        ACTION->setShortcut(QKeySequence::New);
+    }
+    else if (icon == "open") {
+        ACTION->setShortcut(QKeySequence::Open);
+    }
+    else if (icon == "save") {
+        ACTION->setShortcut(QKeySequence::Save);
+    }
+    else if (icon == "saveas") {
+        ACTION->setShortcut(QKeySequence::SaveAs);
+    }
+    else if (icon == "print") {
+        ACTION->setShortcut(QKeySequence::Print);
+    }
+    else if (icon == "designdetails") {
+        ACTION->setShortcut(QKeySequence("Ctrl+D"));
+    }
+    else if (icon == "exit") {
+        ACTION->setShortcut(QKeySequence("Ctrl+Q"));
+    }
+    else if (icon == "cut") {
+        ACTION->setShortcut(QKeySequence::Cut);
+    }
+    else if (icon == "copy") {
+        ACTION->setShortcut(QKeySequence::Copy);
+    }
+    else if (icon == "paste") {
+        ACTION->setShortcut(QKeySequence::Paste);
+    }
+    else if (icon == "windownext") {
+        ACTION->setShortcut(QKeySequence::NextChild);
+    }
+    else if (icon == "windowprevious") {
+        ACTION->setShortcut(QKeySequence::PreviousChild);
+    }
+
+    /*
+    else {
+        ACTION->setEnabled(false);
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(stub_implement()));
+    }
+    */
+    return ACTION;
+}
+
+/*!
+ * \brief MainWindow::runCommandPrompt
+ * \param line
+ */
+void
+MainWindow::runCommandPrompt(const QString &line)
+{
+    QString cmd(line);
+    append_prompt_history(qPrintable(line));
+    /*
+    if (prompt->isRapidFireEnabled()) {
+        engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName);
+    }
+    else {
+        engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName);
+    }
+    */
+    run_command(qPrintable(line));
+}
 
 /*!
  */
@@ -1306,8 +2007,6 @@ alert_f(scheme* sc, pointer args)
 
 /*!
  * \brief blink_prompt_f
- * \param context
- * \return null
  */
 pointer
 blink_f(scheme* sc, pointer args)
@@ -1319,8 +2018,38 @@ blink_f(scheme* sc, pointer args)
     return sc->NIL;
 }
 
+/* TODO */
+pointer changelog_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer color_selector_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer copy_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer cut_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer design_details_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer freeze_all_layers_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer hide_all_layers_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer layers_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer layer_previous_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer layer_selector_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer line_type_selector_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer line_weight_selector_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer lock_all_layers_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer make_layer_current_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer paste_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer print_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer save_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer saveas_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer settings_dialog_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer show_all_layers_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer text_bold_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer text_italic_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer text_overline_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer text_strikeout_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer text_underline_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer thaw_all_layers_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer unlock_all_layers_f(scheme *sc, pointer args) { return sc->NIL; }
+pointer whats_this_f(scheme *sc, pointer args) { return sc->NIL; }
+
 /*!
- * 
+ *
  */
 pointer
 day_f(scheme* sc, pointer args)
@@ -1488,7 +2217,7 @@ icon128_f(scheme *sc, pointer args)
 }
 
 /*!
- * 
+ *
  */
 pointer
 icon16_f(scheme *sc, pointer args)
@@ -1506,7 +2235,7 @@ icon16_f(scheme *sc, pointer args)
 }
 
 /*!
- * 
+ *
  */
 pointer
 icon24_f(scheme *sc, pointer args)
@@ -1524,7 +2253,7 @@ icon24_f(scheme *sc, pointer args)
 }
 
 /*!
- * 
+ *
  */
 pointer
 icon32_f(scheme *sc, pointer args)
@@ -1542,7 +2271,7 @@ icon32_f(scheme *sc, pointer args)
 }
 
 /*!
- * 
+ *
  */
 pointer
 icon48_f(scheme *sc, pointer args)
@@ -1560,7 +2289,7 @@ icon48_f(scheme *sc, pointer args)
 }
 
 /*!
- * 
+ *
  */
 pointer
 icon64_f(scheme *sc, pointer args)
@@ -3189,7 +3918,7 @@ function prompt(str)
                 alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify third point of circle: "));
             }
-            else {                
+            else {
                 global.x3 = Number(strList[0]);
                 global.y3 = Number(strList[1]);
                 setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
@@ -3200,7 +3929,7 @@ function prompt(str)
         else {
             error("CIRCLE", qsTr("This should never happen."));
         }
-        
+
     }
     else if (global.mode == global.mode_TTR) {
         todo("CIRCLE", "prompt() for TTR");
@@ -3389,7 +4118,7 @@ function updateDolphin(numPts, xScale, yScale)
     var two_pi = 2*Math.PI;
 
     for(i = 0; i <= numPts; i++) {
-        t = two_pi/numPts*i; 
+        t = two_pi/numPts*i;
 
         xx = 4/23*Math.sin(62/33-58*t)+
         8/11*Math.sin(10/9-56*t)+
@@ -3975,7 +4704,7 @@ function updateHeart(style, numPts, xScale, yScale)
     var two_pi = 2*Math.PI;
 
     for(i = 0; i <= numPts; i++) {
-        t = two_pi/numPts*i; 
+        t = two_pi/numPts*i;
 
         if (style == "HEART4") {
             xx = Math.cos(t)*((Math.sin(t)*Math.sqrt(Math.abs(Math.cos(t))))/(Math.sin(t)+7/5) - 2*Math.sin(t) + 2);
@@ -5382,99 +6111,6 @@ function prompt(str)
     }
 }
 
-==> commands/sandbox.cpp <==
-//Command: Sandbox
-
-var global = {}; //Required
-global.test1;
-global.test2;
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
-function main()
-{
-    initCommand();
-    
-    //Report number of pre-selected objects
-    setPromptPrefix("Number of Objects Selected: " + numSelected().toString());
-    appendPromptHistory();
-    
-    mirrorSelected(0,0,0,1);
-    
-    //selectAll();
-    //rotateSelected(0,0,90);
-    
-    //Polyline & Polygon Testing
-    
-    var offsetX = 0.0;
-    var offsetY = 0.0;
-    
-    var polylineArray = [];
-    polylineArray.push(1.0 + offsetX);
-    polylineArray.push(1.0 + offsetY);
-    polylineArray.push(1.0 + offsetX);
-    polylineArray.push(2.0 + offsetY);
-    polylineArray.push(2.0 + offsetX);
-    polylineArray.push(2.0 + offsetY);
-    polylineArray.push(2.0 + offsetX);
-    polylineArray.push(3.0 + offsetY);
-    polylineArray.push(3.0 + offsetX);
-    polylineArray.push(3.0 + offsetY);
-    polylineArray.push(3.0 + offsetX);
-    polylineArray.push(2.0 + offsetY);
-    polylineArray.push(4.0 + offsetX);
-    polylineArray.push(2.0 + offsetY);
-    polylineArray.push(4.0 + offsetX);
-    polylineArray.push(1.0 + offsetY);
-    addPolyline(polylineArray);
-    
-    offsetX = 5.0;
-    offsetY = 0.0;
-    
-    var polygonArray = [];
-    polygonArray.push(1.0 + offsetX);
-    polygonArray.push(1.0 + offsetY);
-    polygonArray.push(1.0 + offsetX);
-    polygonArray.push(2.0 + offsetY);
-    polygonArray.push(2.0 + offsetX);
-    polygonArray.push(2.0 + offsetY);
-    polygonArray.push(2.0 + offsetX);
-    polygonArray.push(3.0 + offsetY);
-    polygonArray.push(3.0 + offsetX);
-    polygonArray.push(3.0 + offsetY);
-    polygonArray.push(3.0 + offsetX);
-    polygonArray.push(2.0 + offsetY);
-    polygonArray.push(4.0 + offsetX);
-    polygonArray.push(2.0 + offsetY);
-    polygonArray.push(4.0 + offsetX);
-    polygonArray.push(1.0 + offsetY);
-    addPolygon(polygonArray);
-    
-
-    endCommand();
-}
-
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
-{
-}
-
-//NOTE: context() is run when a context menu entry is chosen.
-function context(str)
-{
-}
-
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
-function prompt(str)
-{
-}
-
-
 ==> commands/scale.cpp <==
 //Command: Scale
 
@@ -6180,7 +6816,7 @@ function updateSnowflake(numPts, xScale, yScale)
     var two_pi = 2*Math.PI;
 
     for(i = 0; i <= numPts; i++) {
-        t = two_pi/numPts*i; 
+        t = two_pi/numPts*i;
 
 //Snowflake Curve with t [0,2pi]
 

@@ -1,29 +1,4 @@
-#include "view.h"
-#include "property-editor.h"
-#include "statusbar.h"
-#include "object-data.h"
-#include "object-base.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
-
-#include "selectbox.h"
-
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-image.h"
-#include "object-line.h"
-#include "object-path.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
-
-#include <QtGui>
-#include <QGraphicsScene>
-//#include <QOpenGLWidget>
+#include "embroidermodder.h"
 
 View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
@@ -1108,10 +1083,10 @@ void View::setCrossHairSize(quint8 percent)
 void View::setCornerButton()
 {
     int num = mainWin->getSettingsDisplayScrollBarWidgetNum();
-    if(num)
-    {
+    if (num) {
         QPushButton* cornerButton = new QPushButton(this);
         cornerButton->setFlat(true);
+        /* FIXME
         QAction* act = mainWin->actionHash.value(num);
         //NOTE: Prevent crashing if the action is NULL.
         if(!act)
@@ -1126,6 +1101,7 @@ void View::setCornerButton()
             setCornerWidget(cornerButton);
             cornerButton->setCursor(Qt::ArrowCursor);
         }
+        */
     }
     else
     {
@@ -1136,7 +1112,9 @@ void View::setCornerButton()
 void View::cornerButtonClicked()
 {
     qDebug("Corner Button Clicked.");
-    mainWin->actionHash.value(mainWin->getSettingsDisplayScrollBarWidgetNum())->trigger();
+    /* FIXME:
+    mainWin->actionHash[mainWin->getSettingsDisplayScrollBarWidgetNum())->trigger()];
+    */
 }
 
 void View::zoomIn()
@@ -1779,8 +1757,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if(zoomWindowActive)
-    {
+    if (zoomWindowActive) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
@@ -1788,13 +1765,12 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     }
 
     menu.addSeparator();
-    menu.addAction(mainWin->actionHash.value(ACTION_cut));
-    menu.addAction(mainWin->actionHash.value(ACTION_copy));
-    menu.addAction(mainWin->actionHash.value(ACTION_paste));
+    menu.addAction(mainWin->actionHash["cut"]);
+    menu.addAction(mainWin->actionHash["copy"]);
+    menu.addAction(mainWin->actionHash["paste"]);
     menu.addSeparator();
 
-    if(!selectionEmpty)
-    {
+    if (!selectionEmpty) {
         QAction* deleteAction = new QAction(QIcon("icons/" + iconTheme + "/" + "erase" + ".png"), "D&elete", this);
         deleteAction->setStatusTip("Removes objects from a drawing.");
         connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
@@ -2289,4 +2265,3 @@ void View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, 
     selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

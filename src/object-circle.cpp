@@ -1,10 +1,4 @@
-#include "object-circle.h"
-#include "object-data.h"
-#include "embroidery.h" //TODO: make a geom-circle.h that simply includes arc.h so it's more intuitive
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+#include "embroidermodder.h"
 
 CircleObject::CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -264,4 +258,3 @@ QPainterPath CircleObject::objectSavePath() const
     return trans.map(path);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

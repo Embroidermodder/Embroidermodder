@@ -1,9 +1,4 @@
-#include "object-image.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+#include "embroidermodder.h"
 
 ImageObject::ImageObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -206,4 +201,3 @@ void ImageObject::gripEdit(const QPointF& before, const QPointF& after)
     //TODO: gripEdit() for ImageObject
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

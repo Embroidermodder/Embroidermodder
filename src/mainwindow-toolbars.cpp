@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "embroidermodder.h"
 #include <QAction>
 #include <QToolBar>
 
@@ -7,18 +7,18 @@ void MainWindow::createFileToolbar()
     qDebug("MainWindow createFileToolbar()");
 
     toolbarFile->setObjectName("toolbarFile");
-    toolbarFile->addAction(actionHash.value(ACTION_new));
-    toolbarFile->addAction(actionHash.value(ACTION_open));
-    toolbarFile->addAction(actionHash.value(ACTION_save));
-    toolbarFile->addAction(actionHash.value(ACTION_saveas));
-    toolbarFile->addAction(actionHash.value(ACTION_print));
-    toolbarFile->addAction(actionHash.value(ACTION_designdetails));
+    toolbarFile->addAction(actionHash["new"]);
+    toolbarFile->addAction(actionHash["open"]);
+    toolbarFile->addAction(actionHash["save"]);
+    toolbarFile->addAction(actionHash["saveas"]);
+    toolbarFile->addAction(actionHash["print"]);
+    toolbarFile->addAction(actionHash["designdetails"]);
 
     toolbarFile->addSeparator();
-    toolbarFile->addAction(actionHash.value(ACTION_undo));
-    toolbarFile->addAction(actionHash.value(ACTION_redo));
+    toolbarFile->addAction(actionHash["undo"]);
+    toolbarFile->addAction(actionHash["redo"]);
     toolbarFile->addSeparator();
-    toolbarFile->addAction(actionHash.value(ACTION_help));
+    toolbarFile->addAction(actionHash["help"]);
 
     connect(toolbarFile, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -28,9 +28,9 @@ void MainWindow::createEditToolbar()
     qDebug("MainWindow createEditToolbar()");
 
     toolbarEdit->setObjectName("toolbarEdit");
-    toolbarEdit->addAction(actionHash.value(ACTION_cut));
-    toolbarEdit->addAction(actionHash.value(ACTION_copy));
-    toolbarEdit->addAction(actionHash.value(ACTION_paste));
+    toolbarEdit->addAction(actionHash["cut"]);
+    toolbarEdit->addAction(actionHash["copy"]);
+    toolbarEdit->addAction(actionHash["paste"]);
 
     connect(toolbarEdit, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -40,8 +40,8 @@ void MainWindow::createViewToolbar()
     qDebug("MainWindow createViewToolbar()");
 
     toolbarView->setObjectName("toolbarView");
-    toolbarView->addAction(actionHash.value(ACTION_day));
-    toolbarView->addAction(actionHash.value(ACTION_night));
+    toolbarView->addAction(actionHash["day"]);
+    toolbarView->addAction(actionHash["night"]);
 
     connect(toolbarView, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -51,17 +51,17 @@ void MainWindow::createZoomToolbar()
     qDebug("MainWindow createZoomToolbar()");
 
     toolbarZoom->setObjectName("toolbarZoom");
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomwindow));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomdynamic));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomscale));
+    toolbarZoom->addAction(actionHash["zoomwindow"]);
+    toolbarZoom->addAction(actionHash["zoomdynamic"]);
+    toolbarZoom->addAction(actionHash["zoomscale"]);
     toolbarZoom->addSeparator();
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomcenter));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomin));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomout));
+    toolbarZoom->addAction(actionHash["zoomcenter"]);
+    toolbarZoom->addAction(actionHash["zoomin"]);
+    toolbarZoom->addAction(actionHash["zoomout"]);
     toolbarZoom->addSeparator();
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomselected));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomall));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomextents));
+    toolbarZoom->addAction(actionHash["zoomselected"]);
+    toolbarZoom->addAction(actionHash["zoomall"]);
+    toolbarZoom->addAction(actionHash["zoomextents"]);
 
     connect(toolbarZoom, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -71,13 +71,13 @@ void MainWindow::createPanToolbar()
     qDebug("MainWindow createPanToolbar()");
 
     toolbarPan->setObjectName("toolbarPan");
-    toolbarPan->addAction(actionHash.value(ACTION_panrealtime));
-    toolbarPan->addAction(actionHash.value(ACTION_panpoint));
+    toolbarPan->addAction(actionHash["panrealtime"]);
+    toolbarPan->addAction(actionHash["panpoint"]);
     toolbarPan->addSeparator();
-    toolbarPan->addAction(actionHash.value(ACTION_panleft));
-    toolbarPan->addAction(actionHash.value(ACTION_panright));
-    toolbarPan->addAction(actionHash.value(ACTION_panup));
-    toolbarPan->addAction(actionHash.value(ACTION_pandown));
+    toolbarPan->addAction(actionHash["panleft"]);
+    toolbarPan->addAction(actionHash["panright"]);
+    toolbarPan->addAction(actionHash["panup"]);
+    toolbarPan->addAction(actionHash["pandown"]);
 
     connect(toolbarPan, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -87,12 +87,12 @@ void MainWindow::createIconToolbar()
     qDebug("MainWindow createIconToolbar()");
 
     toolbarIcon->setObjectName("toolbarIcon");
-    toolbarIcon->addAction(actionHash.value(ACTION_icon16));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon24));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon32));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon48));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon64));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon128));
+    toolbarIcon->addAction(actionHash["icon16"]);
+    toolbarIcon->addAction(actionHash["icon24"]);
+    toolbarIcon->addAction(actionHash["icon32"]);
+    toolbarIcon->addAction(actionHash["icon48"]);
+    toolbarIcon->addAction(actionHash["icon64"]);
+    toolbarIcon->addAction(actionHash["icon128"]);
 
     connect(toolbarIcon, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -102,13 +102,13 @@ void MainWindow::createHelpToolbar()
     qDebug("MainWindow createHelpToolbar()");
 
     toolbarHelp->setObjectName("toolbarHelp");
-    toolbarHelp->addAction(actionHash.value(ACTION_help));
+    toolbarHelp->addAction(actionHash["help"]);
     toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash.value(ACTION_changelog));
+    toolbarHelp->addAction(actionHash["changelog"]);
     toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash.value(ACTION_about));
+    toolbarHelp->addAction(actionHash["about"]);
     toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash.value(ACTION_whatsthis));
+    toolbarHelp->addAction(actionHash["whatsthis"]);
 
     connect(toolbarHelp, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -118,8 +118,8 @@ void MainWindow::createLayerToolbar()
     qDebug("MainWindow createLayerToolbar()");
 
     toolbarLayer->setObjectName("toolbarLayer");
-    toolbarLayer->addAction(actionHash.value(ACTION_makelayercurrent));
-    toolbarLayer->addAction(actionHash.value(ACTION_layers));
+    toolbarLayer->addAction(actionHash["makelayercurrent"]);
+    toolbarLayer->addAction(actionHash["layers"]);
 
     QString appDir = qApp->applicationDirPath();
     QString icontheme = getSettingsGeneralIconTheme();
@@ -140,7 +140,7 @@ void MainWindow::createLayerToolbar()
     toolbarLayer->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
-    toolbarLayer->addAction(actionHash.value(ACTION_layerprevious));
+    toolbarLayer->addAction(actionHash["layerprevious"]);
 
     connect(toolbarLayer, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -229,16 +229,16 @@ void MainWindow::createTextToolbar()
     textFontSelector->setCurrentFont(QFont(getSettingsTextFont()));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
-    toolbarText->addAction(actionHash.value(ACTION_textbold));
-    actionHash.value(ACTION_textbold)->setChecked(getSettingsTextStyleBold());
-    toolbarText->addAction(actionHash.value(ACTION_textitalic));
-    actionHash.value(ACTION_textitalic)->setChecked(getSettingsTextStyleItalic());
-    toolbarText->addAction(actionHash.value(ACTION_textunderline));
-    actionHash.value(ACTION_textunderline)->setChecked(getSettingsTextStyleUnderline());
-    toolbarText->addAction(actionHash.value(ACTION_textstrikeout));
-    actionHash.value(ACTION_textstrikeout)->setChecked(getSettingsTextStyleStrikeOut());
-    toolbarText->addAction(actionHash.value(ACTION_textoverline));
-    actionHash.value(ACTION_textoverline)->setChecked(getSettingsTextStyleOverline());
+    toolbarText->addAction(actionHash["textbold"]);
+    actionHash["textbold"]->setChecked(getSettingsTextStyleBold());
+    toolbarText->addAction(actionHash["textitalic"]);
+    actionHash["textitalic"]->setChecked(getSettingsTextStyleItalic());
+    toolbarText->addAction(actionHash["textunderline"]);
+    actionHash["textunderline"]->setChecked(getSettingsTextStyleUnderline());
+    toolbarText->addAction(actionHash["textstrikeout"]);
+    actionHash["textstrikeout"]->setChecked(getSettingsTextStyleStrikeOut());
+    toolbarText->addAction(actionHash["textoverline"]);
+    actionHash["textoverline"]->setChecked(getSettingsTextStyleOverline());
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -316,4 +316,3 @@ void MainWindow::createAllToolbars()
     //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

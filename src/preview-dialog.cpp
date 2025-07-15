@@ -1,8 +1,4 @@
-#include "preview-dialog.h"
-#include "imagewidget.h"
-
-#include <QDebug>
-#include <QGridLayout>
+#include "embroidermodder.h"
 
 PreviewDialog::PreviewDialog(QWidget* parent,
                              const QString& caption,
@@ -35,4 +31,3 @@ PreviewDialog::~PreviewDialog()
     qDebug("PreviewDialog Destructor");
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

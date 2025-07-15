@@ -1,12 +1,6 @@
-#include "undo-commands.h"
+#include "embroidermodder.h"
 
-#include "object-base.h"
-#include "view.h"
-
-//==================================================
 // Add
-//==================================================
-
 UndoableAddCommand::UndoableAddCommand(const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -24,10 +18,7 @@ void UndoableAddCommand::redo()
     gview->addObject(object);
 }
 
-//==================================================
 // Delete
-//==================================================
-
 UndoableDeleteCommand::UndoableDeleteCommand(const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -272,4 +263,3 @@ void UndoableMirrorCommand::mirror()
     //TODO: finish undoable mirror
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

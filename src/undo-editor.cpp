@@ -1,10 +1,4 @@
-#include <QUndoGroup>
-#include <QUndoStack>
-#include <QUndoView>
-#include <QKeyEvent>
-
-#include "undo-editor.h"
-#include "undo-commands.h"
+#include "embroidermodder.h"
 
 UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
@@ -77,4 +71,3 @@ void UndoEditor::redo()
     undoGroup->redo();
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

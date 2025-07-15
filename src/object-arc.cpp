@@ -1,11 +1,4 @@
-#include "object-arc.h"
-#include "object-data.h"
-
-#include "embroidery.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+#include "embroidermodder.h"
 
 ArcObject::ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -376,4 +369,3 @@ void ArcObject::gripEdit(const QPointF& before, const QPointF& after)
     //TODO: gripEdit() for ArcObject
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

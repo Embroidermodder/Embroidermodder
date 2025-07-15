@@ -13,7 +13,6 @@
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
-#include "mainwindow-actions.h"
 #include "cmdprompt.h"
 
 #include "script.h"
@@ -44,7 +43,8 @@ class MainWindow: public QMainWindow
     Q_OBJECT
 
 public:
-    void loadCommands(void);
+    std::unordered_map<std::string, QAction*> actionHash;
+
     void loadToolbars(void);
     void loadMenus(void);
 
@@ -55,10 +55,10 @@ public:
     MainWindow* getApplication();
     MdiWindow* activeMdiWindow();
     View* activeView();
-    QGraphicsScene*                 activeScene();
-    QUndoStack*                     activeUndoStack();
+    QGraphicsScene* activeScene();
+    QUndoStack* activeUndoStack();
 
-    void                            setUndoCleanIcon(bool opened);
+    void setUndoCleanIcon(bool opened);
 
     virtual void                    updateMenuToolbarStatusbar();
 
@@ -283,7 +283,6 @@ public:
     void setSettingsTextStyleStrikeOut(bool newValue)                  { settings_text_style_strikeout           = newValue; }
     void setSettingsTextStyleOverline(bool newValue)                   { settings_text_style_overline            = newValue; }
 
-    QHash<int, QAction*>            actionHash;
     QHash<QString, QToolBar*>       toolbarHash;
     QHash<QString, QMenu*>          menuHash;
 
@@ -305,7 +304,6 @@ public slots:
     void                            onWindowActivated (QMdiSubWindow* w);
     void                            windowMenuAboutToShow();
     void                            windowMenuActivated( bool checked/*int id*/ );
-    QAction*                        getAction(int actionEnum);
 
     void                            updateAllViewScrollBars(bool val);
     void                            updateAllViewCrossHairColors(QRgb color);

@@ -80,4 +80,3 @@ void LayerManager::addLayer(const QString& name,
     layerModel->setData(layerModel->index(0, 7), print);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

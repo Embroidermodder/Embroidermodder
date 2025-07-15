@@ -1,10 +1,4 @@
-#include "object-base.h"
-
-#include <QDebug>
-#include <QGraphicsScene>
-#include <QMessageBox>
-#include <QDateTime>
-#include <QPainter>
+#include "embroidermodder.h"
 
 BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -156,4 +150,3 @@ void BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

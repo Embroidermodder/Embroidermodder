@@ -1,12 +1,4 @@
-#include "mainwindow.h"
-#include "mdiwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include <QMenu>
-#include <QMdiArea>
-#include <QApplication>
-#include <QContextMenuEvent>
+#include "embroidermodder.h"
 
 StatusBarButton::StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* statbar, QWidget *parent) : QToolButton(parent)
 {
@@ -232,4 +224,3 @@ void StatusBarButton::disableReal()
     if(gview) { gview->toggleReal(false); }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,31 +1,4 @@
-#include "mdiwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "object-save.h"
-#include "object-data.h"
-#include "object-path.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QApplication>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QMdiSubWindow>
-#include <QStatusBar>
-#include <QColor>
-#include <QUndoStack>
-
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
-
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 void add_polygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
 void add_polyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);

@@ -1,13 +1,8 @@
 #include <QtGui>
 
-#include "settings-dialog.h"
-#include "object-data.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
+#include "embroidermodder.h"
 
-#if QT_VERSION >= 0x050000
 #include <QStandardPaths>
-#endif
 
 Settings_Dialog::Settings_Dialog(MainWindow* mw, const QString& showTab, QWidget* parent) : QDialog(parent)
 {
@@ -299,11 +294,13 @@ QWidget* Settings_Dialog::createTabDisplay()
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
     dialog_display_scrollbar_widget_num = mainWin->getSettingsDisplayScrollBarWidgetNum();
     int numActions = mainWin->actionHash.size();
+    /* FIXME:
     for(int i = 0; i < numActions; i++)
     {
         QAction* action = mainWin->actionHash.value(i);
         if(action) comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
     }
+    */
     comboBoxScrollBarWidget->setCurrentIndex(dialog_display_scrollbar_widget_num);
     connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxScrollBarWidgetCurrentIndexChanged(int)));
 
@@ -2964,4 +2961,3 @@ void Settings_Dialog::rejectChanges()
     reject();
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

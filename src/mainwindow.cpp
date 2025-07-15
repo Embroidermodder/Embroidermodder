@@ -1,44 +1,11 @@
-#include "mainwindow.h"
-#include "mainwindow-actions.h"
+#include "embroidermodder.h"
 
-#include "statusbar.h"
-#include "statusbar-button.h"
-
-#include "view.h"
-#include "cmdprompt.h"
-
-#include "property-editor.h"
-#include "undo-editor.h"
-
-#include "preview-dialog.h"
-
-#include "embroidery.h"
-
-#include <stdlib.h>
-
-#include <QDebug>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QMenu>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QMdiArea>
-#include <QWidget>
-#include <QMdiSubWindow>
-#include <QMessageBox>
-#include <QToolBar>
-#include <QFileDialog>
-#include <QApplication>
-#include <QDate>
-#include <QFileInfo>
-#include <QLabel>
-#include <QComboBox>
-#include <QCloseEvent>
-#include <QMetaObject>
-#include <QLocale>
+extern MainWindow *_mainWin;
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    _mainWin = this;
+
     if (!load_scheme()) {
         QMessageBox::critical(this, tr("Scheme Error"),
             tr("Failed to boot scheme."));
@@ -46,6 +13,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     }
 
     readSettings();
+
+    createAllActions();
 
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
@@ -207,14 +176,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    loadCommands();
     loadToolbars();
     loadMenus();
  
     statusbar = new StatusBar(this, this);
     this->setStatusBar(statusbar);
 
-    createAllActions();
     createAllMenus();
     createAllToolbars();
 
@@ -255,11 +222,6 @@ MainWindow::~MainWindow()
     cutCopyObjectList.clear();
 }
 
-QAction* MainWindow::getAction(int actionEnum)
-{
-    return actionHash.value(actionEnum);
-}
-
 void MainWindow::recentMenuAboutToShow()
 {
     qDebug("MainWindow::recentMenuAboutToShow()");
@@ -298,14 +260,14 @@ void MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
-    windowMenu->addAction(actionHash.value(ACTION_windowclose));
-    windowMenu->addAction(actionHash.value(ACTION_windowcloseall));
+    windowMenu->addAction(actionHash["windowclose"]);
+    windowMenu->addAction(actionHash["windowcloseall"]);
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windowcascade));
-    windowMenu->addAction(actionHash.value(ACTION_windowtile));
+    windowMenu->addAction(actionHash["windowcascade"]);
+    windowMenu->addAction(actionHash["windowtile"]);
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windownext));
-    windowMenu->addAction(actionHash.value(ACTION_windowprevious));
+    windowMenu->addAction(actionHash["windownext"]);
+    windowMenu->addAction(actionHash["windowprevious"]);
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -571,9 +533,9 @@ void MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash["print"]->setEnabled(numOfDocs > 0);
+    actionHash["windowclose"]->setEnabled(numOfDocs > 0);
+    actionHash["designdetails"]->setEnabled(numOfDocs > 0);
 
     if(numOfDocs)
     {
@@ -808,4 +770,3 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

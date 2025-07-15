@@ -1,30 +1,6 @@
-#include <QApplication>
-#include <QtGui>
-#include <QGridLayout>
-#include <QLabel>
-#include <QDialogButtonBox>
-#include <QScrollArea>
-#include <QApplication>
-#include <QGroupBox>
-#include <QFile>
-#include <QXmlStreamReader>
-#include <QFileDialog>
-#include <QPushButton>
-#include <QHeaderView>
-#include <QMenuBar>
-#include <QMessageBox>
-#include <QStatusBar>
-#include <QAction>
-#include <QDesktopServices>
-#include <QApplication>
-#include <QScreen>
-
-#include <QStyle>
+#include "embroidermodder.h"
 
 using namespace Qt::StringLiterals;
-
-#include "dialog.h"
-#include "embroidery.h"
 
 int make_dialog(const char *fname);
 

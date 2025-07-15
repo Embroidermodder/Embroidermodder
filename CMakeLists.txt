@@ -67,81 +67,68 @@ add_compile_options(
 endif()
 
 qt_add_executable(${TARGET}
-	${SRC}/application.cpp
-	${SRC}/object-ellipse.h
-	${SRC}/application.h
-	${SRC}/cmdprompt.cpp
-	${SRC}/cmdprompt.h
-	${SRC}/object-image.cpp
-	${SRC}/object-image.h
-	${SRC}/object-line.cpp
-	${SRC}/object-line.h
-	${SRC}/dialog.cpp
-	${SRC}/dialog.h
-	${SRC}/object-path.cpp
-	${SRC}/object-path.h
 	${SRC}/embroidermodder2.icns
-	${SRC}/object-point.cpp
 	${SRC}/embroidermodder2.ico
-	${SRC}/object-point.h
-	${SRC}/object-polygon.cpp
-	${SRC}/object-polygon.h
-	${SRC}/imagewidget.cpp
-	${SRC}/object-polyline.cpp
-	${SRC}/imagewidget.h
-	${SRC}/object-polyline.h
 	${SRC}/Info.plist
-	${SRC}/object-rect.cpp
+
+	${SRC}/application.cpp
+	${SRC}/cmdprompt.cpp
+	${SRC}/dialog.cpp
+	${SRC}/imagewidget.cpp
 	${SRC}/layer-manager.cpp
-	${SRC}/object-rect.h
-	${SRC}/layer-manager.h
-	${SRC}/object-save.cpp
 	${SRC}/main.cpp
 	${SRC}/mainwindow.cpp
-	${SRC}/mainwindow-actions.cpp
-	${SRC}/mainwindow-actions.h
 	${SRC}/mainwindow-commands.cpp
-	${SRC}/object-save.h
-	${SRC}/object-textsingle.cpp
-	${SRC}/object-textsingle.h
-	${SRC}/preview-dialog.cpp
-	${SRC}/preview-dialog.h
-	${SRC}/mainwindow.h
-	${SRC}/property-editor.cpp
 	${SRC}/mainwindow-menus.cpp
-	${SRC}/property-editor.h
 	${SRC}/mainwindow-settings.cpp
 	${SRC}/mainwindow-toolbars.cpp
-	${SRC}/selectbox.cpp
 	${SRC}/mdiarea.cpp
-	${SRC}/selectbox.h
-	${SRC}/mdiarea.h
-	${SRC}/settings-dialog.cpp
 	${SRC}/mdiwindow.cpp
-	${SRC}/settings-dialog.h
-	${SRC}/mdiwindow.h
-	${SRC}/statusbar-button.cpp
-	${SRC}/statusbar-button.h
-	${SRC}/statusbar.cpp
 	${SRC}/object-arc.cpp
-	${SRC}/statusbar.h
-	${SRC}/undo-commands.cpp
-	${SRC}/undo-commands.h
-	${SRC}/undo-editor.cpp
-	${SRC}/object-data.h
-	${SRC}/object-arc.h
 	${SRC}/object-base.cpp
-	${SRC}/object-base.h
 	${SRC}/object-circle.cpp
-	${SRC}/object-circle.h
 	${SRC}/object-dimleader.cpp
-	${SRC}/object-dimleader.h
 	${SRC}/object-ellipse.cpp
-	${SRC}/undo-editor.h
-	${SRC}/view.cpp
-	${SRC}/view.h
+	${SRC}/object-image.cpp
+	${SRC}/object-line.cpp
+	${SRC}/object-path.cpp
+	${SRC}/object-point.cpp
+	${SRC}/object-polygon.cpp
+	${SRC}/object-polyline.cpp
+	${SRC}/object-rect.cpp
+	${SRC}/object-save.cpp
+	${SRC}/object-textsingle.cpp
+	${SRC}/preview-dialog.cpp
+	${SRC}/property-editor.cpp
 	${SRC}/script.cpp
+	${SRC}/selectbox.cpp
+	${SRC}/settings-dialog.cpp
+	${SRC}/statusbar.cpp
+	${SRC}/statusbar-button.cpp
+	${SRC}/undo-commands.cpp
+	${SRC}/undo-editor.cpp
+	${SRC}/view.cpp
+
+	${SRC}/embroidermodder.h
+
+	${SRC}/cmdprompt.h
+	${SRC}/dialog.h
+	${SRC}/imagewidget.h
+	${SRC}/layer-manager.h
+	${SRC}/preview-dialog.h
+	${SRC}/mainwindow.h
+	${SRC}/mdiarea.h
+	${SRC}/mdiwindow.h
+	${SRC}/object.h
+	${SRC}/property-editor.h
 	${SRC}/script.h
+	${SRC}/selectbox.h
+	${SRC}/settings-dialog.h
+	${SRC}/statusbar-button.h
+	${SRC}/statusbar.h
+	${SRC}/undo-commands.h
+	${SRC}/undo-editor.h
+	${SRC}/view.h
 
 # libembroidery
 	${LIB}/compound-file.c

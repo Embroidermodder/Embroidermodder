@@ -1,7 +1,4 @@
-#include "mainwindow.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include <QLabel>
+#include "embroidermodder.h"
 
 StatusBar::StatusBar(MainWindow* mw, QWidget *parent) : QStatusBar(parent)
 {
@@ -42,4 +39,3 @@ void StatusBar::setMouseCoord(qreal x, qreal y)
     //statusBarMouseCoord->setText(QString().setNum(x, 'E', 4) + ", " + QString().setNum(y, 'E', 4)); //TODO: use precision from unit settings
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

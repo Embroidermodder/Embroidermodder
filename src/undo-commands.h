@@ -142,4 +142,3 @@ private:
 
 #endif
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
