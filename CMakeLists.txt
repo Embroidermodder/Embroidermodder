@@ -17,7 +17,6 @@ set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(LIB ${CMAKE_SOURCE_DIR}/extern/libembroidery)
 
-set(CMDS ${CMAKE_SOURCE_DIR}/commands)
 set(DIALOGS ${CMAKE_SOURCE_DIR}/dialogs)
 set(ICONS ${CMAKE_SOURCE_DIR}/icons)
 set(IMAGES ${CMAKE_SOURCE_DIR}/images)
@@ -110,25 +109,6 @@ qt_add_executable(${TARGET}
 	${SRC}/view.cpp
 
 	${SRC}/embroidermodder.h
-
-	${SRC}/cmdprompt.h
-	${SRC}/dialog.h
-	${SRC}/imagewidget.h
-	${SRC}/layer-manager.h
-	${SRC}/preview-dialog.h
-	${SRC}/mainwindow.h
-	${SRC}/mdiarea.h
-	${SRC}/mdiwindow.h
-	${SRC}/object.h
-	${SRC}/property-editor.h
-	${SRC}/script.h
-	${SRC}/selectbox.h
-	${SRC}/settings-dialog.h
-	${SRC}/statusbar-button.h
-	${SRC}/statusbar.h
-	${SRC}/undo-commands.h
-	${SRC}/undo-editor.h
-	${SRC}/view.h
 
 # libembroidery
 	${LIB}/compound-file.c
@@ -269,7 +249,6 @@ qt_add_translations(embroidermodder2 TS_FILES
 # WARNING: This does NOT regenerate when the assets change, so you have to
 # rerun cmake to ensure that this retriggers.
 #
-file(COPY "${CMDS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${DIALOGS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${ICONS}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${IMAGES}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")

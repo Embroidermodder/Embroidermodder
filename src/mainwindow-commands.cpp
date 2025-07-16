@@ -13,9 +13,9 @@ void MainWindow::stub_testing()
 void MainWindow::exit()
 {
     qDebug("exit()");
-    if(getSettingsPromptSaveHistory())
-    {
-        prompt->saveHistory("prompt.log", getSettingsPromptSaveHistoryAsHtml()); //TODO: get filename from settings
+    if (settings_prompt_save_history) {
+        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html);
+        //TODO: get filename from settings
     }
     qApp->closeAllWindows();
     this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
@@ -223,7 +223,6 @@ void MainWindow::tipOfTheDay()
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    settings_general_tip_of_the_day = mainWin->getSettingsGeneralTipOfTheDay();
     checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
@@ -377,7 +376,7 @@ void MainWindow::iconResize(int iconSize)
 
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
-    setSettingsGeneralIconSize(iconSize);
+    settings_general_icon_size = iconSize;
 }
 
 MdiWindow* MainWindow::activeMdiWindow()
@@ -490,13 +489,13 @@ void MainWindow::updateAllViewRulerColors(QRgb color)
 
 void MainWindow::updatePickAddMode(bool val)
 {
-    setSettingsSelectionModePickAdd(val);
+    settings_selection_mode_pickadd = val;
     dockPropEdit->updatePickAddModeButton(val);
 }
 
 void MainWindow::pickAddModeToggled()
 {
-    bool val = !getSettingsSelectionModePickAdd();
+    bool val = !settings_selection_mode_pickadd;
     updatePickAddMode(val);
 }
 
@@ -662,58 +661,58 @@ void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 void MainWindow::textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
-    setSettingsTextSize(qFabs(textSizeSelector->itemData(index).toReal())); //TODO: check that the toReal() conversion is ok
+    settings_text_size = qFabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
 }
 
 QString MainWindow::textFont()
 {
-    return getSettingsTextFont();
+    return settings_text_font;
 }
 
 qreal MainWindow::textSize()
 {
-    return getSettingsTextSize();
+    return settings_text_size;
 }
 
 qreal MainWindow::textAngle()
 {
-    return getSettingsTextAngle();
+    return settings_text_angle;
 }
 
 bool MainWindow::textBold()
 {
-    return getSettingsTextStyleBold();
+    return settings_text_style_bold;
 }
 
 bool MainWindow::textItalic()
 {
-    return getSettingsTextStyleItalic();
+    return settings_text_style_italic;
 }
 
 bool MainWindow::textUnderline()
 {
-    return getSettingsTextStyleUnderline();
+    return settings_text_style_underline;
 }
 
 bool MainWindow::textStrikeOut()
 {
-    return getSettingsTextStyleStrikeOut();
+    return settings_text_style_strikeout;
 }
 
 bool MainWindow::textOverline()
 {
-    return getSettingsTextStyleOverline();
+    return settings_text_style_overline;
 }
 
 void MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    setSettingsTextFont(str);
+    settings_text_font = str;
 }
 
 void MainWindow::setTextSize(qreal num)
 {
-    setSettingsTextSize(qFabs(num));
+    settings_text_size = qFabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
     if(index != -1)
         textSizeSelector->removeItem(index);
@@ -725,32 +724,32 @@ void MainWindow::setTextSize(qreal num)
 
 void MainWindow::setTextAngle(qreal num)
 {
-    setSettingsTextAngle(num);
+    settings_text_angle = num;
 }
 
 void MainWindow::setTextBold(bool val)
 {
-    setSettingsTextStyleBold(val);
+    settings_text_style_bold = val;
 }
 
 void MainWindow::setTextItalic(bool val)
 {
-    setSettingsTextStyleItalic(val);
+    settings_text_style_italic = val;
 }
 
 void MainWindow::setTextUnderline(bool val)
 {
-    setSettingsTextStyleUnderline(val);
+    settings_text_style_underline = val;
 }
 
 void MainWindow::setTextStrikeOut(bool val)
 {
-    setSettingsTextStyleStrikeOut(val);
+    settings_text_style_strikeout = val;
 }
 
 void MainWindow::setTextOverline(bool val)
 {
-    setSettingsTextStyleOverline(val);
+    settings_text_style_overline = val;
 }
 
 QString MainWindow::getCurrentLayer()
@@ -858,7 +857,7 @@ void MainWindow::runCommand()
 void MainWindow::runCommandMain(const QString& cmd)
 {
     qDebug("runCommandMain(%s)", qPrintable(cmd));
-    // if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
+    // if(!settings_selection_mode_pick_first) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
     runCommandPrompt(cmd);
 }
 

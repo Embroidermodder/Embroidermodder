@@ -949,7 +949,7 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
 {
     QString appDir = qApp->applicationDirPath();
 
-    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
+    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + settings_general_icon_theme + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);
     // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
@@ -1093,47 +1093,6 @@ getCurrentColor(void)
     return _mainWin->getCurrentColor();
 }
 
-const char *
-getSettingsTextFont()
-{
-    return qPrintable(_mainWin->getSettingsTextFont());
-}
-
-double
-getSettingsTextSize()
-{
-    return _mainWin->getSettingsTextSize();
-}
-
-bool
-getSettingsTextStyleBold(void)
-{
-    return _mainWin->getSettingsTextStyleBold();
-}
-
-bool
-getSettingsTextStyleItalic(void)
-{
-    return _mainWin->getSettingsTextStyleItalic();
-}
-
-bool
-getSettingsTextStyleUnderline() {
-    return _mainWin->getSettingsTextStyleUnderline();
-}
-
-bool
-getSettingsTextStyleStrikeOut(void)
-{
-    return _mainWin->getSettingsTextStyleStrikeOut();
-}
-
-bool
-getSettingsTextStyleOverline()
-{
-    return _mainWin->getSettingsTextStyleOverline();
-}
-
 /*!
  * \brief throwError
  */
@@ -1230,21 +1189,21 @@ print_area(double x, double y, double w, double h)
 void
 set_background_color(uint8_t r, uint8_t g, uint8_t b)
 {
-    _mainWin->setSettingsDisplayBGColor(qRgb(r,g,b));
+    settings_display_bg_color = qRgb(r,g,b);
     _mainWin->updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
 void
 set_crosshair_color(uint8_t r, uint8_t g, uint8_t b)
 {
-    _mainWin->setSettingsDisplayCrossHairColor(qRgb(r,g,b));
+    settings_display_crosshair_color = qRgb(r,g,b);
     _mainWin->updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
 void
 set_grid_color(uint8_t r, uint8_t g, uint8_t b)
 {
-    _mainWin->setSettingsGridColor(qRgb(r,g,b));
+    settings_grid_color = qRgb(r,g,b);
     _mainWin->updateAllViewGridColors(qRgb(r,g,b));
 }
 
@@ -1446,13 +1405,13 @@ add_text_single(const char *s, double x, double y, double rot, bool fill, int ru
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
         TextSingleObject* obj = new TextSingleObject(s, x, -y, getCurrentColor());
-        obj->setObjectTextFont(getSettingsTextFont());
-        obj->setObjectTextSize(getSettingsTextSize());
-        obj->setObjectTextStyle(getSettingsTextStyleBold(),
-                                getSettingsTextStyleItalic(),
-                                getSettingsTextStyleUnderline(),
-                                getSettingsTextStyleStrikeOut(),
-                                getSettingsTextStyleOverline());
+        obj->setObjectTextFont(settings_text_font);
+        obj->setObjectTextSize(settings_text_size);
+        obj->setObjectTextStyle(settings_text_style_bold,
+                                settings_text_style_italic,
+                                settings_text_style_underline,
+                                settings_text_style_strikeout,
+                                settings_text_style_overline);
         obj->setObjectTextBackward(false);
         obj->setObjectTextUpsideDown(false);
         obj->setRotation(-rot);
