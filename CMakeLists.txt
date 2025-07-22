@@ -65,6 +65,8 @@ add_compile_options(
 )
 endif()
 
+add_subdirectory(extern/libembroidery)
+
 qt_add_executable(${TARGET}
 	${SRC}/embroidermodder2.icns
 	${SRC}/embroidermodder2.ico
@@ -109,112 +111,6 @@ qt_add_executable(${TARGET}
 	${SRC}/view.cpp
 
 	${SRC}/embroidermodder.h
-
-# libembroidery
-	${LIB}/compound-file.c
-	${LIB}/compound-file-difat.c
-	${LIB}/compound-file-directory.c
-	${LIB}/compound-file-fat.c
-	${LIB}/compound-file-header.c
-	${LIB}/emb-arc.c
-	${LIB}/emb-circle.c
-	${LIB}/emb-color.c
-	${LIB}/emb-compress.c
-	${LIB}/emb-ellipse.c
-	${LIB}/emb-file.c
-	${LIB}/emb-flag.c
-	${LIB}/emb-format.c
-	${LIB}/emb-hash.c
-	${LIB}/emb-hoop.c
-	${LIB}/emb-layer.c
-	${LIB}/emb-line.c
-	${LIB}/emb-logging.c
-#    ${LIB}/emb-outline.c
-        ${LIB}/emb-path.c
-	${LIB}/emb-pattern.c
-	${LIB}/emb-point.c
-	${LIB}/emb-polygon.c
-	${LIB}/emb-polyline.c
-	${LIB}/emb-reader-writer.c
-	${LIB}/emb-rect.c
-	${LIB}/emb-satin-line.c
-	${LIB}/emb-settings.c
-	${LIB}/emb-spline.c
-	${LIB}/emb-stitch.c
-	${LIB}/emb-thread.c
-	${LIB}/emb-time.c
-	${LIB}/emb-vector.c
-	${LIB}/format-100.c
-	${LIB}/format-10o.c
-	${LIB}/format-art.c
-	${LIB}/format-bmc.c
-	${LIB}/format-bro.c
-	${LIB}/format-cnd.c
-	${LIB}/format-col.c
-	${LIB}/format-csd.c
-	${LIB}/format-csv.c
-	${LIB}/format-dat.c
-	${LIB}/format-dem.c
-	${LIB}/format-dsb.c
-	${LIB}/format-dst.c
-	${LIB}/format-dsz.c
-	${LIB}/format-dxf.c
-	${LIB}/format-edr.c
-	${LIB}/format-emd.c
-	${LIB}/format-exp.c
-	${LIB}/format-exy.c
-	${LIB}/format-eys.c
-	${LIB}/format-fxy.c
-	${LIB}/format-gc.c
-	${LIB}/format-gnc.c
-	${LIB}/format-gt.c
-	${LIB}/format-hus.c
-	${LIB}/format-inb.c
-	${LIB}/format-inf.c
-	${LIB}/format-jef.c
-	${LIB}/format-ksm.c
-	${LIB}/format-max.c
-	${LIB}/format-mit.c
-	${LIB}/format-new.c
-	${LIB}/format-ofm.c
-	${LIB}/format-pcd.c
-	${LIB}/format-pcm.c
-	${LIB}/format-pcq.c
-	${LIB}/format-pcs.c
-	${LIB}/format-pec.c
-	${LIB}/format-pel.c
-	${LIB}/format-pem.c
-	${LIB}/format-pes.c
-	${LIB}/format-phb.c
-	${LIB}/format-phc.c
-	${LIB}/format-plt.c
-	${LIB}/format-rgb.c
-	${LIB}/format-sew.c
-	${LIB}/format-shv.c
-	${LIB}/format-sst.c
-	${LIB}/format-stx.c
-	${LIB}/format-svg.c
-	${LIB}/format-t01.c
-	${LIB}/format-t09.c
-	${LIB}/format-tap.c
-	${LIB}/format-thr.c
-	${LIB}/format-txt.c
-	${LIB}/format-u00.c
-	${LIB}/format-u01.c
-	${LIB}/format-vip.c
-	${LIB}/format-vp3.c
-	${LIB}/format-xxx.c
-	${LIB}/format-zsk.c
-	${LIB}/geom-arc.c
-	${LIB}/geom-circle.c
-	${LIB}/geom-line.c
-	${LIB}/hashtable.c
-	${LIB}/helpers-binary.c
-	${LIB}/helpers-misc.c
-	${LIB}/thread-color.c
-
-	${LIB}/embroidery.h
-	${LIB}/hashtable.h
 
 	${EXTERN}/tinyscheme/source/scheme.c
 	${EXTERN}/tinyscheme/source/dynload.c
@@ -274,6 +170,7 @@ target_link_libraries(${TARGET} PRIVATE
 	Qt6::PrintSupport
 	Qt6::Svg
 	Qt6::Xml
+	embroidery_static
 	${OPENGL_LIBRARIES}
 )
 

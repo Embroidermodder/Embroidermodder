@@ -1,5 +1,9 @@
 #include "embroidermodder.h"
 
+/* HACK: This is mostly overridden to allow for the shift to current
+ *       libembroidery. It is a high priority to fix this.
+ */
+
 SaveObject::SaveObject(QGraphicsScene* theScene, QObject* parent) : QObject(parent)
 {
     qDebug("SaveObject Constructor()");
@@ -12,19 +16,20 @@ SaveObject::~SaveObject()
     qDebug("SaveObject Destructor()");
 }
 
+/* TODO: Before saving to a stitch only format, Embroidermodder needs
+ *       to calculate the optimal path to minimize jump stitches. Also
+ *       based upon which layer needs to be stitched first,
+ *       the path to the next object needs to be hidden beneath fills
+ *       that will come later. When finding the optimal path, we need
+ *       to take into account the color of the thread, as we do not want
+ *       to try to hide dark colored stitches beneath light colored fills.
+ */
 bool SaveObject::save(const QString &fileName)
 {
     qDebug("SaveObject save(%s)", qPrintable(fileName));
 
-    /* TODO: Before saving to a stitch only format, Embroidermodder needs
-     *       to calculate the optimal path to minimize jump stitches. Also
-     *       based upon which layer needs to be stitched first,
-     *       the path to the next object needs to be hidden beneath fills
-     *       that will come later. When finding the optimal path, we need
-     *       to take into account the color of the thread, as we do not want
-     *       to try to hide dark colored stitches beneath light colored fills.
-     */
 
+    /* FIXME:
     bool writeSuccessful = false;
     int i;
 
@@ -40,7 +45,7 @@ bool SaveObject::save(const QString &fileName)
     pattern = embPattern_create();
     if(!pattern) { qDebug("Could not allocate memory for embroidery pattern"); }
 
-    /* Write */
+    // Write
     writer = embReaderWriter_getByFileName(qPrintable(fileName));
     if(!writer) { qDebug("Unsupported write file type: %s", qPrintable(fileName)); }
     else
@@ -91,6 +96,8 @@ bool SaveObject::save(const QString &fileName)
     embPattern_free(pattern);
 
     return writeSuccessful;
+    */
+    return 1;
 }
 
 void SaveObject::addArc(EmbPattern* pattern, QGraphicsItem* item)
@@ -103,6 +110,7 @@ void SaveObject::addBlock(EmbPattern* pattern, QGraphicsItem* item)
 
 void SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
 {
+    /*
     CircleObject* obj = static_cast<CircleObject*>(item);
     if(obj)
     {
@@ -116,6 +124,7 @@ void SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
             embPattern_addCircleObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectRadius());
         }
     }
+    */
 }
 
 void SaveObject::addDimAligned(EmbPattern* pattern, QGraphicsItem* item)
@@ -152,6 +161,7 @@ void SaveObject::addDimRadius(EmbPattern* pattern, QGraphicsItem* item)
 
 void SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
 {
+    /*
     EllipseObject* obj = static_cast<EllipseObject*>(item);
     if(obj)
     {
@@ -166,6 +176,7 @@ void SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
             embPattern_addEllipseObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectWidth()/2.0, (double)obj->objectHeight()/2.0);
         }
     }
+    */
 }
 
 void SaveObject::addEllipseArc(EmbPattern* pattern, QGraphicsItem* item)
@@ -190,6 +201,7 @@ void SaveObject::addInfiniteLine(EmbPattern* pattern, QGraphicsItem* item)
 
 void SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
 {
+    /*
     LineObject* obj = static_cast<LineObject*>(item);
     if(obj)
     {
@@ -202,6 +214,7 @@ void SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
             embPattern_addLineObjectAbs(pattern, (double)obj->objectX1(), (double)obj->objectY1(), (double)obj->objectX2(), (double)obj->objectY2());
         }
     }
+    */
 }
 
 void SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
@@ -257,6 +270,7 @@ void SaveObject::addPoint(EmbPattern* pattern, QGraphicsItem* item)
     PointObject* obj = static_cast<PointObject*>(item);
     if(obj)
     {
+        /*
         if(formatType == EMBFORMAT_STITCHONLY)
         {
             toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
@@ -265,6 +279,7 @@ void SaveObject::addPoint(EmbPattern* pattern, QGraphicsItem* item)
         {
             embPattern_addPointObjectAbs(pattern, (double)obj->objectX(), (double)obj->objectY());
         }
+        */
     }
 }
 
@@ -295,6 +310,7 @@ void SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
     RectObject* obj = static_cast<RectObject*>(item);
     if(obj)
     {
+        /*
         if(formatType == EMBFORMAT_STITCHONLY)
         {
             toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
@@ -305,6 +321,7 @@ void SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
             QPointF topLeft = obj->objectTopLeft();
             embPattern_addRectObjectAbs(pattern, (double)topLeft.x(), (double)topLeft.y(), (double)obj->objectWidth(), (double)obj->objectHeight());
         }
+        */
     }
 }
 
@@ -328,26 +345,28 @@ void SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 
     //TODO: This needs to work like a path, not a polyline. Improve this
     TextSingleObject* obj = static_cast<TextSingleObject*>(item);
-    if(obj)
-    {
-        if(formatType == EMBFORMAT_STITCHONLY)
-        {
-            QList<QPainterPath> pathList = obj->objectSavePathList();
-            foreach(QPainterPath path, pathList)
-            {
-                toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
-            }
-        }
-        else
-        {
+    if (!obj) {
+        debug("Failed to save TextSingle Object.");
+    }
 
+    if (formatType == EMBFORMAT_STITCHONLY) {
+        /*
+        QList<QPainterPath> pathList = obj->objectSavePathList();
+        foreach(QPainterPath path, pathList) {
+            toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
         }
+        */
+    }
+    else
+    {
+
     }
 }
 
 //NOTE: This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
 void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight)
 {
+    /* FIXME
     qreal startX = objPos.x();
     qreal startY = objPos.y();
     EmbPointList* pointList = 0;
@@ -368,5 +387,6 @@ void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QP
 
     EmbPolylineObject* polyObject = embPolylineObject_create(pointList, embColor_make(color.red(), color.green(), color.blue()), 1); //TODO: proper lineType
     embPattern_addPolylineObjectAbs(pattern, polyObject);
+    */
 }
 

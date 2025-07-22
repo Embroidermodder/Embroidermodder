@@ -163,6 +163,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
         QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
 
+        /* FIXME:
         double sceneCenterX;
         double sceneCenterY;
         getArcCenter(sceneTan1Point.x(), sceneTan1Point.y(),
@@ -175,6 +176,7 @@ void CircleObject::updateRubber(QPainter* painter)
         qreal radius = sceneLine.length();
         setObjectRadius(radius);
         updatePath();
+        */
     }
     else if(rubberMode == OBJ_RUBBER_GRIP)
     {

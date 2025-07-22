@@ -1,7 +1,7 @@
 #ifndef EMBROIDERMODDER_H
 #define EMBROIDERMODDER_H
 
-#include "embroidery.h"
+#include "../extern/libembroidery/src/embroidery.h"
 #undef bufferSize
 
 #include "scheme.h"
@@ -1914,8 +1914,6 @@ private:
 #define CONTEXT_CLICK             1
 #define CONTEXT_CONTEXT           2
 #define CONTEXT_PROMPT            3
-
-#define MAX_ARGS                 50
 
 int load_scheme(void);
 int run_command(const char *line);

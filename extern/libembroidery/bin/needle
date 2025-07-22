@@ -1,0 +1,152 @@
+#!/bin/bash
+#
+# needle
+# 1.0.0-alpha
+# Copyright 2018-2025 The Embroidermodder Team
+# This file is part of libembroidery.
+# Under the zlib license.
+#
+
+function basic_help_msg () {
+
+    cat <<EOF
+needle
+1.0.0-alpha
+Copyright 2018-2025 The Embroidermodder Team
+This program is part of libembroidery.
+License: Zlib
+
+A tool for creating and altering machine embroidery files. For a full list of
+commands available use "--commands".
+
+Needle extends the functionality of the basic emb-convert tool and it assumes
+you have imagemagick and python installed and are running in a bash terminal. During
+operation it creates temporary files in the current working directory, then clears
+them at the end of the process. These temporary files will be hidden when we are out
+of alpha, but for now they are useful to have available during operation.
+
+For a full help message, please use:
+
+    needle --help
+EOF
+
+}
+
+function help_msg () {
+
+    man 1 needle
+
+}
+
+function list_commands () {
+
+    cat << EOF
+--circle, -c
+--line, -l
+--generate
+--help
+--render
+--report, -R
+--simulate
+--test
+--todo
+EOF
+
+}
+
+function todo_msg () {
+
+    cat <<EOF
+Features that were in "embroider" that now are going to use some scripting.
+
+1. Hilbert curve generation
+2. Sierpinski triangle generation
+3. Dragon curve generation
+4. Adding geometric primatives to a pattern (which could be convert to
+   SVG, add primative using text manipulation, convert to original format
+   or requested format)
+
+All features withing emb_convert need a copy here.
+
+Check necessary dependencies are installed when they are called against.
+
+Check the following flags are covered:
+--circle, -c
+--ellipse, -e
+--line, -l
+--polygon, -P
+--polyline, -p
+--render
+--satin, -s
+--stitch, -S
+--generate hilbert
+--generate sierpinski
+--fill, -f
+--cross-stitch
+--simulate
+--combine
+--ps
+--report, -R
+EOF
+
+}
+
+function testing () {
+
+    echo "."
+
+}
+
+if [ $# -lt 1 ]; then
+    basic_help_msg
+    exit
+fi
+
+while [ $# -gt 0 ]; do
+    case $1 in
+    --circle)
+        echo "The $1 flag is not implemented yet."
+        shift
+        shift
+        shift;;
+    --line)
+        echo "The $1 flag is not implemented yet."
+        shift
+        shift
+        shift
+        shift;;
+    --polygon)
+        echo "The $1 flag is not implemented yet."
+        shift
+        shift
+        shift;;
+    --photo-fit)
+        echo "The $1 flag is not implemented yet."
+        shift;;
+    --generate)
+        echo "The $1 flag is not implemented yet."
+        shift;;
+    --convert)
+        emb_convert $2 $3
+        shift
+        shift;;
+    --commands)
+        list_commands;;
+    --render)
+        emb_convert --render $2
+        shift;;
+    --simulate)
+        emb_convert --simulate $2
+        shift;;
+    --help)
+        help_msg;;
+    --todo)
+        todo_msg;;
+    --test)
+        testing;;
+    *)
+        echo "ERROR: flag $1 not recognised, try --commands.";;
+    esac
+    shift
+done
+

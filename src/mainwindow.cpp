@@ -640,10 +640,13 @@ void MainWindow::hideUnimplemented()
     qDebug("MainWindow::hideUnimplemented()");
 }
 
-bool MainWindow::validFileFormat(const QString& fileName)
+bool
+MainWindow::validFileFormat(const QString& fileName)
 {
-    if(embFormat_typeFromName(qPrintable(fileName)))
+    int format = emb_identify_format(qPrintable(fileName));
+    if ((format >= 0) and (format <= EMB_FORMAT_ZSK)) {
         return true;
+    }
     return false;
 }
 
@@ -668,12 +671,16 @@ void MainWindow::loadFormats()
     char readerState;
     char writerState;
 
+    for (int i=0; i<numberOfFormats; i++) {
+    /* FIXME
     EmbFormatList* curFormat = 0;
     EmbFormatList* formatList = embFormatList_create();
-    if(!formatList) { QMessageBox::critical(this, tr("Format Loading Error"), tr("Unable to load formats from libembroidery.")); return; }
+    if (!formatList) {
+        QMessageBox::critical(this, tr("Format Loading Error"), tr("Unable to load formats from libembroidery."));
+        return;
+    }
     curFormat = formatList;
-    while(curFormat)
-    {
+    while (curFormat) {
         extension = embFormat_extension(curFormat);
         description = embFormat_description(curFormat);
         readerState = embFormat_readerState(curFormat);
@@ -709,7 +716,6 @@ void MainWindow::loadFormats()
     formatFilterSave = supportedWriters + individualWriters;
 
     //TODO: Fixup custom filter
-    /*
     QString custom = settings_custom_filter;
     if(custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
@@ -720,6 +726,7 @@ void MainWindow::loadFormats()
 
     return tr(qPrintable(custom + supported + all));
     */
+    }
 }
 
 void MainWindow::closeToolBar(QAction* action)

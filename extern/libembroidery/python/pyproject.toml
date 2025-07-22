@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "embroidery"
+version = "1.0.2-alpha"
+authors = [
+    { name="Josh Varga" },
+    { name="Robin Swift" }
+]
+description = "A basic library for creating and altering machine embroidery files with Python."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha"
+]
+license = "Zlib"
+license-files = ["LICENSE.md"]
+
+[project.urls]
+Homepage = "https://www.libembroidery.org"
+Source = "https://github.com/embroidermodder/libembroidery"
+Issues = "https://github.com/embroidermodder/libembroidery/issues"
+
