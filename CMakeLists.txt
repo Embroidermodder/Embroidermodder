@@ -49,7 +49,7 @@ endif()
 # give them the same treatment and list them explicitly here.
 #
 
-set(SRC ${CMAKE_SOURCE_DIR}/embroidermodder2)
+set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(LIBEMB ${CMAKE_SOURCE_DIR}/libembroidery)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)

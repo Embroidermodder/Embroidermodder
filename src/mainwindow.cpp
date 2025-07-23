@@ -49,7 +49,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     QFileInfo check(appDir + "/commands");
     if(!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
-    check = QFileInfo(appDir + "/help");
+    check = QFileInfo(appDir + "/docs");
     if(!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/icons");
