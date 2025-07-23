@@ -66,6 +66,7 @@ add_compile_options(
 endif()
 
 add_subdirectory(extern/libembroidery)
+add_subdirectory(extern/tinyscheme)
 
 qt_add_executable(${TARGET}
 	${SRC}/embroidermodder2.icns
@@ -111,10 +112,6 @@ qt_add_executable(${TARGET}
 	${SRC}/view.cpp
 
 	${SRC}/embroidermodder.h
-
-	${EXTERN}/tinyscheme/source/scheme.c
-	${EXTERN}/tinyscheme/source/dynload.c
-	${EXTERN}/tinyscheme/source/mod_json.c
 )
 
 qt_add_translations(embroidermodder2 TS_FILES

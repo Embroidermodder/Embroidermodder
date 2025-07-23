@@ -1,4 +1,0 @@
----
-BasedOnStyle: LLVM
-# same as .editorconfig
-IndentWidth: 4

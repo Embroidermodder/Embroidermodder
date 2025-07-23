@@ -1,3 +1,0 @@
-src/nuklearshaders/*.spv
-src/nuklear_glfw_vulkan.h
-shaders/*.spv
