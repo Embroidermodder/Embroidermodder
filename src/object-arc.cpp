@@ -44,7 +44,7 @@ ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal midY, 
 {
     int error = EMB_NO_ERR;
     EmbGeometry arc = emb_arc(startX, startY, midX, midY, endX, endY);
-    EmbVector center = emb_center(arc, &error);
+    EmbVector center = emb_center(&arc, &error);
     if (error) {
         qDebug("Failed to find arc data.");
         return;
