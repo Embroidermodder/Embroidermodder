@@ -25,7 +25,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 
-#include "emb-reader-writer.h"
+#include "embroidery.h"
 
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
@@ -89,6 +89,11 @@ bool MdiWindow::saveFile(const QString &fileName)
     return saveObj.save(fileName);
 }
 
+/* NOTE: Embroidermodder is reponsible for converting stitches into polylines
+ *       to display them on load.
+ * NOTE: libembroidery is responsible for converting all geometry into stitches
+ *       based on the format.
+ */
 bool MdiWindow::loadFile(const QString &fileName)
 {
     qDebug("MdiWindow loadFile()");
@@ -96,8 +101,7 @@ bool MdiWindow::loadFile(const QString &fileName)
     QRgb tmpColor = getCurrentColor();
 
     QFile file(fileName);
-    if(!file.open(QFile::ReadOnly | QFile::Text))
-    {
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Error reading file"),
                              tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
@@ -110,39 +114,47 @@ bool MdiWindow::loadFile(const QString &fileName)
     QString ext = fileExtension(fileName);
     qDebug("ext: %s", qPrintable(ext));
 
-    //Read
-    EmbPattern* p = embPattern_create();
-    if(!p) { printf("Could not allocate memory for embroidery pattern\n"); exit(1); }
-    int readSuccessful = 0;
-    QString readError;
-    EmbReaderWriter* reader = embReaderWriter_getByFileName(qPrintable(fileName));
-    if(!reader)
-    {
-        readSuccessful = 0;
-        readError = "Unsupported read file type: " + fileName;
-        qDebug("Unsupported read file type: %s\n", qPrintable(fileName));
+    // Read
+    EmbPattern* p = emb_pattern_create();
+    if (!p) {
+        printf("Could not allocate memory for embroidery pattern\n");
+        exit(1);
     }
-    else
-    {
-        readSuccessful = reader->reader(p, qPrintable(fileName));
-        if(!readSuccessful)
-        {
-            readError = "Reading file was unsuccessful: " + fileName;
-            qDebug("Reading file was unsuccessful: %s\n", qPrintable(fileName));
+    /* FIXME: differentiate between error types. */
+    int success = emb_pattern_readAuto(p, qPrintable(fileName));
+    if (!success) {
+        QMessageBox::warning(this, tr("Error reading file"),
+            tr("Cannot read file %1:\n%2.")
+                .arg(fileName)
+                .arg("libembroidery could not parse the file"));
+        emb_pattern_free(p);
+        return  false;
+    }
+
+    /* FIXME: flattens all colors to black */
+    QPainterPath polylinePath;
+    setCurrentColor(qRgb(0, 0, 0));
+    EmbVector start = emb_vector(0, 0);
+    bool firstPoint = false;
+    for (int i=0; i<p->stitch_list->count; i++) {
+        EmbStitch st = p->stitch_list->stitch[i];
+        // NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+        EmbVector position = emb_vector(st.x, -st.y);
+
+        if (firstPoint) {
+            polylinePath.lineTo(position.x, position.y);
+        }
+        else {
+            polylinePath.moveTo(position.x, position.y);
+            firstPoint = true;
+            start = position;
         }
     }
-    free(reader);
-    if(!readSuccessful)
-    {
-        QMessageBox::warning(this, tr("Error reading pattern"), tr(qPrintable(readError)));
-    }
+    polylinePath.translate(-start.x, -start.y);
+    mainWin->nativeAddPolyline(start.x, start.y, polylinePath, OBJ_RUBBER_OFF);
 
-    if(readSuccessful)
-    {
-        embPattern_moveStitchListToPolylines(p); //TODO: Test more
-        int stitchCount = embStitchList_count(p->stitchList);
+    /* FIXME: loading geometry
         QPainterPath path;
-
         if(p->circleObjList)
         {
             EmbCircleObjectList* curCircleObj = p->circleObjList;
@@ -259,7 +271,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curPolygonObjList = curPolygonObjList->next;
             }
         }
-        /* NOTE: Polylines should only contain NORMAL stitches. */
+        // NOTE: Polylines should only contain NORMAL stitches.
         if(p->polylineObjList)
         {
             EmbPolylineObjectList* curPolylineObjList = p->polylineObjList;
@@ -303,25 +315,20 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curRectObj = curRectObj->next;
             }
         }
+    */
 
-        setCurrentFile(fileName);
-        mainWin->statusbar->showMessage("File loaded.");
-        QString stitches;
-        stitches.setNum(stitchCount);
+    setCurrentFile(fileName);
+    mainWin->statusbar->showMessage("File loaded.");
+    QString stitches;
+    stitches.setNum(p->stitch_list->count);
 
-        if(mainWin->getSettingsGridLoadFromFile())
-        {
-            //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
-        }
-
-        QApplication::restoreOverrideCursor();
-    }
-    else
+    if(mainWin->getSettingsGridLoadFromFile())
     {
-        QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, tr("Error reading pattern"), tr("Cannot read pattern"));
+        //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
     }
-    embPattern_free(p);
+
+    QApplication::restoreOverrideCursor();
+    emb_pattern_free(p);
 
     //Clear the undo stack so it is not possible to undo past this point.
     gview->getUndoStack()->clear();

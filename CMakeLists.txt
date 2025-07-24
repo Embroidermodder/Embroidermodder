@@ -54,6 +54,8 @@ set(LIBEMB ${CMAKE_SOURCE_DIR}/libembroidery)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
+add_subdirectory(extern/libembroidery)
+
 qt_add_executable(embroidermodder
 	${SRC}/application.cpp
 	${SRC}/application.h
@@ -128,212 +130,6 @@ qt_add_executable(embroidermodder
 	${SRC}/view.cpp
 	${SRC}/view.h
 
-	${LIBEMB}/api-start.h
-	${LIBEMB}/api-stop.h
-	${LIBEMB}/compound-file.c
-	${LIBEMB}/compound-file-common.h
-	${LIBEMB}/compound-file-difat.c
-	${LIBEMB}/compound-file-difat.h
-	${LIBEMB}/compound-file-directory.c
-	${LIBEMB}/compound-file-directory.h
-	${LIBEMB}/compound-file-fat.c
-	${LIBEMB}/compound-file-fat.h
-	${LIBEMB}/compound-file.h
-	${LIBEMB}/compound-file-header.c
-	${LIBEMB}/compound-file-header.h
-	${LIBEMB}/emb-arc.c
-	${LIBEMB}/emb-arc.h
-	${LIBEMB}/emb-circle.c
-	${LIBEMB}/emb-circle.h
-	${LIBEMB}/emb-color.c
-	${LIBEMB}/emb-color.h
-	${LIBEMB}/emb-compress.c
-	${LIBEMB}/emb-compress.h
-	${LIBEMB}/emb-ellipse.c
-	${LIBEMB}/emb-ellipse.h
-	${LIBEMB}/emb-file.c
-	${LIBEMB}/emb-file.h
-	${LIBEMB}/emb-flag.c
-	${LIBEMB}/emb-flag.h
-	${LIBEMB}/emb-format.c
-	${LIBEMB}/emb-format.h
-	${LIBEMB}/emb-hash.c
-	${LIBEMB}/emb-hash.h
-	${LIBEMB}/emb-hoop.c
-	${LIBEMB}/emb-hoop.h
-	${LIBEMB}/emb-layer.c
-	${LIBEMB}/emb-layer.h
-	${LIBEMB}/emb-line.c
-	${LIBEMB}/emb-line.h
-	${LIBEMB}/emb-logging.c
-	${LIBEMB}/emb-logging.h
-	${LIBEMB}/emb-path.c
-	${LIBEMB}/emb-path.h
-	${LIBEMB}/emb-pattern.c
-	${LIBEMB}/emb-pattern.h
-	${LIBEMB}/emb-point.c
-	${LIBEMB}/emb-point.h
-	${LIBEMB}/emb-polygon.c
-	${LIBEMB}/emb-polygon.h
-	${LIBEMB}/emb-polyline.c
-	${LIBEMB}/emb-polyline.h
-	${LIBEMB}/emb-reader-writer.c
-	${LIBEMB}/emb-reader-writer.h
-	${LIBEMB}/emb-rect.c
-	${LIBEMB}/emb-rect.h
-	${LIBEMB}/emb-satin-line.c
-	${LIBEMB}/emb-satin-line.h
-	${LIBEMB}/emb-settings.c
-	${LIBEMB}/emb-settings.h
-	${LIBEMB}/emb-spline.c
-	${LIBEMB}/emb-spline.h
-	${LIBEMB}/emb-stitch.c
-	${LIBEMB}/emb-stitch.h
-	${LIBEMB}/emb-thread.c
-	${LIBEMB}/emb-thread.h
-	${LIBEMB}/emb-time.c
-	${LIBEMB}/emb-time.h
-	${LIBEMB}/emb-vector.c
-	${LIBEMB}/emb-vector.h
-	${LIBEMB}/format-100.c
-	${LIBEMB}/format-100.h
-	${LIBEMB}/format-10o.c
-	${LIBEMB}/format-10o.h
-	${LIBEMB}/format-art.c
-	${LIBEMB}/format-art.h
-	${LIBEMB}/format-bmc.c
-	${LIBEMB}/format-bmc.h
-	${LIBEMB}/format-bro.c
-	${LIBEMB}/format-bro.h
-	${LIBEMB}/format-cnd.c
-	${LIBEMB}/format-cnd.h
-	${LIBEMB}/format-col.c
-	${LIBEMB}/format-col.h
-	${LIBEMB}/format-csd.c
-	${LIBEMB}/format-csd.h
-	${LIBEMB}/format-csv.c
-	${LIBEMB}/format-csv.h
-	${LIBEMB}/format-dat.c
-	${LIBEMB}/format-dat.h
-	${LIBEMB}/format-dem.c
-	${LIBEMB}/format-dem.h
-	${LIBEMB}/format-dsb.c
-	${LIBEMB}/format-dsb.h
-	${LIBEMB}/format-dst.c
-	${LIBEMB}/format-dst.h
-	${LIBEMB}/format-dsz.c
-	${LIBEMB}/format-dsz.h
-	${LIBEMB}/format-dxf.c
-	${LIBEMB}/format-dxf.h
-	${LIBEMB}/format-edr.c
-	${LIBEMB}/format-edr.h
-	${LIBEMB}/format-emd.c
-	${LIBEMB}/format-emd.h
-	${LIBEMB}/format-exp.c
-	${LIBEMB}/format-exp.h
-	${LIBEMB}/format-exy.c
-	${LIBEMB}/format-exy.h
-	${LIBEMB}/format-eys.c
-	${LIBEMB}/format-eys.h
-	${LIBEMB}/format-fxy.c
-	${LIBEMB}/format-fxy.h
-	${LIBEMB}/format-gc.c
-	${LIBEMB}/format-gc.h
-	${LIBEMB}/format-gnc.c
-	${LIBEMB}/format-gnc.h
-	${LIBEMB}/format-gt.c
-	${LIBEMB}/format-gt.h
-	${LIBEMB}/format-hus.c
-	${LIBEMB}/format-hus.h
-	${LIBEMB}/format-inb.c
-	${LIBEMB}/format-inb.h
-	${LIBEMB}/format-inf.c
-	${LIBEMB}/format-inf.h
-	${LIBEMB}/format-jef.c
-	${LIBEMB}/format-jef.h
-	${LIBEMB}/format-ksm.c
-	${LIBEMB}/format-ksm.h
-	${LIBEMB}/format-max.c
-	${LIBEMB}/format-max.h
-	${LIBEMB}/format-mit.c
-	${LIBEMB}/format-mit.h
-	${LIBEMB}/format-new.c
-	${LIBEMB}/format-new.h
-	${LIBEMB}/format-ofm.c
-	${LIBEMB}/format-ofm.h
-	${LIBEMB}/format-pcd.c
-	${LIBEMB}/format-pcd.h
-	${LIBEMB}/format-pcm.c
-	${LIBEMB}/format-pcm.h
-	${LIBEMB}/format-pcq.c
-	${LIBEMB}/format-pcq.h
-	${LIBEMB}/format-pcs.c
-	${LIBEMB}/format-pcs.h
-	${LIBEMB}/format-pec.c
-	${LIBEMB}/format-pec.h
-	${LIBEMB}/format-pel.c
-	${LIBEMB}/format-pel.h
-	${LIBEMB}/format-pem.c
-	${LIBEMB}/format-pem.h
-	${LIBEMB}/format-pes.c
-	${LIBEMB}/format-pes.h
-	${LIBEMB}/format-phb.c
-	${LIBEMB}/format-phb.h
-	${LIBEMB}/format-phc.c
-	${LIBEMB}/format-phc.h
-	${LIBEMB}/format-plt.c
-	${LIBEMB}/format-plt.h
-	${LIBEMB}/format-rgb.c
-	${LIBEMB}/format-rgb.h
-	${LIBEMB}/format-sew.c
-	${LIBEMB}/format-sew.h
-	${LIBEMB}/formats.h
-	${LIBEMB}/format-shv.c
-	${LIBEMB}/format-shv.h
-	${LIBEMB}/format-sst.c
-	${LIBEMB}/format-sst.h
-	${LIBEMB}/format-stx.c
-	${LIBEMB}/format-stx.h
-	${LIBEMB}/format-svg.c
-	${LIBEMB}/format-svg.h
-	${LIBEMB}/format-t01.c
-	${LIBEMB}/format-t01.h
-	${LIBEMB}/format-t09.c
-	${LIBEMB}/format-t09.h
-	${LIBEMB}/format-tap.c
-	${LIBEMB}/format-tap.h
-	${LIBEMB}/format-thr.c
-	${LIBEMB}/format-thr.h
-	${LIBEMB}/format-txt.c
-	${LIBEMB}/format-txt.h
-	${LIBEMB}/format-u00.c
-	${LIBEMB}/format-u00.h
-	${LIBEMB}/format-u01.c
-	${LIBEMB}/format-u01.h
-	${LIBEMB}/format-vip.c
-	${LIBEMB}/format-vip.h
-	${LIBEMB}/format-vp3.c
-	${LIBEMB}/format-vp3.h
-	${LIBEMB}/format-xxx.c
-	${LIBEMB}/format-xxx.h
-	${LIBEMB}/format-zsk.c
-	${LIBEMB}/format-zsk.h
-	${LIBEMB}/geom-arc.c
-	${LIBEMB}/geom-arc.h
-	${LIBEMB}/geom-circle.c
-	${LIBEMB}/geom-circle.h
-	${LIBEMB}/geom-line.c
-	${LIBEMB}/geom-line.h
-	${LIBEMB}/hashtable.c
-	${LIBEMB}/hashtable.h
-	${LIBEMB}/helpers-binary.c
-	${LIBEMB}/helpers-binary.h
-	${LIBEMB}/helpers-misc.c
-	${LIBEMB}/helpers-misc.h
-	${LIBEMB}/helpers-unused.h
-	${LIBEMB}/thread-color.c
-	${LIBEMB}/thread-color.h
-
 	${EXTERN}/tinyscheme/source/dynload.c
 	${EXTERN}/tinyscheme/source/mod_json.c
 	${EXTERN}/tinyscheme/source/scheme.c
@@ -359,7 +155,6 @@ file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/embroidermodder2
-    ${CMAKE_SOURCE_DIR}/libembroidery
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
 	${CMAKE_SOURCE_DIR}/extern/tinyscheme/include
 )
@@ -368,12 +163,13 @@ target_link_libraries(embroidermodder PRIVATE
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport
+	embroidery_static
 	${OPENGL_LIBRARIES}
 )
 
 set_target_properties(embroidermodder PROPERTIES
-    WIN32_EXECUTABLE ON
-    MACOSX_BUNDLE ON
+	WIN32_EXECUTABLE ON
+	MACOSX_BUNDLE ON
 )
 
 if (WIN32)

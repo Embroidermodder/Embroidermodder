@@ -4,9 +4,7 @@
 
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)
 {
-    #if QT_VERSION >= 0x040800
-        setTabsClosable(true);
-    #endif
+    setTabsClosable(true);
 
     useLogo = false;
     useTexture = false;

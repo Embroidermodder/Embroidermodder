@@ -17,11 +17,12 @@
 #include "object-polyline.h"
 #include "object-rect.h"
 #include "object-textsingle.h"
-#include "emb-rect.h"
 #include "property-editor.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
 #include "embdetails-dialog.h"
+
+#include "embroidery.h"
 
 #include <QLabel>
 #include <QDesktopServices>

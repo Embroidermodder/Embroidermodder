@@ -15,7 +15,7 @@
 
 #include "preview-dialog.h"
 
-#include "emb-format.h"
+#include "embroidery.h"
 
 #include <stdlib.h>
 
@@ -691,8 +691,11 @@ void MainWindow::hideUnimplemented()
 
 bool MainWindow::validFileFormat(const QString& fileName)
 {
-    if(embFormat_typeFromName(qPrintable(fileName)))
+    /* FIXME
+    if (embFormat_typeFromName(qPrintable(fileName))) {
+    */
         return true;
+    //}
     return false;
 }
 
@@ -717,6 +720,7 @@ void MainWindow::loadFormats()
     char readerState;
     char writerState;
 
+    /* FIXME:
     EmbFormatList* curFormat = 0;
     EmbFormatList* formatList = embFormatList_create();
     if(!formatList) { QMessageBox::critical(this, tr("Format Loading Error"), tr("Unable to load formats from libembroidery.")); return; }
@@ -758,7 +762,6 @@ void MainWindow::loadFormats()
     formatFilterSave = supportedWriters + individualWriters;
 
     //TODO: Fixup custom filter
-    /*
     QString custom = getSettingsCustomFilter();
     if(custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it

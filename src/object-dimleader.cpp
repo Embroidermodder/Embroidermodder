@@ -300,4 +300,3 @@ void DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
     else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
