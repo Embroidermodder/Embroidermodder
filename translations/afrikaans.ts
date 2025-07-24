@@ -1,6 +1,911 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en" sourcelanguage="en">
+<TS version="2.0" language="af" sourcelanguage="en">
+<context>
+    <name>circle</name>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="36"/>
+        <location filename="../../commands/circle/circle.js" line="212"/>
+        <source>Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="56"/>
+        <location filename="../../commands/circle/circle.js" line="223"/>
+        <location filename="../../commands/circle/circle.js" line="242"/>
+        <source>Specify radius of circle or [Diameter]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="72"/>
+        <location filename="../../commands/circle/circle.js" line="107"/>
+        <location filename="../../commands/circle/circle.js" line="141"/>
+        <location filename="../../commands/circle/circle.js" line="260"/>
+        <location filename="../../commands/circle/circle.js" line="283"/>
+        <location filename="../../commands/circle/circle.js" line="327"/>
+        <location filename="../../commands/circle/circle.js" line="388"/>
+        <source>This should never happen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="94"/>
+        <location filename="../../commands/circle/circle.js" line="304"/>
+        <location filename="../../commands/circle/circle.js" line="314"/>
+        <source>Specify second end point of circle&apos;s diameter: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="117"/>
+        <source>Specify second point on circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="128"/>
+        <source>Specify third point on circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="151"/>
+        <source>Specify point on object for second tangent of circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="158"/>
+        <source>Specify radius of circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="165"/>
+        <source>Specify second point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="193"/>
+        <location filename="../../commands/circle/circle.js" line="295"/>
+        <source>Specify first end point of circle&apos;s diameter: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="198"/>
+        <location filename="../../commands/circle/circle.js" line="339"/>
+        <source>Specify first point of circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="203"/>
+        <source>Specify point on object for first tangent of circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="210"/>
+        <source>Point or option keyword required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="233"/>
+        <location filename="../../commands/circle/circle.js" line="269"/>
+        <source>Specify diameter of circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="240"/>
+        <source>Requires numeric radius, point on circumference, or &quot;D&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="267"/>
+        <source>Requires numeric distance or second point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="293"/>
+        <location filename="../../commands/circle/circle.js" line="312"/>
+        <location filename="../../commands/circle/circle.js" line="337"/>
+        <location filename="../../commands/circle/circle.js" line="353"/>
+        <location filename="../../commands/circle/circle.js" line="373"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="345"/>
+        <location filename="../../commands/circle/circle.js" line="355"/>
+        <source>Specify second point of circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/circle/circle.js" line="365"/>
+        <location filename="../../commands/circle/circle.js" line="375"/>
+        <source>Specify third point of circle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>distance</name>
+    <message>
+        <location filename="../../commands/distance/distance.js" line="19"/>
+        <location filename="../../commands/distance/distance.js" line="66"/>
+        <source>Specify first point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/distance/distance.js" line="35"/>
+        <location filename="../../commands/distance/distance.js" line="75"/>
+        <location filename="../../commands/distance/distance.js" line="84"/>
+        <source>Specify second point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/distance/distance.js" line="64"/>
+        <location filename="../../commands/distance/distance.js" line="82"/>
+        <source>Requires numeric distance or two points.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/distance/distance.js" line="114"/>
+        <source>Distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/distance/distance.js" line="114"/>
+        <source>Angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/distance/distance.js" line="116"/>
+        <source>Delta X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/distance/distance.js" line="116"/>
+        <source>Delta Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ellipse</name>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="35"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="179"/>
+        <source>Specify first axis start point or [Center]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="53"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="100"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="188"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="199"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="267"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="277"/>
+        <source>Specify first axis end point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="70"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="113"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="215"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="232"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="289"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="306"/>
+        <source>Specify second axis end point or [Rotation]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="84"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="127"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="134"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="138"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="324"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="328"/>
+        <source>This should never happen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="170"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="255"/>
+        <source>Specify center point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="177"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="230"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="304"/>
+        <source>Point or option keyword required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="197"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="253"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="275"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="223"/>
+        <location filename="../../commands/ellipse/ellipse.js" line="336"/>
+        <source>Specify rotation: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="297"/>
+        <source>Specify ellipse rotation: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/ellipse/ellipse.js" line="334"/>
+        <source>Invalid angle. Input a numeric angle or pick a point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>erase</name>
+    <message>
+        <location filename="../../commands/erase/erase.js" line="12"/>
+        <location filename="../../commands/erase/erase.js" line="15"/>
+        <source>Preselect objects before invoking the delete command.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/erase/erase.js" line="15"/>
+        <source>Delete Preselect</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>line</name>
+    <message>
+        <location filename="../../commands/line/line.js" line="21"/>
+        <location filename="../../commands/line/line.js" line="74"/>
+        <source>Specify first point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/line/line.js" line="40"/>
+        <location filename="../../commands/line/line.js" line="86"/>
+        <location filename="../../commands/line/line.js" line="102"/>
+        <location filename="../../commands/line/line.js" line="115"/>
+        <source>Specify next point or [Undo]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/line/line.js" line="72"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/line/line.js" line="100"/>
+        <source>Point or option keyword required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>locatepoint</name>
+    <message>
+        <location filename="../../commands/locatepoint/locatepoint.js" line="9"/>
+        <location filename="../../commands/locatepoint/locatepoint.js" line="40"/>
+        <source>Specify point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/locatepoint/locatepoint.js" line="38"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>move</name>
+    <message>
+        <location filename="../../commands/move/move.js" line="28"/>
+        <location filename="../../commands/move/move.js" line="31"/>
+        <source>Preselect objects before invoking the move command.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/move/move.js" line="31"/>
+        <source>Move Preselect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/move/move.js" line="35"/>
+        <location filename="../../commands/move/move.js" line="87"/>
+        <source>Specify base point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/move/move.js" line="54"/>
+        <location filename="../../commands/move/move.js" line="98"/>
+        <location filename="../../commands/move/move.js" line="108"/>
+        <source>Specify destination point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/move/move.js" line="85"/>
+        <location filename="../../commands/move/move.js" line="106"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>path</name>
+    <message>
+        <location filename="../../commands/path/path.js" line="23"/>
+        <source>Specify start point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/path/path.js" line="40"/>
+        <location filename="../../commands/path/path.js" line="78"/>
+        <location filename="../../commands/path/path.js" line="92"/>
+        <source>Specify next point or [Arc/Undo]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/path/path.js" line="76"/>
+        <source>Point or option keyword required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>platform</name>
+    <message>
+        <location filename="../../commands/platform/platform.js" line="41"/>
+        <source>Platform</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>point</name>
+    <message>
+        <location filename="../../commands/point/point.js" line="15"/>
+        <location filename="../../commands/point/point.js" line="64"/>
+        <source>Specify first point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/point/point.js" line="27"/>
+        <location filename="../../commands/point/point.js" line="71"/>
+        <location filename="../../commands/point/point.js" line="82"/>
+        <location filename="../../commands/point/point.js" line="88"/>
+        <source>Specify next point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/point/point.js" line="62"/>
+        <location filename="../../commands/point/point.js" line="80"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>polygon</name>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="44"/>
+        <location filename="../../commands/polygon/polygon.js" line="119"/>
+        <source>Enter number of sides</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="61"/>
+        <location filename="../../commands/polygon/polygon.js" line="150"/>
+        <location filename="../../commands/polygon/polygon.js" line="225"/>
+        <source>Specify polygon type [Inscribed in circle/Circumscribed around circle]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="109"/>
+        <location filename="../../commands/polygon/polygon.js" line="124"/>
+        <location filename="../../commands/polygon/polygon.js" line="143"/>
+        <source>Specify center point or [Sidelength]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="117"/>
+        <source>Requires an integer between 3 and 1024.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="134"/>
+        <source>Specify start point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="141"/>
+        <location filename="../../commands/polygon/polygon.js" line="240"/>
+        <location filename="../../commands/polygon/polygon.js" line="266"/>
+        <source>Point or option keyword required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="168"/>
+        <location filename="../../commands/polygon/polygon.js" line="201"/>
+        <location filename="../../commands/polygon/polygon.js" line="242"/>
+        <source>Specify polygon corner point or [Distance]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="190"/>
+        <location filename="../../commands/polygon/polygon.js" line="210"/>
+        <location filename="../../commands/polygon/polygon.js" line="268"/>
+        <source>Specify polygon side point or [Distance]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="218"/>
+        <location filename="../../commands/polygon/polygon.js" line="308"/>
+        <source>Polygon type is not Inscribed or Circumscribed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="223"/>
+        <source>Invalid option keyword.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="233"/>
+        <location filename="../../commands/polygon/polygon.js" line="259"/>
+        <location filename="../../commands/polygon/polygon.js" line="286"/>
+        <source>Specify distance: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polygon/polygon.js" line="284"/>
+        <source>Requires valid numeric distance.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>polyline</name>
+    <message>
+        <location filename="../../commands/polyline/polyline.js" line="23"/>
+        <location filename="../../commands/polyline/polyline.js" line="75"/>
+        <source>Specify first point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polyline/polyline.js" line="42"/>
+        <location filename="../../commands/polyline/polyline.js" line="87"/>
+        <location filename="../../commands/polyline/polyline.js" line="103"/>
+        <location filename="../../commands/polyline/polyline.js" line="115"/>
+        <source>Specify next point or [Undo]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polyline/polyline.js" line="73"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/polyline/polyline.js" line="101"/>
+        <source>Point or option keyword required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>quickleader</name>
+    <message>
+        <location filename="../../commands/quickleader/quickleader.js" line="21"/>
+        <location filename="../../commands/quickleader/quickleader.js" line="69"/>
+        <source>Specify first point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/quickleader/quickleader.js" line="37"/>
+        <location filename="../../commands/quickleader/quickleader.js" line="78"/>
+        <location filename="../../commands/quickleader/quickleader.js" line="87"/>
+        <source>Specify second point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/quickleader/quickleader.js" line="67"/>
+        <location filename="../../commands/quickleader/quickleader.js" line="85"/>
+        <source>Requires two points.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>rectangle</name>
+    <message>
+        <location filename="../../commands/rectangle/rectangle.js" line="21"/>
+        <source>Specify first corner point or [Chamfer/Fillet]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rectangle/rectangle.js" line="37"/>
+        <location filename="../../commands/rectangle/rectangle.js" line="95"/>
+        <source>Specify other corner point or [Dimensions]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rectangle/rectangle.js" line="79"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rectangle/rectangle.js" line="81"/>
+        <source>Specify first point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>rgb</name>
+    <message>
+        <location filename="../../commands/rgb/rgb.js" line="18"/>
+        <source>Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rgb/rgb.js" line="46"/>
+        <location filename="../../commands/rgb/rgb.js" line="82"/>
+        <source>Specify crosshair color: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rgb/rgb.js" line="51"/>
+        <location filename="../../commands/rgb/rgb.js" line="100"/>
+        <source>Specify grid color: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rgb/rgb.js" line="61"/>
+        <location filename="../../commands/rgb/rgb.js" line="80"/>
+        <location filename="../../commands/rgb/rgb.js" line="98"/>
+        <source>Invalid color. R,G,B values must be in the range of 0-255.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rgb/rgb.js" line="63"/>
+        <source>Specify background color: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>rotate</name>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="47"/>
+        <location filename="../../commands/rotate/rotate.js" line="50"/>
+        <source>Preselect objects before invoking the rotate command.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="50"/>
+        <source>Rotate Preselect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="54"/>
+        <location filename="../../commands/rotate/rotate.js" line="141"/>
+        <source>Specify base point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="75"/>
+        <location filename="../../commands/rotate/rotate.js" line="152"/>
+        <location filename="../../commands/rotate/rotate.js" line="170"/>
+        <source>Specify rotation angle or [Reference]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="98"/>
+        <location filename="../../commands/rotate/rotate.js" line="202"/>
+        <location filename="../../commands/rotate/rotate.js" line="230"/>
+        <source>Specify second point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="108"/>
+        <location filename="../../commands/rotate/rotate.js" line="218"/>
+        <location filename="../../commands/rotate/rotate.js" line="239"/>
+        <location filename="../../commands/rotate/rotate.js" line="252"/>
+        <location filename="../../commands/rotate/rotate.js" line="264"/>
+        <source>Specify the new angle: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="139"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="160"/>
+        <location filename="../../commands/rotate/rotate.js" line="193"/>
+        <source>Specify the reference angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="168"/>
+        <source>Requires valid numeric angle, second point, or option keyword.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="191"/>
+        <location filename="../../commands/rotate/rotate.js" line="228"/>
+        <source>Requires valid numeric angle or two points.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/rotate/rotate.js" line="262"/>
+        <source>Requires valid numeric angle or second point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>scale</name>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="47"/>
+        <location filename="../../commands/scale/scale.js" line="50"/>
+        <source>Preselect objects before invoking the scale command.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="50"/>
+        <source>Scale Preselect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="54"/>
+        <location filename="../../commands/scale/scale.js" line="164"/>
+        <source>Specify base point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="75"/>
+        <location filename="../../commands/scale/scale.js" line="175"/>
+        <location filename="../../commands/scale/scale.js" line="193"/>
+        <source>Specify scale factor or [Reference]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="98"/>
+        <location filename="../../commands/scale/scale.js" line="112"/>
+        <location filename="../../commands/scale/scale.js" line="225"/>
+        <location filename="../../commands/scale/scale.js" line="267"/>
+        <location filename="../../commands/scale/scale.js" line="281"/>
+        <location filename="../../commands/scale/scale.js" line="307"/>
+        <source>Specify second point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="110"/>
+        <location filename="../../commands/scale/scale.js" line="128"/>
+        <location filename="../../commands/scale/scale.js" line="244"/>
+        <location filename="../../commands/scale/scale.js" line="279"/>
+        <location filename="../../commands/scale/scale.js" line="305"/>
+        <location filename="../../commands/scale/scale.js" line="336"/>
+        <location filename="../../commands/scale/scale.js" line="354"/>
+        <source>Value must be positive and nonzero.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="119"/>
+        <location filename="../../commands/scale/scale.js" line="130"/>
+        <location filename="../../commands/scale/scale.js" line="254"/>
+        <location filename="../../commands/scale/scale.js" line="287"/>
+        <location filename="../../commands/scale/scale.js" line="313"/>
+        <location filename="../../commands/scale/scale.js" line="326"/>
+        <location filename="../../commands/scale/scale.js" line="338"/>
+        <location filename="../../commands/scale/scale.js" line="356"/>
+        <source>Specify new length: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="162"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="183"/>
+        <location filename="../../commands/scale/scale.js" line="216"/>
+        <location filename="../../commands/scale/scale.js" line="246"/>
+        <source>Specify reference length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="191"/>
+        <source>Requires valid numeric distance, second point, or option keyword.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="214"/>
+        <location filename="../../commands/scale/scale.js" line="265"/>
+        <source>Requires valid numeric distance or two points.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/scale/scale.js" line="324"/>
+        <source>Requires valid numeric distance or second point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>singlelinetext</name>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="33"/>
+        <source>Current font: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="33"/>
+        <source>Text height: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="35"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="118"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="132"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="210"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="233"/>
+        <source>Specify start point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="53"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="242"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="257"/>
+        <source>Specify text height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="60"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="251"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="263"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="287"/>
+        <source>Specify text angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="66"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="271"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="293"/>
+        <source>Enter text: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="104"/>
+        <source>Specify center point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="111"/>
+        <source>Specify right-end point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="125"/>
+        <source>Specify middle point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="139"/>
+        <source>Specify top-left point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="146"/>
+        <source>Specify top-center point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="153"/>
+        <source>Specify top-right point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="160"/>
+        <source>Specify middle-left point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="167"/>
+        <source>Specify middle-center point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="174"/>
+        <source>Specify middle-right point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="181"/>
+        <source>Specify bottom-left point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="188"/>
+        <source>Specify bottom-center point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="195"/>
+        <source>Specify bottom-right point of text or [Justify/Setfont]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="199"/>
+        <source>Invalid option keyword.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="201"/>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="219"/>
+        <source>Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="224"/>
+        <source>Specify font name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="231"/>
+        <source>Point or option keyword required.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="255"/>
+        <source>Requires valid numeric distance or second point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/singlelinetext/singlelinetext.js" line="285"/>
+        <source>Requires valid numeric angle or second point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>star</name>
+    <message>
+        <location filename="../../commands/star/star.js" line="32"/>
+        <location filename="../../commands/star/star.js" line="124"/>
+        <source>Enter number of star points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/star/star.js" line="49"/>
+        <location filename="../../commands/star/star.js" line="148"/>
+        <location filename="../../commands/star/star.js" line="162"/>
+        <source>Specify outer radius of star: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/star/star.js" line="60"/>
+        <location filename="../../commands/star/star.js" line="169"/>
+        <location filename="../../commands/star/star.js" line="180"/>
+        <source>Specify inner radius of star: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/star/star.js" line="114"/>
+        <location filename="../../commands/star/star.js" line="129"/>
+        <location filename="../../commands/star/star.js" line="141"/>
+        <source>Specify center point: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/star/star.js" line="122"/>
+        <source>Requires an integer between 3 and 1024.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/star/star.js" line="139"/>
+        <location filename="../../commands/star/star.js" line="160"/>
+        <location filename="../../commands/star/star.js" line="178"/>
+        <source>Invalid point.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>syswindows</name>
+    <message>
+        <location filename="../../commands/syswindows/syswindows.js" line="9"/>
+        <location filename="../../commands/syswindows/syswindows.js" line="46"/>
+        <source>Enter an option [Cascade/Tile]: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands/syswindows/syswindows.js" line="44"/>
+        <source>Invalid option keyword.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>CmdPromptInput</name>
     <message>
@@ -8,12 +913,12 @@
         <location filename="../../cmdprompt.cpp" line="378"/>
         <location filename="../../cmdprompt.cpp" line="573"/>
         <source>Command: </source>
-        <translation type="unfinished"></translation>
+        <translation>Opdrag: </translation>
     </message>
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*Kanselleer*</translation>
     </message>
 </context>
 <context>
@@ -21,72 +926,72 @@
     <message>
         <location filename="../../embdetails-dialog.cpp" line="28"/>
         <source>Embroidery Design Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Borduur-ontwerp Inligting</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="58"/>
         <source>General Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Algmene Inligting</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="60"/>
         <source>Total Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid Steke:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="61"/>
         <source>Real Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid Borduursteke:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="62"/>
         <source>Jump Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring Steke:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="63"/>
         <source>Trim Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Knip Steke:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="64"/>
         <source>Total Colors:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid Kleure:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="65"/>
         <source>Color Changes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleur Veranderings:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="66"/>
         <source>Left:</source>
-        <translation type="unfinished"></translation>
+        <translation>Links:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="67"/>
         <source>Top:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bopunt:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="68"/>
         <source>Right:</source>
-        <translation type="unfinished"></translation>
+        <translation>Regs:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="69"/>
         <source>Bottom:</source>
-        <translation type="unfinished"></translation>
+        <translation>Onderpunt:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="70"/>
         <source>Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wydte:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="71"/>
         <source>Height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoogte:</translation>
     </message>
 </context>
 <context>
@@ -94,47 +999,47 @@
     <message>
         <location filename="../../layer-manager.cpp" line="24"/>
         <source>Layer Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Laag Beheer</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="27"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="28"/>
         <source>Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Sigbaar</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="29"/>
         <source>Frozen</source>
-        <translation type="unfinished"></translation>
+        <translation>Gevries</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="30"/>
         <source>Z Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Z Waarde</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="31"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleur</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="32"/>
         <source>Linetype</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyn Tipe</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="33"/>
         <source>Lineweight</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyn Gewig</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="34"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Afdruk</translation>
     </message>
 </context>
 <context>
@@ -217,7 +1122,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="17"/>
         <source>Ne&amp;xt</source>
-        <translation type="unfinished"></translation>
+        <translation>Vo&amp;lgende</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="17"/>
@@ -227,7 +1132,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="18"/>
         <source>Pre&amp;vious</source>
-        <translation type="unfinished"></translation>
+        <translation>Vo&amp;rige</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="18"/>
@@ -247,7 +1152,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Open</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
@@ -327,7 +1232,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Plak</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
@@ -338,7 +1243,7 @@
         <location filename="../../mainwindow-actions.cpp" line="32"/>
         <location filename="../../mainwindow.cpp" line="50"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Help</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
@@ -619,7 +1524,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="65"/>
         <source>&amp;Underline Text</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Onderlyn Teks</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="65"/>
@@ -819,7 +1724,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="88"/>
         <source>&amp;Day</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dag</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="88"/>
@@ -829,7 +1734,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="89"/>
         <source>&amp;Night</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nag</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="89"/>
@@ -859,7 +1764,7 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="189"/>
         <source>http://embroidermodder.sourceforge.net</source>
-        <translation type="unfinished"></translation>
+        <translation>http://embroidermodder.sourceforge.net</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="191"/>
@@ -869,7 +1774,7 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="193"/>
         <source>Embroidery formats by Josh Varga.</source>
-        <translation type="unfinished"></translation>
+        <translation>Borduur formate deur Josh Varga.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="194"/>
@@ -885,7 +1790,7 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="197"/>
         <source>Free under the zlib/libpng license.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gratis onder the zlib/libpng lisensie.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="246"/>
@@ -895,12 +1800,12 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="265"/>
         <source>&amp;Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vorige</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="266"/>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Volgende</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="267"/>
@@ -1011,7 +1916,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="62"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Help</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="63"/>
@@ -1026,7 +1931,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="65"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="66"/>
@@ -1036,7 +1941,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="340"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Open</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="345"/>
@@ -1056,27 +1961,27 @@
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="157"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rooi</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="158"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Geel</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="159"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Groen</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="160"/>
         <source>Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Siaan</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="161"/>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Blou</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="162"/>
@@ -1086,12 +1991,12 @@
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="163"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation>Wit</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="164"/>
         <source>Other...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ander...</translation>
     </message>
 </context>
 <context>
@@ -1099,7 +2004,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="102"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Eienskappe</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="140"/>
@@ -1120,12 +2025,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="277"/>
         <source>Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Blok</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="278"/>
         <source>Circle</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirkel</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="279"/>
@@ -1175,7 +2080,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="288"/>
         <source>Image</source>
-        <translation type="unfinished"></translation>
+        <translation>Beeld</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="289"/>
@@ -1185,17 +2090,17 @@
     <message>
         <location filename="../../property-editor.cpp" line="290"/>
         <source>Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyn</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="291"/>
         <source>Point</source>
-        <translation type="unfinished"></translation>
+        <translation>Punt</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="292"/>
         <source>Polygon</source>
-        <translation type="unfinished"></translation>
+        <translation>Veelhoek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="293"/>
@@ -1210,7 +2115,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="295"/>
         <source>Rectangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Reghoek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="296"/>
@@ -1220,12 +2125,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="298"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekend</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="807"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Algemeen</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="809"/>
@@ -1235,7 +2140,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="810"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleur</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="811"/>
@@ -1293,7 +2198,7 @@
         <location filename="../../property-editor.cpp" line="835"/>
         <location filename="../../property-editor.cpp" line="927"/>
         <source>Radius</source>
-        <translation type="unfinished"></translation>
+        <translation>Radius</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="836"/>
@@ -1311,7 +2216,7 @@
         <location filename="../../property-editor.cpp" line="1147"/>
         <location filename="../../property-editor.cpp" line="1290"/>
         <source>Start X</source>
-        <translation type="unfinished"></translation>
+        <translation>Begin X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="839"/>
@@ -1319,13 +2224,13 @@
         <location filename="../../property-editor.cpp" line="1148"/>
         <location filename="../../property-editor.cpp" line="1291"/>
         <source>Start Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Begin Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="840"/>
         <location filename="../../property-editor.cpp" line="1149"/>
         <source>End X</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="841"/>
@@ -1339,7 +2244,7 @@
         <location filename="../../property-editor.cpp" line="1247"/>
         <location filename="../../property-editor.cpp" line="1332"/>
         <source>Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Area</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="843"/>
@@ -1349,12 +2254,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="844"/>
         <source>Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Koord</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="845"/>
         <source>Included Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingeslote Hoek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="888"/>
@@ -1367,7 +2272,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="890"/>
         <source>Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Kloksgewyse</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="905"/>
@@ -1376,7 +2281,7 @@
         <location filename="../../property-editor.cpp" line="1378"/>
         <location filename="../../property-editor.cpp" line="1431"/>
         <source>Position X</source>
-        <translation type="unfinished"></translation>
+        <translation>Posisie X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="906"/>
@@ -1385,17 +2290,17 @@
         <location filename="../../property-editor.cpp" line="1379"/>
         <location filename="../../property-editor.cpp" line="1432"/>
         <source>Position Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Posisie Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="928"/>
         <source>Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Deursnee</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="930"/>
         <source>Circumference</source>
-        <translation type="unfinished"></translation>
+        <translation>Omtrek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1036"/>
@@ -1421,19 +2326,19 @@
         <location filename="../../property-editor.cpp" line="1073"/>
         <location filename="../../property-editor.cpp" line="1330"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Wydte</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1074"/>
         <location filename="../../property-editor.cpp" line="1331"/>
         <location filename="../../property-editor.cpp" line="1401"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoogte</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1097"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1098"/>
@@ -1444,13 +2349,13 @@
         <location filename="../../property-editor.cpp" line="1117"/>
         <location filename="../../property-editor.cpp" line="1292"/>
         <source>2nd X</source>
-        <translation type="unfinished"></translation>
+        <translation>2de X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1118"/>
         <location filename="../../property-editor.cpp" line="1293"/>
         <source>2nd Y</source>
-        <translation type="unfinished"></translation>
+        <translation>de Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1119"/>
@@ -1477,13 +2382,13 @@
     <message>
         <location filename="../../property-editor.cpp" line="1153"/>
         <source>Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1154"/>
         <location filename="../../property-editor.cpp" line="1248"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Lengte</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1211"/>
@@ -1533,53 +2438,53 @@
     <message>
         <location filename="../../property-editor.cpp" line="1322"/>
         <source>Corner 1 X</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 1 X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1323"/>
         <source>Corner 1 Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 1 Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1324"/>
         <source>Corner 2 X</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 2 X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1325"/>
         <source>Corner 2 Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 2 Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1326"/>
         <source>Corner 3 X</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 3 X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1327"/>
         <source>Corner 3 Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 3 Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1328"/>
         <source>Corner 4 X</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 4 X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1329"/>
         <source>Corner 4 Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 4 Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="297"/>
         <location filename="../../property-editor.cpp" line="1396"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1398"/>
         <source>Contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Inhoud</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1399"/>
@@ -1599,12 +2504,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="1452"/>
         <source>Backward</source>
-        <translation type="unfinished"></translation>
+        <translation>Agteruit</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1453"/>
         <source>UpsideDown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ondertebo</translation>
     </message>
 </context>
 <context>
@@ -1642,7 +2547,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="20"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Algemeen</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="21"/>
@@ -1727,7 +2632,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="107"/>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Agtergrond</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="110"/>
@@ -1754,12 +2659,12 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="123"/>
         <source>Use Texture</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik Tekstuur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="136"/>
         <source>Use Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik Kleur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="163"/>
@@ -1791,7 +2696,7 @@
         <location filename="../../settings-dialog.cpp" line="407"/>
         <location filename="../../settings-dialog.cpp" line="1647"/>
         <source>Colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleure</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="275"/>
@@ -1802,7 +2707,7 @@
         <location filename="../../settings-dialog.cpp" line="285"/>
         <location filename="../../settings-dialog.cpp" line="419"/>
         <source>Background Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Agtergrond Kleur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="295"/>
@@ -1847,7 +2752,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="409"/>
         <source>Text Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks Kleur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="438"/>
@@ -1872,7 +2777,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="470"/>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>Geskiedenis</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="472"/>
@@ -1928,7 +2833,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="943"/>
         <source>Trimming</source>
-        <translation type="unfinished"></translation>
+        <translation>Knip</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="945"/>
@@ -1953,7 +2858,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1003"/>
         <source>Save Ink</source>
-        <translation type="unfinished"></translation>
+        <translation>Bespaar Ink</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1005"/>
@@ -2064,13 +2969,13 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1278"/>
         <source>Ruler Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Liniaal Eenhede</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1293"/>
         <location filename="../../settings-dialog.cpp" line="1295"/>
         <source>Ruler Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Liniaal Kleur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1313"/>
@@ -2090,12 +2995,12 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1368"/>
         <source>Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Eindpunt</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1374"/>
         <source>Midpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Middelpunt</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1380"/>
@@ -2110,7 +3015,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1392"/>
         <source>Quadrant</source>
-        <translation type="unfinished"></translation>
+        <translation>Kwadrant</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1398"/>
@@ -2140,7 +3045,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1428"/>
         <source>Nearest</source>
-        <translation type="unfinished"></translation>
+        <translation>Naaste</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1434"/>
@@ -2150,7 +3055,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1440"/>
         <source>Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paralel</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1462"/>
@@ -2235,7 +3140,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1671"/>
         <source>Sizes</source>
-        <translation type="unfinished"></translation>
+        <translation>Groottes</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1673"/>
@@ -2250,27 +3155,27 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1712"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rooi</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1713"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Geel</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1714"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Groen</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1715"/>
         <source>Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Siaan</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1716"/>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Blou</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1717"/>
@@ -2280,7 +3185,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1718"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation>Wit</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1753"/>
@@ -2358,7 +3263,7 @@
     <message>
         <location filename="../../view.cpp" line="2163"/>
         <source>Rotate 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Roteer 1</translation>
     </message>
     <message>
         <location filename="../../view.cpp" line="2185"/>
@@ -2368,7 +3273,7 @@
     <message>
         <location filename="../../view.cpp" line="2214"/>
         <source>Scale 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Skaal 1</translation>
     </message>
 </context>
 </TS>
