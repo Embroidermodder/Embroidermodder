@@ -81,7 +81,6 @@ qt_add_executable(embroidermodder
 	${SRC}/mdiwindow.cpp
 	${SRC}/mdiwindow.h
 	${SRC}/native-scripting.cpp
-	${SRC}/native-scripting.h
 	${SRC}/object-arc.cpp
 	${SRC}/object-arc.h
 	${SRC}/object-base.cpp
@@ -142,7 +141,7 @@ file(COPY "${CMAKE_SOURCE_DIR}/images"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/icons"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_SOURCE_DIR}/commands"
+file(COPY "${CMAKE_SOURCE_DIR}/scripts"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/samples"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")

@@ -1,4 +1,4 @@
-//Command: Star
+; Command: Star
 
 var global = {}; //Required
 global.numPoints = 5; //Default

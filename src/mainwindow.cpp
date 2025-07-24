@@ -46,7 +46,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
-    QFileInfo check(appDir + "/commands");
+    QFileInfo check(appDir + "/scripts");
     if(!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/docs");
@@ -72,13 +72,8 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     //Load translations for the Embroidermodder 2 GUI
     QTranslator translatorEmb;
-    translatorEmb.load(appDir + "/translations/" + lang + "/embroidermodder2_" + lang);
+    translatorEmb.load(appDir + "/translations/" + lang + "/" + lang);
     qApp->installTranslator(&translatorEmb);
-
-    //Load translations for the commands
-    QTranslator translatorCmd;
-    translatorCmd.load(appDir + "/translations/" + lang + "/commands_" + lang);
-    qApp->installTranslator(&translatorCmd);
 
     //Load translations provided by Qt - this covers dialog buttons and other common things.
     QTranslator translatorQt;
@@ -87,17 +82,19 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     //Init
     mainWin = this;
+
     //Menus
-    fileMenu     = new QMenu(tr("&File"),     this);
-    editMenu     = new QMenu(tr("&Edit"),     this);
-    viewMenu     = new QMenu(tr("&View"),     this);
+    fileMenu     = new QMenu(tr("&File"), this);
+    editMenu     = new QMenu(tr("&Edit"), this);
+    viewMenu     = new QMenu(tr("&View"), this);
     settingsMenu = new QMenu(tr("&Settings"), this);
-    windowMenu   = new QMenu(tr("&Window"),   this);
-    helpMenu     = new QMenu(tr("&Help"),     this);
+    windowMenu   = new QMenu(tr("&Window"), this);
+    helpMenu     = new QMenu(tr("&Help"), this);
     //SubMenus
     recentMenu   = new QMenu(tr("Open &Recent"), this);
-    zoomMenu     = new QMenu(tr("&Zoom"),        this);
-    panMenu      = new QMenu(tr("&Pan"),         this);
+    zoomMenu     = new QMenu(tr("&Zoom"), this);
+    panMenu      = new QMenu(tr("&Pan"), this);
+
     //Toolbars
     toolbarFile       = addToolBar(tr("File"));
     toolbarEdit       = addToolBar(tr("Edit"));
@@ -204,22 +201,9 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    //Javascript
-    /*
-    initMainWinPointer(this);
-
-    engine = new QScriptEngine(this);
-    engine->installTranslatorFunctions();
-    debugger = new QScriptEngineDebugger(this);
-    debugger->attachTo(engine);
-    javaInitNatives(engine);
-    */
-
-    //Load all commands in a loop
-    QDir commandDir(appDir + "/commands");
-    QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach (QString cmdName, cmdList) {
-        javaLoadCommand(cmdName);
+    // Scripting
+    if (!scheme_boot()) {
+        return;
     }
 
     statusbar = new StatusBar(this, this);
@@ -239,27 +223,28 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     showNormal();
 
-    //Load tips from external file
-    QFile tipFile(appDir + "/tips.txt");
-    if(tipFile.open(QFile::ReadOnly))
-    {
+    /* Load tips from external file */
+    QFile tipFile(appDir + "/docs/tips.txt");
+    if (tipFile.open(QFile::ReadOnly)) {
         QTextStream stream(&tipFile);
         QString tipLine;
-        do
-        {
+        do {
             tipLine = stream.readLine();
-            if(!tipLine.isEmpty())
+            if (!tipLine.isEmpty()) {
                 listTipOfTheDay << tipLine;
-        }
-        while(!tipLine.isNull());
+            }
+        } while(!tipLine.isNull());
     }
-    if(getSettingsGeneralTipOfTheDay())
+    if (getSettingsGeneralTipOfTheDay()) {
         tipOfTheDay();
+    }
 }
 
 MainWindow::~MainWindow()
 {
     qDebug("MainWindow::Destructor()");
+
+    scheme_free();
 
     //Prevent memory leaks by deleting any unpasted objects
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());

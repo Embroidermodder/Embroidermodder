@@ -5,13 +5,14 @@
 #include <QList>
 #include <QHash>
 #include <QDir>
-//#include <QtScript>
-//#include <QtScriptTools>
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
 #include "mainwindow-actions.h"
 #include "cmdprompt.h"
+
+#include "scheme.h"
+#include "scheme-private.h"
 
 class MdiArea;
 class MdiWindow;
@@ -42,23 +43,30 @@ public:
     MainWindow();
     ~MainWindow();
 
-    MdiArea*                        getMdiArea();
-    MainWindow*                     getApplication();
-    MdiWindow*                      activeMdiWindow();
-    View*                           activeView();
-    QGraphicsScene*                 activeScene();
-    QUndoStack*                     activeUndoStack();
+    /* Pointer access */
+    MainWindow* mainWin;
+    MdiArea* mdiArea;
+    CmdPrompt* prompt;
+    PropertyEditor* dockPropEdit;
+    UndoEditor* dockUndoEdit;
+    StatusBar* statusbar;
 
-    void                            setUndoCleanIcon(bool opened);
+    MdiArea* getMdiArea();
+    MainWindow* getApplication();
+    MdiWindow* activeMdiWindow();
+    View* activeView();
+    QGraphicsScene* activeScene();
+    QUndoStack* activeUndoStack();
+
+    /* Scipting environment */
+    scheme *sc;
+    bool scheme_boot(void);
+    void scheme_free(void);
+    void load_command(const QString& cmdName);
+
+    void setUndoCleanIcon(bool opened);
 
     virtual void                    updateMenuToolbarStatusbar();
-
-    MainWindow*     mainWin;
-    MdiArea*        mdiArea;
-    CmdPrompt*      prompt;
-    PropertyEditor* dockPropEdit;
-    UndoEditor*     dockUndoEdit;
-    StatusBar*      statusbar;
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
@@ -650,12 +658,6 @@ public slots:
 
     void doNothing();
 
-private:
-    QScriptEngine*         engine;
-    QScriptEngineDebugger* debugger;
-    void                   javaInitNatives(QScriptEngine* engine);
-    void                   javaLoadCommand(const QString& cmdName);
-
 public:
     //Natives
     void nativeAlert                  (const QString& txt);
@@ -796,4 +798,3 @@ public:
 
 #endif
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
