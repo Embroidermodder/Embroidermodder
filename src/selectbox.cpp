@@ -1,4 +1,9 @@
-#include "selectbox.h"
+/*!
+ * \file selectbox.cpp
+ * \brief Draws a box used for selecting large numbers of points with the mouse.
+ */
+
+#include "embroidermodder.h"
 #include <QPainter>
 
 SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)
@@ -55,5 +60,3 @@ void SelectBox::forceRepaint()
     resize(hack + QSize(1,1));
     resize(hack);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

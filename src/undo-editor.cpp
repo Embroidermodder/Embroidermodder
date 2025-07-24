@@ -1,10 +1,14 @@
+/*!
+ * \file undo-editor.cpp
+ * \brief Shows the undo history to the user in a dockable widget.
+ */
+
 #include <QUndoGroup>
 #include <QUndoStack>
 #include <QUndoView>
 #include <QKeyEvent>
 
-#include "undo-editor.h"
-#include "undo-commands.h"
+#include "embroidermodder.h"
 
 UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {

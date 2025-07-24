@@ -1,6 +1,9 @@
-#include "mdiarea.h"
-#include "mainwindow.h"
-#include "view.h"
+/*!
+ * \file mdiarea.cpp
+ * \brief Managing the Multiple Document Interface area within the main window.
+ */
+
+#include "embroidermodder.h"
 
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)
 {
@@ -105,14 +108,11 @@ void MdiArea::tile()
 
 void MdiArea::zoomExtentsAllSubWindows()
 {
-    foreach(QMdiSubWindow* window, subWindowList())
-    {
+    foreach(QMdiSubWindow* window, subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
-        if(mdiWin)
-        {
-            View* v = mdiWin->getView();
-            if(v)
-            {
+        if (mdiWin) {
+            View* v = mdiWin->gview;
+            if (v) {
                 v->recalculateLimits();
                 v->zoomExtents();
             }
@@ -127,5 +127,3 @@ void MdiArea::forceRepaint()
     resize(hack + QSize(1,1));
     resize(hack);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

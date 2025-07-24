@@ -1,15 +1,9 @@
-#include <QApplication>
-#include <QtGui>
-#include <QGridLayout>
-#include <QLabel>
-#include <QDialogButtonBox>
-#include <QScrollArea>
-#include <QApplication>
-#include <QGroupBox>
+/*!
+ * \file embdetails-dialog.cpp
+ * \brief Dialog that shows stitch counts and other useful metrics.
+ */
 
-#include "embdetails-dialog.h"
-
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
 {
@@ -36,6 +30,8 @@ EmbDetailsDialog::~EmbDetailsDialog()
     QApplication::restoreOverrideCursor();
 }
 
+/*! Recalculate the information presented in the dialog.
+ */
 void EmbDetailsDialog::getInfo()
 {
     //TODO: generate a temporary pattern from the scene data.
@@ -137,7 +133,7 @@ QWidget* EmbDetailsDialog::createMainWidget()
 void MainWindow::designDetails()
 {
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    qDebug("designDetails()");
+    debug("designDetails()");
     QString appName = QApplication::applicationName();
     QString title = "Design Details";
 
@@ -319,7 +315,7 @@ void MainWindow::designDetails()
         frame->setPalette( palette );
         frame->setAutoFillBackground(true);
         grid->addWidget(frame, currentRow,0,1,1);
-        qDebug("size: %d i: %d", stitchLengths.size(), i);
+        debug("size: %d i: %d", stitchLengths.size(), i);
         grid->addWidget(new QLabel(QString::number(stitchLengths.at(i)) + " mm"), currentRow,1,1,1);
         currentRow++;
     }

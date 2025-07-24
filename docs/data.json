@@ -1,0 +1,33 @@
+{
+    "meta": {
+        "overview": "Data used by out build, testing and QA apparatus.",
+        "last-edit": "Thu May  1 01:53:12 2025"
+    },
+    "embroidermodder": {
+        "version": "2.0.0-alpha",
+        "license": {
+            "schemaVersion": 1,
+            "label": "License",
+            "message": "zlib",
+            "color": "yellow"
+        }
+    },
+    "libembroidery": {
+        "version": "1.0.0-alpha",
+        "license": {
+            "schemaVersion": 1,
+            "label": "License",
+            "message": "zlib",
+            "color": "yellow"
+        }
+    },
+    "embroideryMobile": {
+        "version": "1.0.0-alpha",
+        "license": {
+            "schemaVersion": 1,
+            "label": "License",
+            "message": "MIT",
+            "color": "yellow"
+        }
+    }
+}

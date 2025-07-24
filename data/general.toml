@@ -1,0 +1,274 @@
+# Embroidermodder 2 -- Main Configuration
+#
+# ----------------------------------------------------------------------------
+# Embroidermodder 2 is open source software.
+# Copyright 2011-2025 The Embroidermodder Team.
+# See LICENSE.md for details about distribution.
+# ----------------------------------------------------------------------------
+
+string_tables = [
+    "file_toolbar_list",
+    "edit_toolbar_list",
+    "view_toolbar_list",
+    "zoom_toolbar_list",
+    "pan_toolbar_list",
+    "icon_toolbar_list",
+    "help_toolbar_list",
+    "draw_toolbar_list",
+    "inquiry_toolbar_list",
+    "modify_toolbar_list",
+    "dimension_toolbar_list",
+    "layer_selector_list",
+    "color_selector_list",
+    "linetype_selector_list",
+    "lineweight_selector_list",
+    "extensions",
+    "tips"
+]
+
+
+file_toolbar_list = [
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails",
+    "---",
+    "undo",
+    "redo",
+    "---",
+    "help"
+]
+
+edit_toolbar_list = [
+    "selectall",
+    "---",
+    "cut",
+    "copy",
+    "paste"
+]
+
+view_toolbar_list = [
+    "day",
+    "night"
+]
+
+zoom_toolbar_list = [
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "---",
+    "zoomcenter",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+]
+
+pan_toolbar_list = [
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+
+icon_toolbar_list = [
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128"
+]
+
+help_toolbar_list = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+]
+
+draw_toolbar_list = [
+    "polyline",
+    "path",
+    "---",
+    "circle",
+    "ellipse",
+    "line",
+    "point",
+    "polygon",
+    "rectangle",
+    "singlelinetext",
+    "---",
+    "heart",
+    "dolphin",
+    "snowflake",
+    "star"
+]
+
+inquiry_toolbar_list = [
+    "distance",
+    "locatepoint"
+]
+
+modify_toolbar_list = [
+    "erase",
+    "move",
+    "rotate",
+    "scale"
+]
+
+dimension_toolbar_list = [
+    "quickleader"
+]
+
+# TODO: Create layer pixmaps by concatenating several icons
+layer_selector_list = [
+    "linetypebylayer", "0", "",
+    "linetypebylayer", "1", "",
+    "linetypebylayer", "2", "",
+    "linetypebylayer", "3", "",
+    "linetypebylayer", "4", "",
+    "linetypebylayer", "5", "",
+    "linetypebylayer", "6", "",
+    "linetypebylayer", "7", "",
+    "linetypebylayer", "8", "",
+    "linetypebylayer", "9", ""
+]
+
+color_selector_list = [
+    "colorbylayer", "ByLayer", "",
+    "colorbyblock", "ByBlock", "",
+    "colorred", "Red", "16711680",
+    "coloryellow", "Yellow", "16776960",
+    "colorgreen", "Green", "65280",
+    "colorcyan", "Cyan", "65535",
+    "colorblue", "Blue", "255",
+    "colormagenta", "Magenta", "16711935",
+    "colorwhite", "White", "16777215",
+    "colorother", "Other...", ""
+]
+
+linetype_selector_list = [
+    "linetypebylayer", "ByLayer", "",
+    "linetypebyblock", "ByBlock", "",
+    "linetypecontinuous", "Continuous", "",
+    "linetypehidden", "Hidden", "",
+    "linetypecenter", "Center", "",
+    "linetypeother", "Other...", ""
+]
+
+# TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight
+lineweight_selector_list = [
+    "lineweightbylayer", "ByLayer", "-2.00",
+    "lineweightbyblock", "ByBlock", "-1.00",
+    "lineweightdefault", "Default", "0.00",
+    "lineweight01", "0.00 mm", "0.00",
+    "lineweight02", "0.05 mm", "0.05",
+    "lineweight03", "0.15 mm", "0.15",
+    "lineweight04", "0.20 mm", "0.20",
+    "lineweight05", "0.25 mm", "0.25",
+    "lineweight06", "0.30 mm", "0.30",
+    "lineweight07", "0.35 mm", "0.35",
+    "lineweight08", "0.40 mm", "0.40",
+    "lineweight09", "0.45 mm", "0.45",
+    "lineweight10", "0.50 mm", "0.50",
+    "lineweight11", "0.55 mm", "0.55",
+    "lineweight12", "0.60 mm", "0.60",
+    "lineweight13", "0.65 mm", "0.65",
+    "lineweight14", "0.70 mm", "0.70",
+    "lineweight15", "0.75 mm", "0.75",
+    "lineweight16", "0.80 mm", "0.80",
+    "lineweight17", "0.85 mm", "0.85",
+    "lineweight18", "0.90 mm", "0.90",
+    "lineweight19", "0.95 mm", "0.95",
+    "lineweight20", "1.00 mm", "1.00",
+    "lineweight21", "1.05 mm", "1.05",
+    "lineweight22", "1.10 mm", "1.10",
+    "lineweight23", "1.15 mm", "1.15",
+    "lineweight24", "1.20 mm", "1.20"
+]
+
+extensions = [
+    "100",
+    "10O",
+    "ART",
+    "BMC",
+    "BRO",
+    "CND",
+    "COL",
+    "CSD",
+    "CSV",
+    "DAT",
+    "DEM",
+    "DSB",
+    "DST",
+    "DSZ",
+    "DXF",
+    "EDR",
+    "EMD",
+    "EXP",
+    "EXY",
+    "EYS",
+    "FXY",
+    "GNC",
+    "GT",
+    "HUS",
+    "INB",
+    "JEF",
+    "KSM",
+    "PCD",
+    "PCM",
+    "PCQ",
+    "PCS",
+    "PEC",
+    "PEL",
+    "PEM",
+    "PES",
+    "PHB",
+    "PHC",
+    "RGB",
+    "SEW",
+    "SHV",
+    "SST",
+    "STX",
+    "SVG",
+    "T09",
+    "TAP",
+    "THR",
+    "TXT",
+    "U00",
+    "U01",
+    "VIP",
+    "VP3",
+    "XXX",
+    "ZSK"
+]
+
+tips = [
+    "we need more tips?",
+    "you can change the color of the display through settings?",
+    "you can hide the scrollbars to increase the viewable area through settings?",
+    "you can change the icon size for increased visibility?",
+    "you can toggle the grid on and off by pressing the button in the statusbar?",
+    "the grid size can be changed to match your hoop size through settings?",
+    "the crosshair size is based on a percentage of your screen size? Setting it to 100 may help you visually line things up better.",
+    "you can pan by pressing the middle mouse button and dragging your mouse across the screen?",
+    "you can open and edit multiple designs simultaneously?",
+    "you that many embroidery machines support the .dst format?",
+    "that you can zoom in and out using your mouse wheel?",
+    "that you can use circular and isometric grids?",
+    "about our command line format converter?",
+    "that you can use the 'DAY' and 'NIGHT' commands to quickly switch the view colors to commonly used white or black?",
+    "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?"
+]
+

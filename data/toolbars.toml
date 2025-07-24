@@ -1,0 +1,157 @@
+# Embroidermodder 2 -- Toolbar Configuration
+#
+# ----------------------------------------------------------------------------
+# Embroidermodder 2 is open source software.
+# Copyright 2011-2025 The Embroidermodder Team.
+# See LICENSE.md for details about distribution.
+# ----------------------------------------------------------------------------
+
+top_toolbar_order = [
+    "FILE",
+    "EDIT",
+    "HELP",
+    "ICON",
+    "---",
+    "ZOOM",
+    "PAN",
+    "VIEW",
+    "---",
+    "LAYER",
+    "PROPERTIES",
+    "---",
+    "TEXT"
+]
+
+left_toolbar_order = [
+    "DRAW",
+    "INQUIRY",
+    "DIMENSION",
+    "MODIFY"
+]
+
+bottom_toolbar_order = [
+    "PROMPT"
+]
+
+file_toolbar_list = [
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails",
+    "---",
+    "undo",
+    "redo",
+    "---",
+    "help"
+]
+
+edit_toolbar_list = [
+    "selectall",
+    "---",
+    "cut",
+    "copy",
+    "paste"
+]
+
+view_toolbar_list = [
+    "day",
+    "night"
+]
+
+zoom_toolbar_list = [
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "---",
+    "zoomcenter",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+]
+
+pan_toolbar_list = [
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+
+icon_toolbar_list = [
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128"
+]
+
+help_toolbar_list = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+]
+
+draw_toolbar_list = [
+    "polyline",
+    "path",
+    "---",
+    "circle",
+    "ellipse",
+    "line",
+    "point",
+    "polygon",
+    "rectangle",
+    "singlelinetext",
+    "---",
+    "heart",
+    "dolphin",
+    "snowflake",
+    "star"
+]
+
+inquiry_toolbar_list = [
+    "distance",
+    "locatepoint"
+]
+
+modify_toolbar_list = [
+    "erase",
+    "move",
+    "rotate",
+    "scale"
+]
+
+dimension_toolbar_list = [
+    "quickleader"
+]
+
+[[toolbars]]
+label = "File"
+key = "FILE"
+mdi_only = false
+entries = [
+    "new",
+    "open",
+    "save"
+]
+
+[[toolbars]]
+label = "Edit"
+key = "EDIT"
+mdi_only = false
+entries = [
+    "cut"
+]
+

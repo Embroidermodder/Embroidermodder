@@ -1,0 +1,241 @@
+# Embroidermodder 2 -- Main Configuration
+#
+# ----------------------------------------------------------------------------
+# Embroidermodder 2 is open source software.
+# Copyright 2011-2025 The Embroidermodder Team.
+# See LICENSE.md for details about distribution.
+# ----------------------------------------------------------------------------
+
+menubar_order = [
+    "FILE",
+    "EDIT",
+    "VIEW",
+    "DRAW",
+    "GENERATE",
+    "FILL",
+    "TOOLS",
+    "MODIFY",
+    "DIMENSION",
+    "WINDOW",
+    "HELP"
+]
+
+[[menus]]
+label = "&File"
+key = "FILE"
+mdi_only = false
+top_level = true
+entries = [
+    "new",
+    "---",
+    "open",
+    "submenu",
+    "RECENT",
+    "---",
+    "save",
+    "saveas",
+    "---",
+    "print",
+    "---",
+    "windowclose",
+    "---",
+    "designdetails",
+    "---",
+    "exit"
+]
+
+[[menus]]
+label = "&Edit"
+key = "EDIT"
+mdi_only = false
+top_level = true
+entries = [
+    "undo",
+    "redo",
+    "---",
+    "selectall",
+    "---",
+    "cut",
+    "copy",
+    "paste",
+    "---",
+    "settingsdialog"
+]
+
+[[menus]]
+label = "&View"
+key = "VIEW"
+mdi_only = true
+top_level = true
+entries = [
+    "submenu",
+    "ZOOM",
+    "submenu",
+    "PAN",
+    "---",
+    "day",
+    "night"
+]
+
+[[menus]]
+label = "&Draw"
+key = "DRAW"
+mdi_only = true
+top_level = true
+entries = [
+    "polyline",
+    "path",
+    "---",
+    "circle",
+    "ellipse",
+    "line",
+    "point",
+    "polygon",
+    "rectangle",
+    "singlelinetext",
+    "---",
+    "heart",
+    "dolphin",
+    "snowflake",
+    "star"
+]
+
+[[menus]]
+label = "&Generate"
+key = "GENERATE"
+mdi_only = true
+top_level = true
+entries = [
+    "photo",
+    "drawing",
+    "qr",
+    "guilloche",
+    "knot"
+]
+
+[[menus]]
+label = "&Fill"
+key = "FILL"
+mdi_only = true
+top_level = true
+entries = [
+    "satin",
+    "---",
+    "gradient",
+    "brick"
+]
+
+[[menus]]
+label = "&Tools"
+key = "TOOLS"
+mdi_only = true
+top_level = true
+entries = [
+    "distance",
+    "locatepoint",
+    "---",
+    "play",
+    "stop"
+]
+
+[[menus]]
+label = "&Modify"
+key = "MODIFY"
+mdi_only = true
+top_level = true
+entries = [
+    "erase",
+    "move",
+    "rotate",
+    "scale"
+]
+
+[[menus]]
+label = "Dimen&sion"
+key = "DIMENSION"
+mdi_only = true
+top_level = true
+entries = [
+    "quickleader"
+]
+
+[[menus]]
+label = "&Window"
+key = "WINDOW"
+mdi_only = true
+top_level = true
+entries = [
+    "windowclose",
+    "windowcloseall",
+    "---",
+    "windowcascade",
+    "windowtile",
+    "---",
+    "windownext",
+    "windowprevious"
+]
+
+[[menus]]
+label = "&Help"
+key = "HELP"
+mdi_only = true
+top_level = true
+entries = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "tipoftheday",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+]
+
+[[menus]]
+label = "Open &Recent"
+key = "RECENT"
+mdi_only = false
+top_level = false
+
+[[menus]]
+label = "&Zoom"
+key = "ZOOM"
+mdi_only = false
+top_level = false
+entries = [
+    "icon",
+    "zoom",
+    "zoomrealtime",
+    "zoomprevious",
+    "---",
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "zoomcenter",
+    "---",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+]
+
+[[menus]]
+label = "&Pan"
+key = "PAN"
+mdi_only = false
+top_level = false
+entries = [
+    "icon",
+    "pan",
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+

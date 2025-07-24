@@ -1,31 +1,9 @@
-#include "mdiwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "object-save.h"
-#include "object-data.h"
-#include "object-path.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
+/*!
+ * \file mdiwindow.cpp
+ * \brief The sub-window used for editing a given EmbPattern.
+ */
 
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QApplication>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QMdiSubWindow>
-#include <QStatusBar>
-#include <QColor>
-#include <QUndoStack>
-
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
-
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
@@ -42,7 +20,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    this->setWindowIcon(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    this->setWindowIcon(_mainWin->createIcon("app"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(mainWin, gscene, this);
@@ -52,12 +30,12 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     //WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
     //WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
     //WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
-    gview->setFocusProxy(mainWin->prompt);
+    gview->setFocusProxy(prompt);
 
     resize(sizeHint());
 
     promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
-    mainWin->prompt->setHistory(promptHistory);
+    prompt->setHistory(promptHistory);
     promptInputList << "";
     promptInputNum = 0;
 
@@ -80,7 +58,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
 MdiWindow::~MdiWindow()
 {
-    qDebug("MdiWindow Destructor()");
+    debug("MdiWindow Destructor()");
 }
 
 bool MdiWindow::saveFile(const QString &fileName)
@@ -96,7 +74,7 @@ bool MdiWindow::saveFile(const QString &fileName)
  */
 bool MdiWindow::loadFile(const QString &fileName)
 {
-    qDebug("MdiWindow loadFile()");
+    debug("MdiWindow loadFile()");
 
     QRgb tmpColor = getCurrentColor();
 
@@ -112,7 +90,7 @@ bool MdiWindow::loadFile(const QString &fileName)
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QString ext = fileExtension(fileName);
-    qDebug("ext: %s", qPrintable(ext));
+    debug("ext: %s", qPrintable(ext));
 
     // Read
     EmbPattern* p = emb_pattern_create();
@@ -133,7 +111,7 @@ bool MdiWindow::loadFile(const QString &fileName)
 
     /* FIXME: flattens all colors to black */
     QPainterPath polylinePath;
-    setCurrentColor(qRgb(0, 0, 0));
+    curColor = qRgb(0, 0, 0);
     EmbVector start = emb_vector(0, 0);
     bool firstPoint = false;
     for (int i=0; i<p->stitch_list->count; i++) {
@@ -151,7 +129,7 @@ bool MdiWindow::loadFile(const QString &fileName)
         }
     }
     polylinePath.translate(-start.x, -start.y);
-    mainWin->nativeAddPolyline(start.x, start.y, polylinePath, OBJ_RUBBER_OFF);
+    mainWin->add_polyline(start, polylinePath, OBJ_RUBBER_OFF);
 
     /* FIXME: loading geometry
         QPainterPath path;
@@ -162,9 +140,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbCircle c = curCircleObj->circleObj.circle;
                 EmbColor thisColor = curCircleObj->circleObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
+                mainWin->add_circle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
                 curCircleObj = curCircleObj->next;
             }
         }
@@ -175,9 +153,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbEllipse e = curEllipseObj->ellipseObj.ellipse;
                 EmbColor thisColor = curEllipseObj->ellipseObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddEllipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                mainWin->add_ellipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curEllipseObj = curEllipseObj->next;
             }
         }
@@ -188,9 +166,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbLine li = curLineObj->lineObj.line;
                 EmbColor thisColor = curLineObj->lineObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddLine(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
+                mainWin->add_line(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
                 curLineObj = curLineObj->next;
             }
         }
@@ -235,9 +213,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbPoint po = curPointObj->pointObj.point;
                 EmbColor thisColor = curPointObj->pointObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddPoint(embPoint_x(po), embPoint_y(po));
+                mainWin->add_point(embPoint_x(po), embPoint_y(po));
                 curPointObj = curPointObj->next;
             }
         }
@@ -252,7 +230,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 qreal x = 0, y = 0;
                 EmbPointList* curPointList = curPolygonObjList->polygonObj->pointList;
                 EmbColor thisColor = curPolygonObjList->polygonObj->color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
@@ -266,7 +244,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polygonPath.translate(-startX, -startY);
-                mainWin->nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
+                mainWin->add_polygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
 
                 curPolygonObjList = curPolygonObjList->next;
             }
@@ -283,7 +261,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 qreal x = 0, y = 0;
                 EmbPointList* curPointList = curPolylineObjList->polylineObj->pointList;
                 EmbColor thisColor = curPolylineObjList->polylineObj->color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
@@ -297,7 +275,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polylinePath.translate(-startX, -startY);
-                mainWin->nativeAddPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
+                mainWin->add_polyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
 
                 curPolylineObjList = curPolylineObjList->next;
             }
@@ -309,21 +287,20 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbRect r = curRectObj->rectObj.rect;
                 EmbColor thisColor = curRectObj->rectObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddRectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                mainWin->add_rectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curRectObj = curRectObj->next;
             }
         }
     */
 
     setCurrentFile(fileName);
-    mainWin->statusbar->showMessage("File loaded.");
+    statusbar->showMessage("File loaded.");
     QString stitches;
     stitches.setNum(p->stitch_list->count);
 
-    if(mainWin->getSettingsGridLoadFromFile())
-    {
+    if (st[ST_GRID_LOAD_FROM_FILE].b) {
         //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
     }
 
@@ -333,36 +310,11 @@ bool MdiWindow::loadFile(const QString &fileName)
     //Clear the undo stack so it is not possible to undo past this point.
     gview->getUndoStack()->clear();
 
-    setCurrentColor(tmpColor);
+    curColor = tmpColor;
 
     fileWasLoaded = true;
     mainWin->setUndoCleanIcon(fileWasLoaded);
     return fileWasLoaded;
-}
-
-void MdiWindow::print()
-{
-    QPrintDialog dialog(&printer, this);
-    if(dialog.exec() == QDialog::Accepted)
-    {
-        QPainter painter(&printer);
-        if(mainWin->getSettingsPrintingDisableBG())
-        {
-            //Save current bg
-            QBrush brush = gview->backgroundBrush();
-            //Save ink by not printing the bg at all
-            gview->setBackgroundBrush(Qt::NoBrush);
-            //Print, fitting the viewport contents into a full page
-            gview->render(&painter);
-            //Restore the bg
-            gview->setBackgroundBrush(brush);
-        }
-        else
-        {
-            //Print, fitting the viewport contents into a full page
-            gview->render(&painter);
-        }
-    }
 }
 
 //TODO: Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?
@@ -379,7 +331,7 @@ void MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if(mainWin->getSettingsPrintingDisableBG()) //TODO: Make BMC background into it's own setting?
+    if (st[ST_PRINTING_DISABLE_BG].b) //TODO: Make BMC background into it's own setting?
     {
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
@@ -387,8 +339,7 @@ void MdiWindow::saveBMC()
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
         gscene->setBackgroundBrush(brush);
     }
-    else
-    {
+    else {
         gscene->update();
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
     }
@@ -415,29 +366,29 @@ QString MdiWindow::fileExtension(const QString& fileName)
 
 void MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
-    qDebug("MdiWindow closeEvent()");
+    debug("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
 void MdiWindow::onWindowActivated()
 {
-    qDebug("MdiWindow onWindowActivated()");
+    debug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
     mainWin->setUndoCleanIcon(fileWasLoaded);
-    mainWin->statusbar->statusBarSnapButton->setChecked(gscene->property(ENABLE_SNAP).toBool());
-    mainWin->statusbar->statusBarGridButton->setChecked(gscene->property(ENABLE_GRID).toBool());
-    mainWin->statusbar->statusBarRulerButton->setChecked(gscene->property(ENABLE_RULER).toBool());
-    mainWin->statusbar->statusBarOrthoButton->setChecked(gscene->property(ENABLE_ORTHO).toBool());
-    mainWin->statusbar->statusBarPolarButton->setChecked(gscene->property(ENABLE_POLAR).toBool());
-    mainWin->statusbar->statusBarQSnapButton->setChecked(gscene->property(ENABLE_QSNAP).toBool());
-    mainWin->statusbar->statusBarQTrackButton->setChecked(gscene->property(ENABLE_QTRACK).toBool());
-    mainWin->statusbar->statusBarLwtButton->setChecked(gscene->property(ENABLE_LWT).toBool());
-    mainWin->prompt->setHistory(promptHistory);
+    statusbar->statusBarSnapButton->setChecked(gscene->property(ENABLE_SNAP).toBool());
+    statusbar->statusBarGridButton->setChecked(gscene->property(ENABLE_GRID).toBool());
+    statusbar->statusBarRulerButton->setChecked(gscene->property(ENABLE_RULER).toBool());
+    statusbar->statusBarOrthoButton->setChecked(gscene->property(ENABLE_ORTHO).toBool());
+    statusbar->statusBarPolarButton->setChecked(gscene->property(ENABLE_POLAR).toBool());
+    statusbar->statusBarQSnapButton->setChecked(gscene->property(ENABLE_QSNAP).toBool());
+    statusbar->statusBarQTrackButton->setChecked(gscene->property(ENABLE_QTRACK).toBool());
+    statusbar->statusBarLwtButton->setChecked(gscene->property(ENABLE_LWT).toBool());
+    prompt->setHistory(promptHistory);
 }
 
 QSize MdiWindow::sizeHint() const
 {
-    qDebug("MdiWindow sizeHint()");
+    debug("MdiWindow sizeHint()");
     return QSize(450, 300);
 }
 
@@ -526,23 +477,38 @@ void MdiWindow::promptInputNext()
     promptInputPrevNext(false);
 }
 
-void MdiWindow::promptInputPrevNext(bool prev)
+void
+MdiWindow::promptInputPrevNext(bool prev)
 {
-    if(promptInputList.isEmpty())
-    {
-        if(prev) QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
-        else     QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
-        qDebug("The prompt input is empty! Please report this as a bug!");
+    if (promptInputList.isEmpty()) {
+        if (prev) {
+            QMessageBox::critical(this, tr("Prompt Previous Error"),
+                tr("The prompt input is empty! Please report this as a bug!"));
+        }
+        else {
+            QMessageBox::critical(this, tr("Prompt Next Error"),
+                tr("The prompt input is empty! Please report this as a bug!"));
+        }
+        debug("The prompt input is empty! Please report this as a bug!");
+        return;
     }
-    else
-    {
-        if(prev) promptInputNum--;
-        else     promptInputNum++;
-        int maxNum = promptInputList.size();
-        if     (promptInputNum < 0)       { promptInputNum = 0;      mainWin->prompt->setCurrentText(""); }
-        else if(promptInputNum >= maxNum) { promptInputNum = maxNum; mainWin->prompt->setCurrentText(""); }
-        else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
+
+    if (prev) {
+        promptInputNum--;
+    }
+    else {
+        promptInputNum++;
+    }
+    int maxNum = promptInputList.size();
+    if (promptInputNum < 0) {
+        promptInputNum = 0;
+        prompt->setCurrentText("");
+    }
+    else if (promptInputNum >= maxNum) {
+        promptInputNum = maxNum; prompt->setCurrentText("");
+    }
+    else {
+        prompt->setCurrentText(promptInputList.at(promptInputNum));
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
