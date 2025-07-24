@@ -1,5 +1,9 @@
-#include "preview-dialog.h"
-#include "imagewidget.h"
+/*!
+ * \file preview-dialog.cpp
+ * \brief Dialog to allow us to thumbnail a file before opening it in an MdiWindow.
+ */
+
+#include "embroidermodder.h"
 
 #include <QDebug>
 #include <QGridLayout>
@@ -34,5 +38,3 @@ PreviewDialog::~PreviewDialog()
 {
     qDebug("PreviewDialog Destructor");
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

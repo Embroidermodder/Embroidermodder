@@ -1,0 +1,24 @@
+site_name: Embroidermodder 2.0.0-alpha
+site_description: Free machine embroidery software supporting a variety of formats.
+copyright: Copyright (C) 2011-2025 The Embroidermodder Team
+site_url: https://www.libembroidery.org/
+repo_url: https://github.com/embroidermodder/embroidermodder
+edit_uri: edit/main/docs/
+nav:
+  - 'Home': 'index.md'
+  - 'Downloads': 'downloads/index.md'
+  - 'About': 'about.md'
+  - 'Documentation': 'docs/index.html'
+  - 'Contact': 'contact.md'
+  - 'Donate': https://opencollective.com/embroidermodder
+theme:
+  name: material
+  language: en
+  favicon: "images/app.png"
+  logo: "images/app.png"
+  features:
+    - navigation.tabs
+  font:
+    text: 'Source Serif 4'
+markdown_extensions:
+  - admonition

@@ -1,5 +1,9 @@
-#include "object-textsingle.h"
-#include "object-data.h"
+/*!
+ * \file object-textsingle.cpp
+ * \brief Tools for writing and manipulating EmbTextSingles via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -352,5 +356,3 @@ QList<QPainterPath> TextSingleObject::subPathList() const
 
     return pathList;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

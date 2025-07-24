@@ -1,0 +1,77 @@
+# Basic crash testing script.
+#
+# FIXME: These cause a warning box that overrides the script, we
+# could add a QBasicTimer to the warning box command to close it
+# in testing mode after 1 second.
+#    "cut",
+#    "copy",
+#    "paste",
+#    "select_all",
+#    "zoom_selected",
+#
+# FIXME: boolean support for set
+#    "set text_bold true",
+#    "set text_bold false",
+#    "set text_italic true",
+#    "set text_italic false",
+#    "set text_underline true",
+#    "set text_underline false",
+#    "set text_strikeout true",
+#    "set text_strikeout false",
+#    "set text_overline true",
+#    "set text_overline false",
+#
+# TODO: Make selections, move, rotate, scale and erase
+#    "select_all",
+#    "move",
+#    "scale",
+#    "erase",
+#
+# FIXME: Running pan_up before new crashes the program.
+#
+# FIXME: Softloacks if play is run after multiple windows are opened.
+#     "play",
+
+test_script = [
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128",
+    "icon24",
+    "open samples/spiralgrid.csv",
+    "open samples/spiral4.csv",
+    "open samples/spiral5.csv",
+    "pan_up",
+    "pan_up",
+    "pan_left",
+    "pan_right",
+    "pan_down",
+    "zoom_in",
+    "zoom_in",
+    "zoom_out",
+    "zoom_extents",
+    "window_cascade",
+    "window_tile",
+    "window_next",
+    "window_previous",
+    "day",
+    "night",
+    "new",
+    "polyline",
+    "path",
+    "circle",
+    "ellipse",
+    "line",
+    "point",
+    "polygon",
+    "rectangle",
+    "singlelinetext",
+    "heart",
+    "dolphin",
+    "snowflake",
+    "star",
+    "exit"
+]
+

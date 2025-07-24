@@ -1,4 +1,9 @@
-#include "object-base.h"
+/*!
+ * \file object-base.cpp
+ * \brief Tools for drawing and manipulating geometric objects via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QDebug>
 #include <QGraphicsScene>
@@ -155,5 +160,3 @@ void BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
         painter->fillPath(realPath, QBrush(grad));
     }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

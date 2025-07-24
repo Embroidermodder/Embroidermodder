@@ -1,5 +1,9 @@
-#include "object-line.h"
-#include "object-data.h"
+/*!
+ * \file object-line.cpp
+ * \brief Tools for drawing and manipulating EmbLines via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -209,5 +213,3 @@ QPainterPath LineObject::objectSavePath() const
     path.lineTo(objectDeltaX(), objectDeltaY());
     return path;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

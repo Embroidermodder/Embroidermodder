@@ -1,6 +1,9 @@
-#include <QtGui>
-#include "layer-manager.h"
-#include "mainwindow.h"
+/*!
+ * \file layer-manager.cpp
+ * \brief Dialog to allow the management of layers within a pattern.
+ */
+
+#include "embroidermodder.h"
 
 LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
 {
@@ -79,5 +82,3 @@ void LayerManager::addLayer(const QString& name,
     layerModel->setData(layerModel->index(0, 6), lineWeight);
     layerModel->setData(layerModel->index(0, 7), print);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

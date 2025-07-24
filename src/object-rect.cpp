@@ -1,5 +1,9 @@
-#include "object-rect.h"
-#include "object-data.h"
+/*!
+ * \file object-rect.cpp
+ * \brief Tools for drawing and manipulating EmbRects via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -248,5 +252,3 @@ QPainterPath RectObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(path);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

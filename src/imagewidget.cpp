@@ -1,5 +1,9 @@
-#include <QDebug>
-#include "imagewidget.h"
+/*!
+ * \file imagewidget.cpp
+ * \brief Widget to embed images for displaying in dialogs.
+ */
+
+#include "embroidermodder.h"
 
 ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
 {

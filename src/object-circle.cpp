@@ -1,7 +1,9 @@
-#include "object-circle.h"
-#include "object-data.h"
+/*!
+ * \file object-circle.cpp
+ * \brief Tools for drawing and manipulating EmbCircles via the GUI.
+ */
 
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -264,5 +266,3 @@ QPainterPath CircleObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(path);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

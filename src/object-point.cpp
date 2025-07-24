@@ -1,5 +1,9 @@
-#include "object-point.h"
-#include "object-data.h"
+/*!
+ * \file object-point.cpp
+ * \brief Tools for drawing and manipulating EmbPoints via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -108,5 +112,3 @@ QPainterPath PointObject::objectSavePath() const
     path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     return path;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

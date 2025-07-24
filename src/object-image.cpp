@@ -1,5 +1,9 @@
-#include "object-image.h"
-#include "object-data.h"
+/*!
+ * \file object-image.cpp
+ * \brief Tools for drawing and manipulating EmbImages via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -205,5 +209,3 @@ void ImageObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for ImageObject
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

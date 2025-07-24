@@ -1,5 +1,9 @@
-#include "object-polygon.h"
-#include "object-data.h"
+/*!
+ * \file object-polygon.cpp
+ * \brief Tools for drawing and manipulating EmbPolygons via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -277,5 +281,3 @@ QPainterPath PolygonObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(closedPath);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

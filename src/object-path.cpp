@@ -1,5 +1,9 @@
-#include "object-path.h"
-#include "object-data.h"
+/*!
+ * \file object-path.cpp
+ * \brief Tools for drawing and manipulating EmbPaths via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -119,5 +123,3 @@ QPainterPath PathObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(normalPath);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

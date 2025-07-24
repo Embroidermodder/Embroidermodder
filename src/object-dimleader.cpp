@@ -1,5 +1,9 @@
-#include "object-dimleader.h"
-#include "object-data.h"
+/*!
+ * \file object-dimleader.cpp
+ * \brief Tools for drawing and manipulating EmbDimLeaders via the GUI.
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -299,4 +303,3 @@ void DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
     else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
     else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
-

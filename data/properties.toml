@@ -1,0 +1,57 @@
+# Embroidermodder 2 -- Main Configuration
+#
+# ----------------------------------------------------------------------------
+# Embroidermodder 2 is open source software.
+# Copyright 2011-2025 The Embroidermodder Team.
+# See LICENSE.md for details about distribution.
+# ----------------------------------------------------------------------------
+
+# TODO: icons for circle properties
+[[properties]]
+section = "circle"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "CircleCenterX",
+        label = "Center X",
+        icon = "blank",
+        type = "float",
+        editable = true
+    },
+    {
+        key = "CircleCenterY",
+        label = "Center Y",
+        icon = "blank",
+        type = "float",
+        editable = true
+    },
+    {
+        key = "CircleRadius",
+        label = "Radius",
+        icon = "blank",
+        type = "float",
+        editable = true
+    },
+    {
+        key = "CircleDiameter",
+        label = "Diameter",
+        icon = "blank",
+        type = "float",
+        editable = true
+    },
+    {
+        key = "CircleArea",
+        label = "Area",
+        icon = "blank",
+        type = "float",
+        editable = true
+    },
+    {
+        key = "CircleCircumference",
+        label = "Circumference",
+        icon = "blank",
+        type = "float",
+        editable = true
+    }
+]
+
