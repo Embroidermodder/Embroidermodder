@@ -204,8 +204,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    /*
     //Javascript
+    /*
     initMainWinPointer(this);
 
     engine = new QScriptEngine(this);
@@ -213,15 +213,14 @@ MainWindow::MainWindow() : QMainWindow(0)
     debugger = new QScriptEngineDebugger(this);
     debugger->attachTo(engine);
     javaInitNatives(engine);
+    */
 
     //Load all commands in a loop
     QDir commandDir(appDir + "/commands");
     QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach(QString cmdName, cmdList)
-    {
+    foreach (QString cmdName, cmdList) {
         javaLoadCommand(cmdName);
     }
-    */
 
     statusbar = new StatusBar(this, this);
     this->setStatusBar(statusbar);
