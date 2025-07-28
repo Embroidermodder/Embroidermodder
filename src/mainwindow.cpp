@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "mainwindow-actions.h"
 
 #include "statusbar.h"
 #include "statusbar-button.h"
@@ -9,9 +8,6 @@
 
 #include "property-editor.h"
 #include "undo-editor.h"
-
-//#include "native-scripting.h"
-//#include "native-javascript.h"
 
 #include "preview-dialog.h"
 
@@ -47,7 +43,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
     QFileInfo check(appDir + "/scripts");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/docs");
     if(!check.exists())
@@ -65,7 +61,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     if(!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
-    QString lang = getSettingsGeneralLanguage();
+    QString lang = settings_general_language;
     qDebug("language: %s", qPrintable(lang));
     if(lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
@@ -120,7 +116,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     shiftKeyPressedState = false;
 
-    setWindowIcon(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    setWindowIcon(QIcon(appDir + "/icons/" + settings_general_icon_theme + "/" + "app" + ".png"));
     setMinimumSize(800, 480); //Require Minimum WVGA
 
     loadFormats();
@@ -131,12 +127,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(this, vbox);
-    mdiArea->useBackgroundLogo(getSettingsGeneralMdiBGUseLogo());
-    mdiArea->useBackgroundTexture(getSettingsGeneralMdiBGUseTexture());
-    mdiArea->useBackgroundColor(getSettingsGeneralMdiBGUseColor());
-    mdiArea->setBackgroundLogo(getSettingsGeneralMdiBGLogo());
-    mdiArea->setBackgroundTexture(getSettingsGeneralMdiBGTexture());
-    mdiArea->setBackgroundColor(QColor(getSettingsGeneralMdiBGColor()));
+    mdiArea->useBackgroundLogo(settings_general_mdi_bg_use_logo);
+    mdiArea->useBackgroundTexture(settings_general_mdi_bg_use_texture);
+    mdiArea->useBackgroundColor(settings_general_mdi_bg_use_color);
+    mdiArea->setBackgroundLogo(settings_general_mdi_bg_logo);
+    mdiArea->setBackgroundTexture(settings_general_mdi_bg_texture);
+    mdiArea->setBackgroundColor(QColor(settings_general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -150,8 +146,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    prompt->setPromptTextColor(QColor(getSettingsPromptTextColor()));
-    prompt->setPromptBackgroundColor(QColor(getSettingsPromptBGColor()));
+    prompt->setPromptTextColor(QColor(settings_prompt_text_color));
+    prompt->setPromptBackgroundColor(QColor(settings_prompt_bg_color));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
 
@@ -190,19 +186,19 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), getSettingsSelectionModePickAdd(), prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings_general_icon_theme, settings_selection_mode_pickadd, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + settings_general_icon_theme, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
     // Scripting
-    if (!scheme_boot()) {
+    if (!script_env_boot()) {
         return;
     }
 
@@ -213,7 +209,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     createAllMenus();
     createAllToolbars();
 
-    iconResize(getSettingsGeneralIconSize());
+    iconResize(settings_general_icon_size);
     updateMenuToolbarStatusbar();
 
     //Show date in statusbar after it has been updated
@@ -235,7 +231,7 @@ MainWindow::MainWindow() : QMainWindow(0)
             }
         } while(!tipLine.isNull());
     }
-    if (getSettingsGeneralTipOfTheDay()) {
+    if (settings_general_tip_of_the_day) {
         tipOfTheDay();
     }
 }
@@ -244,16 +240,11 @@ MainWindow::~MainWindow()
 {
     qDebug("MainWindow::Destructor()");
 
-    scheme_free();
+    script_env_free();
 
     //Prevent memory leaks by deleting any unpasted objects
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
     cutCopyObjectList.clear();
-}
-
-QAction* MainWindow::getAction(int actionEnum)
-{
-    return actionHash.value(actionEnum);
 }
 
 void MainWindow::recentMenuAboutToShow()
@@ -294,14 +285,14 @@ void MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
-    windowMenu->addAction(actionHash.value(ACTION_windowclose));
-    windowMenu->addAction(actionHash.value(ACTION_windowcloseall));
+    windowMenu->addAction(actionHash.value("windowclose"));
+    windowMenu->addAction(actionHash.value("windowcloseall"));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windowcascade));
-    windowMenu->addAction(actionHash.value(ACTION_windowtile));
+    windowMenu->addAction(actionHash.value("windowcascade"));
+    windowMenu->addAction(actionHash.value("windowtile"));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windownext));
-    windowMenu->addAction(actionHash.value(ACTION_windowprevious));
+    windowMenu->addAction(actionHash.value("windownext"));
+    windowMenu->addAction(actionHash.value("windowprevious"));
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -366,7 +357,7 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     QStringList files;
-    bool preview = getSettingsOpenThumbnail();
+    bool preview = settings_opensave_open_thumbnail;
     openFilesPath = settings_opensave_recent_directory;
 
     //Check to see if this from the recent files list
@@ -567,9 +558,9 @@ void MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash.value("print")->setEnabled(numOfDocs > 0);
+    actionHash.value("windowclose")->setEnabled(numOfDocs > 0);
+    actionHash.value("designdetails")->setEnabled(numOfDocs > 0);
 
     if(numOfDocs)
     {
@@ -746,7 +737,7 @@ void MainWindow::loadFormats()
     formatFilterSave = supportedWriters + individualWriters;
 
     //TODO: Fixup custom filter
-    QString custom = getSettingsCustomFilter();
+    QString custom = settings_opensave_custom_filter;
     if(custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
     else if(!custom.contains("*", Qt::CaseInsensitive))
@@ -807,4 +798,3 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
