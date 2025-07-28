@@ -1,37 +1,26 @@
-//Command: Icon16
+; Command: Icon16
+;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
-function main()
-{
-    initCommand();
-    clearSelection();
-    icon16();
-    endCommand();
-}
+(define (icon16-main)
+  ; NOTE: main() is run every time the command is started.
+  ;       Use it to reset variables so they are ready to go.
+  (if (= context context-main)
+    (begin
+      (init-command)
+      (clear-selection)
+      (icon16)
+      (end-command))
+    (begin
+      (icon16)
+      (end-command))))
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
-{
-    icon16();
-    endCommand();
-}
-
-//NOTE: context() is run when a context menu entry is chosen.
-function context(str)
-{
-    icon16();
-    endCommand();
-}
-
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text is in the command prompt is sent as an uppercase string.
-function prompt(str)
-{
-    icon16();
-    endCommand();
-}
+; menu-name=None
+; menu-position=0
+;
+; toolbar-name=None
+; toolbar-position=0
+;
+; ToolTip=Icon&16
+; StatusTip=Sets the toolbar icon size to 16x16:  ICON16
+;
+; alias=ICON16

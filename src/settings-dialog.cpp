@@ -301,8 +301,10 @@ QWidget* Settings_Dialog::createTabDisplay()
     int numActions = mainWin->actionHash.size();
     for(int i = 0; i < numActions; i++)
     {
+    /* FIXME:
         QAction* action = mainWin->actionHash.value(i);
         if(action) comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
+        */
     }
     comboBoxScrollBarWidget->setCurrentIndex(dialog_display_scrollbar_widget_num);
     connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxScrollBarWidgetCurrentIndexChanged(int)));

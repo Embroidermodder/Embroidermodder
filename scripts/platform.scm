@@ -1,7 +1,7 @@
-//Command: Platform
+; Command: Platform
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -10,26 +10,26 @@ function main()
     endCommand();
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     reportPlatform();
     endCommand();
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     reportPlatform();
     endCommand();
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text is in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text is in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     reportPlatform();
@@ -40,4 +40,17 @@ function reportPlatform()
 {
     setPromptPrefix(qsTr("Platform") + " = " + platformString());
     appendPromptHistory();
-}
+}[Menu]
+Name=None
+Position=0
+
+[ToolBar]
+Name=None
+Position=0
+
+[Tips]
+ToolTip=&Platform
+StatusTip=List which platform is in use:  PLATFORM
+
+[Prompt]
+Alias=PLATFORM

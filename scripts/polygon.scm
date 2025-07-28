@@ -1,6 +1,6 @@
-//Command: Polygon
+; Command: Polygon
 
-var global = {}; //Required
+var global = {}; ; Required
 global.centerX;
 global.centerY;
 global.sideX1;
@@ -11,11 +11,11 @@ global.pointIX;
 global.pointIY;
 global.pointCX;
 global.pointCY;
-global.polyType = "Inscribed"; //Default
-global.numSides = 4;           //Default
+global.polyType = "Inscribed"; ; Default
+global.numSides = 4;           ; Default
 global.mode;
 
-//enums
+; enums
 global.mode_NUM_SIDES    = 0;
 global.mode_CENTER_PT    = 1;
 global.mode_POLYTYPE     = 2;
@@ -24,8 +24,8 @@ global.mode_CIRCUMSCRIBE = 4;
 global.mode_DISTANCE     = 5;
 global.mode_SIDE_LEN     = 6;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -44,14 +44,14 @@ function main()
     setPromptPrefix(qsTr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     if(global.mode == global.mode_NUM_SIDES)
     {
-        //Do nothing, the prompt controls this.
+        ; Do nothing, the prompt controls this.
     }
     else if(global.mode == global.mode_CENTER_PT)
     {
@@ -63,7 +63,7 @@ function click(x, y)
     }
     else if(global.mode == global.mode_POLYTYPE)
     {
-        //Do nothing, the prompt controls this.
+        ; Do nothing, the prompt controls this.
     }
     else if(global.mode == global.mode_INSCRIBE)
     {
@@ -85,7 +85,7 @@ function click(x, y)
     }
     else if(global.mode == global.mode_DISTANCE)
     {
-        //Do nothing, the prompt controls this.
+        ; Do nothing, the prompt controls this.
     }
     else if(global.mode == global.mode_SIDE_LEN)
     {
@@ -93,16 +93,16 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("POLYGON", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if(global.mode == global.mode_NUM_SIDES)
@@ -130,7 +130,7 @@ function prompt(str)
     }
     else if(global.mode == global.mode_CENTER_PT)
     {
-        if(str == "S" || str == "SIDELENGTH") //TODO: Probably should add additional qsTr calls here.
+        if(str == "S" || str == "SIDELENGTH") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SIDE_LEN;
             setPromptPrefix(qsTr("Specify start point: "));
@@ -162,7 +162,7 @@ function prompt(str)
            str == "INSCRI"   ||
            str == "INSCRIB"  ||
            str == "INSCRIBE" ||
-           str == "INSCRIBED") //TODO: Probably should add additional qsTr calls here.
+           str == "INSCRIBED") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_INSCRIBE;
             global.polyType = "Inscribed";
@@ -184,7 +184,7 @@ function prompt(str)
                 str == "CIRCUMSCRI"   ||
                 str == "CIRCUMSCRIB"  ||
                 str == "CIRCUMSCRIBE" ||
-                str == "CIRCUMSCRIBED") //TODO: Probably should add additional qsTr calls here.
+                str == "CIRCUMSCRIBED") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_CIRCUMSCRIBE;
             global.polyType = "Circumscribed";
@@ -227,7 +227,7 @@ function prompt(str)
     }
     else if(global.mode == global.mode_INSCRIBE)
     {
-        if(str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
+        if(str == "D" || str == "DISTANCE") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_DISTANCE;
             setPromptPrefix(qsTr("Specify distance: "));
@@ -252,7 +252,7 @@ function prompt(str)
     }
     else if(global.mode == global.mode_CIRCUMSCRIBE)
     {
-        if(str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
+        if(str == "D" || str == "DISTANCE") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_DISTANCE;
             setPromptPrefix(qsTr("Specify distance: "));
@@ -311,3 +311,17 @@ function prompt(str)
         todo("POLYGON", "Sidelength mode");
     }
 }
+[Menu]
+Name=Draw
+Position=4
+
+[ToolBar]
+Name=Draw
+Position=4
+
+[Tips]
+ToolTip=Pol&ygon
+StatusTip=Creates a regular polygon:  POLYGON
+
+[Prompt]
+Alias=POL, POLYGON

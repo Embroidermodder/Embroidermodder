@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "mainwindow-actions.h"
 
 #include "statusbar.h"
 #include "statusbar-button.h"
@@ -9,9 +8,6 @@
 
 #include "property-editor.h"
 #include "undo-editor.h"
-
-//#include "native-scripting.h"
-//#include "native-javascript.h"
 
 #include "preview-dialog.h"
 
@@ -251,11 +247,6 @@ MainWindow::~MainWindow()
     cutCopyObjectList.clear();
 }
 
-QAction* MainWindow::getAction(int actionEnum)
-{
-    return actionHash.value(actionEnum);
-}
-
 void MainWindow::recentMenuAboutToShow()
 {
     qDebug("MainWindow::recentMenuAboutToShow()");
@@ -294,14 +285,14 @@ void MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
-    windowMenu->addAction(actionHash.value(ACTION_windowclose));
-    windowMenu->addAction(actionHash.value(ACTION_windowcloseall));
+    windowMenu->addAction(actionHash.value("windowclose"));
+    windowMenu->addAction(actionHash.value("windowcloseall"));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windowcascade));
-    windowMenu->addAction(actionHash.value(ACTION_windowtile));
+    windowMenu->addAction(actionHash.value("windowcascade"));
+    windowMenu->addAction(actionHash.value("windowtile"));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windownext));
-    windowMenu->addAction(actionHash.value(ACTION_windowprevious));
+    windowMenu->addAction(actionHash.value("windownext"));
+    windowMenu->addAction(actionHash.value("windowprevious"));
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -567,9 +558,9 @@ void MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash.value("print")->setEnabled(numOfDocs > 0);
+    actionHash.value("windowclose")->setEnabled(numOfDocs > 0);
+    actionHash.value("designdetails")->setEnabled(numOfDocs > 0);
 
     if(numOfDocs)
     {
@@ -807,4 +798,3 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

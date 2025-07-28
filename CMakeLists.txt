@@ -69,8 +69,6 @@ qt_add_executable(embroidermodder
 	${SRC}/layer-manager.h
 	${SRC}/main.cpp
 	${SRC}/mainwindow-actions.cpp
-	${SRC}/mainwindow-actions.h
-	${SRC}/mainwindow-commands.cpp
 	${SRC}/mainwindow.cpp
 	${SRC}/mainwindow.h
 	${SRC}/mainwindow-menus.cpp
@@ -80,7 +78,6 @@ qt_add_executable(embroidermodder
 	${SRC}/mdiarea.h
 	${SRC}/mdiwindow.cpp
 	${SRC}/mdiwindow.h
-	${SRC}/native-scripting.cpp
 	${SRC}/object-arc.cpp
 	${SRC}/object-arc.h
 	${SRC}/object-base.cpp
@@ -114,6 +111,8 @@ qt_add_executable(embroidermodder
 	${SRC}/preview-dialog.h
 	${SRC}/property-editor.cpp
 	${SRC}/property-editor.h
+	${SRC}/script.cpp
+	${SRC}/script.h
 	${SRC}/selectbox.cpp
 	${SRC}/selectbox.h
 	${SRC}/settings-dialog.cpp

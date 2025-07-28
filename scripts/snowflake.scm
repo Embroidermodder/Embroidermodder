@@ -1,21 +1,21 @@
-//Command: Snowflake
+; Command: Snowflake
 
-var global = {}; //Required
-global.numPoints = 2048; //Default //TODO: min:64 max:8192
+var global = {}; ; Required
+global.numPoints = 2048; ; Default //TODO: min:64 max:8192
 global.cx;
 global.cy;
-global.sx = 0.04; //Default
-global.sy = 0.04; //Default
+global.sx = 0.04; ; Default
+global.sy = 0.04; ; Default
 global.numPoints;
 global.mode;
 
-//enums
+; enums
 global.mode_NUM_POINTS = 0;
 global.mode_XSCALE     = 1;
 global.mode_YSCALE     = 2;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -31,31 +31,31 @@ function main()
     endCommand();
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
 }
 
-//NOTE: move() is optional. It is run only after
-//      enableMoveRapidFire() is called. It
-//      will be called every time the mouse moves until
-//      disableMoveRapidFire() is called.
+; NOTE: move() is optional. It is run only after
+;       enableMoveRapidFire() is called. It
+;       will be called every time the mouse moves until
+;       disableMoveRapidFire() is called.
 function move(x, y)
 {
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("SNOWFLAKE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
 }
@@ -72,7 +72,7 @@ function updateSnowflake(numPts, xScale, yScale)
     {
         t = two_pi/numPts*i; 
 
-//Snowflake Curve with t [0,2pi]
+; Snowflake Curve with t [0,2pi]
 
 xx = 4/7*Math.sin(20/11-318*t)+
 3/13*Math.sin(19/11-317*t)+
@@ -717,3 +717,17 @@ Math.sin(263*t+2/7)-
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
 }
+[Menu]
+Name=Draw
+Position=100
+
+[ToolBar]
+Name=Draw
+Position=100
+
+[Tips]
+ToolTip=&Snowflake
+StatusTip=Creates a snowflake:  SNOWFLAKE
+
+[Prompt]
+Alias=SNOWFLAKE

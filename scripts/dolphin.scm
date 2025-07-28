@@ -1,21 +1,21 @@
-//Command: Dolphin
+; Command: Dolphin
 
-var global = {}; //Required
-global.numPoints = 512; //Default //TODO: min:64 max:8192
+var global = {}; ; Required
+global.numPoints = 512; ; Default //TODO: min:64 max:8192
 global.cx;
 global.cy;
-global.sx = 0.04; //Default
-global.sy = 0.04; //Default
+global.sx = 0.04; ; Default
+global.sy = 0.04; ; Default
 global.numPoints;
 global.mode;
 
-//enums
+; enums
 global.mode_NUM_POINTS = 0;
 global.mode_XSCALE     = 1;
 global.mode_YSCALE     = 2;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -31,31 +31,31 @@ function main()
     endCommand();
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
 }
 
-//NOTE: move() is optional. It is run only after
-//      enableMoveRapidFire() is called. It
-//      will be called every time the mouse moves until
-//      disableMoveRapidFire() is called.
+; NOTE: move() is optional. It is run only after
+;       enableMoveRapidFire() is called. It
+;       will be called every time the mouse moves until
+;       disableMoveRapidFire() is called.
 function move(x, y)
 {
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("DOLPHIN", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
 }
@@ -197,3 +197,17 @@ function updateDolphin(numPts, xScale, yScale)
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
 }
+[Menu]
+Name=Draw
+Position=100
+
+[ToolBar]
+Name=Draw
+Position=100
+
+[Tips]
+ToolTip=&Dolphin
+StatusTip=Creates a dolphin:  DOLPHIN
+
+[Prompt]
+Alias=DOLPHIN

@@ -1,7 +1,7 @@
 ; Command: Star
 
-var global = {}; //Required
-global.numPoints = 5; //Default
+var global = {}; ; Required
+global.numPoints = 5; ; Default
 global.cx;
 global.cy;
 global.x1;
@@ -10,14 +10,14 @@ global.x2;
 global.y2;
 global.mode;
 
-//enums
+; enums
 global.mode_NUM_POINTS = 0;
 global.mode_CENTER_PT  = 1;
 global.mode_RAD_OUTER  = 2;
 global.mode_RAD_INNER  = 3;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -32,14 +32,14 @@ function main()
     setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     if(global.mode == global.mode_NUM_POINTS)
     {
-        //Do nothing, the prompt controls this.
+        ; Do nothing, the prompt controls this.
     }
     else if(global.mode == global.mode_CENTER_PT)
     {
@@ -71,19 +71,19 @@ function click(x, y)
     }
 }
 
-//NOTE: move() is optional. It is run only after
-//      enableMoveRapidFire() is called. It
-//      will be called every time the mouse moves until
-//      disableMoveRapidFire() is called.
+; NOTE: move() is optional. It is run only after
+;       enableMoveRapidFire() is called. It
+;       will be called every time the mouse moves until
+;       disableMoveRapidFire() is called.
 function move(x, y)
 {
     if(global.mode == global.mode_NUM_POINTS)
     {
-        //Do nothing, the prompt controls this.
+        ; Do nothing, the prompt controls this.
     }
     else if(global.mode == global.mode_CENTER_PT)
     {
-        //Do nothing, prompt and click controls this.
+        ; Do nothing, prompt and click controls this.
     }
     else if(global.mode == global.mode_RAD_OUTER)
     {
@@ -95,16 +95,16 @@ function move(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("STAR", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if(global.mode == global.mode_NUM_POINTS)
@@ -206,7 +206,7 @@ function updateStar(x, y)
         distInner = calculateDistance(global.cx, global.cy, x, y);
     }
 
-    //Calculate the Star Points
+    ; Calculate the Star Points
     var angInc = 360.0/(global.numPoints*2);
     var odd = true;
     for(var i = 0; i < global.numPoints*2; i++)
@@ -229,3 +229,17 @@ function updateStar(x, y)
     setRubberText("POLYGON_NUM_POINTS", (global.numPoints*2 - 1).toString());
 }
 
+[Menu]
+Name=Draw
+Position=100
+
+[ToolBar]
+Name=Draw
+Position=100
+
+[Tips]
+ToolTip=&Star
+StatusTip=Creates a star:  STAR
+
+[Prompt]
+Alias=*, STAR

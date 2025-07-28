@@ -1,13 +1,13 @@
-//Command: Distance
+; Command: Distance
 
-var global = {}; //Required
+var global = {}; ; Required
 global.x1;
 global.y1;
 global.x2;
 global.y2;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -19,9 +19,9 @@ function main()
     setPromptPrefix(qsTr("Specify first point: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     if(isNaN(global.x1))
@@ -44,16 +44,16 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("DISTANCE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     var strList = str.split(",");
@@ -91,15 +91,15 @@ function prompt(str)
     }
 }
 
-//Cartesian Coordinate System reported:
-//
-//               (+)
-//               90
-//               |
-//      (-) 180__|__0 (+)
-//               |
-//              270
-//              (-)
+; Cartesian Coordinate System reported:
+; 
+;                (+)
+;                90
+;                |
+;       (-) 180__|__0 (+)
+;                |
+;               270
+;               (-)
 
 function reportDistance()
 {
@@ -114,3 +114,17 @@ function reportDistance()
     setPromptPrefix(qsTr("Delta X") + " = " + dx.toString() + ", " + qsTr("Delta Y") + " = " + dy.toString());
     appendPromptHistory();
 }
+[Menu]
+Name=Tools
+Position=7
+
+[ToolBar]
+Name=Inquiry
+Position=0
+
+[Tips]
+ToolTip=&Distance
+StatusTip=Measures the distance and angle between two points:  DIST
+
+[Prompt]
+Alias=DI, DIST, DISTANCE

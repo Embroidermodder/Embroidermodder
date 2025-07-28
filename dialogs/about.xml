@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<xml version="1.0">
+    <groupbox title="General Information">
+        <grid columnstretch="">
+            <label row="0" column="0" text="Total Stitches:" align="left"></label>
+            <label row="0" column="1" text="get totalstitches" align="left"></label>
+        </grid>
+    </groupbox>
+</xml>
+

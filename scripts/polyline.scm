@@ -1,6 +1,6 @@
-//Command: Polyline
+; Command: Polyline
 
-var global = {}; //Required
+var global = {}; ; Required
 global.firstRun;
 global.firstX;
 global.firstY;
@@ -8,8 +8,8 @@ global.prevX;
 global.prevY;
 global.num;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -23,9 +23,9 @@ function main()
     setPromptPrefix(qsTr("Specify first point: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     if(global.firstRun)
@@ -53,16 +53,16 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("POLYLINE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if(global.firstRun)
@@ -88,7 +88,7 @@ function prompt(str)
     }
     else
     {
-        if(str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
+        if(str == "U" || str == "UNDO") ; TODO: Probably should add additional qsTr calls here.
         {
             todo("POLYLINE", "prompt() for UNDO");
         }
@@ -115,3 +115,17 @@ function prompt(str)
         }
     }
 }
+[Menu]
+Name=Draw
+Position=4
+
+[ToolBar]
+Name=Draw
+Position=4
+
+[Tips]
+ToolTip=&Polyline
+StatusTip=Creates a 2D polyline:  PLINE
+
+[Prompt]
+Alias=PL, PLINE, POLYLINE

@@ -1,6 +1,6 @@
-//Command: Ellipse
+; Command: Ellipse
 
-var global = {}; //Required
+var global = {}; ; Required
 global.x1;
 global.y1;
 global.x2;
@@ -14,13 +14,13 @@ global.height;
 global.rot;
 global.mode;
 
-//enums
+; enums
 global.mode_MAJORDIAMETER_MINORRADIUS = 0;
 global.mode_MAJORRADIUS_MINORRADIUS   = 1;
 global.mode_ELLIPSE_ROTATION          = 2;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -35,9 +35,9 @@ function main()
     setPromptPrefix(qsTr("Specify first axis start point or [Center]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     if(global.mode == global.mode_MAJORDIAMETER_MINORRADIUS)
@@ -148,23 +148,23 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("ELLIPSE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if(global.mode == global.mode_MAJORDIAMETER_MINORRADIUS)
     {
         if(isNaN(global.x1))
         {
-            if(str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
+            if(str == "C" || str == "CENTER") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_MAJORRADIUS_MINORRADIUS;
                 setPromptPrefix(qsTr("Specify center point: "));
@@ -215,7 +215,7 @@ function prompt(str)
         }
         else if(isNaN(global.x3))
         {
-            if(str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
+            if(str == "R" || str == "ROTATION") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_ELLIPSE_ROTATION;
                 setPromptPrefix(qsTr("Specify rotation: "));
@@ -286,7 +286,7 @@ function prompt(str)
         }
         else if(isNaN(global.x3))
         {
-            if(str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
+            if(str == "R" || str == "ROTATION") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_ELLIPSE_ROTATION;
                 setPromptPrefix(qsTr("Specify ellipse rotation: "));
@@ -338,3 +338,17 @@ function prompt(str)
         }
     }
 }
+[Menu]
+Name=Draw
+Position=8
+
+[ToolBar]
+Name=Draw
+Position=8
+
+[Tips]
+ToolTip=Ellipse
+StatusTip=Creates a ellipse:  ELLIPSE
+
+[Prompt]
+Alias=EL, ELLIPSE

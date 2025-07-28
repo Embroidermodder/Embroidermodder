@@ -1,15 +1,15 @@
-//Command: RGB
+; Command: RGB
 
-var global = {}; //Required
+var global = {}; ; Required
 global.mode;
 
-//enums
+; enums
 global.mode_BACKGROUND = 0;
 global.mode_CROSSHAIR  = 1;
 global.mode_GRID       = 2;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -18,34 +18,34 @@ function main()
     setPromptPrefix(qsTr("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
-    //Do Nothing, prompt only command.
+    ; Do Nothing, prompt only command.
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("RGB", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text is in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text is in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if(global.mode == global.mode_BACKGROUND)
     {
-        if(str == "C" || str == "CROSSHAIR") //TODO: Probably should add additional qsTr calls here.
+        if(str == "C" || str == "CROSSHAIR") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_CROSSHAIR;
             setPromptPrefix(qsTr("Specify crosshair color: "));
         }
-        else if(str == "G" || str == "GRID") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "G" || str == "GRID") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_GRID;
             setPromptPrefix(qsTr("Specify grid color: "));
@@ -113,4 +113,17 @@ function validRGB(r, g, b)
     if(g < 0 || g > 255) return false;
     if(b < 0 || b > 255) return false;
     return true;
-}
+}[Menu]
+Name=Sandbox
+Position=4
+
+[ToolBar]
+Name=Sandbox
+Position=3
+
+[Tips]
+ToolTip=&RGB
+StatusTip=Updates the current view colors:  RGB
+
+[Prompt]
+Alias=RGB

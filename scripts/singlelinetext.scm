@@ -1,6 +1,6 @@
-//Command: Single Line Text
+; Command: Single Line Text
 
-var global = {}; //Required
+var global = {}; ; Required
 global.text;
 global.textX;
 global.textY;
@@ -10,14 +10,14 @@ global.textHeight;
 global.textRotation;
 global.mode;
 
-//enums
+; enums
 global.mode_JUSTIFY = 0;
 global.mode_SETFONT = 1;
 global.mode_SETGEOM = 2;
 global.mode_RAPID   = 3;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -35,9 +35,9 @@ function main()
     setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     if(global.mode == global.mode_SETGEOM)
@@ -78,117 +78,117 @@ function click(x, y)
         }
         else
         {
-            //Do nothing, as we are in rapidFire mode now.
+            ; Do nothing, as we are in rapidFire mode now.
         }
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("SINGLELINETEXT", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if(global.mode == global.mode_JUSTIFY)
     {
-        if(str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
+        if(str == "C" || str == "CENTER") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "R" || str == "RIGHT") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "R" || str == "RIGHT") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify right-end point of text or [Justify/Setfont]: "));
         }
-        else if(str == "A" || str == "ALIGN") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "A" || str == "ALIGN") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Aligned";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
         }
-        else if(str == "M" || str == "MIDDLE") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "M" || str == "MIDDLE") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify middle point of text or [Justify/Setfont]: "));
         }
-        else if(str == "F" || str == "FIT") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "F" || str == "FIT") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Fit";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TL" || str == "TOPLEFT") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "TL" || str == "TOPLEFT") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify top-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TC" || str == "TOPCENTER") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "TC" || str == "TOPCENTER") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify top-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TR" || str == "TOPRIGHT") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "TR" || str == "TOPRIGHT") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify top-right point of text or [Justify/Setfont]: "));
         }
-        else if(str == "ML" || str == "MIDDLELEFT") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "ML" || str == "MIDDLELEFT") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify middle-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "MC" || str == "MIDDLECENTER") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "MC" || str == "MIDDLECENTER") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify middle-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "MR" || str == "MIDDLERIGHT") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "MR" || str == "MIDDLERIGHT") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify middle-right point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BL" || str == "BOTTOMLEFT") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "BL" || str == "BOTTOMLEFT") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify bottom-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BC" || str == "BOTTOMCENTER") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "BC" || str == "BOTTOMCENTER") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(qsTr("Specify bottom-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BR" || str == "BOTTOMRIGHT") //TODO: Probably should add additional qsTr calls here.
+        else if(str == "BR" || str == "BOTTOMRIGHT") ; TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Right";
@@ -213,12 +213,12 @@ function prompt(str)
     {
         if(isNaN(global.textX))
         {
-            if(str == "J" || str == "JUSTIFY") //TODO: Probably should add additional qsTr calls here.
+            if(str == "J" || str == "JUSTIFY") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_JUSTIFY;
                 setPromptPrefix(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
             }
-            else if(str == "S" || str == "SETFONT") //TODO: Probably should add additional qsTr calls here.
+            else if(str == "S" || str == "SETFONT") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_SETFONT;
                 setPromptPrefix(qsTr("Specify font name: "));
@@ -302,7 +302,7 @@ function prompt(str)
         }
         else
         {
-            //Do nothing, as we are in rapidFire mode now.
+            ; Do nothing, as we are in rapidFire mode now.
         }
     }
     else if(global.mode == global.mode_RAPID)
@@ -316,7 +316,7 @@ function prompt(str)
             else
             {
                 vulcanize();
-                endCommand(); //TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point
+                endCommand(); ; TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point
             }
         }
         else
@@ -326,3 +326,17 @@ function prompt(str)
         }
     }
 }
+[Menu]
+Name=Draw
+Position=18
+
+[ToolBar]
+Name=Draw
+Position=16
+
+[Tips]
+ToolTip=&Single Line Text
+StatusTip=Creates single-line text objects:  TEXT
+
+[Prompt]
+Alias=DT, DTEXT, TEXT, SINGLELINETEXT

@@ -1,6 +1,6 @@
-//Command: Circle
+; Command: Circle
 
-var global = {}; //Required
+var global = {}; ; Required
 global.x1;
 global.y1;
 global.x2;
@@ -13,15 +13,15 @@ global.cx;
 global.cy;
 global.mode;
 
-//enums
+; enums
 global.mode_1P_RAD = 0;
 global.mode_1P_DIA = 1;
 global.mode_2P     = 2;
 global.mode_3P     = 3;
 global.mode_TTR    = 4;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -36,9 +36,9 @@ function main()
     setPromptPrefix(qsTr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     if(global.mode == global.mode_1P_RAD)
@@ -171,33 +171,33 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("CIRCLE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if(global.mode == global.mode_1P_RAD)
     {
         if(isNaN(global.x1))
         {
-            if(str == "2P") //TODO: Probably should add additional qsTr calls here.
+            if(str == "2P") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_2P;
                 setPromptPrefix(qsTr("Specify first end point of circle's diameter: "));
             }
-            else if(str == "3P") //TODO: Probably should add additional qsTr calls here.
+            else if(str == "3P") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_3P;
                 setPromptPrefix(qsTr("Specify first point of circle: "));
             }
-            else if(str == "T" || str == "TTR") //TODO: Probably should add additional qsTr calls here.
+            else if(str == "T" || str == "TTR") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_TTR;
                 setPromptPrefix(qsTr("Specify point on object for first tangent of circle: "));
@@ -225,7 +225,7 @@ function prompt(str)
         }
         else
         {
-            if(str == "D" || str == "DIAMETER") //TODO: Probably should add additional qsTr calls here.
+            if(str == "D" || str == "DIAMETER") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_1P_DIA;
                 setRubberMode("CIRCLE_1P_DIA");
@@ -387,3 +387,17 @@ function prompt(str)
     }
 }
 
+[Menu]
+Name=Draw
+Position=8
+
+[ToolBar]
+Name=Draw
+Position=8
+
+[Tips]
+ToolTip=Circle
+StatusTip=Creates a circle:  CIRCLE
+
+[Prompt]
+Alias=C, CIRCLE

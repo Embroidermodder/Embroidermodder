@@ -1,6 +1,6 @@
-//Command: Rotate
+; Command: Rotate
 
-var global = {}; //Required
+var global = {}; ; Required
 global.firstRun;
 global.baseX;
 global.baseY;
@@ -17,12 +17,12 @@ global.angleNew;
 
 global.mode;
 
-//enums
+; enums
 global.mode_NORMAL    = 0;
 global.mode_REFERENCE = 1;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+; NOTE: main() is run every time the command is started.
+;       Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -43,7 +43,7 @@ function main()
 
     if(numSelected() <= 0)
     {
-        //TODO: Prompt to select objects if nothing is preselected
+        ; TODO: Prompt to select objects if nothing is preselected
         alert(qsTr("Preselect objects before invoking the rotate command."));
         endCommand();
         messageBox("information", qsTr("Rotate Preselect"), qsTr("Preselect objects before invoking the rotate command."));
@@ -54,9 +54,9 @@ function main()
     }
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
+; NOTE: click() is run only for left clicks.
+;       Middle clicks are used for panning.
+;       Right clicks bring up the context menu.
 function click(x, y)
 {
     if(global.mode == global.mode_NORMAL)
@@ -116,16 +116,16 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
+; NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("ROTATE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+; NOTE: prompt() is run when Enter is pressed.
+;       appendPromptHistory is automatically called before prompt()
+;       is called so calling it is only needed for erroneous input.
+;       Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if(global.mode == global.mode_NORMAL)
@@ -152,7 +152,7 @@ function prompt(str)
         }
         else
         {
-            if(str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
+            if(str == "R" || str == "REFERENCE") ; TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_REFERENCE;
                 setPromptPrefix(qsTr("Specify the reference angle") + " {0.00}: ");
@@ -200,12 +200,12 @@ function prompt(str)
             }
             else
             {
-                //The base and dest values are only set here to advance the command.
+                ; The base and dest values are only set here to advance the command.
                 global.baseRX = 0.0;
                 global.baseRY = 0.0;
                 global.destRX = 0.0;
                 global.destRY = 0.0;
-                //The reference angle is what we will use later.
+                ; The reference angle is what we will use later.
                 global.angleRef = Number(str);
                 addRubber("LINE");
                 setRubberMode("LINE");
@@ -236,12 +236,12 @@ function prompt(str)
             }
             else
             {
-                //The base and dest values are only set here to advance the command.
+                ; The base and dest values are only set here to advance the command.
                 global.baseRX = 0.0;
                 global.baseRY = 0.0;
                 global.destRX = 0.0;
                 global.destRY = 0.0;
-                //The reference angle is what we will use later.
+                ; The reference angle is what we will use later.
                 global.angleRef = Number(str);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                 setPromptPrefix(qsTr("Specify the new angle: "));
@@ -277,3 +277,17 @@ function prompt(str)
         }
     }
 }
+[Menu]
+Name=Modify
+Position=11
+
+[ToolBar]
+Name=Modify
+Position=6
+
+[Tips]
+ToolTip=&Rotate
+StatusTip=Rotates objects about a base point:  ROTATE
+
+[Prompt]
+Alias=RO, ROTATE
