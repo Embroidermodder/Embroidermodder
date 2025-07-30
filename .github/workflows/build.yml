@@ -1,0 +1,51 @@
+name: Build
+
+# Note that we don't allow reuseable workflows as a security measure.
+# This mainly is a setup to call bin/build.sh.
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '**.scm'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    env:
+      HOST_SYSTEM: 'Ubuntu'
+      CMAKE_GENERATOR: 'Ninja'
+    steps:
+      - name: Build
+        run: |
+          git clone https://github.com/embroidermodder/embroidermodder
+          cd embroidermodder
+          bash bin/build.sh "Ubuntu"
+
+  build-macos:
+    runs-on: macos-latest
+    env:
+      HOST_SYSTEM: 'MacOS'
+      CMAKE_GENERATOR: 'Ninja'
+    steps:
+      - name: Build
+        run: |
+          git clone https://github.com/embroidermodder/embroidermodder
+          cd embroidermodder
+          bash bin/build.sh "MacOS"
+
+  build-windows:
+    runs-on: windows-latest
+    env:
+      HOST_SYSTEM: 'Windows'
+      CMAKE_GENERATOR: 'Ninja'
+    steps:
+      - name: Build
+        run: |
+          git clone https://github.com/embroidermodder/embroidermodder
+          cd embroidermodder
+          bash bin/build.sh "Windows"
