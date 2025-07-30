@@ -421,7 +421,8 @@ void setSettingsTextStyleUnderline(bool newValue)                  { settings_te
 void setSettingsTextStyleStrikeOut(bool newValue)                  { settings_text_style_strikeout           = newValue; }
 void setSettingsTextStyleOverline(bool newValue)                   { settings_text_style_overline            = newValue; }
 
-void MainWindow::stub_implement(QString txt)
+void
+stub_implement(QString txt)
 {
     qDebug("TODO: %s", qPrintable(txt));
 }
@@ -644,7 +645,7 @@ void MainWindow::tipOfTheDay()
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    settings_general_tip_of_the_day = mainWin->getSettingsGeneralTipOfTheDay();
+    settings_general_tip_of_the_day = getSettingsGeneralTipOfTheDay();
     checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
@@ -731,42 +732,6 @@ void MainWindow::changelog()
 }
 
 // Standard Slots
-void MainWindow::undo()
-{
-    qDebug("undo()");
-    QString prefix = prompt->getPrefix();
-    if(dockUndoEdit->canUndo())
-    {
-        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
-        prompt->appendHistory(QString());
-        dockUndoEdit->undo();
-        prompt->setPrefix(prefix);
-    }
-    else
-    {
-        prompt->alert("Nothing to undo");
-        prompt->setPrefix(prefix);
-    }
-}
-
-void MainWindow::redo()
-{
-    qDebug("redo()");
-    QString prefix = prompt->getPrefix();
-    if(dockUndoEdit->canRedo())
-    {
-        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
-        prompt->appendHistory(QString());
-        dockUndoEdit->redo();
-        prompt->setPrefix(prefix);
-    }
-    else
-    {
-        prompt->alert("Nothing to redo");
-        prompt->setPrefix(prefix);
-    }
-}
-
 bool MainWindow::isShiftPressed()
 {
     return shiftKeyPressedState;
@@ -799,42 +764,6 @@ void MainWindow::iconResize(int iconSize)
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
     setSettingsGeneralIconSize(iconSize);
-}
-
-void MainWindow::icon16()
-{
-    qDebug("icon16()");
-    iconResize(16);
-}
-
-void MainWindow::icon24()
-{
-    qDebug("icon24()");
-    iconResize(24);
-}
-
-void MainWindow::icon32()
-{
-    qDebug("icon32()");
-    iconResize(32);
-}
-
-void MainWindow::icon48()
-{
-    qDebug("icon48()");
-    iconResize(48);
-}
-
-void MainWindow::icon64()
-{
-    qDebug("icon64()");
-    iconResize(64);;
-}
-
-void MainWindow::icon128()
-{
-    qDebug("icon128()");
-    iconResize(128);
 }
 
 MdiWindow* MainWindow::activeMdiWindow()
@@ -976,88 +905,6 @@ void MainWindow::layerPrevious()
 {
     qDebug("layerPrevious()");
     stub_implement("Implement layerPrevious.");
-}
-
-// Zoom ToolBar
-void MainWindow::zoomRealtime()
-{
-    qDebug("zoomRealtime()");
-    stub_implement("Implement zoomRealtime.");
-}
-
-void MainWindow::zoomPrevious()
-{
-    qDebug("zoomPrevious()");
-    stub_implement("Implement zoomPrevious.");
-}
-
-void MainWindow::zoomWindow()
-{
-    qDebug("zoomWindow()");
-    View* gview = activeView();
-    if(gview) { gview->zoomWindow(); }
-}
-
-void MainWindow::zoomDynamic()
-{
-    qDebug("zoomDynamic()");
-    stub_implement("Implement zoomDynamic.");
-}
-
-void MainWindow::zoomScale()
-{
-    qDebug("zoomScale()");
-    stub_implement("Implement zoomScale.");
-}
-
-void MainWindow::zoomCenter()
-{
-    qDebug("zoomCenter()");
-    stub_implement("Implement zoomCenter.");
-}
-
-void MainWindow::zoomIn()
-{
-    qDebug("zoomIn()");
-    View* gview = activeView();
-    if(gview) { gview->zoomIn(); }
-}
-
-void MainWindow::zoomOut()
-{
-    qDebug("zoomOut()");
-    View* gview = activeView();
-    if(gview) { gview->zoomOut(); }
-}
-
-void MainWindow::zoomSelected()
-{
-    qDebug("zoomSelected()");
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-void MainWindow::zoomAll()
-{
-    qDebug("zoomAll()");
-    stub_implement("Implement zoomAll.");
-}
-
-void MainWindow::zoomExtents()
-{
-    qDebug("zoomExtents()");
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
-        stack->push(cmd);
-    }
 }
 
 void MainWindow::dayVision()
@@ -1339,8 +1186,7 @@ void MainWindow::promptInputNext()
 void MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
-    if(act)
-    {
+    if (act) {
         qDebug("runCommand(%s)", qPrintable(act->objectName()));
         prompt->endCommand();
         prompt->setCurrentText(act->objectName());
@@ -1435,14 +1281,15 @@ void MainWindow::nativeDisableMoveRapidFire()
 void MainWindow::nativeInitCommand()
 {
     View* gview = activeView();
-    if(gview) gview->clearRubberRoom();
+    if (gview) {
+        gview->clearRubberRoom();
+    }
 }
 
 void MainWindow::nativeEndCommand()
 {
     View* gview = activeView();
-    if(gview)
-    {
+    if (gview) {
         gview->clearRubberRoom();
         gview->previewOff();
         gview->disableMoveRapidFire();
@@ -1480,36 +1327,6 @@ void MainWindow::nativeTipOfTheDay()
     tipOfTheDay();
 }
 
-void MainWindow::nativeWindowCascade()
-{
-    mdiArea->cascade();
-}
-
-void MainWindow::nativeWindowTile()
-{
-    mdiArea->tile();
-}
-
-void MainWindow::nativeWindowClose()
-{
-    onCloseWindow();
-}
-
-void MainWindow::nativeWindowCloseAll()
-{
-    mdiArea->closeAllSubWindows();
-}
-
-void MainWindow::nativeWindowNext()
-{
-    mdiArea->activateNextSubWindow();
-}
-
-void MainWindow::nativeWindowPrevious()
-{
-    mdiArea->activatePreviousSubWindow();
-}
-
 QString MainWindow::nativePlatformString()
 {
     return platformString();
@@ -1523,61 +1340,6 @@ void MainWindow::nativeMessageBox(const QString& type, const QString& title, con
     else if(msgType == "question")    { QMessageBox::question   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
     else if(msgType == "warning")     { QMessageBox::warning    (this, tr(qPrintable(title)), tr(qPrintable(text))); }
     else                              { QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function.")); }
-}
-
-void MainWindow::nativeUndo()
-{
-    undo();
-}
-
-void MainWindow::nativeRedo()
-{
-    redo();
-}
-
-void MainWindow::nativeIcon16()
-{
-    icon16();
-}
-
-void MainWindow::nativeIcon24()
-{
-    icon24();
-}
-
-void MainWindow::nativeIcon32()
-{
-    icon32();
-}
-
-void MainWindow::nativeIcon48()
-{
-    icon48();
-}
-
-void MainWindow::nativeIcon64()
-{
-    icon64();
-}
-
-void MainWindow::nativeIcon128()
-{
-    icon128();
-}
-
-void MainWindow::nativeZoomIn()
-{
-    zoomIn();
-}
-
-void MainWindow::nativeZoomOut()
-{
-    zoomOut();
-}
-
-void MainWindow::nativeZoomExtents()
-{
-    zoomExtents();
 }
 
 void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
@@ -2219,15 +1981,88 @@ end_command(void)
     _mainWin->prompt->endCommand();
 }
 
-/* -- Scheme registerables -------------------------------------------------- */
+/* Warns user if they passed arguments to function that takes none. This is
+ * different from missing_args because it does not block the function and
+ * therefore doesn't return an error code.
+ */
+void
+no_arg(pointer args, const char *name)
+{
+    if (args != root->NIL) {
+        char warning[100];
+        sprintf(warning,
+            "WARNING: no arguments required by %s but one or more were passed.",
+            name);
+        debug(warning);
+    }
+}
+
+/* Warns user if they didn't pass enough arguments to function that takes more.
+ * Also returns an error code to allow for the function to be blocked.
+ */
+int
+missing_args(pointer args, const char *name, int expected)
+{
+    pointer current = args;
+    for (int i=0; i<expected; i++) {
+        if (current != root->NIL) {
+            char warning[100];
+            sprintf(warning,
+                "MISSING ARGUMENT(S) %s: expected %d arguments but only %d were supplied.",
+                name, expected, i);
+            debug(warning);
+            return 1;
+        }
+        current = pair_cdr(current);
+    }
+    return 0;
+}
+
+/* Don't inline missing_args because some functions can have different modes of
+ * operation based on the number of arguments.
+ */
+int
+argtype_check(pointer args, const char *name, char *type_str)
+{
+    if (missing_args(args, name, strlen(type_str))) {
+        return 0;
+    }
+
+    pointer current = args;
+    for (int i=0; type_str[i]; i++) {
+        switch (type_str[i]) {
+        case 's': {
+            if (!is_string(current)) {
+                char warning[100];
+                sprintf(warning,
+                    "TYPE ERROR %s: argument %d is not a string.",
+                    name, i);
+                debug(warning);
+                return 0;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+        current = pair_cdr(current);
+    }
+    return 1;
+}
+
+/* -- Scheme registerables --------------------------------------------------
+ *
+ * Try to keep this section of the file alphabetized in the function name to
+ * match the declarations above.
+ *
+ * All function names should end in `_f`.
+ */
 
 /* Show the about dialog. */
 pointer
 about_f(scheme *sc, pointer args)
 {
-    if (args != sc->NIL) {
-        debug("WARNING: no arguments required by about-f but one or more were passed.");
-    }
+    no_arg(args, "about-f");
     if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
@@ -2242,15 +2077,11 @@ about_f(scheme *sc, pointer args)
 pointer
 alert_f(scheme *sc, pointer args)
 {
-    if (args == sc->NIL) {
-        debug("MISSING ARGUMENT alert(): one argument expected and none were supplied.");
+    if (!argtype_check(args, "debug-f", "s")) {
         return sc->NIL;
     }
+
     pointer arg = pair_car(args);
-    if (!is_string(arg)) {
-        debug("TYPE ERROR alert(): first argument is not a string.");
-        return sc->NIL;
-    }
     _mainWin->prompt->alert(string_value(arg));
     return sc->NIL;
 }
@@ -2260,9 +2091,7 @@ alert_f(scheme *sc, pointer args)
 pointer
 blink_f(scheme *sc, pointer args)
 {
-    if (args != sc->NIL) {
-        debug("WARNING: no arguments required by blink-prompt-f but one or more were passed.");
-    }
+    no_arg(args, "blink-f");
     _mainWin->prompt->startBlinking();
     return sc->NIL;
 }
@@ -2273,17 +2102,12 @@ blink_f(scheme *sc, pointer args)
 pointer
 debug_f(scheme* sc, pointer args)
 {
-    if (args == sc->NIL) {
-        debug("MISSING ARGUMENT debug-f: one argument expected and none were supplied.");
-        return sc->NIL;
-    }
-    pointer arg = pair_car(args);
-    if (!is_string(arg)) {
-        debug("TYPE ERROR debug-f: first argument is not a string.");
+    if (!argtype_check(args, "debug-f", "s")) {
         return sc->NIL;
     }
 
-    qDebug("%s", string_value(arg));
+    pointer arg1 = pair_car(args);
+    qDebug("%s", string_value(arg1));
     return sc->NIL;
 }
 
@@ -2292,23 +2116,14 @@ debug_f(scheme* sc, pointer args)
 pointer
 error_f(scheme *sc, pointer args)
 {
-    if (args == sc->NIL) {
-        debug("MISSING ARGUMENT error-f: two arguments expected and none were supplied.");
-        return sc->NIL;
-    }
-    pointer arg1 = pair_car(args);
-    if (!is_string(arg1)) {
-        debug("TYPE ERROR error-f: first argument is not a string.");
-        return sc->NIL;
-    }
-    pointer arg2 = pair_car(args);
-    if (!is_string(arg2)) {
-        debug("TYPE ERROR error-f: second argument is not a string.");
+    if (!argtype_check(args, "error-f", "ss")) {
         return sc->NIL;
     }
 
-    QString strCmd = string_value(arg1);
-    QString strErr = string_value(arg2);
+    QString strCmd = string_value(pair_car(args));
+    args = pair_cdr(args);
+    QString strErr = string_value(pair_car(args));
+
     _mainWin->prompt->setPrefix("ERROR: (" + strCmd + ") " + strErr);
     _mainWin->prompt->appendHistory(QString());
     _mainWin->nativeEndCommand();
@@ -2340,23 +2155,14 @@ report_state_f(scheme *sc, pointer args)
 pointer
 todo_f(scheme *sc, pointer args)
 {
-    if (args == sc->NIL) {
-        debug("MISSING ARGUMENT error-f: two arguments expected and none were supplied.");
-        return sc->NIL;
-    }
-    pointer arg1 = pair_car(args);
-    if (!is_string(arg1)) {
-        debug("TYPE ERROR error-f: first argument is not a string.");
-        return sc->NIL;
-    }
-    pointer arg2 = pair_car(args);
-    if (!is_string(arg2)) {
-        debug("TYPE ERROR error-f: second argument is not a string.");
+    if (!argtype_check(args, "todo-f", "ss")) {
         return sc->NIL;
     }
 
-    QString strCmd = string_value(arg1);
-    QString strTodo = string_value(arg2);
+    QString strCmd = string_value(pair_car(args));
+    args = pair_cdr(args);
+    QString strTodo = string_value(pair_car(args));
+
     _mainWin->prompt->alert("TODO: (" + strCmd + ") " + strTodo);
     end_command();
     return sc->NIL;
@@ -2366,17 +2172,12 @@ todo_f(scheme *sc, pointer args)
 pointer
 set_prompt_prefix_f(scheme* sc, pointer args)
 {
-    if (args == sc->NIL) {
-        debug("MISSING ARGUMENT set-prompt-prefix-f: two arguments expected and none were supplied.");
-        return sc->NIL;
-    }
-    pointer arg1 = pair_car(args);
-    if (!is_string(arg1)) {
-        debug("TYPE ERROR set-prompt-prefix-f: first argument is not a string.");
+    if (!argtype_check(args, "set-prompt-prefix-f", "s")) {
         return sc->NIL;
     }
 
-    _mainWin->prompt->setPrefix(string_value(arg1));
+    QString s = string_value(pair_car(args));
+    _mainWin->prompt->setPrefix(s);
     return sc->NIL;
 }
 
@@ -2503,6 +2304,8 @@ hide_all_layers_f(scheme *sc, pointer args)
 pointer
 icon128_f(scheme *sc, pointer args)
 {
+    no_arg(args, "icon128-f");
+    _mainWin->iconResize(128);
     return sc->NIL;
 }
 
@@ -2510,6 +2313,8 @@ icon128_f(scheme *sc, pointer args)
 pointer
 icon16_f(scheme *sc, pointer args)
 {
+    no_arg(args, "icon16-f");
+    _mainWin->iconResize(16);
     return sc->NIL;
 }
 
@@ -2517,6 +2322,8 @@ icon16_f(scheme *sc, pointer args)
 pointer
 icon24_f(scheme *sc, pointer args)
 {
+    no_arg(args, "icon24-f");
+    _mainWin->iconResize(24);
     return sc->NIL;
 }
 
@@ -2524,6 +2331,8 @@ icon24_f(scheme *sc, pointer args)
 pointer
 icon32_f(scheme *sc, pointer args)
 {
+    no_arg(args, "icon32-f");
+    _mainWin->iconResize(32);
     return sc->NIL;
 }
 
@@ -2531,6 +2340,8 @@ icon32_f(scheme *sc, pointer args)
 pointer
 icon48_f(scheme *sc, pointer args)
 {
+    no_arg(args, "icon48-f");
+    _mainWin->iconResize(48);
     return sc->NIL;
 }
 
@@ -2538,6 +2349,8 @@ icon48_f(scheme *sc, pointer args)
 pointer
 icon64_f(scheme *sc, pointer args)
 {
+    no_arg(args, "icon64-f");
+    _mainWin->iconResize(64);;
     return sc->NIL;
 }
 
@@ -2675,6 +2488,18 @@ rectangle_f(scheme *sc, pointer args)
 pointer
 redo_f(scheme *sc, pointer args)
 {
+    no_arg(args, "redo-f");
+    QString prefix = _mainWin->prompt->getPrefix();
+    if (_mainWin->dockUndoEdit->canRedo()) {
+        _mainWin->prompt->setPrefix("Redo " + _mainWin->dockUndoEdit->redoText());
+        _mainWin->prompt->appendHistory(QString());
+        _mainWin->dockUndoEdit->redo();
+        _mainWin->prompt->setPrefix(prefix);
+    }
+    else {
+        _mainWin->prompt->alert("Nothing to redo");
+        _mainWin->prompt->setPrefix(prefix);
+    }
     return sc->NIL;
 }
 
@@ -2918,6 +2743,18 @@ tip_of_the_day_f(scheme *sc, pointer args)
 pointer
 undo_f(scheme *sc, pointer args)
 {
+    no_arg(args, "undo-f");
+    QString prefix = _mainWin->prompt->getPrefix();
+    if (_mainWin->dockUndoEdit->canUndo()) {
+        _mainWin->prompt->setPrefix("Undo " + _mainWin->dockUndoEdit->undoText());
+        _mainWin->prompt->appendHistory(QString());
+        _mainWin->dockUndoEdit->undo();
+        _mainWin->prompt->setPrefix(prefix);
+    }
+    else {
+        _mainWin->prompt->alert("Nothing to undo");
+        _mainWin->prompt->setPrefix(prefix);
+    }
     return sc->NIL;
 }
 
@@ -2933,57 +2770,79 @@ whats_this_f(scheme *sc, pointer args)
     return sc->NIL;
 }
 
+/* . */
 pointer
 window_cascade_f(scheme *sc, pointer args)
 {
+    no_arg(args, "window-cascade-f");
+    _mainWin->mdiArea->cascade();
     return sc->NIL;
 }
 
+/* . */
 pointer
 window_close_f(scheme *sc, pointer args)
 {
+    no_arg(args, "window-close-f");
+    _mainWin->onCloseWindow();
     return sc->NIL;
 }
 
+/* . */
 pointer
 window_close_all_f(scheme *sc, pointer args)
 {
+    no_arg(args, "window-close-all-f");
+    _mainWin->mdiArea->closeAllSubWindows();
     return sc->NIL;
 }
 
+/* . */
 pointer
 window_next_f(scheme *sc, pointer args)
 {
+    no_arg(args, "window-next-f");
+    _mainWin->mdiArea->activateNextSubWindow();
     return sc->NIL;
 }
 
 pointer
 window_previous_f(scheme *sc, pointer args)
 {
+    no_arg(args, "window-previous-f");
+    _mainWin->mdiArea->activatePreviousSubWindow();
     return sc->NIL;
 }
 
 pointer
 window_tile_f(scheme *sc, pointer args)
 {
+    no_arg(args, "window-tile-f");
+    _mainWin->mdiArea->tile();
     return sc->NIL;
 }
 
 pointer
 zoom_all_f(scheme *sc, pointer args)
 {
+    no_arg(args, "zoom-all-f");
+    stub_implement("Implement zoomAll.");
     return sc->NIL;
 }
 
 pointer
 zoom_center_f(scheme *sc, pointer args)
 {
+    no_arg(args, "zoom-center-f");
+    stub_implement("Implement zoomCenter.");
     return sc->NIL;
 }
 
 pointer
 zoom_dynamic_f(scheme *sc, pointer args)
 {
+    no_arg(args, "zoom-dynamic-f");
+    stub_implement("Implement zoomDynamic.");
     return sc->NIL;
 }
 
@@ -2991,14 +2850,17 @@ zoom_dynamic_f(scheme *sc, pointer args)
 pointer
 zoom_extents_f(scheme *sc, pointer args)
 {
-    if (args != sc->NIL) {
-        debug("zoomExtents() requires zero arguments");
-    }
+    no_arg(args, "zoom-extents-f");
     if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    _mainWin->nativeZoomExtents();
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+        stack->push(cmd);
+    }
     end_command();
     return sc->NIL;
 }
@@ -3007,14 +2869,15 @@ zoom_extents_f(scheme *sc, pointer args)
 pointer
 zoom_in_f(scheme *sc, pointer args)
 {
-    if (args != sc->NIL) {
-        debug("zoomIn() requires zero arguments");
-    }
+    no_arg(args, "zoom-in-f");
     if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    _mainWin->nativeZoomIn();
+    View* gview = activeView();
+    if (gview) {
+        gview->zoomIn();
+    }
     end_command();
     return sc->NIL;
 }
@@ -3023,48 +2886,71 @@ zoom_in_f(scheme *sc, pointer args)
 pointer
 zoom_out_f(scheme *sc, pointer args)
 {
-    if (args != sc->NIL) {
-        debug("zoomOut() requires zero arguments");
-    }
+    no_arg(args, "zoom-out-f");
     if (context_flag == CONTEXT_MAIN) {
         init_command();
         clear_selection();
     }
-    _mainWin->nativeZoomOut();
+    View* gview = activeView();
+    if (gview) {
+        gview->zoomOut();
+    }
     end_command();
     return sc->NIL;
 }
 
+/* . */
 pointer
 zoom_scale_f(scheme *sc, pointer args)
 {
+    no_arg(args, "zoom-scale-f");
+    stub_implement("Implement zoomScale.");
     return sc->NIL;
 }
 
+/* . */
 pointer
 zoom_previous_f(scheme *sc, pointer args)
 {
+    no_arg(args, "zoom-previous-f");
+    stub_implement("Implement zoomPrevious.");
     return sc->NIL;
 }
 
+/* . */
 pointer
 zoom_real_time_f(scheme *sc, pointer args)
 {
+    no_arg(args, "zoom-real-time-f");
+    stub_implement("Implement zoomRealtime.");
     return sc->NIL;
 }
 
+/* . */
 pointer
 zoom_selected_f(scheme *sc, pointer args)
 {
+    no_arg(args, "zoom-selected-f");
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+        stack->push(cmd);
+    }
     return sc->NIL;
 }
 
+/* . */
 pointer
 zoom_window_f(scheme *sc, pointer args)
 {
+    no_arg(args, "zoom-window-f");
+    View* gview = activeView();
+    if (gview) {
+        gview->zoomWindow();
+    }
     return sc->NIL;
 }
-
 
 #if 0
 /* . */
@@ -3177,82 +3063,11 @@ Help_f(scheme* sc, pointer args)
 
 /* . */
 pointer
-About_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("about() requires zero arguments");
-
-    _mainWin->nativeAbout();
-    return sc->NIL;
-}
-
-/* . */
-pointer
 TipOfTheDay_f(scheme* sc, pointer args)
 {
     if (args != sc->NIL) return debug("tipOfTheDay() requires zero arguments");
 
     _mainWin->nativeTipOfTheDay();
-    return sc->NIL;
-}
-
-/* . */
-pointer
-WindowCascade_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("windowCascade() requires zero arguments");
-
-    _mainWin->nativeWindowCascade();
-    return sc->NIL;
-}
-
-/* . */
-pointer
-WindowTile_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("windowTile() requires zero arguments");
-
-    _mainWin->nativeWindowTile();
-    return sc->NIL;
-}
-
-/* . */
-pointer
-WindowClose_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("windowClose() requires zero arguments");
-
-    _mainWin->nativeWindowClose();
-    return sc->NIL;
-}
-
-/* . */
-pointer
-WindowCloseAll_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("windowCloseAll() requires zero arguments");
-
-    _mainWin->nativeWindowCloseAll();
-    return sc->NIL;
-}
-
-/* . */
-pointer
-window_next_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) {
-        return debug("windowNext() requires zero arguments");
-    }
-    _mainWin->nativeWindowNext();
-    return sc->NIL;
-}
-
-/* . */
-pointer
-WindowPrevious_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("windowPrevious() requires zero arguments");
-
-    _mainWin->nativeWindowPrevious();
     return sc->NIL;
 }
 
@@ -3281,81 +3096,6 @@ MessageBox_f(scheme* sc, pointer args)
         return debug(UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
     _mainWin->nativeMessageBox(type, title, text);
-    return sc->NIL;
-}
-
-/* . */
-pointer
-Undo_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("undo() requires zero arguments");
-
-    _mainWin->nativeUndo();
-    return sc->NIL;
-}
-
-/* . */
-pointer
-Redo_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("redo() requires zero arguments");
-
-    _mainWin->nativeRedo();
-    return sc->NIL;
-}
-
-/* . */
-pointer
-Icon16_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("icon16() requires zero arguments");
-
-    _mainWin->nativeIcon16();
-    return sc->NIL;
-}
-
-pointer
-Icon24_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("icon24() requires zero arguments");
-
-    _mainWin->nativeIcon24();
-    return sc->NIL;
-}
-
-pointer
-Icon32_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("icon32() requires zero arguments");
-
-    _mainWin->nativeIcon32();
-    return sc->NIL;
-}
-
-pointer
-Icon48_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("icon48() requires zero arguments");
-
-    _mainWin->nativeIcon48();
-    return sc->NIL;
-}
-
-pointer
-Icon64_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("icon64() requires zero arguments");
-
-    _mainWin->nativeIcon64();
-    return sc->NIL;
-}
-
-pointer
-Icon128_f(scheme* sc, pointer args)
-{
-    if (args != sc->NIL) return debug("icon128() requires zero arguments");
-
-    _mainWin->nativeIcon128();
     return sc->NIL;
 }
 

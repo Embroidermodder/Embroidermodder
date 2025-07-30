@@ -206,7 +206,6 @@ private slots:
 
 public slots:
 
-    void stub_implement(QString txt);
     void stub_testing();
 
     void promptHistoryAppended(const QString& txt);
@@ -253,14 +252,7 @@ public slots:
     void toggleRuler();
     void toggleLwt();
 
-    // Icons
     void iconResize(int iconSize);
-    void icon16();
-    void icon24();
-    void icon32();
-    void icon48();
-    void icon64();
-    void icon128();
 
     //Selectors
     void layerSelectorIndexChanged(int index);
@@ -294,9 +286,6 @@ public slots:
     QString getCurrentLineWeight();
 
     // Standard Slots
-    void undo();
-    void redo();
-
     bool isShiftPressed();
     void setShiftPressed();
     void setShiftReleased();
@@ -308,18 +297,6 @@ public slots:
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
-    // Zoom Toolbar
-    void zoomRealtime();
-    void zoomPrevious();
-    void zoomWindow();
-    void zoomDynamic();
-    void zoomScale();
-    void zoomCenter();
-    void zoomIn();
-    void zoomOut();
-    void zoomSelected();
-    void zoomAll();
-    void zoomExtents();
 
     void dayVision();
     void nightVision();
@@ -343,30 +320,10 @@ public:
     void nativeHelp                   ();
     void nativeAbout                  ();
     void nativeTipOfTheDay            ();
-    void nativeWindowCascade          ();
-    void nativeWindowTile             ();
-    void nativeWindowClose            ();
-    void nativeWindowCloseAll         ();
-    void nativeWindowNext             ();
-    void nativeWindowPrevious         ();
 
     QString nativePlatformString      ();
 
     void nativeMessageBox             (const QString& type, const QString& title, const QString& text);
-
-    void nativeUndo                   ();
-    void nativeRedo                   ();
-
-    void nativeIcon16                 ();
-    void nativeIcon24                 ();
-    void nativeIcon32                 ();
-    void nativeIcon48                 ();
-    void nativeIcon64                 ();
-    void nativeIcon128                ();
-
-    void nativeZoomIn                 ();
-    void nativeZoomOut                ();
-    void nativeZoomExtents            ();
 
     void nativePrintArea              (qreal x, qreal y, qreal w, qreal h);
 
