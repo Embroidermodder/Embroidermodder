@@ -1,3 +1,4 @@
+#include "script.h"
 #include "cmdprompt.h"
 #include <QApplication>
 #include <QClipboard>
@@ -450,7 +451,9 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
 
     QString cmdtxt(curText);
     cmdtxt.replace(0, prefix.length(), "");
-    if(!rapidFireEnabled) cmdtxt = cmdtxt.toLower();
+    if (!rapidFireEnabled) {
+        cmdtxt = cmdtxt.toLower();
+    }
 
     if(cmdActive)
     {
@@ -485,31 +488,31 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
             emit runCommand(curCmd, cmdtxt);
         }
     }
-    else
-    {
-        if(aliasHash->contains(cmdtxt))
-        {
+    else {
+        run(qPrintable("("+cmdtxt+")"));
+        /*
+        if (aliasHash->contains(cmdtxt)) {
             cmdActive = true;
             lastCmd = curCmd;
             curCmd = aliasHash->value(cmdtxt);
             emit appendHistory(curText, prefix.length());
             emit startCommand(curCmd);
         }
-        else if(cmdtxt.isEmpty())
-        {
+        else if (cmdtxt.isEmpty()) {
             cmdActive = true;
             emit appendHistory(curText, prefix.length());
             //Rerun the last successful command
             emit startCommand(lastCmd);
         }
-        else
-        {
+        else {
             emit appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>", prefix.length());
         }
+        */
     }
 
-    if(!rapidFireEnabled)
+    if (!rapidFireEnabled) {
         clear();
+    }
 }
 
 void CmdPromptInput::checkSelection()

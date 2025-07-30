@@ -94,7 +94,10 @@
 #include <QMetaObject>
 #include <QLocale>
 
-/* State */
+/* ---- State ------------------------------------------------------------------
+ *
+ * TODO: Set defaults for all state variables.
+ */
 scheme *root;
 unsigned char context_flag = CONTEXT_MAIN;
 
@@ -1183,6 +1186,13 @@ void MainWindow::promptInputNext()
     if(mdiWin) mdiWin->promptInputNext();
 }
 
+void
+run(const char *command)
+{
+    _mainWin->prompt->appendHistory(command);
+    scheme_load_string(root, command);
+}
+
 void MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
@@ -1198,10 +1208,12 @@ void
 MainWindow::runCommandMain(const QString& cmd)
 {
     qDebug("runCommandMain(%s)", qPrintable(cmd));
-    //if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
-    //engine->evaluate(cmd + "_main()", fileName);
+    // TODO: Uncomment this line when post-selection is available
+    // if (!getSettingsSelectionModePickFirst()) {
+    //     clear_selection();
+    // }
     context_flag = CONTEXT_MAIN;
-    scheme_load_string(root, qPrintable("("+cmd+")"));
+    run(qPrintable("("+cmd+")"));
 }
 
 void
@@ -1212,7 +1224,7 @@ MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
     sprintf(mouse_pos, "(define mouse '(%f %f))", x, y);
     context_flag = CONTEXT_CLICK;
     scheme_load_string(root, mouse_pos);
-    scheme_load_string(root, qPrintable("("+cmd+")"));
+    run(qPrintable("("+cmd+")"));
 }
 
 void
@@ -1223,7 +1235,7 @@ MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
     sprintf(mouse_pos, "(define mouse '(%f %f))", x, y);
     context_flag = CONTEXT_MOVE;
     scheme_load_string(root, mouse_pos);
-    scheme_load_string(root, qPrintable("("+cmd+")"));
+    run(qPrintable("("+cmd+")"));
 }
 
 void
@@ -1234,7 +1246,7 @@ MainWindow::runCommandContext(const QString& cmd, const QString& str)
     sprintf(context_str, "(define context-str \"%s\")", qPrintable(str));
     context_flag = CONTEXT_CONTEXT;
     scheme_load_string(root, context_str);
-    scheme_load_string(root, qPrintable("("+cmd+")"));
+    run(qPrintable("("+cmd+")"));
 }
 
 void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
@@ -1255,7 +1267,7 @@ void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
     */
     context_flag = CONTEXT_PROMPT;
     scheme_load_string(root, prompt);
-    scheme_load_string(root, qPrintable(cmd));
+    run(qPrintable("("+cmd+")"));
 }
 
 void MainWindow::nativeEnablePromptRapidFire()

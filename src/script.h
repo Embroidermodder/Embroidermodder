@@ -405,6 +405,8 @@ pointer zoom_scale_f(scheme *sc, pointer args);
 pointer zoom_selected_f(scheme *sc, pointer args);
 pointer zoom_window_f(scheme *sc, pointer args);
 
+void run(const char *command);
+
 extern scheme *root;
 extern unsigned char context_flag;
 extern const Command command_map[];
