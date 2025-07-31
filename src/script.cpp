@@ -60,6 +60,8 @@
 #include "undo-commands.h"
 #include "embdetails-dialog.h"
 
+#include "../extern/lua/src/lua.hpp"
+
 #include <stdlib.h>
 
 #include <QLabel>
@@ -423,6 +425,10 @@ void setSettingsTextStyleItalic(bool newValue)                     { settings_te
 void setSettingsTextStyleUnderline(bool newValue)                  { settings_text_style_underline           = newValue; }
 void setSettingsTextStyleStrikeOut(bool newValue)                  { settings_text_style_strikeout           = newValue; }
 void setSettingsTextStyleOverline(bool newValue)                   { settings_text_style_overline            = newValue; }
+
+extern "C" {
+    int about_f_l(lua_State* L);
+}
 
 void
 stub_implement(QString txt)
@@ -2082,6 +2088,18 @@ about_f(scheme *sc, pointer args)
     _mainWin->about();
     end_command();
     return sc->NIL;
+}
+
+int
+about_f_l(lua_State *L)
+{
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
+    _mainWin->about();
+    end_command();
+    return 0;
 }
 
 /* Adds the scheme function (alert "EXAMPLE ALERT").
@@ -4463,6 +4481,15 @@ MainWindow::scheme_boot(void)
     }
     scheme_load_file(root, f);
     fclose(f);
+
+    /* Setting up Lua. */
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    lua_pushcfunction(L, about_f_l);
+    lua_setglobal(L, "about_f");
+
+    luaL_dostring(L, "about_f()");
 
 #if 0
 void

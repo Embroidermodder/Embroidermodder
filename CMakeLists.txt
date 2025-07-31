@@ -131,6 +131,69 @@ qt_add_executable(embroidermodder
 	${EXTERN}/tinyscheme/source/dynload.c
 	${EXTERN}/tinyscheme/source/mod_json.c
 	${EXTERN}/tinyscheme/source/scheme.c
+
+    ${EXTERN}/lua/src/lapi.c
+    ${EXTERN}/lua/src/lapi.h
+    ${EXTERN}/lua/src/lauxlib.c
+    ${EXTERN}/lua/src/lauxlib.h
+    ${EXTERN}/lua/src/lbaselib.c
+    ${EXTERN}/lua/src/lcode.c
+    ${EXTERN}/lua/src/lcode.h
+    ${EXTERN}/lua/src/lcorolib.c
+    ${EXTERN}/lua/src/lctype.c
+    ${EXTERN}/lua/src/lctype.h
+    ${EXTERN}/lua/src/ldblib.c
+    ${EXTERN}/lua/src/ldebug.c
+    ${EXTERN}/lua/src/ldebug.h
+    ${EXTERN}/lua/src/ldo.c
+    ${EXTERN}/lua/src/ldo.h
+    ${EXTERN}/lua/src/ldump.c
+    ${EXTERN}/lua/src/lfunc.c
+    ${EXTERN}/lua/src/lfunc.h
+    ${EXTERN}/lua/src/lgc.c
+    ${EXTERN}/lua/src/lgc.h
+    ${EXTERN}/lua/src/linit.c
+    ${EXTERN}/lua/src/liolib.c
+    ${EXTERN}/lua/src/ljumptab.h
+    ${EXTERN}/lua/src/llex.c
+    ${EXTERN}/lua/src/llex.h
+    ${EXTERN}/lua/src/llimits.h
+    ${EXTERN}/lua/src/lmathlib.c
+    ${EXTERN}/lua/src/lmem.c
+    ${EXTERN}/lua/src/lmem.h
+    ${EXTERN}/lua/src/loadlib.c
+    ${EXTERN}/lua/src/lobject.c
+    ${EXTERN}/lua/src/lobject.h
+    ${EXTERN}/lua/src/lopcodes.c
+    ${EXTERN}/lua/src/lopcodes.h
+    ${EXTERN}/lua/src/lopnames.h
+    ${EXTERN}/lua/src/loslib.c
+    ${EXTERN}/lua/src/lparser.c
+    ${EXTERN}/lua/src/lparser.h
+    ${EXTERN}/lua/src/lprefix.h
+    ${EXTERN}/lua/src/lstate.c
+    ${EXTERN}/lua/src/lstate.h
+    ${EXTERN}/lua/src/lstring.c
+    ${EXTERN}/lua/src/lstring.h
+    ${EXTERN}/lua/src/lstrlib.c
+    ${EXTERN}/lua/src/ltable.c
+    ${EXTERN}/lua/src/ltable.h
+    ${EXTERN}/lua/src/ltablib.c
+    ${EXTERN}/lua/src/ltm.c
+    ${EXTERN}/lua/src/ltm.h
+#    ${EXTERN}/lua/src/lua.c
+#    ${EXTERN}/lua/src/luac.c
+    ${EXTERN}/lua/src/luaconf.h
+    ${EXTERN}/lua/src/lua.h
+    ${EXTERN}/lua/src/lua.hpp
+    ${EXTERN}/lua/src/lualib.h
+    ${EXTERN}/lua/src/lundump.c
+    ${EXTERN}/lua/src/lundump.h
+    ${EXTERN}/lua/src/lutf8lib.c
+    ${EXTERN}/lua/src/lvm.c
+    ${EXTERN}/lua/src/lvm.h
+    ${EXTERN}/lua/src/lzio.c
+    ${EXTERN}/lua/src/lzio.h
 )
 
 # WARNING: This does NOT regenerate when the assets change, so you have to
