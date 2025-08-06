@@ -63,7 +63,7 @@ public:
 
     void setUndoCleanIcon(bool opened);
 
-    virtual void                    updateMenuToolbarStatusbar();
+    virtual void updateMenuToolbarStatusbar();
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
@@ -74,8 +74,8 @@ public:
     QString formatFilterOpen;
     QString formatFilterSave;
 
-    bool                            isCommandActive() { return prompt->isCommandActive(); }
-    QString                         activeCommand() { return prompt->activeCommand(); }
+    bool isCommandActive() { return prompt->isCommandActive(); }
+    QString activeCommand() { return prompt->activeCommand(); }
 
     QString platformString();
 
@@ -96,47 +96,46 @@ public slots:
     void updateAllViewGridColors(QRgb color);
     void updateAllViewRulerColors(QRgb color);
 
-    void                            updatePickAddMode(bool val);
-    void                            pickAddModeToggled();
+    void updatePickAddMode(bool val);
+    void pickAddModeToggled();
 
-    void                            settingsPrompt();
+    void settingsPrompt();
 
-    void                            settingsDialog(const QString& showTab = QString());
-    void                            readSettings();
-    void                            writeSettings();
+    void settingsDialog(const QString& showTab = QString());
+    void readSettings();
+    void writeSettings();
 
-    static bool                     validFileFormat(const QString &fileName);
+    static bool validFileFormat(const QString &fileName);
 
 protected:
-    virtual void                    resizeEvent(QResizeEvent*);
-    void                            closeEvent(QCloseEvent *event);
-    QAction*                        getFileSeparator();
-    void                            loadFormats();
+    virtual void resizeEvent(QResizeEvent*);
+    void closeEvent(QCloseEvent *event);
+    QAction* getFileSeparator();
+    void loadFormats();
 
 private:
 
-    bool                            shiftKeyPressedState;
+    bool shiftKeyPressedState;
 
-    QByteArray                      layoutState;
+    QByteArray layoutState;
 
-    int                             numOfDocs;
-    int                             docIndex;
+    int numOfDocs;
+    int docIndex;
 
-    QList<MdiWindow*>               listMdiWin;
-    QMdiSubWindow*                  findMdiWindow(const QString &fileName);
-    QString                         openFilesPath;
+    QList<MdiWindow*> listMdiWin;
+    QMdiSubWindow* findMdiWindow(const QString &fileName);
+    QString openFilesPath;
 
-    QAction*                        myFileSeparator;
+    QAction* myFileSeparator;
 
-    QWizard*    wizardTipOfTheDay;
-    QLabel*     labelTipOfTheDay;
-    QCheckBox*  checkBoxTipOfTheDay;
+    QWizard* wizardTipOfTheDay;
+    QLabel* labelTipOfTheDay;
+    QCheckBox* checkBoxTipOfTheDay;
     QStringList listTipOfTheDay;
 
     void createAllActions(void);
-    //====================================================
-    //Toolbars
-    //====================================================
+
+    // Toolbars
     void createAllToolbars();
     void createFileToolbar();
     void createEditToolbar();
@@ -161,18 +160,16 @@ private:
     QToolBar* toolbarText;
     QToolBar* toolbarProperties;
     QToolBar* toolbarPrompt;
-    //====================================================
-    //Selectors
-    //====================================================
-    QComboBox*     layerSelector;
-    QComboBox*     colorSelector;
-    QComboBox*     linetypeSelector;
-    QComboBox*     lineweightSelector;
+
+    // Selectors
+    QComboBox* layerSelector;
+    QComboBox* colorSelector;
+    QComboBox* linetypeSelector;
+    QComboBox* lineweightSelector;
     QFontComboBox* textFontSelector;
-    QComboBox*     textSizeSelector;
-    //====================================================
-    //Menus
-    //====================================================
+    QComboBox* textSizeSelector;
+
+    // Menus
     void createAllMenus();
     void createFileMenu();
     void createEditMenu();
@@ -187,9 +184,8 @@ private:
     QMenu* settingsMenu;
     QMenu* windowMenu;
     QMenu* helpMenu;
-    //====================================================
-    //SubMenus
-    //====================================================
+
+    // SubMenus
     QMenu* recentMenu;
     QMenu* zoomMenu;
     QMenu* panMenu;
@@ -221,8 +217,6 @@ public slots:
     void saveasfile();
     void print();
     void designDetails();
-    void exit();
-    void quit();
     void checkForUpdates();
     // Help Menu
     void tipOfTheDay();
@@ -247,7 +241,7 @@ public slots:
 
     void iconResize(int iconSize);
 
-    //Selectors
+    // Selectors
     void layerSelectorIndexChanged(int index);
     void colorSelectorIndexChanged(int index);
     void linetypeSelectorIndexChanged(int index);
@@ -264,7 +258,7 @@ public slots:
     void setTextAngle(qreal num);
 
     QString getCurrentLayer();
-    QRgb    getCurrentColor();
+    QRgb getCurrentColor();
     QString getCurrentLineType();
     QString getCurrentLineWeight();
 
@@ -281,62 +275,27 @@ public slots:
     void layerManager();
     void layerPrevious();
 
-    void dayVision();
-    void nightVision();
-
     void doNothing();
 
 public:
     //Natives
-    void nativeEndCommand             ();
+    void nativeMessageBox(const QString& type, const QString& title, const QString& text);
 
-    void nativeNewFile                ();
-    void nativeOpenFile               ();
+    void nativePrintArea(qreal x, qreal y, qreal w, qreal h);
 
-    void nativeExit                   ();
-    void nativeHelp                   ();
-    void nativeAbout                  ();
-    void nativeTipOfTheDay            ();
+    bool nativeAllowRubber();
+    void nativeSpareRubber(qint64 id);
+    // TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
+    void nativeSetRubberMode(int mode);
+    void nativeSetRubberPoint(const QString& key, qreal x, qreal y);
+    void nativeSetRubberText(const QString& key, const QString& txt);
 
-    QString nativePlatformString      ();
+    void nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
+    void nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
 
-    void nativeMessageBox             (const QString& type, const QString& title, const QString& text);
-
-    void nativePrintArea              (qreal x, qreal y, qreal w, qreal h);
-
-    void nativeDayVision              ();
-    void nativeNightVision            ();
-
-    void nativeSetBackgroundColor     (quint8 r, quint8 g, quint8 b);
-    void nativeSetCrossHairColor      (quint8 r, quint8 g, quint8 b);
-    void nativeSetGridColor           (quint8 r, quint8 g, quint8 b);
-
-    QString nativeTextFont            ();
-    qreal   nativeTextSize            ();
-    qreal   nativeTextAngle           ();
-
-    void nativeSetTextFont            (const QString& str);
-    void nativeSetTextSize            (qreal num);
-    void nativeSetTextAngle           (qreal num);
-
-    void nativePreviewOn              (int clone, int mode, qreal x, qreal y, qreal data);
-    void nativePreviewOff             ();
-
-    void nativeVulcanize              ();
-    void nativeClearRubber            ();
-    bool nativeAllowRubber            ();
-    void nativeSpareRubber            (qint64 id);
-    //TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    void nativeSetRubberMode          (int mode);
-    void nativeSetRubberPoint         (const QString& key, qreal x, qreal y);
-    void nativeSetRubberText          (const QString& key, const QString& txt);
-
-    void nativeAddTextMulti           (const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
-    void nativeAddTextSingle          (const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
-
-    void nativeAddInfiniteLine        (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddRay                 (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddLine                (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
+    void nativeAddInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
+    void nativeAddRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
+    void nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
     void nativeAddTriangle            (qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
     void nativeAddRectangle           (qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
     void nativeAddRoundedRectangle    (qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
@@ -360,13 +319,7 @@ public:
     qreal nativeCalculateDistance(qreal x1, qreal y1, qreal x2, qreal y2);
     qreal nativePerpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
 
-    int  nativeNumSelected();
-    void nativeSelectAll();
     void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-    void nativeClearSelection();
-    void nativeDeleteSelected();
-    void nativeCutSelected(qreal x, qreal y);
-    void nativeCopySelected(qreal x, qreal y);
     void nativePasteSelected(qreal x, qreal y);
     void nativeMoveSelected(qreal dx, qreal dy);
     void nativeScaleSelected(qreal x, qreal y, qreal factor);

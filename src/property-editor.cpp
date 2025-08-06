@@ -26,6 +26,414 @@
 #include "object-rect.h"
 #include "object-textsingle.h"
 
+QString      iconDir;
+int          iconSize;
+Qt::ToolButtonStyle propertyEditorButtonStyle;
+
+bool pickAdd;
+
+QList<QGraphicsItem*> selectedItemList;
+
+ArcObject*          tempArcObj;
+BlockObject*        tempBlockObj;
+CircleObject*       tempCircleObj;
+DimAlignedObject*   tempDimAlignedObj;
+DimAngularObject*   tempDimAngularObj;
+DimArcLengthObject* tempDimArcLenObj;
+DimDiameterObject*  tempDimDiamObj;
+DimLeaderObject*    tempDimLeaderObj;
+DimLinearObject*    tempDimLinearObj;
+DimOrdinateObject*  tempDimOrdObj;
+DimRadiusObject*    tempDimRadiusObj;
+EllipseObject*      tempEllipseObj;
+EllipseArcObject*   tempEllipseArcObj;
+HatchObject*        tempHatchObj;
+ImageObject*        tempImageObj;
+InfiniteLineObject* tempInfLineObj;
+LineObject*         tempLineObj;
+PathObject*         tempPathObj;
+PointObject*        tempPointObj;
+PolygonObject*      tempPolygonObj;
+PolylineObject*     tempPolylineObj;
+RayObject*          tempRayObj;
+RectObject*         tempRectObj;
+SplineObject*       tempSplineObj;
+TextMultiObject*    tempTextMultiObj;
+TextSingleObject*   tempTextSingleObj;
+
+int precisionAngle;
+int precisionLength;
+
+//Used when checking if fields vary
+QString fieldOldText;
+QString fieldNewText;
+QString fieldVariesText;
+QString fieldYesText;
+QString fieldNoText;
+QString fieldOnText;
+QString fieldOffText;
+
+//====================
+//Selection
+//====================
+QComboBox*   comboBoxSelected;
+QToolButton* toolButtonQSelect;
+QToolButton* toolButtonPickAdd;
+
+//TODO: Alphabetic/Categorized TabWidget
+
+//====================
+//General
+//====================
+QGroupBox*   groupBoxGeneral;
+
+QToolButton* toolButtonGeneralLayer;
+QToolButton* toolButtonGeneralColor;
+QToolButton* toolButtonGeneralLineType;
+QToolButton* toolButtonGeneralLineWeight;
+
+QComboBox*   comboBoxGeneralLayer;
+QComboBox*   comboBoxGeneralColor;
+QComboBox*   comboBoxGeneralLineType;
+QComboBox*   comboBoxGeneralLineWeight;
+
+//====================
+//Geometry
+//====================
+
+//Arc
+QGroupBox*   groupBoxGeometryArc;
+
+QToolButton* toolButtonArcCenterX;
+QToolButton* toolButtonArcCenterY;
+QToolButton* toolButtonArcRadius;
+QToolButton* toolButtonArcStartAngle;
+QToolButton* toolButtonArcEndAngle;
+QToolButton* toolButtonArcStartX;
+QToolButton* toolButtonArcStartY;
+QToolButton* toolButtonArcEndX;
+QToolButton* toolButtonArcEndY;
+QToolButton* toolButtonArcArea;
+QToolButton* toolButtonArcLength;
+QToolButton* toolButtonArcChord;
+QToolButton* toolButtonArcIncAngle;
+
+QLineEdit*   lineEditArcCenterX;
+QLineEdit*   lineEditArcCenterY;
+QLineEdit*   lineEditArcRadius;
+QLineEdit*   lineEditArcStartAngle;
+QLineEdit*   lineEditArcEndAngle;
+QLineEdit*   lineEditArcStartX;
+QLineEdit*   lineEditArcStartY;
+QLineEdit*   lineEditArcEndX;
+QLineEdit*   lineEditArcEndY;
+QLineEdit*   lineEditArcArea;
+QLineEdit*   lineEditArcLength;
+QLineEdit*   lineEditArcChord;
+QLineEdit*   lineEditArcIncAngle;
+
+QGroupBox*   groupBoxMiscArc;
+
+QToolButton* toolButtonArcClockwise;
+
+QComboBox*   comboBoxArcClockwise;
+
+//Block
+QGroupBox*   groupBoxGeometryBlock;
+
+QToolButton* toolButtonBlockX;
+QToolButton* toolButtonBlockY;
+
+QLineEdit*   lineEditBlockX;
+QLineEdit*   lineEditBlockY;
+
+//Circle
+QGroupBox*   groupBoxGeometryCircle;
+
+QToolButton* toolButtonCircleCenterX;
+QToolButton* toolButtonCircleCenterY;
+QToolButton* toolButtonCircleRadius;
+QToolButton* toolButtonCircleDiameter;
+QToolButton* toolButtonCircleArea;
+QToolButton* toolButtonCircleCircumference;
+
+QLineEdit*   lineEditCircleCenterX;
+QLineEdit*   lineEditCircleCenterY;
+QLineEdit*   lineEditCircleRadius;
+QLineEdit*   lineEditCircleDiameter;
+QLineEdit*   lineEditCircleArea;
+QLineEdit*   lineEditCircleCircumference;
+
+//DimAligned
+QGroupBox*   groupBoxGeometryDimAligned;
+
+//TODO: toolButtons and lineEdits for DimAligned
+
+//DimAngular
+QGroupBox*   groupBoxGeometryDimAngular;
+
+//TODO: toolButtons and lineEdits for DimAngular
+
+//DimArcLength
+QGroupBox*   groupBoxGeometryDimArcLength;
+
+//TODO: toolButtons and lineEdits for DimArcLength
+
+//DimDiameter
+QGroupBox*   groupBoxGeometryDimDiameter;
+
+//TODO: toolButtons and lineEdits for DimDiameter
+
+//DimLeader
+QGroupBox*   groupBoxGeometryDimLeader;
+
+//TODO: toolButtons and lineEdits for DimLeader
+
+//DimLinear
+QGroupBox*   groupBoxGeometryDimLinear;
+
+//TODO: toolButtons and lineEdits for DimLinear
+
+//DimOrdinate
+QGroupBox*   groupBoxGeometryDimOrdinate;
+
+//TODO: toolButtons and lineEdits for DimOrdinate
+
+//DimRadius
+QGroupBox*   groupBoxGeometryDimRadius;
+
+//TODO: toolButtons and lineEdits for DimRadius
+
+//Ellipse
+QGroupBox*   groupBoxGeometryEllipse;
+
+QToolButton* toolButtonEllipseCenterX;
+QToolButton* toolButtonEllipseCenterY;
+QToolButton* toolButtonEllipseRadiusMajor;
+QToolButton* toolButtonEllipseRadiusMinor;
+QToolButton* toolButtonEllipseDiameterMajor;
+QToolButton* toolButtonEllipseDiameterMinor;
+
+QLineEdit*   lineEditEllipseCenterX;
+QLineEdit*   lineEditEllipseCenterY;
+QLineEdit*   lineEditEllipseRadiusMajor;
+QLineEdit*   lineEditEllipseRadiusMinor;
+QLineEdit*   lineEditEllipseDiameterMajor;
+QLineEdit*   lineEditEllipseDiameterMinor;
+
+//Image
+QGroupBox*   groupBoxGeometryImage;
+
+QToolButton* toolButtonImageX;
+QToolButton* toolButtonImageY;
+QToolButton* toolButtonImageWidth;
+QToolButton* toolButtonImageHeight;
+
+QLineEdit*   lineEditImageX;
+QLineEdit*   lineEditImageY;
+QLineEdit*   lineEditImageWidth;
+QLineEdit*   lineEditImageHeight;
+
+QGroupBox*   groupBoxMiscImage;
+
+QToolButton* toolButtonImageName;
+QToolButton* toolButtonImagePath;
+
+QLineEdit*   lineEditImageName;
+QLineEdit*   lineEditImagePath;
+
+//Infinite Line
+QGroupBox*   groupBoxGeometryInfiniteLine;
+
+QToolButton* toolButtonInfiniteLineX1;
+QToolButton* toolButtonInfiniteLineY1;
+QToolButton* toolButtonInfiniteLineX2;
+QToolButton* toolButtonInfiniteLineY2;
+QToolButton* toolButtonInfiniteLineVectorX;
+QToolButton* toolButtonInfiniteLineVectorY;
+
+QLineEdit*   lineEditInfiniteLineX1;
+QLineEdit*   lineEditInfiniteLineY1;
+QLineEdit*   lineEditInfiniteLineX2;
+QLineEdit*   lineEditInfiniteLineY2;
+QLineEdit*   lineEditInfiniteLineVectorX;
+QLineEdit*   lineEditInfiniteLineVectorY;
+
+//Line
+QGroupBox*   groupBoxGeometryLine;
+
+QToolButton* toolButtonLineStartX;
+QToolButton* toolButtonLineStartY;
+QToolButton* toolButtonLineEndX;
+QToolButton* toolButtonLineEndY;
+QToolButton* toolButtonLineDeltaX;
+QToolButton* toolButtonLineDeltaY;
+QToolButton* toolButtonLineAngle;
+QToolButton* toolButtonLineLength;
+
+QLineEdit*   lineEditLineStartX;
+QLineEdit*   lineEditLineStartY;
+QLineEdit*   lineEditLineEndX;
+QLineEdit*   lineEditLineEndY;
+QLineEdit*   lineEditLineDeltaX;
+QLineEdit*   lineEditLineDeltaY;
+QLineEdit*   lineEditLineAngle;
+QLineEdit*   lineEditLineLength;
+
+//Path
+QGroupBox*   groupBoxGeometryPath;
+
+QToolButton* toolButtonPathVertexNum;
+QToolButton* toolButtonPathVertexX;
+QToolButton* toolButtonPathVertexY;
+QToolButton* toolButtonPathArea;
+QToolButton* toolButtonPathLength;
+
+QComboBox*   comboBoxPathVertexNum;
+QLineEdit*   lineEditPathVertexX;
+QLineEdit*   lineEditPathVertexY;
+QLineEdit*   lineEditPathArea;
+QLineEdit*   lineEditPathLength;
+
+QGroupBox*   groupBoxMiscPath;
+
+QToolButton* toolButtonPathClosed;
+
+QComboBox*   comboBoxPathClosed;
+
+//Point
+QGroupBox*   groupBoxGeometryPoint;
+
+QToolButton* toolButtonPointX;
+QToolButton* toolButtonPointY;
+
+QLineEdit*   lineEditPointX;
+QLineEdit*   lineEditPointY;
+
+//Polygon
+QGroupBox*   groupBoxGeometryPolygon;
+
+QToolButton* toolButtonPolygonCenterX;
+QToolButton* toolButtonPolygonCenterY;
+QToolButton* toolButtonPolygonRadiusVertex;
+QToolButton* toolButtonPolygonRadiusSide;
+QToolButton* toolButtonPolygonDiameterVertex;
+QToolButton* toolButtonPolygonDiameterSide;
+QToolButton* toolButtonPolygonInteriorAngle;
+
+QLineEdit*   lineEditPolygonCenterX;
+QLineEdit*   lineEditPolygonCenterY;
+QLineEdit*   lineEditPolygonRadiusVertex;
+QLineEdit*   lineEditPolygonRadiusSide;
+QLineEdit*   lineEditPolygonDiameterVertex;
+QLineEdit*   lineEditPolygonDiameterSide;
+QLineEdit*   lineEditPolygonInteriorAngle;
+
+//Polyline
+QGroupBox*   groupBoxGeometryPolyline;
+
+QToolButton* toolButtonPolylineVertexNum;
+QToolButton* toolButtonPolylineVertexX;
+QToolButton* toolButtonPolylineVertexY;
+QToolButton* toolButtonPolylineArea;
+QToolButton* toolButtonPolylineLength;
+
+QComboBox*   comboBoxPolylineVertexNum;
+QLineEdit*   lineEditPolylineVertexX;
+QLineEdit*   lineEditPolylineVertexY;
+QLineEdit*   lineEditPolylineArea;
+QLineEdit*   lineEditPolylineLength;
+
+QGroupBox*   groupBoxMiscPolyline;
+
+QToolButton* toolButtonPolylineClosed;
+
+QComboBox*   comboBoxPolylineClosed;
+
+//Ray
+QGroupBox*   groupBoxGeometryRay;
+
+QToolButton* toolButtonRayX1;
+QToolButton* toolButtonRayY1;
+QToolButton* toolButtonRayX2;
+QToolButton* toolButtonRayY2;
+QToolButton* toolButtonRayVectorX;
+QToolButton* toolButtonRayVectorY;
+
+QLineEdit*   lineEditRayX1;
+QLineEdit*   lineEditRayY1;
+QLineEdit*   lineEditRayX2;
+QLineEdit*   lineEditRayY2;
+QLineEdit*   lineEditRayVectorX;
+QLineEdit*   lineEditRayVectorY;
+
+//Rectangle
+QGroupBox*   groupBoxGeometryRectangle;
+
+QToolButton* toolButtonRectangleCorner1X;
+QToolButton* toolButtonRectangleCorner1Y;
+QToolButton* toolButtonRectangleCorner2X;
+QToolButton* toolButtonRectangleCorner2Y;
+QToolButton* toolButtonRectangleCorner3X;
+QToolButton* toolButtonRectangleCorner3Y;
+QToolButton* toolButtonRectangleCorner4X;
+QToolButton* toolButtonRectangleCorner4Y;
+QToolButton* toolButtonRectangleWidth;
+QToolButton* toolButtonRectangleHeight;
+QToolButton* toolButtonRectangleArea;
+
+QLineEdit*   lineEditRectangleCorner1X;
+QLineEdit*   lineEditRectangleCorner1Y;
+QLineEdit*   lineEditRectangleCorner2X;
+QLineEdit*   lineEditRectangleCorner2Y;
+QLineEdit*   lineEditRectangleCorner3X;
+QLineEdit*   lineEditRectangleCorner3Y;
+QLineEdit*   lineEditRectangleCorner4X;
+QLineEdit*   lineEditRectangleCorner4Y;
+QLineEdit*   lineEditRectangleWidth;
+QLineEdit*   lineEditRectangleHeight;
+QLineEdit*   lineEditRectangleArea;
+
+//Text Multi
+QGroupBox*   groupBoxGeometryTextMulti;
+
+QToolButton* toolButtonTextMultiX;
+QToolButton* toolButtonTextMultiY;
+
+QLineEdit*   lineEditTextMultiX;
+QLineEdit*   lineEditTextMultiY;
+
+//Text Single
+QGroupBox*   groupBoxTextTextSingle;
+
+QToolButton* toolButtonTextSingleContents;
+QToolButton* toolButtonTextSingleFont;
+QToolButton* toolButtonTextSingleJustify;
+QToolButton* toolButtonTextSingleHeight;
+QToolButton* toolButtonTextSingleRotation;
+
+QLineEdit*     lineEditTextSingleContents;
+QFontComboBox* comboBoxTextSingleFont;
+QComboBox*     comboBoxTextSingleJustify;
+QLineEdit*     lineEditTextSingleHeight;
+QLineEdit*     lineEditTextSingleRotation;
+
+QGroupBox*   groupBoxGeometryTextSingle;
+
+QToolButton* toolButtonTextSingleX;
+QToolButton* toolButtonTextSingleY;
+
+QLineEdit*   lineEditTextSingleX;
+QLineEdit*   lineEditTextSingleY;
+
+QGroupBox*   groupBoxMiscTextSingle;
+
+QToolButton* toolButtonTextSingleBackward;
+QToolButton* toolButtonTextSingleUpsideDown;
+
+QComboBox*   comboBoxTextSingleBackward;
+QComboBox*   comboBoxTextSingleUpsideDown;
+
 PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     iconDir = iconDirectory;

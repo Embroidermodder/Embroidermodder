@@ -225,4 +225,3 @@ const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
 
 #endif
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -605,22 +605,6 @@ void MainWindow::stub_testing()
     QMessageBox::warning(this, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
 }
 
-void MainWindow::exit()
-{
-    qDebug("exit()");
-    if (settings_prompt_save_history) {
-        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html); //TODO: get filename from settings
-    }
-    qApp->closeAllWindows();
-    this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
-}
-
-void MainWindow::quit()
-{
-    qDebug("quit()");
-    exit();
-}
-
 void MainWindow::checkForUpdates()
 {
     qDebug("checkForUpdates()");
@@ -727,8 +711,7 @@ QString MainWindow::platformString()
 void MainWindow::designDetails()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene)
-    {
+    if (scene) {
         EmbDetailsDialog dialog(scene, this);
         dialog.exec();
     }
@@ -793,7 +776,9 @@ void MainWindow::print()
 {
     qDebug("print()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { mdiWin->print(); }
+    if (mdiWin) {
+        mdiWin->print();
+    }
 }
 
 void MainWindow::tipOfTheDay()
@@ -1079,28 +1064,6 @@ void MainWindow::layerPrevious()
     stub_implement("Implement layerPrevious.");
 }
 
-void MainWindow::dayVision()
-{
-    View* gview = activeView();
-    if(gview)
-    {
-        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
-        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
-        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
-    }
-}
-
-void MainWindow::nightVision()
-{
-    View* gview = activeView();
-    if(gview)
-    {
-        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
-        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
-        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
-    }
-}
-
 void MainWindow::doNothing()
 {
     //This function intentionally does nothing.
@@ -1367,41 +1330,6 @@ void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
     run(qPrintable(cmd + "()"));
 }
 
-void MainWindow::nativeNewFile()
-{
-    newFile();
-}
-
-void MainWindow::nativeOpenFile()
-{
-    openFile();
-}
-
-void MainWindow::nativeExit()
-{
-    exit();
-}
-
-void MainWindow::nativeHelp()
-{
-    help();
-}
-
-void MainWindow::nativeAbout()
-{
-    about();
-}
-
-void MainWindow::nativeTipOfTheDay()
-{
-    tipOfTheDay();
-}
-
-QString MainWindow::nativePlatformString()
-{
-    return platformString();
-}
-
 void MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
 {
     QString msgType = type.toLower();
@@ -1417,88 +1345,6 @@ void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
     print();
-}
-
-void MainWindow::nativeDayVision()
-{
-    dayVision();
-}
-
-void MainWindow::nativeNightVision()
-{
-    nightVision();
-}
-
-void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
-{
-    settings_display_bg_color = qRgb(r,g,b);
-    updateAllViewBackgroundColors(qRgb(r,g,b));
-}
-
-void MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
-{
-    settings_display_crosshair_color = qRgb(r,g,b);
-    updateAllViewCrossHairColors(qRgb(r,g,b));
-}
-
-void MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
-{
-    settings_grid_color = qRgb(r,g,b);
-    updateAllViewGridColors(qRgb(r,g,b));
-}
-
-QString MainWindow::nativeTextFont()
-{
-    return textFont();
-}
-
-qreal MainWindow::nativeTextSize()
-{
-    return textSize();
-}
-
-qreal MainWindow::nativeTextAngle()
-{
-    return textAngle();
-}
-
-void MainWindow::nativeSetTextFont(const QString& str)
-{
-    setTextFont(str);
-}
-
-void MainWindow::nativeSetTextSize(qreal num)
-{
-    setTextSize(num);
-}
-
-void MainWindow::nativeSetTextAngle(qreal num)
-{
-    setTextAngle(num);
-}
-
-void MainWindow::nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data)
-{
-    View* gview = activeView();
-    if(gview) gview->previewOn(clone, mode, x, -y, data);
-}
-
-void MainWindow::nativePreviewOff()
-{
-    View* gview = activeView();
-    if(gview) gview->previewOff();
-}
-
-void MainWindow::nativeVulcanize()
-{
-    View* gview = activeView();
-    if(gview) gview->vulcanizeRubberRoom();
-}
-
-void MainWindow::nativeClearRubber()
-{
-    View* gview = activeView();
-    if(gview) gview->clearRubberRoom();
 }
 
 bool MainWindow::nativeAllowRubber()
@@ -1873,40 +1719,7 @@ qreal MainWindow::nativePerpendicularDistance(qreal px, qreal py, qreal x1, qrea
     return QLineF(px, py, iPoint.x(), iPoint.y()).length();
 }
 
-int MainWindow::nativeNumSelected()
-{
-    View* gview = activeView();
-    if(gview) { return gview->numSelected(); }
-    return 0;
-}
-
-void MainWindow::nativeSelectAll()
-{
-    View* gview = activeView();
-    if(gview) { gview->selectAll(); }
-}
-
 void MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
-{
-}
-
-void MainWindow::nativeClearSelection()
-{
-    View* gview = activeView();
-    if(gview) { gview->clearSelection(); }
-}
-
-void MainWindow::nativeDeleteSelected()
-{
-    View* gview = activeView();
-    if(gview) { gview->deleteSelected(); }
-}
-
-void MainWindow::nativeCutSelected(qreal x, qreal y)
-{
-}
-
-void MainWindow::nativeCopySelected(qreal x, qreal y)
 {
 }
 
@@ -2083,7 +1896,10 @@ calculate_angle_f(lua_State *L)
 int
 clear_rubber_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
+    }
     return 0;
 }
 
@@ -2107,7 +1923,10 @@ cut_selected_f(lua_State *L)
 int
 delete_selected_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
+    View* gview = activeView();
+    if (gview) {
+        gview->deleteSelected();
+    }
     return 0;
 }
 
@@ -2155,7 +1974,10 @@ arc_f(lua_State *L)
 int
 clear_selection_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
+    View* gview = activeView();
+    if (gview) {
+        gview->clearSelection();
+    }
     return 0;
 }
 
@@ -2172,6 +1994,21 @@ int
 messagebox_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
+    /*
+    if (context->argumentCount() != 3)    return debug("messageBox() requires three arguments");
+    if (!context->argument(0).isString()) return debug(TypeError, "messageBox(): first argument is not a string");
+    if (!context->argument(1).isString()) return debug(TypeError, "messageBox(): second argument is not a string");
+    if (!context->argument(2).isString()) return debug(TypeError, "messageBox(): third argument is not a string");
+
+    QString type  = context->argument(0).toString().toLower();
+    QString title = context->argument(1).toString();
+    QString text  = context->argument(2).toString();
+
+    if (type != "critical" && type != "information" && type != "question" && type != "warning")
+        return debug(UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+
+    _mainWin->nativeMessageBox(type, title, text);
+    */
     return 0;
 }
 
@@ -2203,7 +2040,16 @@ move_selected_f(lua_State *L)
 int
 num_selected_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
+    debug("TODO: num_selected");
+    /*
+    View* gview = activeView();
+    if (gview) {
+        return gview->numSelected();
+    }
+    else {
+    }
+    return 1;    
+    */
     return 0;
 }
 
@@ -2227,7 +2073,11 @@ perpendicular_distance_f(lua_State *L)
 int
 preview_off_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
+    debug("TODO: preview_off_f");
+    View* gview = activeView();
+    if (gview) {
+        gview->previewOff();
+    }
     return 0;
 }
 
@@ -2235,7 +2085,41 @@ preview_off_f(lua_State *L)
 int
 preview_on_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
+    debug("TODO: preview_on_f");
+    /*     if (context->argumentCount() != 5)    return debug("previewOn() requires five arguments");
+    if (!context->argument(0).isString()) return debug(TypeError, "previewOn(): first argument is not a string");
+    if (!context->argument(1).isString()) return debug(TypeError, "previewOn(): second argument is not a string");
+    if (!context->argument(2).isNumber()) return debug(TypeError, "previewOn(): third argument is not a number");
+    if (!context->argument(3).isNumber()) return debug(TypeError, "previewOn(): fourth argument is not a number");
+    if (!context->argument(4).isNumber()) return debug(TypeError, "previewOn(): fifth argument is not a number");
+
+    QString cloneStr = context->argument(0).toString().toUpper();
+    QString modeStr  = context->argument(1).toString().toUpper();
+    qreal x          = context->argument(2).toNumber();
+    qreal y          = context->argument(3).toNumber();
+    qreal data       = context->argument(4).toNumber();
+
+    int clone = PREVIEW_CLONE_NULL;
+    int mode = PREVIEW_MODE_NULL;
+    if     (cloneStr == "SELECTED") { clone = PREVIEW_CLONE_SELECTED; }
+    else if (cloneStr == "RUBBER")   { clone = PREVIEW_CLONE_RUBBER;   }
+    else            { return debug(UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
+
+    if     (modeStr == "MOVE")   { mode = PREVIEW_MODE_MOVE;   }
+    else if (modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
+    else if (modeStr == "SCALE")  { mode = PREVIEW_MODE_SCALE;  }
+    else         { return debug(UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
+
+    //isNaN check
+    if (qIsNaN(x))    return debug(TypeError, "previewOn(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y))    return debug(TypeError, "previewOn(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(data)) return debug(TypeError, "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
+
+    View* gview = activeView();
+    if (gview) {
+        gview->previewOn(clone, mode, x, -y, data);
+    }
+    */
     return 0;
 }
 
@@ -2244,6 +2128,37 @@ int
 print_area_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
+    /*
+    if (context->argumentCount() != 4) {
+        return debug("printArea() requires four arguments");
+    }
+    if (!context->argument(0).isNumber()) return debug(TypeError, "printArea(): first argument is not a number");
+    if (!context->argument(1).isNumber()) return debug(TypeError, "printArea(): second argument is not a number");
+    if (!context->argument(2).isNumber()) return debug(TypeError, "printArea(): third argument is not a number");
+    if (!context->argument(3).isNumber()) return debug(TypeError, "printArea(): fourth argument is not a number");
+
+    qreal x = context->argument(0).toNumber();
+    qreal y = context->argument(1).toNumber();
+    qreal w = context->argument(2).toNumber();
+    qreal h = context->argument(3).toNumber();
+
+    //isNaN check
+    if (qIsNaN(x)) {
+        return debug(TypeError, "printArea(): first argument failed isNaN check. There is an error in your code.");
+    }
+    if (qIsNaN(y)) {
+        return debug(TypeError, "printArea(): second argument failed isNaN check. There is an error in your code.");
+    }
+    if (qIsNaN(w)) {
+        return debug(TypeError, "printArea(): third argument failed isNaN check. There is an error in your code.");
+    }
+    if (qIsNaN(h)) {
+        return debug(TypeError, "printArea(): fourth argument failed isNaN check. There is an error in your code.");
+    }
+
+    _mainWin->nativePrintArea(x, y, w, h);
+    return 0;
+    */
     return 0;
 }
 
@@ -2259,7 +2174,8 @@ qsnap_f(lua_State *L)
 int
 ray_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
+    //TODO: parameter error checking
+    qDebug("TODO: finish addRay command");
     return 0;
 }
 
@@ -2300,6 +2216,7 @@ int
 text_angle_f(lua_State *L)
 {
     debug("TODO: text_angle_f");
+    /* return QScriptValue(_mainWin->textAngle()); */
     return 0;
 }
 
@@ -2308,6 +2225,7 @@ int
 text_font_f(lua_State *L)
 {
     debug("TODO: text_font_f");
+    /* return QScriptValue(_mainWin->textFont()); */
     return 0;
 }
 
@@ -2347,7 +2265,10 @@ vertical_dimension_f(lua_State *L)
 int
 vulcanize_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
+    View* gview = activeView();
+    if (gview) {
+        gview->vulcanizeRubberRoom();
+    }
     return 0;
 }
 
@@ -2380,6 +2301,10 @@ int
 select_all_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
+    View* gview = activeView();
+    if (gview) {
+        gview->selectAll();
+    }
     return 0;
 }
 
@@ -2388,6 +2313,28 @@ int
 set_background_color_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
+    /*
+    if (context->argumentCount() != 3)    return debug("setBackgroundColor() requires three arguments");
+    if (!context->argument(0).isNumber()) return debug(TypeError, "setBackgroundColor(): first argument is not a number");
+    if (!context->argument(1).isNumber()) return debug(TypeError, "setBackgroundColor(): second argument is not a number");
+    if (!context->argument(2).isNumber()) return debug(TypeError, "setBackgroundColor(): third argument is not a number");
+
+    qreal r = context->argument(0).toNumber();
+    qreal g = context->argument(1).toNumber();
+    qreal b = context->argument(2).toNumber();
+
+    //isNaN check
+    if (qIsNaN(r)) return debug(TypeError, "setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(g)) return debug(TypeError, "setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(b)) return debug(TypeError, "setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
+
+    if (r < 0 || r > 255) { return debug(UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return debug(UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return debug(UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
+
+    settings_display_bg_color = qRgb(r,g,b);
+    updateAllViewBackgroundColors(qRgb(r,g,b));
+    */
     return 0;
 }
 
@@ -2396,6 +2343,28 @@ int
 set_crosshair_color_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
+    /*
+        if (context->argumentCount() != 3)    return debug("setCrossHairColor() requires three arguments");
+    if (!context->argument(0).isNumber()) return debug(TypeError, "setCrossHairColor(): first argument is not a number");
+    if (!context->argument(1).isNumber()) return debug(TypeError, "setCrossHairColor(): second argument is not a number");
+    if (!context->argument(2).isNumber()) return debug(TypeError, "setCrossHairColor(): third argument is not a number");
+
+    qreal r = context->argument(0).toNumber();
+    qreal g = context->argument(1).toNumber();
+    qreal b = context->argument(2).toNumber();
+
+    //isNaN check
+    if (qIsNaN(r)) return debug(TypeError, "setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(g)) return debug(TypeError, "setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(b)) return debug(TypeError, "setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
+
+    if (r < 0 || r > 255) { return debug(UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return debug(UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return debug(UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
+
+    settings_display_crosshair_color = qRgb(r,g,b);
+    updateAllViewCrossHairColors(qRgb(r,g,b));
+    */
     return 0;
 }
 
@@ -2420,6 +2389,28 @@ int
 set_grid_color_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
+    /*
+    if (context->argumentCount() != 3)    return debug("setGridColor() requires three arguments");
+    if (!context->argument(0).isNumber()) return debug(TypeError, "setGridColor(): first argument is not a number");
+    if (!context->argument(1).isNumber()) return debug(TypeError, "setGridColor(): second argument is not a number");
+    if (!context->argument(2).isNumber()) return debug(TypeError, "setGridColor(): third argument is not a number");
+
+    qreal r = context->argument(0).toNumber();
+    qreal g = context->argument(1).toNumber();
+    qreal b = context->argument(2).toNumber();
+
+    //isNaN check
+    if (qIsNaN(r)) return debug(TypeError, "setGridColor(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(g)) return debug(TypeError, "setGridColor(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(b)) return debug(TypeError, "setGridColor(): third argument failed isNaN check. There is an error in your code.");
+
+    if (r < 0 || r > 255) { return debug(UnknownError, "setGridColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return debug(UnknownError, "setGridColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return debug(UnknownError, "setGridColor(): b value must be in range 0-255"); }
+
+    settings_grid_color = qRgb(r,g,b);
+    updateAllViewGridColors(qRgb(r,g,b));
+    */
     return 0;
 }
 
@@ -2433,55 +2424,21 @@ set_rubberText_f(lua_State *L)
 
 /* . */
 int
-set_text_bold_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
 set_text_font_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
-    return 0;
-}
+    /*
+    if (context->argumentCount() != 1)    return debug("setTextFont() requires one argument");
+    if (!context->argument(0).isString()) return debug(TypeError, "setTextFont(): first argument is not a string");
 
-/* . */
-int
-set_text_italic_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
-set_text_overline_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
+    _mainWin->setTextFont(context->argument(0).toString());
+    */
     return 0;
 }
 
 /* . */
 int
 set_text_size_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
-set_text_strikeout_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
-set_text_underline_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
     return 0;
@@ -2524,6 +2481,7 @@ int
 text_size_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
+    /* return QScriptValue(_mainWin->textSize()); */
     return 0;
 }
 
@@ -2652,10 +2610,16 @@ cut_f(lua_State *L)
     return 0;
 }
 
-/* . */
+/* TODO: Make day vision color settings. */
 int
 day_f(lua_State *L)
 {
+    View* gview = activeView();
+    if (gview) {
+        gview->setBackgroundColor(qRgb(255,255,255)); 
+        gview->setCrossHairColor(qRgb(0,0,0));
+        gview->setGridColor(qRgb(0,0,0));
+    }
     return 0;
 }
 
@@ -2743,6 +2707,14 @@ erase_f(lua_State *L)
 int
 exit_program_f(lua_State *L)
 {
+    if (settings_prompt_save_history) {
+        //TODO: get filename from settings
+        _mainWin->prompt->saveHistory("prompt.log",
+            settings_prompt_save_history_as_html);
+    }
+    qApp->closeAllWindows();
+    //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
+    _mainWin->deleteLater();
     return 0;
 }
 
@@ -2764,6 +2736,12 @@ heart_f(lua_State *L)
 int
 help_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
+    _mainWin->help();
+    end_command();
     return 0;
 }
 
@@ -2778,7 +2756,12 @@ hide_all_layers_f(lua_State *L)
 int
 icon128_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->iconResize(128);
+    end_command();
     return 0;
 }
 
@@ -2786,7 +2769,12 @@ icon128_f(lua_State *L)
 int
 icon16_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->iconResize(16);
+    end_command();
     return 0;
 }
 
@@ -2794,7 +2782,12 @@ icon16_f(lua_State *L)
 int
 icon24_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->iconResize(24);
+    end_command();
     return 0;
 }
 
@@ -2802,7 +2795,12 @@ icon24_f(lua_State *L)
 int
 icon32_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->iconResize(32);
+    end_command();
     return 0;
 }
 
@@ -2810,7 +2808,12 @@ icon32_f(lua_State *L)
 int
 icon48_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->iconResize(48);
+    end_command();
     return 0;
 }
 
@@ -2818,7 +2821,12 @@ icon48_f(lua_State *L)
 int
 icon64_f(lua_State *L)
 {
-    _mainWin->iconResize(64);;
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
+    _mainWin->iconResize(64);
+    end_command();
     return 0;
 }
 
@@ -2879,42 +2887,57 @@ locate_point_f(lua_State *L)
     return 0;
 }
 
+/* . */
 int
 lock_all_layers_f(lua_State *L)
 {
     return 0;
 }
 
+/* . */
 int
 make_layer_current_f(lua_State *L)
 {
     return 0;
 }
 
+/* . */
 int
 move_f(lua_State *L)
 {
     return 0;
 }
 
-
 /* . */
 int
 new_file_f(lua_State *L)
 {
-    _mainWin->nativeNewFile();
+    _mainWin->newFile();
     return 0;
 }
 
+/* TODO: Make night vision color settings. */
 int
 night_vision_f(lua_State *L)
 {
+    View* gview = activeView();
+    if (gview) {
+        gview->setBackgroundColor(qRgb(0,0,0));
+        gview->setCrossHairColor(qRgb(255,255,255));
+        gview->setGridColor(qRgb(255,255,255));
+    }
     return 0;
 }
 
 int
 open_file_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
+    _mainWin->openFile();
+    end_command();
     return 0;
 }
 
@@ -2927,6 +2950,9 @@ path_f(lua_State *L)
 int
 platform_f(lua_State *L)
 {
+    /*
+    return QScriptValue(_mainWin->platformString());
+    */
     return 0;
 }
 
@@ -3135,7 +3161,7 @@ set_prompt_prefix_f(lua_State *L)
 
 /* . */
 int
-set_text_bold(lua_State *L)
+set_text_bold_f(lua_State *L)
 {
     if (!lua_isboolean(L, 1)) {
         debug("set_text_bold: argument not boolean");
@@ -3147,7 +3173,7 @@ set_text_bold(lua_State *L)
 
 /* . */
 int
-set_text_italic(lua_State *L)
+set_text_italic_f(lua_State *L)
 {
     if (!lua_isboolean(L, 1)) {
         debug("set_text_italic: argument not boolean");
@@ -3159,7 +3185,7 @@ set_text_italic(lua_State *L)
 
 /* . */
 int
-set_text_overline(lua_State *L)
+set_text_overline_f(lua_State *L)
 {
     if (!lua_isboolean(L, 1)) {
         debug("set_text_overline: argument not boolean");
@@ -3171,7 +3197,7 @@ set_text_overline(lua_State *L)
 
 /* . */
 int
-set_text_strikeout(lua_State *L)
+set_text_strikeout_f(lua_State *L)
 {
     if (!lua_isboolean(L, 1)) {
         debug("set_text_strikeout: argument not boolean");
@@ -3183,7 +3209,7 @@ set_text_strikeout(lua_State *L)
 
 /* . */
 int
-set_text_underline(lua_State *L)
+set_text_underline_f(lua_State *L)
 {
     if (!lua_isboolean(L, 1)) {
         debug("set_text_overline: argument not boolean");
@@ -3269,6 +3295,7 @@ thaw_all_layers_f(lua_State *L)
 int
 tip_of_the_day_f(lua_State *L)
 {
+    _mainWin->tipOfTheDay();
     return 0;
 }
 
@@ -3319,7 +3346,12 @@ whats_this_f(lua_State *L)
 int
 window_cascade_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->mdiArea->cascade();
+    end_command();
     return 0;
 }
 
@@ -3327,7 +3359,12 @@ window_cascade_f(lua_State *L)
 int
 window_close_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->onCloseWindow();
+    end_command();
     return 0;
 }
 
@@ -3335,7 +3372,12 @@ window_close_f(lua_State *L)
 int
 window_close_all_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->mdiArea->closeAllSubWindows();
+    end_command();
     return 0;
 }
 
@@ -3343,21 +3385,36 @@ window_close_all_f(lua_State *L)
 int
 window_next_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->mdiArea->activateNextSubWindow();
+    end_command();
     return 0;
 }
 
 int
 window_previous_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->mdiArea->activatePreviousSubWindow();
+    end_command();
     return 0;
 }
 
 int
 window_tile_f(lua_State *L)
 {
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        clear_selection();
+    }
     _mainWin->mdiArea->tile();
+    end_command();
     return 0;
 }
 
@@ -3481,216 +3538,6 @@ zoom_window_f(lua_State *L)
 }
 
 #if 0
-/* . */
-int
-OpenFile_f(lua_State *L)
-{
-    _mainWin->nativeOpenFile();
-    return 0;
-}
-
-/* . */
-int
-Exit_f(lua_State *L)
-{
-    _mainWin->nativeExit();
-    return 0;
-}
-
-/* . */
-int
-Help_f(lua_State *L)
-{
-    _mainWin->nativeHelp();
-    return 0;
-}
-
-/* . */
-int
-TipOfTheDay_f(lua_State *L)
-{
-    _mainWin->nativeTipOfTheDay();
-    return 0;
-}
-
-/* . */
-int
-PlatformString_f(lua_State *L)
-{
-    return QScriptValue(_mainWin->nativePlatformString());
-}
-
-/* . */
-int
-MessageBox_f(lua_State *L)
-{
-    if (context->argumentCount() != 3)    return debug("messageBox() requires three arguments");
-    if (!context->argument(0).isString()) return debug(TypeError, "messageBox(): first argument is not a string");
-    if (!context->argument(1).isString()) return debug(TypeError, "messageBox(): second argument is not a string");
-    if (!context->argument(2).isString()) return debug(TypeError, "messageBox(): third argument is not a string");
-
-    QString type  = context->argument(0).toString().toLower();
-    QString title = context->argument(1).toString();
-    QString text  = context->argument(2).toString();
-
-    if (type != "critical" && type != "information" && type != "question" && type != "warning")
-        return debug(UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
-
-    _mainWin->nativeMessageBox(type, title, text);
-    return 0;
-}
-
-int
-print_area_f(lua_State *L)
-{
-    if (context->argumentCount() != 4) {
-        return debug("printArea() requires four arguments");
-    }
-    if (!context->argument(0).isNumber()) return debug(TypeError, "printArea(): first argument is not a number");
-    if (!context->argument(1).isNumber()) return debug(TypeError, "printArea(): second argument is not a number");
-    if (!context->argument(2).isNumber()) return debug(TypeError, "printArea(): third argument is not a number");
-    if (!context->argument(3).isNumber()) return debug(TypeError, "printArea(): fourth argument is not a number");
-
-    qreal x = context->argument(0).toNumber();
-    qreal y = context->argument(1).toNumber();
-    qreal w = context->argument(2).toNumber();
-    qreal h = context->argument(3).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x)) {
-        return debug(TypeError, "printArea(): first argument failed isNaN check. There is an error in your code.");
-    }
-    if (qIsNaN(y)) {
-        return debug(TypeError, "printArea(): second argument failed isNaN check. There is an error in your code.");
-    }
-    if (qIsNaN(w)) {
-        return debug(TypeError, "printArea(): third argument failed isNaN check. There is an error in your code.");
-    }
-    if (qIsNaN(h)) {
-        return debug(TypeError, "printArea(): fourth argument failed isNaN check. There is an error in your code.");
-    }
-
-    _mainWin->nativePrintArea(x, y, w, h);
-    return 0;
-}
-
-int
-day_vision_f(lua_State *L)
-{
-    _mainWin->nativeDayVision();
-    return 0;
-}
-
-int
-NightVision_f(lua_State *L)
-{
-    _mainWin->nativeNightVision();
-    return 0;
-}
-
-int
-SetBackgroundColor_f(lua_State *L)
-{
-    if (context->argumentCount() != 3)    return debug("setBackgroundColor() requires three arguments");
-    if (!context->argument(0).isNumber()) return debug(TypeError, "setBackgroundColor(): first argument is not a number");
-    if (!context->argument(1).isNumber()) return debug(TypeError, "setBackgroundColor(): second argument is not a number");
-    if (!context->argument(2).isNumber()) return debug(TypeError, "setBackgroundColor(): third argument is not a number");
-
-    qreal r = context->argument(0).toNumber();
-    qreal g = context->argument(1).toNumber();
-    qreal b = context->argument(2).toNumber();
-
-    //isNaN check
-    if (qIsNaN(r)) return debug(TypeError, "setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return debug(TypeError, "setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return debug(TypeError, "setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
-
-    if (r < 0 || r > 255) { return debug(UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return debug(UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return debug(UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
-
-    _mainWin->nativeSetBackgroundColor(r, g, b);
-    return 0;
-}
-
-int
-SetCrossHairColor_f(lua_State *L)
-{
-    if (context->argumentCount() != 3)    return debug("setCrossHairColor() requires three arguments");
-    if (!context->argument(0).isNumber()) return debug(TypeError, "setCrossHairColor(): first argument is not a number");
-    if (!context->argument(1).isNumber()) return debug(TypeError, "setCrossHairColor(): second argument is not a number");
-    if (!context->argument(2).isNumber()) return debug(TypeError, "setCrossHairColor(): third argument is not a number");
-
-    qreal r = context->argument(0).toNumber();
-    qreal g = context->argument(1).toNumber();
-    qreal b = context->argument(2).toNumber();
-
-    //isNaN check
-    if (qIsNaN(r)) return debug(TypeError, "setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return debug(TypeError, "setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return debug(TypeError, "setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
-
-    if (r < 0 || r > 255) { return debug(UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return debug(UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return debug(UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
-
-    _mainWin->nativeSetCrossHairColor(r, g, b);
-    return 0;
-}
-
-int
-SetGridColor_f(lua_State *L)
-{
-    if (context->argumentCount() != 3)    return debug("setGridColor() requires three arguments");
-    if (!context->argument(0).isNumber()) return debug(TypeError, "setGridColor(): first argument is not a number");
-    if (!context->argument(1).isNumber()) return debug(TypeError, "setGridColor(): second argument is not a number");
-    if (!context->argument(2).isNumber()) return debug(TypeError, "setGridColor(): third argument is not a number");
-
-    qreal r = context->argument(0).toNumber();
-    qreal g = context->argument(1).toNumber();
-    qreal b = context->argument(2).toNumber();
-
-    //isNaN check
-    if (qIsNaN(r)) return debug(TypeError, "setGridColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return debug(TypeError, "setGridColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return debug(TypeError, "setGridColor(): third argument failed isNaN check. There is an error in your code.");
-
-    if (r < 0 || r > 255) { return debug(UnknownError, "setGridColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return debug(UnknownError, "setGridColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return debug(UnknownError, "setGridColor(): b value must be in range 0-255"); }
-
-    _mainWin->nativeSetGridColor(r, g, b);
-    return 0;
-}
-
-int
-TextFont_f(lua_State *L)
-{
-    return QScriptValue(_mainWin->nativeTextFont());
-}
-
-int
-TextSize_f(lua_State *L)
-{
-    return QScriptValue(_mainWin->nativeTextSize());
-}
-
-int
-TextAngle_f(lua_State *L)
-{
-    return QScriptValue(_mainWin->nativeTextAngle());
-}
-
-int
-SetTextFont_f(lua_State *L)
-{
-    if (context->argumentCount() != 1)    return debug("setTextFont() requires one argument");
-    if (!context->argument(0).isString()) return debug(TypeError, "setTextFont(): first argument is not a string");
-
-    _mainWin->nativeSetTextFont(context->argument(0).toString());
-    return 0;
-}
-
 int
 SetTextSize_f(lua_State *L)
 {
@@ -3702,7 +3549,7 @@ SetTextSize_f(lua_State *L)
     //isNaN check
     if (qIsNaN(num)) return debug(TypeError, "setTextSize(): first argument failed isNaN check. There is an error in your code.");
 
-    _mainWin->nativeSetTextSize(num);
+    _mainWin->setTextSize(num);
     return 0;
 }
 
@@ -3717,57 +3564,7 @@ SetTextAngle_f(lua_State *L)
     //isNaN check
     if (qIsNaN(num)) return debug(TypeError, "setTextAngle(): first argument failed isNaN check. There is an error in your code.");
 
-    _mainWin->nativeSetTextAngle(num);
-    return 0;
-}
-
-int
-PreviewOn_f(lua_State *L)
-{
-    if (context->argumentCount() != 5)    return debug("previewOn() requires five arguments");
-    if (!context->argument(0).isString()) return debug(TypeError, "previewOn(): first argument is not a string");
-    if (!context->argument(1).isString()) return debug(TypeError, "previewOn(): second argument is not a string");
-    if (!context->argument(2).isNumber()) return debug(TypeError, "previewOn(): third argument is not a number");
-    if (!context->argument(3).isNumber()) return debug(TypeError, "previewOn(): fourth argument is not a number");
-    if (!context->argument(4).isNumber()) return debug(TypeError, "previewOn(): fifth argument is not a number");
-
-    QString cloneStr = context->argument(0).toString().toUpper();
-    QString modeStr  = context->argument(1).toString().toUpper();
-    qreal x          = context->argument(2).toNumber();
-    qreal y          = context->argument(3).toNumber();
-    qreal data       = context->argument(4).toNumber();
-
-    int clone = PREVIEW_CLONE_NULL;
-    int mode = PREVIEW_MODE_NULL;
-    if     (cloneStr == "SELECTED") { clone = PREVIEW_CLONE_SELECTED; }
-    else if (cloneStr == "RUBBER")   { clone = PREVIEW_CLONE_RUBBER;   }
-    else            { return debug(UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
-
-    if     (modeStr == "MOVE")   { mode = PREVIEW_MODE_MOVE;   }
-    else if (modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
-    else if (modeStr == "SCALE")  { mode = PREVIEW_MODE_SCALE;  }
-    else         { return debug(UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
-
-    //isNaN check
-    if (qIsNaN(x))    return debug(TypeError, "previewOn(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))    return debug(TypeError, "previewOn(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(data)) return debug(TypeError, "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
-
-    _mainWin->nativePreviewOn(clone, mode, x, y, data);
-    return 0;
-}
-
-int
-preview_off_f(lua_State *L)
-{
-    _mainWin->nativePreviewOff();
-    return 0;
-}
-
-int
-vulcanize_f(lua_State *L)
-{
-    _mainWin->nativeVulcanize();
+    _mainWin->setTextAngle(num);
     return 0;
 }
 
@@ -3785,11 +3582,21 @@ SetRubberMode_f(lua_State *L)
 
     QString mode = context->argument(0).toString().toUpper();
 
-    if     (mode == "CIRCLE_1P_RAD")                     { _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD); }
-    else if (mode == "CIRCLE_1P_DIA")                     { _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if (mode == "CIRCLE_2P")                         { _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if (mode == "CIRCLE_3P")                         { _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if (mode == "CIRCLE_TTR")                        { _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
+    if (mode == "CIRCLE_1P_RAD") {
+        _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
+    }
+    else if (mode == "CIRCLE_1P_DIA") {
+        _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA);
+    }
+    else if (mode == "CIRCLE_2P") {
+        _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P);
+    }
+    else if (mode == "CIRCLE_3P") {
+        _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P);
+    }
+    else if (mode == "CIRCLE_TTR") {
+        _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR);
+    }
     else if (mode == "CIRCLE_TTR")                        { _mainWin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
 
     else if (mode == "DIMLEADER_LINE")                    { _mainWin->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
@@ -3895,13 +3702,6 @@ AddRubber_f(lua_State *L)
 }
 
 int
-ClearRubber_f(lua_State *L)
-{
-    _mainWin->nativeClearRubber();
-    return 0;
-}
-
-int
 SpareRubber_f(lua_State *L)
 {
     if (context->argumentCount() != 1)    return debug("spareRubber() requires one argument");
@@ -3978,14 +3778,6 @@ AddInfiniteLine_f(lua_State *L)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addInfiniteLine command");
-    return 0;
-}
-
-int
-AddRay_f(lua_State *L)
-{
-    //TODO: parameter error checking
-    qDebug("TODO: finish addRay command");
     return 0;
 }
 
@@ -4490,36 +4282,9 @@ PerpendicularDistance_f(lua_State *L)
 }
 
 int
-NumSelected_f(lua_State *L)
-{
-    return QScriptValue(_mainWin->nativeNumSelected());
-}
-
-int
-SelectAll_f(lua_State *L)
-{
-    _mainWin->nativeSelectAll();
-    return 0;
-}
-
-int
 AddToSelection_f(lua_State *L)
 {
     //TODO: finish
-    return 0;
-}
-
-int
-ClearSelection_f(lua_State *L)
-{
-    _mainWin->nativeClearSelection();
-    return 0;
-}
-
-int
-DeleteSelected_f(lua_State *L)
-{
-    _mainWin->nativeDeleteSelected();
     return 0;
 }
 
@@ -4537,7 +4302,7 @@ CutSelected_f(lua_State *L)
     if (qIsNaN(x)) return debug(TypeError, "cutSelected(): first argument failed isNaN check. There is an error in your code.");
     if (qIsNaN(y)) return debug(TypeError, "cutSelected(): second argument failed isNaN check. There is an error in your code.");
 
-    _mainWin->nativeCutSelected(x, y);
+    // TODO: _mainWin->cutSelected(x, y);
     return 0;
 }
 
@@ -4555,12 +4320,12 @@ CopySelected_f(lua_State *L)
     if (qIsNaN(x)) return debug(TypeError, "copySelected(): first argument failed isNaN check. There is an error in your code.");
     if (qIsNaN(y)) return debug(TypeError, "copySelected(): second argument failed isNaN check. There is an error in your code.");
 
-    _mainWin->nativeCopySelected(x, y);
+    // TODO: _mainWin->copySelected(x, y);
     return 0;
 }
 
 int
-PasteSelected_f(lua_State *L)
+paste_selected_f(lua_State *L)
 {
     if (context->argumentCount() != 2)    return debug("pasteSelected() requires two arguments");
     if (!context->argument(0).isNumber()) return debug(TypeError, "pasteSelected(): first argument is not a number");
@@ -4578,7 +4343,7 @@ PasteSelected_f(lua_State *L)
 }
 
 int
-MoveSelected_f(lua_State *L)
+move_selected_f(lua_State *L)
 {
     if (context->argumentCount() != 2)    return debug("moveSelected() requires two arguments");
     if (!context->argument(0).isNumber()) return debug(TypeError, "moveSelected(): first argument is not a number");
