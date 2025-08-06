@@ -1,3 +1,4 @@
+#include "script.h"
 #include "mdiwindow.h"
 #include "view.h"
 #include "statusbar.h"
@@ -42,7 +43,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    this->setWindowIcon(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    this->setWindowIcon(QIcon("icons/" + settings_general_icon_theme + "/" + "app" + ".png"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(mainWin, gscene, this);
@@ -322,8 +323,7 @@ bool MdiWindow::loadFile(const QString &fileName)
     QString stitches;
     stitches.setNum(p->stitch_list->count);
 
-    if(mainWin->getSettingsGridLoadFromFile())
-    {
+    if (settings_grid_load_from_file) {
         //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
     }
 
@@ -343,11 +343,9 @@ bool MdiWindow::loadFile(const QString &fileName)
 void MdiWindow::print()
 {
     QPrintDialog dialog(&printer, this);
-    if(dialog.exec() == QDialog::Accepted)
-    {
+    if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
-        if(mainWin->getSettingsPrintingDisableBG())
-        {
+        if (settings_printing_disable_bg) {
             //Save current bg
             QBrush brush = gview->backgroundBrush();
             //Save ink by not printing the bg at all
@@ -357,8 +355,7 @@ void MdiWindow::print()
             //Restore the bg
             gview->setBackgroundBrush(brush);
         }
-        else
-        {
+        else {
             //Print, fitting the viewport contents into a full page
             gview->render(&painter);
         }
@@ -379,7 +376,7 @@ void MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if(mainWin->getSettingsPrintingDisableBG()) //TODO: Make BMC background into it's own setting?
+    if (settings_printing_disable_bg) //TODO: Make BMC background into it's own setting?
     {
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
@@ -387,8 +384,7 @@ void MdiWindow::saveBMC()
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
         gscene->setBackgroundBrush(brush);
     }
-    else
-    {
+    else {
         gscene->update();
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
     }

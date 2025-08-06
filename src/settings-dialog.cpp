@@ -74,7 +74,7 @@ QWidget* Settings_Dialog::createTabGeneral()
 
     QLabel* labelLanguage = new QLabel(tr("Language (Requires Restart)"), groupBoxLanguage);
     QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
-    dialog_general_language = mainWin->getSettingsGeneralLanguage().toLower();
+    dialog_general_language = settings_general_language.toLower();
     comboBoxLanguage->addItem("Default");
     comboBoxLanguage->addItem("System");
     comboBoxLanguage->insertSeparator(2);
@@ -102,7 +102,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     QComboBox* comboBoxIconTheme = new QComboBox(groupBoxIcon);
     QDir dir(qApp->applicationDirPath());
     dir.cd("icons");
-    dialog_general_icon_theme = mainWin->getSettingsGeneralIconTheme();
+    dialog_general_icon_theme = settings_general_icon_theme;
     foreach(QString dirName, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/" + "theme" + ".png"), dirName);
@@ -118,7 +118,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     comboBoxIconSize->addItem(QIcon("icons/" + dialog_general_icon_theme + "/" + "icon48"  + ".png"), "Large",      48);
     comboBoxIconSize->addItem(QIcon("icons/" + dialog_general_icon_theme + "/" + "icon64"  + ".png"), "Very Large", 64);
     comboBoxIconSize->addItem(QIcon("icons/" + dialog_general_icon_theme + "/" + "icon128" + ".png"), "I'm Blind", 128);
-    dialog_general_icon_size = mainWin->getSettingsGeneralIconSize();
+    dialog_general_icon_size = settings_general_icon_size;
     comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(dialog_general_icon_size));
     connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxIconSizeCurrentIndexChanged(int)));
 
@@ -134,42 +134,42 @@ QWidget* Settings_Dialog::createTabGeneral()
 
 
     QCheckBox* checkBoxMdiBGUseLogo = new QCheckBox(tr("Use Logo"), groupBoxMdiBG);
-    dialog_general_mdi_bg_use_logo = mainWin->getSettingsGeneralMdiBGUseLogo();
+    dialog_general_mdi_bg_use_logo = settings_general_mdi_bg_use_logo;
     preview_general_mdi_bg_use_logo = dialog_general_mdi_bg_use_logo;
     checkBoxMdiBGUseLogo->setChecked(preview_general_mdi_bg_use_logo);
     connect(checkBoxMdiBGUseLogo, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseLogoStateChanged(int)));
 
     QPushButton* buttonMdiBGLogo = new QPushButton(tr("Choose"), groupBoxMdiBG);
     buttonMdiBGLogo->setEnabled(dialog_general_mdi_bg_use_logo);
-    dialog_general_mdi_bg_logo  = mainWin->getSettingsGeneralMdiBGLogo();
-    accept_general_mdi_bg_logo  = dialog_general_mdi_bg_logo;
+    dialog_general_mdi_bg_logo = settings_general_mdi_bg_logo;
+    accept_general_mdi_bg_logo = dialog_general_mdi_bg_logo;
     connect(buttonMdiBGLogo, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundLogo()));
     connect(checkBoxMdiBGUseLogo, SIGNAL(toggled(bool)), buttonMdiBGLogo, SLOT(setEnabled(bool)));
 
     QCheckBox* checkBoxMdiBGUseTexture = new QCheckBox(tr("Use Texture"), groupBoxMdiBG);
-    dialog_general_mdi_bg_use_texture = mainWin->getSettingsGeneralMdiBGUseTexture();
+    dialog_general_mdi_bg_use_texture = settings_general_mdi_bg_use_texture;
     preview_general_mdi_bg_use_texture = dialog_general_mdi_bg_use_texture;
     checkBoxMdiBGUseTexture->setChecked(preview_general_mdi_bg_use_texture);
     connect(checkBoxMdiBGUseTexture, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseTextureStateChanged(int)));
 
     QPushButton* buttonMdiBGTexture = new QPushButton(tr("Choose"), groupBoxMdiBG);
     buttonMdiBGTexture->setEnabled(dialog_general_mdi_bg_use_texture);
-    dialog_general_mdi_bg_texture  = mainWin->getSettingsGeneralMdiBGTexture();
-    accept_general_mdi_bg_texture  = dialog_general_mdi_bg_texture;
+    dialog_general_mdi_bg_texture = settings_general_mdi_bg_texture;
+    accept_general_mdi_bg_texture = dialog_general_mdi_bg_texture;
     connect(buttonMdiBGTexture, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundTexture()));
     connect(checkBoxMdiBGUseTexture, SIGNAL(toggled(bool)), buttonMdiBGTexture, SLOT(setEnabled(bool)));
 
     QCheckBox* checkBoxMdiBGUseColor = new QCheckBox(tr("Use Color"), groupBoxMdiBG);
-    dialog_general_mdi_bg_use_color = mainWin->getSettingsGeneralMdiBGUseColor();
+    dialog_general_mdi_bg_use_color = settings_general_mdi_bg_use_color;
     preview_general_mdi_bg_use_color = dialog_general_mdi_bg_use_color;
     checkBoxMdiBGUseColor->setChecked(preview_general_mdi_bg_use_color);
     connect(checkBoxMdiBGUseColor, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseColorStateChanged(int)));
 
     QPushButton* buttonMdiBGColor = new QPushButton(tr("Choose"), groupBoxMdiBG);
     buttonMdiBGColor->setEnabled(dialog_general_mdi_bg_use_color);
-    dialog_general_mdi_bg_color  = mainWin->getSettingsGeneralMdiBGColor();
+    dialog_general_mdi_bg_color = settings_general_mdi_bg_color;
     preview_general_mdi_bg_color = dialog_general_mdi_bg_color;
-    accept_general_mdi_bg_color  = dialog_general_mdi_bg_color;
+    accept_general_mdi_bg_color = dialog_general_mdi_bg_color;
     QPixmap mdiBGPix(16,16);
     mdiBGPix.fill(QColor(preview_general_mdi_bg_color));
     buttonMdiBGColor->setIcon(QIcon(mdiBGPix));
@@ -189,7 +189,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     QGroupBox* groupBoxTips = new QGroupBox(tr("Tips"), widget);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("Show Tip of the Day on startup"), groupBoxTips);
-    dialog_general_tip_of_the_day = mainWin->getSettingsGeneralTipOfTheDay();
+    dialog_general_tip_of_the_day = settings_general_tip_of_the_day;
     checkBoxTipOfTheDay->setChecked(dialog_general_tip_of_the_day);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
@@ -201,9 +201,9 @@ QWidget* Settings_Dialog::createTabGeneral()
     QGroupBox* groupBoxHelpBrowser = new QGroupBox(tr("Help Browser"), widget);
 
     QRadioButton* radioButtonSystemHelpBrowser = new QRadioButton(tr("System"), groupBoxHelpBrowser);
-    radioButtonSystemHelpBrowser->setChecked(mainWin->getSettingsGeneralSystemHelpBrowser());
+    radioButtonSystemHelpBrowser->setChecked(settings_general_system_help_browser);
     QRadioButton* radioButtonCustomHelpBrowser = new QRadioButton(tr("Custom"), groupBoxHelpBrowser);
-    radioButtonCustomHelpBrowser->setChecked(!mainWin->getSettingsGeneralSystemHelpBrowser());
+    radioButtonCustomHelpBrowser->setChecked(!settings_general_system_help_browser);
     radioButtonCustomHelpBrowser->setEnabled(false); //TODO: finish this
 
     QVBoxLayout* vboxLayoutHelpBrowser = new QVBoxLayout(groupBoxHelpBrowser);
@@ -247,32 +247,32 @@ QWidget* Settings_Dialog::createTabDisplay()
     QGroupBox* groupBoxRender = new QGroupBox(tr("Rendering"), widget);
 
     QCheckBox* checkBoxUseOpenGL = new QCheckBox(tr("Use OpenGL"), groupBoxRender);
-    dialog_display_use_opengl = mainWin->getSettingsDisplayUseOpenGL();
+    dialog_display_use_opengl = settings_display_use_opengl;
     checkBoxUseOpenGL->setChecked(dialog_display_use_opengl);
     connect(checkBoxUseOpenGL, SIGNAL(stateChanged(int)), this, SLOT(checkBoxUseOpenGLStateChanged(int)));
 
     QCheckBox* checkBoxRenderHintAA = new QCheckBox(tr("Antialias"), groupBoxRender);
-    dialog_display_renderhint_aa = mainWin->getSettingsDisplayRenderHintAA();
+    dialog_display_renderhint_aa = settings_display_render_hint_aa;
     checkBoxRenderHintAA->setChecked(dialog_display_renderhint_aa);
     connect(checkBoxRenderHintAA, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintAAStateChanged(int)));
 
     QCheckBox* checkBoxRenderHintTextAA = new QCheckBox(tr("Antialias Text"), groupBoxRender);
-    dialog_display_renderhint_text_aa = mainWin->getSettingsDisplayRenderHintTextAA();
+    dialog_display_renderhint_text_aa = settings_display_renderhint_text_aa;
     checkBoxRenderHintTextAA->setChecked(dialog_display_renderhint_text_aa);
     connect(checkBoxRenderHintTextAA, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintTextAAStateChanged(int)));
 
     QCheckBox* checkBoxRenderHintSmoothPix = new QCheckBox(tr("Smooth Pixmap"), groupBoxRender);
-    dialog_display_renderhint_smooth_pix = mainWin->getSettingsDisplayRenderHintSmoothPix();
+    dialog_display_renderhint_smooth_pix = settingsDisplayRenderHintSmoothPix();
     checkBoxRenderHintSmoothPix->setChecked(dialog_display_renderhint_smooth_pix);
     connect(checkBoxRenderHintSmoothPix, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintSmoothPixStateChanged(int)));
 
     QCheckBox* checkBoxRenderHintHighAA = new QCheckBox(tr("High Quality Antialiasing (OpenGL)"), groupBoxRender);
-    dialog_display_renderhint_high_aa = mainWin->getSettingsDisplayRenderHintHighAA();
+    dialog_display_renderhint_high_aa = settingsDisplayRenderHintHighAA();
     checkBoxRenderHintHighAA->setChecked(dialog_display_renderhint_high_aa);
     connect(checkBoxRenderHintHighAA, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintHighAAStateChanged(int)));
 
     QCheckBox* checkBoxRenderHintNonCosmetic = new QCheckBox(tr("Non Cosmetic"), groupBoxRender);
-    dialog_display_renderhint_noncosmetic = mainWin->getSettingsDisplayRenderHintNonCosmetic();
+    dialog_display_renderhint_noncosmetic = settingsDisplayRenderHintNonCosmetic();
     checkBoxRenderHintNonCosmetic->setChecked(dialog_display_renderhint_noncosmetic);
     connect(checkBoxRenderHintNonCosmetic, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintNonCosmeticStateChanged(int)));
 
@@ -290,19 +290,21 @@ QWidget* Settings_Dialog::createTabDisplay()
     QGroupBox* groupBoxScrollBars = new QGroupBox(tr("ScrollBars"), widget);
 
     QCheckBox* checkBoxShowScrollBars = new QCheckBox(tr("Show ScrollBars"), groupBoxScrollBars);
-    dialog_display_show_scrollbars = mainWin->getSettingsDisplayShowScrollBars();
+    dialog_display_show_scrollbars = settings_display_show_scrollbars;
     preview_display_show_scrollbars = dialog_display_show_scrollbars;
     checkBoxShowScrollBars->setChecked(preview_display_show_scrollbars);
     connect(checkBoxShowScrollBars, SIGNAL(stateChanged(int)), this, SLOT(checkBoxShowScrollBarsStateChanged(int)));
 
     QLabel* labelScrollBarWidget = new QLabel(tr("Perform action when clicking corner widget"), groupBoxScrollBars);
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
-    dialog_display_scrollbar_widget_num = mainWin->getSettingsDisplayScrollBarWidgetNum();
+    dialog_display_scrollbar_widget_num = settings_display_scrollbar_widget_num;
     int numActions = mainWin->actionHash.size();
     for(int i = 0; i < numActions; i++)
     {
+    /* FIXME:
         QAction* action = mainWin->actionHash.value(i);
         if(action) comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
+        */
     }
     comboBoxScrollBarWidget->setCurrentIndex(dialog_display_scrollbar_widget_num);
     connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxScrollBarWidgetCurrentIndexChanged(int)));
@@ -318,9 +320,9 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelCrossHairColor = new QLabel(tr("Crosshair Color"), groupBoxColor);
     QPushButton* buttonCrossHairColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog_display_crosshair_color  = mainWin->getSettingsDisplayCrossHairColor();
+    dialog_display_crosshair_color = settings_display_crosshair_color;
     preview_display_crosshair_color = dialog_display_crosshair_color;
-    accept_display_crosshair_color  = dialog_display_crosshair_color;
+    accept_display_crosshair_color = dialog_display_crosshair_color;
     QPixmap crosshairPix(16,16);
     crosshairPix.fill(QColor(preview_display_crosshair_color));
     buttonCrossHairColor->setIcon(QIcon(crosshairPix));
@@ -328,9 +330,9 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelBGColor = new QLabel(tr("Background Color"), groupBoxColor);
     QPushButton* buttonBGColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog_display_bg_color  = mainWin->getSettingsDisplayBGColor();
+    dialog_display_bg_color = settings_display_bg_color;
     preview_display_bg_color = dialog_display_bg_color;
-    accept_display_bg_color  = dialog_display_bg_color;
+    accept_display_bg_color = dialog_display_bg_color;
     QPixmap bgPix(16,16);
     bgPix.fill(QColor(preview_display_bg_color));
     buttonBGColor->setIcon(QIcon(bgPix));
@@ -338,9 +340,9 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelSelectBoxLeftColor = new QLabel(tr("Selection Box Color (Crossing)"), groupBoxColor);
     QPushButton* buttonSelectBoxLeftColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog_display_selectbox_left_color  = mainWin->getSettingsDisplaySelectBoxLeftColor();
+    dialog_display_selectbox_left_color = settings_display_selectbox_left_color;
     preview_display_selectbox_left_color = dialog_display_selectbox_left_color;
-    accept_display_selectbox_left_color  = dialog_display_selectbox_left_color;
+    accept_display_selectbox_left_color = dialog_display_selectbox_left_color;
     QPixmap sBoxLCPix(16,16);
     sBoxLCPix.fill(QColor(preview_display_selectbox_left_color));
     buttonSelectBoxLeftColor->setIcon(QIcon(sBoxLCPix));
@@ -348,9 +350,9 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelSelectBoxLeftFill = new QLabel(tr("Selection Box Fill (Crossing)"), groupBoxColor);
     QPushButton* buttonSelectBoxLeftFill = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog_display_selectbox_left_fill  = mainWin->getSettingsDisplaySelectBoxLeftFill();
+    dialog_display_selectbox_left_fill = settings_display_selectbox_left_fill;
     preview_display_selectbox_left_fill = dialog_display_selectbox_left_fill;
-    accept_display_selectbox_left_fill  = dialog_display_selectbox_left_fill;
+    accept_display_selectbox_left_fill = dialog_display_selectbox_left_fill;
     QPixmap sBoxLFPix(16,16);
     sBoxLFPix.fill(QColor(preview_display_selectbox_left_fill));
     buttonSelectBoxLeftFill->setIcon(QIcon(sBoxLFPix));
@@ -358,7 +360,7 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelSelectBoxRightColor = new QLabel(tr("Selection Box Color (Window)"), groupBoxColor);
     QPushButton* buttonSelectBoxRightColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog_display_selectbox_right_color  = mainWin->getSettingsDisplaySelectBoxRightColor();
+    dialog_display_selectbox_right_color = settings_display_selectbox_right_color;
     preview_display_selectbox_right_color = dialog_display_selectbox_right_color;
     accept_display_selectbox_right_color  = dialog_display_selectbox_right_color;
     QPixmap sBoxRCPix(16,16);
@@ -368,7 +370,7 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelSelectBoxRightFill = new QLabel(tr("Selection Box Fill (Window)"), groupBoxColor);
     QPushButton* buttonSelectBoxRightFill = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog_display_selectbox_right_fill  = mainWin->getSettingsDisplaySelectBoxRightFill();
+    dialog_display_selectbox_right_fill  = settings_display_selectbox_right_fill;
     preview_display_selectbox_right_fill = dialog_display_selectbox_right_fill;
     accept_display_selectbox_right_fill  = dialog_display_selectbox_right_fill;
     QPixmap sBoxRFPix(16,16);
@@ -379,7 +381,7 @@ QWidget* Settings_Dialog::createTabDisplay()
     QLabel* labelSelectBoxAlpha = new QLabel(tr("Selection Box Fill Alpha"), groupBoxColor);
     QSpinBox* spinBoxSelectBoxAlpha = new QSpinBox(groupBoxColor);
     spinBoxSelectBoxAlpha->setRange(0, 255);
-    dialog_display_selectbox_alpha = mainWin->getSettingsDisplaySelectBoxAlpha();
+    dialog_display_selectbox_alpha = settings_display_selectbox_alpha;
     preview_display_selectbox_alpha = dialog_display_selectbox_alpha;
     spinBoxSelectBoxAlpha->setValue(preview_display_selectbox_alpha);
     connect(spinBoxSelectBoxAlpha, SIGNAL(valueChanged(int)), this, SLOT(spinBoxDisplaySelectBoxAlphaValueChanged(int)));
@@ -406,7 +408,7 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelZoomScaleIn = new QLabel(tr("Zoom In Scale"), groupBoxZoom);
     QDoubleSpinBox* spinBoxZoomScaleIn = new QDoubleSpinBox(groupBoxZoom);
-    dialog_display_zoomscale_in = mainWin->getSettingsDisplayZoomScaleIn();
+    dialog_display_zoomscale_in = settings_display_zoomscale_in;
     spinBoxZoomScaleIn->setValue(dialog_display_zoomscale_in);
     spinBoxZoomScaleIn->setSingleStep(0.01);
     spinBoxZoomScaleIn->setRange(1.01, 10.00);
@@ -414,7 +416,7 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelZoomScaleOut = new QLabel(tr("Zoom Out Scale"), groupBoxZoom);
     QDoubleSpinBox* spinBoxZoomScaleOut = new QDoubleSpinBox(groupBoxZoom);
-    dialog_display_zoomscale_out = mainWin->getSettingsDisplayZoomScaleOut();
+    dialog_display_zoomscale_out = settings_display_zoomscale_out;
     spinBoxZoomScaleOut->setValue(dialog_display_zoomscale_out);
     spinBoxZoomScaleOut->setSingleStep(0.01);
     spinBoxZoomScaleOut->setRange(0.01, 0.99);
@@ -452,7 +454,7 @@ QWidget* Settings_Dialog::createTabPrompt()
 
     QLabel* labelTextColor = new QLabel(tr("Text Color"), groupBoxColor);
     QPushButton* buttonTextColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog_prompt_text_color  = mainWin->getSettingsPromptTextColor();
+    dialog_prompt_text_color = settings_prompt_text_color;
     preview_prompt_text_color = dialog_prompt_text_color;
     accept_prompt_text_color  = dialog_prompt_text_color;
     QPixmap pix(16,16);
@@ -462,7 +464,7 @@ QWidget* Settings_Dialog::createTabPrompt()
 
     QLabel* labelBGColor = new QLabel(tr("Background Color"), groupBoxColor);
     QPushButton* buttonBGColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog_prompt_bg_color  = mainWin->getSettingsPromptBGColor();
+    dialog_prompt_bg_color = settings_prompt_bg_color;
     preview_prompt_bg_color = dialog_prompt_bg_color;
     accept_prompt_bg_color  = dialog_prompt_bg_color;
     QPixmap pixx(16,16);
@@ -483,7 +485,7 @@ QWidget* Settings_Dialog::createTabPrompt()
 
     QLabel* labelFontFamily = new QLabel(tr("Font Family"), groupBoxFont);
     QFontComboBox* comboBoxFontFamily = new QFontComboBox(groupBoxFont);
-    dialog_prompt_font_family = mainWin->getSettingsPromptFontFamily();
+    dialog_prompt_font_family = settings_prompt_font_family;
     preview_prompt_font_family = dialog_prompt_font_family;
     comboBoxFontFamily->setCurrentFont(QFont(preview_prompt_font_family));
     connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(const QString&)));
@@ -496,7 +498,7 @@ QWidget* Settings_Dialog::createTabPrompt()
     QLabel* labelFontSize = new QLabel(tr("Font Size"), groupBoxFont);
     QSpinBox* spinBoxFontSize = new QSpinBox(groupBoxFont);
     spinBoxFontSize->setRange(4, 64);
-    dialog_prompt_font_size = mainWin->getSettingsPromptFontSize();
+    dialog_prompt_font_size = settings_prompt_font_size;
     preview_prompt_font_size = dialog_prompt_font_size;
     spinBoxFontSize->setValue(preview_prompt_font_size);
     connect(spinBoxFontSize, SIGNAL(valueChanged(int)), this, SLOT(spinBoxPromptFontSizeValueChanged(int)));
@@ -514,12 +516,12 @@ QWidget* Settings_Dialog::createTabPrompt()
     QGroupBox* groupBoxHistory = new QGroupBox(tr("History"), widget);
 
     QCheckBox* checkBoxPromptSaveHistory = new QCheckBox(tr("Save History"), groupBoxHistory);
-    dialog_prompt_save_history = mainWin->getSettingsPromptSaveHistory();
+    dialog_prompt_save_history = settings_prompt_save_history;
     checkBoxPromptSaveHistory->setChecked(dialog_prompt_save_history);
     connect(checkBoxPromptSaveHistory, SIGNAL(stateChanged(int)), this, SLOT(checkBoxPromptSaveHistoryStateChanged(int)));
 
     QCheckBox* checkBoxPromptSaveHistoryAsHtml = new QCheckBox(tr("Save As HTML"), groupBoxHistory);
-    dialog_prompt_save_history_as_html = mainWin->getSettingsPromptSaveHistoryAsHtml();
+    dialog_prompt_save_history_as_html = settings_prompt_save_history_as_html;
     checkBoxPromptSaveHistoryAsHtml->setChecked(dialog_prompt_save_history_as_html);
     connect(checkBoxPromptSaveHistoryAsHtml, SIGNAL(stateChanged(int)), this, SLOT(checkBoxPromptSaveHistoryAsHtmlStateChanged(int)));
 
@@ -551,7 +553,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QGroupBox* groupBoxCustomFilter = new QGroupBox(tr("Custom Filter"), widget);
     groupBoxCustomFilter->setEnabled(false); //TODO: Fixup custom filter
 
-    dialog_opensave_custom_filter = mainWin->getSettingsCustomFilter();
+    dialog_opensave_custom_filter = settings_opensave_custom_filter;
 
     QCheckBox* checkBoxCustomFilter100 = new QCheckBox("100", groupBoxCustomFilter);
     checkBoxCustomFilter100->setChecked(dialog_opensave_custom_filter.contains("*.100", Qt::CaseInsensitive));
@@ -951,7 +953,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QLabel* labelRecentMaxFiles = new QLabel(tr("Number of recently accessed files to show"), groupBoxOpening);
     QSpinBox* spinBoxRecentMaxFiles = new QSpinBox(groupBoxOpening);
     spinBoxRecentMaxFiles->setRange(0, 10);
-    dialog_opensave_recent_max_files = mainWin->getSettingsRecentMaxFiles();
+    dialog_opensave_recent_max_files = settings_opensave_recent_max_files;
     spinBoxRecentMaxFiles->setValue(dialog_opensave_recent_max_files);
     connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), this, SLOT(spinBoxRecentMaxFilesValueChanged(int)));
 
@@ -990,7 +992,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QLabel* labelTrimDstNumJumps = new QLabel(tr("DST Only: Minimum number of jumps to trim"), groupBoxTrim);
     QSpinBox* spinBoxTrimDstNumJumps = new QSpinBox(groupBoxTrim);
     spinBoxTrimDstNumJumps->setRange(1, 20);
-    dialog_opensave_trim_dst_num_jumps = mainWin->getSettingsOpenSaveTrimDstNumJumps();
+    dialog_opensave_trim_dst_num_jumps = settings_opensave_trim_dst_num_jumps;
     spinBoxTrimDstNumJumps->setValue(dialog_opensave_trim_dst_num_jumps);
     connect(spinBoxTrimDstNumJumps, SIGNAL(valueChanged(int)), this, SLOT(spinBoxTrimDstNumJumpsValueChanged(int)));
 
@@ -1027,15 +1029,15 @@ QWidget* Settings_Dialog::createTabPrinting()
     QGroupBox* groupBoxDefaultPrinter = new QGroupBox(tr("Default Printer"), widget);
 
     QRadioButton* radioButtonUseSame = new QRadioButton(tr("Use as default device"), groupBoxDefaultPrinter);
-    radioButtonUseSame->setChecked(!mainWin->getSettingsPrintingUseLastDevice());
+    radioButtonUseSame->setChecked(!settings_printing_use_last_device);
     QRadioButton* radioButtonUseLast = new QRadioButton(tr("Use last used device"), groupBoxDefaultPrinter);
-    radioButtonUseLast->setChecked(mainWin->getSettingsPrintingUseLastDevice());
+    radioButtonUseLast->setChecked(settings_printing_use_last_device);
 
     QComboBox* comboBoxDefaultDevice = new QComboBox(groupBoxDefaultPrinter);
     QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
     foreach(QPrinterInfo info, listAvailPrinters)
     {
-        comboBoxDefaultDevice->addItem(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "print" + ".png"), info.printerName());
+        comboBoxDefaultDevice->addItem(QIcon("icons/" + settings_general_icon_theme + "/" + "print" + ".png"), info.printerName());
     }
 
     QVBoxLayout* vboxLayoutDefaultPrinter = new QVBoxLayout(groupBoxDefaultPrinter);
@@ -1048,7 +1050,7 @@ QWidget* Settings_Dialog::createTabPrinting()
     QGroupBox* groupBoxSaveInk = new QGroupBox(tr("Save Ink"), widget);
 
     QCheckBox* checkBoxDisableBG = new QCheckBox(tr("Disable Background"), groupBoxSaveInk);
-    dialog_printing_disable_bg = mainWin->getSettingsPrintingDisableBG();
+    dialog_printing_disable_bg = settings_printing_disable_bg;
     checkBoxDisableBG->setChecked(dialog_printing_disable_bg);
     connect(checkBoxDisableBG, SIGNAL(stateChanged(int)), this, SLOT(checkBoxDisableBGStateChanged(int)));
 
@@ -1089,12 +1091,12 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QGroupBox* groupBoxGridMisc = new QGroupBox(tr("Grid Misc"), widget);
 
     QCheckBox* checkBoxGridShowOnLoad = new QCheckBox(tr("Initially show grid when loading a file"), groupBoxGridMisc);
-    dialog_grid_show_on_load = mainWin->getSettingsGridShowOnLoad();
+    dialog_grid_show_on_load = settings_grid_show_on_load;
     checkBoxGridShowOnLoad->setChecked(dialog_grid_show_on_load);
     connect(checkBoxGridShowOnLoad, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridShowOnLoadStateChanged(int)));
 
     QCheckBox* checkBoxGridShowOrigin = new QCheckBox(tr("Show the origin when the grid is enabled"), groupBoxGridMisc);
-    dialog_grid_show_origin = mainWin->getSettingsGridShowOrigin();
+    dialog_grid_show_origin = settings_grid_show_origin;
     checkBoxGridShowOrigin->setChecked(dialog_grid_show_origin);
     connect(checkBoxGridShowOrigin, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridShowOriginStateChanged(int)));
 
@@ -1107,7 +1109,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QGroupBox* groupBoxGridColor = new QGroupBox(tr("Grid Color"), widget);
 
     QCheckBox* checkBoxGridColorMatchCrossHair = new QCheckBox(tr("Match grid color to crosshair color"), groupBoxGridColor);
-    dialog_grid_color_match_crosshair = mainWin->getSettingsGridColorMatchCrossHair();
+    dialog_grid_color_match_crosshair = settings_grid_color_match_crosshair;
     checkBoxGridColorMatchCrossHair->setChecked(dialog_grid_color_match_crosshair);
     connect(checkBoxGridColorMatchCrossHair, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridColorMatchCrossHairStateChanged(int)));
 
@@ -1115,8 +1117,12 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridColor->setObjectName("labelGridColor");
     QPushButton* buttonGridColor = new QPushButton(tr("Choose"), groupBoxGridColor);
     buttonGridColor->setObjectName("buttonGridColor");
-    if(dialog_grid_color_match_crosshair) { dialog_grid_color = mainWin->getSettingsDisplayCrossHairColor(); }
-    else                                  { dialog_grid_color = mainWin->getSettingsGridColor();             }
+    if (dialog_grid_color_match_crosshair) {
+        dialog_grid_color = settings_display_crosshair_color;
+    }
+    else {
+        dialog_grid_color = settings_grid_color;
+    }
     preview_grid_color = dialog_grid_color;
     accept_grid_color  = dialog_grid_color;
     QPixmap gridPix(16,16);
@@ -1137,7 +1143,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QGroupBox* groupBoxGridGeom = new QGroupBox(tr("Grid Geometry"), widget);
 
     QCheckBox* checkBoxGridLoadFromFile = new QCheckBox(tr("Set grid size from opened file"), groupBoxGridGeom);
-    dialog_grid_load_from_file = mainWin->getSettingsGridLoadFromFile();
+    dialog_grid_load_from_file = settings_grid_load_from_file;
     checkBoxGridLoadFromFile->setChecked(dialog_grid_load_from_file);
     connect(checkBoxGridLoadFromFile, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridLoadFromFileStateChanged(int)));
 
@@ -1148,13 +1154,13 @@ QWidget* Settings_Dialog::createTabGridRuler()
     comboBoxGridType->addItem("Rectangular");
     comboBoxGridType->addItem("Circular");
     comboBoxGridType->addItem("Isometric");
-    dialog_grid_type = mainWin->getSettingsGridType();
+    dialog_grid_type = settings_grid_type;
     comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(dialog_grid_type));
     connect(comboBoxGridType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(const QString&)));
 
     QCheckBox* checkBoxGridCenterOnOrigin = new QCheckBox(tr("Center the grid on the origin"), groupBoxGridGeom);
     checkBoxGridCenterOnOrigin->setObjectName("checkBoxGridCenterOnOrigin");
-    dialog_grid_center_on_origin = mainWin->getSettingsGridCenterOnOrigin();
+    dialog_grid_center_on_origin = settings_grid_center_on_origin;
     checkBoxGridCenterOnOrigin->setChecked(dialog_grid_center_on_origin);
     connect(checkBoxGridCenterOnOrigin, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridCenterOnOriginStateChanged(int)));
 
@@ -1162,7 +1168,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridCenterX->setObjectName("labelGridCenterX");
     QDoubleSpinBox* spinBoxGridCenterX = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridCenterX->setObjectName("spinBoxGridCenterX");
-    dialog_grid_center_x = mainWin->getSettingsGridCenterX();
+    dialog_grid_center_x = settings_grid_center_x;
     spinBoxGridCenterX->setSingleStep(1.000);
     spinBoxGridCenterX->setRange(-1000.000, 1000.000);
     spinBoxGridCenterX->setValue(dialog_grid_center_x);
@@ -1172,7 +1178,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridCenterY->setObjectName("labelGridCenterY");
     QDoubleSpinBox* spinBoxGridCenterY = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridCenterY->setObjectName("spinBoxGridCenterY");
-    dialog_grid_center_y = mainWin->getSettingsGridCenterY();
+    dialog_grid_center_y = settings_grid_center_y;
     spinBoxGridCenterY->setSingleStep(1.000);
     spinBoxGridCenterY->setRange(-1000.000, 1000.000);
     spinBoxGridCenterY->setValue(dialog_grid_center_y);
@@ -1182,7 +1188,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridSizeX->setObjectName("labelGridSizeX");
     QDoubleSpinBox* spinBoxGridSizeX = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridSizeX->setObjectName("spinBoxGridSizeX");
-    dialog_grid_size_x = mainWin->getSettingsGridSizeX();
+    dialog_grid_size_x = settings_grid_size_x;
     spinBoxGridSizeX->setSingleStep(1.000);
     spinBoxGridSizeX->setRange(1.000, 1000.000);
     spinBoxGridSizeX->setValue(dialog_grid_size_x);
@@ -1192,7 +1198,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridSizeY->setObjectName("labelGridSizeY");
     QDoubleSpinBox* spinBoxGridSizeY = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridSizeY->setObjectName("spinBoxGridSizeY");
-    dialog_grid_size_y = mainWin->getSettingsGridSizeY();
+    dialog_grid_size_y = settings_grid_size_y;
     spinBoxGridSizeY->setSingleStep(1.000);
     spinBoxGridSizeY->setRange(1.000, 1000.000);
     spinBoxGridSizeY->setValue(dialog_grid_size_y);
@@ -1202,7 +1208,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridSpacingX->setObjectName("labelGridSpacingX");
     QDoubleSpinBox* spinBoxGridSpacingX = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridSpacingX->setObjectName("spinBoxGridSpacingX");
-    dialog_grid_spacing_x = mainWin->getSettingsGridSpacingX();
+    dialog_grid_spacing_x = settings_grid_spacing_x;
     spinBoxGridSpacingX->setSingleStep(1.000);
     spinBoxGridSpacingX->setRange(0.001, 1000.000);
     spinBoxGridSpacingX->setValue(dialog_grid_spacing_x);
@@ -1212,7 +1218,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridSpacingY->setObjectName("labelGridSpacingY");
     QDoubleSpinBox* spinBoxGridSpacingY = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridSpacingY->setObjectName("spinBoxGridSpacingY");
-    dialog_grid_spacing_y = mainWin->getSettingsGridSpacingY();
+    dialog_grid_spacing_y = settings_grid_spacing_y;
     spinBoxGridSpacingY->setSingleStep(1.000);
     spinBoxGridSpacingY->setRange(0.001, 1000.000);
     spinBoxGridSpacingY->setValue(dialog_grid_spacing_y);
@@ -1222,7 +1228,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridSizeRadius->setObjectName("labelGridSizeRadius");
     QDoubleSpinBox* spinBoxGridSizeRadius = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridSizeRadius->setObjectName("spinBoxGridSizeRadius");
-    dialog_grid_size_radius = mainWin->getSettingsGridSizeRadius();
+    dialog_grid_size_radius = settings_grid_size_radius;
     spinBoxGridSizeRadius->setSingleStep(1.000);
     spinBoxGridSizeRadius->setRange(1.000, 1000.000);
     spinBoxGridSizeRadius->setValue(dialog_grid_size_radius);
@@ -1232,7 +1238,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridSpacingRadius->setObjectName("labelGridSpacingRadius");
     QDoubleSpinBox* spinBoxGridSpacingRadius = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridSpacingRadius->setObjectName("spinBoxGridSpacingRadius");
-    dialog_grid_spacing_radius = mainWin->getSettingsGridSpacingRadius();
+    dialog_grid_spacing_radius = settings_grid_spacing_radius;
     spinBoxGridSpacingRadius->setSingleStep(1.000);
     spinBoxGridSpacingRadius->setRange(0.001, 1000.000);
     spinBoxGridSpacingRadius->setValue(dialog_grid_spacing_radius);
@@ -1242,7 +1248,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelGridSpacingAngle->setObjectName("labelGridSpacingAngle");
     QDoubleSpinBox* spinBoxGridSpacingAngle = new QDoubleSpinBox(groupBoxGridGeom);
     spinBoxGridSpacingAngle->setObjectName("spinBoxGridSpacingAngle");
-    dialog_grid_spacing_angle = mainWin->getSettingsGridSpacingAngle();
+    dialog_grid_spacing_angle = settings_grid_spacing_angle;
     spinBoxGridSpacingAngle->setSingleStep(1.000);
     spinBoxGridSpacingAngle->setRange(0.001, 1000.000);
     spinBoxGridSpacingAngle->setValue(dialog_grid_spacing_angle);
@@ -1316,7 +1322,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QGroupBox* groupBoxRulerMisc = new QGroupBox(tr("Ruler Misc"), widget);
 
     QCheckBox* checkBoxRulerShowOnLoad = new QCheckBox(tr("Initially show ruler when loading a file"), groupBoxRulerMisc);
-    dialog_ruler_show_on_load = mainWin->getSettingsRulerShowOnLoad();
+    dialog_ruler_show_on_load = settings_ruler_show_on_load;
     checkBoxRulerShowOnLoad->setChecked(dialog_ruler_show_on_load);
     connect(checkBoxRulerShowOnLoad, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRulerShowOnLoadStateChanged(int)));
 
@@ -1324,7 +1330,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QComboBox* comboBoxRulerMetric = new QComboBox(groupBoxRulerMisc);
     comboBoxRulerMetric->addItem("Imperial", false);
     comboBoxRulerMetric->addItem("Metric",   true);
-    dialog_ruler_metric = mainWin->getSettingsRulerMetric();
+    dialog_ruler_metric = settings_ruler_metric;
     comboBoxRulerMetric->setCurrentIndex(comboBoxRulerMetric->findData(dialog_ruler_metric));
     connect(comboBoxRulerMetric, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxRulerMetricCurrentIndexChanged(int)));
 
@@ -1341,7 +1347,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelRulerColor->setObjectName("labelRulerColor");
     QPushButton* buttonRulerColor = new QPushButton(tr("Choose"), groupBoxRulerColor);
     buttonRulerColor->setObjectName("buttonRulerColor");
-    dialog_ruler_color = mainWin->getSettingsRulerColor();
+    dialog_ruler_color = settings_ruler_color;
     preview_ruler_color = dialog_ruler_color;
     accept_ruler_color  = dialog_ruler_color;
     QPixmap rulerPix(16,16);
@@ -1361,7 +1367,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelRulerPixelSize->setObjectName("labelRulerPixelSize");
     QDoubleSpinBox* spinBoxRulerPixelSize = new QDoubleSpinBox(groupBoxRulerGeom);
     spinBoxRulerPixelSize->setObjectName("spinBoxRulerPixelSize");
-    dialog_ruler_pixel_size = mainWin->getSettingsRulerPixelSize();
+    dialog_ruler_pixel_size = settings_ruler_pixel_size;
     spinBoxRulerPixelSize->setSingleStep(1.000);
     spinBoxRulerPixelSize->setRange(20.000, 100.000);
     spinBoxRulerPixelSize->setValue(dialog_ruler_pixel_size);
@@ -1405,85 +1411,85 @@ QWidget* Settings_Dialog::createTabQuickSnap()
 {
     QWidget* widget = new QWidget(this);
 
-    QString iconTheme = mainWin->getSettingsGeneralIconTheme();
+    QString iconTheme = settings_general_icon_theme;
 
     //QSnap Locators
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
 
     QCheckBox* checkBoxQSnapEndPoint = new QCheckBox(tr("Endpoint"), groupBoxQSnapLoc);
-    dialog_qsnap_endpoint = mainWin->getSettingsQSnapEndPoint();
+    dialog_qsnap_endpoint = settings_qsnap_endpoint;
     checkBoxQSnapEndPoint->setChecked(dialog_qsnap_endpoint);
     checkBoxQSnapEndPoint->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoendpoint" + ".png"));
     connect(checkBoxQSnapEndPoint, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapEndPointStateChanged(int)));
 
     QCheckBox* checkBoxQSnapMidPoint = new QCheckBox(tr("Midpoint"), groupBoxQSnapLoc);
-    dialog_qsnap_midpoint = mainWin->getSettingsQSnapMidPoint();
+    dialog_qsnap_midpoint = settings_qsnap_midpoint;
     checkBoxQSnapMidPoint->setChecked(dialog_qsnap_midpoint);
     checkBoxQSnapMidPoint->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptomidpoint" + ".png"));
     connect(checkBoxQSnapMidPoint, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapMidPointStateChanged(int)));
 
     QCheckBox* checkBoxQSnapCenter = new QCheckBox(tr("Center"), groupBoxQSnapLoc);
-    dialog_qsnap_center = mainWin->getSettingsQSnapCenter();
+    dialog_qsnap_center = settings_qsnap_center;
     checkBoxQSnapCenter->setChecked(dialog_qsnap_center);
     checkBoxQSnapCenter->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptocenter" + ".png"));
     connect(checkBoxQSnapCenter, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapCenterStateChanged(int)));
 
     QCheckBox* checkBoxQSnapNode = new QCheckBox(tr("Node"), groupBoxQSnapLoc);
-    dialog_qsnap_node = mainWin->getSettingsQSnapNode();
+    dialog_qsnap_node = settings_qsnap_node;
     checkBoxQSnapNode->setChecked(dialog_qsnap_node);
     checkBoxQSnapNode->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptonode" + ".png"));
     connect(checkBoxQSnapNode, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapNodeStateChanged(int)));
 
     QCheckBox* checkBoxQSnapQuadrant = new QCheckBox(tr("Quadrant"), groupBoxQSnapLoc);
-    dialog_qsnap_quadrant = mainWin->getSettingsQSnapQuadrant();
+    dialog_qsnap_quadrant = settings_qsnap_quadrant;
     checkBoxQSnapQuadrant->setChecked(dialog_qsnap_quadrant);
     checkBoxQSnapQuadrant->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoquadrant" + ".png"));
     connect(checkBoxQSnapQuadrant, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapQuadrantStateChanged(int)));
 
     QCheckBox* checkBoxQSnapIntersection = new QCheckBox(tr("Intersection"), groupBoxQSnapLoc);
-    dialog_qsnap_intersection = mainWin->getSettingsQSnapIntersection();
+    dialog_qsnap_intersection = settings_qsnap_intersection;
     checkBoxQSnapIntersection->setChecked(dialog_qsnap_intersection);
     checkBoxQSnapIntersection->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptointersection" + ".png"));
     connect(checkBoxQSnapIntersection, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapIntersectionStateChanged(int)));
 
     QCheckBox* checkBoxQSnapExtension = new QCheckBox(tr("Extension"), groupBoxQSnapLoc);
-    dialog_qsnap_extension = mainWin->getSettingsQSnapExtension();
+    dialog_qsnap_extension = settings_qsnap_extension;
     checkBoxQSnapExtension->setChecked(dialog_qsnap_extension);
     checkBoxQSnapExtension->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoextension" + ".png"));
     connect(checkBoxQSnapExtension, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapExtensionStateChanged(int)));
 
     QCheckBox* checkBoxQSnapInsertion = new QCheckBox(tr("Insertion"), groupBoxQSnapLoc);
-    dialog_qsnap_insertion = mainWin->getSettingsQSnapInsertion();
+    dialog_qsnap_insertion = settings_qsnap_insertion;
     checkBoxQSnapInsertion->setChecked(dialog_qsnap_insertion);
     checkBoxQSnapInsertion->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoinsert" + ".png"));
     connect(checkBoxQSnapInsertion, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapInsertionStateChanged(int)));
 
     QCheckBox* checkBoxQSnapPerpendicular = new QCheckBox(tr("Perpendicular"), groupBoxQSnapLoc);
-    dialog_qsnap_perpendicular = mainWin->getSettingsQSnapPerpendicular();
+    dialog_qsnap_perpendicular = settings_qsnap_perpendicular;
     checkBoxQSnapPerpendicular->setChecked(dialog_qsnap_perpendicular);
     checkBoxQSnapPerpendicular->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoperpendicular" + ".png"));
     connect(checkBoxQSnapPerpendicular, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapPerpendicularStateChanged(int)));
 
     QCheckBox* checkBoxQSnapTangent = new QCheckBox(tr("Tangent"), groupBoxQSnapLoc);
-    dialog_qsnap_tangent = mainWin->getSettingsQSnapTangent();
+    dialog_qsnap_tangent = settings_qsnap_tangent;
     checkBoxQSnapTangent->setChecked(dialog_qsnap_tangent);
     checkBoxQSnapTangent->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptotangent" + ".png"));
     connect(checkBoxQSnapTangent, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapTangentStateChanged(int)));
 
     QCheckBox* checkBoxQSnapNearest = new QCheckBox(tr("Nearest"), groupBoxQSnapLoc);
-    dialog_qsnap_nearest = mainWin->getSettingsQSnapNearest();
+    dialog_qsnap_nearest = settings_qsnap_nearest;
     checkBoxQSnapNearest->setChecked(dialog_qsnap_nearest);
     checkBoxQSnapNearest->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptonearest" + ".png"));
     connect(checkBoxQSnapNearest, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapNearestStateChanged(int)));
 
     QCheckBox* checkBoxQSnapApparent = new QCheckBox(tr("Apparent Intersection"), groupBoxQSnapLoc);
-    dialog_qsnap_apparent = mainWin->getSettingsQSnapApparent();
+    dialog_qsnap_apparent = settings_qsnap_apparent;
     checkBoxQSnapApparent->setChecked(dialog_qsnap_apparent);
     checkBoxQSnapApparent->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoapparentintersection" + ".png"));
     connect(checkBoxQSnapApparent, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapApparentStateChanged(int)));
 
     QCheckBox* checkBoxQSnapParallel = new QCheckBox(tr("Parallel"), groupBoxQSnapLoc);
-    dialog_qsnap_parallel = mainWin->getSettingsQSnapParallel();
+    dialog_qsnap_parallel = settings_qsnap_parallel;
     checkBoxQSnapParallel->setChecked(dialog_qsnap_parallel);
     checkBoxQSnapParallel->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoparallel" + ".png"));
     connect(checkBoxQSnapParallel, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapParallelStateChanged(int)));
@@ -1545,14 +1551,14 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     QLabel* labelQSnapLocColor = new QLabel(tr("Locator Color"), groupBoxQSnapVisual);
     QComboBox* comboBoxQSnapLocColor = new QComboBox(groupBoxQSnapVisual);
     addColorsToComboBox(comboBoxQSnapLocColor);
-    dialog_qsnap_locator_color = mainWin->getSettingsQSnapLocatorColor();
+    dialog_qsnap_locator_color = settings_qsnap_locator_color;
     comboBoxQSnapLocColor->setCurrentIndex(comboBoxQSnapLocColor->findData(dialog_qsnap_locator_color));
     connect(comboBoxQSnapLocColor, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxQSnapLocatorColorCurrentIndexChanged(int)));
 
     QLabel* labelQSnapLocSize = new QLabel(tr("Locator Size"), groupBoxQSnapVisual);
     QSlider* sliderQSnapLocSize = new QSlider(Qt::Horizontal, groupBoxQSnapVisual);
     sliderQSnapLocSize->setRange(1,20);
-    dialog_qsnap_locator_size = mainWin->getSettingsQSnapLocatorSize();
+    dialog_qsnap_locator_size = settings_qsnap_locator_size;
     sliderQSnapLocSize->setValue(dialog_qsnap_locator_size);
     connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this, SLOT(sliderQSnapLocatorSizeValueChanged(int)));
 
@@ -1569,7 +1575,7 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     QLabel* labelQSnapApertureSize = new QLabel(tr("Aperture Size"), groupBoxQSnapSensitivity);
     QSlider* sliderQSnapApertureSize = new QSlider(Qt::Horizontal, groupBoxQSnapSensitivity);
     sliderQSnapApertureSize->setRange(1,20);
-    dialog_qsnap_aperture_size = mainWin->getSettingsQSnapApertureSize();
+    dialog_qsnap_aperture_size = settings_qsnap_aperture_size;
     sliderQSnapApertureSize->setValue(dialog_qsnap_aperture_size);
     connect(sliderQSnapApertureSize, SIGNAL(valueChanged(int)), this, SLOT(sliderQSnapApertureSizeValueChanged(int)));
 
@@ -1617,7 +1623,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
     if(s) { dialog_lwt_show_lwt = s->property(ENABLE_LWT).toBool(); }
-    else  { dialog_lwt_show_lwt = mainWin->getSettingsLwtShowLwt(); }
+    else  { dialog_lwt_show_lwt = settings_lwt_show_lwt; }
     preview_lwt_show_lwt = dialog_lwt_show_lwt;
     checkBoxShowLwt->setChecked(preview_lwt_show_lwt);
     connect(checkBoxShowLwt, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtShowLwtStateChanged(int)));
@@ -1625,7 +1631,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
     QCheckBox* checkBoxRealRender = new QCheckBox(tr("RealRender"), groupBoxLwtMisc);
     checkBoxRealRender->setObjectName("checkBoxRealRender");
     if(s) { dialog_lwt_real_render = s->property(ENABLE_REAL).toBool(); }
-    else  { dialog_lwt_real_render = mainWin->getSettingsLwtRealRender(); }
+    else  { dialog_lwt_real_render = settings_lwt_real_render; }
     preview_lwt_real_render = dialog_lwt_real_render;
     checkBoxRealRender->setChecked(preview_lwt_real_render);
     connect(checkBoxRealRender, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtRealRenderStateChanged(int)));
@@ -1634,7 +1640,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
     QLabel* labelDefaultLwt = new QLabel(tr("Default weight"), groupBoxLwtMisc);
     labelDefaultLwt->setEnabled(false); //TODO: remove later
     QComboBox* comboBoxDefaultLwt = new QComboBox(groupBoxLwtMisc);
-    dialog_lwt_default_lwt = mainWin->getSettingsLwtDefaultLwt();
+    dialog_lwt_default_lwt = settings_lwt_default_lwt;
     //TODO: populate the comboBox and set the initial value
     comboBoxDefaultLwt->addItem(QString().setNum(dialog_lwt_default_lwt, 'F', 2).append(" mm"), dialog_lwt_default_lwt);
     comboBoxDefaultLwt->setEnabled(false); //TODO: remove later
@@ -1666,18 +1672,18 @@ QWidget* Settings_Dialog::createTabSelection()
     QGroupBox* groupBoxSelectionModes = new QGroupBox(tr("Modes"), widget);
 
     QCheckBox* checkBoxSelectionModePickFirst = new QCheckBox(tr("Allow Preselection (PickFirst)"), groupBoxSelectionModes);
-    dialog_selection_mode_pickfirst = mainWin->getSettingsSelectionModePickFirst();
+    dialog_selection_mode_pickfirst = settings_selection_mode_pickfirst;
     checkBoxSelectionModePickFirst->setChecked(dialog_selection_mode_pickfirst);
     checkBoxSelectionModePickFirst->setChecked(true); checkBoxSelectionModePickFirst->setEnabled(false); //TODO: Remove this line when Post-selection is available
     connect(checkBoxSelectionModePickFirst, SIGNAL(stateChanged(int)), this, SLOT(checkBoxSelectionModePickFirstStateChanged(int)));
 
     QCheckBox* checkBoxSelectionModePickAdd = new QCheckBox(tr("Add to Selection (PickAdd)"), groupBoxSelectionModes);
-    dialog_selection_mode_pickadd = mainWin->getSettingsSelectionModePickAdd();
+    dialog_selection_mode_pickadd = settings_selection_mode_pickadd;
     checkBoxSelectionModePickAdd->setChecked(dialog_selection_mode_pickadd);
     connect(checkBoxSelectionModePickAdd, SIGNAL(stateChanged(int)), this, SLOT(checkBoxSelectionModePickAddStateChanged(int)));
 
     QCheckBox* checkBoxSelectionModePickDrag = new QCheckBox(tr("Drag to Select (PickDrag)"), groupBoxSelectionModes);
-    dialog_selection_mode_pickdrag = mainWin->getSettingsSelectionModePickDrag();
+    dialog_selection_mode_pickdrag = settings_selection_mode_pickdrag;
     checkBoxSelectionModePickDrag->setChecked(dialog_selection_mode_pickdrag);
     checkBoxSelectionModePickDrag->setChecked(false); checkBoxSelectionModePickDrag->setEnabled(false); //TODO: Remove this line when this functionality is available
     connect(checkBoxSelectionModePickDrag, SIGNAL(stateChanged(int)), this, SLOT(checkBoxSelectionModePickDragStateChanged(int)));
@@ -1694,14 +1700,14 @@ QWidget* Settings_Dialog::createTabSelection()
     QLabel* labelCoolGripColor = new QLabel(tr("Cool Grip (Unselected)"), groupBoxSelectionColors);
     QComboBox* comboBoxCoolGripColor = new QComboBox(groupBoxSelectionColors);
     addColorsToComboBox(comboBoxCoolGripColor);
-    dialog_selection_coolgrip_color = mainWin->getSettingsSelectionCoolGripColor();
+    dialog_selection_coolgrip_color = settings_selection_coolgrip_color;
     comboBoxCoolGripColor->setCurrentIndex(comboBoxCoolGripColor->findData(dialog_selection_coolgrip_color));
     connect(comboBoxCoolGripColor, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxSelectionCoolGripColorCurrentIndexChanged(int)));
 
     QLabel* labelHotGripColor = new QLabel(tr("Hot Grip (Selected)"), groupBoxSelectionColors);
     QComboBox* comboBoxHotGripColor = new QComboBox(groupBoxSelectionColors);
     addColorsToComboBox(comboBoxHotGripColor);
-    dialog_selection_hotgrip_color = mainWin->getSettingsSelectionHotGripColor();
+    dialog_selection_hotgrip_color = settings_selection_hotgrip_color;
     comboBoxHotGripColor->setCurrentIndex(comboBoxHotGripColor->findData(dialog_selection_hotgrip_color));
     connect(comboBoxHotGripColor, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxSelectionHotGripColorCurrentIndexChanged(int)));
 
@@ -1718,14 +1724,14 @@ QWidget* Settings_Dialog::createTabSelection()
     QLabel* labelSelectionGripSize = new QLabel(tr("Grip Size"), groupBoxSelectionSizes);
     QSlider* sliderSelectionGripSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionGripSize->setRange(1,20);
-    dialog_selection_grip_size = mainWin->getSettingsSelectionGripSize();
+    dialog_selection_grip_size = settings_selection_grip_size;
     sliderSelectionGripSize->setValue(dialog_selection_grip_size);
     connect(sliderSelectionGripSize, SIGNAL(valueChanged(int)), this, SLOT(sliderSelectionGripSizeValueChanged(int)));
 
     QLabel* labelSelectionPickBoxSize = new QLabel(tr("Pickbox Size"), groupBoxSelectionSizes);
     QSlider* sliderSelectionPickBoxSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionPickBoxSize->setRange(1,20);
-    dialog_selection_pickbox_size = mainWin->getSettingsSelectionPickBoxSize();
+    dialog_selection_pickbox_size = settings_selection_pickbox_size;
     sliderSelectionPickBoxSize->setValue(dialog_selection_pickbox_size);
     connect(sliderSelectionPickBoxSize, SIGNAL(valueChanged(int)), this, SLOT(sliderSelectionPickBoxSizeValueChanged(int)));
 
@@ -1752,7 +1758,7 @@ QWidget* Settings_Dialog::createTabSelection()
 
 void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {
-    QString iconTheme = mainWin->getSettingsGeneralIconTheme();
+    QString iconTheme = settings_general_icon_theme;
 
     comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorred" + ".png"),     tr("Red"),     qRgb(255,  0,  0));
     comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "coloryellow" + ".png"),  tr("Yellow"),  qRgb(255,255,  0));
@@ -2802,100 +2808,100 @@ void Settings_Dialog::acceptChanges()
     dialog_lwt_show_lwt = preview_lwt_show_lwt;
     dialog_lwt_real_render = preview_lwt_real_render;
 
-    mainWin->setSettingsGeneralLanguage(dialog_general_language);
-    mainWin->setSettingsGeneralIconTheme(dialog_general_icon_theme);
-    mainWin->setSettingsGeneralIconSize(dialog_general_icon_size);
-    mainWin->setSettingsGeneralMdiBGUseLogo(dialog_general_mdi_bg_use_logo);
-    mainWin->setSettingsGeneralMdiBGUseTexture(dialog_general_mdi_bg_use_texture);
-    mainWin->setSettingsGeneralMdiBGUseColor(dialog_general_mdi_bg_use_color);
-    mainWin->setSettingsGeneralMdiBGLogo(dialog_general_mdi_bg_logo);
-    mainWin->setSettingsGeneralMdiBGTexture(dialog_general_mdi_bg_texture);
-    mainWin->setSettingsGeneralMdiBGColor(dialog_general_mdi_bg_color);
-    mainWin->setSettingsGeneralTipOfTheDay(dialog_general_tip_of_the_day);
-    //TODO: mainWin->setSettingsGeneralSystemHelpBrowser(dialog_general_system_help_browser);
-    mainWin->setSettingsDisplayUseOpenGL(dialog_display_use_opengl);
-    mainWin->setSettingsDisplayRenderHintAA(dialog_display_renderhint_aa);
-    mainWin->setSettingsDisplayRenderHintTextAA(dialog_display_renderhint_text_aa);
-    mainWin->setSettingsDisplayRenderHintSmoothPix(dialog_display_renderhint_smooth_pix);
-    mainWin->setSettingsDisplayRenderHintHighAA(dialog_display_renderhint_high_aa);
-    mainWin->setSettingsDisplayRenderHintNonCosmetic(dialog_display_renderhint_noncosmetic);
-    mainWin->setSettingsDisplayShowScrollBars(dialog_display_show_scrollbars);
-    mainWin->setSettingsDisplayScrollBarWidgetNum(dialog_display_scrollbar_widget_num);
-    mainWin->setSettingsDisplayCrossHairColor(dialog_display_crosshair_color);
-    mainWin->setSettingsDisplayBGColor(dialog_display_bg_color);
-    mainWin->setSettingsDisplaySelectBoxLeftColor(dialog_display_selectbox_left_color);
-    mainWin->setSettingsDisplaySelectBoxLeftFill(dialog_display_selectbox_left_fill);
-    mainWin->setSettingsDisplaySelectBoxRightColor(dialog_display_selectbox_right_color);
-    mainWin->setSettingsDisplaySelectBoxRightFill(dialog_display_selectbox_right_fill);
-    mainWin->setSettingsDisplaySelectBoxAlpha(dialog_display_selectbox_alpha);
-    mainWin->setSettingsDisplayZoomScaleIn(dialog_display_zoomscale_in);
-    mainWin->setSettingsDisplayZoomScaleOut(dialog_display_zoomscale_out);
-    //TODO: mainWin->setSettingsDisplayCrossHairPercent(dialog_display_crosshair_percent);
-    //TODO: mainWin->setSettingsDisplayUnits(dialog_display_units);
-    mainWin->setSettingsPromptTextColor(dialog_prompt_text_color);
-    mainWin->setSettingsPromptBGColor(dialog_prompt_bg_color);
-    mainWin->setSettingsPromptFontFamily(dialog_prompt_font_family);
-    mainWin->setSettingsPromptFontStyle(dialog_prompt_font_style);
-    mainWin->setSettingsPromptFontSize(dialog_prompt_font_size);
-    mainWin->setSettingsPromptSaveHistory(dialog_prompt_save_history);
-    mainWin->setSettingsPromptSaveHistoryAsHtml(dialog_prompt_save_history_as_html);
-    //TODO: mainWin->setSettingsPromptSaveHistoryFilename(dialog_prompt_save_history_filename);
-    mainWin->setSettingsCustomFilter(dialog_opensave_custom_filter);
-    //TODO: mainWin->setSettingsOpenFormat(dialog_opensave_open_format);
-    //TODO: mainWin->setSettingsOpenThumbnail(dialog_opensave_open_thumbnail);
-    //TODO: mainWin->setSettingsSaveFormat(dialog_opensave_save_format);
-    //TODO: mainWin->setSettingsSaveThumbnail(dialog_opensave_save_thumbnail);
-    mainWin->setSettingsRecentMaxFiles(dialog_opensave_recent_max_files);
-    mainWin->setSettingsOpenSaveTrimDstNumJumps(dialog_opensave_trim_dst_num_jumps);
-    //TODO: mainWin->setSettingsPrintingDefaultDevice(dialog_printing_default_device);
-    //TODO: mainWin->setSettingsPrintingUseLastDevice(dialog_printing_use_last_device);
-    mainWin->setSettingsPrintingDisableBG(dialog_printing_disable_bg);
-    mainWin->setSettingsGridShowOnLoad(dialog_grid_show_on_load);
-    mainWin->setSettingsGridShowOrigin(dialog_grid_show_origin);
-    mainWin->setSettingsGridColorMatchCrossHair(dialog_grid_color_match_crosshair);
-    mainWin->setSettingsGridColor(dialog_grid_color);
-    //TODO: mainWin->setSettingsGridLoadFromFile(dialog_grid_load_from_file);
-    mainWin->setSettingsGridType(dialog_grid_type);
-    mainWin->setSettingsGridCenterOnOrigin(dialog_grid_center_on_origin);
-    mainWin->setSettingsGridCenterX(dialog_grid_center_x);
-    mainWin->setSettingsGridCenterY(dialog_grid_center_y);
-    mainWin->setSettingsGridSizeX(dialog_grid_size_x);
-    mainWin->setSettingsGridSizeY(dialog_grid_size_y);
-    mainWin->setSettingsGridSpacingX(dialog_grid_spacing_x);
-    mainWin->setSettingsGridSpacingY(dialog_grid_spacing_y);
-    mainWin->setSettingsGridSizeRadius(dialog_grid_size_radius);
-    mainWin->setSettingsGridSpacingRadius(dialog_grid_spacing_radius);
-    mainWin->setSettingsGridSpacingAngle(dialog_grid_spacing_angle);
-    mainWin->setSettingsRulerShowOnLoad(dialog_ruler_show_on_load);
-    mainWin->setSettingsRulerMetric(dialog_ruler_metric);
-    mainWin->setSettingsRulerColor(dialog_ruler_color);
-    mainWin->setSettingsRulerPixelSize(dialog_ruler_pixel_size);
-    //TODO: mainWin->setSettingsQSnapEnabled(dialog_qsnap_enabled);
-    mainWin->setSettingsQSnapLocatorColor(dialog_qsnap_locator_color);
-    mainWin->setSettingsQSnapLocatorSize(dialog_qsnap_locator_size);
-    mainWin->setSettingsQSnapApertureSize(dialog_qsnap_aperture_size);
-    mainWin->setSettingsQSnapEndPoint(dialog_qsnap_endpoint);
-    mainWin->setSettingsQSnapMidPoint(dialog_qsnap_midpoint);
-    mainWin->setSettingsQSnapCenter(dialog_qsnap_center);
-    mainWin->setSettingsQSnapNode(dialog_qsnap_node);
-    mainWin->setSettingsQSnapQuadrant(dialog_qsnap_quadrant);
-    mainWin->setSettingsQSnapIntersection(dialog_qsnap_intersection);
-    mainWin->setSettingsQSnapExtension(dialog_qsnap_extension);
-    mainWin->setSettingsQSnapInsertion(dialog_qsnap_insertion);
-    mainWin->setSettingsQSnapPerpendicular(dialog_qsnap_perpendicular);
-    mainWin->setSettingsQSnapTangent(dialog_qsnap_tangent);
-    mainWin->setSettingsQSnapNearest(dialog_qsnap_nearest);
-    mainWin->setSettingsQSnapApparent(dialog_qsnap_apparent);
-    mainWin->setSettingsQSnapParallel(dialog_qsnap_parallel);
-    mainWin->setSettingsLwtShowLwt(dialog_lwt_show_lwt);
-    mainWin->setSettingsLwtRealRender(dialog_lwt_real_render);
-    mainWin->setSettingsSelectionModePickFirst(dialog_selection_mode_pickfirst);
-    mainWin->setSettingsSelectionModePickAdd(dialog_selection_mode_pickadd);
-    mainWin->setSettingsSelectionModePickDrag(dialog_selection_mode_pickdrag);
-    mainWin->setSettingsSelectionCoolGripColor(dialog_selection_coolgrip_color);
-    mainWin->setSettingsSelectionHotGripColor(dialog_selection_hotgrip_color);
-    mainWin->setSettingsSelectionGripSize(dialog_selection_grip_size);
-    mainWin->setSettingsSelectionPickBoxSize(dialog_selection_pickbox_size);
+    settings_general_language = dialog_general_language;
+    settings_general_icon_theme = dialog_general_icon_theme;
+    settings_general_icon_size = dialog_general_icon_size;
+    settings_general_mdi_bg_use_logo = dialog_general_mdi_bg_use_logo;
+    settings_general_mdi_bg_use_texture = dialog_general_mdi_bg_use_texture;
+    settings_general_mdi_bg_use_color = dialog_general_mdi_bg_use_color;
+    settings_general_mdi_bg_logo = dialog_general_mdi_bg_logo;
+    settings_general_mdi_bg_texture = dialog_general_mdi_bg_texture;
+    settings_general_mdi_bg_color = dialog_general_mdi_bg_color;
+    settings_general_tip_of_the_day = dialog_general_tip_of_the_day;
+    //TODO: settings_general_system_help_browser = dialog_general_system_help_browser;
+    settings_display_use_opengl = dialog_display_use_opengl;
+    settings_display_renderhint_aa = dialog_display_renderhint_aa;
+    settings_display_renderhint_text_aa = dialog_display_renderhint_text_aa;
+    settings_display_renderhint_smooth_pix = dialog_display_renderhint_smooth_pix;
+    settings_display_renderhint_high_aa = dialog_display_renderhint_high_aa;
+    settings_display_renderhint_noncosmetic = dialog_display_renderhint_noncosmetic;
+    settings_display_show_scrollbars = dialog_display_show_scrollbars;
+    settings_display_scrollbar_widget_num = dialog_display_scrollbar_widget_num;
+    settings_display_crosshair_color = dialog_display_crosshair_color;
+    settings_display_bg_color = dialog_display_bg_color;
+    settings_display_selectbox_left_color = dialog_display_selectbox_left_color;
+    settings_display_selectbox_left_fill = dialog_display_selectbox_left_fill;
+    settings_display_selectbox_right_color = dialog_display_selectbox_right_color;
+    settings_display_selectbox_right_fill = dialog_display_selectbox_right_fill;
+    settings_display_selectbox_alpha = dialog_display_selectbox_alpha;
+    settings_display_zoomscale_in = dialog_display_zoomscale_in;
+    settings_display_zoomscale_out = dialog_display_zoomscale_out;
+    //TODO: settingsDisplayCrossHairPercent = dialog_display_crosshair_percent;
+    //TODO: settingsDisplayUnits = dialog_display_units;
+    settings_prompt_text_color = dialog_prompt_text_color;
+    settings_prompt_bg_color = dialog_prompt_bg_color;
+    settings_prompt_font_family = dialog_prompt_font_family;
+    settings_prompt_font_style = dialog_prompt_font_style;
+    settings_prompt_font_size = dialog_prompt_font_size;
+    settings_prompt_save_history = dialog_prompt_save_history;
+    settings_prompt_save_history_as_html = dialog_prompt_save_history_as_html;
+    //TODO: settings_prompt_save_history_filename = dialog_prompt_save_history_filename;
+    settings_opensave_custom_filter = dialog_opensave_custom_filter;
+    //TODO: settings_opensave_open_format = dialog_opensave_open_format;
+    //TODO: settings_opensave_open_thumbnail = dialog_opensave_open_thumbnail;
+    //TODO: settings_opensave_save_format = dialog_opensave_save_format;
+    //TODO: settings_opensave_save_thumbnail = dialog_opensave_save_thumbnail;
+    settings_opensave_recent_max_files = dialog_opensave_recent_max_files;
+    settings_opensave_trim_dst_num_jumps = dialog_opensave_trim_dst_num_jumps;
+    //TODO: settings_printing_default_device = dialog_printing_default_device;
+    //TODO: settings_printing_use_last_device = dialog_printing_use_last_device;
+    settings_printing_disable_bg = dialog_printing_disable_bg;
+    settings_grid_show_on_load = dialog_grid_show_on_load;
+    settings_grid_show_origin = dialog_grid_show_origin;
+    settings_grid_color_match_crosshair = dialog_grid_color_match_crosshair;
+    settings_grid_color = dialog_grid_color;
+    //TODO: settings_grid_load_from_file = dialog_grid_load_from_file;
+    settings_grid_type = dialog_grid_type;
+    settings_grid_center_on_origin = dialog_grid_center_on_origin;
+    settings_grid_center_x = dialog_grid_center_x;
+    settings_grid_center_y = dialog_grid_center_y;
+    settings_grid_size_x = dialog_grid_size_x;
+    settings_grid_size_y = dialog_grid_size_y;
+    settings_grid_spacing_x = dialog_grid_spacing_x;
+    settings_grid_spacing_y = dialog_grid_spacing_y;
+    settings_grid_size_radius = dialog_grid_size_radius;
+    settings_grid_spacing_radius = dialog_grid_spacing_radius;
+    settings_grid_spacing_angle = dialog_grid_spacing_angle;
+    settings_ruler_show_on_load = dialog_ruler_show_on_load;
+    settings_ruler_metric = dialog_ruler_metric;
+    settings_ruler_color = dialog_ruler_color;
+    settings_ruler_pixel_size = dialog_ruler_pixel_size;
+    //TODO: settings_qsnap_enabled = dialog_qsnap_enabled;
+    settings_qsnap_locator_color = dialog_qsnap_locator_color;
+    settings_qsnap_locator_size = dialog_qsnap_locator_size;
+    settings_qsnap_aperture_size = dialog_qsnap_aperture_size;
+    settings_qsnap_endpoint = dialog_qsnap_endpoint;
+    settings_qsnap_midpoint = dialog_qsnap_midpoint;
+    settings_qsnap_center = dialog_qsnap_center;
+    settings_qsnap_node = dialog_qsnap_node;
+    settings_qsnap_quadrant = dialog_qsnap_quadrant;
+    settings_qsnap_intersection = dialog_qsnap_intersection;
+    settings_qsnap_extension = dialog_qsnap_extension;
+    settings_qsnap_insertion = dialog_qsnap_insertion;
+    settings_qsnap_perpendicular = dialog_qsnap_perpendicular;
+    settings_qsnap_tangent = dialog_qsnap_tangent;
+    settings_qsnap_nearest = dialog_qsnap_nearest;
+    settings_qsnap_apparent = dialog_qsnap_apparent;
+    settings_qsnap_parallel = dialog_qsnap_parallel;
+    settings_lwt_show_lwt = dialog_lwt_show_lwt;
+    settings_lwt_real_render = dialog_lwt_real_render;
+    settings_selection_mode_pickfirst = dialog_selection_mode_pickfirst;
+    settings_selection_mode_pickadd = dialog_selection_mode_pickadd;
+    settings_selection_mode_pickdrag = dialog_selection_mode_pickdrag;
+    settings_selection_coolgrip_color = dialog_selection_coolgrip_color;
+    settings_selection_hotgrip_color = dialog_selection_hotgrip_color;
+    settings_selection_grip_size = dialog_selection_grip_size;
+    settings_selection_pickbox_size = dialog_selection_pickbox_size;
 
     //Make sure the user sees the changes applied immediately
     mainWin->mdiArea->useBackgroundLogo(dialog_general_mdi_bg_use_logo);

@@ -56,7 +56,7 @@ set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
 add_subdirectory(extern/libembroidery)
 
-qt_add_executable(embroidermodder
+qt_add_executable(embroidermodder2
 	${SRC}/application.cpp
 	${SRC}/application.h
 	${SRC}/cmdprompt.cpp
@@ -68,9 +68,6 @@ qt_add_executable(embroidermodder
 	${SRC}/layer-manager.cpp
 	${SRC}/layer-manager.h
 	${SRC}/main.cpp
-	${SRC}/mainwindow-actions.cpp
-	${SRC}/mainwindow-actions.h
-	${SRC}/mainwindow-commands.cpp
 	${SRC}/mainwindow.cpp
 	${SRC}/mainwindow.h
 	${SRC}/mainwindow-menus.cpp
@@ -80,8 +77,6 @@ qt_add_executable(embroidermodder
 	${SRC}/mdiarea.h
 	${SRC}/mdiwindow.cpp
 	${SRC}/mdiwindow.h
-	${SRC}/native-scripting.cpp
-	${SRC}/native-scripting.h
 	${SRC}/object-arc.cpp
 	${SRC}/object-arc.h
 	${SRC}/object-base.cpp
@@ -115,6 +110,8 @@ qt_add_executable(embroidermodder
 	${SRC}/preview-dialog.h
 	${SRC}/property-editor.cpp
 	${SRC}/property-editor.h
+	${SRC}/script.cpp
+	${SRC}/script.h
 	${SRC}/selectbox.cpp
 	${SRC}/selectbox.h
 	${SRC}/settings-dialog.cpp
@@ -130,9 +127,68 @@ qt_add_executable(embroidermodder
 	${SRC}/view.cpp
 	${SRC}/view.h
 
-	${EXTERN}/tinyscheme/source/dynload.c
-	${EXTERN}/tinyscheme/source/mod_json.c
-	${EXTERN}/tinyscheme/source/scheme.c
+	${EXTERN}/lua/src/lapi.c
+	${EXTERN}/lua/src/lapi.h
+	${EXTERN}/lua/src/lauxlib.c
+	${EXTERN}/lua/src/lauxlib.h
+	${EXTERN}/lua/src/lbaselib.c
+	${EXTERN}/lua/src/lcode.c
+	${EXTERN}/lua/src/lcode.h
+	${EXTERN}/lua/src/lcorolib.c
+	${EXTERN}/lua/src/lctype.c
+	${EXTERN}/lua/src/lctype.h
+    ${EXTERN}/lua/src/ldblib.c
+    ${EXTERN}/lua/src/ldebug.c
+    ${EXTERN}/lua/src/ldebug.h
+    ${EXTERN}/lua/src/ldo.c
+    ${EXTERN}/lua/src/ldo.h
+    ${EXTERN}/lua/src/ldump.c
+    ${EXTERN}/lua/src/lfunc.c
+    ${EXTERN}/lua/src/lfunc.h
+    ${EXTERN}/lua/src/lgc.c
+    ${EXTERN}/lua/src/lgc.h
+    ${EXTERN}/lua/src/linit.c
+    ${EXTERN}/lua/src/liolib.c
+    ${EXTERN}/lua/src/ljumptab.h
+    ${EXTERN}/lua/src/llex.c
+    ${EXTERN}/lua/src/llex.h
+    ${EXTERN}/lua/src/llimits.h
+    ${EXTERN}/lua/src/lmathlib.c
+    ${EXTERN}/lua/src/lmem.c
+    ${EXTERN}/lua/src/lmem.h
+    ${EXTERN}/lua/src/loadlib.c
+    ${EXTERN}/lua/src/lobject.c
+    ${EXTERN}/lua/src/lobject.h
+    ${EXTERN}/lua/src/lopcodes.c
+    ${EXTERN}/lua/src/lopcodes.h
+    ${EXTERN}/lua/src/lopnames.h
+    ${EXTERN}/lua/src/loslib.c
+    ${EXTERN}/lua/src/lparser.c
+    ${EXTERN}/lua/src/lparser.h
+    ${EXTERN}/lua/src/lprefix.h
+    ${EXTERN}/lua/src/lstate.c
+    ${EXTERN}/lua/src/lstate.h
+    ${EXTERN}/lua/src/lstring.c
+    ${EXTERN}/lua/src/lstring.h
+    ${EXTERN}/lua/src/lstrlib.c
+    ${EXTERN}/lua/src/ltable.c
+    ${EXTERN}/lua/src/ltable.h
+    ${EXTERN}/lua/src/ltablib.c
+    ${EXTERN}/lua/src/ltm.c
+    ${EXTERN}/lua/src/ltm.h
+#    ${EXTERN}/lua/src/lua.c
+#    ${EXTERN}/lua/src/luac.c
+    ${EXTERN}/lua/src/luaconf.h
+    ${EXTERN}/lua/src/lua.h
+    ${EXTERN}/lua/src/lua.hpp
+    ${EXTERN}/lua/src/lualib.h
+    ${EXTERN}/lua/src/lundump.c
+    ${EXTERN}/lua/src/lundump.h
+    ${EXTERN}/lua/src/lutf8lib.c
+    ${EXTERN}/lua/src/lvm.c
+    ${EXTERN}/lua/src/lvm.h
+    ${EXTERN}/lua/src/lzio.c
+    ${EXTERN}/lua/src/lzio.h
 )
 
 # WARNING: This does NOT regenerate when the assets change, so you have to
@@ -142,7 +198,7 @@ file(COPY "${CMAKE_SOURCE_DIR}/images"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/icons"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_SOURCE_DIR}/commands"
+file(COPY "${CMAKE_SOURCE_DIR}/scripts"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/samples"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
@@ -159,7 +215,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/extern/tinyscheme/include
 )
 
-target_link_libraries(embroidermodder PRIVATE
+target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport
@@ -167,16 +223,16 @@ target_link_libraries(embroidermodder PRIVATE
 	${OPENGL_LIBRARIES}
 )
 
-set_target_properties(embroidermodder PROPERTIES
+set_target_properties(embroidermodder2 PROPERTIES
 	WIN32_EXECUTABLE ON
 	MACOSX_BUNDLE ON
 )
 
 if (WIN32)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)
+set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2.exe)
 
 else(WIN32)
-target_link_libraries(embroidermodder PRIVATE m)
+target_link_libraries(embroidermodder2 PRIVATE m)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
 
 endif()
@@ -208,19 +264,3 @@ install(
 	DESTINATION
 		${ASSETS_DIR}/translations
 )
-
-# The necessary licenses are included in installation, should the user
-# not retain the code after installation and so this more resembles
-# the NSIS style installation.
-install(
-	FILES
-		${SRC_ASSETS}/fonts/source-code-pro-license.md
-		${SRC_ASSETS}/fonts/source-code-pro-readme.md
-		${SRC_ASSETS}/fonts/SourceCodePro-Regular.ttf
-		${SRC_ASSETS}/fonts/source-sans-license.md
-		${SRC_ASSETS}/fonts/source-sans-readme.md
-		${SRC_ASSETS}/fonts/SourceSans3-Regular.ttf
-	DESTINATION
-		${ASSETS_DIR}/fonts
-)
-
