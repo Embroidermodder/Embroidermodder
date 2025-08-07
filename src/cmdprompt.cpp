@@ -877,5 +877,3 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
     }
     return QObject::eventFilter(obj, event);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -205,5 +205,3 @@ void ImageObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for ImageObject
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -430,4 +430,3 @@ SaveObject::toPolyline(
     // TODO: proper lineType
     // FIXME: embPattern_addPolylineObjectAbs(pattern, polyObject);
 }
-

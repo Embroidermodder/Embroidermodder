@@ -113,7 +113,7 @@ protected:
     QAction* getFileSeparator();
     void loadFormats();
 
-private:
+public:
 
     bool shiftKeyPressedState;
 
@@ -249,14 +249,6 @@ public slots:
     void textFontSelectorCurrentFontChanged(const QFont& font);
     void textSizeSelectorIndexChanged(int index);
 
-    QString textFont();
-    qreal   textSize();
-    qreal   textAngle();
-
-    void setTextFont(const QString& str);
-    void setTextSize(qreal num);
-    void setTextAngle(qreal num);
-
     QString getCurrentLayer();
     QRgb getCurrentColor();
     QString getCurrentLineType();
@@ -274,8 +266,6 @@ public slots:
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
-
-    void doNothing();
 
 public:
     //Natives
@@ -296,9 +286,9 @@ public:
     void nativeAddInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
     void nativeAddRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
     void nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
-    void nativeAddTriangle            (qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
-    void nativeAddRectangle           (qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
-    void nativeAddRoundedRectangle    (qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
+    void nativeAddTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
+    void nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
+    void nativeAddRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
     void nativeAddArc(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode);
     void nativeAddCircle(qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode);
     void nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);

@@ -34,5 +34,3 @@ PreviewDialog::~PreviewDialog()
 {
     qDebug("PreviewDialog Destructor");
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

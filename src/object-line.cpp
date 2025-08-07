@@ -209,5 +209,3 @@ QPainterPath LineObject::objectSavePath() const
     path.lineTo(objectDeltaX(), objectDeltaY());
     return path;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

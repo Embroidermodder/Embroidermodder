@@ -80,5 +80,3 @@ int main(int argc, char* argv[])
 
     return app.exec();
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

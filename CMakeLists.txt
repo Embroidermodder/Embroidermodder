@@ -116,8 +116,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/selectbox.h
 	${SRC}/settings-dialog.cpp
 	${SRC}/settings-dialog.h
-	${SRC}/statusbar-button.cpp
-	${SRC}/statusbar-button.h
 	${SRC}/statusbar.cpp
 	${SRC}/statusbar.h
 	${SRC}/undo-commands.cpp

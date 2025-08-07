@@ -277,5 +277,3 @@ QPainterPath PolygonObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(closedPath);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

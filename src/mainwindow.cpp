@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 
 #include "statusbar.h"
-#include "statusbar-button.h"
 
 #include "view.h"
 #include "cmdprompt.h"
@@ -61,7 +60,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     if(!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
-    QString lang = settings_general_language;
+    QString lang = settings.general_language;
     qDebug("language: %s", qPrintable(lang));
     if(lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
@@ -116,7 +115,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     shiftKeyPressedState = false;
 
-    setWindowIcon(QIcon(appDir + "/icons/" + settings_general_icon_theme + "/" + "app" + ".png"));
+    setWindowIcon(QIcon(appDir + "/icons/" + settings.general_icon_theme + "/" + "app" + ".png"));
     setMinimumSize(800, 480); //Require Minimum WVGA
 
     loadFormats();
@@ -127,12 +126,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(this, vbox);
-    mdiArea->useBackgroundLogo(settings_general_mdi_bg_use_logo);
-    mdiArea->useBackgroundTexture(settings_general_mdi_bg_use_texture);
-    mdiArea->useBackgroundColor(settings_general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(settings_general_mdi_bg_logo);
-    mdiArea->setBackgroundTexture(settings_general_mdi_bg_texture);
-    mdiArea->setBackgroundColor(QColor(settings_general_mdi_bg_color));
+    mdiArea->useBackgroundLogo(settings.general_mdi_bg_use_logo);
+    mdiArea->useBackgroundTexture(settings.general_mdi_bg_use_texture);
+    mdiArea->useBackgroundColor(settings.general_mdi_bg_use_color);
+    mdiArea->setBackgroundLogo(settings.general_mdi_bg_logo);
+    mdiArea->setBackgroundTexture(settings.general_mdi_bg_texture);
+    mdiArea->setBackgroundColor(QColor(settings.general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -146,8 +145,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    prompt->setPromptTextColor(QColor(settings_prompt_text_color));
-    prompt->setPromptBackgroundColor(QColor(settings_prompt_bg_color));
+    prompt->setPromptTextColor(QColor(settings.prompt_text_color));
+    prompt->setPromptBackgroundColor(QColor(settings.prompt_bg_color));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
 
@@ -186,12 +185,12 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings_general_icon_theme, settings_selection_mode_pickadd, prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings.general_icon_theme, settings.selection_mode_pickadd, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + settings_general_icon_theme, prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + settings.general_icon_theme, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -209,7 +208,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     createAllMenus();
     createAllToolbars();
 
-    iconResize(settings_general_icon_size);
+    iconResize(settings.general_icon_size);
     updateMenuToolbarStatusbar();
 
     //Show date in statusbar after it has been updated
@@ -231,7 +230,7 @@ MainWindow::MainWindow() : QMainWindow(0)
             }
         } while(!tipLine.isNull());
     }
-    if (settings_general_tip_of_the_day) {
+    if (settings.general_tip_of_the_day) {
         tipOfTheDay();
     }
 }
@@ -254,12 +253,12 @@ void MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for(int i = 0; i < settings_opensave_recent_list_of_files.size(); ++i)
+    for(int i = 0; i < settings.opensave_recent_list_of_files.size(); ++i)
     {
         //If less than the max amount of entries add to menu
-        if(i < settings_opensave_recent_max_files)
+        if(i < settings.opensave_recent_max_files)
         {
-            recentFileInfo = QFileInfo(settings_opensave_recent_list_of_files.at(i));
+            recentFileInfo = QFileInfo(settings.opensave_recent_list_of_files.at(i));
             if(recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName()))
             {
                 recentValue.setNum(i+1);
@@ -268,16 +267,16 @@ void MainWindow::recentMenuAboutToShow()
                 else if(recentValue.toInt() == 10)                            rAction = new QAction("1&0 "                  + recentFileInfo.fileName(), this);
                 else                                                          rAction = new QAction(      recentValue + " " + recentFileInfo.fileName(), this);
                 rAction->setCheckable(false);
-                rAction->setData(settings_opensave_recent_list_of_files.at(i));
+                rAction->setData(settings.opensave_recent_list_of_files.at(i));
                 recentMenu->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
         }
     }
     //Ensure the list only has max amount of entries
-    while(settings_opensave_recent_list_of_files.size() > settings_opensave_recent_max_files)
+    while(settings.opensave_recent_list_of_files.size() > settings.opensave_recent_max_files)
     {
-        settings_opensave_recent_list_of_files.removeLast();
+        settings.opensave_recent_list_of_files.removeLast();
     }
 }
 
@@ -357,8 +356,8 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     QStringList files;
-    bool preview = settings_opensave_open_thumbnail;
-    openFilesPath = settings_opensave_recent_directory;
+    bool preview = settings.opensave_open_thumbnail;
+    openFilesPath = settings.opensave_recent_directory;
 
     //Check to see if this from the recent files list
     if(recent)
@@ -368,14 +367,14 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     }
     else if(!preview)
     {
-        //TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
+        //TODO: set getOpenFileNames' selectedFilter parameter from settings.opensave_open_format
         files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
     else if(preview)
     {
         PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
-        //TODO: set openDialog->selectNameFilter(const QString& filter) from settings_opensave_open_format
+        //TODO: set openDialog->selectNameFilter(const QString& filter) from settings.opensave_open_format
         connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
         openDialog->exec();
     }
@@ -416,17 +415,17 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 mdiWin->show();
                 mdiWin->showMaximized();
                 //Prevent duplicate entries in the recent files list
-                if(!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
+                if(!settings.opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
                 {
-                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                    settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
                 //Move the recent file to the top of the list
                 else
                 {
-                    settings_opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
-                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                    settings.opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
+                    settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
-                settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
+                settings.opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
 
                 View* v = mdiWin->getView();
                 if(v)
@@ -471,7 +470,7 @@ void MainWindow::saveasfile()
         return;
 
     QString file;
-    openFilesPath = settings_opensave_recent_directory;
+    openFilesPath = settings.opensave_recent_directory;
     file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
 
     mdiWin->saveFile(file);
@@ -737,7 +736,7 @@ void MainWindow::loadFormats()
     formatFilterSave = supportedWriters + individualWriters;
 
     //TODO: Fixup custom filter
-    QString custom = settings_opensave_custom_filter;
+    QString custom = settings.opensave_custom_filter;
     if(custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
     else if(!custom.contains("*", Qt::CaseInsensitive))
