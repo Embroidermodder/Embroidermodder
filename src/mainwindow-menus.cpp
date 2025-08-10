@@ -1,8 +1,4 @@
-#include "mainwindow.h"
-#include <QDebug>
-#include <QMenu>
-#include <QMenuBar>
-#include <QAction>
+#include "embroidermodder.h"
 
 void MainWindow::createFileMenu()
 {

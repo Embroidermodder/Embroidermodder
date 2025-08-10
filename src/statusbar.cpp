@@ -1,7 +1,4 @@
-#include "mainwindow.h"
-#include "mdiwindow.h"
-#include "view.h"
-#include "statusbar.h"
+#include "embroidermodder.h"
 
 #include <QLabel>
 #include <QMenu>
@@ -78,7 +75,7 @@ void StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
     }
     else if(objectName() == "StatusBarButtonLWT")
     {
-        View* gview = mainWin->activeView();
+        View* gview = activeView();
         if(gview)
         {
             QAction* enableRealAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "realrender" + ".png"), "&RealRender On", &menu);
@@ -144,63 +141,63 @@ void StatusBarButton::settingsLwt()
 void StatusBarButton::toggleSnap(bool on)
 {
     qDebug("StatusBarButton toggleSnap()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleSnap(on); }
 }
 
 void StatusBarButton::toggleGrid(bool on)
 {
     qDebug("StatusBarButton toggleGrid()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleGrid(on); }
 }
 
 void StatusBarButton::toggleRuler(bool on)
 {
     qDebug("StatusBarButton toggleRuler()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleRuler(on); }
 }
 
 void StatusBarButton::toggleOrtho(bool on)
 {
     qDebug("StatusBarButton toggleOrtho()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleOrtho(on); }
 }
 
 void StatusBarButton::togglePolar(bool on)
 {
     qDebug("StatusBarButton togglePolar()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->togglePolar(on); }
 }
 
 void StatusBarButton::toggleQSnap(bool on)
 {
     qDebug("StatusBarButton toggleQSnap()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleQSnap(on); }
 }
 
 void StatusBarButton::toggleQTrack(bool on)
 {
     qDebug("StatusBarButton toggleQTrack()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleQTrack(on); }
 }
 
 void StatusBarButton::toggleLwt(bool on)
 {
     qDebug("StatusBarButton toggleLwt()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleLwt(on); }
 }
 
 void StatusBarButton::enableLwt()
 {
     qDebug("StatusBarButton enableLwt()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview)
     {
         if(!gview->isLwtEnabled())
@@ -211,7 +208,7 @@ void StatusBarButton::enableLwt()
 void StatusBarButton::disableLwt()
 {
     qDebug("StatusBarButton disableLwt()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview)
     {
         if(gview->isLwtEnabled())
@@ -222,14 +219,14 @@ void StatusBarButton::disableLwt()
 void StatusBarButton::enableReal()
 {
     qDebug("StatusBarButton enableReal()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleReal(true); }
 }
 
 void StatusBarButton::disableReal()
 {
     qDebug("StatusBarButton disableReal()");
-    View* gview = mainWin->activeView();
+    View* gview = activeView();
     if(gview) { gview->toggleReal(false); }
 }
 

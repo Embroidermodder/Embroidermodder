@@ -1,4 +1,4 @@
-#include "object-base.h"
+#include "embroidermodder.h"
 
 #include <QDebug>
 #include <QGraphicsScene>

@@ -1,8 +1,6 @@
 #include <QtGui>
 
-#include "settings-dialog.h"
-#include "object-data.h"
-#include "statusbar.h"
+#include "embroidermodder.h"
 
 #include <QStandardPaths>
 
@@ -1625,7 +1623,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
     //Misc
     QGroupBox* groupBoxLwtMisc = new QGroupBox(tr("LineWeight Misc"), widget);
 
-    QGraphicsScene* s = mainWin->activeScene();
+    QGraphicsScene* s = activeScene();
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
     if(s) { dialog.lwt_show_lwt = s->property(ENABLE_LWT).toBool(); }
@@ -1803,7 +1801,7 @@ void Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
 void Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
 {
     preview.general_mdi_bg_use_logo = checked;
-    mainWin->mdiArea->useBackgroundLogo(checked);
+    mdiArea->useBackgroundLogo(checked);
 }
 
 void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
@@ -1824,14 +1822,14 @@ void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
             accept_.general_mdi_bg_logo = selectedImage;
 
         //Update immediately so it can be previewed
-        mainWin->mdiArea->setBackgroundLogo(accept_.general_mdi_bg_logo);
+        mdiArea->setBackgroundLogo(accept_.general_mdi_bg_logo);
     }
 }
 
 void Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged(int checked)
 {
     preview.general_mdi_bg_use_texture = checked;
-    mainWin->mdiArea->useBackgroundTexture(checked);
+    mdiArea->useBackgroundTexture(checked);
 }
 
 void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
@@ -1852,14 +1850,14 @@ void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
             accept_.general_mdi_bg_texture = selectedImage;
 
         //Update immediately so it can be previewed
-        mainWin->mdiArea->setBackgroundTexture(accept_.general_mdi_bg_texture);
+        mdiArea->setBackgroundTexture(accept_.general_mdi_bg_texture);
     }
 }
 
 void Settings_Dialog::checkBoxGeneralMdiBGUseColorStateChanged(int checked)
 {
     preview.general_mdi_bg_use_color = checked;
-    mainWin->mdiArea->useBackgroundColor(checked);
+    mdiArea->useBackgroundColor(checked);
 }
 
 void Settings_Dialog::chooseGeneralMdiBackgroundColor()
@@ -1877,11 +1875,11 @@ void Settings_Dialog::chooseGeneralMdiBackgroundColor()
             QPixmap pix(16,16);
             pix.fill(QColor(accept_.general_mdi_bg_color));
             button->setIcon(QIcon(pix));
-            mainWin->mdiArea->setBackgroundColor(QColor(accept_.general_mdi_bg_color));
+            mdiArea->setBackgroundColor(QColor(accept_.general_mdi_bg_color));
         }
         else
         {
-            mainWin->mdiArea->setBackgroundColor(QColor(dialog.general_mdi_bg_color));
+            mdiArea->setBackgroundColor(QColor(dialog.general_mdi_bg_color));
         }
     }
 }
@@ -1889,7 +1887,7 @@ void Settings_Dialog::chooseGeneralMdiBackgroundColor()
 void Settings_Dialog::currentGeneralMdiBackgroundColorChanged(const QColor& color)
 {
     preview.general_mdi_bg_color = color.rgb();
-    mainWin->mdiArea->setBackgroundColor(QColor(preview.general_mdi_bg_color));
+    mdiArea->setBackgroundColor(QColor(preview.general_mdi_bg_color));
 }
 
 void Settings_Dialog::checkBoxTipOfTheDayStateChanged(int checked)
@@ -2206,11 +2204,11 @@ void Settings_Dialog::choosePromptTextColor()
             QPixmap pix(16,16);
             pix.fill(QColor(accept_.prompt_text_color));
             button->setIcon(QIcon(pix));
-            mainWin->prompt->setPromptTextColor(QColor(accept_.prompt_text_color));
+            prompt->setPromptTextColor(QColor(accept_.prompt_text_color));
         }
         else
         {
-            mainWin->prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
+            prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
         }
     }
 }
@@ -2218,7 +2216,7 @@ void Settings_Dialog::choosePromptTextColor()
 void Settings_Dialog::currentPromptTextColorChanged(const QColor& color)
 {
     preview.prompt_text_color = color.rgb();
-    mainWin->prompt->setPromptTextColor(QColor(preview.prompt_text_color));
+    prompt->setPromptTextColor(QColor(preview.prompt_text_color));
 }
 
 void Settings_Dialog::choosePromptBackgroundColor()
@@ -2236,11 +2234,11 @@ void Settings_Dialog::choosePromptBackgroundColor()
             QPixmap pix(16,16);
             pix.fill(QColor(accept_.prompt_bg_color));
             button->setIcon(QIcon(pix));
-            mainWin->prompt->setPromptBackgroundColor(QColor(accept_.prompt_bg_color));
+            prompt->setPromptBackgroundColor(QColor(accept_.prompt_bg_color));
         }
         else
         {
-            mainWin->prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
+            prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
         }
     }
 }
@@ -2248,25 +2246,25 @@ void Settings_Dialog::choosePromptBackgroundColor()
 void Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 {
     preview.prompt_bg_color = color.rgb();
-    mainWin->prompt->setPromptBackgroundColor(QColor(preview.prompt_bg_color));
+    prompt->setPromptBackgroundColor(QColor(preview.prompt_bg_color));
 }
 
 void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
 {
     preview.prompt_font_family = family;
-    mainWin->prompt->setPromptFontFamily(preview.prompt_font_family);
+    prompt->setPromptFontFamily(preview.prompt_font_family);
 }
 
 void Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(const QString& style)
 {
     preview.prompt_font_style = style;
-    mainWin->prompt->setPromptFontStyle(preview.prompt_font_style);
+    prompt->setPromptFontStyle(preview.prompt_font_style);
 }
 
 void Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
 {
     preview.prompt_font_size = value;
-    mainWin->prompt->setPromptFontSize(preview.prompt_font_size);
+    prompt->setPromptFontSize(preview.prompt_font_size);
 }
 
 void Settings_Dialog::checkBoxPromptSaveHistoryStateChanged(int checked)
@@ -2708,8 +2706,8 @@ void Settings_Dialog::sliderQSnapApertureSizeValueChanged(int value)
 void Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 {
     preview.lwt_show_lwt = checked;
-    if(preview.lwt_show_lwt) { mainWin->statusbar->statusBarLwtButton->enableLwt(); }
-    else                     { mainWin->statusbar->statusBarLwtButton->disableLwt(); }
+    if(preview.lwt_show_lwt) { statusbar->statusBarLwtButton->enableLwt(); }
+    else                     { statusbar->statusBarLwtButton->disableLwt(); }
 
     QObject* senderObj = sender();
     if(senderObj)
@@ -2726,8 +2724,8 @@ void Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 void Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
 {
     preview.lwt_real_render = checked;
-    if(preview.lwt_real_render) { mainWin->statusbar->statusBarLwtButton->enableReal(); }
-    else                        { mainWin->statusbar->statusBarLwtButton->disableReal(); }
+    if(preview.lwt_real_render) { statusbar->statusBarLwtButton->enableReal(); }
+    else                        { statusbar->statusBarLwtButton->disableReal(); }
 }
 
 void Settings_Dialog::checkBoxSelectionModePickFirstStateChanged(int checked)
@@ -2910,12 +2908,12 @@ void Settings_Dialog::acceptChanges()
     settings.selection_pickbox_size = dialog.selection_pickbox_size;
 
     //Make sure the user sees the changes applied immediately
-    mainWin->mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
-    mainWin->mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
-    mainWin->mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
-    mainWin->mdiArea->setBackgroundLogo(dialog.general_mdi_bg_logo);
-    mainWin->mdiArea->setBackgroundTexture(dialog.general_mdi_bg_texture);
-    mainWin->mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
+    mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
+    mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
+    mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
+    mdiArea->setBackgroundLogo(dialog.general_mdi_bg_logo);
+    mdiArea->setBackgroundTexture(dialog.general_mdi_bg_texture);
+    mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
     mainWin->iconResize(dialog.general_icon_size);
     mainWin->updateAllViewScrollBars(dialog.display_show_scrollbars);
     mainWin->updateAllViewCrossHairColors(dialog.display_crosshair_color);
@@ -2925,17 +2923,17 @@ void Settings_Dialog::acceptChanges()
                                           dialog.display_selectbox_right_color,
                                           dialog.display_selectbox_right_fill,
                                           dialog.display_selectbox_alpha);
-    mainWin->prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
-    mainWin->prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
-    mainWin->prompt->setPromptFontFamily(dialog.prompt_font_family);
-    mainWin->prompt->setPromptFontStyle(dialog.prompt_font_style);
-    mainWin->prompt->setPromptFontSize(dialog.prompt_font_size);
+    prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
+    prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
+    prompt->setPromptFontFamily(dialog.prompt_font_family);
+    prompt->setPromptFontStyle(dialog.prompt_font_style);
+    prompt->setPromptFontSize(dialog.prompt_font_size);
     mainWin->updateAllViewGridColors(dialog.grid_color);
     mainWin->updateAllViewRulerColors(dialog.ruler_color);
-    if(dialog.lwt_show_lwt) { mainWin->statusbar->statusBarLwtButton->enableLwt(); }
-    else                    { mainWin->statusbar->statusBarLwtButton->disableLwt(); }
-    if(dialog.lwt_real_render) { mainWin->statusbar->statusBarLwtButton->enableReal(); }
-    else                       { mainWin->statusbar->statusBarLwtButton->disableReal(); }
+    if(dialog.lwt_show_lwt) { statusbar->statusBarLwtButton->enableLwt(); }
+    else                    { statusbar->statusBarLwtButton->disableLwt(); }
+    if(dialog.lwt_real_render) { statusbar->statusBarLwtButton->enableReal(); }
+    else                       { statusbar->statusBarLwtButton->disableReal(); }
     mainWin->updatePickAddMode(dialog.selection_mode_pickadd);
 
     mainWin->writeSettings();
@@ -2947,12 +2945,12 @@ void Settings_Dialog::rejectChanges()
     //TODO: inform the user if they have changed settings
 
     //Update the view since the user must accept the preview
-    mainWin->mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
-    mainWin->mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
-    mainWin->mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
-    mainWin->mdiArea->setBackgroundLogo(dialog.general_mdi_bg_logo);
-    mainWin->mdiArea->setBackgroundTexture(dialog.general_mdi_bg_texture);
-    mainWin->mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
+    mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
+    mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
+    mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
+    mdiArea->setBackgroundLogo(dialog.general_mdi_bg_logo);
+    mdiArea->setBackgroundTexture(dialog.general_mdi_bg_texture);
+    mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
     mainWin->updateAllViewScrollBars(dialog.display_show_scrollbars);
     mainWin->updateAllViewCrossHairColors(dialog.display_crosshair_color);
     mainWin->updateAllViewBackgroundColors(dialog.display_bg_color);
@@ -2961,17 +2959,17 @@ void Settings_Dialog::rejectChanges()
                                           dialog.display_selectbox_right_color,
                                           dialog.display_selectbox_right_fill,
                                           dialog.display_selectbox_alpha);
-    mainWin->prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
-    mainWin->prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
-    mainWin->prompt->setPromptFontFamily(dialog.prompt_font_family);
-    mainWin->prompt->setPromptFontStyle(dialog.prompt_font_style);
-    mainWin->prompt->setPromptFontSize(dialog.prompt_font_size);
+    prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
+    prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
+    prompt->setPromptFontFamily(dialog.prompt_font_family);
+    prompt->setPromptFontStyle(dialog.prompt_font_style);
+    prompt->setPromptFontSize(dialog.prompt_font_size);
     mainWin->updateAllViewGridColors(dialog.grid_color);
     mainWin->updateAllViewRulerColors(dialog.ruler_color);
-    if(dialog.lwt_show_lwt) { mainWin->statusbar->statusBarLwtButton->enableLwt(); }
-    else                    { mainWin->statusbar->statusBarLwtButton->disableLwt(); }
-    if(dialog.lwt_real_render) { mainWin->statusbar->statusBarLwtButton->enableReal(); }
-    else                       { mainWin->statusbar->statusBarLwtButton->disableReal(); }
+    if(dialog.lwt_show_lwt) { statusbar->statusBarLwtButton->enableLwt(); }
+    else                    { statusbar->statusBarLwtButton->disableLwt(); }
+    if(dialog.lwt_real_render) { statusbar->statusBarLwtButton->enableReal(); }
+    else                       { statusbar->statusBarLwtButton->disableReal(); }
 
     reject();
 }

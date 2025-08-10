@@ -1,42 +1,9 @@
-#include "mainwindow.h"
-
-#include "statusbar.h"
-
-#include "view.h"
-#include "cmdprompt.h"
-
-#include "property-editor.h"
-#include "undo-editor.h"
-
-#include "preview-dialog.h"
-
-#include "embroidery.h"
-
-#include <stdlib.h>
-
-#include <QDebug>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QMenu>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QMdiArea>
-#include <QWidget>
-#include <QMdiSubWindow>
-#include <QMessageBox>
-#include <QToolBar>
-#include <QFileDialog>
-#include <QApplication>
-#include <QDate>
-#include <QFileInfo>
-#include <QLabel>
-#include <QComboBox>
-#include <QCloseEvent>
-#include <QMetaObject>
-#include <QLocale>
+#include "embroidermodder.h"
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    _mainWin = this;
+
     readSettings();
 
     QString appDir = qApp->applicationDirPath();
@@ -74,9 +41,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     QTranslator translatorQt;
     translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); //TODO: ensure this always loads, ship a copy of this with the app
     qApp->installTranslator(&translatorQt);
-
-    //Init
-    mainWin = this;
 
     //Menus
     fileMenu     = new QMenu(tr("&File"), this);
@@ -164,25 +128,25 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(F4Pressed()),        this, SLOT(toggleLwt())); //TODO: typically this is toggleTablet(), make F-Keys customizable thru settings
     //TODO: connect(prompt, SIGNAL(F5Pressed()),        this, SLOT(toggleISO()));
     //TODO: connect(prompt, SIGNAL(F6Pressed()),        this, SLOT(toggleCoords()));
-            connect(prompt, SIGNAL(F7Pressed()),        this, SLOT(toggleGrid()));
+    connect(prompt, SIGNAL(F7Pressed()),        this, SLOT(toggleGrid()));
     //TODO: connect(prompt, SIGNAL(F8Pressed()),        this, SLOT(toggleORTHO()));
     //TODO: connect(prompt, SIGNAL(F9Pressed()),        this, SLOT(toggleSNAP()));
     //TODO: connect(prompt, SIGNAL(F10Pressed()),       this, SLOT(togglePOLAR()));
     //TODO: connect(prompt, SIGNAL(F11Pressed()),       this, SLOT(toggleQTRACK()));
-            connect(prompt, SIGNAL(F12Pressed()),       this, SLOT(toggleRuler()));
-            connect(prompt, SIGNAL(cutPressed()),       this, SLOT(cut()));
-            connect(prompt, SIGNAL(copyPressed()),      this, SLOT(copy()));
-            connect(prompt, SIGNAL(pastePressed()),     this, SLOT(paste()));
-            connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
-            connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
-            connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
+    connect(prompt, SIGNAL(F12Pressed()),       this, SLOT(toggleRuler()));
+    connect(prompt, SIGNAL(cutPressed()),       this, SLOT(cut()));
+    connect(prompt, SIGNAL(copyPressed()),      this, SLOT(copy()));
+    connect(prompt, SIGNAL(pastePressed()),     this, SLOT(paste()));
+    connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
+    connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
+    connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
 
-            connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
-            connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
+    connect(prompt, &CmdPrompt::shiftPressed, this, [=]() { shiftKeyPressedState = true; });
+    connect(prompt, &CmdPrompt::shiftReleased, this, [=]() { shiftKeyPressedState = false; });
 
-            connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
+    connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
 
-            connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
+    connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
     dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings.general_icon_theme, settings.selection_mode_pickadd, prompt, this);
@@ -253,14 +217,11 @@ void MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for(int i = 0; i < settings.opensave_recent_list_of_files.size(); ++i)
-    {
+    for(int i = 0; i < settings.opensave_recent_list_of_files.size(); ++i) {
         //If less than the max amount of entries add to menu
-        if(i < settings.opensave_recent_max_files)
-        {
+        if(i < settings.opensave_recent_max_files) {
             recentFileInfo = QFileInfo(settings.opensave_recent_list_of_files.at(i));
-            if(recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName()))
-            {
+            if(recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
                 recentValue.setNum(i+1);
                 QAction* rAction;
                 if     (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
@@ -274,8 +235,7 @@ void MainWindow::recentMenuAboutToShow()
         }
     }
     //Ensure the list only has max amount of entries
-    while(settings.opensave_recent_list_of_files.size() > settings.opensave_recent_max_files)
-    {
+    while(settings.opensave_recent_list_of_files.size() > settings.opensave_recent_max_files) {
         settings.opensave_recent_list_of_files.removeLast();
     }
 }
@@ -295,8 +255,7 @@ void MainWindow::windowMenuAboutToShow()
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
-    for(int i = 0; i < windows.count(); ++i)
-    {
+    for(int i = 0; i < windows.count(); ++i) {
         QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
         aAction->setCheckable(true);
         aAction->setData(i);
@@ -317,24 +276,12 @@ void MainWindow::windowMenuActivated(bool checked)
         w->setFocus();
 }
 
-MdiArea* MainWindow::getMdiArea()
-{
-    qDebug("MainWindow::getMdiArea()");
-    return mdiArea;
-}
-
-MainWindow* MainWindow::getApplication()
-{
-    qDebug("MainWindow::getApplication()");
-    return mainWin;
-}
-
 void MainWindow::newFile()
 {
     qDebug("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    MdiWindow* mdiWin = new MdiWindow(docIndex, _mainWin, mdiArea, Qt::SubWindow);
     connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
@@ -342,8 +289,7 @@ void MainWindow::newFile()
     windowMenuAboutToShow();
 
     View* v = mdiWin->getView();
-    if(v)
-    {
+    if(v) {
         v->recalculateLimits();
         v->zoomExtents();
     }
@@ -360,19 +306,16 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     openFilesPath = settings.opensave_recent_directory;
 
     //Check to see if this from the recent files list
-    if(recent)
-    {
+    if(recent) {
         files.append(recentFile);
         openFilesSelected(files);
     }
-    else if(!preview)
-    {
+    else if(!preview) {
         //TODO: set getOpenFileNames' selectedFilter parameter from settings.opensave_open_format
         files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
-    else if(preview)
-    {
+    else if(preview) {
         PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
         //TODO: set openDialog->selectNameFilter(const QString& filter) from settings.opensave_open_format
         connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
@@ -386,56 +329,51 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
 {
     bool doOnce = true;
 
-    if(filesToOpen.count())
-    {
-        for(int i = 0; i < filesToOpen.count(); i++)
-        {
+    if(filesToOpen.count()) {
+        for(int i = 0; i < filesToOpen.count(); i++) {
             if(!validFileFormat(filesToOpen[i]))
                 continue;
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
-            if(existing)
-            {
+            if(existing) {
                 mdiArea->setActiveSubWindow(existing);
                 continue;
             }
 
             //The docIndex doesn't need increased as it is only used for unnamed files
             numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            MdiWindow* mdiWin = new MdiWindow(docIndex, _mainWin, mdiArea, Qt::SubWindow);
             connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
             //Make sure the toolbars/etc... are shown before doing their zoomExtents
-            if(doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
+            if (doOnce) {
+                updateMenuToolbarStatusbar();
+                doOnce = false;
+            }
 
-            if(mdiWin->loadFile(filesToOpen.at(i)))
-            {
+            if (mdiWin->loadFile(filesToOpen.at(i))) {
                 statusbar->showMessage(tr("File(s) loaded"), 2000);
                 mdiWin->show();
                 mdiWin->showMaximized();
                 //Prevent duplicate entries in the recent files list
-                if(!settings.opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
-                {
+                if(!settings.opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive)) {
                     settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
                 //Move the recent file to the top of the list
-                else
-                {
+                else {
                     settings.opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
                     settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
                 settings.opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
 
                 View* v = mdiWin->getView();
-                if(v)
-                {
+                if(v) {
                     v->recalculateLimits();
                     v->zoomExtents();
                 }
             }
-            else
-            {
+            else {
                 mdiWin->close();
             }
         }
@@ -450,8 +388,7 @@ void MainWindow::openrecentfile()
 
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
-    if(recentSender)
-    {
+    if(recentSender) {
         openFile(true, recentSender->data().toString());
     }
 }
@@ -481,13 +418,10 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
-    foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList())
-    {
+    foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
-        if(mdiWin)
-        {
-            if(mdiWin->getCurrentFile() == canonicalFilePath)
-            {
+        if(mdiWin) {
+            if(mdiWin->getCurrentFile() == canonicalFilePath) {
                 return subWindow;
             }
         }
@@ -506,8 +440,7 @@ void MainWindow::onCloseWindow()
 {
     qDebug("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
-    {
+    if(mdiWin) {
         onCloseMdiWin(mdiWin);
     }
 }
@@ -526,8 +459,7 @@ void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
     updateMenuToolbarStatusbar();
     windowMenuAboutToShow();
 
-    if(keepMaximized)
-    {
+    if(keepMaximized) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
         if(mdiWin) { mdiWin->showMaximized(); }
     }
@@ -561,8 +493,7 @@ void MainWindow::updateMenuToolbarStatusbar()
     actionHash.value("windowclose")->setEnabled(numOfDocs > 0);
     actionHash.value("designdetails")->setEnabled(numOfDocs > 0);
 
-    if(numOfDocs)
-    {
+    if(numOfDocs) {
         //Toolbars
         toolbarView->show();
         toolbarZoom->show();
@@ -574,8 +505,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarProperties->show();
         toolbarPrompt->show();
 
-        foreach(QToolBar* tb, toolbarHash)
-        {
+        foreach(QToolBar* tb, toolbarHash) {
             tb->show();
         }
 
@@ -589,8 +519,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         menuBar()->addMenu(editMenu);
         menuBar()->addMenu(viewMenu);
 
-        foreach(QMenu* menu, menuHash)
-        {
+        foreach(QMenu* menu, menuHash) {
             menuBar()->addMenu(menu);
         }
 
@@ -612,8 +541,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         statusbar->statusBarQTrackButton->show();
         statusbar->statusBarLwtButton->show();
     }
-    else
-    {
+    else {
         //Toolbars
         toolbarView->hide();
         toolbarZoom->hide();
@@ -624,8 +552,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarText->hide();
         toolbarProperties->hide();
         toolbarPrompt->hide();
-        foreach(QToolBar* tb, toolbarHash)
-        {
+        foreach(QToolBar* tb, toolbarHash) {
             tb->hide();
         }
 
@@ -699,8 +626,7 @@ void MainWindow::loadFormats()
     EmbFormatList* formatList = embFormatList_create();
     if(!formatList) { QMessageBox::critical(this, tr("Format Loading Error"), tr("Unable to load formats from libembroidery.")); return; }
     curFormat = formatList;
-    while(curFormat)
-    {
+    while(curFormat) {
         extension = embFormat_extension(curFormat);
         description = embFormat_description(curFormat);
         readerState = embFormat_readerState(curFormat);
@@ -709,17 +635,14 @@ void MainWindow::loadFormats()
         QString upperExt = QString(extension).toUpper();
         supportedStr = "*" + upperExt + " ";
         individualStr = upperExt.replace(".", "") + " - " + description + " (*" + extension + ");;";
-        if(readerState == stable || readerState == unstable)
-        {
+        if(readerState == stable || readerState == unstable) {
             //Exclude color file formats from open dialogs
-            if(upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB")
-            {
+            if(upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB") {
                 supportedReaders.append(supportedStr);
                 individualReaders.append(individualStr);
             }
         }
-        if(writerState == stable || writerState == unstable)
-        {
+        if(writerState == stable || writerState == unstable) {
             supportedWriters.append(supportedStr);
             individualWriters.append(individualStr);
         }
@@ -750,11 +673,9 @@ void MainWindow::loadFormats()
 
 void MainWindow::closeToolBar(QAction* action)
 {
-    if(action->objectName() == "toolbarclose")
-    {
+    if(action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
-        if(tb)
-        {
+        if(tb) {
             qDebug("%s closed.", qPrintable(tb->objectName()));
             tb->hide();
         }
@@ -764,10 +685,8 @@ void MainWindow::closeToolBar(QAction* action)
 void MainWindow::floatingChangedToolBar(bool isFloating)
 {
     QToolBar* tb = qobject_cast<QToolBar*>(sender());
-    if(tb)
-    {
-        if(isFloating)
-        {
+    if(tb) {
+        if(isFloating) {
             /*
             //TODO: Determine best suited close button on various platforms.
             QStyle::SP_DockWidgetCloseButton
@@ -780,14 +699,11 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
             tb->addAction(ACTION);
             connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
         }
-        else
-        {
+        else {
             QList<QAction*> actList = tb->actions();
-            for(int i = 0; i < actList.size(); ++i)
-            {
+            for(int i = 0; i < actList.size(); ++i) {
                 QAction* ACTION = actList.value(i);
-                if(ACTION->objectName() == "toolbarclose")
-                {
+                if(ACTION->objectName() == "toolbarclose") {
                     tb->removeAction(ACTION);
                     disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
                     delete ACTION;

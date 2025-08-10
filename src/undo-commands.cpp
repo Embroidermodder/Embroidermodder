@@ -1,7 +1,4 @@
-#include "undo-commands.h"
-
-#include "object-base.h"
-#include "view.h"
+#include "embroidermodder.h"
 
 //==================================================
 // Add

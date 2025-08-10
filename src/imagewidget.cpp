@@ -1,5 +1,4 @@
-#include <QDebug>
-#include "imagewidget.h"
+#include "embroidermodder.h"
 
 ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
 {

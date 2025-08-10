@@ -34,69 +34,13 @@
  * can be lua registerable functions.
  */
 
-#include "embroidery.h"
+#include "embroidermodder.h"
 
+/* Note that lua has not interfacing outside of this file. The wrappers like 
+ * script_env_boot, script_env_free, etc. allow us to not use the lua_State and
+ * lua_* functions outside of this file.
+ */
 #include "../extern/lua/src/lua.hpp"
-
-#include "mainwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "imagewidget.h"
-#include "layer-manager.h"
-#include "object-data.h"
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-image.h"
-#include "object-line.h"
-#include "object-path.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
-#include "property-editor.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
-#include "embdetails-dialog.h"
-
-#include <stdlib.h>
-
-#include <QAction>
-#include <QApplication>
-#include <QMdiArea>
-#include <QLabel>
-#include <QDesktopServices>
-#include <QApplication>
-#include <QUrl>
-#include <QProcess>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QMdiArea>
-#include <QGraphicsScene>
-#include <QComboBox>
-#include <QWhatsThis>
-#include <QDebug>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QMenu>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QMdiArea>
-#include <QWidget>
-#include <QMdiSubWindow>
-#include <QMessageBox>
-#include <QToolBar>
-#include <QFileDialog>
-#include <QApplication>
-#include <QDate>
-#include <QFileInfo>
-#include <QLabel>
-#include <QComboBox>
-#include <QCloseEvent>
-#include <QMetaObject>
-#include <QLocale>
 
 typedef struct Command_ {
     QString icon;
@@ -115,9 +59,14 @@ typedef struct ScriptValue_ {
     bool b;
 } ScriptValue;
 
+#if __cplusplus
 extern "C" {
-    void temp_name(char *name, int *err);
-}
+#endif
+
+void temp_name(char *name, int *err);
+void init_command(void);
+void clear_selection(void);
+void end_command(void);
 
 /* NOTE: Try to keep this list alphabetical in the function name. */
 int about_f(lua_State *L);
@@ -286,9 +235,9 @@ int zoom_scale_f(lua_State *L);
 int zoom_selected_f(lua_State *L);
 int zoom_window_f(lua_State *L);
 
-void init_command(void);
-void clear_selection(void);
-void end_command(void);
+#if __cplusplus
+}
+#endif
 
 /* ---- State ------------------------------------------------------------------
  *
@@ -299,7 +248,13 @@ unsigned char context_flag = CONTEXT_MAIN;
 
 Settings settings;
 
-MainWindow* _mainWin = 0;
+/* Pointer access */
+MainWindow* _mainWin = NULL;
+MdiArea* mdiArea = NULL;
+CmdPrompt* prompt = NULL;
+PropertyEditor* dockPropEdit = NULL;
+UndoEditor* dockUndoEdit = NULL;
+StatusBar* statusbar = NULL;
 
 const char *temporary_name_format = "tmp_%d";
 int temporary_name = 0;
@@ -891,16 +846,6 @@ bool MainWindow::isShiftPressed()
     return shiftKeyPressedState;
 }
 
-void MainWindow::setShiftPressed()
-{
-    shiftKeyPressedState = true;
-}
-
-void MainWindow::setShiftReleased()
-{
-    shiftKeyPressedState = false;
-}
-
 // Icons
 void MainWindow::iconResize(int iconSize)
 {
@@ -918,49 +863,6 @@ void MainWindow::iconResize(int iconSize)
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
     settings.general_icon_size = iconSize;
-}
-
-MdiWindow* MainWindow::activeMdiWindow()
-{
-    qDebug("activeMdiWindow()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    return mdiWin;
-}
-
-View* MainWindow::activeView()
-{
-    qDebug("activeView()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
-    {
-        View* v = mdiWin->getView();
-        return v;
-    }
-    return 0;
-}
-
-QGraphicsScene* MainWindow::activeScene()
-{
-    qDebug("activeScene()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
-    {
-        QGraphicsScene* s = mdiWin->getScene();
-        return s;
-    }
-    return 0;
-}
-
-QUndoStack* MainWindow::activeUndoStack()
-{
-    qDebug("activeUndoStack()");
-    View* v = activeView();
-    if(v)
-    {
-        QUndoStack* u = v->getUndoStack();
-        return u;
-    }
-    return 0;
 }
 
 void MainWindow::setUndoCleanIcon(bool opened)
@@ -1119,13 +1021,6 @@ QString MainWindow::getCurrentLayer()
     return "0";
 }
 
-QRgb MainWindow::getCurrentColor()
-{
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { return mdiWin->getCurrentColor(); }
-    return 0; //TODO: return color ByLayer
-}
-
 QString MainWindow::getCurrentLineType()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -1205,7 +1100,7 @@ void MainWindow::promptInputNext()
 void
 run(const char *command)
 {
-    _mainWin->prompt->appendHistory(command);
+    prompt->appendHistory(command);
     luaL_dostring(Lua, command);
 }
 
@@ -1633,19 +1528,53 @@ void MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
 View*
 activeView(void)
 {
-    return _mainWin->activeView();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        View* v = mdiWin->getView();
+        return v;
+    }
+    return NULL;
 }
 
 QGraphicsScene*
 activeScene(void)
 {
-    return activeView()->scene();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        QGraphicsScene* s = mdiWin->getScene();
+        return s;
+    }
+    return 0;
+}
+
+MdiWindow*
+activeMdiWindow(void)
+{
+    qDebug("activeMdiWindow()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    return mdiWin;
+}
+
+QUndoStack*
+activeUndoStack(void)
+{
+    qDebug("activeUndoStack()");
+    View* v = activeView();
+    if (v) {
+        QUndoStack* u = v->getUndoStack();
+        return u;
+    }
+    return 0;
 }
 
 QRgb
 getCurrentColor(void)
 {
-    return _mainWin->getCurrentColor();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        return mdiWin->curColor;
+    }
+    return 0; //TODO: return color ByLayer
 }
 
 void
@@ -1681,7 +1610,7 @@ end_command(void)
         gview->previewOff();
         gview->disableMoveRapidFire();
     }
-    _mainWin->prompt->endCommand();
+    prompt->endCommand();
 }
 
 /* -- lua registerables --------------------------------------------------------
@@ -2387,7 +2316,7 @@ alert_f(lua_State *L)
     if (!unpack_args(L, "alert_f", args, "s")) {
         return 0;
     }
-    _mainWin->prompt->alert(args[0].s);
+    prompt->alert(args[0].s);
     return 0;
 }
 
@@ -2400,7 +2329,7 @@ append_prompt_history_f(lua_State *L)
     if (!unpack_args(L, "append_prompt_history_f", args, "s")) {
         return 0;
     }
-    _mainWin->prompt->appendHistory(args[0].s);
+    prompt->appendHistory(args[0].s);
     return 0;
 }
 
@@ -2410,7 +2339,7 @@ int
 blink_f(lua_State *L)
 {
     no_args(L);
-    _mainWin->prompt->startBlinking();
+    prompt->startBlinking();
     return 0;
 }
 
@@ -2438,8 +2367,8 @@ error_f(lua_State *L)
         return 0;
     }
 
-    _mainWin->prompt->setPrefix("ERROR: (" + args[0].s + ") " + args[1].s);
-    _mainWin->prompt->appendHistory(QString());
+    prompt->setPrefix("ERROR: (" + args[0].s + ") " + args[1].s);
+    prompt->appendHistory(QString());
     end_command();
     return 0;
 }
@@ -2569,7 +2498,7 @@ int
 disable_prompt_rapid_fire_f(lua_State *L)
 {
     no_args(L);
-    _mainWin->prompt->disableRapidFire();
+    prompt->disableRapidFire();
     return 0;
 }
 
@@ -2616,7 +2545,7 @@ int
 enable_prompt_rapid_fire_f(lua_State *L)
 {
     no_args(L);
-    _mainWin->prompt->enableRapidFire();
+    prompt->enableRapidFire();
     return 0;
 }
 
@@ -2635,7 +2564,7 @@ exit_program_f(lua_State *L)
     no_args(L);
     if (settings.prompt_save_history) {
         //TODO: get filename from settings
-        _mainWin->prompt->saveHistory("prompt.log",
+        prompt->saveHistory("prompt.log",
             settings.prompt_save_history_as_html);
     }
     qApp->closeAllWindows();
@@ -2928,16 +2857,16 @@ quickleader_f(lua_State *L)
 int
 redo_f(lua_State *L)
 {
-    QString prefix = _mainWin->prompt->getPrefix();
-    if (_mainWin->dockUndoEdit->canRedo()) {
-        _mainWin->prompt->setPrefix("Redo " + _mainWin->dockUndoEdit->redoText());
-        _mainWin->prompt->appendHistory(QString());
-        _mainWin->dockUndoEdit->redo();
-        _mainWin->prompt->setPrefix(prefix);
+    QString prefix = prompt->getPrefix();
+    if (dockUndoEdit->canRedo()) {
+        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
+        prompt->appendHistory(QString());
+        dockUndoEdit->redo();
+        prompt->setPrefix(prefix);
     }
     else {
-        _mainWin->prompt->alert("Nothing to redo");
-        _mainWin->prompt->setPrefix(prefix);
+        prompt->alert("Nothing to redo");
+        prompt->setPrefix(prefix);
     }
     return 0;
 }
@@ -3094,7 +3023,7 @@ int
 set_prompt_prefix_f(lua_State *L)
 {
     QString s(luaL_checkstring(L, 1));
-    _mainWin->prompt->setPrefix(s);
+    prompt->setPrefix(s);
     return 0;
 }
 
@@ -3247,7 +3176,7 @@ todo_f(lua_State *L)
     QString strCmd(luaL_checkstring(L, 1));
     QString strTodo(luaL_checkstring(L, 2));
 
-    _mainWin->prompt->alert("TODO: (" + strCmd + ") " + strTodo);
+    prompt->alert("TODO: (" + strCmd + ") " + strTodo);
     end_command();
     return 0;
 }
@@ -3255,16 +3184,16 @@ todo_f(lua_State *L)
 int
 undo_f(lua_State *L)
 {
-    QString prefix = _mainWin->prompt->getPrefix();
-    if (_mainWin->dockUndoEdit->canUndo()) {
-        _mainWin->prompt->setPrefix("Undo " + _mainWin->dockUndoEdit->undoText());
-        _mainWin->prompt->appendHistory(QString());
-        _mainWin->dockUndoEdit->undo();
-        _mainWin->prompt->setPrefix(prefix);
+    QString prefix = prompt->getPrefix();
+    if (dockUndoEdit->canUndo()) {
+        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
+        prompt->appendHistory(QString());
+        dockUndoEdit->undo();
+        prompt->setPrefix(prefix);
     }
     else {
-        _mainWin->prompt->alert("Nothing to undo");
-        _mainWin->prompt->setPrefix(prefix);
+        prompt->alert("Nothing to undo");
+        prompt->setPrefix(prefix);
     }
     return 0;
 }
@@ -3289,7 +3218,7 @@ window_cascade_f(lua_State *L)
         init_command();
         clear_selection();
     }
-    _mainWin->mdiArea->cascade();
+    mdiArea->cascade();
     end_command();
     return 0;
 }
@@ -3315,7 +3244,7 @@ window_close_all_f(lua_State *L)
         init_command();
         clear_selection();
     }
-    _mainWin->mdiArea->closeAllSubWindows();
+    mdiArea->closeAllSubWindows();
     end_command();
     return 0;
 }
@@ -3328,7 +3257,7 @@ window_next_f(lua_State *L)
         init_command();
         clear_selection();
     }
-    _mainWin->mdiArea->activateNextSubWindow();
+    mdiArea->activateNextSubWindow();
     end_command();
     return 0;
 }
@@ -3340,7 +3269,7 @@ window_previous_f(lua_State *L)
         init_command();
         clear_selection();
     }
-    _mainWin->mdiArea->activatePreviousSubWindow();
+    mdiArea->activatePreviousSubWindow();
     end_command();
     return 0;
 }
@@ -3352,7 +3281,7 @@ window_tile_f(lua_State *L)
         init_command();
         clear_selection();
     }
-    _mainWin->mdiArea->tile();
+    mdiArea->tile();
     end_command();
     return 0;
 }
@@ -4080,13 +4009,8 @@ qsnap_y_f(lua_State *L)
  * lua files.
  */
 bool
-MainWindow::script_env_boot(void)
+script_env_boot(void)
 {
-    /* NOTE: The mainWin pointer can't be passed to lua functions
-     * NOTE: so we make it file-scope.
-     */
-    _mainWin = this;
-
     /* Setting up Lua. */
     Lua = luaL_newstate();
     luaL_openlibs(Lua);
@@ -4165,7 +4089,7 @@ MainWindow::load_command(const QString& cmdName)
 }
 
 void
-MainWindow::script_env_free(void)
+script_env_free(void)
 {
     lua_close(Lua);
 }
@@ -4173,7 +4097,8 @@ MainWindow::script_env_free(void)
 /* NOTE: This has to run after script_env_boot because the command_map is
  * populated by the script files called by it.
  */
-void MainWindow::createAllActions()
+void
+MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");
     QString appDir = qApp->applicationDirPath();

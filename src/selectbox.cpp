@@ -1,4 +1,4 @@
-#include "selectbox.h"
+#include "embroidermodder.h"
 #include <QPainter>
 
 SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)

@@ -1,9 +1,4 @@
-#include "mainwindow.h"
-#include "settings-dialog.h"
-
-#include <QDebug>
-#include <QtGlobal>
-#include <QSettings>
+#include "embroidermodder.h"
 
 namespace {
 

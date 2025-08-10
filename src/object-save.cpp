@@ -1,18 +1,4 @@
-#include "object-save.h"
-#include "object-data.h"
-
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-line.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
-
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>

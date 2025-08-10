@@ -1,7 +1,4 @@
-#include "object-circle.h"
-#include "object-data.h"
-
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>

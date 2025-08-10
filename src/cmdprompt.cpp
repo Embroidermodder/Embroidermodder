@@ -1,17 +1,4 @@
-#include "script.h"
-#include "cmdprompt.h"
-#include <QApplication>
-#include <QClipboard>
-#include <QString>
-#include <QAction>
-#include <QMenu>
-#include <QFile>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QContextMenuEvent>
-#include <QSplitter>
-#include <QTextStream>
-#include <QTimer>
+#include "embroidermodder.h"
 
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {

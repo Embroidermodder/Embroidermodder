@@ -1,5 +1,4 @@
-#include "object-line.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>

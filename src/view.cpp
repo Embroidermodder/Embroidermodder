@@ -1,29 +1,4 @@
-#include "view.h"
-#include "property-editor.h"
-#include "statusbar.h"
-#include "object-data.h"
-#include "object-base.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
-
-#include "selectbox.h"
-
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-image.h"
-#include "object-line.h"
-#include "object-path.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
-
-#include <QtGui>
-#include <QGraphicsScene>
-//#include <QOpenGLWidget>
+#include "embroidermodder.h"
 
 View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
@@ -111,7 +86,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setCornerButton();
 
     undoStack = new QUndoStack(this);
-    mainWin->dockUndoEdit->addStack(undoStack);
+    dockUndoEdit->addStack(undoStack);
 
     installEventFilter(this);
 
@@ -137,7 +112,7 @@ void View::enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
     if (mdiWin) {
-        mainWin->getMdiArea()->setActiveSubWindow(mdiWin);
+        mdiArea->setActiveSubWindow(mdiWin);
     }
 }
 
@@ -1094,7 +1069,7 @@ void View::updateMouseCoords(int x, int y)
     gscene->setProperty(SCENE_QSNAP_POINT, sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
     gscene->setProperty(SCENE_MOUSE_POINT, sceneMousePoint);
     gscene->setProperty(VIEW_MOUSE_POINT, viewMousePoint);
-    mainWin->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
+    statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
 void View::setCrossHairSize(quint8 percent)
@@ -1255,22 +1230,21 @@ void View::selectAll()
     // gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform());
 }
 
-void View::selectionChanged()
+void
+View::selectionChanged()
 {
-    if(mainWin->dockPropEdit->isVisible())
-    {
-        mainWin->dockPropEdit->setSelectedItems(gscene->selectedItems());
+    if (dockPropEdit->isVisible()) {
+        dockPropEdit->setSelectedItems(gscene->selectedItems());
     }
 }
 
-void View::mouseDoubleClickEvent(QMouseEvent* event)
+void
+View::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if(event->button() == Qt::LeftButton)
-    {
+    if (event->button() == Qt::LeftButton) {
         QGraphicsItem* item = gscene->itemAt(mapToScene(event->pos()), QTransform());
-        if(item)
-        {
-            mainWin->dockPropEdit->show();
+        if (item) {
+            dockPropEdit->show();
         }
     }
 }
@@ -1766,9 +1740,9 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     {
         return;
     }
-    if(!mainWin->prompt->isCommandActive())
+    if(!prompt->isCommandActive())
     {
-        QString lastCmd = mainWin->prompt->lastCommand();
+        QString lastCmd = prompt->lastCommand();
         QAction* repeatAction = new QAction(QIcon("icons/" + iconTheme + "/" + lastCmd + ".png"), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
@@ -2132,16 +2106,16 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
 
 void View::repeatAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText(mainWin->prompt->lastCommand());
-    mainWin->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText(prompt->lastCommand());
+    prompt->processInput();
 }
 
 void View::moveAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("move");
-    mainWin->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("move");
+    prompt->processInput();
 }
 
 void View::moveSelected(qreal dx, qreal dy)
@@ -2168,9 +2142,9 @@ void View::moveSelected(qreal dx, qreal dy)
 
 void View::rotateAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("rotate");
-    mainWin->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("rotate");
+    prompt->processInput();
 }
 
 void View::rotateSelected(qreal x, qreal y, qreal rot)
@@ -2219,9 +2193,9 @@ void View::mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
 
 void View::scaleAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("scale");
-    mainWin->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("scale");
+    prompt->processInput();
 }
 
 void View::scaleSelected(qreal x, qreal y, qreal factor)

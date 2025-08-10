@@ -1,6 +1,4 @@
-#include "mainwindow.h"
-#include <QAction>
-#include <QToolBar>
+#include "embroidermodder.h"
 
 void MainWindow::createFileToolbar()
 {
