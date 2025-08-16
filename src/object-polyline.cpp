@@ -1,5 +1,4 @@
-#include "object-polyline.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -219,5 +218,3 @@ QPainterPath PolylineObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(normalPath);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

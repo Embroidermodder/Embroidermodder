@@ -19,16 +19,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 add_compile_options(
 	-g
+	-pg
 	-O2
 	-Wall
 	-Wextra
-	-fprofile-arcs
-	-ftest-coverage
+	--coverage
 )
 
 add_link_options(
-	-fprofile-arcs
-	-ftest-coverage
+	-pg
+	--coverage
 )
 
 else()
@@ -58,74 +58,42 @@ add_subdirectory(extern/libembroidery)
 
 qt_add_executable(embroidermodder2
 	${SRC}/application.cpp
-	${SRC}/application.h
 	${SRC}/cmdprompt.cpp
-	${SRC}/cmdprompt.h
 	${SRC}/embdetails-dialog.cpp
-	${SRC}/embdetails-dialog.h
 	${SRC}/imagewidget.cpp
-	${SRC}/imagewidget.h
 	${SRC}/layer-manager.cpp
-	${SRC}/layer-manager.h
 	${SRC}/main.cpp
 	${SRC}/mainwindow.cpp
-	${SRC}/mainwindow.h
 	${SRC}/mainwindow-menus.cpp
 	${SRC}/mainwindow-settings.cpp
 	${SRC}/mainwindow-toolbars.cpp
 	${SRC}/mdiarea.cpp
-	${SRC}/mdiarea.h
 	${SRC}/mdiwindow.cpp
-	${SRC}/mdiwindow.h
 	${SRC}/object-arc.cpp
-	${SRC}/object-arc.h
 	${SRC}/object-base.cpp
-	${SRC}/object-base.h
 	${SRC}/object-circle.cpp
-	${SRC}/object-circle.h
-	${SRC}/object-data.h
 	${SRC}/object-dimleader.cpp
-	${SRC}/object-dimleader.h
 	${SRC}/object-ellipse.cpp
-	${SRC}/object-ellipse.h
 	${SRC}/object-image.cpp
-	${SRC}/object-image.h
 	${SRC}/object-line.cpp
-	${SRC}/object-line.h
 	${SRC}/object-path.cpp
-	${SRC}/object-path.h
 	${SRC}/object-point.cpp
-	${SRC}/object-point.h
 	${SRC}/object-polygon.cpp
-	${SRC}/object-polygon.h
 	${SRC}/object-polyline.cpp
-	${SRC}/object-polyline.h
 	${SRC}/object-rect.cpp
-	${SRC}/object-rect.h
 	${SRC}/object-save.cpp
-	${SRC}/object-save.h
 	${SRC}/object-textsingle.cpp
-	${SRC}/object-textsingle.h
 	${SRC}/preview-dialog.cpp
-	${SRC}/preview-dialog.h
 	${SRC}/property-editor.cpp
-	${SRC}/property-editor.h
 	${SRC}/script.cpp
-	${SRC}/script.h
 	${SRC}/selectbox.cpp
-	${SRC}/selectbox.h
 	${SRC}/settings-dialog.cpp
-	${SRC}/settings-dialog.h
-	${SRC}/statusbar-button.cpp
-	${SRC}/statusbar-button.h
 	${SRC}/statusbar.cpp
-	${SRC}/statusbar.h
 	${SRC}/undo-commands.cpp
-	${SRC}/undo-commands.h
 	${SRC}/undo-editor.cpp
-	${SRC}/undo-editor.h
 	${SRC}/view.cpp
-	${SRC}/view.h
+
+	${SRC}/embroidermodder.h
 
 	${EXTERN}/lua/src/lapi.c
 	${EXTERN}/lua/src/lapi.h
@@ -212,7 +180,6 @@ file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 include_directories(
 	${CMAKE_SOURCE_DIR}/embroidermodder2
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
-	${CMAKE_SOURCE_DIR}/extern/tinyscheme/include
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
@@ -223,44 +190,20 @@ target_link_libraries(embroidermodder2 PRIVATE
 	${OPENGL_LIBRARIES}
 )
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+target_link_libraries(embroidermodder2 PRIVATE
+	gcov
+)
+endif()
+
 set_target_properties(embroidermodder2 PROPERTIES
 	WIN32_EXECUTABLE ON
 	MACOSX_BUNDLE ON
 )
 
 if (WIN32)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2.exe)
-
+	set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2.exe)
 else(WIN32)
-target_link_libraries(embroidermodder2 PRIVATE m)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
-
+	target_link_libraries(embroidermodder2 PRIVATE m)
+	set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
 endif()
-
-set(EXEC_DIR ".")
-set(ASSETS_DIR ".")
-
-install(
-	FILES ${EXEC}
-	DESTINATION ${EXEC_DIR}
-)
-
-install(
-	FILES
-		${SRC_ASSETS}/em2_config.toml
-	DESTINATION
-		${ASSETS_DIR}
-)
-
-install(
-	FILES
-		${SRC_ASSETS}/translations/arabic.toml
-		${SRC_ASSETS}/translations/chinese_simplified.toml
-		${SRC_ASSETS}/translations/chinese_traditional.toml
-		${SRC_ASSETS}/translations/french.toml
-		${SRC_ASSETS}/translations/hindi.toml
-		${SRC_ASSETS}/translations/russian.toml
-		${SRC_ASSETS}/translations/spanish.toml
-	DESTINATION
-		${ASSETS_DIR}/translations
-)

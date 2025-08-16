@@ -1,7 +1,4 @@
-#include "object-arc.h"
-#include "object-data.h"
-
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -379,5 +376,3 @@ void ArcObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for ArcObject
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,6 +1,4 @@
-#include <QtGui>
-#include "layer-manager.h"
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
 {
@@ -79,5 +77,3 @@ void LayerManager::addLayer(const QString& name,
     layerModel->setData(layerModel->index(0, 6), lineWeight);
     layerModel->setData(layerModel->index(0, 7), print);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

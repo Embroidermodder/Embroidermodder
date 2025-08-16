@@ -1,6 +1,4 @@
-#include "mdiarea.h"
-#include "mainwindow.h"
-#include "view.h"
+#include "embroidermodder.h"
 
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)
 {
@@ -127,5 +125,3 @@ void MdiArea::forceRepaint()
     resize(hack + QSize(1,1));
     resize(hack);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

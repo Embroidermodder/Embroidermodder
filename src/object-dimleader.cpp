@@ -1,5 +1,4 @@
-#include "object-dimleader.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -299,4 +298,3 @@ void DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
     else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
     else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
-

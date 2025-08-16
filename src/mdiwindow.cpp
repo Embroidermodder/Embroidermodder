@@ -1,32 +1,4 @@
-#include "script.h"
-#include "mdiwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "object-save.h"
-#include "object-data.h"
-#include "object-path.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QApplication>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QMdiSubWindow>
-#include <QStatusBar>
-#include <QColor>
-#include <QUndoStack>
-
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
-
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
@@ -43,7 +15,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    this->setWindowIcon(QIcon("icons/" + settings_general_icon_theme + "/" + "app" + ".png"));
+    this->setWindowIcon(QIcon("icons/" + settings.general_icon_theme + "/" + "app" + ".png"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(mainWin, gscene, this);
@@ -53,12 +25,12 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     //WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
     //WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
     //WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
-    gview->setFocusProxy(mainWin->prompt);
+    gview->setFocusProxy(prompt);
 
     resize(sizeHint());
 
     promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
-    mainWin->prompt->setHistory(promptHistory);
+    prompt->setHistory(promptHistory);
     promptInputList << "";
     promptInputNum = 0;
 
@@ -319,11 +291,11 @@ bool MdiWindow::loadFile(const QString &fileName)
     */
 
     setCurrentFile(fileName);
-    mainWin->statusbar->showMessage("File loaded.");
+    statusbar->showMessage("File loaded.");
     QString stitches;
     stitches.setNum(p->stitch_list->count);
 
-    if (settings_grid_load_from_file) {
+    if (settings.grid_load_from_file) {
         //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
     }
 
@@ -345,7 +317,7 @@ void MdiWindow::print()
     QPrintDialog dialog(&printer, this);
     if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
-        if (settings_printing_disable_bg) {
+        if (settings.printing_disable_bg) {
             //Save current bg
             QBrush brush = gview->backgroundBrush();
             //Save ink by not printing the bg at all
@@ -376,7 +348,7 @@ void MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if (settings_printing_disable_bg) //TODO: Make BMC background into it's own setting?
+    if (settings.printing_disable_bg) //TODO: Make BMC background into it's own setting?
     {
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
@@ -420,15 +392,15 @@ void MdiWindow::onWindowActivated()
     qDebug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
     mainWin->setUndoCleanIcon(fileWasLoaded);
-    mainWin->statusbar->statusBarSnapButton->setChecked(gscene->property(ENABLE_SNAP).toBool());
-    mainWin->statusbar->statusBarGridButton->setChecked(gscene->property(ENABLE_GRID).toBool());
-    mainWin->statusbar->statusBarRulerButton->setChecked(gscene->property(ENABLE_RULER).toBool());
-    mainWin->statusbar->statusBarOrthoButton->setChecked(gscene->property(ENABLE_ORTHO).toBool());
-    mainWin->statusbar->statusBarPolarButton->setChecked(gscene->property(ENABLE_POLAR).toBool());
-    mainWin->statusbar->statusBarQSnapButton->setChecked(gscene->property(ENABLE_QSNAP).toBool());
-    mainWin->statusbar->statusBarQTrackButton->setChecked(gscene->property(ENABLE_QTRACK).toBool());
-    mainWin->statusbar->statusBarLwtButton->setChecked(gscene->property(ENABLE_LWT).toBool());
-    mainWin->prompt->setHistory(promptHistory);
+    statusbar->statusBarSnapButton->setChecked(gscene->property(ENABLE_SNAP).toBool());
+    statusbar->statusBarGridButton->setChecked(gscene->property(ENABLE_GRID).toBool());
+    statusbar->statusBarRulerButton->setChecked(gscene->property(ENABLE_RULER).toBool());
+    statusbar->statusBarOrthoButton->setChecked(gscene->property(ENABLE_ORTHO).toBool());
+    statusbar->statusBarPolarButton->setChecked(gscene->property(ENABLE_POLAR).toBool());
+    statusbar->statusBarQSnapButton->setChecked(gscene->property(ENABLE_QSNAP).toBool());
+    statusbar->statusBarQTrackButton->setChecked(gscene->property(ENABLE_QTRACK).toBool());
+    statusbar->statusBarLwtButton->setChecked(gscene->property(ENABLE_LWT).toBool());
+    prompt->setHistory(promptHistory);
 }
 
 QSize MdiWindow::sizeHint() const
@@ -522,23 +494,38 @@ void MdiWindow::promptInputNext()
     promptInputPrevNext(false);
 }
 
-void MdiWindow::promptInputPrevNext(bool prev)
+void
+MdiWindow::promptInputPrevNext(bool prev)
 {
-    if(promptInputList.isEmpty())
-    {
-        if(prev) QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
-        else     QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
+    if (promptInputList.isEmpty()) {
+        if (prev) {
+            QMessageBox::critical(this, tr("Prompt Previous Error"),
+                tr("The prompt input is empty! Please report this as a bug!"));
+        }
+        else {
+            QMessageBox::critical(this, tr("Prompt Next Error"),
+                tr("The prompt input is empty! Please report this as a bug!"));
+        }
         qDebug("The prompt input is empty! Please report this as a bug!");
+        return;
     }
-    else
-    {
-        if(prev) promptInputNum--;
-        else     promptInputNum++;
-        int maxNum = promptInputList.size();
-        if     (promptInputNum < 0)       { promptInputNum = 0;      mainWin->prompt->setCurrentText(""); }
-        else if(promptInputNum >= maxNum) { promptInputNum = maxNum; mainWin->prompt->setCurrentText(""); }
-        else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
+
+    if (prev) {
+        promptInputNum--;
+    }
+    else {
+        promptInputNum++;
+    }
+    int maxNum = promptInputList.size();
+    if (promptInputNum < 0) {
+        promptInputNum = 0;
+        prompt->setCurrentText("");
+    }
+    else if (promptInputNum >= maxNum) {
+        promptInputNum = maxNum; prompt->setCurrentText("");
+    }
+    else {
+        prompt->setCurrentText(promptInputList.at(promptInputNum));
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

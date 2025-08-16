@@ -1,5 +1,4 @@
-#include "application.h"
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
 {

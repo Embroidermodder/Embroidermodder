@@ -1,8 +1,4 @@
-#include "mainwindow.h"
-#include <QDebug>
-#include <QMenu>
-#include <QMenuBar>
-#include <QAction>
+#include "embroidermodder.h"
 
 void MainWindow::createFileMenu()
 {
@@ -51,7 +47,7 @@ void MainWindow::createViewMenu()
     qDebug("MainWindow createViewMenu()");
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = settings_general_icon_theme;
+    QString icontheme = settings.general_icon_theme;
 
     menuBar()->addMenu(viewMenu);
     viewMenu->addSeparator();

@@ -1,5 +1,4 @@
-#include "object-rect.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -248,5 +247,3 @@ QPainterPath RectObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(path);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
