@@ -96,12 +96,13 @@
 #include <QWidget>
 
 #include <QtCore/qmath.h>
-
-#include <inttypes.h>
-
 //#include <QOpenGLWidget>
 
-#include <stdlib.h>
+#include <cinttypes>
+#include <cstdlib>
+#include <string>
+#include <vector>
+#include <unordered_map>
 
 #include "embroidery.h"
 
@@ -695,6 +696,46 @@ private:
     MainWindow* _mainWin;
 };
 
+typedef std::vector<std::string> StringList;
+
+class ToolbarData
+{
+public:
+    QString label;
+    StringList entries;
+    bool mdi_only;
+};
+
+class MenuData
+{
+public:
+    QString label;
+    StringList entries;
+    bool mdi_only;
+};
+
+extern std::vector<ToolbarData> toolbar_table;
+extern std::vector<MenuData> menu_table;
+
+extern StringList file_menu_list;
+extern StringList edit_menu_list;
+extern StringList zoom_menu_list;
+extern StringList pan_menu_list;
+extern StringList help_menu_list;
+
+extern StringList file_toolbar_list;
+extern StringList edit_toolbar_list;
+extern StringList view_toolbar_list;
+extern StringList zoom_toolbar_list;
+extern StringList pan_toolbar_list;
+extern StringList icon_toolbar_list;
+extern StringList help_toolbar_list;
+
+extern StringList layer_selector_list;
+extern StringList color_selector_list;
+extern StringList linetype_selector_list;
+extern StringList lineweight_selector_list;
+
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -715,6 +756,11 @@ public:
 
     QString formatFilterOpen;
     QString formatFilterSave;
+
+    QIcon createIcon(QString label);
+    void addToToolbar(QToolBar *tb, StringList list);
+    void addToMenu(QMenu *menu, StringList data);
+    void addToComboBox(QComboBox *box, StringList data);
 
     bool isCommandActive() { return prompt->isCommandActive(); }
     QString activeCommand() { return prompt->activeCommand(); }
@@ -779,17 +825,6 @@ public:
 
     // Toolbars
     void createAllToolbars();
-    void createFileToolbar();
-    void createEditToolbar();
-    void createViewToolbar();
-    void createZoomToolbar();
-    void createPanToolbar();
-    void createIconToolbar();
-    void createHelpToolbar();
-    void createLayerToolbar();
-    void createPropertiesToolbar();
-    void createTextToolbar();
-    void createPromptToolbar();
 
     QToolBar* toolbarFile;
     QToolBar* toolbarEdit;
@@ -813,17 +848,10 @@ public:
 
     // Menus
     void createAllMenus();
-    void createFileMenu();
-    void createEditMenu();
-    void createViewMenu();
-    void createSettingsMenu();
-    void createWindowMenu();
-    void createHelpMenu();
 
     QMenu* fileMenu;
     QMenu* editMenu;
     QMenu* viewMenu;
-    QMenu* settingsMenu;
     QMenu* windowMenu;
     QMenu* helpMenu;
 

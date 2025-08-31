@@ -60,6 +60,10 @@ typedef struct ScriptValue_ {
     bool b;
 } ScriptValue;
 
+std::vector<Command> command_map;
+std::vector<ToolbarData> toolbar_table;
+std::vector<MenuData> menu_table;
+
 #if __cplusplus
 extern "C" {
 #endif
@@ -428,8 +432,6 @@ luaL_Reg lua_registerables[] = {
     {"zoom_window", zoom_window_f},
     {NULL, NULL}
 };
-
-std::vector<Command> command_map;
 
 int check_clear_top = 0;
 
@@ -3993,7 +3995,7 @@ qsnap_y_f(lua_State *L)
     return 1;
 }
 
-/* Defaults to empty string when no value supplied. */
+/* Defaults to empty QString when no value supplied. */
 QString
 get_toml_string(const toml::value value, const char *key)
 {
@@ -4001,6 +4003,21 @@ get_toml_string(const toml::value value, const char *key)
         return value.at(key).as_string().c_str();
     }
     return "";
+}
+
+
+/* Defaults to empty QStringList when no value supplied. */
+StringList
+get_toml_string_table(const toml::value value, const char *key)
+{
+    StringList list;
+    if (value.contains(key)) {
+        toml::value table = value.at(key).as_array();
+        for (size_t i=0; i<table.size(); i++) {
+            list.push_back(table.at(i).as_string());
+        }
+    }
+    return list;
 }
 
 /* Defaults to false when no value supplied. */
@@ -4055,6 +4072,49 @@ script_env_boot(void)
         command_map.push_back(command);
     }
 
+    auto menus_table = data.at("menus").as_array();
+    for (size_t i=0; i<menus_table.size(); i++) {
+        auto current = menus_table.at(i);
+
+        MenuData data;
+        data.label = get_toml_string(current, "label");
+        data.mdi_only = get_toml_boolean(current, "mdi_only");
+        data.entries = get_toml_string_table(current, "entries");
+
+        menu_table.push_back(data);
+    }
+
+    auto toolbars_table = data.at("menus").as_array();
+    for (size_t i=0; i<toolbars_table.size(); i++) {
+        auto current = toolbars_table.at(i);
+
+        ToolbarData data;
+        data.label = get_toml_string(current, "label");
+        data.mdi_only = get_toml_boolean(current, "mdi_only");
+        data.entries = get_toml_string_table(current, "entries");
+
+        toolbar_table.push_back(data);
+    }
+
+    file_menu_list = get_toml_string_table(data, "file_menu_list");
+    edit_menu_list = get_toml_string_table(data, "edit_menu_list");
+    zoom_menu_list = get_toml_string_table(data, "zoom_menu_list");
+    pan_menu_list = get_toml_string_table(data, "pan_menu_list");
+    help_menu_list = get_toml_string_table(data, "help_menu_list");
+
+    file_toolbar_list = get_toml_string_table(data, "file_toolbar_list");
+    edit_toolbar_list = get_toml_string_table(data, "edit_toolbar_list");
+    view_toolbar_list = get_toml_string_table(data, "view_toolbar_list");
+    zoom_toolbar_list = get_toml_string_table(data, "zoom_toolbar_list");
+    pan_toolbar_list = get_toml_string_table(data, "pan_toolbar_list");
+    icon_toolbar_list = get_toml_string_table(data, "icon_toolbar_list");
+    help_toolbar_list = get_toml_string_table(data, "help_toolbar_list");
+
+    layer_selector_list = get_toml_string_table(data, "layer_selector_list");
+    color_selector_list = get_toml_string_table(data, "color_selector_list");
+    linetype_selector_list = get_toml_string_table(data, "linetype_selector_list");
+    lineweight_selector_list = get_toml_string_table(data, "lineweight_selector_list");
+
     /* Setting up Lua. */
     Lua = luaL_newstate();
     luaL_openlibs(Lua);
@@ -4074,10 +4134,8 @@ script_env_boot(void)
     }
 
 #if 0
-void
 MainWindow::load_command(const QString& cmdName)
-{
-    qDebug("javaLoadCommand(%s)", qPrintable(cmdName));
+
     QString appDir = qApp->applicationDirPath();
     QFile file(appDir + "/commands/" + cmdName + "/" + cmdName + ".js");
     file.open(QIODevice::ReadOnly);
@@ -4126,7 +4184,6 @@ MainWindow::load_command(const QString& cmdName)
     foreach(QString alias, aliases) {
         prompt->addCommand(alias, cmdName);
     }
-}
 #endif
 
     return true;

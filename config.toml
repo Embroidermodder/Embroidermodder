@@ -1,14 +1,304 @@
-# Main Configuration
+# Embroidermodder 2 -- Main Configuration
 #
-# This file is part of Embroidermodder 2.
+# ----------------------------------------------------------------------------
+# Embroidermodder 2 is open source software.
 # Copyright 2011-2025 The Embroidermodder Team.
 # See LICENSE.md for details about distribution.
+# ----------------------------------------------------------------------------
+
+menubar_order = [
+    "File",
+    "Edit",
+    "View",
+    "Settings",
+    "Window",
+    "Help"
+]
+
+top_toolbar_order = [
+    "File"
+]
+
+left_toolbar_order = [
+    "File"
+]
+
+bottom_toolbar_order = [
+    "File"
+]
+
+file_menu_list = [
+    "---",
+    "save",
+    "saveas",
+    "---",
+    "print",
+    "---",
+    "windowclose",
+    "---",
+    "designdetails",
+    "---",
+    "exit"
+]
+
+edit_menu_list = [
+    "undo",
+    "redo",
+    "---",
+    "cut",
+    "copy",
+    "paste",
+    "---",
+    "settingsdialog"
+]
+
+zoom_menu_list = [
+    "icon",
+    "zoom",
+    "zoomrealtime",
+    "zoomprevious",
+    "---",
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "zoomcenter",
+    "---",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+]
+
+pan_menu_list = [
+    "icon",
+    "pan",
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+
+help_menu_list = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "tipoftheday",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+]
+
+file_toolbar_list = [
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails",
+    "---",
+    "undo",
+    "redo",
+    "---",
+    "help"
+]
+
+edit_toolbar_list = [
+    "cut",
+    "copy",
+    "paste"
+]
+
+view_toolbar_list = [
+    "day",
+    "night"
+]
+
+zoom_toolbar_list = [
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "---",
+    "zoomcenter",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+]
+
+pan_toolbar_list = [
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+
+icon_toolbar_list = [
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128"
+]
+
+help_toolbar_list = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+]
+
+# TODO: Create layer pixmaps by concatenating several icons
+layer_selector_list = [
+    "linetypebylayer", "0", "",
+    "linetypebylayer", "1", "",
+    "linetypebylayer", "2", "",
+    "linetypebylayer", "3", "",
+    "linetypebylayer", "4", "",
+    "linetypebylayer", "5", "",
+    "linetypebylayer", "6", "",
+    "linetypebylayer", "7", "",
+    "linetypebylayer", "8", "",
+    "linetypebylayer", "9", ""
+]
+
+color_selector_list = [
+    "colorbylayer", "ByLayer", "",
+    "colorbyblock", "ByBlock", "",
+    "colorred", "Red", "16711680",
+    "coloryellow", "Yellow", "16776960",
+    "colorgreen", "Green", "65280",
+    "colorcyan", "Cyan", "65535",
+    "colorblue", "Blue", "255",
+    "colormagenta", "Magenta", "16711935",
+    "colorwhite", "White", "16777215",
+    "colorother", "Other...", ""
+]
+
+linetype_selector_list = [
+    "linetypebylayer", "ByLayer", "",
+    "linetypebyblock", "ByBlock", "",
+    "linetypecontinuous", "Continuous", "",
+    "linetypehidden", "Hidden", "",
+    "linetypecenter", "Center", "",
+    "linetypeother", "Other...", ""
+]
+
+# TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight
+lineweight_selector_list = [
+    "lineweightbylayer", "ByLayer", "-2.00",
+    "lineweightbyblock", "ByBlock", "-1.00",
+    "lineweightdefault", "Default", "0.00",
+    "lineweight01", "0.00 mm", "0.00",
+    "lineweight02", "0.05 mm", "0.05",
+    "lineweight03", "0.15 mm", "0.15",
+    "lineweight04", "0.20 mm", "0.20",
+    "lineweight05", "0.25 mm", "0.25",
+    "lineweight06", "0.30 mm", "0.30",
+    "lineweight07", "0.35 mm", "0.35",
+    "lineweight08", "0.40 mm", "0.40",
+    "lineweight09", "0.45 mm", "0.45",
+    "lineweight10", "0.50 mm", "0.50",
+    "lineweight11", "0.55 mm", "0.55",
+    "lineweight12", "0.60 mm", "0.60",
+    "lineweight13", "0.65 mm", "0.65",
+    "lineweight14", "0.70 mm", "0.70",
+    "lineweight15", "0.75 mm", "0.75",
+    "lineweight16", "0.80 mm", "0.80",
+    "lineweight17", "0.85 mm", "0.85",
+    "lineweight18", "0.90 mm", "0.90",
+    "lineweight19", "0.95 mm", "0.95",
+    "lineweight20", "1.00 mm", "1.00",
+    "lineweight21", "1.05 mm", "1.05",
+    "lineweight22", "1.10 mm", "1.10",
+    "lineweight23", "1.15 mm", "1.15",
+    "lineweight24", "1.20 mm", "1.20"
+]
 
 [version]
 major = 2
 minor = 0
 patch = 0
 tag = "alpha"
+
+[[menus]]
+label = "&File"
+key = "File"
+mdi_only = false
+entries = [
+    "new",
+    "---",
+    "open",
+    ">Recent",
+    "---",
+    "save",
+    "saveas",
+    "---",
+    "print",
+    "---",
+    "windowclose",
+    "---",
+    "designdetails",
+    "---",
+    "exit"
+]
+
+[[menus]]
+label = "&Edit"
+key = "Edit"
+mdi_only = false
+entries = [
+    "cut"
+]
+
+[[menus]]
+label = "&Zoom"
+key = "Zoom"
+mdi_only = false
+entries = [
+    "zoomin"
+]
+
+[[menus]]
+label = "&Pan"
+key = "Pan"
+mdi_only = false
+entries = [
+    "panleft"
+]
+
+[[toolbars]]
+label = "File"
+key = "File"
+mdi_only = false
+entries = [
+    "new",
+    "open",
+    "save"
+]
+
+[[toolbars]]
+label = "Edit"
+key = "Edit"
+mdi_only = false
+entries = [
+    "cut"
+]
 
 [[commands]]
 command = "about"
