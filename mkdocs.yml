@@ -9,7 +9,6 @@ nav:
   - 'Downloads': 'downloads/index.md'
   - 'About': 'about.md'
   - 'Documentation': 'docs/index.html'
-  - 'Testing': 'testing.md'
   - 'Contact': 'contact.md'
   - 'Donate': https://opencollective.com/embroidermodder
 theme:
@@ -21,7 +20,5 @@ theme:
     - navigation.tabs
   font:
     text: 'Source Serif 4'
-plugins:
-  - search
 markdown_extensions:
   - admonition
