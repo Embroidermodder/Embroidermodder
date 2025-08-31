@@ -8,15 +8,7 @@ function platform_command ()
     clear_selection()
   end
   setPromptPrefix(qsTr("Platform") + " = " + platformString())
-  appendPromptHistory();
+  appendPromptHistory()
   end_command()
 end
-
---[[
-[Tips]
-ToolTip=&Platform
-StatusTip=List which platform is in use:  PLATFORM
---]]
-
-PLATFORM = platform_command
 

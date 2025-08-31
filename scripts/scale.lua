@@ -347,22 +347,8 @@ function prompt(str)
                     scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                     previewOff();
                     endCommand();
-                }
-            }
-        }
-    }
-}
-[Menu]
-Name=Modify
-Position=12
-
-[ToolBar]
-Name=Modify
-Position=7
-
-[Tips]
-ToolTip=Sca&le
-StatusTip=Enlarges or reduces objects proportionally in the X, Y, and Z directions:  SCALE
-
-[Prompt]
-Alias=SC, SCALE
+                end
+            end
+        end
+    end
+end

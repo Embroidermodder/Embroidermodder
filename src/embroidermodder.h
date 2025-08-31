@@ -96,14 +96,83 @@
 #include <QWidget>
 
 #include <QtCore/qmath.h>
-
-#include <inttypes.h>
-
 //#include <QOpenGLWidget>
 
-#include <stdlib.h>
+#include <cinttypes>
+#include <cstdlib>
+#include <string>
+#include <vector>
+#include <unordered_map>
 
 #include "embroidery.h"
+#include "data/data.h"
+
+/* NOTE: this is Qt dependant so this means that needs to be here not in "data/data.h"
+ * after the necessary Qt header.
+ */
+#if defined(Q_OS_AIX)
+#define OS_STR                    "AIX"
+#elif defined(Q_OS_BSD4)
+#define OS_STR                    "BSD 4.4"
+#elif defined(Q_OS_BSDI)
+#define OS_STR                    "BSD/OS"
+#elif defined(Q_OS_CYGWIN)
+#define OS_STR                    "Cygwin"
+#elif defined(Q_OS_DARWIN)
+#define OS_STR                    "Mac OS"
+#elif defined(Q_OS_DGUX)
+#define OS_STR                    "DG/UX"
+#elif defined(Q_OS_DYNIX)
+#define OS_STR                    "DYNIX/ptx"
+#elif defined(Q_OS_FREEBSD)
+#define OS_STR                    "FreeBSD"
+#elif defined(Q_OS_HPUX)
+#define OS_STR                    "HP-UX"
+#elif defined(Q_OS_HURD)
+#define OS_STR                    "GNU Hurd"
+#elif defined(Q_OS_IRIX)
+#define OS_STR                    "SGI Irix"
+#elif defined(Q_OS_LINUX)
+#define OS_STR                    "Linux"
+#elif defined(Q_OS_LYNX)
+#define OS_STR                    "LynxOS"
+#elif defined(Q_OS_MAC)
+#define OS_STR                    "Mac OS"
+#elif defined(Q_OS_MSDOS)
+#define OS_STR                    "MS-DOS"
+#elif defined(Q_OS_NETBSD)
+#define OS_STR                    "NetBSD"
+#elif defined(Q_OS_OS2)
+#define OS_STR                    "OS/2"
+#elif defined(Q_OS_OPENBSD)
+#define OS_STR                    "OpenBSD"
+#elif defined(Q_OS_OS2EMX)
+#define OS_STR                    "XFree86 on OS/2"
+#elif defined(Q_OS_OSF)
+#define OS_STR                    "HP Tru64 UNIX"
+#elif defined(Q_OS_QNX)
+#define OS_STR                    "QNX Neutrino"
+#elif defined(Q_OS_RELIANT)
+#define OS_STR                    "Reliant UNIX"
+#elif defined(Q_OS_SCO)
+#define OS_STR                    "SCO OpenServer 5"
+#elif defined(Q_OS_SOLARIS)
+#define OS_STR                    "Sun Solaris"
+#elif defined(Q_OS_SYMBIAN)
+#define OS_STR                    "Symbian"
+#elif defined(Q_OS_ULTRIX)
+#define OS_STR                    "DEC Ultrix"
+#elif defined(Q_OS_UNIX)
+#define OS_STR                    "UNIX BSD/SYSV"
+#elif defined(Q_OS_UNIXWARE)
+#define OS_STR                    "UnixWare"
+#elif defined(Q_OS_WIN32)
+#define OS_STR                    "Windows"
+#elif defined(Q_OS_WINCE)
+#define OS_STR                    "Windows CE"
+#else
+#define OS_STR                    "Unknown System"
+#endif
 
 /* ---- Forward class declarations ------------------------------------------ */
 class MainWindow;
@@ -152,6 +221,41 @@ class StatusBar;
 class StatusBarButton;
 class UndoEditor;
 
+/* ---- C++ Typedefs -------------------------------------------------------- */
+typedef std::string String;
+typedef std::vector<std::string> StringList;
+
+typedef struct ToolbarData_ {
+    QString label;
+    StringList entries;
+    bool mdi_only;
+} ToolbarData;
+
+typedef struct MenuData_ {
+    QString label;
+    StringList entries;
+    bool mdi_only;
+} MenuData;
+
+typedef struct Command_ {
+    QString icon;
+    QString command;
+    QString tooltip;
+    QString statustip;
+    QString shortcut;
+    QString macos;
+    unsigned char checkable;
+} Command;
+
+typedef struct ScriptValue_ {
+    String s;
+    QStringList l;
+    int32_t i;
+    uint32_t u;
+    double r;
+    bool b;
+} ScriptValue;
+
 /* ---- Function declarations (that aren't in a class) ---------------------- */
 bool script_env_boot(void);
 void script_env_free(void);
@@ -164,6 +268,9 @@ View* activeView(void);
 QGraphicsScene* activeScene(void);
 QUndoStack* activeUndoStack(void);
 
+int get_cmd_id(const char *cmd);
+void run(const char *command);
+
 /* ---- Global data --------------------------------------------------------- */
 extern MainWindow* _mainWin;
 extern MdiArea* mdiArea;
@@ -172,7 +279,15 @@ extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
 
+extern QHash<QString, QAction*> actionHash;
+extern std::vector<Command> command_map;
+extern ScriptValue st[N_SETTINGS];
+extern std::unordered_map<std::string, ToolbarData> toolbar_table;
+extern std::unordered_map<std::string, MenuData> menu_table;
+extern std::unordered_map<std::string, StringList> string_tables;
+
 /* ---- Class declarations -------------------------------------------------- */
+
 class CmdPromptInput : public QLineEdit
 {
     Q_OBJECT
@@ -427,11 +542,6 @@ private:
     bool blinkState;
 };
 
-QT_BEGIN_NAMESPACE
-class QDialogButtonBox;
-class QGraphicsScene;
-QT_END_NAMESPACE
-
 class EmbDetailsDialog : public QDialog
 {
     Q_OBJECT
@@ -441,11 +551,11 @@ public:
     ~EmbDetailsDialog();
 
 private:
-    QWidget*          mainWidget;
+    QWidget* mainWidget;
 
-    void              getInfo();
-    QWidget*          createMainWidget();
-    QWidget*          createHistogram();
+    void getInfo();
+    QWidget* createMainWidget();
+    QWidget* createHistogram();
 
     QDialogButtonBox* buttonBox;
 
@@ -458,228 +568,6 @@ private:
 
     QRectF boundingRect;
 };
-
-//Custom Data used in QGraphicsItems
-
-//                   (     int, const QVariant)
-//I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
-//I.E. object.setData(OBJ_LAYER, "OUTLINE");
-//I.E. object.setData(OBJ_COLOR, 123);
-//I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
-
-//Keys
-enum OBJ_KEYS {
-OBJ_TYPE   = 0, //value type - int: See OBJ_TYPE_VALUES
-OBJ_NAME   = 1, //value type - str: See OBJ_NAME_VALUES
-OBJ_LAYER  = 2, //value type - str: "USER", "DEFINED", "STRINGS", etc...
-OBJ_COLOR  = 3, //value type - int: 0-255 //TODO: Use color chart in formats/format-dxf.h for this
-OBJ_LTYPE  = 4, //value type - int: See OBJ_LTYPE_VALUES
-OBJ_LWT    = 5, //value type - int: 0-27
-OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
-};
-
-//Values
-enum OBJ_TYPE_VALUES {
-OBJ_TYPE_NULL         =      0, //NOTE: Allow this enum to evaluate false
-OBJ_TYPE_BASE         = 100000, //NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast()
-OBJ_TYPE_ARC          = 100001,
-OBJ_TYPE_BLOCK        = 100002,
-OBJ_TYPE_CIRCLE       = 100003,
-OBJ_TYPE_DIMALIGNED   = 100004,
-OBJ_TYPE_DIMANGULAR   = 100005,
-OBJ_TYPE_DIMARCLENGTH = 100006,
-OBJ_TYPE_DIMDIAMETER  = 100007,
-OBJ_TYPE_DIMLEADER    = 100008,
-OBJ_TYPE_DIMLINEAR    = 100009,
-OBJ_TYPE_DIMORDINATE  = 100010,
-OBJ_TYPE_DIMRADIUS    = 100011,
-OBJ_TYPE_ELLIPSE      = 100012,
-OBJ_TYPE_ELLIPSEARC   = 100013,
-OBJ_TYPE_RUBBER       = 100014,
-OBJ_TYPE_GRID         = 100015,
-OBJ_TYPE_HATCH        = 100016,
-OBJ_TYPE_IMAGE        = 100017,
-OBJ_TYPE_INFINITELINE = 100018,
-OBJ_TYPE_LINE         = 100019,
-OBJ_TYPE_PATH         = 100020,
-OBJ_TYPE_POINT        = 100021,
-OBJ_TYPE_POLYGON      = 100022,
-OBJ_TYPE_POLYLINE     = 100023,
-OBJ_TYPE_RAY          = 100024,
-OBJ_TYPE_RECTANGLE    = 100025,
-OBJ_TYPE_SLOT         = 100026,
-OBJ_TYPE_SPLINE       = 100027,
-OBJ_TYPE_TEXTMULTI    = 100028,
-OBJ_TYPE_TEXTSINGLE   = 100029
-};
-
-//OBJ_NAME_VALUES
-const char* const OBJ_NAME_NULL         = "Unknown";
-const char* const OBJ_NAME_BASE         = "Base";
-const char* const OBJ_NAME_ARC          = "Arc";
-const char* const OBJ_NAME_BLOCK        = "Block";
-const char* const OBJ_NAME_CIRCLE       = "Circle";
-const char* const OBJ_NAME_DIMALIGNED   = "Aligned Dimension";
-const char* const OBJ_NAME_DIMANGULAR   = "Angular Dimension";
-const char* const OBJ_NAME_DIMARCLENGTH = "Arc Length Dimension";
-const char* const OBJ_NAME_DIMDIAMETER  = "Diameter Dimension";
-const char* const OBJ_NAME_DIMLEADER    = "Leader Dimension";
-const char* const OBJ_NAME_DIMLINEAR    = "Linear Dimension";
-const char* const OBJ_NAME_DIMORDINATE  = "Ordinate Dimension";
-const char* const OBJ_NAME_DIMRADIUS    = "Radius Dimension";
-const char* const OBJ_NAME_ELLIPSE      = "Ellipse";
-const char* const OBJ_NAME_ELLIPSEARC   = "Elliptical Arc";
-const char* const OBJ_NAME_RUBBER       = "Rubber";
-const char* const OBJ_NAME_GRID         = "Grid";
-const char* const OBJ_NAME_HATCH        = "Hatch";
-const char* const OBJ_NAME_IMAGE        = "Image";
-const char* const OBJ_NAME_INFINITELINE = "Infinite Line";
-const char* const OBJ_NAME_LINE         = "Line";
-const char* const OBJ_NAME_PATH         = "Path";
-const char* const OBJ_NAME_POINT        = "Point";
-const char* const OBJ_NAME_POLYGON      = "Polygon";
-const char* const OBJ_NAME_POLYLINE     = "Polyline";
-const char* const OBJ_NAME_RAY          = "Ray";
-const char* const OBJ_NAME_RECTANGLE    = "Rectangle";
-const char* const OBJ_NAME_SLOT         = "Slot";
-const char* const OBJ_NAME_SPLINE       = "Spline";
-const char* const OBJ_NAME_TEXTMULTI    = "Multi Line Text";
-const char* const OBJ_NAME_TEXTSINGLE   = "Single Line Text";
-
-enum OBJ_LTYPE_VALUES {
-//CAD Linetypes
-OBJ_LTYPE_CONT     = 0,
-OBJ_LTYPE_CENTER   = 1,
-OBJ_LTYPE_DOT      = 2,
-OBJ_LTYPE_HIDDEN   = 3,
-OBJ_LTYPE_PHANTOM  = 4,
-OBJ_LTYPE_ZIGZAG   = 5,
-//Embroidery Stitchtypes
-OBJ_LTYPE_RUNNING  = 6, // __________
-OBJ_LTYPE_SATIN    = 7, // vvvvvvvvvv
-OBJ_LTYPE_FISHBONE = 8, // >>>>>>>>>>
-};
-
-enum OBJ_LWT_VALUES {
-OBJ_LWT_BYLAYER    = -2,
-OBJ_LWT_BYBLOCK    = -1,
-OBJ_LWT_DEFAULT    =  0,
-OBJ_LWT_01         =  1,
-OBJ_LWT_02         =  2,
-OBJ_LWT_03         =  3,
-OBJ_LWT_04         =  4,
-OBJ_LWT_05         =  5,
-OBJ_LWT_06         =  6,
-OBJ_LWT_07         =  7,
-OBJ_LWT_08         =  8,
-OBJ_LWT_09         =  9,
-OBJ_LWT_10         = 10,
-OBJ_LWT_11         = 11,
-OBJ_LWT_12         = 12,
-OBJ_LWT_13         = 13,
-OBJ_LWT_14         = 14,
-OBJ_LWT_15         = 15,
-OBJ_LWT_16         = 16,
-OBJ_LWT_17         = 17,
-OBJ_LWT_18         = 18,
-OBJ_LWT_19         = 19,
-OBJ_LWT_20         = 20,
-OBJ_LWT_21         = 21,
-OBJ_LWT_22         = 22,
-OBJ_LWT_23         = 23,
-OBJ_LWT_24         = 24
-};
-
-enum OBJ_SNAP_VALUES {
-OBJ_SNAP_NULL            =  0, //NOTE: Allow this enum to evaluate false
-OBJ_SNAP_ENDPOINT        =  1,
-OBJ_SNAP_MIDPOINT        =  2,
-OBJ_SNAP_CENTER          =  3,
-OBJ_SNAP_NODE            =  4,
-OBJ_SNAP_QUADRANT        =  5,
-OBJ_SNAP_INTERSECTION    =  6,
-OBJ_SNAP_EXTENSION       =  7,
-OBJ_SNAP_INSERTION       =  8,
-OBJ_SNAP_PERPENDICULAR   =  9,
-OBJ_SNAP_TANGENT         = 10,
-OBJ_SNAP_NEAREST         = 11,
-OBJ_SNAP_APPINTERSECTION = 12,
-OBJ_SNAP_PARALLEL        = 13
-};
-
-enum OBJ_RUBBER_VALUES {
-OBJ_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
-OBJ_RUBBER_ON  = 1,  //NOTE: Allow this enum to evaluate true
-
-OBJ_RUBBER_CIRCLE_1P_RAD,
-OBJ_RUBBER_CIRCLE_1P_DIA,
-OBJ_RUBBER_CIRCLE_2P,
-OBJ_RUBBER_CIRCLE_3P,
-OBJ_RUBBER_CIRCLE_TTR,
-OBJ_RUBBER_CIRCLE_TTT,
-
-OBJ_RUBBER_DIMLEADER_LINE,
-
-OBJ_RUBBER_ELLIPSE_LINE,
-OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS,
-OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
-OBJ_RUBBER_ELLIPSE_ROTATION,
-
-OBJ_RUBBER_GRIP,
-
-OBJ_RUBBER_LINE,
-
-OBJ_RUBBER_POLYGON,
-OBJ_RUBBER_POLYGON_INSCRIBE,
-OBJ_RUBBER_POLYGON_CIRCUMSCRIBE,
-
-OBJ_RUBBER_POLYLINE,
-
-OBJ_RUBBER_IMAGE,
-
-OBJ_RUBBER_RECTANGLE,
-
-OBJ_RUBBER_TEXTSINGLE
-};
-
-enum SPARE_RUBBER_VALUES {
-SPARE_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
-SPARE_RUBBER_PATH,
-SPARE_RUBBER_POLYGON,
-SPARE_RUBBER_POLYLINE
-};
-
-enum PREVIEW_CLONE_VALUES {
-PREVIEW_CLONE_NULL = 0, //NOTE: Allow this enum to evaluate false
-PREVIEW_CLONE_SELECTED,
-PREVIEW_CLONE_RUBBER
-};
-
-enum PREVIEW_MODE_VALUES {
-PREVIEW_MODE_NULL = 0, //NOTE: Allow this enum to evaluate false
-PREVIEW_MODE_MOVE,
-PREVIEW_MODE_ROTATE,
-PREVIEW_MODE_SCALE
-};
-
-const char* const ENABLE_SNAP   = "ENABLE_SNAP";
-const char* const ENABLE_GRID   = "ENABLE_GRID";
-const char* const ENABLE_RULER  = "ENABLE_RULER";
-const char* const ENABLE_ORTHO  = "ENABLE_ORTHO";
-const char* const ENABLE_POLAR  = "ENABLE_POLAR";
-const char* const ENABLE_QSNAP  = "ENABLE_QSNAP";
-const char* const ENABLE_QTRACK = "ENABLE_QTRACK";
-const char* const ENABLE_LWT    = "ENABLE_LWT";
-const char* const ENABLE_REAL   = "ENABLE_REAL";
-
-const char* const SCENE_QSNAP_POINT = "SCENE_QSNAP_POINT";
-const char* const SCENE_MOUSE_POINT = "SCENE_MOUSE_POINT";
-const char* const VIEW_MOUSE_POINT  = "VIEW_MOUSE_POINT";
-const char* const RUBBER_ROOM = "RUBBER_ROOM";
-
-const char* const VIEW_COLOR_BACKGROUND = "VIEW_COLOR_BACKGROUND";
-const char* const VIEW_COLOR_CROSSHAIR  = "VIEW_COLOR_CROSSHAIR";
-const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
 
 /* ---- Class declarations -------------------------------------------------- */
 // On Mac, if the user drops a file on the app's Dock icon, or uses Open As, then this is how the app actually opens the file.
@@ -703,18 +591,18 @@ public:
     MainWindow();
     ~MainWindow();
 
+    QPrinter printer;
+
+    void run_command(int id, ...);
+
     void setUndoCleanIcon(bool opened);
 
     virtual void updateMenuToolbarStatusbar();
 
-    QList<QGraphicsItem*> cutCopyObjectList;
-
-    QHash<QString, QAction*> actionHash;
-    QHash<QString, QToolBar*> toolbarHash;
-    QHash<QString, QMenu*> menuHash;
-
-    QString formatFilterOpen;
-    QString formatFilterSave;
+    QIcon createIcon(QString label);
+    void addToToolbar(QToolBar *tb, StringList list);
+    void addToMenu(QMenu *menu, StringList data);
+    void addToComboBox(QComboBox *box, StringList data);
 
     bool isCommandActive() { return prompt->isCommandActive(); }
     QString activeCommand() { return prompt->activeCommand(); }
@@ -776,32 +664,7 @@ public:
     QStringList listTipOfTheDay;
 
     void createAllActions(void);
-
-    // Toolbars
     void createAllToolbars();
-    void createFileToolbar();
-    void createEditToolbar();
-    void createViewToolbar();
-    void createZoomToolbar();
-    void createPanToolbar();
-    void createIconToolbar();
-    void createHelpToolbar();
-    void createLayerToolbar();
-    void createPropertiesToolbar();
-    void createTextToolbar();
-    void createPromptToolbar();
-
-    QToolBar* toolbarFile;
-    QToolBar* toolbarEdit;
-    QToolBar* toolbarView;
-    QToolBar* toolbarZoom;
-    QToolBar* toolbarPan;
-    QToolBar* toolbarIcon;
-    QToolBar* toolbarHelp;
-    QToolBar* toolbarLayer;
-    QToolBar* toolbarText;
-    QToolBar* toolbarProperties;
-    QToolBar* toolbarPrompt;
 
     // Selectors
     QComboBox* layerSelector;
@@ -813,24 +676,7 @@ public:
 
     // Menus
     void createAllMenus();
-    void createFileMenu();
-    void createEditMenu();
-    void createViewMenu();
-    void createSettingsMenu();
-    void createWindowMenu();
-    void createHelpMenu();
 
-    QMenu* fileMenu;
-    QMenu* editMenu;
-    QMenu* viewMenu;
-    QMenu* settingsMenu;
-    QMenu* windowMenu;
-    QMenu* helpMenu;
-
-    // SubMenus
-    QMenu* recentMenu;
-    QMenu* zoomMenu;
-    QMenu* panMenu;
 
 private slots:
     void hideUnimplemented();
@@ -857,22 +703,11 @@ public slots:
     void openrecentfile();
     void savefile();
     void saveasfile();
-    void print();
-    void designDetails();
-    void checkForUpdates();
     // Help Menu
     void tipOfTheDay();
     void buttonTipOfTheDayClicked(int);
     void checkBoxTipOfTheDayStateChanged(int);
-    void help();
-    void changelog();
     void about();
-    void whatsThisContextHelp();
-
-    void cut();
-    void copy();
-    void paste();
-    void selectAll();
 
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
@@ -1045,45 +880,44 @@ public:
     MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
     ~MdiWindow();
 
-    virtual QSize              sizeHint() const;
-    QString                    getCurrentFile()   { return curFile; }
-    QString                    getShortCurrentFile();
-    View*                      getView() { return gview; }
-    QGraphicsScene*            getScene() { return gscene; }
-    QString                    getCurrentLayer() { return curLayer; }
-    QString                    getCurrentLineType() { return curLineType; }
-    QString                    getCurrentLineWeight() { return curLineWeight; }
-    void                       setCurrentLayer(const QString& layer) { curLayer = layer; }
-    void                       setCurrentColor(const QRgb& color) { curColor = color; }
-    void                       setCurrentLineType(const QString& lineType) { curLineType = lineType; }
-    void                       setCurrentLineWeight(const QString& lineWeight) { curLineWeight = lineWeight; }
-    void                       designDetails();
-    bool                       loadFile(const QString &fileName);
-    bool                       saveFile(const QString &fileName);
+    virtual QSize sizeHint() const;
+    QString getCurrentFile()   { return curFile; }
+    QString getShortCurrentFile();
+    View* getView() { return gview; }
+    QGraphicsScene* getScene() { return gscene; }
+    QString getCurrentLayer() { return curLayer; }
+    QString getCurrentLineType() { return curLineType; }
+    QString getCurrentLineWeight() { return curLineWeight; }
+    void setCurrentLayer(const QString& layer) { curLayer = layer; }
+    void setCurrentColor(const QRgb& color) { curColor = color; }
+    void setCurrentLineType(const QString& lineType) { curLineType = lineType; }
+    void setCurrentLineWeight(const QString& lineWeight) { curLineWeight = lineWeight; }
+    void designDetails();
+    bool loadFile(const QString &fileName);
+    bool saveFile(const QString &fileName);
 signals:
-    void                       sendCloseMdiWin(MdiWindow*);
+    void sendCloseMdiWin(MdiWindow*);
 
 public slots:
-    void                       closeEvent(QCloseEvent* e);
-    void                       onWindowActivated();
+    void closeEvent(QCloseEvent* e);
+    void onWindowActivated();
 
-    void                       currentLayerChanged(const QString& layer);
-    void                       currentColorChanged(const QRgb& color);
-    void                       currentLinetypeChanged(const QString& type);
-    void                       currentLineweightChanged(const QString& weight);
+    void currentLayerChanged(const QString& layer);
+    void currentColorChanged(const QRgb& color);
+    void currentLinetypeChanged(const QString& type);
+    void currentLineweightChanged(const QString& weight);
 
-    void                       updateColorLinetypeLineweight();
-    void                       deletePressed();
-    void                       escapePressed();
+    void updateColorLinetypeLineweight();
+    void deletePressed();
+    void escapePressed();
 
-    void                       showViewScrollBars(bool val);
-    void                       setViewCrossHairColor(QRgb color);
-    void                       setViewBackgroundColor(QRgb color);
-    void                       setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
+    void showViewScrollBars(bool val);
+    void setViewCrossHairColor(QRgb color);
+    void setViewBackgroundColor(QRgb color);
+    void setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
     void setViewGridColor(QRgb color);
     void setViewRulerColor(QRgb color);
 
-    void print();
     void saveBMC();
 
     void promptHistoryAppended(const QString& txt);
@@ -1102,8 +936,6 @@ public:
     QString promptHistory;
     QList<QString> promptInputList;
     int promptInputNum;
-
-    QPrinter printer;
 
     QString curFile;
     void setCurrentFile(const QString& fileName);
@@ -1874,126 +1706,6 @@ private:
 
 };
 
-#define CONTEXT_MAIN                   0
-#define CONTEXT_CLICK                  1
-#define CONTEXT_CONTEXT                2
-#define CONTEXT_MOVE                   3
-#define CONTEXT_PROMPT                 4
-
-typedef struct Settings_ {
-    QString general_language;
-    QString general_icon_theme;
-    int32_t general_icon_size;
-    bool general_mdi_bg_use_logo;
-    bool general_mdi_bg_use_texture;
-    bool general_mdi_bg_use_color;
-    QString general_mdi_bg_logo;
-    QString general_mdi_bg_texture;
-    QRgb general_mdi_bg_color;
-    bool general_tip_of_the_day;
-    uint16_t general_current_tip;
-    bool general_system_help_browser;
-    bool general_check_for_updates;
-    bool display_use_opengl;
-    bool display_renderhint_aa;
-    bool display_renderhint_text_aa;
-    bool display_renderhint_smooth_pix;
-    bool display_renderhint_high_aa;
-    bool display_renderhint_noncosmetic;
-    bool display_show_scrollbars;
-    int display_scrollbar_widget_num;
-    QRgb display_crosshair_color;
-    QRgb display_bg_color;
-    QRgb display_selectbox_left_color;
-    QRgb display_selectbox_left_fill;
-    QRgb display_selectbox_right_color;
-    QRgb display_selectbox_right_fill;
-    quint8 display_selectbox_alpha;
-    qreal display_zoomscale_in;
-    qreal display_zoomscale_out;
-    quint8 display_crosshair_percent;
-    QString display_units;
-    QRgb prompt_text_color;
-    QRgb prompt_bg_color;
-    QString prompt_font_family;
-    QString prompt_font_style;
-    quint8 prompt_font_size;
-    bool prompt_save_history;
-    bool prompt_save_history_as_html;
-    QString prompt_save_history_filename;
-    QString opensave_custom_filter;
-    QString opensave_open_format;
-    bool opensave_open_thumbnail;
-    QString opensave_save_format;
-    bool opensave_save_thumbnail;
-    quint8 opensave_recent_max_files;
-    QStringList opensave_recent_list_of_files;
-    QString opensave_recent_directory;
-    quint8 opensave_trim_dst_num_jumps;
-    QString printing_default_device;
-    bool printing_use_last_device;
-    bool printing_disable_bg;
-    bool grid_show_on_load;
-    bool grid_show_origin;
-    bool grid_color_match_crosshair;
-    QRgb grid_color;
-    bool grid_load_from_file;
-    QString grid_type;
-    bool grid_center_on_origin;
-    qreal grid_center_x;
-    qreal grid_center_y;
-    qreal grid_size_x;
-    qreal grid_size_y;
-    qreal grid_spacing_x;
-    qreal grid_spacing_y;
-    qreal grid_size_radius;
-    qreal grid_spacing_radius;
-    qreal grid_spacing_angle;
-    bool ruler_show_on_load;
-    bool ruler_metric;
-    QRgb ruler_color;
-    quint8 ruler_pixel_size;
-    bool qsnap_enabled;
-    QRgb qsnap_locator_color;
-    quint8 qsnap_locator_size;
-    quint8 qsnap_aperture_size;
-    bool qsnap_endpoint;
-    bool qsnap_midpoint;
-    bool qsnap_center;
-    bool qsnap_node;
-    bool qsnap_quadrant;
-    bool qsnap_intersection;
-    bool qsnap_extension;
-    bool qsnap_insertion;
-    bool qsnap_perpendicular;
-    bool qsnap_tangent;
-    bool qsnap_nearest;
-    bool qsnap_apparent;
-    bool qsnap_parallel;
-    bool lwt_show_lwt;
-    bool lwt_real_render;
-    qreal lwt_default_lwt;
-    bool selection_mode_pickfirst;
-    bool selection_mode_pickadd;
-    bool selection_mode_pickdrag;
-    QRgb selection_coolgrip_color;
-    QRgb selection_hotgrip_color;
-    quint8 selection_grip_size;
-    quint8 selection_pickbox_size;
-    QString text_font;
-    qreal text_size;
-    qreal text_angle;
-    bool text_style_bold;
-    bool text_style_italic;
-    bool text_style_underline;
-    bool text_style_overline;
-    bool text_style_strikeout;
-} Settings;
-
-void run(const char *command);
-
-extern Settings settings;
-
 class SelectBox : public QRubberBand
 {
     Q_OBJECT
@@ -2033,12 +1745,14 @@ class Settings_Dialog : public QDialog
     Q_OBJECT
 
 public:
-    Settings_Dialog(MainWindow* mw, const QString& showTab = QString(), QWidget *parent = 0);
+    Settings_Dialog(const QString& showTab = QString(), QWidget *parent = 0);
     ~Settings_Dialog();
 
-private:
-    MainWindow*       mainWin;
+    QCheckBox *basic_checkbox(QGroupBox *gb, int id);
+    QDoubleSpinBox *basic_double_spinbox(QGroupBox *gb, int id);
+    QSpinBox *basic_spinbox(QGroupBox *gb, int id);
 
+private:
     QWidget* createTabGeneral();
     QWidget* createTabFilesPaths();
     QWidget* createTabDisplay();
@@ -2067,12 +1781,6 @@ private slots:
     void chooseGeneralMdiBackgroundColor();
     void currentGeneralMdiBackgroundColorChanged(const QColor&);
     void checkBoxTipOfTheDayStateChanged(int);
-    void checkBoxUseOpenGLStateChanged(int);
-    void checkBoxRenderHintAAStateChanged(int);
-    void checkBoxRenderHintTextAAStateChanged(int);
-    void checkBoxRenderHintSmoothPixStateChanged(int);
-    void checkBoxRenderHintHighAAStateChanged(int);
-    void checkBoxRenderHintNonCosmeticStateChanged(int);
     void checkBoxShowScrollBarsStateChanged(int);
     void comboBoxScrollBarWidgetCurrentIndexChanged(int);
     void spinBoxZoomScaleInValueChanged(double);
@@ -2098,8 +1806,6 @@ private slots:
     void comboBoxPromptFontFamilyCurrentIndexChanged(const QString&);
     void comboBoxPromptFontStyleCurrentIndexChanged(const QString&);
     void spinBoxPromptFontSizeValueChanged(int);
-    void checkBoxPromptSaveHistoryStateChanged(int);
-    void checkBoxPromptSaveHistoryAsHtmlStateChanged(int);
     void checkBoxCustomFilterStateChanged(int);
     void buttonCustomFilterSelectAllClicked();
     void buttonCustomFilterClearAllClicked();
@@ -2113,33 +1819,11 @@ private slots:
     void checkBoxGridLoadFromFileStateChanged(int);
     void comboBoxGridTypeCurrentIndexChanged(const QString&);
     void checkBoxGridCenterOnOriginStateChanged(int);
-    void spinBoxGridCenterXValueChanged(double);
-    void spinBoxGridCenterYValueChanged(double);
-    void spinBoxGridSizeXValueChanged(double);
-    void spinBoxGridSizeYValueChanged(double);
-    void spinBoxGridSpacingXValueChanged(double);
-    void spinBoxGridSpacingYValueChanged(double);
-    void spinBoxGridSizeRadiusValueChanged(double);
-    void spinBoxGridSpacingRadiusValueChanged(double);
-    void spinBoxGridSpacingAngleValueChanged(double);
     void checkBoxRulerShowOnLoadStateChanged(int);
     void comboBoxRulerMetricCurrentIndexChanged(int);
     void chooseRulerColor();
     void currentRulerColorChanged(const QColor&);
     void spinBoxRulerPixelSizeValueChanged(double);
-    void checkBoxQSnapEndPointStateChanged(int);
-    void checkBoxQSnapMidPointStateChanged(int);
-    void checkBoxQSnapCenterStateChanged(int);
-    void checkBoxQSnapNodeStateChanged(int);
-    void checkBoxQSnapQuadrantStateChanged(int);
-    void checkBoxQSnapIntersectionStateChanged(int);
-    void checkBoxQSnapExtensionStateChanged(int);
-    void checkBoxQSnapInsertionStateChanged(int);
-    void checkBoxQSnapPerpendicularStateChanged(int);
-    void checkBoxQSnapTangentStateChanged(int);
-    void checkBoxQSnapNearestStateChanged(int);
-    void checkBoxQSnapApparentStateChanged(int);
-    void checkBoxQSnapParallelStateChanged(int);
     void buttonQSnapSelectAllClicked();
     void buttonQSnapClearAllClicked();
     void comboBoxQSnapLocatorColorCurrentIndexChanged(int);

@@ -64,9 +64,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/layer-manager.cpp
 	${SRC}/main.cpp
 	${SRC}/mainwindow.cpp
-	${SRC}/mainwindow-menus.cpp
-	${SRC}/mainwindow-settings.cpp
-	${SRC}/mainwindow-toolbars.cpp
 	${SRC}/mdiarea.cpp
 	${SRC}/mdiwindow.cpp
 	${SRC}/object-arc.cpp
@@ -94,6 +91,10 @@ qt_add_executable(embroidermodder2
 	${SRC}/view.cpp
 
 	${SRC}/embroidermodder.h
+
+	${SRC}/data/commands.c
+	${SRC}/data/settings.c
+	${SRC}/data/data.h
 
 	${EXTERN}/lua/src/lapi.c
 	${EXTERN}/lua/src/lapi.h

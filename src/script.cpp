@@ -5,30 +5,23 @@
  *
  * -----------------------------------------------------------------------------
  *
- * This is the most frequently updated part of the source and imports all
- * of the other headers. An alteration here has a faster turn around than
- * anywhere else in the compiled part of the source. New core developers would
- * benefit most from understanding the rough approach of this file and making
- * small changes here.
- *
  * Having scripting available for users to alter their software reflects a
  * core principle of open source software. The full build environment for
  * Embroidermodder is too complex for most users to set up, especially on
  * Windows. So the "freedom" to alter the program would be seldom used.
  * Being able to write a script in any text editor and add it to
- * the build by adding a load call to "commands.scm" is therefore a core
+ * the build by adding a load call to "boot.lua" is therefore a core
  * feature. We as core developers won't be using this flexibility much.
  *
- * For core developers, lua is providing a means of logging all user
- * interaction through a unified, text-based command system and a way of
- * allowing user made designs to be described parametrically along with their
- * custom UIs. While relying more on lua would make some interactions easier to
- * write like loading settings or writing out the state for debugging (see
+ * While relying more on lua could make some core developers' work easier
+ * like loading settings or writing out the state for debugging (see
  * `report_state_f`), going back and forth will be slower,
  * harder to debug and potentially will lead to invalid memory more often.
  * Having every `settings_` variable part of the global C/C++ state of the
  * program rather than as lua symbols has faster load times and easier to
- * access for over 99% of the code and run-time.
+ * access for over 99% of the code and run-time. So we recommend that core
+ * developers make sure they know why a feature should be written as a lua
+ * function before submitting a patch that requires this.
  *
  * TODO: inline all MainWindow native functions, replace MainWindow calls that
  * can be lua registerable functions.
@@ -43,23 +36,6 @@
 #include "../extern/lua/src/lua.hpp"
 #include "../extern/toml11/single_include/toml.hpp"
 
-typedef struct Command_ {
-    QString icon;
-    QString command;
-    QString tooltip;
-    QString statustip;
-    QString shortcut;
-    QString macos;
-    unsigned char checkable;
-} Command;
-
-typedef struct ScriptValue_ {
-    QString s;
-    int32_t i;
-    double r;
-    bool b;
-} ScriptValue;
-
 #if __cplusplus
 extern "C" {
 #endif
@@ -70,11 +46,7 @@ void clear_selection(void);
 void end_command(void);
 
 /* NOTE: Try to keep this list alphabetical in the function name. */
-int about_f(lua_State *L);
-int add_to_menu_f(lua_State *L);
-int add_toolbar_seperator_f(lua_State *L);
 int add_to_selection_f(lua_State *L);
-int add_to_toolbar_f(lua_State *L);
 int alert_f(lua_State *L);
 int allow_rubber_f(lua_State *L);
 int arc_f(lua_State *L);
@@ -86,11 +58,9 @@ int changelog_f(lua_State *L);
 int circle_f(lua_State *L);
 int clear_rubber_f(lua_State *L);
 int clear_selection_f(lua_State *L);
+int cmd_f(lua_State *L);
 int color_selector_f(lua_State *L);
-int command_f(lua_State *L);
-int copy_f(lua_State *L);
 int copy_selected_f(lua_State *L);
-int cut_f(lua_State *L);
 int cut_selected_f(lua_State *L);
 int day_f(lua_State *L);
 int debug_f(lua_State *L);
@@ -114,12 +84,6 @@ int heart_f(lua_State *L);
 int help_f(lua_State *L);
 int hide_all_layers_f(lua_State *L);
 int horizontal_dimension_f(lua_State *L);
-int icon128_f(lua_State *L);
-int icon16_f(lua_State *L);
-int icon24_f(lua_State *L);
-int icon32_f(lua_State *L);
-int icon48_f(lua_State *L);
-int icon64_f(lua_State *L);
 int image_f(lua_State *L);
 int infinite_line_f(lua_State *L);
 int init_command_f(lua_State *L);
@@ -148,7 +112,6 @@ int pan_point_f(lua_State *L);
 int pan_real_time_f(lua_State *L);
 int pan_right_f(lua_State *L);
 int pan_up_f(lua_State *L);
-int paste_f(lua_State *L);
 int paste_selected_f(lua_State *L);
 int path_f(lua_State *L);
 int perpendicular_distance_f(lua_State *L);
@@ -164,7 +127,6 @@ int qsnap_f(lua_State *L);
 int quickleader_f(lua_State *L);
 int ray_f(lua_State *L);
 int rectangle_f(lua_State *L);
-int redo_f(lua_State *L);
 int regular_polygon_f(lua_State *L);
 int rgb_f(lua_State *L);
 int rotate_f(lua_State *L);
@@ -175,8 +137,6 @@ int saveas_f(lua_State *L);
 int save_f(lua_State *L);
 int scale_f(lua_State *L);
 int scale_selected_f(lua_State *L);
-int select_all_f(lua_State *L);
-int selectall_f(lua_State *L);
 int set_color_f(lua_State *L);
 int set_cursor_shape_f(lua_State *L);
 int set_prompt_prefix_f(lua_State *L);
@@ -213,7 +173,6 @@ int thaw_all_layers_f(lua_State *L);
 int tip_of_the_day_f(lua_State *L);
 int todo_f(lua_State *L);
 int triangle_f(lua_State *L);
-int undo_f(lua_State *L);
 int unlock_all_layers_f(lua_State *L);
 int vertical_dimension_f(lua_State *L);
 int vulcanize_f(lua_State *L);
@@ -247,8 +206,6 @@ int zoom_window_f(lua_State *L);
 lua_State *Lua;
 unsigned char context_flag = CONTEXT_MAIN;
 
-Settings settings;
-
 /* Pointer access */
 MainWindow* _mainWin = NULL;
 MdiArea* mdiArea = NULL;
@@ -261,11 +218,7 @@ const char *temporary_name_format = "tmp_%d";
 int temporary_name = 0;
 
 luaL_Reg lua_registerables[] = {
-    {"about", about_f},
-    {"add_to_menu", add_to_menu_f},
-    {"add_toolbar_seperator", add_toolbar_seperator_f},
     {"add_to_selection", add_to_selection_f},
-    {"add_to_toolbar", add_to_toolbar_f},
     {"alert", alert_f},
     {"allow_rubber", allow_rubber_f},
     {"arc", arc_f},
@@ -277,11 +230,9 @@ luaL_Reg lua_registerables[] = {
     {"circle", circle_f},
     {"clear_rubber", clear_rubber_f},
     {"clear_selection", clear_selection_f},
+    {"cmd", cmd_f},
     {"color_selector", color_selector_f},
-    {"command", command_f},
-    {"copy", copy_f},
     {"copy_selected", copy_selected_f},
-    {"cut", cut_f},
     {"cut_selected", cut_selected_f},
     {"day", day_f},
     {"debug", debug_f},
@@ -305,12 +256,6 @@ luaL_Reg lua_registerables[] = {
     {"help", help_f},
     {"hide_all_layers", hide_all_layers_f},
     {"horizontal_dimension", horizontal_dimension_f},
-    {"icon128", icon128_f},
-    {"icon16", icon16_f},
-    {"icon24", icon24_f},
-    {"icon32", icon32_f},
-    {"icon48", icon48_f},
-    {"icon64", icon64_f},
     {"image", image_f},
     {"infinite_line", infinite_line_f},
     {"init_command", init_command_f},
@@ -339,7 +284,6 @@ luaL_Reg lua_registerables[] = {
     {"pan_real_time", pan_real_time_f},
     {"pan_right", pan_right_f},
     {"pan_up", pan_up_f},
-    {"paste", paste_f},
     {"paste_selected", paste_selected_f},
     {"path", path_f},
     {"perpendicular_distance", perpendicular_distance_f},
@@ -355,7 +299,6 @@ luaL_Reg lua_registerables[] = {
     {"quickleader", quickleader_f},
     {"ray", ray_f},
     {"rectangle", rectangle_f},
-    {"redo", redo_f},
     {"regular_polygon", regular_polygon_f},
     {"rgb", rgb_f},
     {"rotate", rotate_f},
@@ -366,8 +309,6 @@ luaL_Reg lua_registerables[] = {
     {"save", save_f},
     {"scale", scale_f},
     {"scale_selected", scale_selected_f},
-    {"select_all", select_all_f},
-    {"selectall", selectall_f},
     {"set_color", set_color_f},
     {"set_cursor_shape", set_cursor_shape_f},
     {"set_prompt_prefix", set_prompt_prefix_f},
@@ -404,7 +345,6 @@ luaL_Reg lua_registerables[] = {
     {"tip_of_the_day", tip_of_the_day_f},
     {"todo", todo_f},
     {"triangle", triangle_f},
-    {"undo", undo_f},
     {"unlock_all_layers", unlock_all_layers_f},
     {"vertical_dimension", vertical_dimension_f},
     {"vulcanize", vulcanize_f},
@@ -428,8 +368,6 @@ luaL_Reg lua_registerables[] = {
     {"zoom_window", zoom_window_f},
     {NULL, NULL}
 };
-
-std::vector<Command> command_map;
 
 int check_clear_top = 0;
 
@@ -558,119 +496,15 @@ void MainWindow::stub_testing()
     QMessageBox::warning(this, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
 }
 
-void MainWindow::checkForUpdates()
-{
-    qDebug("checkForUpdates()");
-    //TODO: Check website for new versions, commands, etc...
-}
-
-void MainWindow::cut()
-{
-    qDebug("cut()");
-    View* gview = activeView();
-    if(gview) { gview->cut(); }
-}
-
-void MainWindow::copy()
-{
-    qDebug("copy()");
-    View* gview = activeView();
-    if(gview) { gview->copy(); }
-}
-
-void MainWindow::paste()
-{
-    qDebug("paste()");
-    View* gview = activeView();
-    if(gview) { gview->paste(); }
-}
-
-void MainWindow::selectAll()
-{
-    qDebug("selectAll()");
-    View* gview = activeView();
-    if(gview) { gview->selectAll(); }
-}
-
+/* TODO: Append QSysInfo to string where applicable. */
 QString MainWindow::platformString()
 {
-    //TODO: Append QSysInfo to string where applicable.
-    QString os;
-    #if   defined(Q_OS_AIX)
-    os = "AIX";
-    #elif defined(Q_OS_BSD4)
-    os = "BSD 4.4";
-    #elif defined(Q_OS_BSDI)
-    os = "BSD/OS";
-    #elif defined(Q_OS_CYGWIN)
-    os = "Cygwin";
-    #elif defined(Q_OS_DARWIN)
-    os = "Mac OS";
-    #elif defined(Q_OS_DGUX)
-    os = "DG/UX";
-    #elif defined(Q_OS_DYNIX)
-    os = "DYNIX/ptx";
-    #elif defined(Q_OS_FREEBSD)
-    os = "FreeBSD";
-    #elif defined(Q_OS_HPUX)
-    os = "HP-UX";
-    #elif defined(Q_OS_HURD)
-    os = "GNU Hurd";
-    #elif defined(Q_OS_IRIX)
-    os = "SGI Irix";
-    #elif defined(Q_OS_LINUX)
-    os = "Linux";
-    #elif defined(Q_OS_LYNX)
-    os = "LynxOS";
-    #elif defined(Q_OS_MAC)
-    os = "Mac OS";
-    #elif defined(Q_OS_MSDOS)
-    os = "MS-DOS";
-    #elif defined(Q_OS_NETBSD)
-    os = "NetBSD";
-    #elif defined(Q_OS_OS2)
-    os = "OS/2";
-    #elif defined(Q_OS_OPENBSD)
-    os = "OpenBSD";
-    #elif defined(Q_OS_OS2EMX)
-    os = "XFree86 on OS/2";
-    #elif defined(Q_OS_OSF)
-    os = "HP Tru64 UNIX";
-    #elif defined(Q_OS_QNX)
-    os = "QNX Neutrino";
-    #elif defined(Q_OS_RELIANT)
-    os = "Reliant UNIX";
-    #elif defined(Q_OS_SCO)
-    os = "SCO OpenServer 5";
-    #elif defined(Q_OS_SOLARIS)
-    os = "Sun Solaris";
-    #elif defined(Q_OS_SYMBIAN)
-    os = "Symbian";
-    #elif defined(Q_OS_ULTRIX)
-    os = "DEC Ultrix";
-    #elif defined(Q_OS_UNIX)
-    os = "UNIX BSD/SYSV";
-    #elif defined(Q_OS_UNIXWARE)
-    os = "UnixWare";
-    #elif defined(Q_OS_WIN32)
-    os = "Windows";
-    #elif defined(Q_OS_WINCE)
-    os = "Windows CE";
-    #endif
-    qDebug("Platform: %s", qPrintable(os));
-    return os;
+    qDebug("Platform: %s", OS_STR);
+    return OS_STR;
 }
 
-void MainWindow::designDetails()
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        EmbDetailsDialog dialog(scene, this);
-        dialog.exec();
-    }
-}
-
-void MainWindow::about()
+void
+MainWindow::about()
 {
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -719,21 +553,6 @@ void MainWindow::about()
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::whatsThisContextHelp()
-{
-    qDebug("whatsThisContextHelp()");
-    QWhatsThis::enterWhatsThisMode();
-}
-
-void MainWindow::print()
-{
-    qDebug("print()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        mdiWin->print();
-    }
-}
-
 void MainWindow::tipOfTheDay()
 {
     qDebug("tipOfTheDay()");
@@ -749,14 +568,14 @@ void MainWindow::tipOfTheDay()
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if(settings.general_current_tip >= listTipOfTheDay.size())
-        settings.general_current_tip = 0;
-    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(settings.general_current_tip), wizardTipOfTheDay);
+    if (st[ST_CURRENT_TIP].i >= listTipOfTheDay.size()) {
+        st[ST_CURRENT_TIP].i = 0;
+    }
+    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(st[ST_CURRENT_TIP].i), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    settings.general_tip_of_the_day = settings.general_tip_of_the_day;
-    checkBoxTipOfTheDay->setChecked(settings.general_tip_of_the_day);
+    checkBoxTipOfTheDay->setChecked(st[ST_TIP_OF_THE_DAY].b);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
@@ -790,55 +609,31 @@ void MainWindow::tipOfTheDay()
 
 void MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 {
-    settings.general_tip_of_the_day = checked;
+    st[ST_TIP_OF_THE_DAY].b = checked;
 }
 
 void MainWindow::buttonTipOfTheDayClicked(int button)
 {
     qDebug("buttonTipOfTheDayClicked(%d)", button);
-    if(button == QWizard::CustomButton1)
-    {
-        if(settings.general_current_tip > 0)
-            settings.general_current_tip--;
-        else
-            settings.general_current_tip = listTipOfTheDay.size()-1;
-        labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
+    if (button == QWizard::CustomButton1) {
+        if (st[ST_CURRENT_TIP].i > 0) {
+            st[ST_CURRENT_TIP].i--;
+        }
+        else {
+            st[ST_CURRENT_TIP].i = listTipOfTheDay.size()-1;
+        }
+        labelTipOfTheDay->setText(listTipOfTheDay.value(st[ST_CURRENT_TIP].i));
     }
-    else if(button == QWizard::CustomButton2)
-    {
-        settings.general_current_tip++;
-        if(settings.general_current_tip >= listTipOfTheDay.size())
-            settings.general_current_tip = 0;
-        labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
+    else if(button == QWizard::CustomButton2) {
+        st[ST_CURRENT_TIP].i++;
+        if (st[ST_CURRENT_TIP].i >= listTipOfTheDay.size()) {
+            st[ST_CURRENT_TIP].i = 0;
+        }
+        labelTipOfTheDay->setText(listTipOfTheDay.value(st[ST_CURRENT_TIP].i));
     }
-    else if(button == QWizard::CustomButton3)
-    {
+    else if(button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
     }
-}
-
-void MainWindow::help()
-{
-    qDebug("help()");
-
-    // Open the HTML Help in the default browser
-    QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
-    QDesktopServices::openUrl(helpURL);
-
-    //TODO: This is how to start an external program. Use this elsewhere...
-    //QString program = "firefox";
-    //QStringList arguments;
-    //arguments << "help/commands.html";
-    //QProcess *myProcess = new QProcess(this);
-    //myProcess->start(program, arguments);
-}
-
-void MainWindow::changelog()
-{
-    qDebug("changelog()");
-
-    QUrl changelogURL("help/changelog.html");
-    QDesktopServices::openUrl(changelogURL);
 }
 
 // Standard Slots
@@ -863,7 +658,7 @@ void MainWindow::iconResize(int iconSize)
 
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
-    settings.general_icon_size = iconSize;
+    st[ST_ICON_SIZE].i = iconSize;
 }
 
 void MainWindow::setUndoCleanIcon(bool opened)
@@ -871,27 +666,32 @@ void MainWindow::setUndoCleanIcon(bool opened)
     dockUndoEdit->updateCleanIcon(opened);
 }
 
-void MainWindow::updateAllViewScrollBars(bool val)
+void
+MainWindow::updateAllViewScrollBars(bool val)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); i++) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->showViewScrollBars(val); }
+        if (mdiWin) {
+            mdiWin->showViewScrollBars(val);
+        }
     }
 }
 
-void MainWindow::updateAllViewCrossHairColors(QRgb color)
+void
+MainWindow::updateAllViewCrossHairColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); i++) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->setViewCrossHairColor(color); }
+        if (mdiWin) {
+            mdiWin->setViewCrossHairColor(color);
+        }
     }
 }
 
-void MainWindow::updateAllViewBackgroundColors(QRgb color)
+void
+MainWindow::updateAllViewBackgroundColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
@@ -933,13 +733,13 @@ void MainWindow::updateAllViewRulerColors(QRgb color)
 
 void MainWindow::updatePickAddMode(bool val)
 {
-    settings.selection_mode_pickadd = val;
+    st[ST_SELECTION_MODE_PICKADD].b = val;
     dockPropEdit->updatePickAddModeButton(val);
 }
 
 void MainWindow::pickAddModeToggled()
 {
-    bool val = !settings.selection_mode_pickadd;
+    bool val = !st[ST_SELECTION_MODE_PICKADD].b;
     updatePickAddMode(val);
 }
 
@@ -1012,7 +812,7 @@ void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 void MainWindow::textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
-    settings.text_size = qFabs(textSizeSelector->itemData(index).toReal());
+    st[ST_TEXT_SIZE].i = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
 QString MainWindow::getCurrentLayer()
@@ -1121,7 +921,7 @@ MainWindow::runCommandMain(const QString& cmd)
 {
     qDebug("runCommandMain(%s)", qPrintable(cmd));
     // TODO: Uncomment this line when post-selection is available
-    // if (!settings.selection_mode_pick_first) {
+    // if (!st[ST_SELECTION_MODE_PICKFIRST].b) {
     //     clear_selection();
     // }
     context_flag = CONTEXT_MAIN;
@@ -1216,13 +1016,13 @@ void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal
     if(gview && gscene && stack)
     {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
-        obj->setObjectTextFont(settings.text_font);
-        obj->setObjectTextSize(settings.text_size);
-        obj->setObjectTextStyle(settings.text_style_bold,
-                                settings.text_style_italic,
-                                settings.text_style_underline,
-                                settings.text_style_strikeout,
-                                settings.text_style_overline);
+        obj->setObjectTextFont(st[ST_TEXT_FONT].s.c_str());
+        obj->setObjectTextSize(st[ST_TEXT_SIZE].i);
+        obj->setObjectTextStyle(st[ST_TEXT_BOLD].b,
+                                st[ST_TEXT_ITALIC].b,
+                                st[ST_TEXT_UNDERLINE].b,
+                                st[ST_TEXT_STRIKEOUT].b,
+                                st[ST_TEXT_OVERLINE].b);
         obj->setObjectTextBackward(false);
         obj->setObjectTextUpsideDown(false);
         obj->setRotation(-rot);
@@ -1622,46 +1422,6 @@ end_command(void)
  * All function names should end in `_f`.
  */
 
-/* Show the about dialog. */
-int
-about_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->about();
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-add_to_menu_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-add_toolbar_seperator_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-add_to_toolbar_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    no_args(L);
-    return 0;
-}
-
 /* . */
 int
 allow_rubber_f(lua_State *L)
@@ -1705,7 +1465,6 @@ delete_selected_f(lua_State *L)
 int
 dim_leader_f(lua_State *L)
 {
-    debug("TODO: add_to_menu");
     ScriptValue args[5];
     if (!unpack_args(L, "dim_leader_f", args, "rrrrr")) {
         return 0;
@@ -1854,8 +1613,8 @@ preview_on_f(lua_State *L)
         return 0;
     }
 
-    QString cloneStr = args[0].s.toUpper();
-    QString modeStr = args[1].s.toUpper();
+    QString cloneStr = QString(args[0].s.c_str()).toUpper();
+    QString modeStr = QString(args[1].s.c_str()).toUpper();
     double x = args[2].r;
     double y = args[3].r;
     double data = args[4].r;
@@ -1909,7 +1668,7 @@ print_area_f(lua_State *L)
 
     qDebug("print_area_f(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
-    _mainWin->print();
+    _mainWin->run_command(CMD_PRINT);
     return 0;
 }
 
@@ -1946,12 +1705,43 @@ rubber_f(lua_State *L)
     return 0;
 }
 
+/*! Interface to core commands.
+ *
+ * User based interaction comes via this interface so we can parse
+ * the differences between interaction contexts.
+ *
+ * TODO: currently can't pass arguments through to core commands.
+ */
+int
+cmd_f(lua_State *L)
+{
+    ScriptValue args[2];
+    if (!unpack_args(L, "run_f", args, "s")) {
+        return 0;
+    }
+    if (context_flag == CONTEXT_MAIN) {
+        init_command();
+        /* Some selection based commands need to override this. */
+        clear_selection();
+    }
+    int id = get_cmd_id(args[0].s.c_str());
+    if (id >= 0) {
+        _mainWin->run_command(id);
+        /* TODO: conditional on if the command is open ended or not. */
+        end_command();
+        return 0;
+    }
+    debug("");
+    end_command();
+    return 0;
+}
+
 /* . */
 int
 text_angle_f(lua_State *L)
 {
     debug("TODO: text_angle_f");
-    /* return QScriptValue(settings.text_angle); */
+    /* return QScriptValue(st[ST_TEXT_ANGLE].r); */
     return 0;
 }
 
@@ -1960,7 +1750,7 @@ int
 text_font_f(lua_State *L)
 {
     debug("TODO: text_font_f");
-    /* return QScriptValue(settings.text_font); */
+    /* return QScriptValue(st[ST_TEXT_FONT].s.c_str()); */
     return 0;
 }
 
@@ -1973,7 +1763,7 @@ text_single_f(lua_State *L)
         return 0;
     }
 
-    QString str = args[0].s;
+    QString str = args[0].s.c_str();
     double x = args[1].r;
     double y = args[2].r;
     double rot = args[3].r;
@@ -1991,7 +1781,7 @@ text_multi_f(lua_State *L)
         return 0;
     }
 
-    QString str = args[0].s;
+    QString str = args[0].s.c_str();
     double x = args[1].r;
     double y = args[2].r;
     double rot = args[3].r;
@@ -2058,25 +1848,13 @@ menu_seperator_f(lua_State *L)
 
 /* . */
 int
-select_all_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    View* gview = activeView();
-    if (gview) {
-        gview->selectAll();
-    }
-    return 0;
-}
-
-/* . */
-int
 set_color_f(lua_State *L)
 {
     ScriptValue args[4];
     if (!unpack_args(L, "set_color_f", args, "srrr")) {
         return 0;
     }
-    QString key = args[0].s;
+    QString key = args[0].s.c_str();
     double r = args[1].r;
     double g = args[2].r;
     double b = args[3].r;
@@ -2095,15 +1873,15 @@ set_color_f(lua_State *L)
     }
 
     if (key == "background") {
-        settings.display_bg_color = qRgb(r,g,b);
+        st[ST_BG_COLOR].u = qRgb(r,g,b);
         _mainWin->updateAllViewBackgroundColors(qRgb(r,g,b));
     }
     else if (key == "crosshair") {
-        settings.display_crosshair_color = qRgb(r,g,b);
+        st[ST_CROSSHAIR_COLOR].u = qRgb(r,g,b);
         _mainWin->updateAllViewCrossHairColors(qRgb(r,g,b));
     }
     else if (key == "grid") {
-        settings.grid_color = qRgb(r,g,b);
+        st[ST_GRID_COLOR].u = qRgb(r,g,b);
         _mainWin->updateAllViewGridColors(qRgb(r,g,b));
     }
     else {
@@ -2192,8 +1970,8 @@ set_rubber_text_f(lua_State *L)
     if (!unpack_args(L, "set_rubber_text_f", args, "ss")) {
         return 0;
     }
-    QString key = args[0].s.toUpper();
-    QString txt = args[1].s;
+    QString key = QString(args[0].s.c_str()).toUpper();
+    QString txt = args[1].s.c_str();
 
     View* gview = activeView();
     if (gview) {
@@ -2210,7 +1988,7 @@ set_text_font_f(lua_State *L)
     const char *str = luaL_checkstring(L, 1);
 
     _mainWin->textFontSelector->setCurrentFont(QFont(str));
-    settings.text_font = str;
+    st[ST_TEXT_FONT].s = str;
     return 0;
 }
 
@@ -2225,7 +2003,7 @@ set_text_size_f(lua_State *L)
         return 0;
     }
 
-    settings.text_size = std::fabs(num);
+    st[ST_TEXT_SIZE].i = std::fabs(num);
     int index = _mainWin->textSizeSelector->findText("Custom", Qt::MatchContains);
     if (index != -1) {
         _mainWin->textSizeSelector->removeItem(index);
@@ -2273,7 +2051,7 @@ set_text_angle_f(lua_State *L)
         return 0;
     }
 
-    settings.text_angle = num;
+    st[ST_TEXT_ANGLE].r = num;
     return 0;
 }
 
@@ -2283,28 +2061,7 @@ text_size_f(lua_State *L)
 {
     debug("TODO: add_to_menu");
     no_args(L);
-    /* return QScriptValue(settings.text_size); */
-    return 0;
-}
-
-/* . */
-int
-command_f(lua_State *L)
-{
-    ScriptValue args[6];
-    if (!unpack_args(L, "command_f", args, "ssssss")) {
-        return 0;
-    }
-    Command command;
-    command.icon = args[0].s;
-    command.command = args[1].s;
-    command.tooltip = args[2].s;
-    command.statustip = args[3].s;
-    command.shortcut = args[4].s;
-    command.macos = args[5].s;
-    command.checkable = 0;
-    qDebug("Adding command \"%s\"...", command.icon);
-    command_map.push_back(command);
+    /* return QScriptValue(st[ST_TEXT_SIZE].i); */
     return 0;
 }
 
@@ -2317,7 +2074,7 @@ alert_f(lua_State *L)
     if (!unpack_args(L, "alert_f", args, "s")) {
         return 0;
     }
-    prompt->alert(args[0].s);
+    prompt->alert(args[0].s.c_str());
     return 0;
 }
 
@@ -2330,7 +2087,7 @@ append_prompt_history_f(lua_State *L)
     if (!unpack_args(L, "append_prompt_history_f", args, "s")) {
         return 0;
     }
-    prompt->appendHistory(args[0].s);
+    prompt->appendHistory(args[0].s.c_str());
     return 0;
 }
 
@@ -2368,7 +2125,8 @@ error_f(lua_State *L)
         return 0;
     }
 
-    prompt->setPrefix("ERROR: (" + args[0].s + ") " + args[1].s);
+    String msg = "ERROR: (" + args[0].s + ") " + args[1].s;
+    prompt->setPrefix(QString(msg.c_str()));
     prompt->appendHistory(QString());
     end_command();
     return 0;
@@ -2439,22 +2197,6 @@ circle_f(lua_State *L)
 /* . */
 int
 color_selector_f(lua_State *L)
-{
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-copy_f(lua_State *L)
-{
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-cut_f(lua_State *L)
 {
     no_args(L);
     return 0;
@@ -2563,10 +2305,9 @@ int
 exit_program_f(lua_State *L)
 {
     no_args(L);
-    if (settings.prompt_save_history) {
+    if (st[ST_PROMPT_SAVE_HISTORY].b) {
         //TODO: get filename from settings
-        prompt->saveHistory("prompt.log",
-            settings.prompt_save_history_as_html);
+        prompt->saveHistory("prompt.log", st[ST_PROMPT_SAVE_AS_HTML].b);
     }
     qApp->closeAllWindows();
     //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
@@ -2599,7 +2340,7 @@ help_f(lua_State *L)
         init_command();
         clear_selection();
     }
-    _mainWin->help();
+    _mainWin->run_command(CMD_HELP);
     end_command();
     return 0;
 }
@@ -2609,90 +2350,6 @@ int
 hide_all_layers_f(lua_State *L)
 {
     no_args(L);
-    return 0;
-}
-
-/* . */
-int
-icon128_f(lua_State *L)
-{
-    no_args(L);
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->iconResize(128);
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-icon16_f(lua_State *L)
-{
-    no_args(L);
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->iconResize(16);
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-icon24_f(lua_State *L)
-{
-    no_args(L);
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->iconResize(24);
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-icon32_f(lua_State *L)
-{
-    no_args(L);
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->iconResize(32);
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-icon48_f(lua_State *L)
-{
-    no_args(L);
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->iconResize(48);
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-icon64_f(lua_State *L)
-{
-    no_args(L);
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->iconResize(64);
-    end_command();
     return 0;
 }
 
@@ -2856,23 +2513,6 @@ quickleader_f(lua_State *L)
 }
 
 int
-redo_f(lua_State *L)
-{
-    QString prefix = prompt->getPrefix();
-    if (dockUndoEdit->canRedo()) {
-        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
-        prompt->appendHistory(QString());
-        dockUndoEdit->redo();
-        prompt->setPrefix(prefix);
-    }
-    else {
-        prompt->alert("Nothing to redo");
-        prompt->setPrefix(prefix);
-    }
-    return 0;
-}
-
-int
 rgb_f(lua_State *L)
 {
     return 0;
@@ -2988,13 +2628,6 @@ pan_up_f(lua_State *L)
 
 /* . */
 int
-paste_f(lua_State *L)
-{
-    return 0;
-}
-
-/* . */
-int
 print_f(lua_State *L)
 {
     return 0;
@@ -3036,7 +2669,7 @@ set_text_bold_f(lua_State *L)
         debug("set_text_bold: argument not boolean");
         return 0;
     }
-    settings.text_style_bold = lua_toboolean(L, 1);
+    st[ST_TEXT_BOLD].b = lua_toboolean(L, 1);
     return 0;
 }
 
@@ -3048,7 +2681,7 @@ set_text_italic_f(lua_State *L)
         debug("set_text_italic: argument not boolean");
         return 0;
     }
-    settings.text_style_italic = lua_toboolean(L, 1);
+    st[ST_TEXT_ITALIC].b = lua_toboolean(L, 1);
     return 0;
 }
 
@@ -3060,7 +2693,7 @@ set_text_overline_f(lua_State *L)
         debug("set_text_overline: argument not boolean");
         return 0;
     }
-    settings.text_style_overline = lua_toboolean(L, 1);
+    st[ST_TEXT_OVERLINE].b = lua_toboolean(L, 1);
     return 0;
 }
 
@@ -3072,7 +2705,7 @@ set_text_strikeout_f(lua_State *L)
         debug("set_text_strikeout: argument not boolean");
         return 0;
     }
-    settings.text_style_strikeout = lua_toboolean(L, 1);
+    st[ST_TEXT_STRIKEOUT].b = lua_toboolean(L, 1);
     return 0;
 }
 
@@ -3084,13 +2717,14 @@ set_text_underline_f(lua_State *L)
         debug("set_text_overline: argument not boolean");
         return 0;
     }
-    settings.text_style_overline = lua_toboolean(L, 1);
+    st[ST_TEXT_UNDERLINE].b = lua_toboolean(L, 1);
     return 0;
 }
 
 int
 settings_dialog_f(lua_State *L)
 {
+    _mainWin->settingsDialog("General");
     return 0;
 }
 
@@ -3121,35 +2755,35 @@ syswindows_f(lua_State *L)
 int
 text_bold_f(lua_State *L)
 {
-    /* lua_push(settings.text_style_bold); */
+    /* lua_push(st[ST_TEXT_BOLD].b); */
     return 0;
 }
 
 int
 text_italic_f(lua_State *L)
 {
-    /* lua_push(settings.text_style_italic); */
+    /* lua_push(st[ST_TEXT_ITALIC].b); */
     return 0;
 }
 
 int
 text_overline_f(lua_State *L)
 {
-    /* lua_push(settings.text_style_overline); */
+    /* lua_push(st[ST_TEXT_OVERLINE].b); */
     return 0;
 }
 
 int
 text_strikeout_f(lua_State *L)
 {
-    /* lua_push(settings.text_style_strikeout); */
+    /* lua_push(st[ST_TEXT_STRIKEOUT].b); */
     return 0;
 }
 
 int
 text_underline_f(lua_State *L)
 {
-    /* lua_push(settings.text_style_underline); */
+    /* lua_push(st[ST_TEXT_UNDERLINE].b); */
     return 0;
 }
 
@@ -3179,23 +2813,6 @@ todo_f(lua_State *L)
 
     prompt->alert("TODO: (" + strCmd + ") " + strTodo);
     end_command();
-    return 0;
-}
-
-int
-undo_f(lua_State *L)
-{
-    QString prefix = prompt->getPrefix();
-    if (dockUndoEdit->canUndo()) {
-        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
-        prompt->appendHistory(QString());
-        dockUndoEdit->undo();
-        prompt->setPrefix(prefix);
-    }
-    else {
-        prompt->alert("Nothing to undo");
-        prompt->setPrefix(prefix);
-    }
     return 0;
 }
 
@@ -3411,8 +3028,12 @@ int
 AddRubber_f(lua_State *L)
 {
     /*
-    if (context->argumentCount() != 1)    return debug("addRubber() requires one argument");
-    if (!context->argument(0).isString()) return debug(TypeError, "addRubber(): first argument is not a string");
+    if (context->argumentCount() != 1) {
+        return debug("addRubber() requires one argument");
+    }
+    if (!context->argument(0).isString()) {
+        return debug(TypeError, "addRubber(): first argument is not a string");
+    }
 
     QString objType = context->argument(0).toString().toUpper();
 
@@ -3488,7 +3109,7 @@ spare_rubber_f(lua_State *L)
         return 0;
     }
 
-    QString objID = args[0].s.toUpper();
+    QString objID = QString(args[0].s.c_str()).toUpper();
 
     if (objID == "PATH") {
         _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);
@@ -3776,7 +3397,7 @@ set_cursor_shape_f(lua_State *L)
         return 0;
     }
 
-    QString shape = args[0].s;
+    QString shape = args[0].s.c_str();
     _mainWin->nativeSetCursorShape(shape);
     return 0;
 }
@@ -3993,7 +3614,7 @@ qsnap_y_f(lua_State *L)
     return 1;
 }
 
-/* Defaults to empty string when no value supplied. */
+/* Defaults to empty QString when no value supplied. */
 QString
 get_toml_string(const toml::value value, const char *key)
 {
@@ -4001,6 +3622,21 @@ get_toml_string(const toml::value value, const char *key)
         return value.at(key).as_string().c_str();
     }
     return "";
+}
+
+
+/* Defaults to empty QStringList when no value supplied. */
+StringList
+get_toml_string_table(const toml::value value, const char *key)
+{
+    StringList list;
+    if (value.contains(key)) {
+        toml::value table = value.at(key).as_array();
+        for (size_t i=0; i<table.size(); i++) {
+            list.push_back(table.at(i).as_string());
+        }
+    }
+    return list;
 }
 
 /* Defaults to false when no value supplied. */
@@ -4051,8 +3687,65 @@ script_env_boot(void)
         command.macos = get_toml_string(current, "macos");
         command.checkable = get_toml_boolean(current, "checkable");
 
-        qDebug("Adding command \"%s\"...", qPrintable(command.icon));
         command_map.push_back(command);
+    }
+
+    auto menus_table = data.at("menus").as_array();
+    for (size_t i=0; i<menus_table.size(); i++) {
+        auto current = menus_table.at(i);
+
+        MenuData data;
+        data.label = get_toml_string(current, "label");
+        data.mdi_only = get_toml_boolean(current, "mdi_only");
+        data.entries = get_toml_string_table(current, "entries");
+
+        std::string key = qPrintable(get_toml_string(current, "key"));
+        menu_table[key] = data;
+    }
+
+    auto toolbars_table = data.at("menus").as_array();
+    for (size_t i=0; i<toolbars_table.size(); i++) {
+        auto current = toolbars_table.at(i);
+
+        ToolbarData data;
+        data.label = get_toml_string(current, "label");
+        data.mdi_only = get_toml_boolean(current, "mdi_only");
+        data.entries = get_toml_string_table(current, "entries");
+
+        std::string key = qPrintable(get_toml_string(current, "key"));
+        toolbar_table[key] = data;
+    }
+
+    for (size_t i=0; i<N_SETTINGS; i++) {
+        const char *value = settings_table[i].default_value;
+        switch (settings_table[i].type) {
+        case 's':
+            st[i].s = value;
+            break;
+        case 'i':
+            st[i].i = atoi(value);
+            break;
+        case 'c':
+            st[i].u = atoi(value);
+            break;
+        case 'r':
+            st[i].r = atof(value);
+            break;
+        case 'b': {
+            st[i].b = (value[0] == 't');
+            break;
+        }
+        default:
+            qDebug("ERROR: unknown settings type starting with the character %c.",
+                settings_table[i].type);
+            break;
+        }
+    }
+
+    StringList string_table_list = get_toml_string_table(data, "string_tables");
+    for (int i=0; i<string_table_list.size(); i++) {
+        string_tables[string_table_list[i]] = get_toml_string_table(
+            data, string_table_list[i].c_str());
     }
 
     /* Setting up Lua. */
@@ -4074,10 +3767,8 @@ script_env_boot(void)
     }
 
 #if 0
-void
 MainWindow::load_command(const QString& cmdName)
-{
-    qDebug("javaLoadCommand(%s)", qPrintable(cmdName));
+
     QString appDir = qApp->applicationDirPath();
     QFile file(appDir + "/commands/" + cmdName + "/" + cmdName + ".js");
     file.open(QIODevice::ReadOnly);
@@ -4126,7 +3817,6 @@ MainWindow::load_command(const QString& cmdName)
     foreach(QString alias, aliases) {
         prompt->addCommand(alias, cmdName);
     }
-}
 #endif
 
     return true;
@@ -4145,14 +3835,11 @@ void
 MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");
-    QString appDir = qApp->applicationDirPath();
-    QString theme = appDir + "/icons/" + settings.general_icon_theme;
 
     for (int i=0; i<(int)command_map.size(); i++) {
         QString tooltip = tr(qPrintable(command_map[i].tooltip));
         QString statustip = tr(qPrintable(command_map[i].statustip));
-        QAction *ACTION = new QAction(
-            QIcon(theme + "/" + command_map[i].icon + ".png"),
+        QAction *ACTION = new QAction(createIcon(command_map[i].icon),
             tooltip, this);
         ACTION->setStatusTip(statustip);
         ACTION->setObjectName(command_map[i].icon);
@@ -4170,8 +3857,17 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
             // FIXME: connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));
         }
-        connect(ACTION, &QAction::triggered, this,
-            [=]() { runCommandMain(command_map[i].command); } );
+
+        int id = get_cmd_id(qPrintable(command_map[i].command));
+        qDebug(qPrintable(command_map[i].command));
+        if (id >= 0) {
+            connect(ACTION, &QAction::triggered, this,
+                [=]() { run_command(id); } );
+        }
+        else {
+            connect(ACTION, &QAction::triggered, this,
+                [=]() { runCommandMain(command_map[i].command); } );
+        }
 
         /*
         else if(icon == "windowcascade") connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(cascade()));

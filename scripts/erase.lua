@@ -45,17 +45,3 @@ function prompt(str)
     deleteSelected();
     endCommand();
 }
-[Menu]
-Name=Modify
-Position=5
-
-[ToolBar]
-Name=Modify
-Position=0
-
-[Tips]
-ToolTip=D&elete
-StatusTip=Removes objects from a drawing:  DELETE
-
-[Prompt]
-Alias=E, ERASE, DEL, DELETE

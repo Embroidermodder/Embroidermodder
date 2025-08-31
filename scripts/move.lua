@@ -105,7 +105,6 @@ function prompt(str)
             setPromptPrefix(qsTr("Specify destination point: "));
         }
         else
-        {
             global.destX = Number(strList[0]);
             global.destY = Number(strList[1]);
             global.deltaX = global.destX - global.baseX;
@@ -113,20 +112,6 @@ function prompt(str)
             moveSelected(global.deltaX, global.deltaY);
             previewOff();
             endCommand();
-        }
-    }
-}
-[Menu]
-Name=Modify
-Position=10
-
-[ToolBar]
-Name=Modify
-Position=5
-
-[Tips]
-ToolTip=&Move
-StatusTip=Displaces objects a specified distance in a specified direction:  MOVE
-
-[Prompt]
-Alias=M, MOVE
+        end
+    end
+end

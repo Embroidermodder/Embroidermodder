@@ -337,18 +337,4 @@ function prompt(str)
             }
         }
     }
-}
-[Menu]
-Name=Draw
-Position=8
-
-[ToolBar]
-Name=Draw
-Position=8
-
-[Tips]
-ToolTip=Ellipse
-StatusTip=Creates a ellipse:  ELLIPSE
-
-[Prompt]
-Alias=EL, ELLIPSE
+end

@@ -716,18 +716,4 @@ Math.sin(263*t+2/7)-
     }
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
-}
-[Menu]
-Name=Draw
-Position=100
-
-[ToolBar]
-Name=Draw
-Position=100
-
-[Tips]
-ToolTip=&Snowflake
-StatusTip=Creates a snowflake:  SNOWFLAKE
-
-[Prompt]
-Alias=SNOWFLAKE
+end

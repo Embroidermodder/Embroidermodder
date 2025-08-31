@@ -87,18 +87,4 @@ function prompt(str)
             addPoint(x,y);
         }
     }
-}
-[Menu]
-Name=Draw
-Position=10
-
-[ToolBar]
-Name=Draw
-Position=10
-
-[Tips]
-ToolTip=&Point
-StatusTip=Creates multiple points:  POINT
-
-[Prompt]
-Alias=PO, POINT
+end

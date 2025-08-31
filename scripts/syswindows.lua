@@ -40,22 +40,7 @@ function prompt(str)
         endCommand();
     }
     else
-    {
         alert(qsTr("Invalid option keyword."));
         setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
-    }
-}
-[Menu]
-Name=None
-Position=0
-
-[ToolBar]
-Name=None
-Position=0
-
-[Tips]
-ToolTip=&SysWindows
-StatusTip=Arrange the windows:  SYSWINDOWS
-
-[Prompt]
-Alias=WINDOWS, SYSWINDOWS
+    end
+end

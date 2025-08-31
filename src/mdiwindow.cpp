@@ -15,7 +15,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    this->setWindowIcon(QIcon("icons/" + settings.general_icon_theme + "/" + "app" + ".png"));
+    this->setWindowIcon(_mainWin->createIcon("app"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(mainWin, gscene, this);
@@ -295,7 +295,7 @@ bool MdiWindow::loadFile(const QString &fileName)
     QString stitches;
     stitches.setNum(p->stitch_list->count);
 
-    if (settings.grid_load_from_file) {
+    if (st[ST_GRID_LOAD_FROM_FILE].b) {
         //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
     }
 
@@ -312,28 +312,6 @@ bool MdiWindow::loadFile(const QString &fileName)
     return fileWasLoaded;
 }
 
-void MdiWindow::print()
-{
-    QPrintDialog dialog(&printer, this);
-    if (dialog.exec() == QDialog::Accepted) {
-        QPainter painter(&printer);
-        if (settings.printing_disable_bg) {
-            //Save current bg
-            QBrush brush = gview->backgroundBrush();
-            //Save ink by not printing the bg at all
-            gview->setBackgroundBrush(Qt::NoBrush);
-            //Print, fitting the viewport contents into a full page
-            gview->render(&painter);
-            //Restore the bg
-            gview->setBackgroundBrush(brush);
-        }
-        else {
-            //Print, fitting the viewport contents into a full page
-            gview->render(&painter);
-        }
-    }
-}
-
 //TODO: Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?
 
 //TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
@@ -348,7 +326,7 @@ void MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if (settings.printing_disable_bg) //TODO: Make BMC background into it's own setting?
+    if (st[ST_PRINTING_DISABLE_BG].b) //TODO: Make BMC background into it's own setting?
     {
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);

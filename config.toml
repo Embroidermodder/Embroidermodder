@@ -1,14 +1,469 @@
-# Main Configuration
+# Embroidermodder 2 -- Main Configuration
 #
-# This file is part of Embroidermodder 2.
+# ----------------------------------------------------------------------------
+# Embroidermodder 2 is open source software.
 # Copyright 2011-2025 The Embroidermodder Team.
 # See LICENSE.md for details about distribution.
+# ----------------------------------------------------------------------------
+
+menubar_order = [
+    "File",
+    "Edit",
+    "View",
+    "Settings",
+    "Window",
+    "Help"
+]
+
+top_toolbar_order = [
+    "FILE",
+    "EDIT",
+    "VIEW",
+    "ZOOM",
+    "PAN",
+    "ICON",
+    "HELP",
+    "LAYER",
+    "TEXT",
+    "PROPERTIES"
+]
+
+left_toolbar_order = [
+    "File"
+]
+
+bottom_toolbar_order = [
+    "PROMPT"
+]
+
+string_tables = [
+    "file_menu_list",
+    "edit_menu_list",
+    "zoom_menu_list",
+    "pan_menu_list",
+    "help_menu_list",
+    "draw_menu_list",
+    "tools_menu_list",
+    "modify_menu_list",
+    "dimension_menu_list",
+    "file_toolbar_list",
+    "edit_toolbar_list",
+    "view_toolbar_list",
+    "zoom_toolbar_list",
+    "pan_toolbar_list",
+    "icon_toolbar_list",
+    "help_toolbar_list",
+    "draw_toolbar_list",
+    "inquiry_toolbar_list",
+    "modify_toolbar_list",
+    "dimension_toolbar_list",
+    "layer_selector_list",
+    "color_selector_list",
+    "linetype_selector_list",
+    "lineweight_selector_list",
+    "extensions"
+]
+
+file_menu_list = [
+    "---",
+    "save",
+    "saveas",
+    "---",
+    "print",
+    "---",
+    "windowclose",
+    "---",
+    "designdetails",
+    "---",
+    "exit"
+]
+
+edit_menu_list = [
+    "undo",
+    "redo",
+    "---",
+    "selectall",
+    "---",
+    "cut",
+    "copy",
+    "paste",
+    "---",
+    "settingsdialog"
+]
+
+zoom_menu_list = [
+    "icon",
+    "zoom",
+    "zoomrealtime",
+    "zoomprevious",
+    "---",
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "zoomcenter",
+    "---",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+]
+
+pan_menu_list = [
+    "icon",
+    "pan",
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+
+help_menu_list = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "tipoftheday",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+]
+
+draw_menu_list = [
+    "polyline",
+    "path",
+    "---",
+    "circle",
+    "ellipse",
+    "line",
+    "point",
+    "polygon",
+    "rectangle",
+    "singlelinetext",
+    "---",
+    "heart",
+    "dolphin",
+    "snowflake",
+    "star"
+]
+
+tools_menu_list = [
+    "distance",
+    "locatepoint"
+]
+
+modify_menu_list = [
+    "erase",
+    "move",
+    "rotate",
+    "scale"
+]
+
+dimension_menu_list = [
+    "quickleader"
+]
+
+file_toolbar_list = [
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails",
+    "---",
+    "undo",
+    "redo",
+    "---",
+    "help"
+]
+
+edit_toolbar_list = [
+    "selectall",
+    "---",
+    "cut",
+    "copy",
+    "paste"
+]
+
+view_toolbar_list = [
+    "day",
+    "night"
+]
+
+zoom_toolbar_list = [
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "---",
+    "zoomcenter",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+]
+
+pan_toolbar_list = [
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+
+icon_toolbar_list = [
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128"
+]
+
+help_toolbar_list = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+]
+
+draw_toolbar_list = [
+    "polyline",
+    "path",
+    "---",
+    "circle",
+    "ellipse",
+    "line",
+    "point",
+    "polygon",
+    "rectangle",
+    "singlelinetext",
+    "---",
+    "heart",
+    "dolphin",
+    "snowflake",
+    "star"
+]
+
+inquiry_toolbar_list = [
+    "distance",
+    "locatepoint"
+]
+
+modify_toolbar_list = [
+    "erase",
+    "move",
+    "rotate",
+    "scale"
+]
+
+dimension_toolbar_list = [
+    "quickleader"
+]
+
+# TODO: Create layer pixmaps by concatenating several icons
+layer_selector_list = [
+    "linetypebylayer", "0", "",
+    "linetypebylayer", "1", "",
+    "linetypebylayer", "2", "",
+    "linetypebylayer", "3", "",
+    "linetypebylayer", "4", "",
+    "linetypebylayer", "5", "",
+    "linetypebylayer", "6", "",
+    "linetypebylayer", "7", "",
+    "linetypebylayer", "8", "",
+    "linetypebylayer", "9", ""
+]
+
+color_selector_list = [
+    "colorbylayer", "ByLayer", "",
+    "colorbyblock", "ByBlock", "",
+    "colorred", "Red", "16711680",
+    "coloryellow", "Yellow", "16776960",
+    "colorgreen", "Green", "65280",
+    "colorcyan", "Cyan", "65535",
+    "colorblue", "Blue", "255",
+    "colormagenta", "Magenta", "16711935",
+    "colorwhite", "White", "16777215",
+    "colorother", "Other...", ""
+]
+
+linetype_selector_list = [
+    "linetypebylayer", "ByLayer", "",
+    "linetypebyblock", "ByBlock", "",
+    "linetypecontinuous", "Continuous", "",
+    "linetypehidden", "Hidden", "",
+    "linetypecenter", "Center", "",
+    "linetypeother", "Other...", ""
+]
+
+# TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight
+lineweight_selector_list = [
+    "lineweightbylayer", "ByLayer", "-2.00",
+    "lineweightbyblock", "ByBlock", "-1.00",
+    "lineweightdefault", "Default", "0.00",
+    "lineweight01", "0.00 mm", "0.00",
+    "lineweight02", "0.05 mm", "0.05",
+    "lineweight03", "0.15 mm", "0.15",
+    "lineweight04", "0.20 mm", "0.20",
+    "lineweight05", "0.25 mm", "0.25",
+    "lineweight06", "0.30 mm", "0.30",
+    "lineweight07", "0.35 mm", "0.35",
+    "lineweight08", "0.40 mm", "0.40",
+    "lineweight09", "0.45 mm", "0.45",
+    "lineweight10", "0.50 mm", "0.50",
+    "lineweight11", "0.55 mm", "0.55",
+    "lineweight12", "0.60 mm", "0.60",
+    "lineweight13", "0.65 mm", "0.65",
+    "lineweight14", "0.70 mm", "0.70",
+    "lineweight15", "0.75 mm", "0.75",
+    "lineweight16", "0.80 mm", "0.80",
+    "lineweight17", "0.85 mm", "0.85",
+    "lineweight18", "0.90 mm", "0.90",
+    "lineweight19", "0.95 mm", "0.95",
+    "lineweight20", "1.00 mm", "1.00",
+    "lineweight21", "1.05 mm", "1.05",
+    "lineweight22", "1.10 mm", "1.10",
+    "lineweight23", "1.15 mm", "1.15",
+    "lineweight24", "1.20 mm", "1.20"
+]
+
+extensions = [
+    "100",
+    "10O",
+    "ART",
+    "BMC",
+    "BRO",
+    "CND",
+    "COL",
+    "CSD",
+    "CSV",
+    "DAT",
+    "DEM",
+    "DSB",
+    "DST",
+    "DSZ",
+    "DXF",
+    "EDR",
+    "EMD",
+    "EXP",
+    "EXY",
+    "EYS",
+    "FXY",
+    "GNC",
+    "GT",
+    "HUS",
+    "INB",
+    "JEF",
+    "KSM",
+    "PCD",
+    "PCM",
+    "PCQ",
+    "PCS",
+    "PEC",
+    "PEL",
+    "PEM",
+    "PES",
+    "PHB",
+    "PHC",
+    "RGB",
+    "SEW",
+    "SHV",
+    "SST",
+    "STX",
+    "SVG",
+    "T09",
+    "TAP",
+    "THR",
+    "TXT",
+    "U00",
+    "U01",
+    "VIP",
+    "VP3",
+    "XXX",
+    "ZSK"
+]
 
 [version]
 major = 2
 minor = 0
 patch = 0
 tag = "alpha"
+
+[[menus]]
+label = "&File"
+key = "FILE"
+mdi_only = false
+entries = [
+    "new",
+    "---",
+    "open",
+    ">Recent",
+    "---",
+    "save",
+    "saveas",
+    "---",
+    "print",
+    "---",
+    "windowclose",
+    "---",
+    "designdetails",
+    "---",
+    "exit"
+]
+
+[[menus]]
+label = "&Edit"
+key = "EDIT"
+mdi_only = false
+entries = [
+    "cut"
+]
+
+[[menus]]
+label = "&Zoom"
+key = "ZOOM"
+mdi_only = false
+entries = [
+    "zoomin"
+]
+
+[[menus]]
+label = "&Pan"
+key = "PAN"
+mdi_only = false
+entries = [
+    "panleft"
+]
+
+[[toolbars]]
+label = "File"
+key = "FILE"
+mdi_only = false
+entries = [
+    "new",
+    "open",
+    "save"
+]
+
+[[toolbars]]
+label = "Edit"
+key = "EDIT"
+mdi_only = false
+entries = [
+    "cut"
+]
 
 [[commands]]
 command = "about"
@@ -34,7 +489,11 @@ statustip = "Describes new features in this product."
 command = "circle"
 icon = "circle"
 tooltip = "Circle"
-statustip = "Creates a circle."
+statustip = "Creates a circle: CIRCLE."
+alias = [
+    "C",
+    "CIRCLE"
+]
 
 [[commands]]
 icon = "colorselector"
@@ -77,13 +536,21 @@ shortcut = "Ctrl+D"
 icon = "distance"
 command = "distance"
 tooltip = "&Distance"
-statustip = "Measures the distance and angle between two points."
+statustip = "Measures the distance and angle between two points: DIST."
+alias = [
+    "DI",
+    "DIST",
+    "DISTANCE"
+]
 
 [[commands]]
 icon = "dolphin"
 command = "dolphin"
 tooltip = "&Dolphin"
-statustip = "Creates a dolphin: DOLPHIN"
+statustip = "Creates a dolphin: DOLPHIN."
+alias = [
+    "DOLPHIN"
+]
 
 [[commands]]
 icon = "donothing"
@@ -95,13 +562,25 @@ statustip = "Does Nothing"
 icon = "ellipse"
 command = "ellipse"
 tooltip = "Ellipse"
-statustip = "Creates an ellipse."
+statustip = "Creates an ellipse: ELLIPSE."
+alias = [
+    "EL",
+    "ELLIPSE"
+]
 
 [[commands]]
 icon = "erase"
 command = "erase"
 tooltip = "D&elete"
-statustip = "Removes objects from a drawing."
+statustip = "Removes objects from a drawing: DELETE."
+# TODO: Check this
+shortcut = "delete"
+alias = [
+    "E",
+    "ERASE",
+    "DEL",
+    "DELETE"
+]
 
 [[commands]]
 icon = "error"
@@ -111,8 +590,12 @@ command = "error"
 icon = "exit"
 command = "exit_program"
 tooltip = "E&xit"
-statustip = "Exit the application."
+statustip = "Exit the application: EXIT."
 shortcut = "Ctrl+Q"
+alias = [
+    "EXIT",
+    "QUIT"
+]
 
 [[commands]]
 icon = "freezealllayers"
@@ -124,7 +607,10 @@ statustip = "Freezes all layers in the current drawing."
 icon = "heart"
 command = "heart"
 tooltip = "&Heart"
-statustip = "Creates a heart."
+statustip = "Creates a heart: HEART."
+alias = [
+    "HEART"
+]
 
 [[commands]]
 icon = "help"
@@ -196,7 +682,11 @@ statustip = "Dropdown selector for changing the current layer"
 icon = "line"
 command = "line"
 tooltip = "&Line"
-statustip = "Creates straight line segments."
+statustip = "Creates straight line segment: LINE."
+alias = [
+    "L",
+    "LINE"
+]
 
 [[commands]]
 icon = "linetypeselector"
@@ -214,7 +704,11 @@ statustip = "Dropdown selector for changing the current thread weight"
 icon = "locatepoint"
 command = "locate_point"
 tooltip = "&Locate Point"
-statustip = "Displays the coordinate values of a location."
+statustip = "Displays the coordinate values of a location: ID."
+alias = [
+    "ID",
+    "LOCATEPOINT"
+]
 
 [[commands]]
 icon = "lockalllayers"
@@ -232,7 +726,11 @@ statustip = "Makes the layer of a selected object the active layer."
 icon = "move"
 command = "move"
 tooltip = "&Move"
-statustip = "Displaces objects a specified distance in a specified direction:  MOVE"
+statustip = "Displaces objects a specified distance in a specified direction: MOVE."
+alias = [
+    "M",
+    "MOVE"
+]
 
 [[commands]]
 icon = "new"
@@ -258,43 +756,74 @@ shortcut = "Ctrl+O"
 icon = "path"
 command = "path"
 tooltip = "&Path"
-statustip = "Creates a 2D path."
+statustip = "Creates a 2D path: PATH."
+alias = [
+    "PA",
+    "PATH"
+]
 
 [[commands]]
 icon = "platform"
 command = "platform"
 tooltip = "&Platform"
-statustip = "List which platform is in use."
+statustip = "List which platform is in use: PLATFORM."
+alias = [
+    "PLATFORM"
+]
 
 [[commands]]
 icon = "point"
 command = "point"
 tooltip = "&Point"
-statustip = "Creates multiple points."
+statustip = "Creates multiple points: POINT."
+alias = [
+    "PO",
+    "POINT"
+]
 
 [[commands]]
 icon = "polygon"
 command = "polygon"
 tooltip = "Pol&ygon"
-statustip = "Creates a regular polygon."
+statustip = "Creates a regular polygon: POLYGON."
+alias = [
+    "POL",
+    "POLYGON"
+]
 
 [[commands]]
 icon = "polyline"
 command = "polyline"
 tooltip = "&Polyline"
-statustip = "Creates a 2D polyline."
+statustip = "Creates a 2D polyline: PLINE."
+alias = [
+    "PL",
+    "PLINE",
+    "POLYLINE"
+]
 
 [[commands]]
 icon = "quickleader"
 command = "quickleader"
 tooltip = "&QuickLeader"
-statustip = "Creates a leader and annotation."
+statustip = "Creates a leader and annotation: QUICKLEADER."
+alias = [
+    "LE",
+    "LEADER",
+    "QLEADER",
+    "QUICKLEADER"
+]
 
 [[commands]]
 icon = "rectangle"
 command = "rectangle"
 tooltip = "&Rectangle"
-statustip = "Creates a rectangular polyline."
+statustip = "Creates a rectangular polyline: RECTANGLE."
+alias = [
+    "RECT",
+    "RECTANG",
+    "RECTANGLE"
+]
 
 [[commands]]
 icon = "redo"
@@ -306,26 +835,43 @@ statustip = "Reverses the effects of the previous undo action."
 icon = "rgb"
 command = "rgb"
 tooltip = "&RGB"
-statustip = "Updates the current view colors."
+statustip = "Updates the current view colors: RGB."
+alias = [
+    "RGB"
+]
 
 [[commands]]
 icon = "rotate"
 command = "rotate"
 tooltip = "&Rotate"
-statustip = "Rotates objects about a base point."
+statustip = "Rotates objects about a base point: ROTATE."
+alias = [
+    "RO",
+    "ROTATE"
+]
 
 [[commands]]
 icon = "selectall"
 command = "select_all"
 tooltip = "&Select All"
-statustip = "Selects all objects:  SELECTALL"
+statustip = "Selects all objects: SELECTALL."
 shortcut = "Ctrl+A"
+alias = [
+    "SELALL",
+    "SELECTALL"
+]
 
 [[commands]]
 icon = "singlelinetext"
 command = "single_line_text"
 tooltip = "&Single Line Text"
-statustip = "Creates single-line text objects:  TEXT"
+statustip = "Creates single-line text objects: TEXT."
+alias = [
+    "DT",
+    "DTEXT",
+    "TEXT",
+    "SINGLELINETEXT"
+]
 
 [[commands]]
 icon = "pandown"
@@ -402,7 +948,11 @@ shortcut = "Ctrl+Shift+S"
 icon = "scale"
 command = "scale"
 tooltip = "Sca&le"
-statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions."
+statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions: SCALE."
+alias = [
+    "SC",
+    "SCALE"
+]
 
 [[commands]]
 icon = "settingsdialog"
@@ -420,19 +970,39 @@ statustip = "Turns the visibility on for all layers in the current drawing:  SHO
 icon = "snowflake"
 command = "snowflake"
 tooltip = "&Snowflake"
-statustip = "Creates a snowflake."
+statustip = "Creates a snowflake: SNOWFLAKE."
+alias = [
+    "SNOWFLAKE"
+]
 
 [[commands]]
 icon = "star"
 command = "star"
 tooltip = "&Star"
-statustip = "Creates a star."
+statustip = "Creates a star: STAR."
+alias = [
+    "STAR"
+]
 
 [[commands]]
 icon = "syswindows"
 command = "syswindows"
 tooltip = "&SysWindows"
-statustip = "Arrange the windows."
+statustip = "Arrange the windows: SYSWINDOWS."
+alias = [
+    "WINDOWS",
+    "SYSWINDOWS"
+]
+
+# Calls the test.lua script.
+[[commands]]
+icon = "test"
+command = "test"
+tooltip = "&Test"
+statustip = "Run a battery of tests to see if Embroidermodder is functioning well: TEST."
+alias = [
+    "TEST"
+]
 
 [[commands]]
 icon = "textbold"
@@ -479,7 +1049,11 @@ statustip = "Thaws all layers in the current drawing:  THAWALL"
 icon = "tipoftheday"
 command = "tip_of_the_day"
 tooltip = "&Tip Of The Day"
-statustip = "Displays a dialog with useful tips"
+statustip = "Displays a dialog with useful tips: TIPS."
+alias = [
+    "TIPS",
+    "TIPOFTHEDAY"
+]
 
 [[commands]]
 icon = "todo"

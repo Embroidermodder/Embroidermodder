@@ -372,20 +372,3 @@ function circle_prompt (str)
         todo("CIRCLE", "prompt() for TTR")
     }
 end
-
---[[
-[Menu]
-Name=Draw
-Position=8
-
-[ToolBar]
-Name=Draw
-Position=8
-
-[Tips]
-ToolTip=Circle
-StatusTip=Creates a circle:  CIRCLE
-
-[Prompt]
-Alias=C, CIRCLE
---]]

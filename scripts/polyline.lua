@@ -93,15 +93,11 @@ function prompt(str)
             todo("POLYLINE", "prompt() for UNDO");
         }
         else
-        {
             var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
-            {
+            if (isNaN(strList[0]) || isNaN(strList[1])) then
                 alert(qsTr("Point or option keyword required."));
                 setPromptPrefix(qsTr("Specify next point or [Undo]: "));
-            }
             else
-            {
                 var x = Number(strList[0]);
                 var y = Number(strList[1]);
                 global.num++;
@@ -111,21 +107,7 @@ function prompt(str)
                 global.prevX = x;
                 global.prevY = y;
                 setPromptPrefix(qsTr("Specify next point or [Undo]: "));
-            }
-        }
-    }
-}
-[Menu]
-Name=Draw
-Position=4
-
-[ToolBar]
-Name=Draw
-Position=4
-
-[Tips]
-ToolTip=&Polyline
-StatusTip=Creates a 2D polyline:  PLINE
-
-[Prompt]
-Alias=PL, PLINE, POLYLINE
+            end
+        end
+    end
+end

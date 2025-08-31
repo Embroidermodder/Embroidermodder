@@ -34,18 +34,4 @@ function prompt(str)
 {
     tipOfTheDay();
     endCommand();
-}
-[Menu]
-Name=None
-Position=0
-
-[ToolBar]
-Name=None
-Position=0
-
-[Tips]
-ToolTip=&Tip Of The Day
-StatusTip=Displays a dialog with useful tips:  TIPS
-
-[Prompt]
-Alias=TIPS, TIPOFTHEDAY
+end

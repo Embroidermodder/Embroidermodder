@@ -91,25 +91,10 @@ function prompt(str)
                 setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
             }
             else
-            {
                 appendLineToPath(x,y);
                 global.prevX = x;
                 global.prevY = y;
-            }
-        }
-    }
-}
-[Menu]
-Name=Draw
-Position=4
-
-[ToolBar]
-Name=Draw
-Position=4
-
-[Tips]
-ToolTip=&Path
-StatusTip=Creates a 2D path:  PATH
-
-[Prompt]
-Alias=PA, PATH
+            end
+        end
+    end
+end

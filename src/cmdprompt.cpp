@@ -151,8 +151,9 @@ void CmdPrompt::setPromptTextColor(const QColor& color)
 
 void CmdPrompt::setPromptBackgroundColor(const QColor& color)
 {
-    styleHash->insert("background-color", color.name());
-    styleHash->insert("selection-color", color.name());
+    /* FIXME: this isn't loading properly for some reason. */
+    styleHash->insert("background-color", "white"); //color.name());
+    styleHash->insert("selection-color", "white"); //color.name());
     updateStyle();
 }
 
