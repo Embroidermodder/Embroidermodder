@@ -36,11 +36,12 @@
 
 #include "embroidermodder.h"
 
-/* Note that lua has not interfacing outside of this file. The wrappers like 
- * script_env_boot, script_env_free, etc. allow us to not use the lua_State and
- * lua_* functions outside of this file.
+/* Note that lua and toml11 do not have interfacing outside of this file.
+ * The wrappers like script_env_boot, script_env_free, etc. allow us to not
+ * use the lua_State and lua_* functions outside of this file.
  */
 #include "../extern/lua/src/lua.hpp"
+#include "../extern/toml11/single_include/toml.hpp"
 
 typedef struct Command_ {
     QString icon;
@@ -3992,6 +3993,26 @@ qsnap_y_f(lua_State *L)
     return 1;
 }
 
+/* Defaults to empty string when no value supplied. */
+QString
+get_toml_string(const toml::value value, const char *key)
+{
+    if (value.contains(key)) {
+        return value.at(key).as_string().c_str();
+    }
+    return "";
+}
+
+/* Defaults to false when no value supplied. */
+bool
+get_toml_boolean(const toml::value value, const char *key)
+{
+    if (value.contains(key)) {
+        return value.at(key).as_boolean();
+    }
+    return false;
+}
+
 /* Lua in Embroidermodder 2 uses a 2 stage boot process.
  *
  * 1. Built-in style hookups to Embroidermodder2 features which are
@@ -4011,6 +4032,29 @@ qsnap_y_f(lua_State *L)
 bool
 script_env_boot(void)
 {
+    /* Loading configuration state. */
+    auto data = toml::parse("config.toml", toml::spec::v(1, 1, 0));
+
+    int version_major = data.at("version").at("major").as_integer();
+    printf("version major %d\n", version_major);
+
+    auto commands_table = data.at("commands").as_array();
+    for (size_t i=0; i<commands_table.size(); i++) {
+        auto current = commands_table.at(i);
+
+        Command command;
+        command.icon = get_toml_string(current, "icon");
+        command.command = get_toml_string(current, "command");
+        command.tooltip = get_toml_string(current, "tooltip");
+        command.statustip = get_toml_string(current, "statustip");
+        command.shortcut = get_toml_string(current, "shortcut");
+        command.macos = get_toml_string(current, "macos");
+        command.checkable = get_toml_boolean(current, "checkable");
+
+        qDebug("Adding command \"%s\"...", qPrintable(command.icon));
+        command_map.push_back(command);
+    }
+
     /* Setting up Lua. */
     Lua = luaL_newstate();
     luaL_openlibs(Lua);

@@ -1,0 +1,608 @@
+# Main Configuration
+#
+# This file is part of Embroidermodder 2.
+# Copyright 2011-2025 The Embroidermodder Team.
+# See LICENSE.md for details about distribution.
+
+[version]
+major = 2
+minor = 0
+patch = 0
+tag = "alpha"
+
+[[commands]]
+command = "about"
+icon = "about"
+tooltip = "&About Embroidermodder 2"
+statustip = "Displays information about this product."
+
+[[commands]]
+command = "alert"
+icon = "alert"
+
+[[commands]]
+command = "blink"
+icon = "blink"
+
+[[commands]]
+command = "changelog"
+icon = "changelog"
+tooltip = "&Changelog"
+statustip = "Describes new features in this product."
+
+[[commands]]
+command = "circle"
+icon = "circle"
+tooltip = "Circle"
+statustip = "Creates a circle."
+
+[[commands]]
+icon = "colorselector"
+command = "color-selector"
+tooltip = "&Color Selector"
+statustip = "Dropdown selector for changing the current thread color"
+
+[[commands]]
+icon = "copy"
+command = "copy"
+tooltip = "&Copy"
+statustip = "Copy the current selection's contents to the clipboard."
+shortcut = "Ctrl+C"
+
+[[commands]]
+icon = "cut"
+command = "cut"
+tooltip = "Cu&t"
+statustip = "Cut the current selection's contents to the clipboard."
+shortcut = "Ctrl+X"
+
+[[commands]]
+icon = "debug"
+command = "debug"
+
+[[commands]]
+icon = "day"
+command = "day"
+tooltip = "&Day"
+statustip = "Updates the current view using day vision settings."
+
+[[commands]]
+icon = "designdetails"
+command = "design_details"
+tooltip = "&Details"
+statustip = "Details of the current design."
+shortcut = "Ctrl+D"
+
+[[commands]]
+icon = "distance"
+command = "distance"
+tooltip = "&Distance"
+statustip = "Measures the distance and angle between two points."
+
+[[commands]]
+icon = "dolphin"
+command = "dolphin"
+tooltip = "&Dolphin"
+statustip = "Creates a dolphin: DOLPHIN"
+
+[[commands]]
+icon = "donothing"
+command = "do_nothing"
+tooltip = "&Do Nothing"
+statustip = "Does Nothing"
+
+[[commands]]
+icon = "ellipse"
+command = "ellipse"
+tooltip = "Ellipse"
+statustip = "Creates an ellipse."
+
+[[commands]]
+icon = "erase"
+command = "erase"
+tooltip = "D&elete"
+statustip = "Removes objects from a drawing."
+
+[[commands]]
+icon = "error"
+command = "error"
+
+[[commands]]
+icon = "exit"
+command = "exit_program"
+tooltip = "E&xit"
+statustip = "Exit the application."
+shortcut = "Ctrl+Q"
+
+[[commands]]
+icon = "freezealllayers"
+command = "freeze_all_layers"
+tooltip = "&Freeze All Layers"
+statustip = "Freezes all layers in the current drawing."
+
+[[commands]]
+icon = "heart"
+command = "heart"
+tooltip = "&Heart"
+statustip = "Creates a heart."
+
+[[commands]]
+icon = "help"
+command = "help"
+tooltip = "&Help"
+statustip = "Displays the help file."
+
+[[commands]]
+icon = "hidealllayers"
+command = "hide_all_layers"
+tooltip = "&Hide All Layers"
+statustip = "Turns the visibility off for all layers in the current drawing."
+
+[[commands]]
+icon = "icon128"
+command = "icon128"
+tooltip = "Icon12&8"
+statustip = "Sets the toolbar icon size to 128x128."
+
+[[commands]]
+icon = "icon16"
+command = "icon16"
+tooltip = "Icon&16"
+statustip = "Sets the toolbar icon size to 16x16."
+
+[[commands]]
+icon = "icon24"
+command = "icon24"
+tooltip = "Icon&24"
+statustip = "Sets the toolbar icon size to 24x24."
+
+[[commands]]
+icon = "icon32"
+command = "icon32"
+tooltip = "Icon&32"
+statustip = "Sets the toolbar icon size to 32x32."
+
+[[commands]]
+icon = "icon48"
+command = "icon48"
+tooltip = "Icon&48"
+statustip = "Sets the toolbar icon size to 48x48."
+
+[[commands]]
+icon = "icon64"
+command = "icon64"
+tooltip = "Icon&64"
+statustip = "Sets the toolbar icon size to 64x64."
+
+[[commands]]
+icon = "layers"
+command = "layers"
+tooltip = "&Layers"
+statustip = "Manages layers and layer properties:  LAYER"
+
+[[commands]]
+icon = "layerprevious"
+command = "layer_previous"
+tooltip = "&Layer Previous"
+statustip = "Restores the previous layer settings:  LAYERP"
+
+[[commands]]
+icon = "layerselector"
+command = "layer_selector"
+tooltip = "&Layer Selector"
+statustip = "Dropdown selector for changing the current layer"
+
+[[commands]]
+icon = "line"
+command = "line"
+tooltip = "&Line"
+statustip = "Creates straight line segments."
+
+[[commands]]
+icon = "linetypeselector"
+command = "line_type_selector"
+tooltip = "&Stitchtype Selector"
+statustip = "Dropdown selector for changing the current stitch type"
+
+[[commands]]
+icon = "lineweightselector"
+command = "line_weight_selector"
+tooltip = "&Threadweight Selector"
+statustip = "Dropdown selector for changing the current thread weight"
+
+[[commands]]
+icon = "locatepoint"
+command = "locate_point"
+tooltip = "&Locate Point"
+statustip = "Displays the coordinate values of a location."
+
+[[commands]]
+icon = "lockalllayers"
+command = "lock_all_layers"
+tooltip = "&Lock All Layers"
+statustip = "Locks all layers in the current drawing."
+
+[[commands]]
+icon = "makelayercurrent"
+command = "make_layer_current"
+tooltip = "&Make Layer Active"
+statustip = "Makes the layer of a selected object the active layer."
+
+[[commands]]
+icon = "move"
+command = "move"
+tooltip = "&Move"
+statustip = "Displaces objects a specified distance in a specified direction:  MOVE"
+
+[[commands]]
+icon = "new"
+command = "new_file"
+tooltip = "&New"
+statustip = "Creates a new file."
+shortcut = "Ctrl+N"
+
+[[commands]]
+icon = "night"
+command = "night_vision"
+tooltip = "&Night"
+statustip = "Updates the current view using night vision settings."
+
+[[commands]]
+icon = "open"
+command = "open_file"
+tooltip = "&Open"
+statustip = "Open an existing file."
+shortcut = "Ctrl+O"
+
+[[commands]]
+icon = "path"
+command = "path"
+tooltip = "&Path"
+statustip = "Creates a 2D path."
+
+[[commands]]
+icon = "platform"
+command = "platform"
+tooltip = "&Platform"
+statustip = "List which platform is in use."
+
+[[commands]]
+icon = "point"
+command = "point"
+tooltip = "&Point"
+statustip = "Creates multiple points."
+
+[[commands]]
+icon = "polygon"
+command = "polygon"
+tooltip = "Pol&ygon"
+statustip = "Creates a regular polygon."
+
+[[commands]]
+icon = "polyline"
+command = "polyline"
+tooltip = "&Polyline"
+statustip = "Creates a 2D polyline."
+
+[[commands]]
+icon = "quickleader"
+command = "quickleader"
+tooltip = "&QuickLeader"
+statustip = "Creates a leader and annotation."
+
+[[commands]]
+icon = "rectangle"
+command = "rectangle"
+tooltip = "&Rectangle"
+statustip = "Creates a rectangular polyline."
+
+[[commands]]
+icon = "redo"
+command = "redo"
+tooltip = "&Redo"
+statustip = "Reverses the effects of the previous undo action."
+
+[[commands]]
+icon = "rgb"
+command = "rgb"
+tooltip = "&RGB"
+statustip = "Updates the current view colors."
+
+[[commands]]
+icon = "rotate"
+command = "rotate"
+tooltip = "&Rotate"
+statustip = "Rotates objects about a base point."
+
+[[commands]]
+icon = "selectall"
+command = "select_all"
+tooltip = "&Select All"
+statustip = "Selects all objects:  SELECTALL"
+shortcut = "Ctrl+A"
+
+[[commands]]
+icon = "singlelinetext"
+command = "single_line_text"
+tooltip = "&Single Line Text"
+statustip = "Creates single-line text objects:  TEXT"
+
+[[commands]]
+icon = "pandown"
+command = "pan_down"
+tooltip = "&Pan Down"
+statustip = "Moves the view down."
+
+[[commands]]
+icon = "panleft"
+command = "pan_left"
+tooltip = "&Pan Left"
+statustip = "Moves the view to the left."
+
+[[commands]]
+icon = "panpoint"
+command = "pan_point"
+tooltip = "&Pan Point"
+statustip = "Moves the view by the specified distance."
+
+[[commands]]
+icon = "panrealtime"
+command = "pan_real-time"
+tooltip = "&Pan Realtime"
+statustip = "Moves the view in the current viewport."
+
+[[commands]]
+icon = "panright"
+command = "pan_right"
+tooltip = "&Pan Right"
+statustip = "Moves the view to the right."
+
+[[commands]]
+icon = "panup"
+command = "pan_up"
+tooltip = "&Pan Up"
+statustip = "Moves the view up."
+
+[[commands]]
+icon = "paste"
+command = "paste"
+tooltip = "&Paste"
+statustip = "Paste the clipboard's contents into the current selection."
+shortcut = "Ctrl+V"
+
+[[commands]]
+icon = "print"
+command = "print"
+tooltip = "&Print"
+statustip = "Print the design."
+shortcut = "Ctrl+P"
+
+[[commands]]
+icon = "redo"
+command = "redo"
+tooltip = "&Redo"
+statustip = "Reverses the effects of the previous undo action."
+shortcut = "Ctrl+Shift+Z"
+
+[[commands]]
+icon = "save"
+command = "save"
+tooltip = "&Save"
+statustip = "Save the design to disk."
+shortcut = "Ctrl+S"
+
+[[commands]]
+icon = "saveas"
+command = "save_as"
+tooltip = "Save &As"
+statustip = "Save the design under a new name."
+shortcut = "Ctrl+Shift+S"
+
+[[commands]]
+icon = "scale"
+command = "scale"
+tooltip = "Sca&le"
+statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions."
+
+[[commands]]
+icon = "settingsdialog"
+command = "settings_dialog"
+tooltip = "&Settings"
+statustip = "Configure settings specific to this product."
+
+[[commands]]
+icon = "showalllayers"
+command = "show_all_layers"
+tooltip = "&Show All Layers"
+statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL"
+
+[[commands]]
+icon = "snowflake"
+command = "snowflake"
+tooltip = "&Snowflake"
+statustip = "Creates a snowflake."
+
+[[commands]]
+icon = "star"
+command = "star"
+tooltip = "&Star"
+statustip = "Creates a star."
+
+[[commands]]
+icon = "syswindows"
+command = "syswindows"
+tooltip = "&SysWindows"
+statustip = "Arrange the windows."
+
+[[commands]]
+icon = "textbold"
+command = "text_bold"
+tooltip = "&Bold Text"
+statustip = "Sets text to be bold."
+checkable = true
+
+[[commands]]
+icon = "textitalic"
+command = "text_italic"
+tooltip = "&Italic Text"
+statustip = "Sets text to be italic."
+checkable = true
+
+[[commands]]
+icon = "textoverline"
+command = "text_overline"
+tooltip = "&Overline Text"
+statustip = "Sets text to be overlined."
+checkable = true
+
+[[commands]]
+icon = "textstrikeout"
+command = "text_strikeout"
+tooltip = "&StrikeOut Text"
+statustip = "Sets text to be striked out."
+checkable = true
+
+[[commands]]
+icon = "textunderline"
+command = "text_underline"
+tooltip = "&Underline Text"
+statustip = "Sets text to be underlined."
+checkable = true
+
+[[commands]]
+icon = "thawalllayers"
+command = "thaw_all_layers"
+tooltip = "&Thaw All Layers"
+statustip = "Thaws all layers in the current drawing:  THAWALL"
+
+[[commands]]
+icon = "tipoftheday"
+command = "tip_of_the_day"
+tooltip = "&Tip Of The Day"
+statustip = "Displays a dialog with useful tips"
+
+[[commands]]
+icon = "todo"
+command = "todo"
+
+[[commands]]
+icon = "undo"
+command = "undo"
+tooltip = "&Undo"
+statustip = "Reverses the most recent action."
+shortcut = "Ctrl+Z"
+
+[[commands]]
+icon = "unlockalllayers"
+command = "unlock_all_layers"
+tooltip = "&Unlock All Layers"
+statustip = "Unlocks all layers in the current drawing:  UNLOCKALL"
+
+[[commands]]
+icon = "whatsthis"
+command = "whatsthis"
+tooltip = "&What's This?"
+statustip = "What's This? Context Help!"
+
+[[commands]]
+icon = "windowcascade"
+command = "window_cascade"
+tooltip = "&Cascade"
+statustip = "Cascade the windows."
+
+[[commands]]
+icon = "windowclose"
+command = "window_close"
+tooltip = "Cl&ose"
+statustip = "Close the active window."
+
+[[commands]]
+icon = "windowcloseall"
+command = "window_close_all"
+tooltip = "Close &All"
+statustip = "Close all the windows."
+
+[[commands]]
+icon = "windownext"
+command = "window_next"
+tooltip = "Ne&xt"
+statustip = "Move the focus to the next window."
+
+[[commands]]
+icon = "windowprevious"
+command = "window_previous"
+tooltip = "Pre&vious"
+statustip = "Move the focus to the previous window."
+
+[[commands]]
+icon = "windowtile"
+command = "window_tile"
+tooltip = "&Tile"
+statustip = "Tile the windows."
+
+[[commands]]
+icon = "zoomall"
+command = "zoom_all"
+tooltip = "Zoom &All"
+statustip = "Zooms to display the drawing extents or the grid limits."
+
+[[commands]]
+icon = "zoomcenter"
+command = "zoom_center"
+tooltip = "Zoom &Center"
+statustip = "Zooms to display a view specified by a center point and magnification or height."
+
+[[commands]]
+icon = "zoomdynamic"
+command = "zoom_dynamic"
+tooltip = "Zoom &Dynamic"
+statustip = "Zooms to display the generated portion of the drawing."
+
+[[commands]]
+icon = "zoomextents"
+command = "zoom_extents"
+tooltip = "Zoom &Extents"
+statustip = "Zooms to display the drawing extents."
+
+[[commands]]
+icon = "zoomin"
+command = "zoom_in"
+tooltip = "Zoom &In"
+statustip = "Zooms to increase the apparent size of objects."
+
+[[commands]]
+icon = "zoomout"
+command = "zoom_out"
+tooltip = "Zoom &Out"
+statustip = "Zooms to decrease the apparent size of objects."
+
+[[commands]]
+icon = "zoomscale"
+command = "zoom_scale"
+tooltip = "Zoom &Scale"
+statustip = "Zooms the display using a specified scale factor."
+
+[[commands]]
+icon = "zoomprevious"
+command = "zoom_previous"
+tooltip = "Zoom &Previous"
+statustip = "Zooms to display the previous view."
+
+[[commands]]
+icon = "zoomrealtime"
+command = "zoom_real_time"
+tooltip = "Zoom &Realtime"
+statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport."
+
+[[commands]]
+icon = "zoomselected"
+command = "zoom_selected"
+tooltip = "Zoom Selec&ted"
+statustip = "Zooms to display the selected objects."
+
+[[commands]]
+icon = "zoomwindow"
+command = "zoom-window"
+tooltip = "Zoom &Window"
+statustip = "Zooms to display an area specified by a rectangular window."
+
