@@ -70,11 +70,11 @@ function get_docstrings () {
 function build_website_docs () {
 
     echo "Building HTML documentation..."
-    cd emrm
+    cd docs/manual
         make html
-        mkdir -p ../site/docs
-        mv _build/html/* ../site/docs
-    cd ..
+        mkdir -p ../../site/docs
+        mv _build/html/* ../../site/docs
+    cd ../..
     echo "Done."
 
 }
@@ -82,10 +82,10 @@ function build_website_docs () {
 function build_print_docs () {
 
     echo "Building printable documentation..."
-    cd emrm
+    cd docs/manual
         make latexpdf
-        mv _build/latex/embroidermodder.pdf ../site/docs/emrm_current.pdf
-    cd ..
+        mv _build/latex/embroidermodder.pdf ../../site/docs/emrm_current.pdf
+    cd ../..
     echo "Done."
 
 }

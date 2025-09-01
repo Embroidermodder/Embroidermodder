@@ -48,7 +48,6 @@ libembroidery-test/libembroidery-test
 #########################
 *.moc
 *.obj
-*Makefile*
 *_memleak*
 *callgrind.*
 *object_script.*
