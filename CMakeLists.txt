@@ -92,6 +92,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/view.cpp
 
 	${SRC}/embroidermodder.h
+	${SRC}/constants.h
 
 	${EXTERN}/lua/src/lapi.c
 	${EXTERN}/lua/src/lapi.h

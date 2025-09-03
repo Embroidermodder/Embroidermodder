@@ -91,21 +91,17 @@ function prompt(str)
         var r = Number(strList[0]);
         var g = Number(strList[1]);
         var b = Number(strList[2]);
-        if(!validRGB(r,g,b))
-        {
-            alert(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
+        if(!validRGB(r,g,b)) then
+            alert(qsTr("Invalid color. R,G,B values must be in the range of 0-255."))
             setPromptPrefix(qsTr("Specify grid color: "));
-        }
         else
-        {
-            setGridColor(r,g,b);
-            endCommand();
-        }
-    }
-}
+            setGridColor(r,g,b)
+            endCommand()
+        end
+    end
+end
 
 function validRGB(r, g, b)
-{
     if(isNaN(r)) return false;
     if(isNaN(g)) return false;
     if(isNaN(b)) return false;
@@ -113,17 +109,4 @@ function validRGB(r, g, b)
     if(g < 0 || g > 255) return false;
     if(b < 0 || b > 255) return false;
     return true;
-}[Menu]
-Name=Sandbox
-Position=4
-
-[ToolBar]
-Name=Sandbox
-Position=3
-
-[Tips]
-ToolTip=&RGB
-StatusTip=Updates the current view colors:  RGB
-
-[Prompt]
-Alias=RGB
+end

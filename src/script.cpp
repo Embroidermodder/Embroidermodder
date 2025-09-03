@@ -5,12 +5,6 @@
  *
  * -----------------------------------------------------------------------------
  *
- * This is the most frequently updated part of the source and imports all
- * of the other headers. An alteration here has a faster turn around than
- * anywhere else in the compiled part of the source. New core developers would
- * benefit most from understanding the rough approach of this file and making
- * small changes here.
- *
  * Having scripting available for users to alter their software reflects a
  * core principle of open source software. The full build environment for
  * Embroidermodder is too complex for most users to set up, especially on
@@ -19,16 +13,15 @@
  * the build by adding a load call to "commands.scm" is therefore a core
  * feature. We as core developers won't be using this flexibility much.
  *
- * For core developers, lua is providing a means of logging all user
- * interaction through a unified, text-based command system and a way of
- * allowing user made designs to be described parametrically along with their
- * custom UIs. While relying more on lua would make some interactions easier to
- * write like loading settings or writing out the state for debugging (see
+ * While relying more on lua could make some core developers' work easier
+ * like loading settings or writing out the state for debugging (see
  * `report_state_f`), going back and forth will be slower,
  * harder to debug and potentially will lead to invalid memory more often.
  * Having every `settings_` variable part of the global C/C++ state of the
  * program rather than as lua symbols has faster load times and easier to
- * access for over 99% of the code and run-time.
+ * access for over 99% of the code and run-time. So we recommend that core
+ * developers make sure they know why a feature should be written as a lua
+ * function before submitting a patch that requires this.
  *
  * TODO: inline all MainWindow native functions, replace MainWindow calls that
  * can be lua registerable functions.
@@ -43,26 +36,10 @@
 #include "../extern/lua/src/lua.hpp"
 #include "../extern/toml11/single_include/toml.hpp"
 
-typedef struct Command_ {
-    QString icon;
-    QString command;
-    QString tooltip;
-    QString statustip;
-    QString shortcut;
-    QString macos;
-    unsigned char checkable;
-} Command;
-
-typedef struct ScriptValue_ {
-    QString s;
-    int32_t i;
-    double r;
-    bool b;
-} ScriptValue;
-
 std::vector<Command> command_map;
 std::vector<ToolbarData> toolbar_table;
 std::vector<MenuData> menu_table;
+std::unordered_map<std::string, StringList> string_tables;
 
 #if __cplusplus
 extern "C" {
@@ -91,10 +68,7 @@ int circle_f(lua_State *L);
 int clear_rubber_f(lua_State *L);
 int clear_selection_f(lua_State *L);
 int color_selector_f(lua_State *L);
-int command_f(lua_State *L);
-int copy_f(lua_State *L);
 int copy_selected_f(lua_State *L);
-int cut_f(lua_State *L);
 int cut_selected_f(lua_State *L);
 int day_f(lua_State *L);
 int debug_f(lua_State *L);
@@ -152,7 +126,6 @@ int pan_point_f(lua_State *L);
 int pan_real_time_f(lua_State *L);
 int pan_right_f(lua_State *L);
 int pan_up_f(lua_State *L);
-int paste_f(lua_State *L);
 int paste_selected_f(lua_State *L);
 int path_f(lua_State *L);
 int perpendicular_distance_f(lua_State *L);
@@ -179,8 +152,6 @@ int saveas_f(lua_State *L);
 int save_f(lua_State *L);
 int scale_f(lua_State *L);
 int scale_selected_f(lua_State *L);
-int select_all_f(lua_State *L);
-int selectall_f(lua_State *L);
 int set_color_f(lua_State *L);
 int set_cursor_shape_f(lua_State *L);
 int set_prompt_prefix_f(lua_State *L);
@@ -282,10 +253,7 @@ luaL_Reg lua_registerables[] = {
     {"clear_rubber", clear_rubber_f},
     {"clear_selection", clear_selection_f},
     {"color_selector", color_selector_f},
-    {"command", command_f},
-    {"copy", copy_f},
     {"copy_selected", copy_selected_f},
-    {"cut", cut_f},
     {"cut_selected", cut_selected_f},
     {"day", day_f},
     {"debug", debug_f},
@@ -343,7 +311,6 @@ luaL_Reg lua_registerables[] = {
     {"pan_real_time", pan_real_time_f},
     {"pan_right", pan_right_f},
     {"pan_up", pan_up_f},
-    {"paste", paste_f},
     {"paste_selected", paste_selected_f},
     {"path", path_f},
     {"perpendicular_distance", perpendicular_distance_f},
@@ -370,8 +337,6 @@ luaL_Reg lua_registerables[] = {
     {"save", save_f},
     {"scale", scale_f},
     {"scale_selected", scale_selected_f},
-    {"select_all", select_all_f},
-    {"selectall", selectall_f},
     {"set_color", set_color_f},
     {"set_cursor_shape", set_cursor_shape_f},
     {"set_prompt_prefix", set_prompt_prefix_f},
@@ -566,34 +531,6 @@ void MainWindow::checkForUpdates()
     //TODO: Check website for new versions, commands, etc...
 }
 
-void MainWindow::cut()
-{
-    qDebug("cut()");
-    View* gview = activeView();
-    if(gview) { gview->cut(); }
-}
-
-void MainWindow::copy()
-{
-    qDebug("copy()");
-    View* gview = activeView();
-    if(gview) { gview->copy(); }
-}
-
-void MainWindow::paste()
-{
-    qDebug("paste()");
-    View* gview = activeView();
-    if(gview) { gview->paste(); }
-}
-
-void MainWindow::selectAll()
-{
-    qDebug("selectAll()");
-    View* gview = activeView();
-    if(gview) { gview->selectAll(); }
-}
-
 QString MainWindow::platformString()
 {
     //TODO: Append QSysInfo to string where applicable.
@@ -672,7 +609,8 @@ void MainWindow::designDetails()
     }
 }
 
-void MainWindow::about()
+void
+MainWindow::about()
 {
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -2060,18 +1998,6 @@ menu_seperator_f(lua_State *L)
 
 /* . */
 int
-select_all_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    View* gview = activeView();
-    if (gview) {
-        gview->selectAll();
-    }
-    return 0;
-}
-
-/* . */
-int
 set_color_f(lua_State *L)
 {
     ScriptValue args[4];
@@ -2289,27 +2215,6 @@ text_size_f(lua_State *L)
     return 0;
 }
 
-/* . */
-int
-command_f(lua_State *L)
-{
-    ScriptValue args[6];
-    if (!unpack_args(L, "command_f", args, "ssssss")) {
-        return 0;
-    }
-    Command command;
-    command.icon = args[0].s;
-    command.command = args[1].s;
-    command.tooltip = args[2].s;
-    command.statustip = args[3].s;
-    command.shortcut = args[4].s;
-    command.macos = args[5].s;
-    command.checkable = 0;
-    qDebug("Adding command \"%s\"...", command.icon);
-    command_map.push_back(command);
-    return 0;
-}
-
 /* Adds the lua function (alert "EXAMPLE ALERT").
  */
 int
@@ -2441,22 +2346,6 @@ circle_f(lua_State *L)
 /* . */
 int
 color_selector_f(lua_State *L)
-{
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-copy_f(lua_State *L)
-{
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-cut_f(lua_State *L)
 {
     no_args(L);
     return 0;
@@ -2990,13 +2879,6 @@ pan_up_f(lua_State *L)
 
 /* . */
 int
-paste_f(lua_State *L)
-{
-    return 0;
-}
-
-/* . */
-int
 print_f(lua_State *L)
 {
     return 0;
@@ -3413,8 +3295,12 @@ int
 AddRubber_f(lua_State *L)
 {
     /*
-    if (context->argumentCount() != 1)    return debug("addRubber() requires one argument");
-    if (!context->argument(0).isString()) return debug(TypeError, "addRubber(): first argument is not a string");
+    if (context->argumentCount() != 1) {
+        return debug("addRubber() requires one argument");
+    }
+    if (!context->argument(0).isString()) {
+        return debug(TypeError, "addRubber(): first argument is not a string");
+    }
 
     QString objType = context->argument(0).toString().toUpper();
 
@@ -4096,24 +3982,11 @@ script_env_boot(void)
         toolbar_table.push_back(data);
     }
 
-    file_menu_list = get_toml_string_table(data, "file_menu_list");
-    edit_menu_list = get_toml_string_table(data, "edit_menu_list");
-    zoom_menu_list = get_toml_string_table(data, "zoom_menu_list");
-    pan_menu_list = get_toml_string_table(data, "pan_menu_list");
-    help_menu_list = get_toml_string_table(data, "help_menu_list");
-
-    file_toolbar_list = get_toml_string_table(data, "file_toolbar_list");
-    edit_toolbar_list = get_toml_string_table(data, "edit_toolbar_list");
-    view_toolbar_list = get_toml_string_table(data, "view_toolbar_list");
-    zoom_toolbar_list = get_toml_string_table(data, "zoom_toolbar_list");
-    pan_toolbar_list = get_toml_string_table(data, "pan_toolbar_list");
-    icon_toolbar_list = get_toml_string_table(data, "icon_toolbar_list");
-    help_toolbar_list = get_toml_string_table(data, "help_toolbar_list");
-
-    layer_selector_list = get_toml_string_table(data, "layer_selector_list");
-    color_selector_list = get_toml_string_table(data, "color_selector_list");
-    linetype_selector_list = get_toml_string_table(data, "linetype_selector_list");
-    lineweight_selector_list = get_toml_string_table(data, "lineweight_selector_list");
+    StringList string_table_list = get_toml_string_table(data, "string_tables");
+    for (int i=0; i<string_table_list.size(); i++) {
+        string_tables[string_table_list[i]] = get_toml_string_table(
+            data, string_table_list[i].c_str());
+    }
 
     /* Setting up Lua. */
     Lua = luaL_newstate();
@@ -4227,8 +4100,18 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
             // FIXME: connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));
         }
-        connect(ACTION, &QAction::triggered, this,
-            [=]() { runCommandMain(command_map[i].command); } );
+
+        int id = get_cmd_id(qPrintable(command_map[i].command));
+        qDebug(qPrintable(command_map[i].command));
+        if (id >= 0) {
+            printf("Creating %d command\n", id);
+            connect(ACTION, &QAction::triggered, this,
+                [=]() { run_command(id); } );
+        }
+        else {
+            connect(ACTION, &QAction::triggered, this,
+                [=]() { runCommandMain(command_map[i].command); } );
+        }
 
         /*
         else if(icon == "windowcascade") connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(cascade()));

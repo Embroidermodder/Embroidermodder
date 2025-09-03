@@ -307,8 +307,7 @@ function prompt(str)
     }
     else if(global.mode == global.mode_RAPID)
     {
-        if(str == "RAPID_ENTER")
-        {
+        if (str == "RAPID_ENTER") then
             if(global.text == "")
             {
                 endCommand();
@@ -318,25 +317,9 @@ function prompt(str)
                 vulcanize();
                 endCommand()-- -- TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point
             }
-        }
         else
-        {
             global.text = str;
             setRubberText("TEXT_RAPID", global.text);
-        }
-    }
-}
-[Menu]
-Name=Draw
-Position=18
-
-[ToolBar]
-Name=Draw
-Position=16
-
-[Tips]
-ToolTip=&Single Line Text
-StatusTip=Creates single-line text objects:  TEXT
-
-[Prompt]
-Alias=DT, DTEXT, TEXT, SINGLELINETEXT
+        end
+    end
+end

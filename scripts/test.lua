@@ -88,18 +88,3 @@ function context(str)
 function prompt(str)
 {
 }
-
-[Menu]
-Name=Sandbox
-Position=100
-
-[ToolBar]
-Name=Sandbox
-Position=100
-
-[Tips]
-ToolTip=Sandbox
-StatusTip=A sandbox to play in:  SANDBOX
-
-[Prompt]
-Alias=SAND, SANDBOX

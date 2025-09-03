@@ -94,28 +94,13 @@ function prompt(str)
                 setPromptPrefix(qsTr("Specify other corner point or [Dimensions]: "));
             }
             else
-            {
-                global.newRect = true;
-                global.x2 = x;
-                global.y2 = y;
-                setRubberPoint("RECTANGLE_END", x, y);
-                vulcanize();
-                endCommand();
-            }
-        }
-    }
-}
-[Menu]
-Name=Draw
-Position=6
-
-[ToolBar]
-Name=Draw
-Position=6
-
-[Tips]
-ToolTip=&Rectangle
-StatusTip=Creates a rectangular polyline: RECTANGLE
-
-[Prompt]
-Alias=REC, RECT, RECTANG, RECTANGLE
+                global.newRect = true
+                global.x2 = x
+                global.y2 = y
+                setRubberPoint("RECTANGLE_END", x, y)
+                vulcanize()
+                endCommand()
+            end
+        end
+    end
+end

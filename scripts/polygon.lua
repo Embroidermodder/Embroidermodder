@@ -310,18 +310,4 @@ function prompt(str)
     {
         todo("POLYGON", "Sidelength mode");
     }
-}
-[Menu]
-Name=Draw
-Position=4
-
-[ToolBar]
-Name=Draw
-Position=4
-
-[Tips]
-ToolTip=Pol&ygon
-StatusTip=Creates a regular polygon:  POLYGON
-
-[Prompt]
-Alias=POL, POLYGON
+end

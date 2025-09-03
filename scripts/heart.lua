@@ -91,18 +91,4 @@ function updateHeart(style, numPts, xScale, yScale)
     }
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
-}
-[Menu]
-Name=Draw
-Position=100
-
-[ToolBar]
-Name=Draw
-Position=100
-
-[Tips]
-ToolTip=&Heart
-StatusTip=Creates a heart:  HEART
-
-[Prompt]
-Alias=HEART
+end

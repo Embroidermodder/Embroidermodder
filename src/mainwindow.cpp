@@ -1,23 +1,142 @@
+/* Embroidermodder 2: CAD COMMANDS
+ *
+ * Copyright (C) 2011-2025 The Embroidermodder Team
+ * Licensed under the terms of the zlib license.
+ *
+ * ------------------------------------------------------------------------------------
+ *
+ * This is the most frequently updated part of the source: new core developers would
+ * benefit most from understanding the rough approach of this file and making
+ * small changes here.
+ *
+ * NOTE: the run_command function is the part of the source treated with the most
+ * concern for optimization and bug traceability.
+ *
+ * Core Commands and User Interaction
+ * ==================================
+ *
+ * All user interaction takes place via commands which can be:
+ *
+ * 1. Core commands defined for internal use that uses the switch table below
+ *    for fast calling with logging for debugging purposes and the undo history.
+ * 2. Functions written in lua scripts in the `scripts/` folder that call the
+ *    wrapper run_command_f to run this switch table.
+ * 3. C++ functions designed to take the same arguments called lua registerables
+ *    in src/script.cpp: intended the most complex commands. These call run_command
+ *    directly using the appropriate constant.
+ *
+ * For example, when the user issues a "day" command we have 3 internal calls to make
+ * which the day command is a wrapper for: change the grid color, change the background
+ * color and change the crosshair color. Each of these is issued as a core command,
+ * with day being a macro encoding these as a list of core commands.
+ *
+ * It is likely (FIXME: decide on this) that all core commands will not be modal and
+ * only the scripted commands deal with the mode variable.
+ */
+
 #include "embroidermodder.h"
 
-StringList file_menu_list;
-StringList edit_menu_list;
-StringList zoom_menu_list;
-StringList pan_menu_list;
-StringList help_menu_list;
+int debug = 1;
 
-StringList file_toolbar_list;
-StringList edit_toolbar_list;
-StringList view_toolbar_list;
-StringList zoom_toolbar_list;
-StringList pan_toolbar_list;
-StringList icon_toolbar_list;
-StringList help_toolbar_list;
+/* Order matches the CMD_* ID table in "constants.h". This is compiled in since
+ * it will only change with changes to the associated constants and there's a
+ * potential speed improvements from the compiler if the comparisons are done
+ * against static and constant data.
+ */
+static const char *command_names[] = {
+    "null",
+    "about",
+    "stub",
+    "cut",
+    "copy",
+    "paste",
+    "select_all",
+    "_END"
+};
 
-StringList layer_selector_list;
-StringList color_selector_list;
-StringList linetype_selector_list;
-StringList lineweight_selector_list;
+int
+get_cmd_id(const char *cmd)
+{
+    for (int i=0; command_names[i][0] != '_'; i++) {
+        if (!strncmp(command_names[i], cmd, 50)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/*! It is important that there is as little as possible before the switch: this
+ * overhead would be present for every core command issued and individual commands
+ * may consist of thousands of core command calls.
+ *
+ * WARNING: note that this does not perform type checking. This is performed
+ * on lua style functions, but we either assume that the runCommand* family of functions
+ * has vetted the data before it gets to this point or it is the caller's
+ * responsibility to get it right within a C++ function.
+ */
+void
+MainWindow::run_command(int id, ...)
+{
+    if (id > MAX_COMMANDS) {
+        qDebug("ERROR: unrecognised command id.");
+        return;
+    }
+    if (debug > 0) {
+        qDebug("COMMAND %d (%s)", id, command_names[id]);
+    }
+
+    switch (id) {
+    /* This action intentionally does nothing. */
+    case CMD_NULL:
+        break;
+
+    /* Show the about dialog. */
+    case CMD_ABOUT:
+        about();
+        break;
+
+    case CMD_STUB:
+        QMessageBox::warning(this, tr("Testing Feature"),
+            tr("<b>This feature is in testing.</b>"));
+        break;
+
+    case CMD_CUT: {
+        View* gview = activeView();
+        if (gview) {
+            gview->cut();
+        }
+        break;
+    }
+
+    case CMD_COPY: {
+        View* gview = activeView();
+        if (gview) {
+            gview->copy();
+        }
+        break;
+    }
+
+    case CMD_PASTE: {
+        View* gview = activeView();
+        if (gview) {
+            gview->paste();
+        }
+        break;
+    }
+
+    case CMD_SELECT_ALL: {
+        View* gview = activeView();
+        if (gview) {
+            gview->selectAll();
+        }
+        break;
+    }
+
+    default:
+        printf("ERROR: unrecognised command id %d\n", id);
+        break;
+    }
+}
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
@@ -764,32 +883,31 @@ void MainWindow::createAllMenus()
     connect(recentMenu, SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
     recentMenu->setTearOffEnabled(false);
 
-    addToMenu(fileMenu, file_menu_list);
-
     menuBar()->addMenu(editMenu);
-    addToMenu(editMenu, edit_menu_list);
-
     menuBar()->addMenu(viewMenu);
     viewMenu->addSeparator();
     viewMenu->addMenu(zoomMenu);
-    addToMenu(zoomMenu, zoom_menu_list);
     viewMenu->addMenu(panMenu);
-    addToMenu(panMenu, pan_menu_list);
     viewMenu->addSeparator();
     viewMenu->addAction(actionHash.value( "day"));
     viewMenu->addAction(actionHash.value( "night"));
     viewMenu->addSeparator();
 
-    viewMenu->setTearOffEnabled(true);
-
     menuBar()->addMenu(windowMenu);
     connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
     //Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
+
+    viewMenu->setTearOffEnabled(false);
     windowMenu->setTearOffEnabled(false);
+    helpMenu->setTearOffEnabled(false);
 
     menuBar()->addMenu(helpMenu);
-    addToMenu(helpMenu, help_menu_list);
-    helpMenu->setTearOffEnabled(true);
+
+    addToMenu(fileMenu, string_tables["file_menu_list"]);
+    addToMenu(editMenu, string_tables["edit_menu_list"]);
+    addToMenu(zoomMenu, string_tables["zoom_menu_list"]);
+    addToMenu(panMenu, string_tables["pan_menu_list"]);
+    addToMenu(helpMenu, string_tables["help_menu_list"]);
 }
 
 void
@@ -840,38 +958,38 @@ MainWindow::createAllToolbars()
     qDebug("MainWindow createAllToolbars()");
 
     toolbarFile->setObjectName("toolbarFile");
-    addToToolbar(toolbarFile, file_toolbar_list);
+    addToToolbar(toolbarFile, string_tables["file_toolbar_list"]);
     connect(toolbarFile, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     toolbarEdit->setObjectName("toolbarEdit");
-    addToToolbar(toolbarEdit, edit_toolbar_list);
+    addToToolbar(toolbarEdit, string_tables["edit_toolbar_list"]);
     connect(toolbarEdit, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     toolbarView->setObjectName("toolbarView");
-    addToToolbar(toolbarView, view_toolbar_list);
+    addToToolbar(toolbarView, string_tables["view_toolbar_list"]);
     connect(toolbarView, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     toolbarZoom->setObjectName("toolbarZoom");
-    addToToolbar(toolbarZoom, zoom_toolbar_list);
+    addToToolbar(toolbarZoom, string_tables["zoom_toolbar_list"]);
     connect(toolbarZoom, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     toolbarPan->setObjectName("toolbarPan");
-    addToToolbar(toolbarPan, pan_toolbar_list);
+    addToToolbar(toolbarPan, string_tables["pan_toolbar_list"]);
     connect(toolbarPan, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     toolbarPan->setObjectName("toolbarIcon");
-    addToToolbar(toolbarIcon, icon_toolbar_list);
+    addToToolbar(toolbarIcon, string_tables["icon_toolbar_list"]);
     connect(toolbarIcon, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     toolbarHelp->setObjectName("toolbarHelp");
-    addToToolbar(toolbarHelp, help_toolbar_list);
+    addToToolbar(toolbarHelp, string_tables["help_toolbar_list"]);
     connect(toolbarHelp, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     toolbarLayer->setObjectName("toolbarLayer");
     toolbarLayer->addAction(actionHash.value("makelayercurrent"));
     toolbarLayer->addAction(actionHash.value("layers"));
 
-    addToComboBox(layerSelector, layer_selector_list);
+    addToComboBox(layerSelector, string_tables["layer_selector_list"]);
     toolbarLayer->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
@@ -879,17 +997,17 @@ MainWindow::createAllToolbars()
     connect(toolbarLayer, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     toolbarProperties->setObjectName("toolbarProperties");
-    addToComboBox(colorSelector, color_selector_list);
+    addToComboBox(colorSelector, string_tables["color_selector_list"]);
     toolbarProperties->addWidget(colorSelector);
     connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
 
     toolbarProperties->addSeparator();
-    addToComboBox(linetypeSelector, linetype_selector_list);
+    addToComboBox(linetypeSelector, string_tables["linetype_selector_list"]);
     toolbarProperties->addWidget(linetypeSelector);
     connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetypeSelectorIndexChanged(int)));
 
     toolbarProperties->addSeparator();
-    addToComboBox(lineweightSelector, lineweight_selector_list);
+    addToComboBox(lineweightSelector, string_tables["lineweight_selector_list"]);
     lineweightSelector->setMinimumContentsLength(8); // Prevent dropdown text readability being squish...d.
     toolbarProperties->addWidget(lineweightSelector);
     connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));

@@ -10,6 +10,11 @@ Settings accept_;
 /* Temporary for instant preview. */
 Settings preview;
 
+ScriptValue settings_table[N_SETTINGS];
+ScriptValue dialog_table[N_SETTINGS];
+ScriptValue accept_table[N_SETTINGS];
+ScriptValue preview_table[N_SETTINGS];
+
 QTabWidget* tabWidget;
 QDialogButtonBox* buttonBox;
 
