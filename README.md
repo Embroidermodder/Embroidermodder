@@ -26,7 +26,7 @@ Ubuntu repository packages:
 (FIXME) The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
 
 ```
-sudo apt-get install git build-essential cmake qt6-base-dev qt6-tools-dev libqt6-opengl-dev qt6-declarative-dev qt6-scxml-dev valgrind
+sudo apt-get install git build-essential cmake qt6-base-dev qt6-tools-dev qt6-declarative-dev qt6-scxml-dev valgrind
 ```
 
 Fedora repository packages:

@@ -51,7 +51,8 @@ string_tables = [
     "layer_selector_list",
     "color_selector_list",
     "linetype_selector_list",
-    "lineweight_selector_list"
+    "lineweight_selector_list",
+    "extensions"
 ]
 
 file_menu_list = [
@@ -329,11 +330,868 @@ lineweight_selector_list = [
     "lineweight24", "1.20 mm", "1.20"
 ]
 
+extensions = [
+    "100",
+    "10O",
+    "ART",
+    "BMC",
+    "BRO",
+    "CND",
+    "COL",
+    "CSD",
+    "CSV",
+    "DAT",
+    "DEM",
+    "DSB",
+    "DST",
+    "DSZ",
+    "DXF",
+    "EDR",
+    "EMD",
+    "EXP",
+    "EXY",
+    "EYS",
+    "FXY",
+    "GNC",
+    "GT",
+    "HUS",
+    "INB",
+    "JEF",
+    "KSM",
+    "PCD",
+    "PCM",
+    "PCQ",
+    "PCS",
+    "PEC",
+    "PEL",
+    "PEM",
+    "PES",
+    "PHB",
+    "PHC",
+    "RGB",
+    "SEW",
+    "SHV",
+    "SST",
+    "STX",
+    "SVG",
+    "T09",
+    "TAP",
+    "THR",
+    "TXT",
+    "U00",
+    "U01",
+    "VIP",
+    "VP3",
+    "XXX",
+    "ZSK"
+]
+
 [version]
 major = 2
 minor = 0
 patch = 0
 tag = "alpha"
+
+[[settings]]
+id_label = "ST_LANGUAGE"
+id = 0
+key = "Language"
+default = "default"
+type = "string"
+
+[[settings]]
+id_label = "ST_ICON_THEME"
+id = 1
+key = "IconTheme"
+default = "default"
+type = "string"
+
+[[settings]]
+id_label = "ST_ICON_SIZE"
+id = 2
+key = "IconSize"
+default = 16
+type = "integer"
+
+[[settings]]
+id_label = "ST_MDI_BG_USE_LOGO"
+id = 3
+key = "MdiBGUseLogo"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_MDI_BG_USE_TEXTURE"
+id = 4
+key = "MdiBGUseTexture"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_MDI_BG_USE_COLOR"
+id = 5
+key = "MdiBGUseColor"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_MDI_BG_LOGO"
+id = 6
+key = "MdiBGLogo"
+default = "images/logo-spirals.png"
+type = "string"
+
+[[settings]]
+id_label = "ST_MDI_MDI_BG_TEXTURE"
+id = 7
+key = "MdiBGTexture"
+default = "images/texture-spirals.png"
+type = "string"
+
+[[settings]]
+id_label = "ST_MDI_BG_COLOR"
+id = 8
+key = "MdiBGColor"
+default = [192, 192, 192]
+type = "color"
+
+[[settings]]
+id_label = "ST_TIP_OF_THE_DAY"
+id = 9
+key = "TipOfTheDay"
+default = true
+type = "boolean"
+description = "Show Tip of the Day on startup"
+
+[[settings]]
+id_label = "ST_CURRENT_TIP"
+id = 10
+key = "CurrentTip"
+default = 0
+type = "integer"
+
+[[settings]]
+id_label = "ST_SYSTEM_HELP_BROWSER"
+id = 11
+key = "SystemHelpBrowser"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_CHECK_FOR_UPDATES"
+id = 12
+key = "CheckForUpdates"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_USE_OPENGL"
+id = 13
+key = "Display/UseOpenGL"
+default = false
+type = "boolean"
+description = "Use OpenGL"
+enabled = false
+
+[[settings]]
+id_label = "ST_RENDERHINT_AA"
+id = 14
+key = "Display/RenderHintAntiAlias"
+default = false
+type = "boolean"
+description = "Antialias"
+enabled = false
+
+[[settings]]
+id_label = "ST_RENDERHINT_TEXT_AA"
+id = 15
+key = "Display/RenderHintTextAntiAlias"
+default = false
+type = "boolean"
+description = "Antialias Text"
+enabled = false
+
+[[settings]]
+id_label = "ST_RENDERHINT_SMOOTHPIX"
+id = 16
+key = "Display/RenderHintSmoothPixmap"
+default = false
+type = "boolean"
+description = "Smooth Pixmap"
+enabled = false
+
+[[settings]]
+id_label = "ST_RENDERHINT_HIGH_AA"
+id = 17
+key = "Display/RenderHintHighQualityAntiAlias"
+default = false
+type = "boolean"
+description = "High Quality Antialiasing (OpenGL)"
+enabled = false
+
+[[settings]]
+id_label = "ST_RENDERHINT_NONCOSMETIC"
+id = 18
+key = "Display/RenderHintNonCosmetic"
+default = false
+type = "boolean"
+description = "Non Cosmetic"
+enabled = false
+
+[[settings]]
+id_label = "ST_SHOW_SCROLLBARS"
+id = 19
+key = "Display/ShowScrollBars"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_SCROLLBAR_WIDGET_NUM"
+id = 20
+key = "Display/ScrollBarWidgetNum"
+default = 0
+type = "integer"
+
+[[settings]]
+id_label = "ST_CROSSHAIR_COLOR"
+id = 21
+key = "Display/CrossHairColor"
+default = [0,  0,  0]
+type = "color"
+
+[[settings]]
+id_label = "ST_BG_COLOR"
+id = 22
+key = "Display/BackgroundColor"
+default = [235, 235, 235]
+type = "color"
+
+[[settings]]
+id_label = "ST_SELECTBOX_LEFT_COLOR"
+id = 23
+key = "Display/SelectBoxLeftColor"
+default = [0, 128, 0]
+type = "color"
+
+[[settings]]
+id_label = "ST_SELECTBOX_LEFT_FILL"
+id = 24
+key = "Display/SelectBoxLeftFill"
+default = [0, 255, 0]
+type = "color"
+
+[[settings]]
+id_label = "ST_SELECTBOX_RIGHT_COLOR"
+id = 25
+key = "Display/SelectBoxRightColor"
+default = [0, 0, 128]
+type = "color"
+
+[[settings]]
+id_label = "ST_SELECTBOX_RIGHT_FILL"
+id = 26
+key = "Display/SelectBoxRightFill"
+default = [0, 0, 255]
+type = "color"
+
+[[settings]]
+id_label = "ST_SELECTBOX_ALPHA"
+id = 27
+key = "Display/SelectBoxAlpha"
+default = 32
+type = "integer"
+
+[[settings]]
+id_label = "ST_ZOOMSCALE_IN"
+id = 28
+key = "Display/ZoomScaleIn"
+default = 2.0
+type = "real"
+description = "Zoom In Scale"
+
+[[settings]]
+id_label = "ST_ZOOMSCALE_OUT"
+id = 29
+key = "Display/ZoomScaleOut"
+default = 0.5
+type = "real"
+description = "Zoom Out Scale"
+
+[[settings]]
+id_label = "ST_CROSSHAIR_PERCENT"
+id = 30
+key = "Display/CrossHairPercent"
+default = 5
+type = "integer"
+
+[[settings]]
+id_label = "ST_UNITS"
+id = 31
+key = "Display/Units"
+default = "mm"
+type = "string"
+
+[[settings]]
+id_label = "ST_PROMPT_TEXT_COLOR"
+id = 32
+key = "Prompt/TextColor"
+default = [0, 0, 0]
+type = "color"
+
+[[settings]]
+id_label = "ST_PROMPT_BG_COLOR"
+id = 33
+key = "Prompt/BackgroundColor"
+default = [255, 255, 255]
+type = "color"
+
+[[settings]]
+id_label = "ST_PROMPT_FONT_FAMILY"
+id = 34
+key = "Prompt/FontFamily"
+default = "Monospace"
+type = "string"
+
+[[settings]]
+id_label = "ST_PROMPT_FONT_STYLE"
+id = 35
+key = "Prompt/FontStyle"
+default = "normal"
+type = "string"
+
+[[settings]]
+id_label = "ST_PROMPT_FONT_SIZE"
+id = 36
+key = "Prompt/FontSize"
+default = 12
+type = "integer"
+
+[[settings]]
+id_label = "ST_PROMPT_SAVE_HISTORY"
+id = 37
+key = "Prompt/SaveHistory"
+default = true
+type = "boolean"
+description = "Save History"
+
+[[settings]]
+id_label = "ST_PROMPT_SAVE_AS_HTML"
+id = 38
+key = "Prompt/SaveHistoryAsHtml"
+default = false
+type = "boolean"
+description = "Save As HTML"
+
+[[settings]]
+# FIXME: this file sits in settingsDir rather than appDir
+id_label = "ST_PROMPT_SAVE_FNAME"
+id = 39
+key = "Prompt/SaveHistoryFilename"
+default = "prompt.log"
+type = "string"
+
+[[settings]]
+id_label = "ST_OPENSAVE_CUSTOM_FILTER"
+id = 40
+key = "OpenSave/CustomFilter"
+default = "supported"
+type = "string"
+
+[[settings]]
+id_label = "ST_OPEN_FORMAT"
+id = 41
+key = "OpenSave/OpenFormat"
+default = "*.*"
+type = "string"
+
+[[settings]]
+id_label = "ST_OPEN_THUMBNAIL"
+id = 42
+key = "OpenSave/OpenThumbnail"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_SAVE_FORMAT"
+id = 43
+key = "OpenSave/SaveFormat"
+default = "*.*"
+type = "string"
+
+[[settings]]
+id_label = "ST_SAVE_THUMBNAIL"
+id = 44
+key = "OpenSave/SaveThumbnail"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_RECENT_MAX_FILES"
+id = 45
+key = "OpenSave/RecentMax"
+default = 10
+type = "integer"
+
+[[settings]]
+id_label = "ST_RECENT_FILES"
+id = 46
+key = "OpenSave/RecentFiles"
+default = []
+type = "list"
+
+[[settings]]
+id_label = "ST_RECENT_DIRECTORY"
+id = 47
+key = "OpenSave/RecentDirectory"
+default = "samples"
+type = "string"
+
+[[settings]]
+id_label = "ST_TRIM_DST_NUM_JUMPS"
+id = 48
+key = "OpenSave/TrimDstNumJumps"
+default = 5
+type = "integer"
+
+[[settings]]
+id_label = "ST_PRINTING_DEFAULT_DEVICE"
+id = 49
+key = "Printing/DefaultDevice"
+default = ""
+type = "string"
+
+[[settings]]
+id_label = "ST_PRINTING_USE_LAST_DEVICE"
+id = 50
+key = "Printing/UseLastDevice"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_PRINTING_DISABLE_BG"
+id = 51
+key = "Printing/DisableBG"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_GRID_SHOW_ON_LOAD"
+id = 52
+key = "Grid/ShowOnLoad"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_GRID_SHOW_ORIGIN"
+id = 53
+key = "Grid/ShowOrigin"
+default = true
+type = "boolean"
+
+[[settings]]
+# FIXME: override the grid color if this is true on load.
+id_label = "ST_GRID_COLOR_MATCH_CROSSHAIR"
+id = 54
+key = "Grid/ColorMatchCrossHair"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_GRID_COLOR"
+id = 55
+key = "Grid/Color"
+default = [0, 0, 0]
+type = "color"
+
+[[settings]]
+id_label = "ST_GRID_LOAD_FROM_FILE"
+id = 56
+key = "Grid/LoadFromFile"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_GRID_TYPE"
+id = 57
+key = "Grid/Type"
+default = "Rectangular"
+type = "string"
+
+[[settings]]
+id_label = "ST_GRID_CENTER_ON_ORIGIN"
+id = 58
+key = "Grid/CenterOnOrigin"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_GRID_CENTER_X"
+id = 59
+key = "Grid/CenterX"
+default = 0.0
+type = "real"
+
+[[settings]]
+id_label = "ST_GRID_CENTER_Y"
+id = 60
+key = "Grid/CenterY"
+default = 0.0
+type = "real"
+
+[[settings]]
+id_label = "ST_GRID_SIZE_X"
+id = 61
+key = "Grid/SizeX"
+default = 100.0
+type = "real"
+
+[[settings]]
+id_label = "ST_GRID_SIZE_Y"
+id = 62
+key = "Grid/SizeY"
+default = 100.0
+type = "real"
+
+[[settings]]
+id_label = "ST_GRID_SPACING_X"
+id = 63
+key = "Grid/SpacingX"
+default = 25.0
+type = "real"
+
+[[settings]]
+id_label = "ST_GRID_SPACING_Y"
+id = 64
+key = "Grid/SpacingY"
+default = 25.0
+type = "real"
+
+[[settings]]
+id_label = "ST_GRID_SIZE_RADIUS"
+id = 65
+key = "Grid/SizeRadius"
+default = 50.0
+type = "real"
+
+[[settings]]
+id_label = "ST_GRID_SPACING_RADIUS"
+id = 66
+key = "Grid/SpacingRadius"
+default = 25.0
+type = "real"
+
+[[settings]]
+id_label = "ST_GRID_SPACING_ANGLE"
+id = 67
+key = "Grid/SpacingAngle"
+default = 45.0
+type = "real"
+
+[[settings]]
+id_label = "ST_RULER_SHOW_ON_LOAD"
+id = 68
+key = "Ruler/ShowOnLoad"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_RULER_METRIC"
+id = 69
+key = "Ruler/Metric"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_RULER_COLOR"
+id = 70
+key = "Ruler/Color"
+default = [210, 210, 50]
+type = "color"
+
+[[settings]]
+id_label = "ST_RULER_PIXEL_SIZE"
+id = 71
+key = "Ruler/PixelSize"
+default = 20
+type = "integer"
+
+[[settings]]
+id_label = "ST_QSNAP_ENABLED"
+id = 72
+key = "QuickSnap/Enabled"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_QSNAP_LOCATOR_COLOR"
+id = 73
+key = "QuickSnap/LocatorColor"
+default = [255, 255, 0]
+type = "color"
+
+[[settings]]
+id_label = "ST_QSNAP_LOCATOR_SIZE"
+id = 74
+key = "QuickSnap/LocatorSize"
+default = 4
+type = "integer"
+
+[[settings]]
+id_label = "ST_QSNAP_APERTURE_SIZE"
+id = 75
+key = "QuickSnap/ApertureSize"
+default = 10
+type = "integer"
+
+[[settings]]
+id_label = "ST_QSNAP_ENDPOINT"
+id = 76
+key = "QuickSnap/EndPoint"
+default = true
+type = "boolean"
+description = "Endpoint"
+icon = "locator-snaptoendpoint"
+
+[[settings]]
+id_label = "ST_QSNAP_MIDPOINT"
+id = 77
+key = "QuickSnap/MidPoint"
+default = true
+type = "boolean"
+description = "Midpoint"
+icon = "locator-snaptomidpoint"
+
+[[settings]]
+id_label = "ST_QSNAP_CENTER"
+id = 78
+key = "QuickSnap/Center"
+default = true
+type = "boolean"
+description = "Center"
+icon = "locator-snaptocenter"
+
+[[settings]]
+id_label = "ST_QSNAP_NODE"
+id = 79
+key = "QuickSnap/Node"
+default = true
+type = "boolean"
+description = "Node"
+icon = "locator-snaptonode"
+
+[[settings]]
+id_label = "ST_QSNAP_QUADRANT"
+id = 80
+key = "QuickSnap/Quadrant"
+default = true
+type = "boolean"
+description = "Quadrant"
+icon = "locator-snaptoquadrant"
+
+[[settings]]
+id_label = "ST_QSNAP_INTERSECTION"
+id = 81
+key = "QuickSnap/Intersection"
+default = true
+type = "boolean"
+description = "Intersection"
+icon = "locator-snaptointersection"
+
+[[settings]]
+id_label = "ST_QSNAP_EXTENSION"
+id = 82
+key = "QuickSnap/Extension"
+default = true
+type = "boolean"
+description = "Extension"
+icon = "locator-snaptoextension"
+
+[[settings]]
+id_label = "ST_QSNAP_INSERTION"
+id = 83
+key = "QuickSnap/Insertion"
+default = false
+type = "boolean"
+description = "Insertion"
+icon = "locator-snaptoinsertion"
+
+[[settings]]
+id_label = "ST_QSNAP_PERPENDICULAR"
+id = 84
+key = "QuickSnap/Perpendicular"
+default = true
+type = "boolean"
+description = "Perpendicular"
+icon = "locator-snaptoperpendicular"
+
+[[settings]]
+id_label = "ST_QSNAP_TANGENT"
+id = 85
+key = "QuickSnap/Tangent"
+default = true
+type = "boolean"
+description = "Tangent"
+icon = "locator-snaptotangent"
+
+[[settings]]
+id_label = "ST_QSNAP_NEAREST"
+id = 86
+key = "QuickSnap/Nearest"
+default = false
+type = "boolean"
+description = "Nearest"
+icon = "locator-snaptonearest"
+
+[[settings]]
+id_label = "ST_QSNAP_APPARENT"
+id = 87
+key = "QuickSnap/Apparent"
+default = false
+type = "boolean"
+description = "Apparent Intersection"
+icon = "locator-snaptoapparent"
+
+[[settings]]
+id_label = "ST_QSNAP_PARALLEL"
+id = 88
+key = "QuickSnap/Parallel"
+default = false
+type = "boolean"
+description = "Parallel"
+icon = "locator-snaptoparallel"
+
+[[settings]]
+id_label = "ST_LWT_SHOW_LWT"
+id = 89
+key = "LineWeight/ShowLineWeight"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_LWT_REAL_RENDER"
+id = 90
+key = "LineWeight/RealRender"
+default = true
+type = "boolean"
+
+[[settings]]
+id_label = "ST_LWT_DEFAULT_LWT"
+id = 91
+key = "LineWeight/DefaultLineWeight"
+default = 0
+type = "integer"
+
+[[settings]]
+id_label = "ST_SELECTION_MODE_PICKFIRST"
+id = 92
+key = "Selection/PickFirst"
+default = true
+type = "boolean"
+description = "Allow Preselection (PickFirst)"
+# TODO: Remove this line when Post-selection is available
+enabled = false
+
+[[settings]]
+id_label = "ST_SELECTION_MODE_PICKADD"
+id = 93
+key = "Selection/PickAdd"
+default = true
+type = "boolean"
+description = "Add to Selection (PickAdd)"
+
+[[settings]]
+id_label = "ST_SELECTION_MODE_PICKDRAG"
+id = 94
+key = "Selection/PickDrag"
+default = false
+type = "boolean"
+description = "Drag to Select (PickDrag)"
+# TODO: Remove this line when available
+enabled = false
+
+[[settings]]
+id_label = "ST_SELECTION_COOLGRIP_COLOR"
+id = 95
+key = "Selection/CoolGripColor"
+default = [0, 0, 255]
+type = "color"
+
+[[settings]]
+id_label = "ST_SELECTION_HOTGRIP_COLOR"
+id = 96
+key = "Selection/HotGripColor"
+default = [255, 0, 0]
+type = "color"
+
+[[settings]]
+id_label = "ST_SELECTION_GRIP_SIZE"
+id = 97
+key = "Selection/GripSize"
+default = 4
+type = "integer"
+
+[[settings]]
+id_label = "ST_SELECTION_PICKBOX_SIZE"
+id = 98
+key = "Selection/PickBoxSize"
+default = 4
+type = "integer"
+
+[[settings]]
+id_label = "ST_TEXT_FONT"
+id = 99
+key = "Text/Font"
+default = "Arial"
+type = "string"
+
+[[settings]]
+id_label = "ST_TEXT_SIZE"
+id = 100
+key = "Text/Size"
+default = 12
+type = "integer"
+
+[[settings]]
+id_label = "ST_TEXT_ANGLE"
+id = 101
+key = "Text/Angle"
+default = 0.0
+type = "real"
+
+[[settings]]
+id_label = "ST_TEXT_BOLD"
+id = 102
+key = "Text/StyleBold"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_TEXT_ITALIC"
+id = 103
+key = "Text/StyleItalic"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_TEXT_UNDERLINE"
+id = 104
+key = "Text/StyleUnderline"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_TEXT_OVERLINE"
+id = 105
+key = "Text/StyleOverline"
+default = false
+type = "boolean"
+
+[[settings]]
+id_label = "ST_TEXT_STRIKEOUT"
+id = 106
+key = "Text/StyleStrikeOut"
+default = false
+type = "boolean"
 
 [[menus]]
 label = "&File"

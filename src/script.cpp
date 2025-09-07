@@ -40,6 +40,7 @@ std::vector<Command> command_map;
 std::vector<ToolbarData> toolbar_table;
 std::vector<MenuData> menu_table;
 std::unordered_map<std::string, StringList> string_tables;
+SettingsData st[N_SETTINGS];
 
 #if __cplusplus
 extern "C" {
@@ -1794,8 +1795,8 @@ preview_on_f(lua_State *L)
         return 0;
     }
 
-    QString cloneStr = args[0].s.toUpper();
-    QString modeStr = args[1].s.toUpper();
+    QString cloneStr = QString(args[0].s.c_str()).toUpper();
+    QString modeStr = QString(args[1].s.c_str()).toUpper();
     double x = args[2].r;
     double y = args[3].r;
     double data = args[4].r;
@@ -1913,7 +1914,7 @@ text_single_f(lua_State *L)
         return 0;
     }
 
-    QString str = args[0].s;
+    QString str = args[0].s.c_str();
     double x = args[1].r;
     double y = args[2].r;
     double rot = args[3].r;
@@ -1931,7 +1932,7 @@ text_multi_f(lua_State *L)
         return 0;
     }
 
-    QString str = args[0].s;
+    QString str = args[0].s.c_str();
     double x = args[1].r;
     double y = args[2].r;
     double rot = args[3].r;
@@ -2004,7 +2005,7 @@ set_color_f(lua_State *L)
     if (!unpack_args(L, "set_color_f", args, "srrr")) {
         return 0;
     }
-    QString key = args[0].s;
+    QString key = args[0].s.c_str();
     double r = args[1].r;
     double g = args[2].r;
     double b = args[3].r;
@@ -2120,8 +2121,8 @@ set_rubber_text_f(lua_State *L)
     if (!unpack_args(L, "set_rubber_text_f", args, "ss")) {
         return 0;
     }
-    QString key = args[0].s.toUpper();
-    QString txt = args[1].s;
+    QString key = QString(args[0].s.c_str()).toUpper();
+    QString txt = args[1].s.c_str();
 
     View* gview = activeView();
     if (gview) {
@@ -2224,7 +2225,7 @@ alert_f(lua_State *L)
     if (!unpack_args(L, "alert_f", args, "s")) {
         return 0;
     }
-    prompt->alert(args[0].s);
+    prompt->alert(args[0].s.c_str());
     return 0;
 }
 
@@ -2237,7 +2238,7 @@ append_prompt_history_f(lua_State *L)
     if (!unpack_args(L, "append_prompt_history_f", args, "s")) {
         return 0;
     }
-    prompt->appendHistory(args[0].s);
+    prompt->appendHistory(args[0].s.c_str());
     return 0;
 }
 
@@ -2275,7 +2276,8 @@ error_f(lua_State *L)
         return 0;
     }
 
-    prompt->setPrefix("ERROR: (" + args[0].s + ") " + args[1].s);
+    String msg = "ERROR: (" + args[0].s + ") " + args[1].s;
+    prompt->setPrefix(QString(msg.c_str()));
     prompt->appendHistory(QString());
     end_command();
     return 0;
@@ -2975,6 +2977,7 @@ set_text_underline_f(lua_State *L)
 int
 settings_dialog_f(lua_State *L)
 {
+    _mainWin->settingsDialog("General");
     return 0;
 }
 
@@ -3376,7 +3379,7 @@ spare_rubber_f(lua_State *L)
         return 0;
     }
 
-    QString objID = args[0].s.toUpper();
+    QString objID = QString(args[0].s.c_str()).toUpper();
 
     if (objID == "PATH") {
         _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);
@@ -3664,7 +3667,7 @@ set_cursor_shape_f(lua_State *L)
         return 0;
     }
 
-    QString shape = args[0].s;
+    QString shape = args[0].s.c_str();
     _mainWin->nativeSetCursorShape(shape);
     return 0;
 }
@@ -3980,6 +3983,47 @@ script_env_boot(void)
         data.entries = get_toml_string_table(current, "entries");
 
         toolbar_table.push_back(data);
+    }
+
+    auto settings_table = data.at("settings").as_array();
+    for (size_t i=0; i<settings_table.size(); i++) {
+        auto current = settings_table.at(i);
+
+        int id = current.at("id").as_integer();
+        st[id].key = qPrintable(get_toml_string(current, "key"));
+        st[id].type = qPrintable(get_toml_string(current, "type"));
+        st[id].description = qPrintable(get_toml_string(current, "description"));
+        if (current.contains("enabled")) {
+            st[id].enabled = current.at("enabled").as_boolean();
+        }
+        else {
+            st[id].enabled = true;
+        }
+        char type_ = st[id].type.c_str()[0];
+        switch (type_) {
+        case 's':
+            st[id].value.s = qPrintable(get_toml_string(current, "default"));
+            break;
+        case 'i':
+            st[id].value.i = current.at("default").as_integer();
+            break;
+        case 'c': {
+            auto color_array = current.at("default").as_array();
+            st[id].value.u = 256*256*color_array.at(0).as_integer();
+            st[id].value.u += 256*color_array.at(1).as_integer();
+            st[id].value.u += color_array.at(2).as_integer();
+            break;
+        }
+        case 'r':
+            st[id].value.r = current.at("default").as_floating();
+            break;
+        case 'b':
+            st[id].value.r = current.at("default").as_boolean();
+            break;
+        default:
+            qDebug("ERROR: unknown settings type starting with the character %c.", type_);
+            break;
+        }
     }
 
     StringList string_table_list = get_toml_string_table(data, "string_tables");

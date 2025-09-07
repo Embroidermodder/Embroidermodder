@@ -64,7 +64,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/layer-manager.cpp
 	${SRC}/main.cpp
 	${SRC}/mainwindow.cpp
-	${SRC}/mainwindow-settings.cpp
 	${SRC}/mdiarea.cpp
 	${SRC}/mdiwindow.cpp
 	${SRC}/object-arc.cpp

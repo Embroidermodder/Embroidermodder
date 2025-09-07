@@ -154,6 +154,33 @@ class StatusBar;
 class StatusBarButton;
 class UndoEditor;
 
+/* ---- C++ Typedefs -------------------------------------------------------- */
+typedef std::string String;
+typedef std::vector<std::string> StringList;
+
+typedef struct ScriptValue_ {
+    String s;
+    int32_t i;
+    uint32_t u;
+    double r;
+    bool b;
+} ScriptValue;
+
+typedef struct SettingsData_ {
+    String key;
+    ScriptValue value;
+    ScriptValue accept;
+    ScriptValue dialog;
+    ScriptValue preview;
+    String type;
+    bool enabled;
+    String description;
+    String icon;
+    double lower;
+    double upper;
+    double single_step;
+} SettingsData;
+
 /* ---- Function declarations (that aren't in a class) ---------------------- */
 bool script_env_boot(void);
 void script_env_free(void);
@@ -177,8 +204,6 @@ extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
 
 /* ---- Class declarations -------------------------------------------------- */
-typedef std::vector<std::string> StringList;
-
 class ToolbarData
 {
 public:
@@ -204,14 +229,6 @@ typedef struct Command_ {
     QString macos;
     unsigned char checkable;
 } Command;
-
-typedef struct ScriptValue_ {
-    QString s;
-    int32_t i;
-    uint32_t u;
-    double r;
-    bool b;
-} ScriptValue;
 
 class CmdPromptInput : public QLineEdit
 {
