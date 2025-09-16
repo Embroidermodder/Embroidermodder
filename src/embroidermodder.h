@@ -16,6 +16,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QBrush>
+#include <QBasicTimer>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QCloseEvent>
@@ -592,8 +593,11 @@ public:
     ~MainWindow();
 
     QPrinter printer;
+    QBasicTimer timer;
 
-    void run_command(int id, ...);
+    void timerEvent(QTimerEvent *);
+
+    void run_command(int id, ScriptValue *args=NULL, int n_args=0);
 
     void setUndoCleanIcon(bool opened);
 
@@ -697,12 +701,9 @@ public slots:
     void runCommandContext(const QString& cmd, const QString& str);
     void runCommandPrompt(const QString& cmd, const QString& str);
 
-    void newFile();
     void openFile(bool recent = false, const QString& recentFile = "");
     void openFilesSelected(const QStringList&);
     void openrecentfile();
-    void savefile();
-    void saveasfile();
     // Help Menu
     void tipOfTheDay();
     void buttonTipOfTheDayClicked(int);

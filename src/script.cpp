@@ -25,6 +25,9 @@
  *
  * TODO: inline all MainWindow native functions, replace MainWindow calls that
  * can be lua registerable functions.
+ *
+ * TODO: convert more lua registerables to core commands and keep cmd_f as
+ * the interface for scripts to these commands
  */
 
 #include "embroidermodder.h"
@@ -54,7 +57,6 @@ int append_prompt_history_f(lua_State *L);
 int blink_f(lua_State *L);
 int calculate_angle_f(lua_State *L);
 int calculate_distance_f(lua_State *L);
-int changelog_f(lua_State *L);
 int circle_f(lua_State *L);
 int clear_rubber_f(lua_State *L);
 int clear_selection_f(lua_State *L);
@@ -102,16 +104,9 @@ int mirror_selected_f(lua_State *L);
 int mouse_f(lua_State *L);
 int move_f(lua_State *L);
 int move_selected_f(lua_State *L);
-int new_file_f(lua_State *L);
 int night_vision_f(lua_State *L);
 int num_selected_f(lua_State *L);
 int open_file_f(lua_State *L);
-int pan_down_f(lua_State *L);
-int pan_left_f(lua_State *L);
-int pan_point_f(lua_State *L);
-int pan_real_time_f(lua_State *L);
-int pan_right_f(lua_State *L);
-int pan_up_f(lua_State *L);
 int paste_selected_f(lua_State *L);
 int path_f(lua_State *L);
 int perpendicular_distance_f(lua_State *L);
@@ -177,23 +172,6 @@ int unlock_all_layers_f(lua_State *L);
 int vertical_dimension_f(lua_State *L);
 int vulcanize_f(lua_State *L);
 int whats_this_f(lua_State *L);
-int window_cascade_f(lua_State *L);
-int window_close_all_f(lua_State *L);
-int window_close_f(lua_State *L);
-int window_next_f(lua_State *L);
-int window_previous_f(lua_State *L);
-int window_tile_f(lua_State *L);
-int zoom_all_f(lua_State *L);
-int zoom_center_f(lua_State *L);
-int zoom_dynamic_f(lua_State *L);
-int zoom_extents_f(lua_State *L);
-int zoom_in_f(lua_State *L);
-int zoom_out_f(lua_State *L);
-int zoom_previous_f(lua_State *L);
-int zoom_real_time_f(lua_State *L);
-int zoom_scale_f(lua_State *L);
-int zoom_selected_f(lua_State *L);
-int zoom_window_f(lua_State *L);
 
 #if __cplusplus
 }
@@ -226,7 +204,6 @@ luaL_Reg lua_registerables[] = {
     {"blink", blink_f},
     {"calculate_angle", calculate_angle_f},
     {"calculate_distance", calculate_distance_f},
-    {"changelog", changelog_f},
     {"circle", circle_f},
     {"clear_rubber", clear_rubber_f},
     {"clear_selection", clear_selection_f},
@@ -274,16 +251,9 @@ luaL_Reg lua_registerables[] = {
     {"mouse", mouse_f},
     {"move", move_f},
     {"move_selected", move_selected_f},
-    {"new_file", new_file_f},
     {"night_vision", night_vision_f},
     {"num_selected", num_selected_f},
     {"open_file", open_file_f},
-    {"pan_down", pan_down_f},
-    {"pan_left", pan_left_f},
-    {"pan_point", pan_point_f},
-    {"pan_real_time", pan_real_time_f},
-    {"pan_right", pan_right_f},
-    {"pan_up", pan_up_f},
     {"paste_selected", paste_selected_f},
     {"path", path_f},
     {"perpendicular_distance", perpendicular_distance_f},
@@ -349,23 +319,6 @@ luaL_Reg lua_registerables[] = {
     {"vertical_dimension", vertical_dimension_f},
     {"vulcanize", vulcanize_f},
     {"whats_this", whats_this_f},
-    {"window_cascade", window_cascade_f},
-    {"window_close_all", window_close_all_f},
-    {"window_close", window_close_f},
-    {"window_next", window_next_f},
-    {"window_previous", window_previous_f},
-    {"window_tile", window_tile_f},
-    {"zoom_all", zoom_all_f},
-    {"zoom_center", zoom_center_f},
-    {"zoom_dynamic", zoom_dynamic_f},
-    {"zoom_extents", zoom_extents_f},
-    {"zoom_in", zoom_in_f},
-    {"zoom_out", zoom_out_f},
-    {"zoom_previous", zoom_previous_f},
-    {"zoom_real_time", zoom_real_time_f},
-    {"zoom_scale", zoom_scale_f},
-    {"zoom_selected", zoom_selected_f},
-    {"zoom_window", zoom_window_f},
     {NULL, NULL}
 };
 
@@ -568,10 +521,11 @@ void MainWindow::tipOfTheDay()
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if (st[ST_CURRENT_TIP].i >= listTipOfTheDay.size()) {
+    StringList tip_list = string_tables["tips"];
+    if (st[ST_CURRENT_TIP].i >= tip_list.size()) {
         st[ST_CURRENT_TIP].i = 0;
     }
-    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(st[ST_CURRENT_TIP].i), wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(tip_list[st[ST_CURRENT_TIP].i].c_str(), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
@@ -615,21 +569,22 @@ void MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 void MainWindow::buttonTipOfTheDayClicked(int button)
 {
     qDebug("buttonTipOfTheDayClicked(%d)", button);
+    StringList tip_list = string_tables["tips"];
     if (button == QWizard::CustomButton1) {
         if (st[ST_CURRENT_TIP].i > 0) {
             st[ST_CURRENT_TIP].i--;
         }
         else {
-            st[ST_CURRENT_TIP].i = listTipOfTheDay.size()-1;
+            st[ST_CURRENT_TIP].i = tip_list.size() - 1;
         }
-        labelTipOfTheDay->setText(listTipOfTheDay.value(st[ST_CURRENT_TIP].i));
+        labelTipOfTheDay->setText(tip_list[st[ST_CURRENT_TIP].i].c_str());
     }
     else if(button == QWizard::CustomButton2) {
         st[ST_CURRENT_TIP].i++;
-        if (st[ST_CURRENT_TIP].i >= listTipOfTheDay.size()) {
+        if (st[ST_CURRENT_TIP].i >= tip_list.size()) {
             st[ST_CURRENT_TIP].i = 0;
         }
-        labelTipOfTheDay->setText(listTipOfTheDay.value(st[ST_CURRENT_TIP].i));
+        labelTipOfTheDay->setText(tip_list[st[ST_CURRENT_TIP].i].c_str());
     }
     else if(button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
@@ -889,7 +844,9 @@ void MainWindow::logPromptInput(const QString& txt)
 void MainWindow::promptInputPrevious()
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if(mdiWin) mdiWin->promptInputPrevious();
+    if (mdiWin) {
+        mdiWin->promptInputPrevious();
+    }
 }
 
 void MainWindow::promptInputNext()
@@ -1716,7 +1673,7 @@ int
 cmd_f(lua_State *L)
 {
     ScriptValue args[2];
-    if (!unpack_args(L, "run_f", args, "s")) {
+    if (!unpack_args(L, "cmd_f", args, "s")) {
         return 0;
     }
     if (context_flag == CONTEXT_MAIN) {
@@ -2152,14 +2109,6 @@ report_state_f(lua_State *L)
     return 0;
 }
 
-/* . */
-int
-changelog_f(lua_State *L)
-{
-    no_args(L);
-    return 0;
-}
-
 /* TODO: circle fill. */
 int
 circle_f(lua_State *L)
@@ -2446,14 +2395,6 @@ move_f(lua_State *L)
     return 0;
 }
 
-/* . */
-int
-new_file_f(lua_State *L)
-{
-    _mainWin->newFile();
-    return 0;
-}
-
 /* TODO: Make night vision color settings. */
 int
 night_vision_f(lua_State *L)
@@ -2533,96 +2474,6 @@ selectall_f(lua_State *L)
 int
 singlelinetext_f(lua_State *L)
 {
-    return 0;
-}
-
-/* Moves the view down. */
-int
-pan_down_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-    }
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
-        stack->push(cmd);
-    }
-    end_command();
-    return 0;
-}
-
-/* Moves the view to the left. */
-int
-pan_left_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-    }
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
-        stack->push(cmd);
-    }
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-pan_point_f(lua_State *L)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->panPoint();
-    }
-    return 0;
-}
-
-/* . */
-int
-pan_real_time_f(lua_State *L)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->panRealTime();
-    }
-    return 0;
-}
-
-/* Moves the view to the right. */
-int
-pan_right_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-    }
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
-        stack->push(cmd);
-    }
-    end_command();
-    return 0;
-}
-
-/* Moves the view up. */
-int
-pan_up_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-    }
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
-        stack->push(cmd);
-    }
-    end_command();
     return 0;
 }
 
@@ -2825,201 +2676,6 @@ unlock_all_layers_f(lua_State *L)
 int
 whats_this_f(lua_State *L)
 {
-    return 0;
-}
-
-/* . */
-int
-window_cascade_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    mdiArea->cascade();
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-window_close_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->onCloseWindow();
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-window_close_all_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    mdiArea->closeAllSubWindows();
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-window_next_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    mdiArea->activateNextSubWindow();
-    end_command();
-    return 0;
-}
-
-int
-window_previous_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    mdiArea->activatePreviousSubWindow();
-    end_command();
-    return 0;
-}
-
-int
-window_tile_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    mdiArea->tile();
-    end_command();
-    return 0;
-}
-
-int
-zoom_all_f(lua_State *L)
-{
-    stub_implement("Implement zoomAll.");
-    return 0;
-}
-
-int
-zoom_center_f(lua_State *L)
-{
-    stub_implement("Implement zoomCenter.");
-    return 0;
-}
-
-int
-zoom_dynamic_f(lua_State *L)
-{
-    stub_implement("Implement zoomDynamic.");
-    return 0;
-}
-
-/* Zooms to display the drawing extents. */
-int
-zoom_extents_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
-        stack->push(cmd);
-    }
-    end_command();
-    return 0;
-}
-
-/* Zooms to increase the apparent size of objects. */
-int
-zoom_in_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomIn();
-    }
-    end_command();
-    return 0;
-}
-
-/* Zooms to decrease the apparent size of objects. */
-int
-zoom_out_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomOut();
-    }
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-zoom_scale_f(lua_State *L)
-{
-    stub_implement("Implement zoomScale.");
-    return 0;
-}
-
-/* . */
-int
-zoom_previous_f(lua_State *L)
-{
-    stub_implement("Implement zoomPrevious.");
-    return 0;
-}
-
-/* . */
-int
-zoom_real_time_f(lua_State *L)
-{
-    stub_implement("Implement zoomRealtime.");
-    return 0;
-}
-
-/* . */
-int
-zoom_selected_f(lua_State *L)
-{
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
-        stack->push(cmd);
-    }
-    return 0;
-}
-
-/* . */
-int
-zoom_window_f(lua_State *L)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomWindow();
-    }
     return 0;
 }
 

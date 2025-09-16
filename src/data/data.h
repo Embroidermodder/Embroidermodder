@@ -26,6 +26,9 @@ extern "C" {
 
 #include <stdbool.h>
 
+/* FIXME: this needs changing in libembroidery. */
+#undef N_COMMANDS
+
 /* Command IDs: for faster internal calls of CAD commands
  * (see the switch table in command.cpp).
  */
@@ -51,6 +54,36 @@ extern "C" {
 #define CMD_ICON48                    19
 #define CMD_ICON64                    20
 #define CMD_ICON128                   21
+#define CMD_PLAY                      22
+#define CMD_SLEEP                     23
+#define CMD_NEW                       24
+#define CMD_OPEN                      25
+#define CMD_SAVE                      26
+#define CMD_SAVE_AS                   27
+#define CMD_PAN_LEFT                  28
+#define CMD_PAN_DOWN                  29
+#define CMD_PAN_RIGHT                 30
+#define CMD_PAN_UP                    31
+#define CMD_PAN_POINT                 32
+#define CMD_PAN_REAL_TIME             33
+#define CMD_WINDOW_CASCADE            34
+#define CMD_WINDOW_CLOSE_ALL          35
+#define CMD_WINDOW_CLOSE              36
+#define CMD_WINDOW_NEXT               37
+#define CMD_WINDOW_PREVIOUS           38
+#define CMD_WINDOW_TILE               39
+#define CMD_ZOOM_ALL                  40
+#define CMD_ZOOM_CENTER               41
+#define CMD_ZOOM_DYNAMIC              42
+#define CMD_ZOOM_EXTENTS              43
+#define CMD_ZOOM_IN                   44
+#define CMD_ZOOM_OUT                  45
+#define CMD_ZOOM_PREVIOUS             46
+#define CMD_ZOOM_REAL_TIME            47
+#define CMD_ZOOM_SCALE                48
+#define CMD_ZOOM_SELECTED             49
+#define CMD_ZOOM_WINDOW               50
+#define N_COMMANDS                    51
 #define MAX_COMMANDS                 100
 
 /* Contexts for Lua calls */
@@ -410,7 +443,12 @@ typedef struct SettingsData_ {
     double single_step;
 } SettingsData;
 
+extern bool testing;
+extern int test_script_pos;
+extern char test_script[200][200];
+
 extern const char *command_names[MAX_COMMANDS];
+
 extern const SettingsData settings_table[N_SETTINGS];
 
 #ifdef __cplusplus

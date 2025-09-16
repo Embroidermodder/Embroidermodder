@@ -36,10 +36,17 @@
 
 #include "embroidermodder.h"
 
+#include <chrono>
+#include <thread>
+
 #define KEY_SHORTCUT(F, CMD) \
     connect(prompt, SIGNAL(F()), this, SLOT([=]() { run_command(CMD); }))
     
+using namespace std::chrono_literals;
+
 int debug = 1;
+bool testing = false;
+int test_script_pos = 0;
 
 QMenu* fileMenu;
 QMenu* editMenu;
@@ -66,10 +73,12 @@ std::unordered_map<std::string, StringList> string_tables;
 QString formatFilterOpen;
 QString formatFilterSave;
 
+int play_mode;
+
 int
 get_cmd_id(const char *cmd)
 {
-    for (int i=0; command_names[i][0] != '_'; i++) {
+    for (int i=0; i<N_COMMANDS; i++) {
         if (!strncmp(command_names[i], cmd, 50)) {
             return i;
         }
@@ -81,13 +90,20 @@ get_cmd_id(const char *cmd)
  * overhead would be present for every core command issued and individual commands
  * may consist of thousands of core command calls.
  *
+ * Wrappers like runCommandMain and cmd_f can add manage the interface state with before
+ * calling this function so we don't check that, for example, the clipboard is
+ * empty before entering the switch table.
+ *
+ * If the body of the entry for a case is more than a dozen lines or so, then
+ * it is worth making it a seperate function just to reduce indentation.
+ *
  * WARNING: note that this does not perform type checking. This is performed
  * on lua style functions, but we either assume that the runCommand* family of functions
  * has vetted the data before it gets to this point or it is the caller's
  * responsibility to get it right within a C++ function.
  */
 void
-MainWindow::run_command(int id, ...)
+MainWindow::run_command(int id, ScriptValue *args, int n_args)
 {
     if (id > MAX_COMMANDS) {
         qDebug("ERROR: unrecognised command id.");
@@ -284,6 +300,244 @@ MainWindow::run_command(int id, ...)
         break;
     }
 
+    case CMD_PLAY: {
+        play_mode = 1;
+        break;
+    }
+
+    case CMD_SLEEP: {
+        std::this_thread::sleep_for(1000ms);
+        break;
+    }
+
+    case CMD_NEW: {
+        docIndex++;
+        numOfDocs++;
+        MdiWindow* mdiWin = new MdiWindow(docIndex, _mainWin, mdiArea, Qt::SubWindow);
+        connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this,
+            SLOT(onCloseMdiWin(MdiWindow*)));
+        connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this,
+            SLOT(onWindowActivated(QMdiSubWindow*)));
+
+        updateMenuToolbarStatusbar();
+        windowMenuAboutToShow();
+
+        View* v = mdiWin->getView();
+        if (v) {
+            v->recalculateLimits();
+            v->zoomExtents();
+        }
+        break;
+    }
+
+    case CMD_OPEN: {
+        /* FIXME */
+        break;
+    }
+
+    case CMD_SAVE: {
+        /* FIXME */
+        break;
+    }
+
+    case CMD_SAVE_AS: {
+        /* need to find the activeSubWindow before it loses focus to the FileDialog. */
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+        if (!mdiWin) {
+            return;
+        }
+
+        openFilesPath = st[ST_RECENT_DIRECTORY].s.c_str();
+        QString file = QFileDialog::getSaveFileName(this, tr("Save As"),
+            openFilesPath, formatFilterSave);
+
+        mdiWin->saveFile(file);
+        break;
+    }
+
+    /* Moves the view to the left. */
+    case CMD_PAN_LEFT: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+
+    /* Moves the view down. */
+    case CMD_PAN_DOWN: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+
+    /* Moves the view to the right. */
+    case CMD_PAN_RIGHT: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+
+    /* Moves the view up. */
+    case CMD_PAN_UP: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+
+    /* . */
+    case CMD_PAN_POINT: {
+        View* gview = activeView();
+        if (gview) {
+            gview->panPoint();
+        }
+        break;
+    }
+
+    /* . */
+    case CMD_PAN_REAL_TIME: {
+        View* gview = activeView();
+        if (gview) {
+            gview->panRealTime();
+        }
+        break;
+    }
+
+    /* . */
+    case CMD_WINDOW_CASCADE: {
+        mdiArea->cascade();
+        break;
+    }
+
+    /* . */
+    case CMD_WINDOW_CLOSE: {
+        _mainWin->onCloseWindow();
+        break;
+    }
+
+    /* . */
+    case CMD_WINDOW_CLOSE_ALL: {
+        mdiArea->closeAllSubWindows();
+        break;
+    }
+
+    /* . */
+    case CMD_WINDOW_NEXT: {
+        mdiArea->activateNextSubWindow();
+        break;
+    }
+
+    /* . */
+    case CMD_WINDOW_PREVIOUS: {
+        mdiArea->activatePreviousSubWindow();
+        break;
+    }
+
+    /* . */
+    case CMD_WINDOW_TILE: {
+        mdiArea->tile();
+        break;
+    }
+
+    /* . */
+    case CMD_ZOOM_ALL: {
+        qDebug("TODO: Implement zoomAll.");
+        break;
+    }
+
+    /* . */
+    case CMD_ZOOM_CENTER: {
+        qDebug("TODO: Implement zoomCenter.");
+        break;
+    }
+
+    /* . */
+    case CMD_ZOOM_DYNAMIC: {
+        qDebug("TODO: Implement zoomDynamic.");
+        break;
+    }
+
+    /* Zooms to display the drawing extents. */
+    case CMD_ZOOM_EXTENTS: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+
+    /* Zooms to increase the apparent size of objects. */
+    case CMD_ZOOM_IN: {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomIn();
+        }
+        break;
+    }
+
+    /* Zooms to decrease the apparent size of objects. */
+    case CMD_ZOOM_OUT: {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomOut();
+        }
+        break;
+    }
+
+    /* . */
+    case CMD_ZOOM_SCALE: {
+        qDebug("TODO: Implement zoomScale.");
+        break;
+    }
+
+    /* . */
+    case CMD_ZOOM_PREVIOUS: {
+        qDebug("TODO: Implement zoomPrevious.");
+        break;
+    }
+
+    /* . */
+    case CMD_ZOOM_REAL_TIME: {
+        qDebug("TODO: Implement zoomRealtime.");
+        break;
+    }
+
+    /* . */
+    case CMD_ZOOM_SELECTED: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+
+    /* . */
+    case CMD_ZOOM_WINDOW: {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomWindow();
+        }
+        break;
+    }
+
     default:
         printf("ERROR: unrecognised command id %d\n", id);
         break;
@@ -333,15 +587,15 @@ MainWindow::MainWindow() : QMainWindow(0)
     qApp->installTranslator(&translatorQt);
 
     //Menus
-    fileMenu     = new QMenu(tr("&File"), this);
-    editMenu     = new QMenu(tr("&Edit"), this);
-    viewMenu     = new QMenu(tr("&View"), this);
-    windowMenu   = new QMenu(tr("&Window"), this);
-    helpMenu     = new QMenu(tr("&Help"), this);
+    fileMenu = new QMenu(tr("&File"), this);
+    editMenu = new QMenu(tr("&Edit"), this);
+    viewMenu = new QMenu(tr("&View"), this);
+    windowMenu = new QMenu(tr("&Window"), this);
+    helpMenu = new QMenu(tr("&Help"), this);
     //SubMenus
-    recentMenu   = new QMenu(tr("Open &Recent"), this);
-    zoomMenu     = new QMenu(tr("&Zoom"), this);
-    panMenu      = new QMenu(tr("&Pan"), this);
+    recentMenu = new QMenu(tr("Open &Recent"), this);
+    zoomMenu = new QMenu(tr("&Zoom"), this);
+    panMenu = new QMenu(tr("&Pan"), this);
 
     //Toolbars
     toolbarHash["FILE"] = addToolBar(tr("File"));
@@ -466,26 +720,17 @@ MainWindow::MainWindow() : QMainWindow(0)
     iconResize(st[ST_ICON_SIZE].i);
     updateMenuToolbarStatusbar();
 
-    //Show date in statusbar after it has been updated
+    /* Show date in statusbar after it has been updated. */
     QDate date = QDate::currentDate();
     QString datestr = date.toString("MMMM d, yyyy");
     statusbar->showMessage(datestr);
 
     showNormal();
 
-    /* Load tips from external file */
-    QFile tipFile(appDir + "/docs/tips.txt");
-    if (tipFile.open(QFile::ReadOnly)) {
-        QTextStream stream(&tipFile);
-        QString tipLine;
-        do {
-            tipLine = stream.readLine();
-            if (!tipLine.isEmpty()) {
-                listTipOfTheDay << tipLine;
-            }
-        } while(!tipLine.isNull());
-    }
-    if (st[ST_TIP_OF_THE_DAY].b) {
+    /* Run updates at around 60fps. */
+    timer.start(12, this);
+
+    if (st[ST_TIP_OF_THE_DAY].b && (!testing)) {
         tipOfTheDay();
     }
 }
@@ -496,9 +741,32 @@ MainWindow::~MainWindow()
 
     script_env_free();
 
-    //Prevent memory leaks by deleting any unpasted objects
+    /* Prevent memory leaks by deleting any unpasted objects. */
     qDeleteAll(clipboard.begin(), clipboard.end());
     clipboard.clear();
+}
+
+/* Allows us to run test scripts and animations. */
+void
+MainWindow::timerEvent(QTimerEvent *)
+{
+    if (testing) {
+        StringList test_script = string_tables["test_script"];
+        if (test_script_pos < test_script.size()) {
+            int id = get_cmd_id(test_script[test_script_pos].c_str());
+            if (id >= 0) {
+                run_command(id);
+                run_command(CMD_SLEEP);
+            }
+            else {
+                qDebug("ERROR: failed to find command \"%s\".",
+                    test_script[test_script_pos].c_str());
+            }
+            test_script_pos++;
+        }
+    }
+
+    update();
 }
 
 void MainWindow::recentMenuAboutToShow()
@@ -567,30 +835,11 @@ void MainWindow::windowMenuActivated(bool checked)
 {
     qDebug("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
-    if(!aSender)
+    if (!aSender)
         return;
     QWidget* w = mdiArea->subWindowList().at(aSender->data().toInt());
-    if(w && checked)
+    if (w && checked)
         w->setFocus();
-}
-
-void MainWindow::newFile()
-{
-    qDebug("MainWindow::newFile()");
-    docIndex++;
-    numOfDocs++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, _mainWin, mdiArea, Qt::SubWindow);
-    connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
-    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
-
-    updateMenuToolbarStatusbar();
-    windowMenuAboutToShow();
-
-    View* v = mdiWin->getView();
-    if(v) {
-        v->recalculateLimits();
-        v->zoomExtents();
-    }
 }
 
 void MainWindow::openFile(bool recent, const QString& recentFile)
@@ -690,27 +939,6 @@ void MainWindow::openrecentfile()
     if(recentSender) {
         openFile(true, recentSender->data().toString());
     }
-}
-
-void MainWindow::savefile()
-{
-    qDebug("MainWindow::savefile()");
-}
-
-void MainWindow::saveasfile()
-{
-    qDebug("MainWindow::saveasfile()");
-    // need to find the activeSubWindow before it loses focus to the FileDialog
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (!mdiWin) {
-        return;
-    }
-
-    QString file;
-    openFilesPath = st[ST_RECENT_DIRECTORY].s.c_str();
-    file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
-
-    mdiWin->saveFile(file);
 }
 
 QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
