@@ -78,33 +78,15 @@ function prompt(str)
         }
     }
     else
-    {
-        if(isNaN(strList[0]) || isNaN(strList[1]))
-        {
+        if(isNaN(strList[0]) || isNaN(strList[1])) then
             alert(qsTr("Requires two points."));
             setPromptPrefix(qsTr("Specify second point: "));
-        }
         else
-        {
             global.x2 = Number(strList[0]);
             global.y2 = Number(strList[1]);
             setRubberPoint("DIMLEADER_LINE_END", global.x2, global.y2);
             vulcanize();
             endCommand();
-        }
-    }
-}
-[Menu]
-Name=Dimension
-Position=12
-
-[ToolBar]
-Name=Dimension
-Position=12
-
-[Tips]
-ToolTip=&QuickLeader
-StatusTip=Creates a leader and annotation:  QUICKLEADER
-
-[Prompt]
-Alias=LE, LEADER, QLEADER, QUICKLEADER
+        end
+    end
+end

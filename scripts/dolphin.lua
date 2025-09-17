@@ -196,18 +196,4 @@ function updateDolphin(numPts, xScale, yScale)
     }
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString())
-}
-[Menu]
-Name=Draw
-Position=100
-
-[ToolBar]
-Name=Draw
-Position=100
-
-[Tips]
-ToolTip=&Dolphin
-StatusTip=Creates a dolphin:  DOLPHIN
-
-[Prompt]
-Alias=DOLPHIN
+end

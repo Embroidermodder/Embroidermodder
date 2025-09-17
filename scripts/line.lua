@@ -111,21 +111,7 @@ function prompt(str)
                 global.prevX = x;
                 global.prevY = y;
                 setPromptPrefix(qsTr("Specify next point or [Undo]: "));
-            }
-        }
-    }
-}
-[Menu]
-Name=Draw
-Position=0
-
-[ToolBar]
-Name=Draw
-Position=0
-
-[Tips]
-ToolTip=&Line
-StatusTip=Creates straight line segments:  LINE
-
-[Prompt]
-Alias=L, LINE
+            end
+        end
+    end
+end

@@ -1,0 +1,63 @@
+/* Embroidermodder 2
+ * Copyright 2011-2025 The Embroidermodder Team
+ *
+ * Embroidermodder 2 is free and open software under the zlib license:
+ * see LICENSE.md for details.
+ */
+
+#include "data.h"
+
+const char *command_names[MAX_COMMANDS] = {
+    [CMD_NULL] = "null",
+    [CMD_ABOUT] = "about",
+    [CMD_STUB] = "stub",
+    [CMD_CUT] = "cut",
+    [CMD_COPY] = "copy",
+    [CMD_PASTE] = "paste",
+    [CMD_SELECT_ALL] = "select_all",
+    [CMD_DETAILS] = "details",
+    [CMD_UPDATES] = "update",
+    [CMD_WHATS_THIS] = "whats_this",
+    [CMD_PRINT] = "print",
+    [CMD_HELP] = "help",
+    [CMD_CHANGELOG] = "changelog",
+    [CMD_UNDO] = "undo",
+    [CMD_REDO] = "redo",
+    [CMD_REPEAT] = "repeat",
+    [CMD_ICON16] = "icon16",
+    [CMD_ICON24] = "icon24",
+    [CMD_ICON32] = "icon32",
+    [CMD_ICON48] = "icon48",
+    [CMD_ICON64] = "icon64",
+    [CMD_ICON128] = "icon128",
+    [CMD_PLAY] = "play",
+    [CMD_SLEEP] = "sleep",
+    [CMD_NEW] = "new",
+    [CMD_OPEN] = "open",
+    [CMD_SAVE] = "save",
+    [CMD_SAVE_AS] = "save_as",
+    [CMD_PAN_LEFT] = "pan_left",
+    [CMD_PAN_DOWN] = "pan_down",
+    [CMD_PAN_RIGHT] = "pan_right",
+    [CMD_PAN_UP] = "pan_up",
+    [CMD_PAN_POINT] = "pan_point",
+    [CMD_PAN_REAL_TIME] = "pan_real_time",
+    [CMD_WINDOW_CASCADE] = "window_cascade",
+    [CMD_WINDOW_CLOSE_ALL] = "window_close_all",
+    [CMD_WINDOW_CLOSE] = "window_close",
+    [CMD_WINDOW_NEXT] = "window_next",
+    [CMD_WINDOW_PREVIOUS] = "window_previous",
+    [CMD_WINDOW_TILE] = "window_tile",
+    [CMD_ZOOM_ALL] = "zoom_all",
+    [CMD_ZOOM_CENTER] = "zoom_center",
+    [CMD_ZOOM_DYNAMIC] = "zoom_dynamic",
+    [CMD_ZOOM_EXTENTS] = "zoom_extents",
+    [CMD_ZOOM_IN] = "zoom_in",
+    [CMD_ZOOM_OUT] = "zoom_out",
+    [CMD_ZOOM_PREVIOUS] = "zoom_previous",
+    [CMD_ZOOM_REAL_TIME] = "zoom_real_time",
+    [CMD_ZOOM_SCALE] = "zoom_scale",
+    [CMD_ZOOM_SELECTED] = "zoom_selected",
+    [CMD_ZOOM_WINDOW] = "zoom_window"
+};
+

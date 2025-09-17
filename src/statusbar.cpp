@@ -33,63 +33,65 @@ void StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
     QMenu menu(this);
     if(objectName() == "StatusBarButtonSNAP")
     {
-        QAction* settingsSnapAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "gridsnapsettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsSnapAction = new QAction(_mainWin->createIcon("gridsnapsettings"), "&Settings...", &menu);
         connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
         menu.addAction(settingsSnapAction);
     }
     else if(objectName() == "StatusBarButtonGRID")
     {
-        QAction* settingsGridAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "gridsettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsGridAction = new QAction(_mainWin->createIcon("gridsettings"), "&Settings...", &menu);
         connect(settingsGridAction, SIGNAL(triggered()), this, SLOT(settingsGrid()));
         menu.addAction(settingsGridAction);
     }
     else if(objectName() == "StatusBarButtonRULER")
     {
-        QAction* settingsRulerAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "rulersettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsRulerAction = new QAction(_mainWin->createIcon("rulersettings"), "&Settings...", &menu);
         connect(settingsRulerAction, SIGNAL(triggered()), this, SLOT(settingsRuler()));
         menu.addAction(settingsRulerAction);
     }
     else if(objectName() == "StatusBarButtonORTHO")
     {
-        QAction* settingsOrthoAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "orthosettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsOrthoAction = new QAction(_mainWin->createIcon("orthosettings"), "&Settings...", &menu);
         connect(settingsOrthoAction, SIGNAL(triggered()), this, SLOT(settingsOrtho()));
         menu.addAction(settingsOrthoAction);
     }
     else if(objectName() == "StatusBarButtonPOLAR")
     {
-        QAction* settingsPolarAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "polarsettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsPolarAction = new QAction(_mainWin->createIcon("polarsettings"), "&Settings...", &menu);
         connect(settingsPolarAction, SIGNAL(triggered()), this, SLOT(settingsPolar()));
         menu.addAction(settingsPolarAction);
     }
     else if(objectName() == "StatusBarButtonQSNAP")
     {
-        QAction* settingsQSnapAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "qsnapsettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsQSnapAction = new QAction(_mainWin->createIcon("qsnapsettings"), "&Settings...", &menu);
         connect(settingsQSnapAction, SIGNAL(triggered()), this, SLOT(settingsQSnap()));
         menu.addAction(settingsQSnapAction);
     }
     else if(objectName() == "StatusBarButtonQTRACK")
     {
-        QAction* settingsQTrackAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "qtracksettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsQTrackAction = new QAction(_mainWin->createIcon("qtracksettings"), "&Settings...", &menu);
         connect(settingsQTrackAction, SIGNAL(triggered()), this, SLOT(settingsQTrack()));
         menu.addAction(settingsQTrackAction);
     }
     else if(objectName() == "StatusBarButtonLWT")
     {
         View* gview = activeView();
-        if(gview)
-        {
-            QAction* enableRealAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "realrender" + ".png"), "&RealRender On", &menu);
+        if (gview) {
+            QAction* enableRealAction = new QAction(_mainWin->createIcon("realrender"),
+                "&RealRender On", &menu);
             enableRealAction->setEnabled(!gview->isRealEnabled());
             connect(enableRealAction, SIGNAL(triggered()), this, SLOT(enableReal()));
             menu.addAction(enableRealAction);
 
-            QAction* disableRealAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "realrender" + ".png"), "&RealRender Off", &menu);
+            QAction* disableRealAction = new QAction(_mainWin->createIcon("realrender"),
+                "&RealRender Off", &menu);
             disableRealAction->setEnabled(gview->isRealEnabled());
             connect(disableRealAction, SIGNAL(triggered()), this, SLOT(disableReal()));
             menu.addAction(disableRealAction);
         }
 
-        QAction* settingsLwtAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "lineweightsettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsLwtAction = new QAction(_mainWin->createIcon("lineweightsettings"),
+            "&Settings...", &menu);
         connect(settingsLwtAction, SIGNAL(triggered()), this, SLOT(settingsLwt()));
         menu.addAction(settingsLwtAction);
     }

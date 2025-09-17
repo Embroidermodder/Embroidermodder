@@ -227,19 +227,4 @@ function updateStar(x, y)
         setRubberPoint("POLYGON_POINT_" + i.toString(), global.cx + xx, global.cy + yy);
     }
     setRubberText("POLYGON_NUM_POINTS", (global.numPoints*2 - 1).toString());
-}
-
-[Menu]
-Name=Draw
-Position=100
-
-[ToolBar]
-Name=Draw
-Position=100
-
-[Tips]
-ToolTip=&Star
-StatusTip=Creates a star:  STAR
-
-[Prompt]
-Alias=*, STAR
+end

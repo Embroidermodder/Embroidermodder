@@ -46,17 +46,3 @@ function prompt(str)
         endCommand();
     }
 }
-[Menu]
-Name=Tools
-Position=11
-
-[ToolBar]
-Name=Inquiry
-Position=0
-
-[Tips]
-ToolTip=&Locate Point
-StatusTip=Displays the coordinate values of a location:  ID
-
-[Prompt]
-Alias=ID, LOCATEPOINT

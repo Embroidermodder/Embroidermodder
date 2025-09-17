@@ -115,20 +115,3 @@ function reportDistance()
     appendPromptHistory()
 }
 
---[[
-[Menu]
-Name=Tools
-Position=7
-
-[ToolBar]
-Name=Inquiry
-Position=0
-
-[Tips]
-ToolTip=&Distance
-StatusTip=Measures the distance and angle between two points:  DIST
-
-[Prompt]
-Alias=DI, DIST, DISTANCE
---]]
-

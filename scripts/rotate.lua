@@ -263,31 +263,16 @@ function prompt(str)
                     var y = Number(strList[1]);
                     global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
                     rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
-                    previewOff();
-                    endCommand();
-                }
-            }
+                    previewOff()
+                    endCommand()
+                end
             else
-            {
-                global.angleNew = Number(str);
-                rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
-                previewOff();
-                endCommand();
-            }
-        }
-    }
-}
-[Menu]
-Name=Modify
-Position=11
+                global.angleNew = Number(str)
+                rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef)
+                previewOff()
+                endCommand()
+            end
+        end
+    end
+end
 
-[ToolBar]
-Name=Modify
-Position=6
-
-[Tips]
-ToolTip=&Rotate
-StatusTip=Rotates objects about a base point:  ROTATE
-
-[Prompt]
-Alias=RO, ROTATE

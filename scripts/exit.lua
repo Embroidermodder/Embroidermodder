@@ -36,20 +36,3 @@ function prompt(str)
     endCommand();
 }
 
---[[
-[Menu]
-Name=None
-Position=0
-
-[ToolBar]
-Name=None
-Position=0
-
-[Tips]
-ToolTip=E&xit
-StatusTip=Exit the application:  EXIT
-
-[Prompt]
-Alias=EXIT, QUIT
---]]
-
