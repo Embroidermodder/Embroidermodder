@@ -1,0 +1,283 @@
+"Name","Color (Hex code)","Catalog Code"
+"Pure White", #FFFFFF, 1001 
+"Lemon Ice", #DDE00F, 1271
+"Neon Green", #C9DD03, 1272
+"Brilliant Lime", #60DD49, 1273
+"Mango", #FFCC1E, 1274
+"Neon Yellow", #FFED38, 1275
+"Tropical Orange", #FFA952, 1276
+"Neon Orange", #FF9338, 1277
+"Rebel Peach", #FF585F, 1278
+"Shy Flamingo", #F28CA3, 1279
+"Neon Pink", #FE8A9E, 1280
+"Neon Peach", #FC074F, 1281
+"Dove Gray", #CFC3C3, 1067
+"Silver Lining", #C9CAC8, 1068
+"Storm Cloud", #B2B4B3, 1069
+"Platinum", #C6C6BC, 1070
+"Graphite", #616365, 1244
+"Light Charcoal", #4D4F53, 1245
+"Chrome", #8E908F, 1072
+"Antique Silver", #747678, 1077
+"Pewter Gray", #6C6F70, 1073
+"Black Stallion", #191D1F, 1079
+"Charcoal", #1B242A, 1087
+"Classic Black", #000000, 1000
+"Marshmallow", #D5D2CA, 1118
+"Ice Blue", #DAE3EA, 1119
+"Nautical Blue", #A6BCC6, 1076
+"Sea Storm", #818A8F, 1074
+"Bronzed Steel", #595A5C, 1078
+"Silvery Gray", #B9C9D0, 1239
+"Granite", #7D9AAA, 1240
+"Shadow", #5E6A71, 1085
+"Dark Slate Blue", #003C69, 1241
+"Deep Slate Blue", #003946, 1242
+"Pacific Waters", #004250, 1081
+"Dark Slate", #37424A, 1086
+"Smoky Blue", #005B82, 1192
+"Light Slate Blue", #5E9CAE, 1193
+"Hyacinth", #6AADE4, 1188
+"Bluebird", #4B92DB, 1187
+"Misty Blue", #8FCAE7, 1186
+"Cornflower Blue", #C2DEEA, 1185
+"Pale Blue", #A0CFEB, 1256
+"Country Blue", #0098DB, 1255
+"Azure", #3D7EDB, 1202
+"Royal Blue", #0039A6, 1203
+"Brilliant Blue", #00338D, 1204
+"Deep Blue", #0B2265, 1205
+"Winter Blue", #98C6EA, 1189
+"Winter Sky", #AACAE6, 1190
+"Sky Blue", #8EBAE5, 1191
+"China Blue", #0073CF, 1198
+"Dark Blueberry", #004165, 1201
+"Salem Blue", #004153, 1200
+"Navy", #002244, 1199
+"Sailor Blue", #002C5F, 1265
+"Dark Blue ", #002857, 1264
+"Berry Blue", #003591, 1263
+"True Blue", #002C77, 1261
+"Periwinkle", #6F9AD3, 1262
+"Iceberg Blue", #65CFE9, 1197
+"Medium Aquamarine", #0075B0, 1195
+"Dark Aquamarine", #0066A1, 1196
+"Peacock Blue", #006983, 1194
+"Dark Turquoise", #003D4C, 1258
+"Turquoise", #0098C3, 1259
+"Caribbean Blue", #00B0CA, 1260
+"Summer Sky", #6FD4E4, 1257
+"Crystal Lake", #BBE7E6, 1178
+"Icicle Blue", #C1E2E5, 1172
+"Frosty Blue", #8FDFE2, 1173
+"Blue Lagoon", #00AFD8, 1174
+"Blue Satin", #006778, 1181
+"Teal Blue", #007C92, 1180
+"Light Teal Blue", #009AA6, 1176
+"Wintergreen", #7CA295, 1175
+"Mint Green", #63CECA, 1177
+"Navajo Turquoise", #00877C, 1179
+"Peacock Green", #007B69, 1182
+"Forest Glen", #024E43, 1183
+"Deep Teal", #004953, 1184
+"Deep Sea", #156570, 1082
+"Dragonfly", #00505C, 1113
+"Blue Steel", #44697D, 1084
+"Dark Sage", #496C60, 1114
+"Silver Green", #949D9E, 1115
+"Antique Gray", #91BAA3, 1243
+"Ocean Spray", #B9CCC3, 1100
+"Sea Foam", #A6E6BC, 1088
+"Cucumber Melon", #00B588, 1094
+"Light Jade", #00985F, 1106
+"Jade", #009B74, 1107
+"Dark Jade", #007D57, 1105
+"Caribbean", #006A4D, 1104
+"Dark Teal", #00685B, 1254
+"Minty Teal", #0D776E, 1253
+"Lemony Lime", #C3E76F, 1099
+"Kiwi Lime", #CCDC00, 1247
+"Electric Green", #69BE28, 1097
+"Green Apple", #92D400, 1091
+"Key Lime", #7AB800, 1092
+"Kelly Green", #3F9C35, 1093
+"Meadow", #00AF3F, 1248
+"Grassy Green", #007934, 1095
+"Dark Kelly Green", #008542, 1108
+"Christmas Green", #00693C, 1109
+"Winter Pine ", #1C453B, 1250
+"Holly Leaf", #175E54, 1249
+"Pistachio Nut", #C8E59A, 1096
+"Dusty Green", #69923A, 1251
+"Bush Ivy ", #557630, 1252
+"Leafy Green", #739600, 1089
+"Kentucky Grass", #53682B, 1090
+"Ivy", #035642, 1103
+"Evergreen", #284E36, 1110
+"Mountain Meadow", #004438, 1111
+"Forest Green", #004D46, 1112
+"Oregano", #57584F, 1121
+"Jungle Green", #404A29, 1123
+"Thyme", #83847A, 1120
+"Light Avocado", #827C34, 1058
+"Split Pea", #B19B00, 1061
+"Spring Leaf", #B5A300, 1059
+"Almond Cream", #F8E498, 1060
+"Eggshell", #D7D3C7, 1229
+"Cornsilk Green", #D5C833, 1098
+"Avocado", #6A7029, 1101
+"Seaweed", #898F4B, 1102
+"Olive Green", #65551C, 1246
+"Coconut Shell", #4B452C, 1117
+"Parsley", #4B471A, 1116
+"Dried Sage", #718674, 1083
+"Mocha", #4F4C25, 1125
+"Warm Earth", #5D4F4B, 1131
+"Dark Chocolate", #452325, 1126
+"Deep Walnut", #4E2E2D, 1128
+"Teddybear Brown", #6E3219, 1130
+"Light Chestnut", #60351D, 1134
+"Pecan Pie", #6C4D23, 1140
+"Dark Alder", #766A65, 1237
+"Army Green", #5B491F, 1137
+"Pharaoh Gold", #6E5A2A, 1135
+"Autumn Haystack", #AB8422, 1136
+"Sahara", #856822, 1122
+"Weathered Wood", #675C53, 1236
+"Soft Beige", #9A996E, 1124
+"Mercury", #C2B2B5, 1149
+"Old Lace", #A5ACAF, 1146
+"Caramel Cappuccino", #AE7D5B, 1145
+"Brown Sugar", #A76F3E, 1133
+"Light Cinnamon", #A25022, 1064
+"Cinnamon", #86431E, 1238
+"Apple Cider", #B2541A, 1163
+"Indian Paintbrush", #9A3B26, 1144
+"Rust", #833820, 1164
+"Toasted Almond", #825C26, 1142
+"Pale Caramel", #C59217, 1063
+"Honey Butter", #DDB99A, 1062
+"Sandy Shore", #D2C295, 1057
+"Ecru", #C2C2A0, 1056
+"Malt", #B3B38C, 1055
+"Antique Lace", #C7B37F, 1054
+"Champagne", #BD9271, 1171
+"Butter Taffy", #B3995D, 1138
+"Cream Soda", #CEA98C, 1235
+"Conch Shell", #E39B6C, 1139
+"New Penny", #BA6F2E, 1132
+"Pumpkin Spice", #BB650E, 1141
+"Soft Sunlight", #EBE8B1, 1042
+"Lemon Drop", #EEEC83, 1043
+"Daffodil", #F3EC7A, 1045
+"Lemon Citrus", #F5EC5A, 1225
+"Sunshine Yellow", #FAE700, 1226
+"Canary Yellow", #F2EE72, 1044
+"Sunflower", #FCD900, 1227
+"Sun", #FADC41, 1046
+"Dandelion", #FED100, 1047
+"Buttercup", #F3CF45, 1048
+"Ginger Root", #EFBD47, 1050
+"Goldenrod", #EAAB00, 1051
+"Cornsilk", #DCD6B2, 1037
+"Macadamia", #C6BC89, 1038
+"Yellow Plumeria", #F8E498, 1039
+"Maize", #F8DE6E, 1040
+"Dried Banana", #FADA63, 1049
+"Butternut", #FFCB4F, 1053
+"Orange Meringue", #FFA100, 1232
+"September Sunset", #FFB612, 1231
+"Orange Cream", #FFB652, 1230
+"Cantaloupe", #FFBC3D, 1041
+"Old Gold", #CE8E00, 1052
+"Auburn", #9D5324, 1143
+"Citrus Burst", #E98300, 1024
+"Orange Slice", #FF7000, 1025
+"Fiery Sunset", #E37222, 1027
+"Hunter Orange", #FB4F14, 1028
+"Fall Harvest", #DD4814, 1029
+"Candy Apple", #CD202C, 1030
+"Christmas Red", #C30014, 1270
+"Pomegranate", #A70232, 1032
+"Rummy Raisin", #882332, 1031
+"Cardinal Red", #A51100, 1002
+"Rusty Red", #9E3039, 1234
+"Redwood", #783014, 1233
+"Carrot", #D55C19, 1065
+"Paprika", #AA272F, 1066
+"Cherrywood", #5F3327, 1129
+"Burnt Sienna", #5D3526, 1127
+"Merlot", #592C35, 1160
+"Loganberry", #6A1A41, 1159
+"Cranberry", #6E2714, 1158
+"Mulberry", #662046, 1157
+"Magenta", #85003C, 1156
+"Raspberry", #641F14, 1155
+"Salmon", #FF818D, 1166
+"Georgia Peach", #FFA48A, 1015
+"Rose Sunset", #FFB0B7, 1011
+"Bubblegum Pink", #F3789B, 1012
+"Carnation", #DB4D69, 1014
+"Very Berry", #91004B, 1013
+"Raspberry Red", #82240C, 1224
+"Dark Salmon", #F54359, 1018
+"Apricot Dream", #F4587A, 1017
+"Coral Reef", #FF8B7C, 1016
+"Frosted Peach", #FFC19C, 1022
+"Tangerine", #FF8F70, 1020
+"Dark Mango", #FF6D42, 1026
+"Marigold", #FFA02F, 1023
+"Spun Silk", #ECC182, 1168
+"Whipped Papaya", #FBCE92, 1021
+"Baby Peach", #FDC480, 1228
+"Pink Pearl", #FFC2A2, 1167
+"Peaches 'n Cream", #EFC5CE, 1169
+"Peach Pastel", #EFBE9C, 1170
+"Old Penny", #774A39, 1162
+"Dusty Rose", #B26F7E, 1151
+"Winter Rose", #D490A8, 1165
+"Valentine Pink", #F6A3BB, 1161
+"Petal Peach", #FFB7AE, 1019
+"Soft Petal", #EFD6DB, 1150
+"Fuchsia", #920075, 1036
+"Pink Kiss", #F375C6, 1004
+"Baby Pink", #F3BBCE, 1003
+"Whisper Pink", #F1DBDF, 1005
+"Gentle Blush", #F3C9D3, 1006
+"English Rose", #F4B2C1, 1007
+"Sweet Pea", #F39EBC, 1008
+"Rosy Blush", #F77AB4, 1009
+"Passion Pink", #D71F85, 1010
+"Mulled Wine", #772059, 1035
+"Primrose", #C50084, 1034
+"Azalea", #A1006B, 1033
+"Snowflake", #D1D4D3, 1148
+"Moonlight", #CAD1E7, 1147
+"Tulip", #9DABE2, 1207
+"Purple Iris", #8884D5, 1206
+"Grape", #1A2155, 1209
+"Moon Shadow", #6459C4, 1211
+"Electric Purple", #212492, 1208
+"Indigo", #411244, 1210
+"Royal Purple", #3B0083, 1223
+"Eggplant", #151C54, 1267
+"Dark Purple", #490E6F, 1269
+"Pure Purple", #57068C, 1268
+"Pale Orchid", #DCC7DF, 1217
+"Dusty Mauve", #C2ACBE, 1219
+"Orchid", #DC9DDD, 1218
+"Heather", #B382C7, 1213
+"Lavender", #9C5FB5, 1214
+"Soft Grape", #4B08A1, 1266
+"Freesia", #C1AFE5, 1221
+"Lilac", #C5B9E3, 1222
+"Peony", #6E2C6B, 1215
+"Dark Fuschia", #7D0063, 1216
+"Grape Jelly", #752864, 1220
+"Deep Orchid", #55517B, 1080
+"Misty Blue Gray", #5C7F92, 1075
+"Iron Ore", #AFADC3, 1071
+"Light Mauve", #D8AAB3, 1152
+"Dark Mauve", #89687C, 1153
+"Wild Plum", #644459, 1154
+"Huckleberry", #4B306A, 1212
