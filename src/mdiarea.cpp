@@ -1,3 +1,8 @@
+/*!
+ * \file mdiarea.cpp
+ * \brief Managing the Multiple Document Interface area within the main window.
+ */
+
 #include "embroidermodder.h"
 
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)

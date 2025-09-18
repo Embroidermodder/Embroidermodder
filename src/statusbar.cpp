@@ -1,3 +1,8 @@
+/*!
+ * \file statusbar.cpp
+ * \brief Graphics and callbacks for the bar at the very bottom of main window.
+ */
+
 #include "embroidermodder.h"
 
 #include <QLabel>

@@ -1,3 +1,8 @@
+/*!
+ * \file object-circle.cpp
+ * \brief Tools for drawing and manipulating EmbCircles via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

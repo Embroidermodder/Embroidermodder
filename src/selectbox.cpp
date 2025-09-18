@@ -1,3 +1,8 @@
+/*!
+ * \file selectbox.cpp
+ * \brief Draws a box used for selecting large numbers of points with the mouse.
+ */
+
 #include "embroidermodder.h"
 #include <QPainter>
 

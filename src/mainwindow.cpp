@@ -1,9 +1,6 @@
-/* Embroidermodder 2: CAD COMMANDS
- *
- * Copyright (C) 2011-2025 The Embroidermodder Team
- * Licensed under the terms of the zlib license.
- *
- * ------------------------------------------------------------------------------------
+/*!
+ * \file mainwindow.cpp
+ * \brief Most of the MainWindow class function.
  *
  * This is the most frequently updated part of the source: new core developers would
  * benefit most from understanding the rough approach of this file and making

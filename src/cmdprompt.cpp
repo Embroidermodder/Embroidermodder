@@ -1,3 +1,8 @@
+/*!
+ * \file cmdprompt.cpp
+ * \brief The command prompt widget to be embedded at the bottom of the window.
+ */
+
 #include "embroidermodder.h"
 
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)

@@ -1,3 +1,8 @@
+/*!
+ * \file mdiwindow.cpp
+ * \brief The sub-window used for editing a given EmbPattern.
+ */
+
 #include "embroidermodder.h"
 
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)

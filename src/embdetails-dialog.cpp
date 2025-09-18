@@ -1,3 +1,8 @@
+/*!
+ * \file embdetails-dialog.cpp
+ * \brief Dialog that shows stitch counts and other useful metrics.
+ */
+
 #include "embroidermodder.h"
 
 EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
@@ -25,6 +30,8 @@ EmbDetailsDialog::~EmbDetailsDialog()
     QApplication::restoreOverrideCursor();
 }
 
+/*! Recalculate the information presented in the dialog.
+ */
 void EmbDetailsDialog::getInfo()
 {
     //TODO: generate a temporary pattern from the scene data.

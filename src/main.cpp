@@ -1,3 +1,8 @@
+/*!
+ * \file main.cpp
+ * \brief The main starting point for loading the application and main window.
+ */
+
 #include "embroidermodder.h"
 
 const char* _appName_ = "Embroidermodder";

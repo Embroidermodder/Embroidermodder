@@ -1,3 +1,8 @@
+/*!
+ * \file object-arc.cpp
+ * \brief Tools for drawing and manipulating EmbArcs via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

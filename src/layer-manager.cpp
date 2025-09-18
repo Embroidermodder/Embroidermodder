@@ -1,3 +1,8 @@
+/*!
+ * \file layer-manager.cpp
+ * \brief Dialog to allow the management of layers within a pattern.
+ */
+
 #include "embroidermodder.h"
 
 LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)

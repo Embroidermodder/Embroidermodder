@@ -1,3 +1,8 @@
+/*!
+ * \file property-editor.cpp
+ * \brief Tools that allow us to enter the numbers specifying geometric objects directly.
+ */
+
 #include <QApplication>
 #include <QComboBox>
 #include <QFontComboBox>

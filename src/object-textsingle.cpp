@@ -1,3 +1,8 @@
+/*!
+ * \file object-textsingle.cpp
+ * \brief Tools for writing and manipulating EmbTextSingles via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>
