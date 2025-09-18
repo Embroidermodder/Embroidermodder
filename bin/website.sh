@@ -47,22 +47,12 @@ function get_docstrings () {
     cond_install git
     cond_install doxygen
 
-    # Run on latest version of docstrings -- eventually these will be tagged.
-    # If the embroidermodder folder is present we assume it is up-to date for now.
-    if [ ! -d "embroidermodder" ]; then
-        git clone https://github.com/embroidermodder/embroidermodder
-        cd embroidermodder
-            git pull origin main
-            git submodule init
-            git submodule update
-        cd ..
-    fi
+    git submodule init
+    git submodule update
 
-    cd embroidermodder
-        doxygen
-    cd ..
-    rm -fr emrm/xml
-    mv embroidermodder/docs/xml emrm
+    rm -fr docs/manual/xml
+    doxygen
+    mv docs/xml docs/manual
     echo "Done."
 
 }
