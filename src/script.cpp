@@ -1,9 +1,6 @@
-/* Embroidermodder 2: SCRIPTING
- *
- * Copyright (C) 2011-2025 The Embroidermodder Team
- * Licensed under the terms of the zlib license.
- *
- * -----------------------------------------------------------------------------
+/*!
+ * \file script.cpp
+ * \brief Lua and TOML support for Embroidermodder.
  *
  * Having scripting available for users to alter their software reflects a
  * core principle of open source software. The full build environment for

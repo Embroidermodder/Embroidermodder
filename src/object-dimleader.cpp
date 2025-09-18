@@ -1,3 +1,8 @@
+/*!
+ * \file object-dimleader.cpp
+ * \brief Tools for drawing and manipulating EmbDimLeaders via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

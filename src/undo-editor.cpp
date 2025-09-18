@@ -1,3 +1,8 @@
+/*!
+ * \file undo-editor.cpp
+ * \brief Shows the undo history to the user in a dockable widget.
+ */
+
 #include <QUndoGroup>
 #include <QUndoStack>
 #include <QUndoView>

@@ -1,3 +1,8 @@
+/*!
+ * \file object-polygon.cpp
+ * \brief Tools for drawing and manipulating EmbPolygons via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

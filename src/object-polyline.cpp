@@ -1,3 +1,8 @@
+/*!
+ * \file object-polyline.cpp
+ * \brief Tools for drawing and manipulating EmbPolylines via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

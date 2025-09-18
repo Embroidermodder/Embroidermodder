@@ -1,3 +1,8 @@
+/*!
+ * \file object-ellipse.cpp
+ * \brief Tools for drawing and manipulating EmbEllipses via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

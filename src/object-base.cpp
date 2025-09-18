@@ -1,3 +1,8 @@
+/*!
+ * \file object-base.cpp
+ * \brief Tools for drawing and manipulating geometric objects via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QDebug>

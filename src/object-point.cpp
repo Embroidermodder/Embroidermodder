@@ -1,3 +1,8 @@
+/*!
+ * \file object-point.cpp
+ * \brief Tools for drawing and manipulating EmbPoints via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

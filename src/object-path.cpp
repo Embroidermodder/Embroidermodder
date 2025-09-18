@@ -1,3 +1,8 @@
+/*!
+ * \file object-path.cpp
+ * \brief Tools for drawing and manipulating EmbPaths via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

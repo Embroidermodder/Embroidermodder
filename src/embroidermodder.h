@@ -1,4 +1,8 @@
-/* Embroidermodder 2
+/*!
+ * \file embroidermodder.h
+ * \brief Global header for the embroidermodder GUI.
+ *
+ * Embroidermodder 2
  * Copyright 2011-2025 The Embroidermodder Team
  *
  * Embroidermodder 2 is free and open software under the zlib license:

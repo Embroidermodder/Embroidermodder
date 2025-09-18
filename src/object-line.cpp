@@ -1,3 +1,8 @@
+/*!
+ * \file object-line.cpp
+ * \brief Tools for drawing and manipulating EmbLines via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>

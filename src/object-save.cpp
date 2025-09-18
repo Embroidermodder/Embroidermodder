@@ -1,3 +1,8 @@
+/*!
+ * \file object-save.cpp
+ * \brief Convert geometric objects into a form that allows the saving of the file.
+ */
+
 #include "embroidermodder.h"
 
 #include <QGraphicsScene>

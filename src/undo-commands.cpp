@@ -1,3 +1,8 @@
+/*!
+ * \file undo-commands.cpp
+ * \brief Commands that record the data they were called with to allow them to be undone.
+ */
+
 #include "embroidermodder.h"
 
 //==================================================

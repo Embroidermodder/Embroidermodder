@@ -1,3 +1,8 @@
+/*!
+ * \file preview-dialog.cpp
+ * \brief Dialog to allow us to thumbnail a file before opening it in an MdiWindow.
+ */
+
 #include "embroidermodder.h"
 
 #include <QDebug>

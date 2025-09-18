@@ -1,3 +1,8 @@
+/*!
+ * \file view.cpp
+ * \brief Display the EmbPattern within an MdiWindow.
+ */
+
 #include "embroidermodder.h"
 
 extern QList<QGraphicsItem*> clipboard;

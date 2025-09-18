@@ -1,3 +1,8 @@
+/*!
+ * \file object-image.cpp
+ * \brief Tools for drawing and manipulating EmbImages via the GUI.
+ */
+
 #include "embroidermodder.h"
 
 #include <QPainter>
