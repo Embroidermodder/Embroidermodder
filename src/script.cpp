@@ -1,6 +1,6 @@
 /*!
  * \file script.cpp
- * \brief Lua and TOML support for Embroidermodder.
+ * \brief Lua support for Embroidermodder.
  *
  * Having scripting available for users to alter their software reflects a
  * core principle of open source software. The full build environment for
@@ -20,331 +20,42 @@
  * developers make sure they know why a feature should be written as a lua
  * function before submitting a patch that requires this.
  *
- * TODO: inline all MainWindow native functions, replace MainWindow calls that
- * can be lua registerable functions.
+ * @todo convert more lua registerables to core commands and keep cmd_f as
+ *       the interface for scripts to these commands
  *
- * TODO: convert more lua registerables to core commands and keep cmd_f as
- * the interface for scripts to these commands
+ * @todo check that the actions appropriately clear selections and rubber modes
+ *
+ * @todo functioning lua GUI scripting
  */
 
 #include "embroidermodder.h"
 
-/* Note that lua and toml11 do not have interfacing outside of this file.
+/* Note that lua does not have interfacing outside of this file.
  * The wrappers like script_env_boot, script_env_free, etc. allow us to not
  * use the lua_State and lua_* functions outside of this file.
  */
 #include "../extern/lua/src/lua.hpp"
-#include "../extern/toml11/single_include/toml.hpp"
 
-#if __cplusplus
+/* Functions with C linkage which refer to lua_State and need declaration. */
 extern "C" {
-#endif
-
-void temp_name(char *name, int *err);
-void init_command(void);
-void clear_selection(void);
-void end_command(void);
-
-/* NOTE: Try to keep this list alphabetical in the function name. */
-int add_to_selection_f(lua_State *L);
-int alert_f(lua_State *L);
-int allow_rubber_f(lua_State *L);
-int arc_f(lua_State *L);
-int append_prompt_history_f(lua_State *L);
-int blink_f(lua_State *L);
-int calculate_angle_f(lua_State *L);
-int calculate_distance_f(lua_State *L);
-int circle_f(lua_State *L);
-int clear_rubber_f(lua_State *L);
-int clear_selection_f(lua_State *L);
-int cmd_f(lua_State *L);
-int color_selector_f(lua_State *L);
-int copy_selected_f(lua_State *L);
-int cut_selected_f(lua_State *L);
-int day_f(lua_State *L);
-int debug_f(lua_State *L);
-int delete_selected_f(lua_State *L);
-int design_details_f(lua_State *L);
-int dim_leader_f(lua_State *L);
-int disable_move_rapid_fire_f(lua_State *L);
-int disable_prompt_rapid_fire_f(lua_State *L);
-int distance_f(lua_State *L);
-int dolphin_f(lua_State *L);
-int do_nothing_f(lua_State *L);
-int ellipse_f(lua_State *L);
-int enable_move_rapid_fire_f(lua_State *L);
-int enable_prompt_rapid_fire_f(lua_State *L);
-int end_command_f(lua_State *L);
-int erase_f(lua_State *L);
-int error_f(lua_State *L);
-int exit_program_f(lua_State *L);
-int freeze_all_layers_f(lua_State *L);
-int heart_f(lua_State *L);
-int help_f(lua_State *L);
-int hide_all_layers_f(lua_State *L);
-int horizontal_dimension_f(lua_State *L);
-int image_f(lua_State *L);
-int infinite_line_f(lua_State *L);
-int init_command_f(lua_State *L);
-int layer_previous_f(lua_State *L);
-int layer_selector_f(lua_State *L);
-int layers_f(lua_State *L);
-int line_f(lua_State *L);
-int line_type_selector_f(lua_State *L);
-int line_weight_selector_f(lua_State *L);
-int locate_point_f(lua_State *L);
-int lock_all_layers_f(lua_State *L);
-int make_layer_current_f(lua_State *L);
-int menu_seperator_f(lua_State *L);
-int messagebox_f(lua_State *L);
-int mirror_selected_f(lua_State *L);
-int mouse_f(lua_State *L);
-int move_f(lua_State *L);
-int move_selected_f(lua_State *L);
-int night_vision_f(lua_State *L);
-int num_selected_f(lua_State *L);
-int open_file_f(lua_State *L);
-int paste_selected_f(lua_State *L);
-int path_f(lua_State *L);
-int perpendicular_distance_f(lua_State *L);
-int platform_f(lua_State *L);
-int point_f(lua_State *L);
-int polygon_f(lua_State *L);
-int polyline_f(lua_State *L);
-int preview_off_f(lua_State *L);
-int preview_on_f(lua_State *L);
-int print_area_f(lua_State *L);
-int print_f(lua_State *L);
-int qsnap_f(lua_State *L);
-int quickleader_f(lua_State *L);
-int ray_f(lua_State *L);
-int rectangle_f(lua_State *L);
-int regular_polygon_f(lua_State *L);
-int rgb_f(lua_State *L);
-int rotate_f(lua_State *L);
-int rotate_selected_f(lua_State *L);
-int rounded_rectangle_f(lua_State *L);
-int rubber_f(lua_State *L);
-int saveas_f(lua_State *L);
-int save_f(lua_State *L);
-int scale_f(lua_State *L);
-int scale_selected_f(lua_State *L);
-int set_color_f(lua_State *L);
-int set_cursor_shape_f(lua_State *L);
-int set_prompt_prefix_f(lua_State *L);
-int set_rubber_mode_f(lua_State *L);
-int set_rubber_point_f(lua_State *L);
-int set_rubber_text_f(lua_State *L);
-int set_text_angle_f(lua_State *L);
-int set_text_bold_f(lua_State *L);
-int set_text_font_f(lua_State *L);
-int set_text_italic_f(lua_State *L);
-int set_text_overline_f(lua_State *L);
-int set_text_size_f(lua_State *L);
-int set_text_strikeout_f(lua_State *L);
-int set_text_underline_f(lua_State *L);
-int settings_dialog_f(lua_State *L);
-int show_all_layers_f(lua_State *L);
-int singlelinetext_f(lua_State *L);
-int slot_f(lua_State *L);
-int snowflake_f(lua_State *L);
-int spare_rubber_f(lua_State *L);
-int star_f(lua_State *L);
-int syswindows_f(lua_State *L);
-int text_angle_f(lua_State *L);
-int text_bold_f(lua_State *L);
-int text_font_f(lua_State *L);
-int text_italic_f(lua_State *L);
-int text_multi_f(lua_State *L);
-int text_overline_f(lua_State *L);
-int text_single_f(lua_State *L);
-int text_size_f(lua_State *L);
-int text_strikeout_f(lua_State *L);
-int text_underline_f(lua_State *L);
-int thaw_all_layers_f(lua_State *L);
-int tip_of_the_day_f(lua_State *L);
-int todo_f(lua_State *L);
-int triangle_f(lua_State *L);
-int unlock_all_layers_f(lua_State *L);
-int vertical_dimension_f(lua_State *L);
-int vulcanize_f(lua_State *L);
-int whats_this_f(lua_State *L);
-
-#if __cplusplus
+    void temp_name(char *name, int *err);
+    int cmd_f(lua_State *L);
+    int get_f(lua_State *L);
+    int set_f(lua_State *L);
 }
-#endif
 
 /* ---- State ------------------------------------------------------------------
  *
  * TODO: Set defaults for all state variables.
  */
 lua_State *Lua;
-unsigned char context_flag = CONTEXT_MAIN;
-
-/* Pointer access */
-MainWindow* _mainWin = NULL;
-MdiArea* mdiArea = NULL;
-CmdPrompt* prompt = NULL;
-PropertyEditor* dockPropEdit = NULL;
-UndoEditor* dockUndoEdit = NULL;
-StatusBar* statusbar = NULL;
+int context_flag = CONTEXT_MAIN;
 
 const char *temporary_name_format = "tmp_%d";
 int temporary_name = 0;
 
-luaL_Reg lua_registerables[] = {
-    {"add_to_selection", add_to_selection_f},
-    {"alert", alert_f},
-    {"allow_rubber", allow_rubber_f},
-    {"arc", arc_f},
-    {"append_prompt_history", append_prompt_history_f},
-    {"blink", blink_f},
-    {"calculate_angle", calculate_angle_f},
-    {"calculate_distance", calculate_distance_f},
-    {"circle", circle_f},
-    {"clear_rubber", clear_rubber_f},
-    {"clear_selection", clear_selection_f},
-    {"cmd", cmd_f},
-    {"color_selector", color_selector_f},
-    {"copy_selected", copy_selected_f},
-    {"cut_selected", cut_selected_f},
-    {"day", day_f},
-    {"debug", debug_f},
-    {"delete_selected", delete_selected_f},
-    {"design_details", design_details_f},
-    {"dim_leader", dim_leader_f},
-    {"disable_move_rapid_fire", disable_move_rapid_fire_f},
-    {"disable_prompt_rapid_fire", disable_prompt_rapid_fire_f},
-    {"distance", distance_f},
-    {"dolphin", dolphin_f},
-    {"do_nothing", do_nothing_f},
-    {"ellipse", ellipse_f},
-    {"enable_move_rapid_fire", enable_move_rapid_fire_f},
-    {"enable_prompt_rapid_fire", enable_prompt_rapid_fire_f},
-    {"end_command", end_command_f},
-    {"erase", erase_f},
-    {"error", error_f},
-    {"exit_program", exit_program_f},
-    {"freeze_all_layers", freeze_all_layers_f},
-    {"heart", heart_f},
-    {"help", help_f},
-    {"hide_all_layers", hide_all_layers_f},
-    {"horizontal_dimension", horizontal_dimension_f},
-    {"image", image_f},
-    {"infinite_line", infinite_line_f},
-    {"init_command", init_command_f},
-    {"layer_previous", layer_previous_f},
-    {"layer_selector", layer_selector_f},
-    {"layers", layers_f},
-    {"line", line_f},
-    {"line_type_selector", line_type_selector_f},
-    {"line_weight_selector", line_weight_selector_f},
-    {"locate_point", locate_point_f},
-    {"lock_all_layers", lock_all_layers_f},
-    {"make_layer_current", make_layer_current_f},
-    {"menu_seperator", menu_seperator_f},
-    {"messagebox", messagebox_f},
-    {"mirror_selected", mirror_selected_f},
-    {"mouse", mouse_f},
-    {"move", move_f},
-    {"move_selected", move_selected_f},
-    {"night_vision", night_vision_f},
-    {"num_selected", num_selected_f},
-    {"open_file", open_file_f},
-    {"paste_selected", paste_selected_f},
-    {"path", path_f},
-    {"perpendicular_distance", perpendicular_distance_f},
-    {"platform", platform_f},
-    {"point", point_f},
-    {"polygon", polygon_f},
-    {"polyline", polyline_f},
-    {"preview_off", preview_off_f},
-    {"preview_on", preview_on_f},
-    {"print_area", print_area_f},
-    {"print", print_f},
-    {"qsnap", qsnap_f},
-    {"quickleader", quickleader_f},
-    {"ray", ray_f},
-    {"rectangle", rectangle_f},
-    {"regular_polygon", regular_polygon_f},
-    {"rgb", rgb_f},
-    {"rotate", rotate_f},
-    {"rotate_selected", rotate_selected_f},
-    {"rounded_rectangle", rounded_rectangle_f},
-    {"rubber", rubber_f},
-    {"saveas", saveas_f},
-    {"save", save_f},
-    {"scale", scale_f},
-    {"scale_selected", scale_selected_f},
-    {"set_color", set_color_f},
-    {"set_cursor_shape", set_cursor_shape_f},
-    {"set_prompt_prefix", set_prompt_prefix_f},
-    {"set_rubber_mode", set_rubber_mode_f},
-    {"set_rubber_point", set_rubber_point_f},
-    {"set_rubber_text", set_rubber_text_f},
-    {"set_text_angle", set_text_angle_f},
-    {"set_text_bold", set_text_bold_f},
-    {"set_text_font", set_text_font_f},
-    {"set_text_italic", set_text_italic_f},
-    {"set_text_overline", set_text_overline_f},
-    {"set_text_size", set_text_size_f},
-    {"set_text_strikeout", set_text_strikeout_f},
-    {"set_text_underline", set_text_underline_f},
-    {"settings_dialog", settings_dialog_f},
-    {"show_all_layers", show_all_layers_f},
-    {"singlelinetext", singlelinetext_f},
-    {"slot", slot_f},
-    {"snowflake", snowflake_f},
-    {"spare_rubber", spare_rubber_f},
-    {"star", star_f},
-    {"syswindows", syswindows_f},
-    {"text_angle", text_angle_f},
-    {"text_bold", text_bold_f},
-    {"text_font", text_font_f},
-    {"text_italic", text_italic_f},
-    {"text_multi", text_multi_f},
-    {"text_overline", text_overline_f},
-    {"text_single", text_single_f},
-    {"text_size", text_size_f},
-    {"text_strikeout", text_strikeout_f},
-    {"text_underline", text_underline_f},
-    {"thaw_all_layers", thaw_all_layers_f},
-    {"tip_of_the_day", tip_of_the_day_f},
-    {"todo", todo_f},
-    {"triangle", triangle_f},
-    {"unlock_all_layers", unlock_all_layers_f},
-    {"vertical_dimension", vertical_dimension_f},
-    {"vulcanize", vulcanize_f},
-    {"whats_this", whats_this_f},
-    {NULL, NULL}
-};
-
-int check_clear_top = 0;
-
 void debug(const char *msg);
-void clear_top_check(lua_State *L, int expected);
-void no_args(lua_State *L);
 int unpack_args(lua_State *L, const char *function, ScriptValue *args, const char *type_string);
-
-/* This doesn't block, it just warns the user about excess symbols. */
-void
-clear_top_check(lua_State *L, int expected)
-{
-    if (!check_clear_top) {
-        return;
-    }
-    if (lua_gettop(L) > expected) {
-        debug("WARNING: running in CLEAR TOP mode, embroidermodder expects");
-        debug("WARNING: no extra symbols to be on top during a function call");
-        debug("WARNING: and a function was called requiring no arguments");
-    }
-}
-
-void
-no_args(lua_State *L)
-{
-    clear_top_check(L, 0);
-}
 
 /* Unpacks the lua state according to the type_string where the possible
  * types are:
@@ -367,8 +78,6 @@ unpack_args(lua_State *L, const char *function, ScriptValue *args, const char *t
     if (lua_gettop(L) < expected) {
         return 0;
     }
-    /* This doesn't block, it just warns the user about excess symbols. */
-    clear_top_check(L, expected);
 
     for (int i=0; type_string[i]; i++) {
         switch (type_string[i]) {
@@ -433,12 +142,6 @@ temp_name(char *name, int *err)
         temporary_name++;
     }
     fclose(f);
-}
-
-void
-stub_implement(QString txt)
-{
-    qDebug("TODO: %s", qPrintable(txt));
 }
 
 void MainWindow::stub_testing()
@@ -699,13 +402,13 @@ void MainWindow::pickAddModeToggled()
 void MainWindow::makeLayerActive()
 {
     qDebug("makeLayerActive()");
-    stub_implement("Implement makeLayerActive.");
+    qDebug("TODO: Implement makeLayerActive.");
 }
 
 void MainWindow::layerManager()
 {
     qDebug("layerManager()");
-    stub_implement("Implement layerManager.");
+    qDebug("TODO: Implement layerManager.");
     LayerManager layman(this, this);
     layman.exec();
 }
@@ -713,7 +416,7 @@ void MainWindow::layerManager()
 void MainWindow::layerPrevious()
 {
     qDebug("layerPrevious()");
-    stub_implement("Implement layerPrevious.");
+    qDebug("TODO: Implement layerPrevious.");
 }
 
 void MainWindow::layerSelectorIndexChanged(int index)
@@ -757,7 +460,7 @@ void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
     qDebug("textFontSelectorCurrentFontChanged()");
     char command[200];
     sprintf(command, "set_text_font(%s)", qPrintable(font.family()));
-    run(command);
+    cmd(command);
 }
 
 // TODO: check that the toReal() conversion is ok
@@ -767,24 +470,31 @@ void MainWindow::textSizeSelectorIndexChanged(int index)
     st[ST_TEXT_SIZE].i = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
-QString MainWindow::getCurrentLayer()
+QString
+MainWindow::getCurrentLayer()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { return mdiWin->getCurrentLayer(); }
+    if (mdiWin) {
+        return mdiWin->curLayer;
+    }
     return "0";
 }
 
 QString MainWindow::getCurrentLineType()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { return mdiWin->getCurrentLineType(); }
+    if (mdiWin) {
+        return mdiWin->curLineType;
+    }
     return "ByLayer";
 }
 
 QString MainWindow::getCurrentLineWeight()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { return mdiWin->getCurrentLineWeight(); }
+    if (mdiWin) {
+        return mdiWin->curLineWeight;
+    }
     return "ByLayer";
 }
 
@@ -797,7 +507,8 @@ void MainWindow::deletePressed()
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::escapePressed()
+void
+MainWindow::escapePressed()
 {
     qDebug("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -805,16 +516,18 @@ void MainWindow::escapePressed()
     if(mdiWin) { mdiWin->escapePressed(); }
     QApplication::restoreOverrideCursor();
 
-    end_command();
+    cmd("end");
 }
 
-void MainWindow::toggleGrid()
+void
+MainWindow::toggleGrid()
 {
     qDebug("toggleGrid()");
     statusbar->statusBarGridButton->toggle();
 }
 
-void MainWindow::toggleRuler()
+void
+MainWindow::toggleRuler()
 {
     qDebug("toggleRuler()");
     statusbar->statusBarRulerButton->toggle();
@@ -852,14 +565,26 @@ void MainWindow::promptInputNext()
     if(mdiWin) mdiWin->promptInputNext();
 }
 
+/**
+ * @brief Run the lua script in the file supplied.
+ *
+ * @todo warning box
+ */
 void
-run(const char *command)
+MainWindow::run(const char *filename)
 {
-    prompt->appendHistory(command);
-    luaL_dostring(Lua, command);
+    int status = luaL_dofile(Lua, filename);
+    if (status) {
+        printf("ERROR: %d\n", status);
+        qDebug("Failed to boot scripting environment.");
+    }
 }
 
-void MainWindow::runCommand()
+/**
+ * @brief The callback for buttons to call `cmd` via the prompt.
+ */
+void
+MainWindow::runCommand(void)
 {
     QAction* act = qobject_cast<QAction*>(sender());
     if (act) {
@@ -870,54 +595,55 @@ void MainWindow::runCommand()
     }
 }
 
+/**
+ * @brief The standard way to call a command.
+ */
 void
-MainWindow::runCommandMain(const QString& cmd)
+MainWindow::runCommandMain(const QString& line)
 {
-    qDebug("runCommandMain(%s)", qPrintable(cmd));
+    qDebug("runCommandMain(%s)", qPrintable(line));
     // TODO: Uncomment this line when post-selection is available
     // if (!st[ST_SELECTION_MODE_PICKFIRST].b) {
     //     clear_selection();
     // }
     context_flag = CONTEXT_MAIN;
-    run(qPrintable(cmd + "()"));
+    cmd(qPrintable(line));
 }
 
 void
-MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
+MainWindow::runCommandClick(const QString& line, qreal x, qreal y)
 {
-    qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(line), x, y);
     char mouse_pos[100];
     sprintf(mouse_pos, "mouse = {%f, %f}", x, y);
     context_flag = CONTEXT_CLICK;
-    luaL_dostring(Lua, mouse_pos);
-    run(qPrintable(cmd + "()"));
+    cmd(qPrintable(line));
 }
 
 void
-MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
+MainWindow::runCommandMove(const QString& line, qreal x, qreal y)
 {
-    qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(line), x, y);
     char mouse_pos[100];
     sprintf(mouse_pos, "mouse = {%f, %f}", x, y);
     context_flag = CONTEXT_MOVE;
-    luaL_dostring(Lua, mouse_pos);
-    run(qPrintable(cmd + "()"));
+    cmd(qPrintable(line));
 }
 
 void
-MainWindow::runCommandContext(const QString& cmd, const QString& str)
+MainWindow::runCommandContext(const QString& line, const QString& str)
 {
-    qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
+    qDebug("runCommandContext(%s, %s)", qPrintable(line), qPrintable(str));
     char context_str[100];
     sprintf(context_str, "prompt = \"%s\"", qPrintable(str));
     context_flag = CONTEXT_CONTEXT;
-    luaL_dostring(Lua, context_str);
-    run(qPrintable(cmd + "()"));
+    cmd(qPrintable(line));
 }
 
-void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
+void
+MainWindow::runCommandPrompt(const QString& line, const QString& str)
 {
-    qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
+    qDebug("runCommandPrompt(%s, %s)", qPrintable(line), qPrintable(str));
     char prompt[100];
     sprintf(prompt, "(define prompt \"%s\")", qPrintable(str));
     QString safeStr = str;
@@ -932,8 +658,7 @@ void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
     }
     */
     context_flag = CONTEXT_PROMPT;
-    luaL_dostring(Lua, prompt);
-    run(qPrintable(cmd + "()"));
+    cmd(qPrintable(line));
 }
 
 void MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
@@ -958,18 +683,26 @@ void MainWindow::nativeSetRubberMode(int mode)
     if(gview) gview->setRubberMode(mode);
 }
 
-void MainWindow::nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
+/**
+ * @brief Adds a EmbTextMulti to the design.
+ */
+void
+MainWindow::add_text_multi(const QString& str, EmbVector position, qreal rot, bool fill, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
+/**
+ * @brief Adds a EmbTextSingle to the design.
+ */
+void
+MainWindow::add_text_single(const QString& str, EmbVector position, qreal rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if(gview && gscene && stack)
     {
-        TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
+        TextSingleObject* obj = new TextSingleObject(str, position.x, -position.y, getCurrentColor());
         obj->setObjectTextFont(st[ST_TEXT_FONT].s.c_str());
         obj->setObjectTextSize(st[ST_TEXT_SIZE].i);
         obj->setObjectTextStyle(st[ST_TEXT_BOLD].b,
@@ -996,22 +729,34 @@ void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal
     }
 }
 
-void MainWindow::nativeAddInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot)
+/**
+ * @brief Adds a EmbInfiniteLine to the design.
+ */
+void
+MainWindow::add_infinite_line(EmbVector point1, EmbVector point2, qreal rot)
 {
 }
 
-void MainWindow::nativeAddRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot)
+/**
+ * @brief Adds a EmbRay to the design.
+ */
+void
+MainWindow::add_ray(EmbVector start, EmbVector point, qreal rot)
 {
 }
 
-void MainWindow::nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode)
+/**
+ * @brief Adds a EmbLine to the design.
+ */
+void
+MainWindow::add_line(EmbVector start, EmbVector end, qreal rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if(gview && gscene && stack)
     {
-        LineObject* obj = new LineObject(x1, -y1, x2, -y2, getCurrentColor());
+        LineObject* obj = new LineObject(start.x, -start.y, end.x, -end.y, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if(rubberMode)
@@ -1028,11 +773,46 @@ void MainWindow::nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot
     }
 }
 
-void MainWindow::nativeAddTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill)
+/**
+ * @brief Adds a EmbCircle to the design.
+ */
+void
+MainWindow::add_circle(EmbVector center, double radius, bool fill, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && gscene && stack) {
+        CircleObject* obj = new CircleObject(center.x, center.y, radius, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: circle fill
+        if (rubberMode) {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+/**
+ * @brief Adds a EmbLine to the design.
+ */
+void
+MainWindow::add_triangle(EmbVector point1, EmbVector point2, EmbVector point3,
+    qreal rot, bool fill)
 {
 }
 
-void MainWindow::nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode)
+/**
+ * @brief Adds a EmbLine to the design.
+ */
+void
+MainWindow::add_rectangle(qreal x, qreal y, qreal w, qreal h, qreal rot,
+    bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1057,29 +837,46 @@ void MainWindow::nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal ro
     }
 }
 
-void MainWindow::nativeAddRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill)
+/**
+ * @brief Adds a EmbLine to the design.
+ */
+void
+MainWindow::add_rounded_rectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill)
 {
 }
 
-void MainWindow::nativeAddArc(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode)
+/**
+ * @brief Adds a EmbLine to the design.
+ */
+void
+MainWindow::add_arc(EmbVector start, EmbVector mid, EmbVector end, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
-    if(gview && scene)
-    {
-        ArcObject* arcObj = new ArcObject(startX, -startY, midX, -midY, endX, -endY, getCurrentColor());
-        arcObj->setObjectRubberMode(rubberMode);
-        if(rubberMode) gview->addToRubberRoom(arcObj);
-        scene->addItem(arcObj);
-        scene->update();
+    if (!(gview && scene)) {
+        return;
     }
+
+    ArcObject* arcObj = new ArcObject(start.x, -start.y, mid.x, -mid.y, end.x, -end.y,
+        getCurrentColor());
+    arcObj->setObjectRubberMode(rubberMode);
+    if (rubberMode) {
+        gview->addToRubberRoom(arcObj);
+    }
+    scene->addItem(arcObj);
+    scene->update();
 }
 
-void MainWindow::nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode)
+/**
+ * @brief Adds a EmbLine to the design.
+ */
+void
+MainWindow::add_slot(EmbVector center, qreal diameter, qreal length, qreal rot, bool fill,
+    int rubberMode)
 {
     //TODO: Use UndoableAddCommand for slots
     /*
-    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length, getCurrentColor());
+    SlotObject* slotObj = new SlotObject(center.x, -center.y, diameter, length, getCurrentColor());
     slotObj->setRotation(-rot);
     slotObj->setObjectRubberMode(rubberMode);
     if(rubberMode) gview->addToRubberRoom(slotObj);
@@ -1089,56 +886,127 @@ void MainWindow::nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qre
     */
 }
 
-void MainWindow::nativeAddEllipse(qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode)
+/**
+ * @brief Adds a EmbLine to the design.
+ */
+void
+MainWindow::add_ellipse(EmbVector center, qreal width, qreal height, qreal rot, bool fill,
+    int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
-    {
-        EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height, getCurrentColor());
-        obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
-        //TODO: ellipse fill
-        if(rubberMode)
-        {
-            gview->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else
-        {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
-            stack->push(cmd);
-        }
+    if (!(gview && gscene && stack)) {
+        return;
     }
-}
 
-void MainWindow::nativeAddPoint(qreal x, qreal y)
-{
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
-    {
-        PointObject* obj = new PointObject(x, -y, getCurrentColor());
-        UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+    EllipseObject* obj = new EllipseObject(center.x, -center.y, width, height, getCurrentColor());
+    obj->setRotation(-rot);
+    obj->setObjectRubberMode(rubberMode);
+    //TODO: ellipse fill
+    if (rubberMode) {
+        gview->addToRubberRoom(obj);
+        gscene->addItem(obj);
+        gscene->update();
+    }
+    else {
+        UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj,
+            gview, 0);
         stack->push(cmd);
     }
 }
 
-void MainWindow::nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill)
+/**
+ * @brief Add an EmbPoint to the design.
+ */
+void
+MainWindow::add_point(EmbVector position)
+{
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (!(gview && stack)) {
+        return;
+    }
+
+    PointObject* obj = new PointObject(position.x, -position.y, getCurrentColor());
+    UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(),
+        obj, gview, 0);
+    stack->push(cmd);
+}
+
+/**
+ * @brief Add an EmbRegularPolygon to the design.
+ */
+void
+MainWindow::add_regular_polygon(EmbVector center, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill)
 {
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+/**
+ * @brief Adds a EmbPolygon to the design.
+ *
+ * @note This native is different than the rest in that the Y+ is down
+ *       (scripters need not worry about this).
+ */
+void
+MainWindow::add_polygon(EmbVector start, const QPainterPath& p, int rubberMode)
 {
+    /*
+    if (context->argumentCount() != 1)   return debug("addPolygon() requires one argument");
+    if (!context->argument(0).isArray()) return debug(TypeError, "addPolygon(): first argument is not an array");
+
+    QVariantList varList = context->argument(0).toVariant().toList();
+    int varSize = varList.size();
+    if (varSize < 2) return debug(TypeError, "addPolygon(): array must contain at least two elements");
+    if (varSize % 2) return debug(TypeError, "addPolygon(): array cannot contain an odd number of elements");
+
+    bool lineTo = false;
+    bool xCoord = true;
+    double x = 0;
+    double y = 0;
+    double startX = 0;
+    double startY = 0;
+    QPainterPath path;
+    foreach(QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
+                xCoord = false;
+                x = var.toReal();
+            }
+            else {
+                xCoord = true;
+                y = -var.toReal();
+
+                if (lineTo) {
+                    path.lineTo(x,y);
+                }
+                else {
+                    path.moveTo(x,y);
+                    lineTo = true;
+                    startX = x;
+                    startY = y;
+                }
+            }
+        }
+        else {
+            return debug(TypeError, "addPolygon(): array contains one or more invalid elements");
+        }
+    }
+
+    //Close the polygon
+    path.closeSubpath();
+
+    path.translate(-startX, -startY);
+
+    _mainWin->add_polygon(startX, startY, path, OBJ_RUBBER_OFF);
+    */
+
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if(gview && gscene && stack)
     {
-        PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
+        PolygonObject* obj = new PolygonObject(start.x, start.y, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if(rubberMode)
         {
@@ -1154,15 +1022,68 @@ void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath
     }
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+/**
+ * @brief Adds a EmbPolyline to the design.
+ *
+ * @note This native is different than the rest in that the Y+ is down
+ *       (scripters need not worry about this).
+ */
+void
+MainWindow::add_polyline(EmbVector start, const QPainterPath& p, int rubberMode)
 {
+    /*
+    if (context->argumentCount() != 1)   return debug("addPolyline() requires one argument");
+    if (!context->argument(0).isArray()) return debug(TypeError, "addPolyline(): first argument is not an array");
+
+    QVariantList varList = context->argument(0).toVariant().toList();
+    int varSize = varList.size();
+    if (varSize < 2) return debug(TypeError, "addPolyline(): array must contain at least two elements");
+    if (varSize % 2) return debug(TypeError, "addPolyline(): array cannot contain an odd number of elements");
+
+    bool lineTo = false;
+    bool xCoord = true;
+    double x = 0;
+    double y = 0;
+    double startX = 0;
+    double startY = 0;
+    QPainterPath path;
+    foreach(QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
+                xCoord = false;
+                x = var.toReal();
+            }
+            else {
+                xCoord = true;
+                y = -var.toReal();
+
+                if (lineTo) {
+                    path.lineTo(x,y);
+                }
+                else {
+                    path.moveTo(x,y);
+                    lineTo = true;
+                    startX = x;
+                    startY = y;
+                }
+            }
+        }
+        else {
+            return debug(TypeError, "addPolyline(): array contains one or more invalid elements");
+        }
+    }
+
+    path.translate(-startX, -startY);
+
+    _mainWin->add_polyline(startX, startY, path, OBJ_RUBBER_OFF);
+    */
+
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if(gview && gscene && stack)
     {
-        PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
+        PolylineObject* obj = new PolylineObject(start.x, start.y, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if(rubberMode)
         {
@@ -1178,21 +1099,65 @@ void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPat
     }
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+/**
+ * @brief Adds a EmbHorizontalDimension to the design.
+ *
+ * @note This native is different than the rest in that the Y+ is down
+ *       (scripters need not worry about this).
+ */
+void
+MainWindow::add_path(EmbVector start, const QPainterPath& p, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddHorizontalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight)
+/**
+ * @brief Adds a EmbHorizontalDimension to the design.
+ */
+void
+MainWindow::add_horizontal_dimension(EmbVector start, EmbVector end, qreal legHeight)
 {
 }
 
-void MainWindow::nativeAddVerticalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight)
+/**
+ * @brief Adds a EmbVerticalDimension to the design.
+ */
+void
+MainWindow::add_vertical_dimension(EmbVector start, EmbVector end, qreal legHeight)
 {
 }
 
-void MainWindow::nativeAddImage(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot)
+/**
+ * @brief Adds a EmbImage to the design.
+ */
+void
+MainWindow::add_image(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot)
 {
+}
+
+/**
+ * @brief Adds a EmbDimLeader to the design.
+ */
+void
+MainWindow::add_dim_leader(double x1, double y1, double x2, double y2, qreal rot, int rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && gscene && stack) {
+        DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2,
+            getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        if (rubberMode) {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
 }
 
 void MainWindow::nativeSetCursorShape(const QString& str)
@@ -1220,12 +1185,9 @@ void MainWindow::nativeSetCursorShape(const QString& str)
         else if(shape == "handclosed")      gview->setCursor(QCursor(Qt::ClosedHandCursor));
         else if(shape == "whatsthis")       gview->setCursor(QCursor(Qt::WhatsThisCursor));
         else if(shape == "busy")            gview->setCursor(QCursor(Qt::BusyCursor));
-        #if QT_VERSION >= 0x040700
         else if(shape == "dragmove")        gview->setCursor(QCursor(Qt::DragMoveCursor));
         else if(shape == "dragcopy")        gview->setCursor(QCursor(Qt::DragCopyCursor));
         else if(shape == "draglink")        gview->setCursor(QCursor(Qt::DragLinkCursor));
-        #endif
-
     }
 }
 
@@ -1285,7 +1247,7 @@ activeView(void)
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        View* v = mdiWin->getView();
+        View* v = mdiWin->gview;
         return v;
     }
     return NULL;
@@ -1296,7 +1258,7 @@ activeScene(void)
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        QGraphicsScene* s = mdiWin->getScene();
+        QGraphicsScene* s = mdiWin->gscene;
         return s;
     }
     return 0;
@@ -1338,36 +1300,6 @@ debug(const char *msg)
     qDebug(msg);
 }
 
-void
-init_command(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearRubberRoom();
-    }
-}
-
-void
-clear_selection(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearSelection();
-    }
-}
-
-void
-end_command(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearRubberRoom();
-        gview->previewOff();
-        gview->disableMoveRapidFire();
-    }
-    prompt->endCommand();
-}
-
 /* -- lua registerables --------------------------------------------------------
  *
  * Try to keep this section of the file alphabetized in the function name to
@@ -1394,7 +1326,6 @@ allow_rubber_f(lua_State *L)
 int
 clear_rubber_f(lua_State *L)
 {
-    no_args(L);
     View* gview = activeView();
     if (gview) {
         gview->clearRubberRoom();
@@ -1406,95 +1337,11 @@ clear_rubber_f(lua_State *L)
 int
 delete_selected_f(lua_State *L)
 {
-    no_args(L);
     View* gview = activeView();
     if (gview) {
         gview->deleteSelected();
     }
-    clear_selection();
-    return 0;
-}
-
-/* . */
-int
-dim_leader_f(lua_State *L)
-{
-    ScriptValue args[5];
-    if (!unpack_args(L, "dim_leader_f", args, "rrrrr")) {
-        return 0;
-    }
-    /*
-    double x1 = args[0].r;
-    double y1 = args[1].r;
-    double x2 = args[2].r;
-    double y2 = args[3].r;
-    double rot = args[4].r;
-
-    int rubberMode = OBJ_RUBBER_OFF;
-
-    View* gview = activeView();
-    QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack) {
-        DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2, getCurrentColor());
-        obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
-        if (rubberMode) {
-            gview->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
-            stack->push(cmd);
-        }
-    }
-    */
-    return 0;
-}
-
-/* . */
-int
-end_command_f(lua_State *L)
-{
-    no_args(L);
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-horizontal_dimension_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-image_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
-clear_selection_f(lua_State *L)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearSelection();
-    }
-    return 0;
-}
-
-/* . */
-int
-menu_selector_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
+    _mainWin->cmd("clear");
     return 0;
 }
 
@@ -1517,31 +1364,6 @@ messagebox_f(lua_State *L)
         return debug(UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
     _mainWin->nativeMessageBox(type, title, text);
-    */
-    return 0;
-}
-
-/* . */
-int
-mouse_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
-num_selected_f(lua_State *L)
-{
-    debug("TODO: num_selected");
-    /*
-    View* gview = activeView();
-    if (gview) {
-        return gview->numSelected();
-    }
-    else {
-    }
-    return 1;    
     */
     return 0;
 }
@@ -1622,32 +1444,7 @@ print_area_f(lua_State *L)
 
     qDebug("print_area_f(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
-    _mainWin->run_command(CMD_PRINT);
-    return 0;
-}
-
-/* . */
-int
-qsnap_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
-ray_f(lua_State *L)
-{
-    //TODO: parameter error checking
-    qDebug("TODO: finish addRay command");
-    return 0;
-}
-
-/* TODO: parameter error checking */
-int
-regular_polygon_f(lua_State *L)
-{
-    debug("TODO: finish addRegularPolygon command");
+    _mainWin->cmd("print");
     return 0;
 }
 
@@ -1659,7 +1456,8 @@ rubber_f(lua_State *L)
     return 0;
 }
 
-/*! Interface to core commands.
+/**
+ * @brief Lua interface to core commands.
  *
  * User based interaction comes via this interface so we can parse
  * the differences between interaction contexts.
@@ -1674,28 +1472,13 @@ cmd_f(lua_State *L)
         return 0;
     }
     if (context_flag == CONTEXT_MAIN) {
-        init_command();
+        _mainWin->cmd("clear_rubber");
         /* Some selection based commands need to override this. */
-        clear_selection();
+        _mainWin->cmd("clear");
     }
-    int id = get_cmd_id(args[0].s.c_str());
-    if (id >= 0) {
-        _mainWin->run_command(id);
-        /* TODO: conditional on if the command is open ended or not. */
-        end_command();
-        return 0;
-    }
-    debug("");
-    end_command();
-    return 0;
-}
-
-/* . */
-int
-text_angle_f(lua_State *L)
-{
-    debug("TODO: text_angle_f");
-    /* return QScriptValue(st[ST_TEXT_ANGLE].r); */
+    _mainWin->cmd(args[0].s.c_str());
+    /* TODO: conditional on if the command is open ended or not. */
+    _mainWin->cmd("end");
     return 0;
 }
 
@@ -1710,93 +1493,12 @@ text_font_f(lua_State *L)
 
 /* . */
 int
-text_single_f(lua_State *L)
-{
-    ScriptValue args[5];
-    if (!unpack_args(L, "text_single_f", args, "srrrb")) {
-        return 0;
-    }
-
-    QString str = args[0].s.c_str();
-    double x = args[1].r;
-    double y = args[2].r;
-    double rot = args[3].r;
-    bool fill = args[4].b;
-    _mainWin->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
-    return 0;
-}
-
-/* . */
-int
-text_multi_f(lua_State *L)
-{
-    ScriptValue args[5];
-    if (!unpack_args(L, "text_single_f", args, "srrrb")) {
-        return 0;
-    }
-
-    QString str = args[0].s.c_str();
-    double x = args[1].r;
-    double y = args[2].r;
-    double rot = args[3].r;
-    bool fill = args[4].b;
-    _mainWin->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
-    return 0;
-}
-
-/* . */
-int
-triangle_f(lua_State *L)
-{
-    ScriptValue args[8];
-    if (!unpack_args(L, "text_single_f", args, "rrrrrrrb")) {
-        return 0;
-    }
-
-    double x1 = args[0].r;
-    double y1 = args[1].r;
-    double x2 = args[2].r;
-    double y2 = args[3].r;
-    double x3 = args[4].r;
-    double y3 = args[5].r;
-    double rot = args[6].r;
-    bool fill = args[7].b;
-    _mainWin->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
-    return 0;
-}
-
-/* . */
-int
-vertical_dimension_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
 vulcanize_f(lua_State *L)
 {
     View* gview = activeView();
     if (gview) {
         gview->vulcanizeRubberRoom();
     }
-    return 0;
-}
-
-/* . */
-int
-infinite_line_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    return 0;
-}
-
-/* . */
-int
-menu_seperator_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
     return 0;
 }
 
@@ -1946,30 +1648,6 @@ set_text_font_f(lua_State *L)
     return 0;
 }
 
-/* . */
-int
-set_text_size_f(lua_State *L)
-{
-    double num = lua_tonumber(L, 1);
-
-    if (std::isnan(num)) {
-        debug("TypeError, setTextSize(): first argument failed isNaN check.");
-        return 0;
-    }
-
-    st[ST_TEXT_SIZE].i = std::fabs(num);
-    int index = _mainWin->textSizeSelector->findText("Custom", Qt::MatchContains);
-    if (index != -1) {
-        _mainWin->textSizeSelector->removeItem(index);
-    }
-    _mainWin->textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
-    index = _mainWin->textSizeSelector->findText("Custom", Qt::MatchContains);
-    if (index != -1) {
-        _mainWin->textSizeSelector->setCurrentIndex(index);
-    }
-    return 0;
-}
-
 /* TODO: convert set_rubber_point_f. */
 int
 set_rubber_point_f(lua_State *L)
@@ -1991,31 +1669,6 @@ set_rubber_point_f(lua_State *L)
     if (gview) {
         gview->setRubberPoint(key, QPointF(x, -y));
     }
-    return 0;
-}
-
-/* . */
-int
-set_text_angle_f(lua_State *L)
-{
-    double num = lua_tonumber(L, 1);
-
-    if (std::isnan(num)) {
-        debug("TypeError, set_text_angle_f(): first argument failed isNaN check.");
-        return 0;
-    }
-
-    st[ST_TEXT_ANGLE].r = num;
-    return 0;
-}
-
-/* . */
-int
-text_size_f(lua_State *L)
-{
-    debug("TODO: add_to_menu");
-    no_args(L);
-    /* return QScriptValue(st[ST_TEXT_SIZE].i); */
     return 0;
 }
 
@@ -2050,7 +1703,6 @@ append_prompt_history_f(lua_State *L)
 int
 blink_f(lua_State *L)
 {
-    no_args(L);
     prompt->startBlinking();
     return 0;
 }
@@ -2082,7 +1734,6 @@ error_f(lua_State *L)
     String msg = "ERROR: (" + args[0].s + ") " + args[1].s;
     prompt->setPrefix(QString(msg.c_str()));
     prompt->appendHistory(QString());
-    end_command();
     return 0;
 }
 
@@ -2096,7 +1747,6 @@ error_f(lua_State *L)
 int
 report_state_f(lua_State *L)
 {
-    no_args(L);
     FILE *f = fopen("state.txt", "w");
     if (!f) {
         return 0;
@@ -2106,59 +1756,10 @@ report_state_f(lua_State *L)
     return 0;
 }
 
-/* TODO: circle fill. */
-int
-circle_f(lua_State *L)
-{
-    ScriptValue args[4];
-    if (!unpack_args(L, "circle_f", args, "rrrb")) {
-        return 0;
-    }
-
-    EmbVector center = unpack_vector(args, 0);
-    double radius = args[2].r;
-    bool fill = args[3].b;
-    int rubberMode = OBJ_RUBBER_OFF;
-
-    View* gview = activeView();
-    QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack) {
-        CircleObject* obj = new CircleObject(center.x, center.y, radius, getCurrentColor());
-        obj->setObjectRubberMode(rubberMode);
-        //TODO: circle fill
-        if (rubberMode) {
-            gview->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
-            stack->push(cmd);
-        }
-    }
-    return 0;
-}
-
 /* . */
 int
 color_selector_f(lua_State *L)
 {
-    no_args(L);
-    return 0;
-}
-
-/* TODO: Make day vision color settings. */
-int
-day_f(lua_State *L)
-{
-    no_args(L);
-    View* gview = activeView();
-    if (gview) {
-        gview->setBackgroundColor(qRgb(255,255,255)); 
-        gview->setCrossHairColor(qRgb(0,0,0));
-        gview->setGridColor(qRgb(0,0,0));
-    }
     return 0;
 }
 
@@ -2166,7 +1767,6 @@ day_f(lua_State *L)
 int
 design_details_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
@@ -2174,7 +1774,6 @@ design_details_f(lua_State *L)
 int
 disable_move_rapid_fire_f(lua_State *L)
 {
-    no_args(L);
     View* gview = activeView();
     if (gview) {
         gview->disableMoveRapidFire();
@@ -2186,7 +1785,6 @@ disable_move_rapid_fire_f(lua_State *L)
 int
 disable_prompt_rapid_fire_f(lua_State *L)
 {
-    no_args(L);
     prompt->disableRapidFire();
     return 0;
 }
@@ -2195,7 +1793,6 @@ disable_prompt_rapid_fire_f(lua_State *L)
 int
 distance_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
@@ -2203,17 +1800,6 @@ distance_f(lua_State *L)
 int
 dolphin_f(lua_State *L)
 {
-    no_args(L);
-    return 0;
-}
-
-/* This function intensionally does nothing: a nil function to use as a
- * placeholder that can be called.
- */
-int
-do_nothing_f(lua_State *L)
-{
-    no_args(L);
     return 0;
 }
 
@@ -2221,7 +1807,6 @@ do_nothing_f(lua_State *L)
 int
 enable_move_rapid_fire_f(lua_State *L)
 {
-    no_args(L);
     View* gview = activeView();
     if (gview) {
         gview->enableMoveRapidFire();
@@ -2233,7 +1818,6 @@ enable_move_rapid_fire_f(lua_State *L)
 int
 enable_prompt_rapid_fire_f(lua_State *L)
 {
-    no_args(L);
     prompt->enableRapidFire();
     return 0;
 }
@@ -2242,22 +1826,6 @@ enable_prompt_rapid_fire_f(lua_State *L)
 int
 erase_f(lua_State *L)
 {
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-exit_program_f(lua_State *L)
-{
-    no_args(L);
-    if (st[ST_PROMPT_SAVE_HISTORY].b) {
-        //TODO: get filename from settings
-        prompt->saveHistory("prompt.log", st[ST_PROMPT_SAVE_AS_HTML].b);
-    }
-    qApp->closeAllWindows();
-    //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
-    _mainWin->deleteLater();
     return 0;
 }
 
@@ -2265,7 +1833,6 @@ exit_program_f(lua_State *L)
 int
 freeze_all_layers_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
@@ -2273,21 +1840,6 @@ freeze_all_layers_f(lua_State *L)
 int
 heart_f(lua_State *L)
 {
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-help_f(lua_State *L)
-{
-    no_args(L);
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->run_command(CMD_HELP);
-    end_command();
     return 0;
 }
 
@@ -2295,19 +1847,6 @@ help_f(lua_State *L)
 int
 hide_all_layers_f(lua_State *L)
 {
-    no_args(L);
-    return 0;
-}
-
-/* . */
-int
-init_command_f(lua_State *L)
-{
-    no_args(L);
-    View* gview = activeView();
-    if (gview) {
-        gview->clearRubberRoom();
-    }
     return 0;
 }
 
@@ -2315,7 +1854,6 @@ init_command_f(lua_State *L)
 int
 layers_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
@@ -2323,7 +1861,6 @@ layers_f(lua_State *L)
 int
 layer_previous_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
@@ -2334,37 +1871,21 @@ layer_selector_f(lua_State *L)
     return 0;
 }
 
-/* . */
-int
-line_f(lua_State *L)
-{
-    ScriptValue args[5];
-    if (!unpack_args(L, "line_f", args, "rrrrr")) {
-        return 0;
-    }
-    _mainWin->nativeAddLine(args[0].r, args[1].r, args[2].r, args[3].r,
-        args[4].r, OBJ_RUBBER_OFF);
-    return 0;
-}
-
 int
 line_type_selector_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
 int
 line_weight_selector_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
 int
 locate_point_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
@@ -2372,7 +1893,6 @@ locate_point_f(lua_State *L)
 int
 lock_all_layers_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
@@ -2380,7 +1900,6 @@ lock_all_layers_f(lua_State *L)
 int
 make_layer_current_f(lua_State *L)
 {
-    no_args(L);
     return 0;
 }
 
@@ -2388,47 +1907,12 @@ make_layer_current_f(lua_State *L)
 int
 move_f(lua_State *L)
 {
-    no_args(L);
-    return 0;
-}
-
-/* TODO: Make night vision color settings. */
-int
-night_vision_f(lua_State *L)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->setBackgroundColor(qRgb(0,0,0));
-        gview->setCrossHairColor(qRgb(255,255,255));
-        gview->setGridColor(qRgb(255,255,255));
-    }
-    return 0;
-}
-
-int
-open_file_f(lua_State *L)
-{
-    if (context_flag == CONTEXT_MAIN) {
-        init_command();
-        clear_selection();
-    }
-    _mainWin->openFile();
-    end_command();
     return 0;
 }
 
 int
 path_f(lua_State *L)
 {
-    return 0;
-}
-
-int
-platform_f(lua_State *L)
-{
-    /*
-    return QScriptValue(_mainWin->platformString());
-    */
     return 0;
 }
 
@@ -2481,98 +1965,9 @@ print_f(lua_State *L)
     return 0;
 }
 
-/* . */
-int
-save_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-saveas_f(lua_State *L)
-{
-    return 0;
-}
-
 int
 scale_f(lua_State *L)
 {
-    return 0;
-}
-
-/* . */
-int
-set_prompt_prefix_f(lua_State *L)
-{
-    QString s(luaL_checkstring(L, 1));
-    prompt->setPrefix(s);
-    return 0;
-}
-
-/* . */
-int
-set_text_bold_f(lua_State *L)
-{
-    if (!lua_isboolean(L, 1)) {
-        debug("set_text_bold: argument not boolean");
-        return 0;
-    }
-    st[ST_TEXT_BOLD].b = lua_toboolean(L, 1);
-    return 0;
-}
-
-/* . */
-int
-set_text_italic_f(lua_State *L)
-{
-    if (!lua_isboolean(L, 1)) {
-        debug("set_text_italic: argument not boolean");
-        return 0;
-    }
-    st[ST_TEXT_ITALIC].b = lua_toboolean(L, 1);
-    return 0;
-}
-
-/* . */
-int
-set_text_overline_f(lua_State *L)
-{
-    if (!lua_isboolean(L, 1)) {
-        debug("set_text_overline: argument not boolean");
-        return 0;
-    }
-    st[ST_TEXT_OVERLINE].b = lua_toboolean(L, 1);
-    return 0;
-}
-
-/* . */
-int
-set_text_strikeout_f(lua_State *L)
-{
-    if (!lua_isboolean(L, 1)) {
-        debug("set_text_strikeout: argument not boolean");
-        return 0;
-    }
-    st[ST_TEXT_STRIKEOUT].b = lua_toboolean(L, 1);
-    return 0;
-}
-
-/* . */
-int
-set_text_underline_f(lua_State *L)
-{
-    if (!lua_isboolean(L, 1)) {
-        debug("set_text_overline: argument not boolean");
-        return 0;
-    }
-    st[ST_TEXT_UNDERLINE].b = lua_toboolean(L, 1);
-    return 0;
-}
-
-int
-settings_dialog_f(lua_State *L)
-{
-    _mainWin->settingsDialog("General");
     return 0;
 }
 
@@ -2597,41 +1992,6 @@ star_f(lua_State *L)
 int
 syswindows_f(lua_State *L)
 {
-    return 0;
-}
-
-int
-text_bold_f(lua_State *L)
-{
-    /* lua_push(st[ST_TEXT_BOLD].b); */
-    return 0;
-}
-
-int
-text_italic_f(lua_State *L)
-{
-    /* lua_push(st[ST_TEXT_ITALIC].b); */
-    return 0;
-}
-
-int
-text_overline_f(lua_State *L)
-{
-    /* lua_push(st[ST_TEXT_OVERLINE].b); */
-    return 0;
-}
-
-int
-text_strikeout_f(lua_State *L)
-{
-    /* lua_push(st[ST_TEXT_STRIKEOUT].b); */
-    return 0;
-}
-
-int
-text_underline_f(lua_State *L)
-{
-    /* lua_push(st[ST_TEXT_UNDERLINE].b); */
     return 0;
 }
 
@@ -2660,7 +2020,6 @@ todo_f(lua_State *L)
     QString strTodo(luaL_checkstring(L, 2));
 
     prompt->alert("TODO: (" + strCmd + ") " + strTodo);
-    end_command();
     return 0;
 }
 
@@ -2670,15 +2029,9 @@ unlock_all_layers_f(lua_State *L)
     return 0;
 }
 
-int
-whats_this_f(lua_State *L)
-{
-    return 0;
-}
-
 /* TODO: move add_rubber to script */
 int
-AddRubber_f(lua_State *L)
+add_rubber_f(lua_State *L)
 {
     /*
     if (context->argumentCount() != 1) {
@@ -2691,7 +2044,7 @@ AddRubber_f(lua_State *L)
     QString objType = context->argument(0).toString().toUpper();
 
     // FIXME
-    run("a = allow_rubber()");
+    cmd("a = allow_rubber()");
     if (!a) {
         return debug(UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
     }
@@ -2706,7 +2059,7 @@ AddRubber_f(lua_State *L)
         //TODO: handle this type
     }
     else if (objType == "CIRCLE") {
-        _mainWin->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
+        _mainWin->add_circle(mx, my, 0, false, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMALIGNED") {
         //TODO: handle this type
@@ -2721,7 +2074,7 @@ AddRubber_f(lua_State *L)
 
 } //TODO: handle this type
     else if (objType == "DIMLEADER") {
-        _mainWin->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+        _mainWin->add_dim_leader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMLINEAR") {
 
@@ -2732,23 +2085,23 @@ AddRubber_f(lua_State *L)
     else if (objType == "DIMRADIUS")   {
 
 } //TODO: handle this type
-    else if (objType == "ELLIPSE") { _mainWin->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "ELLIPSE") { _mainWin->add_ellipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "ELLIPSEARC") {
 
 } //TODO: handle this type
     else if (objType == "HATCH")       {} //TODO: handle this type
     else if (objType == "IMAGE")       {} //TODO: handle this type
     else if (objType == "INFINITELINE") {} //TODO: handle this type
-    else if (objType == "LINE")        { _mainWin->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "LINE")        { _mainWin->add_line(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "PATH")        {} //TODO: handle this type
     else if (objType == "POINT")       {} //TODO: handle this type
-    else if (objType == "POLYGON")     { _mainWin->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "POLYLINE")    { _mainWin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYGON")     { _mainWin->add_polygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYLINE")    { _mainWin->add_polyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "RAY")         {} //TODO: handle this type
-    else if (objType == "RECTANGLE")   { _mainWin->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "RECTANGLE")   { _mainWin->add_rectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "SPLINE")      {} //TODO: handle this type
     else if (objType == "TEXTMULTI")   {} //TODO: handle this type
-    else if (objType == "TEXTSINGLE")  { _mainWin->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "TEXTSINGLE")  { _mainWin->add_text_single("", mx, my, 0, false, OBJ_RUBBER_ON); }
     */
     return 0;
 }
@@ -2786,261 +2139,6 @@ spare_rubber_f(lua_State *L)
     return 0;
 }
 
-int
-AddInfiniteLine_f(lua_State *L)
-{
-    //TODO: parameter error checking
-    qDebug("TODO: finish addInfiniteLine command");
-    return 0;
-}
-
-int
-rectangle_f(lua_State *L)
-{
-    ScriptValue args[6];
-    if (!unpack_args(L, "rectangle_f", args, "rrrrrb")) {
-        return 0;
-    }
-
-    double x = args[0].r;
-    double y = args[1].r;
-    double w = args[2].r;
-    double h = args[3].r;
-    double rot = args[4].r;
-    bool fill = args[5].b;
-
-    _mainWin->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
-    return 0;
-}
-
-/* . */
-int
-rounded_rectangle_f(lua_State *L)
-{
-    ScriptValue args[7];
-    if (!unpack_args(L, "rounded_rectangle_f", args, "rrrrrrb")) {
-        return 0;
-    }
-
-    double x = args[0].r;
-    double y = args[1].r;
-    double w = args[2].r;
-    double h = args[3].r;
-    double rad = args[4].r;
-    double rot = args[5].r;
-    bool fill = args[6].b;
-
-    _mainWin->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
-    return 0;
-}
-
-/* . */
-int
-arc_f(lua_State *L)
-{
-    ScriptValue args[6];
-    if (!unpack_args(L, "arc_f", args, "rrrrrr")) {
-        return 0;
-    }
-
-    EmbVector start = unpack_vector(args, 0);
-    EmbVector mid = unpack_vector(args, 2);
-    EmbVector end = unpack_vector(args, 4);
-
-    _mainWin->nativeAddArc(start.x, start.y, mid.x, mid.y, end.x, end.y, OBJ_RUBBER_OFF);
-    return 0;
-}
-
-/* . */
-int
-slot_f(lua_State *L)
-{
-    ScriptValue args[6];
-    if (!unpack_args(L, "slot_f", args, "rrrrrb")) {
-        return 0;
-    }
-
-    EmbVector center = unpack_vector(args, 0);
-    double diameter = args[2].r;
-    double length = args[3].r;
-    double rot = args[4].r;
-    bool fill = args[5].b;
-
-    _mainWin->nativeAddSlot(center.x, center.y, diameter, length, rot, fill, OBJ_RUBBER_OFF);
-    return 0;
-}
-
-/* . */
-int
-ellipse_f(lua_State *L)
-{
-    ScriptValue args[6];
-    if (!unpack_args(L, "ellipse_f", args, "rrrrrb")) {
-        return 0;
-    }
-
-    EmbVector center = unpack_vector(args, 0);
-    EmbVector radii = unpack_vector(args, 2);
-    double rot = args[4].r;
-    bool fill = args[5].b;
-
-    _mainWin->nativeAddEllipse(center.x, center.y, radii.x, radii.y, rot, fill, OBJ_RUBBER_OFF);
-    return 0;
-}
-
-/* . */
-int
-point_f(lua_State *L)
-{
-    ScriptValue args[2];
-    if (!unpack_args(L, "point_f", args, "rr")) {
-        return 0;
-    }
-
-    double x = args[0].r;
-    double y = args[1].r;
-    _mainWin->nativeAddPoint(x,y);
-    return 0;
-}
-
-int
-AddPolygon_f(lua_State *L)
-{
-    /*
-    if (context->argumentCount() != 1)   return debug("addPolygon() requires one argument");
-    if (!context->argument(0).isArray()) return debug(TypeError, "addPolygon(): first argument is not an array");
-
-    QVariantList varList = context->argument(0).toVariant().toList();
-    int varSize = varList.size();
-    if (varSize < 2) return debug(TypeError, "addPolygon(): array must contain at least two elements");
-    if (varSize % 2) return debug(TypeError, "addPolygon(): array cannot contain an odd number of elements");
-
-    bool lineTo = false;
-    bool xCoord = true;
-    double x = 0;
-    double y = 0;
-    double startX = 0;
-    double startY = 0;
-    QPainterPath path;
-    foreach(QVariant var, varList) {
-        if (var.canConvert(QVariant::Double)) {
-            if (xCoord) {
-                xCoord = false;
-                x = var.toReal();
-            }
-            else {
-                xCoord = true;
-                y = -var.toReal();
-
-                if (lineTo) {
-                    path.lineTo(x,y);
-                }
-                else {
-                    path.moveTo(x,y);
-                    lineTo = true;
-                    startX = x;
-                    startY = y;
-                }
-            }
-        }
-        else {
-            return debug(TypeError, "addPolygon(): array contains one or more invalid elements");
-        }
-    }
-
-    //Close the polygon
-    path.closeSubpath();
-
-    path.translate(-startX, -startY);
-
-    _mainWin->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
-    */
-    return 0;
-}
-
-int
-AddPolyline_f(lua_State *L)
-{
-    /*
-    if (context->argumentCount() != 1)   return debug("addPolyline() requires one argument");
-    if (!context->argument(0).isArray()) return debug(TypeError, "addPolyline(): first argument is not an array");
-
-    QVariantList varList = context->argument(0).toVariant().toList();
-    int varSize = varList.size();
-    if (varSize < 2) return debug(TypeError, "addPolyline(): array must contain at least two elements");
-    if (varSize % 2) return debug(TypeError, "addPolyline(): array cannot contain an odd number of elements");
-
-    bool lineTo = false;
-    bool xCoord = true;
-    double x = 0;
-    double y = 0;
-    double startX = 0;
-    double startY = 0;
-    QPainterPath path;
-    foreach(QVariant var, varList) {
-        if (var.canConvert(QVariant::Double)) {
-            if (xCoord) {
-                xCoord = false;
-                x = var.toReal();
-            }
-            else {
-                xCoord = true;
-                y = -var.toReal();
-
-                if (lineTo) {
-                    path.lineTo(x,y);
-                }
-                else {
-                    path.moveTo(x,y);
-                    lineTo = true;
-                    startX = x;
-                    startY = y;
-                }
-            }
-        }
-        else {
-            return debug(TypeError, "addPolyline(): array contains one or more invalid elements");
-        }
-    }
-
-    path.translate(-startX, -startY);
-
-    _mainWin->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
-    */
-    return 0;
-}
-
-int
-AddPath_f(lua_State *L)
-{
-    //TODO: parameter error checking
-    qDebug("TODO: finish addPath command");
-    return 0;
-}
-
-int
-AddHorizontalDimension_f(lua_State *L)
-{
-    //TODO: parameter error checking
-    qDebug("TODO: finish addHorizontalDimension command");
-    return 0;
-}
-
-int
-AddVerticalDimension_f(lua_State *L)
-{
-    //TODO: parameter error checking
-    qDebug("TODO: finish addVerticalDimension command");
-    return 0;
-}
-
-int
-AddImage_f(lua_State *L)
-{
-    //TODO: parameter error checking
-    qDebug("TODO: finish addImage command");
-    return 0;
-}
 
 int
 set_cursor_shape_f(lua_State *L)
@@ -3213,96 +2311,62 @@ mirror_selected_f(lua_State *L)
     return 0;
 }
 
-/* Report the current x-position of the mouse and return it. */
+/**
+ * @brief Set a state variable to a lua variable.
+ *
+ * EXAMPLE: set("text_font", "Arial")
+ *
+ * FIXME: this is an untested draft.
+ */
 int
-mouse_x_f(lua_State *L)
+set_f(lua_State *L)
 {
-    QGraphicsScene* scene = activeScene();
-    double result = 0.0;
-    if (scene) {
-        qDebug("mouseX: %.50f", scene->property(SCENE_MOUSE_POINT).toPointF().x());
-        result = scene->property(SCENE_MOUSE_POINT).toPointF().x();
+    if (!lua_isstring(L, 1)) {
+        debug("set: first argument not a string");
+        return 0;
     }
-    lua_pushnumber(L, result);
+    const char *key = lua_tostring(L, 1);
+    ScriptValue value;
+    value.b = false;
+    if (lua_isboolean(L, 2)) {
+        value.b = lua_toboolean(L, 2);
+        return 0;
+    }
+    if (lua_isinteger(L, 2)) {
+        value.i = lua_tointeger(L, 2);
+        return 0;
+    }
+    if (lua_isstring(L, 2)) {
+        value.s = lua_tostring(L, 2);
+        return 0;
+    }
+    _mainWin->set(key, value);
+    return 0;
+}
+
+/**
+ * @brief Get a state variable and pass it as a lua variable.
+ *
+ * EXAMPLE: font = get("text_font")
+ *
+ * @fixme this is an untested draft.
+ */
+int
+get_f(lua_State *L)
+{
+    if (!lua_isstring(L, 1)) {
+        debug("get: first argument not a string");
+        return 0;
+    }
+    ScriptValue result = _mainWin->get(lua_tostring(L, 1));
+    lua_pushnumber(L, result.i);
     return 1;
 }
 
-/* Report the current y-position of the mouse and return it. */
-int
-mouse_y_f(lua_State *L)
-{
-    QGraphicsScene* scene = activeScene();
-    double result = 0.0;
-    if (scene) {
-        qDebug("mouseY: %.50f", -scene->property(SCENE_MOUSE_POINT).toPointF().y());
-        result = -scene->property(SCENE_MOUSE_POINT).toPointF().y();
-    }
-    lua_pushnumber(L, result);
-    return 1;
-}
-
-/* Return the current x-position of the quicksnap position. */
-int
-qsnap_x_f(lua_State *L)
-{
-    QGraphicsScene* scene = activeScene();
-    double result = 0.0;
-    if (scene) {
-        result = scene->property(SCENE_QSNAP_POINT).toPointF().x();
-    }
-    lua_pushnumber(L, result);
-    return 1;
-}
-
-/* Return the current y-position of the quicksnap position. */
-int
-qsnap_y_f(lua_State *L)
-{
-    QGraphicsScene* scene = activeScene();
-    double result = 0.0;
-    if (scene) {
-        result = -scene->property(SCENE_QSNAP_POINT).toPointF().y();
-    }
-    lua_pushnumber(L, result);
-    return 1;
-}
-
-/* Defaults to empty QString when no value supplied. */
-QString
-get_toml_string(const toml::value value, const char *key)
-{
-    if (value.contains(key)) {
-        return value.at(key).as_string().c_str();
-    }
-    return "";
-}
-
-
-/* Defaults to empty QStringList when no value supplied. */
-StringList
-get_toml_string_table(const toml::value value, const char *key)
-{
-    StringList list;
-    if (value.contains(key)) {
-        toml::value table = value.at(key).as_array();
-        for (size_t i=0; i<table.size(); i++) {
-            list.push_back(table.at(i).as_string());
-        }
-    }
-    return list;
-}
-
-/* Defaults to false when no value supplied. */
-bool
-get_toml_boolean(const toml::value value, const char *key)
-{
-    if (value.contains(key)) {
-        return value.at(key).as_boolean();
-    }
-    return false;
-}
-
-/* Lua in Embroidermodder 2 uses a 2 stage boot process.
+/*!
+ * \brief Load TOML data and initialise lua registerables.
+ *
+ * Lua in Embroidermodder 2 uses a 2 stage boot process.
  *
  * 1. Built-in style hookups to Embroidermodder2 features which are
  *    lua functions.
@@ -3311,178 +2375,53 @@ get_toml_boolean(const toml::value value, const char *key)
  *
  * Each command loaded in boot step 3 has up to 5 contexts
  * (see the list of defines in the headers: grep for "CONTEXT_") and will switch
- * depending on what context it is called in. This is enabled by a global
- * variable packed into `sc` called `context` which is checked during the
- * execution of the command's main.
- *
- * FIXME: loading of initation for each command needs a replacement in the
- * lua files.
+ * depending on what context it is called in.
  */
 bool
 script_env_boot(void)
 {
-    /* Loading configuration state. */
-    auto data = toml::parse("config.toml", toml::spec::v(1, 1, 0));
-
-    int version_major = data.at("version").at("major").as_integer();
-    printf("version major %d\n", version_major);
-
-    auto commands_table = data.at("commands").as_array();
-    for (size_t i=0; i<commands_table.size(); i++) {
-        auto current = commands_table.at(i);
-
-        Command command;
-        command.icon = get_toml_string(current, "icon");
-        command.command = get_toml_string(current, "command");
-        command.tooltip = get_toml_string(current, "tooltip");
-        command.statustip = get_toml_string(current, "statustip");
-        command.shortcut = get_toml_string(current, "shortcut");
-        command.macos = get_toml_string(current, "macos");
-        command.checkable = get_toml_boolean(current, "checkable");
-
-        command_map.push_back(command);
-    }
-
-    auto menus_table = data.at("menus").as_array();
-    for (size_t i=0; i<menus_table.size(); i++) {
-        auto current = menus_table.at(i);
-
-        MenuData data;
-        data.label = get_toml_string(current, "label");
-        data.mdi_only = get_toml_boolean(current, "mdi_only");
-        data.entries = get_toml_string_table(current, "entries");
-
-        std::string key = qPrintable(get_toml_string(current, "key"));
-        menu_table[key] = data;
-    }
-
-    auto toolbars_table = data.at("menus").as_array();
-    for (size_t i=0; i<toolbars_table.size(); i++) {
-        auto current = toolbars_table.at(i);
-
-        ToolbarData data;
-        data.label = get_toml_string(current, "label");
-        data.mdi_only = get_toml_boolean(current, "mdi_only");
-        data.entries = get_toml_string_table(current, "entries");
-
-        std::string key = qPrintable(get_toml_string(current, "key"));
-        toolbar_table[key] = data;
-    }
-
-    for (size_t i=0; i<N_SETTINGS; i++) {
-        const char *value = settings_table[i].default_value;
-        switch (settings_table[i].type) {
-        case 's':
-            st[i].s = value;
-            break;
-        case 'i':
-            st[i].i = atoi(value);
-            break;
-        case 'c':
-            st[i].u = atoi(value);
-            break;
-        case 'r':
-            st[i].r = atof(value);
-            break;
-        case 'b': {
-            st[i].b = (value[0] == 't');
-            break;
-        }
-        default:
-            qDebug("ERROR: unknown settings type starting with the character %c.",
-                settings_table[i].type);
-            break;
-        }
-    }
-
-    StringList string_table_list = get_toml_string_table(data, "string_tables");
-    for (int i=0; i<string_table_list.size(); i++) {
-        string_tables[string_table_list[i]] = get_toml_string_table(
-            data, string_table_list[i].c_str());
-    }
-
-    /* Setting up Lua. */
+    /** Setting up Lua. */
     Lua = luaL_newstate();
     luaL_openlibs(Lua);
 
-    /* TODO: Read into C closures in lua to make sure this should be 0.
-    luaL_setfuncs(Lua, lua_registerables, 1);
-    */
-    for (int i=0; lua_registerables[i].name != NULL; i++) {
-        lua_register(Lua, lua_registerables[i].name, lua_registerables[i].func);
-    }
-
-    int status = luaL_dofile(Lua, "scripts/boot.lua");
-    if (status) {
-        printf("ERROR: %d\n", status);
-        qDebug("Failed to boot scripting environment.");
-        return false;
-    }
-
-#if 0
-MainWindow::load_command(const QString& cmdName)
-
-    QString appDir = qApp->applicationDirPath();
-    QFile file(appDir + "/commands/" + cmdName + "/" + cmdName + ".js");
-    file.open(QIODevice::ReadOnly);
-    QString script(file.readAll());
-    file.close();
-
-    QSettings settings(appDir + "/commands/" + cmdName + "/" + cmdName + ".ini", QSettings::IniFormat);
-    QString menuName = settings.value("Menu/Name",    "Lost & Found").toString();
-    int menuPos = settings.value("Menu/Position", 0).toInt();
-    QString toolbarName = settings.value("ToolBar/Name", "Lost & Found").toString();
-    int toolbarPos = settings.value("ToolBar/Position", 0).toInt();
-    QString toolTip = settings.value("Tips/ToolTip", "").toString();
-    QString statusTip = settings.value("Tips/StatusTip", "").toString();
-    QStringList aliases = settings.value("Prompt/Alias").toStringList();
-
-    QAction* ACTION = createAction(cmdName, toolTip, statusTip, true);
-
-    if (toolbarName.toUpper() != "NONE") {
-        //If the toolbar doesn't exist, create it.
-        if (!toolbarHash.value(toolbarName)) {
-            QToolBar* tb = new QToolBar(toolbarName, this);
-            tb->setObjectName("toolbar" + toolbarName);
-            connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-            addToolBar(Qt::LeftToolBarArea, tb);
-            addToolBarBreak(Qt::LeftToolBarArea);
-            toolbarHash.insert(toolbarName, tb);
-        }
-
-        //TODO: order actions position in toolbar based on .ini setting
-        toolbarHash.value(toolbarName)->addAction(ACTION);
-    }
-
-    if (menuName.toUpper() != "NONE") {
-        //If the menu doesn't exist, create it.
-        if (!menuHash.value(menuName)) {
-            QMenu* menu = new QMenu(menuName, this);
-            menu->setTearOffEnabled(true);
-            menuBar()->addMenu(menu);
-            menuHash.insert(menuName, menu);
-        }
-
-        //TODO: order actions position in menu based on .ini setting
-        menuHash.value(menuName)->addAction(ACTION);
-    }
-
-    foreach(QString alias, aliases) {
-        prompt->addCommand(alias, cmdName);
-    }
-#endif
+    /**
+     * Bootstrapping function to support complex scripting.
+     *
+     * Allow scripts to act on the program state using the command line like this::
+     *
+     *     -- Convert an example file from Tajima dst to Brother pes format.
+     *     cmd("open example.dst")
+     *     cmd("saveas example.pes")
+     */
+    lua_register(Lua, "cmd", cmd_f);
+    lua_register(Lua, "get", get_f);
+    lua_register(Lua, "set", set_f);
 
     return true;
 }
 
+/**
+ * @brief Free up the memory used by the scripting environment.
+ *
+ * This is necessary since all the script variables and headers are only
+ * present in this file. Currently just the Lua state.
+ */
 void
 script_env_free(void)
 {
     lua_close(Lua);
 }
 
-/* NOTE: This has to run after script_env_boot because the command_map is
- * populated by the script files called by it.
+/**
+ * @note This has to run after script_env_boot because the command_map is
+ *       populated by the script files called by it.
+ *
+ * @todo Set What's This Context Help to statustip for now so there is some infos there.
+ * Make custom whats this context help popup with more descriptive help than just
+ * the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+ * at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+ *
+ * @todo Finish All Commands ... <.<
  */
 void
 MainWindow::createAllActions()
@@ -3496,40 +2435,18 @@ MainWindow::createAllActions()
             tooltip, this);
         ACTION->setStatusTip(statustip);
         ACTION->setObjectName(command_map[i].icon);
-        // TODO: Set What's This Context Help to statustip for now so there is some infos there.
-        // Make custom whats this context help popup with more descriptive help than just
-        // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
-        // at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
         ACTION->setWhatsThis(statustip);
-        // TODO: Finish All Commands ... <.<
 
         if (command_map[i].shortcut != "") {
             ACTION->setShortcut(command_map[i].shortcut);
         }
         if (command_map[i].checkable != 0) {
             ACTION->setCheckable(true);
-            // FIXME: connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));
+            /** @fixme connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool))); */
         }
 
-        int id = get_cmd_id(qPrintable(command_map[i].command));
-        qDebug(qPrintable(command_map[i].command));
-        if (id >= 0) {
-            connect(ACTION, &QAction::triggered, this,
-                [=]() { run_command(id); } );
-        }
-        else {
-            connect(ACTION, &QAction::triggered, this,
-                [=]() { runCommandMain(command_map[i].command); } );
-        }
-
-        /*
-        else if(icon == "windowcascade") connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(cascade()));
-        else if(icon == "windowtile") connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(tile()));
-        else if(icon == "windowclose") { ACTION->setShortcut(QKeySequence::Close);    connect(ACTION, SIGNAL(triggered()), this, SLOT(onCloseWindow()));   }
-        else if(icon == "windowcloseall") connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
-        else if(icon == "windownext") { ACTION->setShortcut(QKeySequence::NextChild);     connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activateNextSubWindow()));     }
-        else if(icon == "windowprevious") { ACTION->setShortcut(QKeySequence::PreviousChild); connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activatePreviousSubWindow())); }
-        */
+        connect(ACTION, &QAction::triggered, this,
+            [=]() { cmd(qPrintable(command_map[i].command)); } );
 
         actionHash.insert(command_map[i].icon, ACTION);
     }

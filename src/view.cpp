@@ -1090,7 +1090,9 @@ int View::roundToMultiple(bool roundUp, int numToRound, int multiple)
     return numToRound - remainder;
 }
 
-void View::updateMouseCoords(int x, int y)
+/** Update the mouse co-ordinates in the statusbar. */
+void
+View::updateMouseCoords(int x, int y)
 {
     viewMousePoint = QPoint(x, y);
     sceneMousePoint = mapToScene(viewMousePoint);
@@ -1100,17 +1102,26 @@ void View::updateMouseCoords(int x, int y)
     statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
-void View::setCrossHairSize(quint8 percent)
+/** Set the crosshair size as a proportion of the screen width.
+ *
+ * Note that crosshairSize is in pixels. If an invalid percentage is given
+ * then the crosshairSize defaults to 20%.
+ *
+ * @example (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
+ *
+ * @todo Should be based on current screen size, not primary screen.
+ */
+void
+View::setCrossHairSize(quint8 percent)
 {
-    /*
-    //NOTE: crosshairSize is in pixels and is a percentage of your screen width
-    //NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
-    quint32 screenWidth = qApp->desktop()->width();
-    if(percent > 0 && percent < 100)
-        crosshairSize = (screenWidth*(percent/100.0))/2;
-    else
-        crosshairSize = screenWidth;
-    */
+    QSize screen_size = qApp->screens()[0]->size();
+    uint32_t width = screen_size.width();
+    if (percent > 0 && percent < 100) {
+        crosshairSize = (width*(percent/100.0))/2;
+    }
+    else {
+        crosshairSize = (width * 0.2)/2;
+    }
 }
 
 void View::setCornerButton()
@@ -1641,13 +1652,13 @@ void View::mouseReleaseEvent(QMouseEvent* event)
     }
     if (event->button() == Qt::XButton1) {
         qDebug("XButton1");
-        run("undo()");
+        _mainWin->cmd("undo");
         //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2) {
         qDebug("XButton2");
-        run("redo()");
+        _mainWin->cmd("redo");
         //TODO: Make this customizable
         event->accept();
     }

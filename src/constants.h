@@ -1,8 +1,6 @@
-/*!
- * \file data.h
- * \brief Integer and string constants and external table declarations.
- *
- * The code in this directory is all C99 compliant.
+/**
+ * @file constants.h
+ * @brief Integer and string constants and external table declarations.
  *
  * These macros are all for optimization of either lookup using explicit indicies
  * or tokens for switch tables.
@@ -13,14 +11,13 @@
  * cross reference these in the configuration.
  */
 
-#ifndef EM2_DATA__
-#define EM2_DATA__
+#ifndef EM2_CONSTANTS__
+#define EM2_CONSTANTS__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <stdbool.h>
+#define VERSION_MAJOR                  2
+#define VERSION_MINOR                  0
+#define VERSION_PATCH                  0
+#define VERSION_TAG              "alpha"
 
 /* FIXME: this needs changing in libembroidery. */
 #undef N_COMMANDS
@@ -79,8 +76,57 @@ extern "C" {
 #define CMD_ZOOM_SCALE                48
 #define CMD_ZOOM_SELECTED             49
 #define CMD_ZOOM_WINDOW               50
-#define N_COMMANDS                    51
-#define MAX_COMMANDS                 100
+#define CMD_DAY                       51
+#define CMD_NIGHT                     52
+#define CMD_CLEAR_RUBBER              53
+#define CMD_CLEAR_SELECTION           54
+#define CMD_END                       55
+#define CMD_EXIT                      56
+#define CMD_MACRO                     57
+#define CMD_SCRIPT                    58
+#define CMD_SETTINGS                  59
+#define CMD_SET                       60
+#define CMD_GET                       61
+#define CMD_TEXT_MULTI                62
+#define CMD_TEXT_SINGLE               63
+#define CMD_INFINITE_LINE             64
+#define CMD_RAY                       65
+#define CMD_LINE                      66
+#define CMD_TRIANGLE                  67
+#define CMD_RECTANGLE                 68
+#define CMD_ROUNDED_RECTANGLE         69
+#define CMD_ARC                       70
+#define CMD_CIRCLE                    71
+#define CMD_SLOT                      72
+#define CMD_ELLIPSE                   73
+#define CMD_POINT                     74
+#define CMD_REGULAR_POLYGON           75
+#define CMD_POLYGON                   76
+#define CMD_POLYLINE                  77
+#define CMD_PATH                      78
+#define CMD_IMAGE                     79
+#define CMD_DIM_LEADER                80
+#define CMD_HORIZONTAL_DIM            81
+#define CMD_VERTICAL_DIM              82
+#define CMD_STOP                      83
+#define CMD_GENERATE                  84
+#define CMD_FILL                      85
+#define N_COMMANDS                    86
+#define MAX_COMMANDS    (N_COMMANDS+100)
+
+/* Generate pattern */
+#define GEN_PHOTO                      0
+#define GEN_DRAWING                    1
+#define GEN_QR                         2
+#define GEN_GUILLOCHE                  3
+#define GEN_KNOT                       4
+#define N_GEN                          5
+
+/* Fills */
+#define FILL_SATIN                     0
+#define FILL_GRADIENT                  1
+#define FILL_BRICK                     2
+#define N_FILLS                        3
 
 /* Contexts for Lua calls */
 #define CONTEXT_MAIN                   0
@@ -425,31 +471,6 @@ extern "C" {
 #define VIEW_COLOR_BACKGROUND     "VIEW_COLOR_BACKGROUND"
 #define VIEW_COLOR_CROSSHAIR      "VIEW_COLOR_CROSSHAIR"
 #define VIEW_COLOR_GRID           "VIEW_COLOR_GRID"
-
-typedef struct SettingsData_ {
-    char *section;
-    char *key;
-    char *default_value;
-    char type;
-    bool enabled;
-    char *description;
-    char *icon;
-    double lower;
-    double upper;
-    double single_step;
-} SettingsData;
-
-extern bool testing;
-extern int test_script_pos;
-extern char test_script[200][200];
-
-extern const char *command_names[MAX_COMMANDS];
-
-extern const SettingsData settings_table[N_SETTINGS];
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

@@ -17,39 +17,28 @@ The Embroidermodder Reference Manual
    If there is reason to refer to manual specifically outside of the website
    repository use the abbreviation ``EMRM``.
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+.. raw:: latex
 
-   credits
-   introduction
-   changelog
-   commands
-   features
-   history
-   tutorials
-   api
-   development
-   needle
-   unsorted
-   bibliography
-   LICENSE
-   genindex
+   \newpage
 
-.. image::images/logo.png[The embroidery machine logo for the Embroidermodder 2 Project]
+   \hspace{1cm}
 
-.. quote::
+   \vspace{8cm}
 
    Copyright \copyright{} 2011-2025 The Embroidermodder Team.
 
-   https://www.libembroidery.org
+   \url{https://www.libembroidery.org}
 
    The Embroidermodder Team consists of all contributors to our projects
    at \url{https://github.com/Embroidermodder}. A copy of the contributor
    list is in the Credits section below
    and is maintained at \url{https://www.libembroidery.org/docs/credits}.
 
-   --------------------------------------------------------------------------
+   \vspace{1cm}
+
+   \hrulefill
+
+   \vspace{1cm}
 
    Permission is granted to copy, distribute and/or modify this document
    under the terms of the GNU Free Documentation License, Version 1.3
@@ -63,18 +52,57 @@ The Embroidermodder Reference Manual
    for our internal code or a similar license for our dependencies.
    For details please read the ``LICENSE.md`` files in source code.
 
-.. raw:: latex
+   \newpage
+
+   \hspace{1cm}
+
+   \vspace{6cm}
 
    \begingroup
    \begin{center}
 
    \emph{Dedicated to Jonathan Grieg.}
+   
+   \vspace{1cm}
 
-   \emph{Open source software is made by people who care about good tools and other people.}
+   \emph{Open source software is made by people who care about good tools and the people who use them.}
 
-   \emph{You gave us so many ideas worth saving and we'll be working on, and sharing, your creations for some time.}
+   \vspace{1cm}
+
+   \emph{You gave us many good ideas and worked hard to realise them.}
+   
+   \vspace{1cm}
+
+   \emph{We'll be working on, and sharing, these creations for some time.}
+
+   \vspace{1cm}
 
    \emph{Rock on!}
 
    \end{center}
    \endgroup
+
+   \newpage
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   credits
+   introduction
+   changelog
+   commands
+   features
+   history
+   tutorials
+   api
+   development
+   geometry
+   needle
+   unsorted
+   bibliography
+   LICENSE
+   genindex
+
+.. image::images/logo.png[The embroidery machine logo for the Embroidermodder 2 Project]
+

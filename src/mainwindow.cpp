@@ -1,12 +1,12 @@
-/*!
- * \file mainwindow.cpp
- * \brief Most of the MainWindow class function.
+/**
+ * @file mainwindow.cpp
+ * @brief The main starting point for loading the application and main window.
  *
  * This is the most frequently updated part of the source: new core developers would
  * benefit most from understanding the rough approach of this file and making
  * small changes here.
  *
- * NOTE: the run_command function is the part of the source treated with the most
+ * NOTE: the run function is the part of the source treated with the most
  * concern for optimization and bug traceability.
  *
  * Core Commands and User Interaction
@@ -17,9 +17,9 @@
  * 1. Core commands defined for internal use that uses the switch table below
  *    for fast calling with logging for debugging purposes and the undo history.
  * 2. Functions written in lua scripts in the `scripts/` folder that call the
- *    wrapper run_command_f to run this switch table.
+ *    wrapper `cmd_f` to run this switch table.
  * 3. C++ functions designed to take the same arguments called lua registerables
- *    in src/script.cpp: intended the most complex commands. These call run_command
+ *    in src/script.cpp: intended the most complex commands. These call `run`
  *    directly using the appropriate constant.
  *
  * For example, when the user issues a "day" command we have 3 internal calls to make
@@ -33,28 +33,21 @@
 
 #include "embroidermodder.h"
 
-#include <chrono>
-#include <thread>
-
 #define KEY_SHORTCUT(F, CMD) \
-    connect(prompt, SIGNAL(F()), this, SLOT([=]() { run_command(CMD); }))
-    
+    connect(prompt, SIGNAL(F()), this, SLOT([=]() { cmd(CMD); }))
+
 using namespace std::chrono_literals;
 
 int debug = 1;
+int play_mode = 0;
 bool testing = false;
 int test_script_pos = 0;
-
-QMenu* fileMenu;
-QMenu* editMenu;
-QMenu* viewMenu;
-QMenu* windowMenu;
-QMenu* helpMenu;
-
-// SubMenus
-QMenu* recentMenu;
-QMenu* zoomMenu;
-QMenu* panMenu;
+uint64_t simulation_start = 0;
+/*! In millimeters per second, so note that 1000.0 mm/s = 1 m/s.
+ * \todo This needs to be a setting.
+ */
+float machine_speed = 1000.0f;
+float stitch_time = 0.05f;
 
 QList<QGraphicsItem*> clipboard;
 
@@ -62,28 +55,220 @@ QHash<QString, QAction*> actionHash;
 QHash<QString, QToolBar*> toolbarHash;
 QHash<QString, QMenu*> menuHash;
 
-std::vector<Command> command_map;
-std::unordered_map<std::string, ToolbarData> toolbar_table;
-std::unordered_map<std::string, MenuData> menu_table;
-std::unordered_map<std::string, StringList> string_tables;
-
 QString formatFilterOpen;
 QString formatFilterSave;
 
-int play_mode;
+const char* _appName_ = "Embroidermodder";
+const char* _appVer_  = "v2.0 alpha";
+bool exitApp = false;
 
-int
-get_cmd_id(const char *cmd)
+const char *command_names[MAX_COMMANDS] = {
+    [CMD_NULL] = "null",
+    [CMD_ABOUT] = "about",
+    [CMD_STUB] = "stub",
+    [CMD_CUT] = "cut",
+    [CMD_COPY] = "copy",
+    [CMD_PASTE] = "paste",
+    [CMD_SELECT_ALL] = "select_all",
+    [CMD_DETAILS] = "details",
+    [CMD_UPDATES] = "update",
+    [CMD_WHATS_THIS] = "whats_this",
+    [CMD_PRINT] = "print",
+    [CMD_HELP] = "help",
+    [CMD_CHANGELOG] = "changelog",
+    [CMD_UNDO] = "undo",
+    [CMD_REDO] = "redo",
+    [CMD_REPEAT] = "repeat",
+    [CMD_ICON16] = "icon16",
+    [CMD_ICON24] = "icon24",
+    [CMD_ICON32] = "icon32",
+    [CMD_ICON48] = "icon48",
+    [CMD_ICON64] = "icon64",
+    [CMD_ICON128] = "icon128",
+    [CMD_PLAY] = "play",
+    [CMD_SLEEP] = "sleep",
+    [CMD_NEW] = "new",
+    [CMD_OPEN] = "open",
+    [CMD_SAVE] = "save",
+    [CMD_SAVE_AS] = "save_as",
+    [CMD_PAN_LEFT] = "pan_left",
+    [CMD_PAN_DOWN] = "pan_down",
+    [CMD_PAN_RIGHT] = "pan_right",
+    [CMD_PAN_UP] = "pan_up",
+    [CMD_PAN_POINT] = "pan_point",
+    [CMD_PAN_REAL_TIME] = "pan_real_time",
+    [CMD_WINDOW_CASCADE] = "window_cascade",
+    [CMD_WINDOW_CLOSE_ALL] = "window_close_all",
+    [CMD_WINDOW_CLOSE] = "window_close",
+    [CMD_WINDOW_NEXT] = "window_next",
+    [CMD_WINDOW_PREVIOUS] = "window_previous",
+    [CMD_WINDOW_TILE] = "window_tile",
+    [CMD_ZOOM_ALL] = "zoom_all",
+    [CMD_ZOOM_CENTER] = "zoom_center",
+    [CMD_ZOOM_DYNAMIC] = "zoom_dynamic",
+    [CMD_ZOOM_EXTENTS] = "zoom_extents",
+    [CMD_ZOOM_IN] = "zoom_in",
+    [CMD_ZOOM_OUT] = "zoom_out",
+    [CMD_ZOOM_PREVIOUS] = "zoom_previous",
+    [CMD_ZOOM_REAL_TIME] = "zoom_real_time",
+    [CMD_ZOOM_SCALE] = "zoom_scale",
+    [CMD_ZOOM_SELECTED] = "zoom_selected",
+    [CMD_ZOOM_WINDOW] = "zoom_window",
+    [CMD_DAY] = "day",
+    [CMD_NIGHT] = "night",
+    [CMD_CLEAR_RUBBER] = "clear_rubber",
+    [CMD_CLEAR_SELECTION] = "clear",
+    [CMD_END] = "end",
+    [CMD_EXIT] = "exit",
+    [CMD_MACRO] = "macro",
+    [CMD_SCRIPT] = "run",
+    [CMD_SETTINGS] = "settings",
+    [CMD_SET] = "set",
+    [CMD_GET] = "get",
+    [CMD_TEXT_MULTI] = "text_multi",
+    [CMD_TEXT_SINGLE] = "text_single",
+    [CMD_INFINITE_LINE] = "infinite_line",
+    [CMD_RAY] = "ray",
+    [CMD_LINE] = "line",
+    [CMD_TRIANGLE] = "triangle",
+    [CMD_RECTANGLE] = "rectangle",
+    [CMD_ROUNDED_RECTANGLE] = "rounded_rectangle",
+    [CMD_ARC] = "arc",
+    [CMD_CIRCLE] = "circle",
+    [CMD_SLOT] = "slot",
+    [CMD_ELLIPSE] = "ellipse",
+    [CMD_POINT] = "point",
+    [CMD_REGULAR_POLYGON] = "regular_polygon",
+    [CMD_POLYGON] = "polygon",
+    [CMD_POLYLINE] = "polyline",
+    [CMD_PATH] = "path",
+    [CMD_IMAGE] = "image",
+    [CMD_DIM_LEADER] = "dim_leader",
+    [CMD_HORIZONTAL_DIM] = "horizontal_dimension",
+    [CMD_VERTICAL_DIM] = "vertical_dimension",
+    [CMD_STOP] = "stop",
+    [CMD_GENERATE] = "generate",
+    [CMD_FILL] = "fill",
+    [N_COMMANDS] = "_END"
+};
+
+uint64_t current_time(void);
+
+static void usage(void)
 {
-    for (int i=0; i<N_COMMANDS; i++) {
-        if (!strncmp(command_names[i], cmd, 50)) {
+    fprintf(stderr,
+    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"
+    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n"
+    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/"           "\n"
+    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
+    " _____________________________________________________________________________ "           "\n"
+    "|                                                                             | "          "\n"
+    "|                   http://embroidermodder.github.io                          | "          "\n"
+    "|_____________________________________________________________________________| "          "\n"
+    "                                                                               "           "\n"
+    "Usage: embroidermodder [options] files ..."                                      "\n"
+   //80CHARS======================================================================MAX
+    "Options:"                                                                        "\n"
+    "  -d, --debug      Print lots of debugging information."                         "\n"
+    "  -h, --help       Print this message and exit."                                 "\n"
+    "  -v, --version    Print the version number of embroidermodder and exit."        "\n"
+    "\n"
+           );
+    exitApp = true;
+}
+
+int main(int argc, char* argv[])
+{
+    load_data();
+
+#if defined(Q_OS_MAC)
+    Application app(argc, argv);
+#else
+    QApplication app(argc, argv);
+#endif
+    app.setApplicationName(_appName_);
+    app.setApplicationVersion(_appVer_);
+
+    QStringList filesToOpen;
+
+    for (int i = 1; i < argc; i++) {
+        if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
+        }
+        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
+            usage();
+        }
+        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
+            fprintf(stdout, "%s %s\n", _appName_, _appVer_);
+            exitApp = true;
+        }
+        else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--test")) {
+            testing = true;
+        }
+        else if(QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i])) {
+            filesToOpen << argv[i];
+        }
+        else {
+            usage();
+        }
+    }
+
+    if (exitApp) {
+        return 1;
+    }
+
+    MainWindow* mainWin = new MainWindow();
+#if defined(Q_OS_MAC)
+    app.setMainWin(mainWin);
+#endif
+
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
+
+    mainWin->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
+    mainWin->show();
+
+    //NOTE: If openFilesSelected() is called from within the mainWin constructor, slot commands wont work and the window menu will be screwed
+    if(!filesToOpen.isEmpty())
+        mainWin->openFilesSelected(filesToOpen);
+
+    return app.exec();
+}
+
+Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
+{
+}
+
+bool Application::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::FileOpen:
+        if (_mainWin) {
+            _mainWin->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+            return true;
+        }
+        // Fall through
+    default:
+        return QApplication::event(event);
+    }
+}
+
+/**
+ * @brief Identify command id by its name in the supplied table.
+ */
+int
+get_id(const char *table[], const char *cmd)
+{
+    for (int i=0; table[i][0]!='_'; i++) {
+        if (!strncmp(table[i], cmd, 50)) {
             return i;
         }
     }
     return -1;
 }
 
-/*! It is important that there is as little as possible before the switch: this
+/**
+ * @brief The main command processor.
+ *
+ * It is important that there is as little as possible before the switch: this
  * overhead would be present for every core command issued and individual commands
  * may consist of thousands of core command calls.
  *
@@ -100,12 +285,22 @@ get_cmd_id(const char *cmd)
  * responsibility to get it right within a C++ function.
  */
 void
-MainWindow::run_command(int id, ScriptValue *args, int n_args)
+MainWindow::cmd(const char *line)
 {
-    if (id > MAX_COMMANDS) {
+    prompt->appendHistory(line);
+
+    QString qstr(line);
+    QStringList list = qstr.split(" ");
+    const char *cmd = qPrintable(list[0]);
+    if (aliases.find(list[0]) != aliases.end()) {
+        cmd = qPrintable(aliases.at(list[0]));
+    }
+    int id = get_id(command_names, cmd);
+    if (id < 0) {
         qDebug("ERROR: unrecognised command id.");
         return;
     }
+
     if (debug > 0) {
         qDebug("COMMAND %d (%s)", id, command_names[id]);
     }
@@ -216,12 +411,13 @@ MainWindow::run_command(int id, ScriptValue *args, int n_args)
         QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
         QDesktopServices::openUrl(helpURL);
 
-        //TODO: This is how to start an external program. Use this elsewhere...
-        //QString program = "firefox";
-        //QStringList arguments;
-        //arguments << "help/commands.html";
-        //QProcess *myProcess = new QProcess(this);
-        //myProcess->start(program, arguments);
+        /* TODO: This is how to start an external program. Use this elsewhere...
+         * QString program = "firefox";
+         * QStringList arguments;
+         * arguments << "help/commands.html";
+         * QProcess *myProcess = new QProcess(this);
+         * myProcess->start(program, arguments);
+         */
         break;
     }
 
@@ -299,11 +495,17 @@ MainWindow::run_command(int id, ScriptValue *args, int n_args)
 
     case CMD_PLAY: {
         play_mode = 1;
+        simulation_start = current_time();
+        break;
+    }
+
+    case CMD_STOP: {
+        play_mode = 0;
         break;
     }
 
     case CMD_SLEEP: {
-        std::this_thread::sleep_for(1000ms);
+        std::this_thread::sleep_for(100ms);
         break;
     }
 
@@ -319,7 +521,7 @@ MainWindow::run_command(int id, ScriptValue *args, int n_args)
         updateMenuToolbarStatusbar();
         windowMenuAboutToShow();
 
-        View* v = mdiWin->getView();
+        View* v = mdiWin->gview;
         if (v) {
             v->recalculateLimits();
             v->zoomExtents();
@@ -328,7 +530,12 @@ MainWindow::run_command(int id, ScriptValue *args, int n_args)
     }
 
     case CMD_OPEN: {
-        /* FIXME */
+        if (list.size() == 1) {
+            openFile();
+            break;
+        }
+        list.remove(0);
+        openFilesSelected(list);
         break;
     }
 
@@ -535,9 +742,490 @@ MainWindow::run_command(int id, ScriptValue *args, int n_args)
         break;
     }
 
+    /* TODO: Make day vision color settings. */
+    case CMD_DAY: {
+        View* gview = activeView();
+        if (gview) {
+            gview->setBackgroundColor(qRgb(255,255,255)); 
+            gview->setCrossHairColor(qRgb(0,0,0));
+            gview->setGridColor(qRgb(0,0,0));
+        }
+        break;
+    }
+
+    /* TODO: Make night vision color settings. */
+    case CMD_NIGHT: {
+        View* gview = activeView();
+        if (gview) {
+            gview->setBackgroundColor(qRgb(0,0,0));
+            gview->setCrossHairColor(qRgb(255,255,255));
+            gview->setGridColor(qRgb(255,255,255));
+        }
+        break;
+    }
+
+    case CMD_CLEAR_RUBBER: {
+        View* gview = activeView();
+        if (gview) {
+            gview->clearRubberRoom();
+        }
+        break;
+    }
+
+    case CMD_CLEAR_SELECTION: {
+        View* gview = activeView();
+        if (gview) {
+            gview->clearSelection();
+        }
+        break;
+    }
+
+    case CMD_END: {
+        View* gview = activeView();
+        if (gview) {
+            gview->clearRubberRoom();
+            gview->previewOff();
+            gview->disableMoveRapidFire();
+        }
+        prompt->endCommand();
+        break;
+    }
+
+    case CMD_EXIT: {
+        if (st[ST_PROMPT_SAVE_HISTORY].b) {
+            /* TODO: get filename from settings. */
+            prompt->saveHistory("prompt.log", st[ST_PROMPT_SAVE_AS_HTML].b);
+        }
+        qApp->closeAllWindows();
+        /* Force the MainWindow destructor to run before exiting.
+         * Makes Valgrind "still reachable" happy :)
+         */
+        _mainWin->deleteLater();
+        break;
+    }
+
+    case CMD_MACRO: {
+        qDebug("TODO: macro support");
+        break;
+    }
+
+    case CMD_SCRIPT: {
+        run(qPrintable(list[1]));
+        break;
+    }
+
+    case CMD_SETTINGS: {
+        settingsDialog("General");
+        break;
+    }
+
+    /** @todo Report the value. */
+    case CMD_GET: {
+        ScriptValue value = get(qPrintable(list[1]));
+        break;
+    }
+
+    case CMD_SET: {
+        ScriptValue value;
+        value.s = qPrintable(list[2]);
+        set(qPrintable(list[1]), value);
+        break;
+    }
+
+    /** Add a EmbTextMulti object to the design.
+     * @todo argument parsing
+     */
+    case CMD_TEXT_MULTI: {
+        const QString& str = "Lorem ipsum\ndolor sit amet,";
+        EmbVector position = emb_vector(10.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_text_multi(str, position, rot, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_TEXT_SINGLE: {
+        const QString& str = "Lorem ipsum dolor sit amet,";
+        EmbVector position = emb_vector(10.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_text_single(str, position, rot, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_INFINITE_LINE: {
+        EmbVector point1 = emb_vector(0.0f, 0.0f);
+        EmbVector point2 = emb_vector(0.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        add_infinite_line(point1, point2, rot);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_RAY: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        EmbVector point = emb_vector(0.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        add_ray(start, point, rot);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_LINE: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        EmbVector end = emb_vector(0.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_line(start, end, rot, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_TRIANGLE: {
+        EmbVector point1 = emb_vector(0.0f, 0.0f);
+        EmbVector point2 = emb_vector(0.0f, 10.0f);
+        EmbVector point3 = emb_vector(0.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        bool fill = false;
+        add_triangle(point1, point2, point3, rot, fill);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_RECTANGLE: {
+        EmbReal x = 0.0f;
+        EmbReal y = 0.0f;
+        EmbReal w = 10.0f;
+        EmbReal h = 20.0f;
+        EmbReal rot = 0.0f;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_rectangle(x, y, w, h, rot, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_ROUNDED_RECTANGLE: {
+        EmbReal x = 0.0f;
+        EmbReal y = 0.0f;
+        EmbReal w = 10.0f;
+        EmbReal h = 20.0f;
+        EmbReal rad = 2.0f;
+        EmbReal rot = 0.0f;
+        bool fill = false;
+        add_rounded_rectangle(x, y, w, h, rad, rot, fill);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_ARC: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        EmbVector mid = emb_vector(10.0f, 0.0f);
+        EmbVector end = emb_vector(10.0f, 10.0f);
+        add_arc(start, mid, end, OBJ_RUBBER_OFF);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_CIRCLE: {
+        EmbVector center = emb_vector(0.0f, 0.0f);
+        EmbReal radius = 10.0;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_circle(center, radius, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_SLOT: {
+        EmbVector center = emb_vector(0.0f, 0.0f);
+        EmbReal diameter = 1.0;
+        EmbReal length = 10.0;
+        EmbReal rot = 0.0;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_slot(center, diameter, length, rot, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_ELLIPSE: {
+        EmbVector center = emb_vector(0.0f, 0.0f);
+        EmbReal width = 10.0;
+        EmbReal height = 30.0;
+        EmbReal rot = 1.0;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_ellipse(center, width, height, rot, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_POINT: {
+        EmbVector position = emb_vector(10.0f, 10.0f);
+        add_point(position);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_REGULAR_POLYGON: {
+        EmbVector center = emb_vector(10.0f, 10.0f);
+        int sides = 5;
+        int mode = 0;
+        EmbReal rad = 10.0;
+        EmbReal rot = 0.0;
+        bool fill = false;
+        add_regular_polygon(center, sides, mode, rad, rot, fill);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_POLYGON: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        QPainterPath p;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_polygon(start, p, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_POLYLINE: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        QPainterPath p;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_polyline(start, p, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_PATH: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        QPainterPath p;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_path(start, p, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_HORIZONTAL_DIM: {
+        EmbVector start = emb_vector(8.0f, 12.0f);
+        EmbVector end = emb_vector(18.0f, 11.0f);
+        EmbReal legHeight = 10.0f;
+        add_horizontal_dimension(start, end, legHeight);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_VERTICAL_DIM: {
+        EmbVector start = emb_vector(-8.0f, 10.0f);
+        EmbVector end = emb_vector(1.0f, 13.0f);
+        EmbReal legHeight = 10.0f;
+        add_vertical_dimension(start, end, legHeight);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_IMAGE: {
+        QString img = "icons/default/app.png";
+        double x = 10.0;
+        double y = 10.0;
+        double w = 30.0;
+        double h = 20.0;
+        double rot = 10.0;
+        add_image(img, x, y, w, h, rot);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_DIM_LEADER: {
+        EmbVector start = emb_vector(8.0f, 1.0f);
+        EmbVector end = emb_vector(1.0f, 3.0f);
+        EmbReal rot = 10.0;
+        int rubberMode = OBJ_RUBBER_OFF;
+        add_dim_leader(start.x, start.y, end.x, end.y, rot, rubberMode);
+        break;
+    }
+
+    case CMD_GENERATE: {
+        generate(qPrintable(list[1]));
+        break;
+    }
+
+    case CMD_FILL: {
+        fill(qPrintable(list[1]));
+        break;
+    }
+
     default:
         printf("ERROR: unrecognised command id %d\n", id);
         break;
+    }
+}
+
+/*!
+ */
+ScriptValue
+MainWindow::get(const char *key)
+{
+    ScriptValue result;
+    result.r = 0.0;
+    result.i = 0;
+    result.b = false;
+    if (!strncmp(key, "text_angle", 20)) {
+        result.r = st[ST_TEXT_ANGLE].r;
+        return result;
+    }
+    if (!strncmp(key, "text_size", 20)) {
+        result.i = st[ST_TEXT_SIZE].i;
+        return result;
+    }
+    if (!strncmp(key, "text_bold", 20)) {
+        result.b = st[ST_TEXT_BOLD].b;
+        return result;
+    }
+    if (!strncmp(key, "text_italic", 20)) {
+        result.b = st[ST_TEXT_ITALIC].b;
+        return result;
+    }
+    if (!strncmp(key, "text_underline", 20)) {
+        result.b = st[ST_TEXT_UNDERLINE].b;
+        return result;
+    }
+    if (!strncmp(key, "text_strikeout", 20)) {
+        result.b = st[ST_TEXT_STRIKEOUT].b;
+        return result;
+    }
+    if (!strncmp(key, "text_overline", 20)) {
+        result.b = st[ST_TEXT_OVERLINE].b;
+        return result;
+    }
+    if (!strncmp(key, "platform", 20)) {
+        result.s = qPrintable(platformString());
+        return result;
+    }
+    if (!strncmp(key, "prefix", 20)) {
+        result.s = qPrintable(prompt->promptInput->prefix);
+        return result;
+    }
+    /* Report the current x-position of the mouse and return it. */
+    if (!strncmp(key, "mousex", 20)) {
+        QGraphicsScene* scene = activeScene();
+        if (scene) {
+            result.r = scene->property(SCENE_MOUSE_POINT).toPointF().x();
+        }
+        return result;
+    }
+    /* Report the current y-position of the mouse and return it. */
+    if (!strncmp(key, "mousey", 20)) {
+        QGraphicsScene* scene = activeScene();
+        if (scene) {
+            result.r = -scene->property(SCENE_MOUSE_POINT).toPointF().y();
+        }
+        return result;
+    }
+    /* Return the current x-position of the quicksnap position. */
+    if (!strncmp(key, "qsnapx", 20)) {
+        QGraphicsScene* scene = activeScene();
+        if (scene) {
+            result.r = scene->property(SCENE_QSNAP_POINT).toPointF().x();
+        }
+        return result;
+    }
+    /* Return the current y-position of the quicksnap position. */
+    if (!strncmp(key, "qsnapy", 20)) {
+        QGraphicsScene* scene = activeScene();
+        if (scene) {
+            result.r = -scene->property(SCENE_QSNAP_POINT).toPointF().y();
+        }
+        return result;
+    }
+    /* Return the current y-position of the quicksnap position. */
+    if (!strncmp(key, "num_selected", 20)) {
+        View* gview = activeView();
+        if (gview) {
+            result.i = gview->numSelected();
+        }
+        return result;
+    }
+    return result;
+}
+
+/*!
+ */
+void
+MainWindow::set(const char *key, ScriptValue value)
+{
+    if (!strncmp(key, "text_angle", 20)) {
+        st[ST_TEXT_ANGLE].r = value.r;
+        return;
+    }
+    if (!strncmp(key, "text_size", 20)) {
+        double num = value.i;
+
+        if (std::isnan(num)) {
+            qDebug("TypeError, setTextSize(): first argument failed isNaN check.");
+            return;
+        }
+
+        st[ST_TEXT_SIZE].i = std::fabs(num);
+        int index = textSizeSelector->findText("Custom", Qt::MatchContains);
+        if (index != -1) {
+            textSizeSelector->removeItem(index);
+        }
+        textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
+        index = textSizeSelector->findText("Custom", Qt::MatchContains);
+        if (index != -1) {
+            textSizeSelector->setCurrentIndex(index);
+        }
+        return;
+    }
+    if (!strncmp(key, "text_bold", 20)) {
+        st[ST_TEXT_BOLD].b = value.b;
+        return;
+    }
+    if (!strncmp(key, "text_italic", 20)) {
+        st[ST_TEXT_ITALIC].b = value.b;
+        return;
+    }
+    if (!strncmp(key, "text_underline", 20)) {
+        st[ST_TEXT_UNDERLINE].b = value.b;
+        return;
+    }
+    if (!strncmp(key, "text_strikeout", 20)) {
+        st[ST_TEXT_STRIKEOUT].b = value.b;
+        return;
+    }
+    if (!strncmp(key, "text_overline", 20)) {
+        st[ST_TEXT_OVERLINE].b = value.b;
+        return;
+    }
+    if (!strncmp(key, "prefix", 20)) {
+        prompt->setPrefix(value.s.c_str());
+        return;
     }
 }
 
@@ -549,24 +1237,22 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
-    QFileInfo check(appDir + "/scripts");
-    if (!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
-    check = QFileInfo(appDir + "/docs");
-    if(!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
-    check = QFileInfo(appDir + "/icons");
-    if(!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
-    check = QFileInfo(appDir + "/images");
-    if(!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
-    check = QFileInfo(appDir + "/samples");
-    if(!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
-    check = QFileInfo(appDir + "/translations");
-    if(!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    QStringList folders = {
+        "scripts",
+        "docs",
+        "icons",
+        "images",
+        "samples",
+        "translations",
+        "data"
+    };
+    for (QString folder: folders) {
+        QFileInfo check(appDir + "/" + folder);
+        if (!check.exists()) {
+            QMessageBox::critical(this, tr("Path Error"),
+                tr("Cannot locate: ") + check.absoluteFilePath());
+        }
+    }
 
     QString lang = st[ST_LANGUAGE].s.c_str();
     qDebug("language: %s", qPrintable(lang));
@@ -583,17 +1269,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); //TODO: ensure this always loads, ship a copy of this with the app
     qApp->installTranslator(&translatorQt);
 
-    //Menus
-    fileMenu = new QMenu(tr("&File"), this);
-    editMenu = new QMenu(tr("&Edit"), this);
-    viewMenu = new QMenu(tr("&View"), this);
-    windowMenu = new QMenu(tr("&Window"), this);
-    helpMenu = new QMenu(tr("&Help"), this);
-    //SubMenus
-    recentMenu = new QMenu(tr("Open &Recent"), this);
-    zoomMenu = new QMenu(tr("&Zoom"), this);
-    panMenu = new QMenu(tr("&Pan"), this);
-
     //Toolbars
     toolbarHash["FILE"] = addToolBar(tr("File"));
     toolbarHash["EDIT"] = addToolBar(tr("Edit"));
@@ -606,6 +1281,10 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarHash["PROPERTIES"] = addToolBar(tr("Properties"));
     toolbarHash["TEXT"] = addToolBar(tr("Text"));
     toolbarHash["PROMPT"] = addToolBar(tr("Command Prompt"));
+    toolbarHash["DRAW"] = addToolBar(tr("Draw"));
+    toolbarHash["INQUIRY"] = addToolBar(tr("Inquiry"));
+    toolbarHash["MODIFY"] = addToolBar(tr("Modify"));
+    toolbarHash["DIMENSION"] = addToolBar(tr("Dimension"));
     //Selectors
     layerSelector      = new QComboBox(this);
     colorSelector      = new QComboBox(this);
@@ -655,7 +1334,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(runCommandMain(const QString&)));
-    connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), this, SLOT(runCommandPrompt(const QString&, const QString&)));
 
     connect(prompt, SIGNAL(deletePressed()),    this, SLOT(deletePressed()));
     //TODO: connect(prompt, SIGNAL(tabPressed()),       this, SLOT(someUnknownSlot()));
@@ -745,20 +1423,13 @@ MainWindow::~MainWindow()
 
 /* Allows us to run test scripts and animations. */
 void
-MainWindow::timerEvent(QTimerEvent *)
+MainWindow::timerEvent(QTimerEvent * /* event */)
 {
     if (testing) {
         StringList test_script = string_tables["test_script"];
         if (test_script_pos < test_script.size()) {
-            int id = get_cmd_id(test_script[test_script_pos].c_str());
-            if (id >= 0) {
-                run_command(id);
-                run_command(CMD_SLEEP);
-            }
-            else {
-                qDebug("ERROR: failed to find command \"%s\".",
-                    test_script[test_script_pos].c_str());
-            }
+            cmd(test_script[test_script_pos].c_str());
+            cmd("sleep");
             test_script_pos++;
         }
     }
@@ -769,7 +1440,7 @@ MainWindow::timerEvent(QTimerEvent *)
 void MainWindow::recentMenuAboutToShow()
 {
     qDebug("MainWindow::recentMenuAboutToShow()");
-    recentMenu->clear();
+    menuHash["RECENT"]->clear();
 
     QFileInfo recentFileInfo;
     QString recentValue;
@@ -793,7 +1464,7 @@ void MainWindow::recentMenuAboutToShow()
             }
             rAction->setCheckable(false);
             rAction->setData(st[ST_RECENT_FILES].l.at(i));
-            recentMenu->addAction(rAction);
+            menuHash["RECENT"]->addAction(rAction);
             connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
         }
     }
@@ -806,23 +1477,23 @@ void MainWindow::recentMenuAboutToShow()
 void MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
-    windowMenu->clear();
-    windowMenu->addAction(actionHash.value("windowclose"));
-    windowMenu->addAction(actionHash.value("windowcloseall"));
-    windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value("windowcascade"));
-    windowMenu->addAction(actionHash.value("windowtile"));
-    windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value("windownext"));
-    windowMenu->addAction(actionHash.value("windowprevious"));
+    menuHash["WINDOW"]->clear();
+    menuHash["WINDOW"]->addAction(actionHash.value("windowclose"));
+    menuHash["WINDOW"]->addAction(actionHash.value("windowcloseall"));
+    menuHash["WINDOW"]->addSeparator();
+    menuHash["WINDOW"]->addAction(actionHash.value("windowcascade"));
+    menuHash["WINDOW"]->addAction(actionHash.value("windowtile"));
+    menuHash["WINDOW"]->addSeparator();
+    menuHash["WINDOW"]->addAction(actionHash.value("windownext"));
+    menuHash["WINDOW"]->addAction(actionHash.value("windowprevious"));
 
-    windowMenu->addSeparator();
+    menuHash["WINDOW"]->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
     for(int i = 0; i < windows.count(); ++i) {
         QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
         aAction->setCheckable(true);
         aAction->setData(i);
-        windowMenu->addAction(aAction);
+        menuHash["WINDOW"]->addAction(aAction);
         connect(aAction, SIGNAL(toggled(bool)), this, SLOT(windowMenuActivated(bool)));
         aAction->setChecked(mdiArea->activeSubWindow() == windows.at(i));
     }
@@ -912,8 +1583,8 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 QString recent_dir = QFileInfo(filesToOpen.at(i)).absolutePath();
                 st[ST_RECENT_DIRECTORY].s = qPrintable(recent_dir);
 
-                View* v = mdiWin->getView();
-                if(v) {
+                View* v = mdiWin->gview;
+                if (v) {
                     v->recalculateLimits();
                     v->zoomExtents();
                 }
@@ -946,7 +1617,7 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
         if(mdiWin) {
-            if(mdiWin->getCurrentFile() == canonicalFilePath) {
+            if (mdiWin->curFile == canonicalFilePath) {
                 return subWindow;
             }
         }
@@ -1034,18 +1705,11 @@ void MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        menuBar()->addMenu(fileMenu);
-        menuBar()->addMenu(editMenu);
-        menuBar()->addMenu(viewMenu);
-
-        foreach(QMenu* menu, menuHash) {
-            menuBar()->addMenu(menu);
+        for (int i=0; i<string_tables["menubar_order"].size(); i++) {
+            const char *key = string_tables["menubar_order"][i].c_str();
+            menuBar()->addMenu(menuHash[key]);
+            menuHash[key]->setEnabled(true);
         }
-
-        menuBar()->addMenu(windowMenu);
-        menuBar()->addMenu(helpMenu);
-
-        windowMenu->setEnabled(true);
 
         //Statusbar
         statusbar->clearMessage();
@@ -1073,12 +1737,16 @@ void MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        menuBar()->addMenu(fileMenu);
-        menuBar()->addMenu(editMenu);
-        menuBar()->addMenu(windowMenu);
-        menuBar()->addMenu(helpMenu);
-
-        windowMenu->setEnabled(false);
+        for (int i=0; i<string_tables["menubar_order"].size(); i++) {
+            const char *key = string_tables["menubar_order"][i].c_str();
+            menuBar()->addMenu(menuHash[key]);
+            if (menu_table[key].mdi_only) {
+                menuHash[key]->setEnabled(false);
+            }
+            else {
+                menuHash[key]->setEnabled(true);
+            }
+        }
 
         //Statusbar
         statusbar->clearMessage();
@@ -1230,8 +1898,9 @@ void
 MainWindow::addToMenu(QMenu *menu, StringList data)
 {
     for (int i=0; i<data.size(); i++) {
-        if (data[i] == "addmenu") {
+        if (data[i] == "submenu") {
             i += 1;
+            menu->addMenu(menuHash[data[i].c_str()]);
             continue;
         }
         if (data[i] == "icon") {
@@ -1245,59 +1914,61 @@ MainWindow::addToMenu(QMenu *menu, StringList data)
         }
         menu->addAction(actionHash.value(data[i].c_str()));
     }
+    /* Do not allow the Window Menu to be torn off.
+     * It's a pain in the ass to maintain.
+     */
     menu->setTearOffEnabled(false);
 }
 
-void MainWindow::createAllMenus()
+/**
+ *
+ */
+void
+MainWindow::createAllMenus(void)
 {
     qDebug("MainWindow createAllMenus()");
-    menuBar()->addMenu(fileMenu);
-    fileMenu->addAction(actionHash.value("new"));
-    fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value("open"));
 
-    fileMenu->addMenu(recentMenu);
-    connect(recentMenu, SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
-    recentMenu->setTearOffEnabled(false);
+    /* We loop twice through the menu data so all the submenus exist before
+     * they are attached the leaf above.
+     */
+    for (auto iter=menu_table.begin(); iter!=menu_table.end(); iter++) {
+        const char *key = iter->first.c_str();
+        const char *label = qPrintable(iter->second.label);
+        menuHash[key] = new QMenu(tr(label), this);
+    }
 
-    menuBar()->addMenu(editMenu);
-    menuBar()->addMenu(viewMenu);
-    viewMenu->addSeparator();
-    viewMenu->addMenu(zoomMenu);
-    viewMenu->addMenu(panMenu);
-    viewMenu->addSeparator();
-    viewMenu->addAction(actionHash.value( "day"));
-    viewMenu->addAction(actionHash.value( "night"));
-    viewMenu->addSeparator();
+    /* Populate the menus. */
+    for (auto iter=menu_table.begin(); iter!=menu_table.end(); iter++) {
+        const char *key = iter->first.c_str();
+        if (iter->second.top_level) {
+            menuBar()->addMenu(menuHash[key]);
+        }
+        addToMenu(menuHash[key], iter->second.entries);
+    }
 
-    menuBar()->addMenu(windowMenu);
-    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
-    //Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
-
-    viewMenu->setTearOffEnabled(false);
-    windowMenu->setTearOffEnabled(false);
-    helpMenu->setTearOffEnabled(false);
-
-    menuBar()->addMenu(helpMenu);
-
-    addToMenu(fileMenu, string_tables["file_menu_list"]);
-    addToMenu(editMenu, string_tables["edit_menu_list"]);
-    addToMenu(zoomMenu, string_tables["zoom_menu_list"]);
-    addToMenu(panMenu, string_tables["pan_menu_list"]);
-    addToMenu(helpMenu, string_tables["help_menu_list"]);
+    /* Deal with dynamic menus with call backs. */
+    connect(menuHash["RECENT"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    connect(menuHash["WINDOW"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
 }
 
+/**
+ * @brief Construct a new toolbar.
+ */
 void
-MainWindow::addToToolbar(QToolBar *tb, StringList list)
+MainWindow::addToToolbar(const char *toolbar, const char *name, const char *list)
 {
-    for (int i=0; i<list.size(); i++) {
-        if (list[i] == "---") {
-            tb->addSeparator();
+    toolbarHash[toolbar]->setObjectName(name);
+    for (int i=0; i<string_tables[list].size(); i++) {
+        std::string value = string_tables[list][i];
+        if (value == "---") {
+            toolbarHash[toolbar]->addSeparator();
         }
         else {
-            tb->addAction(actionHash.value(list[i].c_str()));
+            toolbarHash[toolbar]->addAction(actionHash.value(value.c_str()));
         }
     }
+    connect(toolbarHash[toolbar], SIGNAL(topLevelChanged(bool)), this,
+        SLOT(floatingChangedToolBar(bool)));
 }
 
 //NOTE: Qt4.7 wont load icons without an extension...
@@ -1309,9 +1980,9 @@ MainWindow::createIcon(QString label)
     return QIcon(appDir + "/icons/" + icontheme + "/" + label + ".png");
 }
 
-/*
- * TODO: switch prompt to some other focus proxy
- * TODO: some kind of type awareness of data column
+/**
+ * @todo switch prompt to some other focus proxy
+ * @todo some kind of type awareness of data column
  */
 void
 MainWindow::addToComboBox(QComboBox *box, StringList data)
@@ -1330,38 +2001,35 @@ MainWindow::addToComboBox(QComboBox *box, StringList data)
 }
 
 void
+MainWindow::place_toolbars(Qt::ToolBarArea toolbar_area, const char *toolbar_list)
+{
+    for (int i=0; i<string_tables[toolbar_list].size(); i++) {
+        std::string key = string_tables[toolbar_list][i];
+        if (key == "---") {
+            addToolBarBreak(toolbar_area);
+        }
+        else {
+            addToolBar(toolbar_area, toolbarHash[key.c_str()]);
+        }
+    }
+}
+
+void
 MainWindow::createAllToolbars()
 {
     qDebug("MainWindow createAllToolbars()");
 
-    toolbarHash["FILE"]->setObjectName("toolbarFile");
-    addToToolbar(toolbarHash["FILE"], string_tables["file_toolbar_list"]);
-    connect(toolbarHash["FILE"], SIGNAL(topLevelChanged(bool)), this,
-        SLOT(floatingChangedToolBar(bool)));
-
-    toolbarHash["EDIT"]->setObjectName("toolbarEdit");
-    addToToolbar(toolbarHash["EDIT"], string_tables["edit_toolbar_list"]);
-    connect(toolbarHash["EDIT"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-
-    toolbarHash["VIEW"]->setObjectName("toolbarView");
-    addToToolbar(toolbarHash["VIEW"], string_tables["view_toolbar_list"]);
-    connect(toolbarHash["VIEW"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-
-    toolbarHash["ZOOM"]->setObjectName("toolbarZoom");
-    addToToolbar(toolbarHash["ZOOM"], string_tables["zoom_toolbar_list"]);
-    connect(toolbarHash["ZOOM"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-
-    toolbarHash["PAN"]->setObjectName("toolbarPan");
-    addToToolbar(toolbarHash["PAN"], string_tables["pan_toolbar_list"]);
-    connect(toolbarHash["PAN"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-
-    toolbarHash["PAN"]->setObjectName("toolbarIcon");
-    addToToolbar(toolbarHash["ICON"], string_tables["icon_toolbar_list"]);
-    connect(toolbarHash["ICON"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-
-    toolbarHash["HELP"]->setObjectName("toolbarHelp");
-    addToToolbar(toolbarHash["HELP"], string_tables["help_toolbar_list"]);
-    connect(toolbarHash["HELP"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    addToToolbar("FILE", "toolbarFile", "file_toolbar_list");
+    addToToolbar("EDIT", "toolbarEdit", "edit_toolbar_list");
+    addToToolbar("VIEW", "toolbarView", "view_toolbar_list");
+    addToToolbar("ZOOM", "toolbarZoom", "zoom_toolbar_list");
+    addToToolbar("PAN", "toolbarPan", "pan_toolbar_list");
+    addToToolbar("ICON", "toolbarIcon", "icon_toolbar_list");
+    addToToolbar("HELP", "toolbarHelp", "help_toolbar_list");
+    addToToolbar("DRAW", "toolbarDraw", "draw_toolbar_list");
+    addToToolbar("INQUIRY", "toolbarInquiry", "inquiry_toolbar_list");
+    addToToolbar("MODIFY", "toolbarModify", "modify_toolbar_list");
+    addToToolbar("DIMENSION", "toolbarDimension",  "dimension_toolbar_list");
 
     toolbarHash["LAYER"]->setObjectName("toolbarLayer");
     toolbarHash["LAYER"]->addAction(actionHash.value("makelayercurrent"));
@@ -1424,7 +2092,7 @@ MainWindow::createAllToolbars()
     textSizeSelector->addItem("72 pt", 72);
     char command[200];
     sprintf(command, "set_text_size(%d)", st[ST_TEXT_SIZE].i);
-    run(command);
+    cmd(command);
     toolbarHash["TEXT"]->addWidget(textSizeSelector);
     connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
 
@@ -1442,23 +2110,16 @@ MainWindow::createAllToolbars()
     toolbarHash["PROPERTIES"]->setOrientation(Qt::Horizontal);
     toolbarHash["TEXT"]->setOrientation(Qt::Horizontal);
     toolbarHash["PROMPT"]->setOrientation(Qt::Horizontal);
-    // Top
+
+    toolbarHash["DRAW"]->setOrientation(Qt::Vertical);
+    toolbarHash["MODIFY"]->setOrientation(Qt::Vertical);
+    toolbarHash["DIMENSION"]->setOrientation(Qt::Vertical);
+    toolbarHash["INQUIRY"]->setOrientation(Qt::Vertical);
+
     addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["FILE"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["EDIT"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["HELP"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["ICON"]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["ZOOM"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["PAN"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["VIEW"]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["LAYER"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["PROPERTIES"]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["TEXT"]);
-    // Bottom
-    addToolBar(Qt::BottomToolBarArea, toolbarHash["PROMPT"]);
+    place_toolbars(Qt::TopToolBarArea, "top_toolbar_order");
+    place_toolbars(Qt::BottomToolBarArea, "bottom_toolbar_order");
+    place_toolbars(Qt::LeftToolBarArea, "left_toolbar_order");
 
     //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
 }
@@ -1498,8 +2159,8 @@ void MainWindow::readSettings()
     }
 
     for (int i=0; i<N_SETTINGS; i++) {
-        QString key_(settings_table[i].section);
-        key_ += QString("/") + QString(settings_table[i].key);
+        QString key_(settings_table[i].section.c_str());
+        key_ += QString("/") + QString(settings_table[i].key.c_str());
         switch (settings_table[i].type) {
         case 's': {
             const char *s = st[i].s.c_str();
@@ -1541,8 +2202,8 @@ void MainWindow::writeSettings()
     settings_file.setValue("Window/Size", size());
 
     for (int i=0; i<N_SETTINGS; i++) {
-        QString key_(settings_table[i].section);
-        key_ += QString("/") + QString(settings_table[i].key);
+        QString key_(settings_table[i].section.c_str());
+        key_ += QString("/") + QString(settings_table[i].key.c_str());
         switch (settings_table[i].type) {
         case 's':
             settings_file.setValue(key_, st[i].s.c_str());

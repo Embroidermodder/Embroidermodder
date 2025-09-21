@@ -3,11 +3,10 @@
 SOURCE_DIR="."
 BUILD_DIR="_build"
 
-doxygen
-cd docs
+cd docs/manual
 sphinx-build -M html $SOURCE_DIR $BUILD_DIR
 sphinx-build -M latex $SOURCE_DIR $BUILD_DIR
 cd _build/latex
 make
 cd ../..
-cd ..
+cd ../..

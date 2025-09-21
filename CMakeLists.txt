@@ -9,9 +9,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED True)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -39,16 +36,6 @@ add_compile_options(
 )
 endif()
 
-#add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
-
-# The makers of CMake advise that you do not glob source files.
-#
-# https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
-#
-# Since our ASSETS are essential for the program to run, we are going to
-# give them the same treatment and list them explicitly here.
-#
-
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(LIBEMB ${CMAKE_SOURCE_DIR}/libembroidery)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
@@ -56,56 +43,58 @@ set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
 add_subdirectory(extern/libembroidery)
 
+# The makers of CMake advise that you do not glob source files.
+#
+# https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
+#
 qt_add_executable(embroidermodder2
-	${SRC}/application.cpp
-	${SRC}/cmdprompt.cpp
-	${SRC}/embdetails-dialog.cpp
-	${SRC}/imagewidget.cpp
-	${SRC}/layer-manager.cpp
-	${SRC}/main.cpp
-	${SRC}/mainwindow.cpp
-	${SRC}/mdiarea.cpp
-	${SRC}/mdiwindow.cpp
-	${SRC}/object-arc.cpp
-	${SRC}/object-base.cpp
-	${SRC}/object-circle.cpp
-	${SRC}/object-dimleader.cpp
-	${SRC}/object-ellipse.cpp
-	${SRC}/object-image.cpp
-	${SRC}/object-line.cpp
-	${SRC}/object-path.cpp
-	${SRC}/object-point.cpp
-	${SRC}/object-polygon.cpp
-	${SRC}/object-polyline.cpp
-	${SRC}/object-rect.cpp
-	${SRC}/object-save.cpp
-	${SRC}/object-textsingle.cpp
-	${SRC}/preview-dialog.cpp
-	${SRC}/property-editor.cpp
-	${SRC}/script.cpp
-	${SRC}/selectbox.cpp
-	${SRC}/settings-dialog.cpp
-	${SRC}/statusbar.cpp
-	${SRC}/undo-commands.cpp
-	${SRC}/undo-editor.cpp
-	${SRC}/view.cpp
+    ${SRC}/cmdprompt.cpp
+    ${SRC}/data.cpp
+    ${SRC}/embdetails-dialog.cpp
+    ${SRC}/fill.cpp
+    ${SRC}/generate.cpp
+    ${SRC}/imagewidget.cpp
+    ${SRC}/layer-manager.cpp
+    ${SRC}/mainwindow.cpp
+    ${SRC}/mdiarea.cpp
+    ${SRC}/mdiwindow.cpp
+    ${SRC}/object-arc.cpp
+    ${SRC}/object-base.cpp
+    ${SRC}/object-circle.cpp
+    ${SRC}/object-dimleader.cpp
+    ${SRC}/object-ellipse.cpp
+    ${SRC}/object-image.cpp
+    ${SRC}/object-line.cpp
+    ${SRC}/object-path.cpp
+    ${SRC}/object-point.cpp
+    ${SRC}/object-polygon.cpp
+    ${SRC}/object-polyline.cpp
+    ${SRC}/object-rect.cpp
+    ${SRC}/object-save.cpp
+    ${SRC}/object-textsingle.cpp
+    ${SRC}/preview-dialog.cpp
+    ${SRC}/property-editor.cpp
+    ${SRC}/script.cpp
+    ${SRC}/selectbox.cpp
+    ${SRC}/settings-dialog.cpp
+    ${SRC}/statusbar.cpp
+    ${SRC}/undo-commands.cpp
+    ${SRC}/undo-editor.cpp
+    ${SRC}/view.cpp
 
-	${SRC}/embroidermodder.h
+    ${SRC}/embroidermodder.h
+    ${SRC}/constants.h
 
-	${SRC}/data/commands.c
-	${SRC}/data/settings.c
-	${SRC}/data/data.h
-
-	${EXTERN}/lua/src/lapi.c
-	${EXTERN}/lua/src/lapi.h
-	${EXTERN}/lua/src/lauxlib.c
-	${EXTERN}/lua/src/lauxlib.h
-	${EXTERN}/lua/src/lbaselib.c
-	${EXTERN}/lua/src/lcode.c
-	${EXTERN}/lua/src/lcode.h
-	${EXTERN}/lua/src/lcorolib.c
-	${EXTERN}/lua/src/lctype.c
-	${EXTERN}/lua/src/lctype.h
+    ${EXTERN}/lua/src/lapi.c
+    ${EXTERN}/lua/src/lapi.h
+    ${EXTERN}/lua/src/lauxlib.c
+    ${EXTERN}/lua/src/lauxlib.h
+    ${EXTERN}/lua/src/lbaselib.c
+    ${EXTERN}/lua/src/lcode.c
+    ${EXTERN}/lua/src/lcode.h
+    ${EXTERN}/lua/src/lcorolib.c
+    ${EXTERN}/lua/src/lctype.c
+    ${EXTERN}/lua/src/lctype.h
     ${EXTERN}/lua/src/ldblib.c
     ${EXTERN}/lua/src/ldebug.c
     ${EXTERN}/lua/src/ldebug.h
@@ -145,8 +134,6 @@ qt_add_executable(embroidermodder2
     ${EXTERN}/lua/src/ltablib.c
     ${EXTERN}/lua/src/ltm.c
     ${EXTERN}/lua/src/ltm.h
-#    ${EXTERN}/lua/src/lua.c
-#    ${EXTERN}/lua/src/luac.c
     ${EXTERN}/lua/src/luaconf.h
     ${EXTERN}/lua/src/lua.h
     ${EXTERN}/lua/src/lua.hpp
@@ -175,9 +162,9 @@ file(COPY "${CMAKE_SOURCE_DIR}/translations"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/docs"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
+file(COPY "${CMAKE_SOURCE_DIR}/data"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_SOURCE_DIR}/config.toml"
+file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(

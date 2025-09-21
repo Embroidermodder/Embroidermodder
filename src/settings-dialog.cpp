@@ -1,6 +1,13 @@
-/*!
- * \file settings-dialog.cpp
- * \brief Dialog to offer a GUI for altering settings variables.
+/*
+ * Embroidermodder 2
+ * Copyright 2011-2025 The Embroidermodder Team
+ *
+ * Embroidermodder 2 is free and open software under the zlib license:
+ * see LICENSE.md for details.
+ *
+ * ----------------------------------------------------------------------------
+ *
+ * Settings Dialog: a dialog to offer a GUI for altering settings variables.
  */
 
 #include "embroidermodder.h"
@@ -9,8 +16,6 @@
 #include <QStandardPaths>
 
 typedef struct Settings_ {
-    QString general_language;
-    QString general_icon_theme;
     QString general_mdi_bg_logo;
     QString general_mdi_bg_texture;
     QRgb general_mdi_bg_color;
@@ -66,7 +71,6 @@ typedef struct Settings_ {
     qreal grid_size_radius;
     qreal grid_spacing_radius;
     qreal grid_spacing_angle;
-    int general_icon_size;
     bool grid_show_origin;
     bool general_mdi_bg_use_logo;
     bool general_mdi_bg_use_texture;
@@ -88,7 +92,7 @@ ScriptValue st_accept[N_SETTINGS];
 /* Temporary for instant preview. */
 ScriptValue st_preview[N_SETTINGS];
 
-Settings settings, dialog, accept_, preview;
+Settings dialog, accept_, preview;
 
 QTabWidget* tabWidget;
 QDialogButtonBox* buttonBox;
@@ -182,11 +186,11 @@ Settings_Dialog::~Settings_Dialog()
 QCheckBox *
 Settings_Dialog::basic_checkbox(QGroupBox *gb, int id)
 {
-    QCheckBox* cb = new QCheckBox(tr(settings_table[id].description), gb);
+    QCheckBox* cb = new QCheckBox(tr(settings_table[id].description.c_str()), gb);
     cb->setChecked(st_dialog[id].b);
     cb->setEnabled(settings_table[id].enabled);
     if (settings_table[id].icon != "") {
-        cb->setIcon(_mainWin->createIcon(settings_table[id].icon));
+        cb->setIcon(_mainWin->createIcon(settings_table[id].icon.c_str()));
     }
     connect(cb, SIGNAL(stateChanged(int)), this, SLOT(
         [=](int checked) {
@@ -205,7 +209,7 @@ Settings_Dialog::basic_double_spinbox(QGroupBox *gb, int id)
     sb->setValue(st_dialog[id].r);
     connect(sb, SIGNAL(valueChanged(double)), this,
         SLOT([=](double value) { st_dialog[id].r = value; }));
-    sb->setObjectName(QString("spinBox") + settings_table[id].key);
+    sb->setObjectName(QString("spinBox") + settings_table[id].key.c_str());
     return sb;
 }
 
@@ -1047,8 +1051,6 @@ QWidget* Settings_Dialog::createTabQuickSnap()
 {
     QWidget* widget = new QWidget(this);
 
-    QString iconTheme = settings.general_icon_theme;
-
     //QSnap Locators
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
 
@@ -1189,19 +1191,20 @@ QWidget* Settings_Dialog::createTabLineWeight()
     QGroupBox* groupBoxLwtMisc = new QGroupBox(tr("LineWeight Misc"), widget);
 
     QGraphicsScene* s = activeScene();
+    if (s) {
+        dialog.lwt_show_lwt = s->property(ENABLE_LWT).toBool();
+        preview.lwt_show_lwt = dialog.lwt_show_lwt;
+
+        dialog.lwt_real_render = s->property(ENABLE_REAL).toBool();
+        preview.lwt_real_render = dialog.lwt_real_render;
+    }
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
-    if(s) { dialog.lwt_show_lwt = s->property(ENABLE_LWT).toBool(); }
-    else  { dialog.lwt_show_lwt = settings.lwt_show_lwt; }
-    preview.lwt_show_lwt = dialog.lwt_show_lwt;
     checkBoxShowLwt->setChecked(preview.lwt_show_lwt);
     connect(checkBoxShowLwt, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtShowLwtStateChanged(int)));
 
     QCheckBox* checkBoxRealRender = new QCheckBox(tr("RealRender"), groupBoxLwtMisc);
     checkBoxRealRender->setObjectName("checkBoxRealRender");
-    if(s) { dialog.lwt_real_render = s->property(ENABLE_REAL).toBool(); }
-    else  { dialog.lwt_real_render = settings.lwt_real_render; }
-    preview.lwt_real_render = dialog.lwt_real_render;
     checkBoxRealRender->setChecked(preview.lwt_real_render);
     connect(checkBoxRealRender, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtRealRenderStateChanged(int)));
     checkBoxRealRender->setEnabled(dialog.lwt_show_lwt);
@@ -1317,42 +1320,53 @@ QWidget* Settings_Dialog::createTabSelection()
     return scrollArea;
 }
 
-void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
+/* Combobox callback for selecting colors.
+ *
+ * @todo Add Other... so the user can select custom colors.
+ */
+void
+Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {
-    QString iconTheme = settings.general_icon_theme;
-
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorred" + ".png"),     tr("Red"),     qRgb(255,  0,  0));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "coloryellow" + ".png"),  tr("Yellow"),  qRgb(255,255,  0));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorgreen" + ".png"),   tr("Green"),   qRgb(  0,255,  0));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorcyan" + ".png"),    tr("Cyan"),    qRgb(  0,255,255));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorblue" + ".png"),    tr("Blue"),    qRgb(  0,  0,255));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colormagenta" + ".png"), tr("Magenta"), qRgb(255,  0,255));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorwhite" + ".png"),   tr("White"),   qRgb(255,255,255));
-    //TODO: Add Other... so the user can select custom colors
+    comboBox->addItem(_mainWin->createIcon("colorred"), tr("Red"), qRgb(255, 0, 0));
+    comboBox->addItem(_mainWin->createIcon("coloryellow"), tr("Yellow"), qRgb(255, 255, 0));
+    comboBox->addItem(_mainWin->createIcon("colorgreen"), tr("Green"), qRgb(0, 255, 0));
+    comboBox->addItem(_mainWin->createIcon("colorcyan"), tr("Cyan"), qRgb(0, 255, 255));
+    comboBox->addItem(_mainWin->createIcon("colorblue"), tr("Blue"), qRgb(0, 0, 255));
+    comboBox->addItem(_mainWin->createIcon("colormagenta"), tr("Magenta"), qRgb(255, 0, 255));
+    comboBox->addItem(_mainWin->createIcon("colorwhite"), tr("White"), qRgb(255, 255, 255));
 }
 
-void Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
+/* Combobox callback for the general interface language */
+void
+Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
 {
-    dialog.general_language = lang.toLower();
+    st_dialog[ST_LANGUAGE].s = qPrintable(lang.toLower());
 }
 
-void Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
+/* Combobox callback for the general interface icon theme. */
+void
+Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
 {
-    dialog.general_icon_theme = theme;
+    st_dialog[ST_ICON_THEME].s = qPrintable(theme);
 }
 
-void Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
+/* Combobox callback for the general interface icon size.
+ *
+ * Defaults to 16 pixels wide.
+ */
+void
+Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     if (comboBox) {
         bool ok = 0;
-        dialog.general_icon_size = comboBox->itemData(index).toUInt(&ok);
+        st_dialog[ST_ICON_SIZE].i = comboBox->itemData(index).toUInt(&ok);
         if (!ok) {
-            dialog.general_icon_size = 16;
+            st_dialog[ST_ICON_SIZE].i = 16;
         }
     }
     else {
-        dialog.general_icon_size = 16;
+        st_dialog[ST_ICON_SIZE].i = 16;
     }
 }
 
@@ -2166,7 +2180,9 @@ void Settings_Dialog::comboBoxSelectionHotGripColorCurrentIndexChanged(int index
         dialog.selection_hotgrip_color = defaultColor;
 }
 
-void Settings_Dialog::acceptChanges()
+/* Update the interface settings to the dialog state. */
+void
+Settings_Dialog::acceptChanges(void)
 {
     dialog.general_mdi_bg_use_logo = preview.general_mdi_bg_use_logo;
     dialog.general_mdi_bg_use_texture = preview.general_mdi_bg_use_texture;
@@ -2193,7 +2209,7 @@ void Settings_Dialog::acceptChanges()
     dialog.lwt_show_lwt = preview.lwt_show_lwt;
     dialog.lwt_real_render = preview.lwt_real_render;
 
-    for (int i=ST_QSNAP_ENDPOINT; i<ST_QSNAP_PARALLEL+1; i++) {
+    for (int i=0; i<N_SETTINGS; i++) {
         st[i] = st_dialog[i];
     }
 
@@ -2204,7 +2220,7 @@ void Settings_Dialog::acceptChanges()
     mdiArea->setBackgroundLogo(dialog.general_mdi_bg_logo);
     mdiArea->setBackgroundTexture(dialog.general_mdi_bg_texture);
     mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
-    _mainWin->iconResize(dialog.general_icon_size);
+    _mainWin->iconResize(st_dialog[ST_ICON_SIZE].i);
     _mainWin->updateAllViewScrollBars(dialog.display_show_scrollbars);
     _mainWin->updateAllViewCrossHairColors(dialog.display_crosshair_color);
     _mainWin->updateAllViewBackgroundColors(dialog.display_bg_color);
@@ -2230,7 +2246,9 @@ void Settings_Dialog::acceptChanges()
     accept();
 }
 
-void Settings_Dialog::rejectChanges()
+/* Reset all fo the interface settings to ensure everything is displayed as before. */
+void
+Settings_Dialog::rejectChanges(void)
 {
     //TODO: inform the user if they have changed settings
 
@@ -2256,10 +2274,19 @@ void Settings_Dialog::rejectChanges()
     prompt->setPromptFontSize(dialog.prompt_font_size);
     _mainWin->updateAllViewGridColors(dialog.grid_color);
     _mainWin->updateAllViewRulerColors(dialog.ruler_color);
-    if(dialog.lwt_show_lwt) { statusbar->statusBarLwtButton->enableLwt(); }
-    else                    { statusbar->statusBarLwtButton->disableLwt(); }
-    if(dialog.lwt_real_render) { statusbar->statusBarLwtButton->enableReal(); }
-    else                       { statusbar->statusBarLwtButton->disableReal(); }
+    if (dialog.lwt_show_lwt) {
+        statusbar->statusBarLwtButton->enableLwt();
+    }
+    else {
+        statusbar->statusBarLwtButton->disableLwt();
+    }
+    if (dialog.lwt_real_render) {
+        statusbar->statusBarLwtButton->enableReal();
+    }
+    else {
+        statusbar->statusBarLwtButton->disableReal();
+    }
 
     reject();
 }
+

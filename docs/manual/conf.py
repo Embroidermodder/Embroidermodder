@@ -24,8 +24,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.imgmath',
-    'sphinx.ext.todo',
-    'breathe'
+    'sphinx.ext.todo'
 ]
 
 templates_path = [
@@ -41,12 +40,6 @@ exclude_patterns = [
 ]
 
 html_title = "Embroidermodder " + release
-
-# Doxygen generation
-breathe_default_project = "embroidermodder"
-breathe_projects = {
-    "embroidermodder": curdir + "/xml"
-}
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

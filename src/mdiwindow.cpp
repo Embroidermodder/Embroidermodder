@@ -111,7 +111,7 @@ bool MdiWindow::loadFile(const QString &fileName)
 
     /* FIXME: flattens all colors to black */
     QPainterPath polylinePath;
-    setCurrentColor(qRgb(0, 0, 0));
+    curColor = qRgb(0, 0, 0);
     EmbVector start = emb_vector(0, 0);
     bool firstPoint = false;
     for (int i=0; i<p->stitch_list->count; i++) {
@@ -129,7 +129,7 @@ bool MdiWindow::loadFile(const QString &fileName)
         }
     }
     polylinePath.translate(-start.x, -start.y);
-    mainWin->nativeAddPolyline(start.x, start.y, polylinePath, OBJ_RUBBER_OFF);
+    mainWin->add_polyline(start, polylinePath, OBJ_RUBBER_OFF);
 
     /* FIXME: loading geometry
         QPainterPath path;
@@ -140,9 +140,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbCircle c = curCircleObj->circleObj.circle;
                 EmbColor thisColor = curCircleObj->circleObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
+                mainWin->add_circle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
                 curCircleObj = curCircleObj->next;
             }
         }
@@ -153,9 +153,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbEllipse e = curEllipseObj->ellipseObj.ellipse;
                 EmbColor thisColor = curEllipseObj->ellipseObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddEllipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                mainWin->add_ellipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curEllipseObj = curEllipseObj->next;
             }
         }
@@ -166,9 +166,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbLine li = curLineObj->lineObj.line;
                 EmbColor thisColor = curLineObj->lineObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddLine(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
+                mainWin->add_line(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
                 curLineObj = curLineObj->next;
             }
         }
@@ -213,9 +213,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbPoint po = curPointObj->pointObj.point;
                 EmbColor thisColor = curPointObj->pointObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddPoint(embPoint_x(po), embPoint_y(po));
+                mainWin->add_point(embPoint_x(po), embPoint_y(po));
                 curPointObj = curPointObj->next;
             }
         }
@@ -230,7 +230,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 qreal x = 0, y = 0;
                 EmbPointList* curPointList = curPolygonObjList->polygonObj->pointList;
                 EmbColor thisColor = curPolygonObjList->polygonObj->color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
@@ -244,7 +244,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polygonPath.translate(-startX, -startY);
-                mainWin->nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
+                mainWin->add_polygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
 
                 curPolygonObjList = curPolygonObjList->next;
             }
@@ -261,7 +261,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 qreal x = 0, y = 0;
                 EmbPointList* curPointList = curPolylineObjList->polylineObj->pointList;
                 EmbColor thisColor = curPolylineObjList->polylineObj->color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
@@ -275,7 +275,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polylinePath.translate(-startX, -startY);
-                mainWin->nativeAddPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
+                mainWin->add_polyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
 
                 curPolylineObjList = curPolylineObjList->next;
             }
@@ -287,9 +287,9 @@ bool MdiWindow::loadFile(const QString &fileName)
             {
                 EmbRect r = curRectObj->rectObj.rect;
                 EmbColor thisColor = curRectObj->rectObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                curColor = qRgb(thisColor.r, thisColor.g, thisColor.b);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddRectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                mainWin->add_rectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curRectObj = curRectObj->next;
             }
         }
@@ -310,7 +310,7 @@ bool MdiWindow::loadFile(const QString &fileName)
     //Clear the undo stack so it is not possible to undo past this point.
     gview->getUndoStack()->clear();
 
-    setCurrentColor(tmpColor);
+    curColor = tmpColor;
 
     fileWasLoaded = true;
     mainWin->setUndoCleanIcon(fileWasLoaded);

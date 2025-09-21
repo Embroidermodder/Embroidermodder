@@ -1,12 +1,13 @@
-/*!
- * \file embroidermodder.h
- * \brief Global header for the embroidermodder GUI.
- *
+/*
  * Embroidermodder 2
  * Copyright 2011-2025 The Embroidermodder Team
  *
  * Embroidermodder 2 is free and open software under the zlib license:
  * see LICENSE.md for details.
+ *
+ * ----------------------------------------------------------------------------
+ *
+ * Global header for the embroidermodder GUI.
  *
  * New developers should try reading the comments in and altering `script.cpp`
  * or creating/altering files in `scripts/`. If you are unsure what part of the
@@ -109,10 +110,13 @@
 #include <vector>
 #include <unordered_map>
 
-#include "embroidery.h"
-#include "data/data.h"
+#include <chrono>
+#include <thread>
 
-/* NOTE: this is Qt dependant so this means that needs to be here not in "data/data.h"
+#include "embroidery.h"
+#include "constants.h"
+
+/* NOTE: this is Qt dependant so this means that needs to be here not in "constants.h"
  * after the necessary Qt header.
  */
 #if defined(Q_OS_AIX)
@@ -209,21 +213,14 @@ class RectObject;
 class SplineObject;
 class TextMultiObject;
 class TextSingleObject;
-class View;
 class StatusBarButton;
-class MainWindow;
 class StatusBar;
 class ImageWidget;
-class MainWindow;
 class SelectBox;
 class CmdPrompt;
-class MainWindow;
 class MdiArea;
 class MdiWindow;
-class View;
 class PropertyEditor;
-class StatusBar;
-class StatusBarButton;
 class UndoEditor;
 
 /* ---- C++ Typedefs -------------------------------------------------------- */
@@ -240,6 +237,7 @@ typedef struct MenuData_ {
     QString label;
     StringList entries;
     bool mdi_only;
+    bool top_level;
 } MenuData;
 
 typedef struct Command_ {
@@ -261,10 +259,33 @@ typedef struct ScriptValue_ {
     bool b;
 } ScriptValue;
 
+/** @brief Data for a given interface setting. */
+typedef struct SettingsData_ {
+    String section;
+    String key;
+    String default_value;
+    char type;
+    bool enabled;
+    String description;
+    String icon;
+    double lower;
+    double upper;
+    double single_step;
+} SettingsData;
+
+/** @brief Property data for a given geometric object. */
+typedef struct PropertiesData_ {
+    String key;
+    String label;
+    String icon;
+    char type;
+    bool editable;
+} PropertiesData;
+
 /* ---- Function declarations (that aren't in a class) ---------------------- */
 bool script_env_boot(void);
 void script_env_free(void);
-void load_command(const QString& cmdName);
+void load_data();
 
 QRgb getCurrentColor();
 
@@ -273,8 +294,7 @@ View* activeView(void);
 QGraphicsScene* activeScene(void);
 QUndoStack* activeUndoStack(void);
 
-int get_cmd_id(const char *cmd);
-void run(const char *command);
+int get_id(const char **table, const char *cmd);
 
 /* ---- Global data --------------------------------------------------------- */
 extern MainWindow* _mainWin;
@@ -286,10 +306,18 @@ extern StatusBar* statusbar;
 
 extern QHash<QString, QAction*> actionHash;
 extern std::vector<Command> command_map;
+extern SettingsData settings_table[N_SETTINGS];
 extern ScriptValue st[N_SETTINGS];
 extern std::unordered_map<std::string, ToolbarData> toolbar_table;
 extern std::unordered_map<std::string, MenuData> menu_table;
 extern std::unordered_map<std::string, StringList> string_tables;
+extern std::unordered_map<std::string, std::vector<PropertiesData>> properties_table;
+extern std::unordered_map<QString, QString> aliases;
+extern const char *command_names[MAX_COMMANDS];
+
+extern int context_flag;
+extern bool testing;
+extern int test_script_pos;
 
 /* ---- Class declarations -------------------------------------------------- */
 
@@ -317,8 +345,6 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 signals:
-    void appendHistory(const QString& txt, int prefixLength);
-
     //These connect to the CmdPrompt signals
     void startCommand(const QString& cmd);
     void runCommand(const QString& cmd, const QString& cmdtxt);
@@ -387,7 +413,6 @@ protected:
     void contextMenuEvent(QContextMenuEvent* event);
 
 public slots:
-    void appendHistory(const QString& txt, int prefixLength);
     void startResizeHistory(int y);
     void stopResizeHistory(int y);
     void resizeHistory(int y);
@@ -455,7 +480,17 @@ public:
     CmdPrompt(QWidget* parent = 0);
     ~CmdPrompt();
 
-protected:
+    CmdPromptInput* promptInput;
+    CmdPromptHistory* promptHistory;
+    QVBoxLayout* promptVBoxLayout;
+    QFrame* promptDivider;
+
+    CmdPromptSplitter* promptSplitter;
+
+    QHash<QString, QString>* styleHash;
+    void updateStyle();
+    QTimer* blinkTimer;
+    bool blinkState;
 
 public slots:
     QString getHistory() { return promptHistory->toHtml(); }
@@ -532,19 +567,6 @@ signals:
     void showSettings();
 
     void historyAppended(const QString& txt);
-
-private:
-    CmdPromptInput*    promptInput;
-    CmdPromptHistory*  promptHistory;
-    QVBoxLayout*       promptVBoxLayout;
-    QFrame*            promptDivider;
-
-    CmdPromptSplitter* promptSplitter;
-
-    QHash<QString, QString>*  styleHash;
-    void updateStyle();
-    QTimer* blinkTimer;
-    bool blinkState;
 };
 
 class EmbDetailsDialog : public QDialog
@@ -596,26 +618,33 @@ public:
     MainWindow();
     ~MainWindow();
 
+    void cmd(const char *line);
+    void run(const char *filename);
+    ScriptValue get(const char *key);
+    void set(const char *key, ScriptValue value);
+
     QPrinter printer;
     QBasicTimer timer;
 
     void timerEvent(QTimerEvent *);
-
-    void run_command(int id, ScriptValue *args=NULL, int n_args=0);
 
     void setUndoCleanIcon(bool opened);
 
     virtual void updateMenuToolbarStatusbar();
 
     QIcon createIcon(QString label);
-    void addToToolbar(QToolBar *tb, StringList list);
+    void addToToolbar(const char *toolbar, const char *name, const char *list);
     void addToMenu(QMenu *menu, StringList data);
     void addToComboBox(QComboBox *box, StringList data);
+    void place_toolbars(Qt::ToolBarArea toolbar_area, const char *toolbar_list);
 
     bool isCommandActive() { return prompt->isCommandActive(); }
     QString activeCommand() { return prompt->activeCommand(); }
 
     QString platformString();
+
+    void generate(const char *type);
+    void fill(const char *type);
 
 public slots:
     void onCloseWindow();
@@ -759,29 +788,30 @@ public:
     void nativeSetRubberPoint(const QString& key, qreal x, qreal y);
     void nativeSetRubberText(const QString& key, const QString& txt);
 
-    void nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
-    void nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
+    /* Geometry */
+    void add_text_multi(const QString& str, EmbVector position, qreal rot, bool fill, int rubberMode);
+    void add_text_single(const QString& str, EmbVector position, qreal rot, bool fill, int rubberMode);
+    void add_infinite_line(EmbVector point1, EmbVector point2, qreal rot);
+    void add_ray(EmbVector start, EmbVector point, qreal rot);
+    void add_line(EmbVector start, EmbVector end, qreal rot, int rubberMode);
+    void add_triangle(EmbVector point1, EmbVector point2, EmbVector point3, qreal rot, bool fill);
+    void add_rectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
+    void add_rounded_rectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
+    void add_arc(EmbVector start, EmbVector mid, EmbVector end, int rubberMode);
+    void add_circle(EmbVector center, qreal radius, bool fill, int rubberMode);
+    void add_slot(EmbVector center, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);
+    void add_ellipse(EmbVector center, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
+    void add_point(EmbVector position);
+    void add_regular_polygon(EmbVector center, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
+    void add_polygon(EmbVector start, const QPainterPath& p, int rubberMode);
+    void add_polyline(EmbVector start, const QPainterPath& p, int rubberMode);
+    void add_path(EmbVector start, const QPainterPath& p, int rubberMode);
+    void add_image(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);
 
-    void nativeAddInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
-    void nativeAddTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
-    void nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
-    void nativeAddRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
-    void nativeAddArc(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode);
-    void nativeAddCircle(qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode);
-    void nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);
-    void nativeAddEllipse(qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
-    void nativeAddPoint(qreal x, qreal y);
-    void nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
-    void nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddHorizontalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
-    void nativeAddVerticalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
-    void nativeAddImage(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);
-
-    void nativeAddDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
+    /* Annotations */
+    void add_dim_leader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
+    void add_horizontal_dimension(EmbVector start, EmbVector end, qreal legHeight);
+    void add_vertical_dimension(EmbVector start, EmbVector end, qreal legHeight);
 
     void  nativeSetCursorShape(const QString& str);
     qreal nativeCalculateAngle(qreal x1, qreal y1, qreal x2, qreal y2);
@@ -886,17 +916,7 @@ public:
     ~MdiWindow();
 
     virtual QSize sizeHint() const;
-    QString getCurrentFile()   { return curFile; }
     QString getShortCurrentFile();
-    View* getView() { return gview; }
-    QGraphicsScene* getScene() { return gscene; }
-    QString getCurrentLayer() { return curLayer; }
-    QString getCurrentLineType() { return curLineType; }
-    QString getCurrentLineWeight() { return curLineWeight; }
-    void setCurrentLayer(const QString& layer) { curLayer = layer; }
-    void setCurrentColor(const QRgb& color) { curColor = color; }
-    void setCurrentLineType(const QString& lineType) { curLineType = lineType; }
-    void setCurrentLineWeight(const QString& lineWeight) { curLineWeight = lineWeight; }
     void designDetails();
     bool loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);

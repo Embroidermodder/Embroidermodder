@@ -10,6 +10,53 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 
+extern int play_mode;
+extern uint64_t simulation_start;
+extern float machine_speed;
+extern float stitch_time;
+
+/*! \brief Our preferred current time format: milliseconds since epoch as an uint64_t.
+ *
+ * \todo Check for failure due to porting or the 2038 problem.
+ */
+uint64_t
+current_time(void)
+{
+    const std::chrono::time_point now = std::chrono::system_clock::now();
+    const auto now_t = now.time_since_epoch();
+    const auto time_s = std::chrono::duration_cast<std::chrono::milliseconds>(now_t);
+    return time_s.count();
+}
+
+/*! Calculate what position the embroidery machine is at given the current time.
+ *
+ * HACK: this is very inefficient because there is no storage of data from previous
+ *       renders.
+ *
+ * FIXME: this is not per-design, so all loaded designs will simulate together.
+ */
+QPainterPath
+simulation_step(QPainterPath normalPath)
+{
+    double simulation_time = (current_time() - simulation_start)/1000.0;
+    qDebug("Simulation time: %lu", simulation_time);
+
+    QPainterPath animatePath;
+    QPointF start_pt = normalPath.elementAt(0);
+    double time = 0.0f;
+    animatePath.moveTo(start_pt);
+    for (int i=1; i<normalPath.elementCount(); i++) {
+        QPointF pt = normalPath.elementAt(i) - start_pt;
+        double travelled = std::sqrt(pt.x()*pt.x() + pt.y()*pt.y());
+        time += (travelled / machine_speed) + stitch_time;
+        if (time > simulation_time) {
+            break;
+        }
+        animatePath.lineTo(pt);
+    }
+    return animatePath;
+}
+
 PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolylineObject Constructor()");
@@ -59,21 +106,36 @@ void PolylineObject::updatePath(const QPainterPath& p)
     setObjectPath(reversePath);
 }
 
-void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void
+PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) {
+        return;
+    }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property(ENABLE_LWT).toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
-    painter->drawPath(normalPath);
+    if (play_mode) {
+        painter->drawPath(simulation_step(normalPath));
+        update();
+    }
+    else {
+        painter->drawPath(normalPath);
+    }
 
-    if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, normalPath); }
+    if (objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) {
+        realRender(painter, normalPath);
+    }
 }
 
 void PolylineObject::updateRubber(QPainter* painter)
