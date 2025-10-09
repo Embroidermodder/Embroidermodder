@@ -101,17 +101,25 @@
 #include <QWhatsThis>
 #include <QWidget>
 
-#include <QtCore/qmath.h>
+#include <QFontComboBox>
+#include <QFormLayout>
+#include <QGroupBox>
+#include <QKeyEvent>
+#include <QLineEdit>
+#include <QScrollArea>
+#include <QSignalMapper>
+
 //#include <QOpenGLWidget>
 
 #include <cinttypes>
+#include <cmath>
 #include <cstdlib>
-#include <string>
-#include <vector>
-#include <unordered_map>
 
 #include <chrono>
+#include <string>
 #include <thread>
+#include <vector>
+#include <unordered_map>
 
 #include "embroidery.h"
 #include "constants.h"
@@ -1657,6 +1665,38 @@ public:
     PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
     ~PropertyEditor();
 
+    void createGroupBox(const char *title, const char *key, int32_t geometry_type);
+
+    std::unordered_map<std::string, QToolButton *> tool_buttons;
+    std::unordered_map<std::string, QLineEdit *> line_edits;
+    std::unordered_map<std::string, QComboBox *> combo_boxes;
+    std::unordered_map<std::string, QGroupBox *> group_boxes;
+
+    QString iconDir;
+    int iconSize;
+    Qt::ToolButtonStyle propertyEditorButtonStyle;
+
+    bool pickAdd;
+
+    QList<QGraphicsItem*> selectedItemList;
+
+    int precisionAngle;
+    int precisionLength;
+
+    /* Used when checking if fields vary. */
+    QString fieldOldText;
+    QString fieldNewText;
+    QString fieldVariesText;
+    QString fieldYesText;
+    QString fieldNoText;
+    QString fieldOnText;
+    QString fieldOffText;
+
+    /* Selection */
+    QComboBox* comboBoxSelected;
+    QToolButton* toolButtonQSelect;
+    QToolButton* toolButtonPickAdd;
+
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
@@ -1676,12 +1716,12 @@ private slots:
     void togglePickAddMode();
 
 private:
-    QWidget*     focusWidget;
+    QWidget* focusWidget;
 
     //Helper functions
-    QToolButton*   createToolButton(const QString& iconName, const QString& txt);
-    QLineEdit*     createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
-    QComboBox*     createComboBox(bool disable = false);
+    QToolButton* createToolButton(const QString& iconName, const QString& txt);
+    QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
+    QComboBox* createComboBox(bool disable = false);
     QFontComboBox* createFontComboBox(bool disable = false);
 
     void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
@@ -1693,42 +1733,9 @@ private:
     QSignalMapper* signalMapper;
     void mapSignal(QObject* fieldObj, const QString& name, QVariant value);
 
-    QComboBox*   createComboBoxSelected();
+    QComboBox* createComboBoxSelected();
     QToolButton* createToolButtonQSelect();
     QToolButton* createToolButtonPickAdd();
-
-    QGroupBox*   createGroupBoxGeneral();
-
-    QGroupBox*   createGroupBoxGeometryArc();
-    QGroupBox*   createGroupBoxMiscArc();
-    QGroupBox*   createGroupBoxGeometryBlock();
-    QGroupBox*   createGroupBoxGeometryCircle();
-    QGroupBox*   createGroupBoxGeometryDimAligned();
-    QGroupBox*   createGroupBoxGeometryDimAngular();
-    QGroupBox*   createGroupBoxGeometryDimArcLength();
-    QGroupBox*   createGroupBoxGeometryDimDiameter();
-    QGroupBox*   createGroupBoxGeometryDimLeader();
-    QGroupBox*   createGroupBoxGeometryDimLinear();
-    QGroupBox*   createGroupBoxGeometryDimOrdinate();
-    QGroupBox*   createGroupBoxGeometryDimRadius();
-    QGroupBox*   createGroupBoxGeometryEllipse();
-    QGroupBox*   createGroupBoxGeometryImage();
-    QGroupBox*   createGroupBoxMiscImage();
-    QGroupBox*   createGroupBoxGeometryInfiniteLine();
-    QGroupBox*   createGroupBoxGeometryLine();
-    QGroupBox*   createGroupBoxGeometryPath();
-    QGroupBox*   createGroupBoxMiscPath();
-    QGroupBox*   createGroupBoxGeometryPoint();
-    QGroupBox*   createGroupBoxGeometryPolygon();
-    QGroupBox*   createGroupBoxGeometryPolyline();
-    QGroupBox*   createGroupBoxMiscPolyline();
-    QGroupBox*   createGroupBoxGeometryRay();
-    QGroupBox*   createGroupBoxGeometryRectangle();
-    QGroupBox*   createGroupBoxGeometryTextMulti();
-    QGroupBox*   createGroupBoxTextTextSingle();
-    QGroupBox*   createGroupBoxGeometryTextSingle();
-    QGroupBox*   createGroupBoxMiscTextSingle();
-
 };
 
 class SelectBox : public QRubberBand

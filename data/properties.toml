@@ -6,51 +6,1072 @@
 # See LICENSE.md for details about distribution.
 # ----------------------------------------------------------------------------
 
-# TODO: icons for circle properties
+groupbox_order = [
+    "General",
+    "GeometryArc",
+    "MiscArc",
+    "GeometryBlock",
+    "GeometryCircle",
+    "GeometryDimAligned",
+    "GeometryDimAngular",
+    "GeometryDimArcLength",
+    "GeometryDimDiameter",
+    "GeometryDimLeader",
+    "GeometryDimLinear",
+    "GeometryDimOrdinate",
+    "GeometryDimRadius",
+    "GeometryEllipse",
+    "GeometryImage",
+    "MiscImage",
+    "GeometryInfiniteLine",
+    "GeometryLine",
+    "GeometryPath",
+    "MiscPath",
+    "GeometryPoint",
+    "GeometryPolygon",
+    "GeometryPolyline",
+    "MiscPolyline",
+    "GeometryRay",
+    "GeometryRectangle",
+    "GeometryTextMulti",
+    "TextTextSingle",
+    "GeometryTextSingle",
+    "MiscTextSingle"
+]
+
+# TODO: use proper icons
 [[properties]]
-section = "circle"
+section = "General"
+groupbox = "General"
+entries = [
+    {
+        key = "GeneralLayer",
+        label = "Layer",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    },
+    {
+        key = "GeneralColor",
+        label = "Color",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    },
+    {
+        key = "GeneralLineType",
+        label = "Line Type",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    },
+    {
+        key = "GeneralLineWeight",
+        label = "Line Weight",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryArc"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "ArcCenterX",
+        label = "Center X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ArcCenterY",
+        label = "Center Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ArcRadius",
+        label = "Radius",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ArcStartAngle",
+        label = "Start Angle",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ArcEndAngle",
+        label = "End Angle",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ArcStartX",
+        label = "Start X",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "ArcStartY",
+        label = "Start Y",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "ArcEndX",
+        label = "End X",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "ArcEndY",
+        label = "End Y",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "ArcArea",
+        label = "Area",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "ArcArcLength",
+        label = "Arc Length",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "ArcChord",
+        label = "Chord",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "ArcIncAngle",
+        label = "Included Angle",
+        icon = "blank",
+        type = "real",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "MiscArc"
+groupbox = "Misc"
+entries = [
+    {
+        key = "ArcClockwise",
+        label = "Clockwise",
+        icon = "blank",
+        type = "combobox",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryBlock"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "BlockPositionX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "BlockPositionY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryCircle"
 groupbox = "Geometry"
 entries = [
     {
         key = "CircleCenterX",
         label = "Center X",
         icon = "blank",
-        type = "float",
+        type = "real",
         editable = true
     },
     {
         key = "CircleCenterY",
         label = "Center Y",
         icon = "blank",
-        type = "float",
+        type = "real",
         editable = true
     },
     {
         key = "CircleRadius",
         label = "Radius",
         icon = "blank",
-        type = "float",
+        type = "real",
         editable = true
     },
     {
         key = "CircleDiameter",
         label = "Diameter",
         icon = "blank",
-        type = "float",
+        type = "real",
         editable = true
     },
     {
         key = "CircleArea",
         label = "Area",
         icon = "blank",
-        type = "float",
+        type = "real",
         editable = true
     },
     {
         key = "CircleCircumference",
         label = "Circumference",
         icon = "blank",
-        type = "float",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+# TODO: full list of toolButtons and lineEdits
+[[properties]]
+section = "GeometryDimAligned"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "DimAlignedPositionX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "DimAlignedPositionY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+# TODO: full list of toolButtons and lineEdits
+[[properties]]
+section = "GeometryDimAngular"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "DimAngularPositionX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "DimAngularPositionY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+# TODO: full list of toolButtons and lineEdits
+[[properties]]
+section = "GeometryDimArcLength"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "DimArcLengthPositionX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "DimArcLengthPositionY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+# TODO: full list of toolButtons and lineEdits
+[[properties]]
+section = "GeometryDimDiameter"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "DimDiameterPositionX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "DimDiameterPositionY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+# TODO: full list of toolButtons and lineEdits
+[[properties]]
+section = "GeometryDimLeader"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "DimLeaderPositionX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "DimLeaderPositionY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+# TODO: full list of toolButtons and lineEdits
+[[properties]]
+section = "GeometryDimLinear"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "DimLinearPositionX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "DimLinearPositionY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+# TODO: full list of toolButtons and lineEdits
+[[properties]]
+section = "GeometryDimOrdinate"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "DimOrdinatePositionX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "DimOrdinatePositionY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+# TODO: full list of toolButtons and lineEdits
+[[properties]]
+section = "GeometryDimRadius"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "DimRadiusCenterX",
+        label = "Center X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "DimRadiusCenterY",
+        label = "Center Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryEllipse"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "EllipseCenterX",
+        label = "Center X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "EllipseCenterY",
+        label = "Center Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "EllipseRadiusMajor",
+        label = "Major Radius",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "EllipseRadiusMinor",
+        label = "Minor Radius",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "EllipseDiameterMajor",
+        label = "Major Diameter",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "EllipseDiameterMinor",
+        label = "Minor Diameter",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryImage"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "ImageX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ImageY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ImageWidth",
+        label = "Width",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ImageHeight",
+        label = "Height",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "MiscImage"
+groupbox = "Misc"
+entries = [
+    {
+        key = "ImageName",
+        label = "Name",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "ImagePath",
+        label = "Path",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryInfiniteLine"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "InfiniteLineStartX",
+        label = "Start X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "InfiniteLineStartY",
+        label = "Start Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "InfiniteLine2ndX",
+        label = "2nd X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "InfiniteLine2ndY",
+        label = "2nd Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "InfiniteLineVectorX",
+        label = "Vector X",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "InfiniteLineVectorY",
+        label = "Vector Y",
+        icon = "blank",
+        type = "real",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryLine"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "InfiniteLineStartX",
+        label = "Start X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "InfiniteLineStartY",
+        label = "Start Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "InfiniteLineEndX",
+        label = "End X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "InfiniteLineEndY",
+        label = "End Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "InfiniteLineDeltaX",
+        label = "Delta X",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "InfiniteLineDeltaY",
+        label = "Delta Y",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "InfiniteLineAngle",
+        label = "Angle",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "InfiniteLineLength",
+        label = "Length",
+        icon = "blank",
+        type = "real",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryPath"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "PathVertexNum",
+        label = "Vertex #",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    },
+    {
+        key = "PathVertexX",
+        label = "Vertex X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PathVertexY",
+        label = "Vertex Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PathArea",
+        label = "Area",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "PathLength",
+        label = "Length",
+        icon = "blank",
+        type = "real",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "MiscPath"
+groupbox = "Misc"
+entries = [
+    {
+        key = "PathClosed",
+        label = "Closed",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryPoint"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "PointX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PointY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryPolygon"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "PolygonCenterX",
+        label = "Center X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PolygonCenterY",
+        label = "Center Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PolygonRadiusVertex",
+        label = "Vertex Radius",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PolygonRadiusSide",
+        label = "Side Radius",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PolygonDiameterVertex",
+        label = "Vertex Diameter",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PolygonDiameterSide",
+        label = "Side Diameter",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PolygonInteriorAngle",
+        label = "Interior Angle",
+        icon = "blank",
+        type = "real",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryPolyline"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "PolylineVertexNum",
+        label = "Vertex Num",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    },
+    {
+        key = "PolylineVertexX",
+        label = "Vertex X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PolylineVertexY",
+        label = "Vertex Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "PolylineArea",
+        label = "Area",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "PolylineLength",
+        label = "Length",
+        icon = "blank",
+        type = "real",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "MiscPolyline"
+groupbox = "Misc"
+entries = [
+    {
+        key = "PolylineClosed",
+        label = "Closed",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryRay"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "RayStartX",
+        label = "Start X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RayStartY",
+        label = "Start Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RaySecondX",
+        label = "2nd X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RaySecondY",
+        label = "2nd Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RayVectorX",
+        label = "Vector X",
+        icon = "blank",
+        type = "real",
+        editable = false
+    },
+    {
+        key = "RayVectorY",
+        label = "Vector Y",
+        icon = "blank",
+        type = "real",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryRectangle"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "RectangleCorner1X",
+        label = "Corner 1 X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleCorner1Y",
+        label = "Corner 1 Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleCorner2X",
+        label = "Corner 2 X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleCorner2Y",
+        label = "Corner 2 Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleCorner3X",
+        label = "Corner 3 X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleCorner3Y",
+        label = "Corner 3 Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleCorner4X",
+        label = "Corner 4 X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleCorner4Y",
+        label = "Corner 4 Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleWidth",
+        label = "Width",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleHeight",
+        label = "Height",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "RectangleArea",
+        label = "Area",
+        icon = "blank",
+        type = "real",
+        editable = false
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryTextMulti"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "TextMultiX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "TextMultiY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "TextTextSingle"
+groupbox = "Text"
+entries = [
+    {
+        key = "TextSingleContents",
+        label = "Contents",
+        icon = "blank",
+        type = "string",
+        editable = true
+    },
+    {
+        key = "TextSingleFont",
+        label = "Font",
+        icon = "blank",
+        type = "font",
+        editable = true
+    },
+    {
+        key = "TextSingleJustify",
+        label = "Justify",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    },
+    {
+        key = "TextSingleHeight",
+        label = "Height",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "TextSingleRotation",
+        label = "Rotation",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "GeometryTextSingle"
+groupbox = "Geometry"
+entries = [
+    {
+        key = "TextSingleX",
+        label = "Position X",
+        icon = "blank",
+        type = "real",
+        editable = true
+    },
+    {
+        key = "TextSingleY",
+        label = "Position Y",
+        icon = "blank",
+        type = "real",
+        editable = true
+    }
+]
+
+# TODO: use proper icons
+[[properties]]
+section = "MiscTextSingle"
+groupbox = "Misc"
+entries = [
+    {
+        key = "TextSingleBackward",
+        label = "Backward",
+        icon = "blank",
+        type = "combobox",
+        editable = true
+    },
+    {
+        key = "TextSingleUpsideDown",
+        label = "Upside Down",
+        icon = "blank",
+        type = "combobox",
         editable = true
     }
 ]

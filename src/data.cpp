@@ -205,6 +205,8 @@ load_properties_data(void)
     qDebug("Loading properties...");
     auto data = toml::parse("data/properties.toml", toml::spec::v(1, 1, 0));
 
+    string_tables["groupbox_order"] = get_toml_string_table(data, "groupbox_order");
+
     auto table = data.at("properties").as_array();
     for (size_t i=0; i<table.size(); i++) {
         auto current = table.at(i);
