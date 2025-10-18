@@ -60,22 +60,22 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     toggleRuler(st[ST_RULER_SHOW_ON_LOAD].b);
     toggleReal(true); //TODO: load this from file, else settings with default being true
 
-    grippingActive = false;
-    rapidMoveActive = false;
+    vdata.grippingActive = false;
+    vdata.rapidMoveActive = false;
     previewMode = PREVIEW_MODE_NULL;
     previewData = 0;
     previewObjectItemGroup = 0;
     pasteObjectItemGroup = 0;
-    previewActive = false;
-    pastingActive = false;
-    movingActive = false;
-    selectingActive = false;
-    zoomWindowActive = false;
-    panningRealTimeActive = false;
-    panningPointActive = false;
-    panningActive = false;
-    qSnapActive = false;
-    qSnapToggle = false;
+    vdata.previewActive = false;
+    vdata.pastingActive = false;
+    vdata.movingActive = false;
+    vdata.selectingActive = false;
+    vdata.zoomWindowActive = false;
+    vdata.panningRealTimeActive = false;
+    vdata.panningPointActive = false;
+    vdata.panningActive = false;
+    vdata.qSnapActive = false;
+    vdata.qSnapToggle = false;
 
     //Randomize the hot grip location initially so it's not located at (0,0)
     srand(QDateTime::currentMSecsSinceEpoch());
@@ -150,24 +150,22 @@ void View::previewOn(int clone, int mode, qreal x, qreal y, qreal data)
 
     //Create new objects and add them to the scene in an item group.
     if     (clone == PREVIEW_CLONE_SELECTED) previewObjectList = createObjectList(gscene->selectedItems());
-    else if(clone == PREVIEW_CLONE_RUBBER)   previewObjectList = createObjectList(rubberRoomList);
+    else if (clone == PREVIEW_CLONE_RUBBER)   previewObjectList = createObjectList(rubberRoomList);
     else return;
     previewObjectItemGroup = gscene->createItemGroup(previewObjectList);
 
-    if(previewMode == PREVIEW_MODE_MOVE   ||
+    if (previewMode == PREVIEW_MODE_MOVE ||
        previewMode == PREVIEW_MODE_ROTATE ||
-       previewMode == PREVIEW_MODE_SCALE)
-    {
+       previewMode == PREVIEW_MODE_SCALE) {
         previewPoint = QPointF(x, y); //NOTE: Move: basePt; Rotate: basePt;   Scale: basePt;
         previewData = data;           //NOTE: Move: unused; Rotate: refAngle; Scale: refFactor;
-        previewActive = true;
+        vdata.previewActive = true;
     }
-    else
-    {
+    else {
         previewMode = PREVIEW_MODE_NULL;
         previewPoint = QPointF();
         previewData = 0;
-        previewActive = false;
+        vdata.previewActive = false;
     }
 
     gscene->update();
@@ -179,31 +177,31 @@ void View::previewOff()
     qDeleteAll(previewObjectList.begin(), previewObjectList.end());
     previewObjectList.clear();
 
-    if(previewObjectItemGroup)
+    if (previewObjectItemGroup)
     {
         gscene->removeItem(previewObjectItemGroup);
         delete previewObjectItemGroup;
         previewObjectItemGroup = 0;
     }
 
-    previewActive = false;
+    vdata.previewActive = false;
 
     gscene->update();
 }
 
 void View::enableMoveRapidFire()
 {
-    rapidMoveActive = true;
+    vdata.rapidMoveActive = true;
 }
 
 void View::disableMoveRapidFire()
 {
-    rapidMoveActive = false;
+    vdata.rapidMoveActive = false;
 }
 
 bool View::allowRubber()
 {
-    //if(!rubberRoomList.size()) //TODO: this check should be removed later
+    //if (!rubberRoomList.size()) //TODO: this check should be removed later
         return true;
     return false;
 }
@@ -220,7 +218,7 @@ void View::vulcanizeRubberRoom()
     foreach(QGraphicsItem* item, rubberRoomList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base) vulcanizeObject(base);
+        if (base) vulcanizeObject(base);
     }
     rubberRoomList.clear();
     gscene->update();
@@ -228,12 +226,12 @@ void View::vulcanizeRubberRoom()
 
 void View::vulcanizeObject(BaseObject* obj)
 {
-    if(!obj) return;
+    if (!obj) return;
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
     obj->vulcanize();
 
     UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, this, 0);
-    if(cmd) undoStack->push(cmd);
+    if (cmd) undoStack->push(cmd);
 }
 
 void View::clearRubberRoom()
@@ -241,15 +239,15 @@ void View::clearRubberRoom()
     foreach(QGraphicsItem* item, rubberRoomList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base)
+        if (base)
         {
             int type = base->type();
-            if((type == OBJ_TYPE_PATH     && spareRubberList.contains(SPARE_RUBBER_PATH))     ||
+            if ((type == OBJ_TYPE_PATH     && spareRubberList.contains(SPARE_RUBBER_PATH))     ||
                (type == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
                (type == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
                (spareRubberList.contains(base->objectID())))
             {
-                if(!base->objectPath().elementCount())
+                if (!base->objectPath().elementCount())
                 {
                     QMessageBox::critical(this, tr("Empty Rubber Object Error"),
                                           tr("The rubber object added contains no points. "
@@ -284,7 +282,7 @@ void View::setRubberMode(int mode)
     foreach(QGraphicsItem* item, rubberRoomList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base) { base->setObjectRubberMode(mode); }
+        if (base) { base->setObjectRubberMode(mode); }
     }
     gscene->update();
 }
@@ -294,7 +292,7 @@ void View::setRubberPoint(const QString& key, const QPointF& point)
     foreach(QGraphicsItem* item, rubberRoomList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base) { base->setObjectRubberPoint(key, point); }
+        if (base) { base->setObjectRubberPoint(key, point); }
     }
     gscene->update();
 }
@@ -304,7 +302,7 @@ void View::setRubberText(const QString& key, const QString& txt)
     foreach(QGraphicsItem* item, rubberRoomList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base) { base->setObjectRubberText(key, txt); }
+        if (base) { base->setObjectRubberText(key, txt); }
     }
     gscene->update();
 }
@@ -547,7 +545,7 @@ void View::toggleQSnap(bool on)
 {
     qDebug("View toggleQSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    qSnapToggle = on;
+    vdata.qSnapToggle = on;
     gscene->setProperty(ENABLE_QSNAP, on);
     gscene->update();
     QApplication::restoreOverrideCursor();
@@ -595,7 +593,7 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
-    if(gscene->property(ENABLE_GRID).toBool() && rect.intersects(gridPath.controlPointRect()))
+    if (gscene->property(ENABLE_GRID).toBool() && rect.intersects(gridPath.controlPointRect()))
     {
         QPen gridPen(gridColor);
         gridPen.setJoinStyle(Qt::MiterJoin);
@@ -605,6 +603,238 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
         painter->drawPath(originPath);
         painter->fillPath(originPath, gridColor);
     }
+}
+
+void
+View::drawRulers(QPainter *painter)
+{
+    int vw = width(); // View Width
+    int vh = height(); // View Height
+    QPointF origin = mapToScene(0, 0);
+    QPointF rulerHoriz = mapToScene(vw, rulerPixelSize);
+    QPointF rulerVert  = mapToScene(rulerPixelSize, vh);
+
+    qreal ox = origin.x();
+    qreal oy = origin.y();
+
+    EmbRect rh, rv;
+    rh.x = rulerHoriz.x();
+    rh.y = rulerHoriz.y();
+    rh.w = rh.x - ox;
+    rh.h = rh.y - oy;
+
+    rv.x = rulerVert.x();
+    rv.y = rulerVert.y();
+    rv.w = rv.x - ox;
+    rv.h = rv.y - oy;
+
+    //NOTE: Drawing ruler if zoomed out too far will cause an assertion failure.
+    //      We will limit the maximum size the ruler can be shown at.
+    quint16 maxSize = -1; //Intentional underflow
+    if (rh.w >= maxSize || rv.h >= maxSize) {
+        return;
+    }
+
+    int distance = mapToScene(rulerPixelSize*3, 0).x() - ox;
+    QString distStr = QString().setNum(distance);
+    int distStrSize = distStr.size();
+    int msd = distStr.at(0).digitValue(); //Most Significant Digit
+    if (msd == -1) {
+        return;
+    }
+
+    msd++;
+    if (msd == 10) {
+        msd = 1;
+        distStr.resize(distStrSize+1);
+        distStrSize++;
+    }
+
+    distStr.replace(0, 1, QString().setNum(msd));
+    for (int i = 1; i < distStrSize; ++i) {
+        distStr.replace(i, 1, '0');
+    }
+    int unit = distStr.toInt();
+    qreal fraction;
+    bool feet = true;
+    if (rulerMetric) {
+        if (unit < 10) unit = 10;
+        fraction = unit/10;
+    }
+    else {
+        if (unit <= 1) {
+            unit = 1;
+            feet = false;
+            fraction = (qreal)(unit/16);
+        }
+        else {
+            unit = roundToMultiple(true, unit, 12);
+            fraction = unit/12;
+        }
+    }
+
+    qreal little  = 0.20;
+    qreal medium = 0.40;
+    qreal rhTextOffset = mapToScene(3, 0).x() - ox;
+    qreal rvTextOffset = mapToScene(0, 3).y() - oy;
+    qreal textHeight = rh.h * medium;
+
+    QVector<QLineF> lines;
+    lines.append(QLineF(ox, rh.y, rh.x, rh.y));
+    lines.append(QLineF(rv.x, oy, rv.x, rv.y));
+
+    qreal mx = sceneMousePoint.x();
+    qreal my = sceneMousePoint.y();
+    lines.append(QLineF(mx, rh.y, mx, oy));
+    lines.append(QLineF(rv.x, my, ox, my));
+
+    QTransform transform;
+
+    QPen rulerPen(QColor(0,0,0));
+    rulerPen.setCosmetic(true);
+    painter->setPen(rulerPen);
+    painter->fillRect(QRectF(ox, oy, rh.w, rh.h), rulerColor);
+    painter->fillRect(QRectF(ox, oy, rv.w, rv.h), rulerColor);
+
+    int xFlow;
+    int xStart;
+    int yFlow;
+    int yStart;
+    if (willUnderflowInt32(ox, unit)) {
+        return;
+    }
+    else {
+        xFlow = roundToMultiple(false, ox, unit);
+    }
+    if (willUnderflowInt32(xFlow, unit)) {
+        return;
+    }
+    else {
+        xStart = xFlow - unit;
+    }
+    if (willUnderflowInt32(oy, unit)) {
+        return;
+    }
+    else {
+        yFlow = roundToMultiple(false, oy, unit);
+    }
+    if (willUnderflowInt32(yFlow, unit)) {
+        return;
+    }
+    else {
+        yStart = yFlow - unit;
+    }
+
+    for (int x = xStart; x < rh.x; x += unit) {
+        transform.translate(x+rhTextOffset, rh.y - rh.h/2);
+        QPainterPath rulerTextPath;
+        if (rulerMetric) {
+            rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x), textHeight));
+        }
+        else {
+            if (feet)
+                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x/12).append('\''), textHeight));
+            else
+                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x).append('\"'), textHeight));
+        }
+        transform.reset();
+        painter->drawPath(rulerTextPath);
+
+        lines.append(QLineF(x, rh.y, x, oy));
+        if (rulerMetric) {
+            lines.append(QLineF(x, rh.y, x, oy));
+            lines.append(QLineF(x+fraction  , rh.y, x+fraction,   rh.y-rh.h*little));
+            lines.append(QLineF(x+fraction*2, rh.y, x+fraction*2, rh.y-rh.h*little));
+            lines.append(QLineF(x+fraction*3, rh.y, x+fraction*3, rh.y-rh.h*little));
+            lines.append(QLineF(x+fraction*4, rh.y, x+fraction*4, rh.y-rh.h*little));
+            lines.append(QLineF(x+fraction*5, rh.y, x+fraction*5, rh.y-rh.h*medium)); //Half
+            lines.append(QLineF(x+fraction*6, rh.y, x+fraction*6, rh.y-rh.h*little));
+            lines.append(QLineF(x+fraction*7, rh.y, x+fraction*7, rh.y-rh.h*little));
+            lines.append(QLineF(x+fraction*8, rh.y, x+fraction*8, rh.y-rh.h*little));
+            lines.append(QLineF(x+fraction*9, rh.y, x+fraction*9, rh.y-rh.h*little));
+        }
+        else {
+            if (feet) {
+                for(int i = 0; i < 12; ++i) {
+                    lines.append(QLineF(x+fraction*i, rh.y, x+fraction*i, rh.y-rh.h*medium));
+                }
+            }
+            else {
+                lines.append(QLineF(x+fraction   , rh.y, x+fraction,    rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction* 2, rh.y, x+fraction* 2, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction* 3, rh.y, x+fraction* 3, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction* 4, rh.y, x+fraction* 4, rh.y-rh.h*medium)); //Quarter
+                lines.append(QLineF(x+fraction* 5, rh.y, x+fraction* 5, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction* 6, rh.y, x+fraction* 6, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction* 7, rh.y, x+fraction* 7, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction* 8, rh.y, x+fraction* 8, rh.y-rh.h*medium)); //Half
+                lines.append(QLineF(x+fraction* 9, rh.y, x+fraction* 9, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction*10, rh.y, x+fraction*10, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction*11, rh.y, x+fraction*11, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction*12, rh.y, x+fraction*12, rh.y-rh.h*medium)); //Quarter
+                lines.append(QLineF(x+fraction*13, rh.y, x+fraction*13, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction*14, rh.y, x+fraction*14, rh.y-rh.h*little));
+                lines.append(QLineF(x+fraction*15, rh.y, x+fraction*15, rh.y-rh.h*little));
+            }
+        }
+    }
+
+    for (int y = yStart; y < rv.y; y += unit) {
+        transform.translate(rv.x-rv.w/2, y-rvTextOffset);
+        transform.rotate(-90);
+        QPainterPath rulerTextPath;
+        if (rulerMetric) {
+            rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y), textHeight));
+        }
+        else {
+            if (feet)
+                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y/12).append('\''), textHeight));
+            else
+                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y).append('\"'), textHeight));
+        }
+        transform.reset();
+        painter->drawPath(rulerTextPath);
+
+        lines.append(QLineF(rv.x, y, ox, y));
+        if (rulerMetric) {
+            lines.append(QLineF(rv.x, y+fraction  , rv.x-rv.w*little, y+fraction));
+            lines.append(QLineF(rv.x, y+fraction*2, rv.x-rv.w*little, y+fraction*2));
+            lines.append(QLineF(rv.x, y+fraction*3, rv.x-rv.w*little, y+fraction*3));
+            lines.append(QLineF(rv.x, y+fraction*4, rv.x-rv.w*little, y+fraction*4));
+            lines.append(QLineF(rv.x, y+fraction*5, rv.x-rv.w*medium, y+fraction*5)); //Half
+            lines.append(QLineF(rv.x, y+fraction*6, rv.x-rv.w*little, y+fraction*6));
+            lines.append(QLineF(rv.x, y+fraction*7, rv.x-rv.w*little, y+fraction*7));
+            lines.append(QLineF(rv.x, y+fraction*8, rv.x-rv.w*little, y+fraction*8));
+            lines.append(QLineF(rv.x, y+fraction*9, rv.x-rv.w*little, y+fraction*9));
+        }
+        else {
+            if (feet) {
+                for(int i = 0; i < 12; ++i) {
+                    lines.append(QLineF(rv.x, y+fraction*i, rv.x-rv.w*medium, y+fraction*i));
+                }
+            }
+            else {
+                lines.append(QLineF(rv.x, y+fraction   , rv.x-rv.w*little, y+fraction));
+                lines.append(QLineF(rv.x, y+fraction* 2, rv.x-rv.w*little, y+fraction* 2));
+                lines.append(QLineF(rv.x, y+fraction* 3, rv.x-rv.w*little, y+fraction* 3));
+                lines.append(QLineF(rv.x, y+fraction* 4, rv.x-rv.w*medium, y+fraction* 4)); //Quarter
+                lines.append(QLineF(rv.x, y+fraction* 5, rv.x-rv.w*little, y+fraction* 5));
+                lines.append(QLineF(rv.x, y+fraction* 6, rv.x-rv.w*little, y+fraction* 6));
+                lines.append(QLineF(rv.x, y+fraction* 7, rv.x-rv.w*little, y+fraction* 7));
+                lines.append(QLineF(rv.x, y+fraction* 8, rv.x-rv.w*medium, y+fraction* 8)); //Half
+                lines.append(QLineF(rv.x, y+fraction* 9, rv.x-rv.w*little, y+fraction* 9));
+                lines.append(QLineF(rv.x, y+fraction*10, rv.x-rv.w*little, y+fraction*10));
+                lines.append(QLineF(rv.x, y+fraction*11, rv.x-rv.w*little, y+fraction*11));
+                lines.append(QLineF(rv.x, y+fraction*12, rv.x-rv.w*medium, y+fraction*12)); //Quarter
+                lines.append(QLineF(rv.x, y+fraction*13, rv.x-rv.w*little, y+fraction*13));
+                lines.append(QLineF(rv.x, y+fraction*14, rv.x-rv.w*little, y+fraction*14));
+                lines.append(QLineF(rv.x, y+fraction*15, rv.x-rv.w*little, y+fraction*15));
+            }
+        }
+    }
+
+    painter->drawLines(lines);
+    painter->fillRect(QRectF(ox, oy, rv.w, rh.h), rulerColor);
 }
 
 void View::drawForeground(QPainter* painter, const QRectF& rect)
@@ -622,21 +852,17 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
 
     QList<QPointF> selectedGripPoints;
     QList<QGraphicsItem*> selectedItemList = gscene->selectedItems();
-    if(selectedItemList.size() <= 100)
-    {
-        foreach(QGraphicsItem* item, selectedItemList)
-        {
-            if(item->type() >= OBJ_TYPE_BASE)
-            {
+    if (selectedItemList.size() <= 100) {
+        foreach(QGraphicsItem* item, selectedItemList) {
+            if (item->type() >= OBJ_TYPE_BASE) {
                 tempBaseObj = static_cast<BaseObject*>(item);
-                if(tempBaseObj) { selectedGripPoints = tempBaseObj->allGripPoints(); }
+                if (tempBaseObj) { selectedGripPoints = tempBaseObj->allGripPoints(); }
 
-                foreach(QPointF ssp, selectedGripPoints)
-                {
+                foreach(QPointF ssp, selectedGripPoints) {
                     QPoint p1 = mapFromScene(ssp) - gripOffset;
                     QPoint q1 = mapFromScene(ssp) + gripOffset;
 
-                    if(ssp == sceneGripPoint)
+                    if (ssp == sceneGripPoint)
                         painter->fillRect(QRectF(mapToScene(p1), mapToScene(q1)), QColor::fromRgb(gripColorHot));
                     else
                         painter->drawRect(QRectF(mapToScene(p1), mapToScene(q1)));
@@ -649,7 +875,7 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
     //Draw the closest qsnap point
     //==================================================
 
-    if(!selectingActive) //TODO: && findClosestSnapPoint == true
+    if (!vdata.selectingActive) //TODO: && findClosestSnapPoint == true
     {
         QPen qsnapPen(QColor::fromRgb(qsnapLocatorColor));
         qsnapPen.setWidth(2);
@@ -663,17 +889,14 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                                                         viewMousePoint.y()-qsnapApertureSize,
                                                         qsnapApertureSize*2,
                                                         qsnapApertureSize*2);
-        foreach(QGraphicsItem* item, apertureItemList)
-        {
-            if(item->type() >= OBJ_TYPE_BASE)
-            {
+        foreach(QGraphicsItem* item, apertureItemList) {
+            if (item->type() >= OBJ_TYPE_BASE) {
                 tempBaseObj = static_cast<BaseObject*>(item);
-                if(tempBaseObj) { apertureSnapPoints << tempBaseObj->mouseSnapPoint(sceneMousePoint); }
+                if (tempBaseObj) { apertureSnapPoints << tempBaseObj->mouseSnapPoint(sceneMousePoint); }
             }
         }
         //TODO: Check for intersection snap points and add them to the list
-        foreach(QPointF asp, apertureSnapPoints)
-        {
+        foreach(QPointF asp, apertureSnapPoints) {
             QPoint p1 = mapFromScene(asp) - qsnapOffset;
             QPoint q1 = mapFromScene(asp) + qsnapOffset;
             painter->drawRect(QRectF(mapToScene(p1), mapToScene(q1)));
@@ -684,254 +907,15 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
     //Draw horizontal and vertical rulers
     //==================================================
 
-    if(gscene->property(ENABLE_RULER).toBool())
-    {
-        bool proceed = true;
-
-        int vw = width();  //View Width
-        int vh = height(); //View Height
-        QPointF origin = mapToScene(0,0);
-        QPointF rulerHoriz = mapToScene(vw,rulerPixelSize);
-        QPointF rulerVert  = mapToScene(rulerPixelSize,vh);
-
-        qreal ox = origin.x();
-        qreal oy = origin.y();
-
-        qreal rhx = rulerHoriz.x();
-        qreal rhy = rulerHoriz.y();
-        qreal rhw = rhx - ox;
-        qreal rhh = rhy - oy;
-
-        qreal rvx = rulerVert.x();
-        qreal rvy = rulerVert.y();
-        qreal rvw = rvx - ox;
-        qreal rvh = rvy - oy;
-
-        //NOTE: Drawing ruler if zoomed out too far will cause an assertion failure.
-        //      We will limit the maximum size the ruler can be shown at.
-        quint16 maxSize = -1; //Intentional underflow
-        if(rhw >= maxSize || rvh >= maxSize) proceed = false;
-
-        if(proceed)
-        {
-            int distance = mapToScene(rulerPixelSize*3, 0).x() - ox;
-            QString distStr = QString().setNum(distance);
-            int distStrSize = distStr.size();
-            int msd = distStr.at(0).digitValue(); //Most Significant Digit
-
-            if(msd != -1)
-            {
-
-                msd++;
-                if(msd == 10)
-                {
-                    msd = 1;
-                    distStr.resize(distStrSize+1);
-                    distStrSize++;
-                }
-
-                distStr.replace(0, 1, QString().setNum(msd));
-                for(int i = 1; i < distStrSize; ++i)
-                {
-                    distStr.replace(i, 1, '0');
-                }
-                int unit = distStr.toInt();
-                qreal fraction;
-                bool feet = true;
-                if(rulerMetric)
-                {
-                    if(unit < 10) unit = 10;
-                    fraction = unit/10;
-                }
-                else
-                {
-                    if(unit <= 1)
-                    {
-                        unit = 1;
-                        feet = false;
-                        fraction = (qreal)(unit/16);
-                    }
-                    else
-                    {
-                        unit = roundToMultiple(true, unit, 12);
-                        fraction = unit/12;
-                    }
-                }
-
-                qreal little  = 0.20;
-                qreal medium = 0.40;
-                qreal rhTextOffset = mapToScene(3, 0).x() - ox;
-                qreal rvTextOffset = mapToScene(0, 3).y() - oy;
-                qreal textHeight = rhh*medium;
-
-                QVector<QLineF> lines;
-                lines.append(QLineF(ox, rhy, rhx, rhy));
-                lines.append(QLineF(rvx, oy, rvx, rvy));
-
-                qreal mx = sceneMousePoint.x();
-                qreal my = sceneMousePoint.y();
-                lines.append(QLineF(mx, rhy, mx, oy));
-                lines.append(QLineF(rvx, my, ox, my));
-
-                QTransform transform;
-
-                QPen rulerPen(QColor(0,0,0));
-                rulerPen.setCosmetic(true);
-                painter->setPen(rulerPen);
-                painter->fillRect(QRectF(ox, oy, rhw, rhh), rulerColor);
-                painter->fillRect(QRectF(ox, oy, rvw, rvh), rulerColor);
-
-                int xFlow;
-                if(willUnderflowInt32(ox, unit)) { proceed = false; }
-                else                             { xFlow = roundToMultiple(false, ox, unit); }
-                int xStart;
-                if(willUnderflowInt32(xFlow, unit)) { proceed = false; }
-                else                             { xStart = xFlow - unit; }
-                int yFlow;
-                if(willUnderflowInt32(oy, unit)) { proceed = false; }
-                else                             { yFlow = roundToMultiple(false, oy, unit); }
-                int yStart;
-                if(willUnderflowInt32(yFlow, unit)) { proceed = false; }
-                else                             { yStart = yFlow - unit; }
-
-                if(proceed)
-                {
-                    for(int x = xStart; x < rhx; x += unit)
-                    {
-                        transform.translate(x+rhTextOffset, rhy-rhh/2);
-                        QPainterPath rulerTextPath;
-                        if(rulerMetric)
-                        {
-                            rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x), textHeight));
-                        }
-                        else
-                        {
-                            if(feet)
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x/12).append('\''), textHeight));
-                            else
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x).append('\"'), textHeight));
-                        }
-                        transform.reset();
-                        painter->drawPath(rulerTextPath);
-
-                        lines.append(QLineF(x, rhy, x, oy));
-                        if(rulerMetric)
-                        {
-                            lines.append(QLineF(x, rhy, x, oy));
-                            lines.append(QLineF(x+fraction  , rhy, x+fraction,   rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*3, rhy, x+fraction*3, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*4, rhy, x+fraction*4, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*5, rhy, x+fraction*5, rhy-rhh*medium)); //Half
-                            lines.append(QLineF(x+fraction*6, rhy, x+fraction*6, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*7, rhy, x+fraction*7, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*8, rhy, x+fraction*8, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*9, rhy, x+fraction*9, rhy-rhh*little));
-                        }
-                        else
-                        {
-                            if(feet)
-                            {
-                                for(int i = 0; i < 12; ++i)
-                                {
-                                    lines.append(QLineF(x+fraction*i, rhy, x+fraction*i, rhy-rhh*medium));
-                                }
-                            }
-                            else
-                            {
-                                lines.append(QLineF(x+fraction   , rhy, x+fraction,    rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 2, rhy, x+fraction* 2, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 3, rhy, x+fraction* 3, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 4, rhy, x+fraction* 4, rhy-rhh*medium)); //Quarter
-                                lines.append(QLineF(x+fraction* 5, rhy, x+fraction* 5, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 6, rhy, x+fraction* 6, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 7, rhy, x+fraction* 7, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 8, rhy, x+fraction* 8, rhy-rhh*medium)); //Half
-                                lines.append(QLineF(x+fraction* 9, rhy, x+fraction* 9, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*10, rhy, x+fraction*10, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*11, rhy, x+fraction*11, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*12, rhy, x+fraction*12, rhy-rhh*medium)); //Quarter
-                                lines.append(QLineF(x+fraction*13, rhy, x+fraction*13, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*14, rhy, x+fraction*14, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*15, rhy, x+fraction*15, rhy-rhh*little));
-                            }
-                        }
-                    }
-                    for(int y = yStart; y < rvy; y += unit)
-                    {
-                        transform.translate(rvx-rvw/2, y-rvTextOffset);
-                        transform.rotate(-90);
-                        QPainterPath rulerTextPath;
-                        if(rulerMetric)
-                        {
-                            rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y), textHeight));
-                        }
-                        else
-                        {
-                            if(feet)
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y/12).append('\''), textHeight));
-                            else
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y).append('\"'), textHeight));
-                        }
-                        transform.reset();
-                        painter->drawPath(rulerTextPath);
-
-                        lines.append(QLineF(rvx, y, ox, y));
-                        if(rulerMetric)
-                        {
-                            lines.append(QLineF(rvx, y+fraction  , rvx-rvw*little, y+fraction));
-                            lines.append(QLineF(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2));
-                            lines.append(QLineF(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3));
-                            lines.append(QLineF(rvx, y+fraction*4, rvx-rvw*little, y+fraction*4));
-                            lines.append(QLineF(rvx, y+fraction*5, rvx-rvw*medium, y+fraction*5)); //Half
-                            lines.append(QLineF(rvx, y+fraction*6, rvx-rvw*little, y+fraction*6));
-                            lines.append(QLineF(rvx, y+fraction*7, rvx-rvw*little, y+fraction*7));
-                            lines.append(QLineF(rvx, y+fraction*8, rvx-rvw*little, y+fraction*8));
-                            lines.append(QLineF(rvx, y+fraction*9, rvx-rvw*little, y+fraction*9));
-                        }
-                        else
-                        {
-                            if(feet)
-                            {
-                                for(int i = 0; i < 12; ++i)
-                                {
-                                    lines.append(QLineF(rvx, y+fraction*i, rvx-rvw*medium, y+fraction*i));
-                                }
-                            }
-                            else
-                            {
-                                lines.append(QLineF(rvx, y+fraction   , rvx-rvw*little, y+fraction));
-                                lines.append(QLineF(rvx, y+fraction* 2, rvx-rvw*little, y+fraction* 2));
-                                lines.append(QLineF(rvx, y+fraction* 3, rvx-rvw*little, y+fraction* 3));
-                                lines.append(QLineF(rvx, y+fraction* 4, rvx-rvw*medium, y+fraction* 4)); //Quarter
-                                lines.append(QLineF(rvx, y+fraction* 5, rvx-rvw*little, y+fraction* 5));
-                                lines.append(QLineF(rvx, y+fraction* 6, rvx-rvw*little, y+fraction* 6));
-                                lines.append(QLineF(rvx, y+fraction* 7, rvx-rvw*little, y+fraction* 7));
-                                lines.append(QLineF(rvx, y+fraction* 8, rvx-rvw*medium, y+fraction* 8)); //Half
-                                lines.append(QLineF(rvx, y+fraction* 9, rvx-rvw*little, y+fraction* 9));
-                                lines.append(QLineF(rvx, y+fraction*10, rvx-rvw*little, y+fraction*10));
-                                lines.append(QLineF(rvx, y+fraction*11, rvx-rvw*little, y+fraction*11));
-                                lines.append(QLineF(rvx, y+fraction*12, rvx-rvw*medium, y+fraction*12)); //Quarter
-                                lines.append(QLineF(rvx, y+fraction*13, rvx-rvw*little, y+fraction*13));
-                                lines.append(QLineF(rvx, y+fraction*14, rvx-rvw*little, y+fraction*14));
-                                lines.append(QLineF(rvx, y+fraction*15, rvx-rvw*little, y+fraction*15));
-                            }
-                        }
-                    }
-                }
-
-                painter->drawLines(lines);
-                painter->fillRect(QRectF(ox, oy, rvw, rhh), rulerColor);
-            }
-        }
+    if (gscene->property(ENABLE_RULER).toBool()) {
+        drawRulers(painter);
     }
 
     //==================================================
     //Draw the crosshair
     //==================================================
 
-    if(!selectingActive)
-    {
+    if (!vdata.selectingActive) {
         //painter->setBrush(Qt::NoBrush);
         QPen crosshairPen(QColor::fromRgb(crosshairColor));
         crosshairPen.setCosmetic(true);
@@ -945,26 +929,6 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
     }
 }
 
-bool View::willUnderflowInt32(qint64 a, qint64 b)
-{
-    qint64 c;
-    Q_ASSERT(LLONG_MAX>INT_MAX);
-    c = (qint64)a-b;
-    if(c < INT_MIN || c > INT_MAX)
-        return true;
-    return false;
-}
-
-bool View::willOverflowInt32(qint64 a, qint64 b)
-{
-    qint64 c;
-    Q_ASSERT(LLONG_MAX>INT_MAX);
-    c = (qint64)a+b;
-    if(c < INT_MIN || c > INT_MAX)
-        return true;
-    return false;
-}
-
 QPainterPath View::createRulerTextPath(float x, float y, QString str, float height)
 {
     QPainterPath path;
@@ -975,7 +939,7 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
     int len = str.length();
     for(int i = 0; i < len; ++i)
     {
-        if(str[i] == QChar('1'))
+        if (str[i] == QChar('1'))
         {
             path.moveTo(x+0.05*xScale, y-0.00*yScale);
             path.lineTo(x+0.45*xScale, y-0.00*yScale);
@@ -983,27 +947,27 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
             path.lineTo(x+0.25*xScale, y-1.00*yScale);
             path.lineTo(x+0.25*xScale, y-0.00*yScale);
         }
-        else if(str[i] == QChar('2'))
+        else if (str[i] == QChar('2'))
         {
             path.moveTo(x+0.00*xScale, y-0.75*yScale);
             path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 180.00, -216.87);
             path.lineTo(x+0.00*xScale, y-0.00*yScale);
             path.lineTo(x+0.50*xScale, y-0.00*yScale);
         }
-        else if(str[i] == QChar('3'))
+        else if (str[i] == QChar('3'))
         {
             path.arcMoveTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 195.00);
             path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 195.00, 255.00);
             path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 270.00, 255.00);
         }
-        else if(str[i] == QChar('4'))
+        else if (str[i] == QChar('4'))
         {
             path.moveTo(x+0.50*xScale, y-0.00*yScale);
             path.lineTo(x+0.50*xScale, y-1.00*yScale);
             path.lineTo(x+0.00*xScale, y-0.50*yScale);
             path.lineTo(x+0.50*xScale, y-0.50*yScale);
         }
-        else if(str[i] == QChar('5'))
+        else if (str[i] == QChar('5'))
         {
             path.moveTo(x+0.50*xScale, y-1.00*yScale);
             path.lineTo(x+0.00*xScale, y-1.00*yScale);
@@ -1012,33 +976,33 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
             path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 90.00, -180.00);
             path.lineTo(x+0.00*xScale, y-0.00*yScale);
         }
-        else if(str[i] == QChar('6'))
+        else if (str[i] == QChar('6'))
         {
             path.addEllipse(QPointF(x+0.25*xScale, y-0.25*yScale), 0.25*xScale, 0.25*yScale);
             path.moveTo(x+0.00*xScale, y-0.25*yScale);
             path.lineTo(x+0.00*xScale, y-0.75*yScale);
             path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 180.00, -140.00);
         }
-        else if(str[i] == QChar('7'))
+        else if (str[i] == QChar('7'))
         {
             path.moveTo(x+0.00*xScale, y-1.00*yScale);
             path.lineTo(x+0.50*xScale, y-1.00*yScale);
             path.lineTo(x+0.25*xScale, y-0.25*yScale);
             path.lineTo(x+0.25*xScale, y-0.00*yScale);
         }
-        else if(str[i] == QChar('8'))
+        else if (str[i] == QChar('8'))
         {
             path.addEllipse(QPointF(x+0.25*xScale, y-0.25*yScale), 0.25*xScale, 0.25*yScale);
             path.addEllipse(QPointF(x+0.25*xScale, y-0.75*yScale), 0.25*xScale, 0.25*yScale);
         }
-        else if(str[i] == QChar('9'))
+        else if (str[i] == QChar('9'))
         {
             path.addEllipse(QPointF(x+0.25*xScale, y-0.75*yScale), 0.25*xScale, 0.25*yScale);
             path.moveTo(x+0.50*xScale, y-0.75*yScale);
             path.lineTo(x+0.50*xScale, y-0.25*yScale);
             path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 0.00, -140.00);
         }
-        else if(str[i] == QChar('0'))
+        else if (str[i] == QChar('0'))
         {
             //path.addEllipse(QPointF(x+0.25*xScale, y-0.50*yScale), 0.25*xScale, 0.50*yScale);
 
@@ -1048,17 +1012,17 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
             path.lineTo(x+0.50*xScale, y-0.75*yScale);
             path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale,   0.00, 180.00);
         }
-        else if(str[i] == QChar('-'))
+        else if (str[i] == QChar('-'))
         {
             path.moveTo(x+0.00*xScale, y-0.50*yScale);
             path.lineTo(x+0.50*xScale, y-0.50*yScale);
         }
-        else if(str[i] == QChar('\''))
+        else if (str[i] == QChar('\''))
         {
             path.moveTo(x+0.25*xScale, y-1.00*yScale);
             path.lineTo(x+0.25*xScale, y-0.75*yScale);
         }
-        else if(str[i] == QChar('\"'))
+        else if (str[i] == QChar('\"'))
         {
             path.moveTo(x+0.10*xScale, y-1.00*yScale);
             path.lineTo(x+0.10*xScale, y-0.75*yScale);
@@ -1070,24 +1034,6 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
     }
 
     return path;
-}
-
-int View::roundToMultiple(bool roundUp, int numToRound, int multiple)
-{
-    if(multiple == 0)
-        return numToRound;
-    int remainder = numToRound % multiple;
-    if(remainder == 0)
-        return numToRound;
-
-    if(numToRound < 0 && roundUp)
-        return numToRound - remainder;
-    if(roundUp)
-        return numToRound + multiple - remainder;
-    //else round down
-    if(numToRound < 0 && !roundUp)
-        return numToRound - multiple - remainder;
-    return numToRound - remainder;
 }
 
 /** Update the mouse co-ordinates in the statusbar. */
@@ -1128,7 +1074,7 @@ void View::setCornerButton()
 {
     /* FIXME: 
     int num = st[ST_SCROLLBAR_WIDGET_NUM].i;
-    if(num) {
+    if (num) {
         QPushButton* cornerButton = new QPushButton(this);
         cornerButton->setFlat(true);
         QAction* act = actionHash.value(num);
@@ -1159,7 +1105,7 @@ void View::cornerButtonClicked()
 void View::zoomIn()
 {
     qDebug("View zoomIn()");
-    if(!allowZoomIn()) { return; }
+    if (!allowZoomIn()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2, height()/2));
     qreal s = st[ST_ZOOMSCALE_IN].r;
@@ -1172,7 +1118,7 @@ void View::zoomIn()
 void View::zoomOut()
 {
     qDebug("View zoomOut()");
-    if(!allowZoomOut()) { return; }
+    if (!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2, height()/2));
     qreal s = st[ST_ZOOMSCALE_OUT].r;
@@ -1184,8 +1130,8 @@ void View::zoomOut()
 
 void View::zoomWindow()
 {
-    zoomWindowActive = true;
-    selectingActive = false;
+    vdata.zoomWindowActive = true;
+    vdata.selectingActive = false;
     clearSelection();
 }
 
@@ -1199,7 +1145,7 @@ void View::zoomSelected()
         selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
     }
     QRectF selectedRect = selectedRectPath.boundingRect();
-    if(selectedRect.isNull())
+    if (selectedRect.isNull())
     {
         QMessageBox::information(this, tr("ZoomSelected Preselect"), tr("Preselect objects before invoking the zoomSelected command."));
         //TODO: Support Post selection of objects
@@ -1223,12 +1169,12 @@ void View::zoomExtents()
 
 void View::panRealTime()
 {
-    panningRealTimeActive = true;
+    vdata.panningRealTimeActive = true;
 }
 
 void View::panPoint()
 {
-    panningPointActive = true;
+    vdata.panningPointActive = true;
 }
 
 void View::panLeft()
@@ -1288,9 +1234,9 @@ View::mouseDoubleClickEvent(QMouseEvent* event)
 void View::mousePressEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->x(), event->y());
-    if(event->button() == Qt::LeftButton)
+    if (event->button() == Qt::LeftButton)
     {
-        if(mainWin->isCommandActive())
+        if (mainWin->isCommandActive())
         {
             QPointF cmdPoint = mapToScene(event->pos());
             mainWin->runCommandClick(mainWin->activeCommand(), cmdPoint.x(), cmdPoint.y());
@@ -1301,18 +1247,15 @@ void View::mousePressEvent(QMouseEvent* event)
                                                               mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
 
         bool itemsInPickBox = pickList.size();
-        if(itemsInPickBox && !selectingActive && !grippingActive)
-        {
+        if (itemsInPickBox && !vdata.selectingActive && !vdata.grippingActive) {
             bool itemsAlreadySelected = pickList.at(0)->isSelected();
-            if(!itemsAlreadySelected)
-            {
+            if (!itemsAlreadySelected) {
                 pickList.at(0)->setSelected(true);
             }
-            else
-            {
+            else {
                 bool foundGrip = false;
                 BaseObject* base = static_cast<BaseObject*>(pickList.at(0)); //TODO: Allow multiple objects to be gripped at once
-                if(!base) return;
+                if (!base) return;
 
                 QPoint qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
                 QPointF gripPoint = base->mouseSnapPoint(sceneMousePoint);
@@ -1321,48 +1264,46 @@ void View::mousePressEvent(QMouseEvent* event)
                 QRectF gripRect = QRectF(mapToScene(p1), mapToScene(q1));
                 QRectF pickRect = QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
                                         mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize));
-                if(gripRect.intersects(pickRect))
+                if (gripRect.intersects(pickRect))
                     foundGrip = true;
 
                 //If the pick point is within the item's grip box, start gripping
-                if(foundGrip)
+                if (foundGrip)
                 {
                     startGripping(base);
                 }
                 else //start moving
                 {
-                    movingActive = true;
+                    vdata.movingActive = true;
                     pressPoint = event->pos();
                     scenePressPoint = mapToScene(pressPoint);
                 }
             }
         }
-        else if(grippingActive)
-        {
+        else if (vdata.grippingActive) {
             stopGripping(true);
         }
-        else if(!selectingActive)
-        {
-            selectingActive = true;
+        else if (!vdata.selectingActive) {
+            vdata.selectingActive = true;
             pressPoint = event->pos();
             scenePressPoint = mapToScene(pressPoint);
 
-            if(!selectBox)
+            if (!selectBox)
                 selectBox = new SelectBox(QRubberBand::Rectangle, this);
             selectBox->setGeometry(QRect(pressPoint, pressPoint));
             selectBox->show();
         }
         else {
-            selectingActive = false;
+            vdata.selectingActive = false;
             selectBox->hide();
             releasePoint = event->pos();
             sceneReleasePoint = mapToScene(releasePoint);
 
             //Start SelectBox Code
             path.addPolygon(mapToScene(selectBox->geometry()));
-            if(sceneReleasePoint.x() > scenePressPoint.x()) {
+            if (sceneReleasePoint.x() > scenePressPoint.x()) {
                 if (st[ST_SELECTION_MODE_PICKADD].b) {
-                    if (mainWin->isShiftPressed()) {
+                    if (state.shift) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -1374,10 +1315,9 @@ void View::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if(mainWin->isShiftPressed())
-                    {
+                    if (state.shift) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
-                        if(!itemList.size())
+                        if (!itemList.size())
                             clearSelection();
                         else
                         {
@@ -1385,8 +1325,7 @@ void View::mousePressEvent(QMouseEvent* event)
                                 item->setSelected(!item->isSelected()); //Toggle selected
                         }
                     }
-                    else
-                    {
+                    else {
                         clearSelection();
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
@@ -1396,7 +1335,7 @@ void View::mousePressEvent(QMouseEvent* event)
             }
             else {
                 if (st[ST_SELECTION_MODE_PICKADD].b) {
-                    if (mainWin->isShiftPressed()) {
+                    if (state.shift) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -1408,18 +1347,16 @@ void View::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (mainWin->isShiftPressed()) {
+                    if (state.shift) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
-                        if(!itemList.size())
+                        if (!itemList.size())
                             clearSelection();
-                        else
-                        {
+                        else {
                             foreach(QGraphicsItem* item, itemList)
                                 item->setSelected(!item->isSelected()); //Toggle selected
                         }
                     }
-                    else
-                    {
+                    else {
                         clearSelection();
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
@@ -1430,8 +1367,7 @@ void View::mousePressEvent(QMouseEvent* event)
             //End SelectBox Code
         }
 
-        if(pastingActive)
-        {
+        if (vdata.pastingActive) {
             QList<QGraphicsItem*> itemList = pasteObjectItemGroup->childItems();
             gscene->destroyItemGroup(pasteObjectItemGroup);
             foreach(QGraphicsItem* item, itemList)
@@ -1443,19 +1379,18 @@ void View::mousePressEvent(QMouseEvent* event)
             foreach(QGraphicsItem* item, itemList)
             {
                 BaseObject* base = static_cast<BaseObject*>(item);
-                if(base)
+                if (base)
                 {
                     UndoableAddCommand* cmd = new UndoableAddCommand(base->data(OBJ_NAME).toString(), base, this, 0);
-                    if(cmd) undoStack->push(cmd);
+                    if (cmd) undoStack->push(cmd);
                 }
             }
             undoStack->endMacro();
 
-            pastingActive = false;
-            selectingActive = false;
+            vdata.pastingActive = false;
+            vdata.selectingActive = false;
         }
-        if(zoomWindowActive)
-        {
+        if (vdata.zoomWindowActive) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
             clearSelection();
         }
@@ -1477,7 +1412,7 @@ void View::panStart(const QPoint& point)
 
     alignScenePointWithViewPoint(mapToScene(point), point);
 
-    panningActive = true;
+    vdata.panningActive = true;
     panStartX = point.x();
     panStartY = point.y();
 }
@@ -1489,7 +1424,7 @@ void View::recalculateLimits()
     QRectF  viewRect(mapToScene(rect().topLeft()), mapToScene(rect().bottomRight()));
     QRectF  sceneRect(gscene->sceneRect());
     QRectF  newRect = viewRect.adjusted(-viewRect.width(), -viewRect.height(), viewRect.width(), viewRect.height());
-    if(!sceneRect.contains(newRect.topLeft()) || !sceneRect.contains(newRect.bottomRight()))
+    if (!sceneRect.contains(newRect.topLeft()) || !sceneRect.contains(newRect.bottomRight()))
     {
         gscene->setSceneRect(sceneRect.adjusted(-viewRect.width(),
                                                 -viewRect.height(),
@@ -1527,20 +1462,16 @@ void View::mouseMoveEvent(QMouseEvent* event)
     movePoint = event->pos();
     sceneMovePoint = mapToScene(movePoint);
 
-    if(mainWin->isCommandActive())
-    {
-        if(rapidMoveActive)
-        {
+    if (mainWin->isCommandActive()) {
+        if (vdata.rapidMoveActive) {
             mainWin->runCommandMove(mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
         }
     }
-    if(previewActive)
-    {
-        if(previewMode == PREVIEW_MODE_MOVE)
-        {
+    if (vdata.previewActive) {
+        if (previewMode == PREVIEW_MODE_MOVE) {
             previewObjectItemGroup->setPos(sceneMousePoint - previewPoint);
         }
-        else if(previewMode == PREVIEW_MODE_ROTATE)
+        else if (previewMode == PREVIEW_MODE_ROTATE)
         {
             qreal x = previewPoint.x();
             qreal y = previewPoint.y();
@@ -1563,7 +1494,7 @@ void View::mouseMoveEvent(QMouseEvent* event)
             previewObjectItemGroup->setPos(rotX, rotY);
             previewObjectItemGroup->setRotation(rot-mouseAngle);
         }
-        else if(previewMode == PREVIEW_MODE_SCALE)
+        else if (previewMode == PREVIEW_MODE_SCALE)
         {
             qreal x = previewPoint.x();
             qreal y = previewPoint.y();
@@ -1574,7 +1505,7 @@ void View::mouseMoveEvent(QMouseEvent* event)
             previewObjectItemGroup->setScale(1);
             previewObjectItemGroup->setPos(0,0);
 
-            if(scaleFactor <= 0.0)
+            if (scaleFactor <= 0.0)
             {
                 QMessageBox::critical(this, QObject::tr("ScaleFactor Error"),
                                     QObject::tr("Hi there. If you are not a developer, report this as a bug. "
@@ -1598,25 +1529,21 @@ void View::mouseMoveEvent(QMouseEvent* event)
             }
         }
     }
-    if(pastingActive)
-    {
+    if (vdata.pastingActive) {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     }
-    if(movingActive)
-    {
+    if (vdata.movingActive) {
         //Ensure that the preview is only shown if the mouse has moved.
-        if(!previewActive)
+        if (!vdata.previewActive)
             previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, scenePressPoint.x(), scenePressPoint.y(), 0);
     }
-    if(selectingActive)
-    {
-        if(sceneMovePoint.x() >= scenePressPoint.x()) { selectBox->setDirection(1); }
+    if (vdata.selectingActive) {
+        if (sceneMovePoint.x() >= scenePressPoint.x()) { selectBox->setDirection(1); }
         else                                          { selectBox->setDirection(0); }
         selectBox->setGeometry(QRect(mapFromScene(scenePressPoint), event->pos()).normalized());
         event->accept();
     }
-    if(panningActive)
-    {
+    if (vdata.panningActive) {
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - panStartX));
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - panStartY));
         panStartX = event->x();
@@ -1629,22 +1556,19 @@ void View::mouseMoveEvent(QMouseEvent* event)
 void View::mouseReleaseEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->x(), event->y());
-    if(event->button() == Qt::LeftButton)
-    {
-        if(movingActive)
-        {
+    if (event->button() == Qt::LeftButton) {
+        if (vdata.movingActive) {
             previewOff();
             qreal dx = sceneMousePoint.x()-scenePressPoint.x();
             qreal dy = sceneMousePoint.y()-scenePressPoint.y();
             //Ensure that moving only happens if the mouse has moved.
-            if(dx || dy) moveSelected(dx, dy);
-            movingActive = false;
+            if (dx || dy) moveSelected(dx, dy);
+            vdata.movingActive = false;
         }
         event->accept();
     }
-    if(event->button() == Qt::MiddleButton)
-    {
-        panningActive = false;
+    if (event->button() == Qt::MiddleButton) {
+        vdata.panningActive = false;
         //The Undo command will record the spot where the pan completed.
         UndoableNavCommand* cmd = new UndoableNavCommand("PanStop", this, 0);
         undoStack->push(cmd);
@@ -1673,7 +1597,7 @@ bool View::allowZoomIn()
     qreal maxHeight = corner.y() - origin.y();
 
     qreal zoomInLimit = 0.0000000001;
-    if(qMin(maxWidth, maxHeight) < zoomInLimit)
+    if (qMin(maxWidth, maxHeight) < zoomInLimit)
     {
         qDebug("ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
         return false;
@@ -1690,7 +1614,7 @@ bool View::allowZoomOut()
     qreal maxHeight = corner.y() - origin.y();
 
     qreal zoomOutLimit = 10000000000000.0;
-    if(qMax(maxWidth, maxHeight) > zoomOutLimit)
+    if (qMax(maxWidth, maxHeight) > zoomOutLimit)
     {
         qDebug("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
         return false;
@@ -1706,7 +1630,7 @@ void View::wheelEvent(QWheelEvent* event)
     QPoint mousePoint = event->position();
 
     updateMouseCoords(mousePoint.x(), mousePoint.y());
-    if(zoomDir > 0)
+    if (zoomDir > 0)
     {
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", this, 0);
         undoStack->push(cmd);
@@ -1744,12 +1668,10 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
     alignScenePointWithViewPoint(pointBeforeScale, mousePoint);
 
     updateMouseCoords(mousePoint.x(), mousePoint.y());
-    if(pastingActive)
-    {
+    if (vdata.pastingActive) {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     }
-    if(selectingActive)
-    {
+    if (vdata.selectingActive) {
         selectBox->setGeometry(QRect(mapFromScene(scenePressPoint), mousePoint).normalized());
     }
     gscene->update();
@@ -1764,13 +1686,13 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     bool selectionEmpty = itemList.isEmpty();
 
     for (int i = 0; i < itemList.size(); i++) {
-        if(itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
+        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             selectionEmpty = false;
             break;
         }
     }
 
-    if (pastingActive) {
+    if (vdata.pastingActive) {
         return;
     }
 
@@ -1782,7 +1704,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
         menu.addAction(repeatAction);
     }
 
-    if (zoomWindowActive) {
+    if (vdata.zoomWindowActive) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
@@ -1795,7 +1717,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     menu.addAction(actionHash.value("paste"));
     menu.addSeparator();
 
-    if(!selectionEmpty)
+    if (!selectionEmpty)
     {
         QAction* deleteAction = new QAction(QIcon("icons/" + iconTheme + "/" + "erase" + ".png"), "D&elete", this);
         deleteAction->setStatusTip("Removes objects from a drawing.");
@@ -1828,42 +1750,46 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     menu.exec(event->globalPos());
 }
 
-void View::deletePressed()
+void
+View::deletePressed()
 {
     qDebug("View deletePressed()");
-    if(pastingActive)
-    {
+    if (vdata.pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
     }
-    pastingActive = false;
-    zoomWindowActive = false;
-    selectingActive = false;
+    vdata.pastingActive = false;
+    vdata.zoomWindowActive = false;
+    vdata.selectingActive = false;
     selectBox->hide();
     stopGripping(false);
     deleteSelected();
 }
 
-void View::escapePressed()
+void
+View::escapePressed()
 {
     qDebug("View escapePressed()");
-    if(pastingActive)
-    {
+    if (vdata.pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
     }
-    pastingActive = false;
-    zoomWindowActive = false;
-    selectingActive = false;
+    vdata.pastingActive = false;
+    vdata.zoomWindowActive = false;
+    vdata.selectingActive = false;
     selectBox->hide();
-    if(grippingActive) stopGripping(false);
-    else clearSelection();
+    if (vdata.grippingActive) {
+        stopGripping(false);
+    }
+    else {
+        clearSelection();
+    }
 }
 
 void View::startGripping(BaseObject* obj)
 {
-    if(!obj) return;
-    grippingActive = true;
+    if (!obj) return;
+    vdata.grippingActive = true;
     gripBaseObj = obj;
     sceneGripPoint = gripBaseObj->mouseSnapPoint(sceneMousePoint);
     gripBaseObj->setObjectRubberPoint("GRIP_POINT", sceneGripPoint);
@@ -1872,14 +1798,14 @@ void View::startGripping(BaseObject* obj)
 
 void View::stopGripping(bool accept)
 {
-    grippingActive = false;
-    if(gripBaseObj)
+    vdata.grippingActive = false;
+    if (gripBaseObj)
     {
         gripBaseObj->vulcanize();
-        if(accept)
+        if (accept)
         {
             UndoableGripEditCommand* cmd = new UndoableGripEditCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
-            if(cmd) undoStack->push(cmd);
+            if (cmd) undoStack->push(cmd);
             selectionChanged(); //Update the Property Editor
         }
         gripBaseObj = 0;
@@ -1897,28 +1823,28 @@ void View::deleteSelected()
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
     for(int i = 0; i < itemList.size(); i++)
     {
-        if(itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
+        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
         {
             BaseObject* base = static_cast<BaseObject*>(itemList.at(i));
-            if(base)
+            if (base)
             {
                 UndoableDeleteCommand* cmd = new UndoableDeleteCommand(tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-                if(cmd)
+                if (cmd)
                 undoStack->push(cmd);
             }
         }
     }
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->endMacro();
 }
 
 void View::cut()
 {
-    if(gscene->selectedItems().isEmpty())
+    if (gscene->selectedItems().isEmpty())
     {
         QMessageBox::information(this, tr("Cut Preselect"), tr("Preselect objects before invoking the cut command."));
         return; //TODO: Prompt to select objects if nothing is preselected
@@ -1932,7 +1858,7 @@ void View::cut()
 
 void View::copy()
 {
-    if(gscene->selectedItems().isEmpty())
+    if (gscene->selectedItems().isEmpty())
     {
         QMessageBox::information(this, tr("Copy Preselect"), tr("Preselect objects before invoking the copy command."));
         return; //TODO: Prompt to select objects if nothing is preselected
@@ -1956,10 +1882,10 @@ void View::copySelected()
     clipboard = createObjectList(selectedList);
 }
 
-void View::paste()
+void
+View::paste()
 {
-    if(pastingActive)
-    {
+    if (vdata.pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
     }
@@ -1967,7 +1893,7 @@ void View::paste()
     pasteObjectItemGroup = gscene->createItemGroup(clipboard);
     pasteDelta = pasteObjectItemGroup->boundingRect().bottomLeft();
     pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
-    pastingActive = true;
+    vdata.pastingActive = true;
 
     //Re-create the list in case of multiple pastes
     clipboard = createObjectList(clipboard);
@@ -1980,153 +1906,153 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
     for(int i = 0; i < list.size(); i++)
     {
         QGraphicsItem* item = list.at(i);
-        if(!item)
+        if (!item)
             continue;
 
         int objType = item->data(OBJ_TYPE).toInt();
 
-        if(objType == OBJ_TYPE_ARC)
+        if (objType == OBJ_TYPE_ARC)
         {
             ArcObject* arcObj = static_cast<ArcObject*>(item);
-            if(arcObj)
+            if (arcObj)
             {
                 ArcObject* copyArcObj = new ArcObject(arcObj);
                 copyList.append(copyArcObj);
             }
         }
-        else if(objType == OBJ_TYPE_BLOCK)
+        else if (objType == OBJ_TYPE_BLOCK)
         {
             //TODO: cut/copy blocks
         }
-        else if(objType == OBJ_TYPE_CIRCLE)
+        else if (objType == OBJ_TYPE_CIRCLE)
         {
             CircleObject* circObj = static_cast<CircleObject*>(item);
-            if(circObj)
+            if (circObj)
             {
                 CircleObject* copyCircObj = new CircleObject(circObj);
                 copyList.append(copyCircObj);
             }
         }
-        else if(objType == OBJ_TYPE_DIMALIGNED)
+        else if (objType == OBJ_TYPE_DIMALIGNED)
         {
             //TODO: cut/copy aligned dimensions
         }
-        else if(objType == OBJ_TYPE_DIMANGULAR)
+        else if (objType == OBJ_TYPE_DIMANGULAR)
         {
             //TODO: cut/copy angular dimensions
         }
-        else if(objType == OBJ_TYPE_DIMARCLENGTH)
+        else if (objType == OBJ_TYPE_DIMARCLENGTH)
         {
             //TODO: cut/copy arclength dimensions
         }
-        else if(objType == OBJ_TYPE_DIMDIAMETER)
+        else if (objType == OBJ_TYPE_DIMDIAMETER)
         {
             //TODO: cut/copy diameter dimensions
         }
-        else if(objType == OBJ_TYPE_DIMLEADER)
+        else if (objType == OBJ_TYPE_DIMLEADER)
         {
             DimLeaderObject* dimLeaderObj = static_cast<DimLeaderObject*>(item);
-            if(dimLeaderObj)
+            if (dimLeaderObj)
             {
                 DimLeaderObject* copyDimLeaderObj = new DimLeaderObject(dimLeaderObj);
                 copyList.append(copyDimLeaderObj);
             }
         }
-        else if(objType == OBJ_TYPE_DIMLINEAR)
+        else if (objType == OBJ_TYPE_DIMLINEAR)
         {
             //TODO: cut/copy linear dimensions
         }
-        else if(objType == OBJ_TYPE_DIMORDINATE)
+        else if (objType == OBJ_TYPE_DIMORDINATE)
         {
             //TODO: cut/copy ordinate dimensions
         }
-        else if(objType == OBJ_TYPE_DIMRADIUS)
+        else if (objType == OBJ_TYPE_DIMRADIUS)
         {
             //TODO: cut/copy radius dimensions
         }
-        else if(objType == OBJ_TYPE_ELLIPSE)
+        else if (objType == OBJ_TYPE_ELLIPSE)
         {
             EllipseObject* elipObj = static_cast<EllipseObject*>(item);
-            if(elipObj)
+            if (elipObj)
             {
                 EllipseObject* copyElipObj = new EllipseObject(elipObj);
                 copyList.append(copyElipObj);
             }
         }
-        else if(objType == OBJ_TYPE_ELLIPSEARC)
+        else if (objType == OBJ_TYPE_ELLIPSEARC)
         {
             //TODO: cut/copy elliptical arcs
         }
-        else if(objType == OBJ_TYPE_IMAGE)
+        else if (objType == OBJ_TYPE_IMAGE)
         {
             //TODO: cut/copy images
         }
-        else if(objType == OBJ_TYPE_INFINITELINE)
+        else if (objType == OBJ_TYPE_INFINITELINE)
         {
             //TODO: cut/copy infinite lines
         }
-        else if(objType == OBJ_TYPE_LINE)
+        else if (objType == OBJ_TYPE_LINE)
         {
             LineObject* lineObj = static_cast<LineObject*>(item);
-            if(lineObj)
+            if (lineObj)
             {
                 LineObject* copyLineObj = new LineObject(lineObj);
                 copyList.append(copyLineObj);
             }
         }
-        else if(objType == OBJ_TYPE_PATH)
+        else if (objType == OBJ_TYPE_PATH)
         {
             PathObject* pathObj = static_cast<PathObject*>(item);
-            if(pathObj)
+            if (pathObj)
             {
                 PathObject* copyPathObj = new PathObject(pathObj);
                 copyList.append(copyPathObj);
             }
         }
-        else if(objType == OBJ_TYPE_POINT)
+        else if (objType == OBJ_TYPE_POINT)
         {
             PointObject* pointObj = static_cast<PointObject*>(item);
-            if(pointObj)
+            if (pointObj)
             {
                 PointObject* copyPointObj = new PointObject(pointObj);
                 copyList.append(copyPointObj);
             }
         }
-        else if(objType == OBJ_TYPE_POLYGON)
+        else if (objType == OBJ_TYPE_POLYGON)
         {
             PolygonObject* pgonObj = static_cast<PolygonObject*>(item);
-            if(pgonObj)
+            if (pgonObj)
             {
                 PolygonObject* copyPgonObj = new PolygonObject(pgonObj);
                 copyList.append(copyPgonObj);
             }
         }
-        else if(objType == OBJ_TYPE_POLYLINE)
+        else if (objType == OBJ_TYPE_POLYLINE)
         {
             PolylineObject* plineObj = static_cast<PolylineObject*>(item);
-            if(plineObj)
+            if (plineObj)
             {
                 PolylineObject* copyPlineObj = new PolylineObject(plineObj);
                 copyList.append(copyPlineObj);
             }
         }
-        else if(objType == OBJ_TYPE_RAY)
+        else if (objType == OBJ_TYPE_RAY)
         {
             //TODO: cut/copy rays
         }
-        else if(objType == OBJ_TYPE_RECTANGLE)
+        else if (objType == OBJ_TYPE_RECTANGLE)
         {
             RectObject* rectObj = static_cast<RectObject*>(item);
-            if(rectObj)
+            if (rectObj)
             {
                 RectObject* copyRectObj = new RectObject(rectObj);
                 copyList.append(copyRectObj);
             }
         }
-        else if(objType == OBJ_TYPE_TEXTSINGLE)
+        else if (objType == OBJ_TYPE_TEXTSINGLE)
         {
             TextSingleObject* textObj = static_cast<TextSingleObject*>(item);
-            if(textObj)
+            if (textObj)
             {
                 TextSingleObject* copyTextObj = new TextSingleObject(textObj);
                 copyList.append(copyTextObj);
@@ -2155,18 +2081,18 @@ void View::moveSelected(qreal dx, qreal dy)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base)
+        if (base)
         {
             UndoableMoveCommand* cmd = new UndoableMoveCommand(dx, dy, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-            if(cmd) undoStack->push(cmd);
+            if (cmd) undoStack->push(cmd);
         }
     }
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->endMacro();
 
     //Always clear the selection after a move
@@ -2184,18 +2110,18 @@ void View::rotateSelected(qreal x, qreal y, qreal rot)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base)
+        if (base)
         {
             UndoableRotateCommand* cmd = new UndoableRotateCommand(x, y, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-            if(cmd) undoStack->push(cmd);
+            if (cmd) undoStack->push(cmd);
         }
     }
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->endMacro();
 
     //Always clear the selection after a rotate
@@ -2206,18 +2132,18 @@ void View::mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base)
+        if (base)
         {
             UndoableMirrorCommand* cmd = new UndoableMirrorCommand(x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-            if(cmd) undoStack->push(cmd);
+            if (cmd) undoStack->push(cmd);
         }
     }
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->endMacro();
 
     //Always clear the selection after a mirror
@@ -2235,18 +2161,18 @@ void View::scaleSelected(qreal x, qreal y, qreal factor)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base)
+        if (base)
         {
             UndoableScaleCommand* cmd = new UndoableScaleCommand(x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-            if(cmd) undoStack->push(cmd);
+            if (cmd) undoStack->push(cmd);
         }
     }
-    if(numSelected > 1)
+    if (numSelected > 1)
         undoStack->endMacro();
 
     //Always clear the selection after a scale
@@ -2260,7 +2186,7 @@ int View::numSelected()
 
 void View::showScrollBars(bool val)
 {
-    if(val)
+    if (val)
     {
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -2276,14 +2202,14 @@ void View::setCrossHairColor(QRgb color)
 {
     crosshairColor = color;
     gscene->setProperty(VIEW_COLOR_CROSSHAIR, color);
-    if(gscene) gscene->update();
+    if (gscene) gscene->update();
 }
 
 void View::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
     gscene->setProperty(VIEW_COLOR_BACKGROUND, color);
-    if(gscene) gscene->update();
+    if (gscene) gscene->update();
 }
 
 void View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)

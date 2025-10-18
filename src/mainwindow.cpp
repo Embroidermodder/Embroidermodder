@@ -38,17 +38,6 @@
 
 using namespace std::chrono_literals;
 
-int debug = 1;
-int play_mode = 0;
-bool testing = false;
-int test_script_pos = 0;
-uint64_t simulation_start = 0;
-/*! In millimeters per second, so note that 1000.0 mm/s = 1 m/s.
- * \todo This needs to be a setting.
- */
-float machine_speed = 1000.0f;
-float stitch_time = 0.05f;
-
 QList<QGraphicsItem*> clipboard;
 
 QHash<QString, QAction*> actionHash;
@@ -61,96 +50,6 @@ QString formatFilterSave;
 const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
-
-const char *command_names[MAX_COMMANDS] = {
-    [CMD_NULL] = "null",
-    [CMD_ABOUT] = "about",
-    [CMD_STUB] = "stub",
-    [CMD_CUT] = "cut",
-    [CMD_COPY] = "copy",
-    [CMD_PASTE] = "paste",
-    [CMD_SELECT_ALL] = "select_all",
-    [CMD_DETAILS] = "details",
-    [CMD_UPDATES] = "update",
-    [CMD_WHATS_THIS] = "whats_this",
-    [CMD_PRINT] = "print",
-    [CMD_HELP] = "help",
-    [CMD_CHANGELOG] = "changelog",
-    [CMD_UNDO] = "undo",
-    [CMD_REDO] = "redo",
-    [CMD_REPEAT] = "repeat",
-    [CMD_ICON16] = "icon16",
-    [CMD_ICON24] = "icon24",
-    [CMD_ICON32] = "icon32",
-    [CMD_ICON48] = "icon48",
-    [CMD_ICON64] = "icon64",
-    [CMD_ICON128] = "icon128",
-    [CMD_PLAY] = "play",
-    [CMD_SLEEP] = "sleep",
-    [CMD_NEW] = "new",
-    [CMD_OPEN] = "open",
-    [CMD_SAVE] = "save",
-    [CMD_SAVE_AS] = "save_as",
-    [CMD_PAN_LEFT] = "pan_left",
-    [CMD_PAN_DOWN] = "pan_down",
-    [CMD_PAN_RIGHT] = "pan_right",
-    [CMD_PAN_UP] = "pan_up",
-    [CMD_PAN_POINT] = "pan_point",
-    [CMD_PAN_REAL_TIME] = "pan_real_time",
-    [CMD_WINDOW_CASCADE] = "window_cascade",
-    [CMD_WINDOW_CLOSE_ALL] = "window_close_all",
-    [CMD_WINDOW_CLOSE] = "window_close",
-    [CMD_WINDOW_NEXT] = "window_next",
-    [CMD_WINDOW_PREVIOUS] = "window_previous",
-    [CMD_WINDOW_TILE] = "window_tile",
-    [CMD_ZOOM_ALL] = "zoom_all",
-    [CMD_ZOOM_CENTER] = "zoom_center",
-    [CMD_ZOOM_DYNAMIC] = "zoom_dynamic",
-    [CMD_ZOOM_EXTENTS] = "zoom_extents",
-    [CMD_ZOOM_IN] = "zoom_in",
-    [CMD_ZOOM_OUT] = "zoom_out",
-    [CMD_ZOOM_PREVIOUS] = "zoom_previous",
-    [CMD_ZOOM_REAL_TIME] = "zoom_real_time",
-    [CMD_ZOOM_SCALE] = "zoom_scale",
-    [CMD_ZOOM_SELECTED] = "zoom_selected",
-    [CMD_ZOOM_WINDOW] = "zoom_window",
-    [CMD_DAY] = "day",
-    [CMD_NIGHT] = "night",
-    [CMD_CLEAR_RUBBER] = "clear_rubber",
-    [CMD_CLEAR_SELECTION] = "clear",
-    [CMD_END] = "end",
-    [CMD_EXIT] = "exit",
-    [CMD_MACRO] = "macro",
-    [CMD_SCRIPT] = "run",
-    [CMD_SETTINGS] = "settings",
-    [CMD_SET] = "set",
-    [CMD_GET] = "get",
-    [CMD_TEXT_MULTI] = "text_multi",
-    [CMD_TEXT_SINGLE] = "text_single",
-    [CMD_INFINITE_LINE] = "infinite_line",
-    [CMD_RAY] = "ray",
-    [CMD_LINE] = "line",
-    [CMD_TRIANGLE] = "triangle",
-    [CMD_RECTANGLE] = "rectangle",
-    [CMD_ROUNDED_RECTANGLE] = "rounded_rectangle",
-    [CMD_ARC] = "arc",
-    [CMD_CIRCLE] = "circle",
-    [CMD_SLOT] = "slot",
-    [CMD_ELLIPSE] = "ellipse",
-    [CMD_POINT] = "point",
-    [CMD_REGULAR_POLYGON] = "regular_polygon",
-    [CMD_POLYGON] = "polygon",
-    [CMD_POLYLINE] = "polyline",
-    [CMD_PATH] = "path",
-    [CMD_IMAGE] = "image",
-    [CMD_DIM_LEADER] = "dim_leader",
-    [CMD_HORIZONTAL_DIM] = "horizontal_dimension",
-    [CMD_VERTICAL_DIM] = "vertical_dimension",
-    [CMD_STOP] = "stop",
-    [CMD_GENERATE] = "generate",
-    [CMD_FILL] = "fill",
-    [N_COMMANDS] = "_END"
-};
 
 uint64_t current_time(void);
 
@@ -202,7 +101,7 @@ int main(int argc, char* argv[])
             exitApp = true;
         }
         else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--test")) {
-            testing = true;
+            state.testing = true;
         }
         else if(QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i])) {
             filesToOpen << argv[i];
@@ -265,8 +164,15 @@ get_id(const char *table[], const char *cmd)
     return -1;
 }
 
+/* Wrapper for C calls of the main command processor. */
+void
+run_cmd(const char *line)
+{
+    _mainWin->cmd(line);
+}
+
 /**
- * @brief The main command processor.
+ * The main command processor.
  *
  * It is important that there is as little as possible before the switch: this
  * overhead would be present for every core command issued and individual commands
@@ -295,14 +201,14 @@ MainWindow::cmd(const char *line)
     if (aliases.find(list[0]) != aliases.end()) {
         cmd = qPrintable(aliases.at(list[0]));
     }
-    int id = get_id(command_names, cmd);
+    int id = get_id((const char**)state.command_names, cmd);
     if (id < 0) {
         qDebug("ERROR: unrecognised command id.");
         return;
     }
 
-    if (debug > 0) {
-        qDebug("COMMAND %d (%s)", id, command_names[id]);
+    if (state.debug > 0) {
+        qDebug("COMMAND %d (%s)", id, state.command_names[id]);
     }
 
     switch (id) {
@@ -494,13 +400,13 @@ MainWindow::cmd(const char *line)
     }
 
     case CMD_PLAY: {
-        play_mode = 1;
-        simulation_start = current_time();
+        state.play_mode = 1;
+        state.simulation_start = current_time();
         break;
     }
 
     case CMD_STOP: {
-        play_mode = 0;
+        state.play_mode = 0;
         break;
     }
 
@@ -510,9 +416,9 @@ MainWindow::cmd(const char *line)
     }
 
     case CMD_NEW: {
-        docIndex++;
-        numOfDocs++;
-        MdiWindow* mdiWin = new MdiWindow(docIndex, _mainWin, mdiArea, Qt::SubWindow);
+        state.docIndex++;
+        state.numOfDocs++;
+        MdiWindow* mdiWin = new MdiWindow(state.docIndex, _mainWin, mdiArea, Qt::SubWindow);
         connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this,
             SLOT(onCloseMdiWin(MdiWindow*)));
         connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this,
@@ -1293,10 +1199,10 @@ MainWindow::MainWindow() : QMainWindow(0)
     textFontSelector   = new QFontComboBox(this);
     textSizeSelector   = new QComboBox(this);
 
-    numOfDocs = 0;
-    docIndex = 0;
+    state.numOfDocs = 0;
+    state.docIndex = 0;
 
-    shiftKeyPressedState = false;
+    state.shift = false;
 
     setWindowIcon(createIcon("app"));
     setMinimumSize(800, 480); //Require Minimum WVGA
@@ -1359,8 +1265,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
     connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
 
-    connect(prompt, &CmdPrompt::shiftPressed, this, [=]() { shiftKeyPressedState = true; });
-    connect(prompt, &CmdPrompt::shiftReleased, this, [=]() { shiftKeyPressedState = false; });
+    connect(prompt, &CmdPrompt::shiftPressed, this, [=]() { state.shift = true; });
+    connect(prompt, &CmdPrompt::shiftReleased, this, [=]() { state.shift = false; });
 
     connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
 
@@ -1405,7 +1311,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* Run updates at around 60fps. */
     timer.start(12, this);
 
-    if (st[ST_TIP_OF_THE_DAY].b && (!testing)) {
+    if (st[ST_TIP_OF_THE_DAY].b && (!state.testing)) {
         tipOfTheDay();
     }
 }
@@ -1425,12 +1331,12 @@ MainWindow::~MainWindow()
 void
 MainWindow::timerEvent(QTimerEvent * /* event */)
 {
-    if (testing) {
+    if (state.testing) {
         StringList test_script = string_tables["test_script"];
-        if (test_script_pos < test_script.size()) {
-            cmd(test_script[test_script_pos].c_str());
+        if (state.test_script_pos < test_script.size()) {
+            cmd(test_script[state.test_script_pos].c_str());
             cmd("sleep");
-            test_script_pos++;
+            state.test_script_pos++;
         }
     }
 
@@ -1556,8 +1462,8 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
             }
 
             //The docIndex doesn't need increased as it is only used for unnamed files
-            numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, _mainWin, mdiArea, Qt::SubWindow);
+            state.numOfDocs++;
+            MdiWindow* mdiWin = new MdiWindow(state.docIndex, _mainWin, mdiArea, Qt::SubWindow);
             connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
@@ -1644,7 +1550,7 @@ void MainWindow::onCloseWindow()
 void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
     qDebug("MainWindow::onCloseMdiWin()");
-    numOfDocs--;
+    state.numOfDocs--;
 
     bool keepMaximized;
     if(theMdiWin) { keepMaximized = theMdiWin->isMaximized(); }
@@ -1689,11 +1595,11 @@ void MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash.value("print")->setEnabled(numOfDocs > 0);
-    actionHash.value("windowclose")->setEnabled(numOfDocs > 0);
-    actionHash.value("designdetails")->setEnabled(numOfDocs > 0);
+    actionHash.value("print")->setEnabled(state.numOfDocs > 0);
+    actionHash.value("windowclose")->setEnabled(state.numOfDocs > 0);
+    actionHash.value("designdetails")->setEnabled(state.numOfDocs > 0);
 
-    if (numOfDocs) {
+    if (state.numOfDocs) {
         //Toolbars
         foreach(QToolBar* tb, toolbarHash) {
             tb->show();

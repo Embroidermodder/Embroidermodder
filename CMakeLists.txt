@@ -9,6 +9,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -83,7 +86,9 @@ qt_add_executable(embroidermodder2
     ${SRC}/view.cpp
 
     ${SRC}/embroidermodder.h
-    ${SRC}/constants.h
+
+    ${SRC}/core.c
+    ${SRC}/core.h
 
     ${EXTERN}/lua/src/lapi.c
     ${EXTERN}/lua/src/lapi.h

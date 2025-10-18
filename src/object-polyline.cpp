@@ -10,11 +10,6 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 
-extern int play_mode;
-extern uint64_t simulation_start;
-extern float machine_speed;
-extern float stitch_time;
-
 /*! \brief Our preferred current time format: milliseconds since epoch as an uint64_t.
  *
  * \todo Check for failure due to porting or the 2038 problem.
@@ -38,7 +33,7 @@ current_time(void)
 QPainterPath
 simulation_step(QPainterPath normalPath)
 {
-    double simulation_time = (current_time() - simulation_start)/1000.0;
+    double simulation_time = (current_time() - state.simulation_start)/1000.0;
     qDebug("Simulation time: %lu", simulation_time);
 
     QPainterPath animatePath;
@@ -48,7 +43,7 @@ simulation_step(QPainterPath normalPath)
     for (int i=1; i<normalPath.elementCount(); i++) {
         QPointF pt = normalPath.elementAt(i) - start_pt;
         double travelled = std::sqrt(pt.x()*pt.x() + pt.y()*pt.y());
-        time += (travelled / machine_speed) + stitch_time;
+        time += (travelled / state.machine_speed) + state.stitch_time;
         if (time > simulation_time) {
             break;
         }
@@ -125,7 +120,7 @@ PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     }
     painter->setPen(paintPen);
 
-    if (play_mode) {
+    if (state.play_mode) {
         painter->drawPath(simulation_step(normalPath));
         update();
     }

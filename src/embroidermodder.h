@@ -111,18 +111,13 @@
 
 //#include <QOpenGLWidget>
 
-#include <cinttypes>
-#include <cmath>
-#include <cstdlib>
-
 #include <chrono>
 #include <string>
 #include <thread>
 #include <vector>
 #include <unordered_map>
 
-#include "embroidery.h"
-#include "constants.h"
+#include "core.h"
 
 /* NOTE: this is Qt dependant so this means that needs to be here not in "constants.h"
  * after the necessary Qt header.
@@ -291,10 +286,6 @@ typedef struct PropertiesData_ {
 } PropertiesData;
 
 /* ---- Function declarations (that aren't in a class) ---------------------- */
-bool script_env_boot(void);
-void script_env_free(void);
-void load_data();
-
 QRgb getCurrentColor();
 
 MdiWindow* activeMdiWindow(void);
@@ -322,10 +313,6 @@ extern std::unordered_map<std::string, StringList> string_tables;
 extern std::unordered_map<std::string, std::vector<PropertiesData>> properties_table;
 extern std::unordered_map<QString, QString> aliases;
 extern const char *command_names[MAX_COMMANDS];
-
-extern int context_flag;
-extern bool testing;
-extern int test_script_pos;
 
 /* ---- Class declarations -------------------------------------------------- */
 
@@ -690,12 +677,7 @@ protected:
 
 public:
 
-    bool shiftKeyPressedState;
-
     QByteArray layoutState;
-
-    int numOfDocs;
-    int docIndex;
 
     QList<MdiWindow*> listMdiWin;
     QMdiSubWindow* findMdiWindow(const QString &fileName);
@@ -771,9 +753,6 @@ public slots:
     QString getCurrentLayer();
     QString getCurrentLineType();
     QString getCurrentLineWeight();
-
-    // Standard Slots
-    bool isShiftPressed();
 
     void deletePressed();
     void escapePressed();
@@ -993,12 +972,12 @@ public:
     enum { Type = OBJ_TYPE_BASE };
     virtual int type() const { return Type; }
 
-    qint64       objectID()                            const { return objID; }
-    QPen         objectPen()                           const { return objPen; }
-    QColor       objectColor()                         const { return objPen.color(); }
-    QRgb         objectColorRGB()                      const { return objPen.color().rgb(); }
-    Qt::PenStyle objectLineType()                      const { return objPen.style(); }
-    qreal        objectLineWeight()                    const { return lwtPen.widthF(); }
+    qint64 objectID() const { return objID; }
+    QPen objectPen() const { return objPen; }
+    QColor objectColor() const { return objPen.color(); }
+    QRgb objectColorRGB() const { return objPen.color().rgb(); }
+    Qt::PenStyle objectLineType() const { return objPen.style(); }
+    qreal objectLineWeight() const { return lwtPen.widthF(); }
     QPainterPath objectPath()                          const { return path(); }
     int          objectRubberMode()                    const { return objRubberMode; }
     QPointF      objectRubberPoint(const QString& key) const;
@@ -2112,6 +2091,8 @@ public:
     View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
     ~View();
 
+    ViewData vdata;
+
     bool allowZoomIn();
     bool allowZoomOut();
 
@@ -2124,6 +2105,8 @@ public:
     void addObject(BaseObject* obj);
     void deleteObject(BaseObject* obj);
     void vulcanizeObject(BaseObject* obj);
+
+    void drawRulers(QPainter *painter);
 
 public slots:
     void zoomIn();
@@ -2225,9 +2208,6 @@ private:
     quint8 rulerPixelSize;
     void loadRulerSettings();
 
-    bool willUnderflowInt32(qint64 a, qint64 b);
-    bool willOverflowInt32(qint64 a, qint64 b);
-    int roundToMultiple(bool roundUp, int numToRound, int multiple);
     QPainterPath createRulerTextPath(float x, float y, QString str, float height);
 
     QList<QGraphicsItem*> previewObjectList;
@@ -2244,19 +2224,6 @@ private:
     QList<QGraphicsItem*> rubberRoomList;
 
     void copySelected();
-
-    bool grippingActive;
-    bool rapidMoveActive;
-    bool previewActive;
-    bool pastingActive;
-    bool movingActive;
-    bool selectingActive;
-    bool zoomWindowActive;
-    bool panningRealTimeActive;
-    bool panningPointActive;
-    bool panningActive;
-    bool qSnapActive;
-    bool qSnapToggle;
 
     void startGripping(BaseObject* obj);
     void stopGripping(bool accept = false);

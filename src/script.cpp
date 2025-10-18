@@ -49,7 +49,6 @@ extern "C" {
  * TODO: Set defaults for all state variables.
  */
 lua_State *Lua;
-int context_flag = CONTEXT_MAIN;
 
 const char *temporary_name_format = "tmp_%d";
 int temporary_name = 0;
@@ -289,12 +288,6 @@ void MainWindow::buttonTipOfTheDayClicked(int button)
     else if(button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
     }
-}
-
-// Standard Slots
-bool MainWindow::isShiftPressed()
-{
-    return shiftKeyPressedState;
 }
 
 // Icons
@@ -596,7 +589,7 @@ MainWindow::runCommand(void)
 }
 
 /**
- * @brief The standard way to call a command.
+ * The standard way to call a command.
  */
 void
 MainWindow::runCommandMain(const QString& line)
@@ -606,7 +599,7 @@ MainWindow::runCommandMain(const QString& line)
     // if (!st[ST_SELECTION_MODE_PICKFIRST].b) {
     //     clear_selection();
     // }
-    context_flag = CONTEXT_MAIN;
+    state.context_flag = CONTEXT_MAIN;
     cmd(qPrintable(line));
 }
 
@@ -616,7 +609,7 @@ MainWindow::runCommandClick(const QString& line, qreal x, qreal y)
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(line), x, y);
     char mouse_pos[100];
     sprintf(mouse_pos, "mouse = {%f, %f}", x, y);
-    context_flag = CONTEXT_CLICK;
+    state.context_flag = CONTEXT_CLICK;
     cmd(qPrintable(line));
 }
 
@@ -626,7 +619,7 @@ MainWindow::runCommandMove(const QString& line, qreal x, qreal y)
     qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(line), x, y);
     char mouse_pos[100];
     sprintf(mouse_pos, "mouse = {%f, %f}", x, y);
-    context_flag = CONTEXT_MOVE;
+    state.context_flag = CONTEXT_MOVE;
     cmd(qPrintable(line));
 }
 
@@ -636,7 +629,7 @@ MainWindow::runCommandContext(const QString& line, const QString& str)
     qDebug("runCommandContext(%s, %s)", qPrintable(line), qPrintable(str));
     char context_str[100];
     sprintf(context_str, "prompt = \"%s\"", qPrintable(str));
-    context_flag = CONTEXT_CONTEXT;
+    state.context_flag = CONTEXT_CONTEXT;
     cmd(qPrintable(line));
 }
 
@@ -657,7 +650,7 @@ MainWindow::runCommandPrompt(const QString& line, const QString& str)
         engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName);
     }
     */
-    context_flag = CONTEXT_PROMPT;
+    state.context_flag = CONTEXT_PROMPT;
     cmd(qPrintable(line));
 }
 
@@ -1471,7 +1464,7 @@ cmd_f(lua_State *L)
     if (!unpack_args(L, "cmd_f", args, "s")) {
         return 0;
     }
-    if (context_flag == CONTEXT_MAIN) {
+    if (state.context_flag == CONTEXT_MAIN) {
         _mainWin->cmd("clear_rubber");
         /* Some selection based commands need to override this. */
         _mainWin->cmd("clear");
@@ -1751,7 +1744,7 @@ report_state_f(lua_State *L)
     if (!f) {
         return 0;
     }
-    fprintf(f, "context_flag = %d\n", context_flag);
+    fprintf(f, "context_flag = %d\n", state.context_flag);
     fclose(f);
     return 0;
 }
@@ -2451,7 +2444,7 @@ MainWindow::createAllActions()
         actionHash.insert(command_map[i].icon, ACTION);
     }
 
-    actionHash.value("windowclose")->setEnabled(numOfDocs > 0);
-    actionHash.value("designdetails")->setEnabled(numOfDocs > 0);
+    actionHash.value("windowclose")->setEnabled(state.numOfDocs > 0);
+    actionHash.value("designdetails")->setEnabled(state.numOfDocs > 0);
 }
 

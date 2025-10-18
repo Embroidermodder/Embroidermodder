@@ -1,6 +1,30 @@
-/**
- * @file constants.h
- * @brief Integer and string constants and external table declarations.
+/*
+ * Embroidermodder 2
+ * Copyright 2011-2025 The Embroidermodder Team
+ *
+ * Embroidermodder 2 is free and open software under the zlib license:
+ * see LICENSE.md for details.
+ *
+ * ----------------------------------------------------------------------------
+ *
+ * The C11 core: works by calling commands and altering the state directly.
+ * Note that the global "state" variable is defined here.
+ */
+
+#ifndef __EM2_CORE__
+#define __EM2_CORE__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdlib.h>
+#include <inttypes.h>
+#include <math.h>
+
+#include "embroidery.h"
+
+/* Integer and string constants and external table declarations.
  *
  * These macros are all for optimization of either lookup using explicit indicies
  * or tokens for switch tables.
@@ -10,9 +34,6 @@
  * an `int32_t` because we give an explicit value every time so we can
  * cross reference these in the configuration.
  */
-
-#ifndef EM2_CONSTANTS__
-#define EM2_CONSTANTS__
 
 #define VERSION_MAJOR                  2
 #define VERSION_MINOR                  0
@@ -112,7 +133,7 @@
 #define CMD_GENERATE                  84
 #define CMD_FILL                      85
 #define N_COMMANDS                    86
-#define MAX_COMMANDS    (N_COMMANDS+100)
+#define MAX_COMMANDS                 200
 
 /* Generate pattern */
 #define GEN_PHOTO                      0
@@ -471,6 +492,60 @@
 #define VIEW_COLOR_BACKGROUND     "VIEW_COLOR_BACKGROUND"
 #define VIEW_COLOR_CROSSHAIR      "VIEW_COLOR_CROSSHAIR"
 #define VIEW_COLOR_GRID           "VIEW_COLOR_GRID"
+
+/* Type declarations */
+typedef struct ViewData_ {
+    uint8_t grippingActive;
+    uint8_t rapidMoveActive;
+    uint8_t previewActive;
+    uint8_t pastingActive;
+    uint8_t movingActive;
+    uint8_t selectingActive;
+    uint8_t zoomWindowActive;
+    uint8_t panningRealTimeActive;
+    uint8_t panningPointActive;
+    uint8_t panningActive;
+    uint8_t qSnapActive;
+    uint8_t qSnapToggle;
+} ViewData;
+
+typedef struct State_ {
+    uint8_t debug;
+    uint8_t play_mode;
+    uint8_t shift;
+    uint64_t numOfDocs;
+    uint64_t docIndex;
+
+    char *command_names[MAX_COMMANDS];
+
+    uint8_t testing;
+    uint64_t test_script_pos;
+
+    uint64_t simulation_start;
+    /* In millimeters per second, so note that 1000.0 mm/s = 1 m/s.
+     * TODO: This needs to be a setting.
+     */
+    float machine_speed;
+    float stitch_time;
+
+    uint64_t context_flag;
+    uint64_t mode;
+} State;
+
+void run_cmd(const char *line);
+bool script_env_boot(void);
+void script_env_free(void);
+void load_data();
+
+uint8_t willUnderflowInt32(int64_t a, int64_t b);
+uint8_t willOverflowInt32(int64_t a, int64_t b);
+int32_t roundToMultiple(bool roundUp, int32_t numToRound, int32_t multiple);
+
+extern State state;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
