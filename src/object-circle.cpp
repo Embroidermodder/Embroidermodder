@@ -176,7 +176,7 @@ void CircleObject::updateRubber(QPainter* painter)
             sceneTan1Point.x(), sceneTan1Point.y(),
             sceneTan2Point.x(), sceneTan2Point.y(),
             sceneTan3Point.x(), sceneTan3Point.y());
-        int error = EMB_NO_ERR;
+        EmbError error = EMB_NO_ERR;
         EmbVector sceneCenter = emb_center(&arc, &error);
         QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
         QLineF sceneLine(sceneCenterPoint, sceneTan3Point);

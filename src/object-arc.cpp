@@ -50,7 +50,7 @@ void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal e
 
 void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY)
 {
-    int error = EMB_NO_ERR;
+    EmbError error = EMB_NO_ERR;
     EmbGeometry arc = emb_arc(startX, startY, midX, midY, endX, endY);
     EmbVector center = emb_center(&arc, &error);
     if (error) {
@@ -285,11 +285,9 @@ bool ArcObject::objectClockwise() const
     // NOTE: Y values are inverted here on purpose
     EmbGeometry arc = emb_arc(objectStartX(), -objectStartY(),
         objectMidX(), -objectMidY(), objectEndX(), -objectEndY());
-    int error = EMB_NO_ERR;
-    if (emb_clockwise(&arc, &error)) {
-        return true;
-    }
-    return false;
+    EmbError error = EMB_NO_ERR;
+    bool clockwise = emb_clockwise(&arc, &error);
+    return clockwise;
 }
 
 void ArcObject::updatePath()
