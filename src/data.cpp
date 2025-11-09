@@ -11,23 +11,6 @@
 /* Note that toml11 does not have interfacing outside of this file. */
 #include "../extern/toml11/single_include/toml.hpp"
 
-/* Pointer access */
-MainWindow* _mainWin = NULL;
-MdiArea* mdiArea = NULL;
-CmdPrompt* prompt = NULL;
-PropertyEditor* dockPropEdit = NULL;
-UndoEditor* dockUndoEdit = NULL;
-StatusBar* statusbar = NULL;
-
-/* Tables */
-std::vector<Command> command_map;
-std::unordered_map<std::string, ToolbarData> toolbar_table;
-std::unordered_map<std::string, MenuData> menu_table;
-std::unordered_map<std::string, StringList> string_tables;
-std::unordered_map<std::string, std::vector<PropertiesData>> properties_table;
-std::unordered_map<QString, QString> aliases;
-SettingsData settings_table[N_SETTINGS];
-
 /*!
  * \brief Get an integer from a given toml table.
  *
@@ -146,7 +129,7 @@ load_action_data(void)
 void
 load_menu_data(void)
 {
-    qDebug("Loading menus...");
+    debug("Loading menus...");
     auto data = toml::parse("data/menus.toml", toml::spec::v(1, 1, 0));
 
     string_tables["menubar_order"] = get_toml_string_table(data, "menubar_order");
@@ -172,7 +155,7 @@ load_menu_data(void)
 void
 load_toolbar_data(void)
 {
-    qDebug("Loading toolbars...");
+    debug("Loading toolbars...");
     auto data = toml::parse("data/toolbars.toml", toml::spec::v(1, 1, 0));
 
     string_tables["top_toolbar_order"] = get_toml_string_table(data, "top_toolbar_order");
@@ -202,7 +185,7 @@ load_toolbar_data(void)
 void
 load_properties_data(void)
 {
-    qDebug("Loading properties...");
+    debug("Loading properties...");
     auto data = toml::parse("data/properties.toml", toml::spec::v(1, 1, 0));
 
     string_tables["groupbox_order"] = get_toml_string_table(data, "groupbox_order");
@@ -236,7 +219,7 @@ load_properties_data(void)
 void
 load_settings_data(void)
 {
-    qDebug("Loading settings...");
+    debug("Loading settings...");
     auto data = toml::parse("data/settings.toml", toml::spec::v(1, 1, 0));
 
     auto table = data.at("settings_table");
@@ -260,7 +243,7 @@ load_settings_data(void)
         const char *value = settings_table[i].default_value.c_str();
         switch (settings_table[i].type) {
         case 's':
-            st[i].s = value;
+            strncpy(st[i].s, value, 200);
             break;
         case 'i':
             st[i].i = atoi(value);
@@ -276,7 +259,7 @@ load_settings_data(void)
             break;
         }
         default:
-            qDebug("ERROR: unknown settings type starting with the character %c.",
+            debug("ERROR: unknown settings type starting with the character %c.",
                 settings_table[i].type);
             break;
         }

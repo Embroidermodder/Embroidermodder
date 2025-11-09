@@ -18,7 +18,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
      * NOTE: This has to be done before setting mouse tracking.
      * TODO: Review OpenGL for Qt5 later
     if (st[ST_USE_OPENGL].b) {
-        qDebug("Using OpenGL...");
+        debug("Using OpenGL...");
         setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     }
 
@@ -51,7 +51,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setGridColor(st[ST_GRID_COLOR].u);
 
     if (st[ST_GRID_SHOW_ON_LOAD].b) {
-        createGrid(st[ST_GRID_TYPE].s.c_str());
+        createGrid(st[ST_GRID_TYPE].s);
     }
     else {
         createGrid("");
@@ -143,7 +143,7 @@ void View::deleteObject(BaseObject* obj)
 
 void View::previewOn(int clone, int mode, qreal x, qreal y, qreal data)
 {
-    qDebug("View previewOn()");
+    debug("View previewOn()");
     previewOff(); //Free the old objects before creating new ones
 
     previewMode = mode;
@@ -488,7 +488,7 @@ View::createGridIso()
 
 void View::toggleSnap(bool on)
 {
-    qDebug("View toggleSnap()");
+    debug("View toggleSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty(ENABLE_SNAP, on);
@@ -498,10 +498,10 @@ void View::toggleSnap(bool on)
 
 void View::toggleGrid(bool on)
 {
-    qDebug("View toggleGrid()");
+    debug("View toggleGrid()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (on) {
-        createGrid(st[ST_GRID_TYPE].s.c_str());
+        createGrid(st[ST_GRID_TYPE].s);
     }
     else {
         createGrid("");
@@ -511,7 +511,7 @@ void View::toggleGrid(bool on)
 
 void View::toggleRuler(bool on)
 {
-    qDebug("View toggleRuler()");
+    debug("View toggleRuler()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty(ENABLE_RULER, on);
     rulerMetric = st[ST_RULER_METRIC].b;
@@ -523,7 +523,7 @@ void View::toggleRuler(bool on)
 
 void View::toggleOrtho(bool on)
 {
-    qDebug("View toggleOrtho()");
+    debug("View toggleOrtho()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty(ENABLE_ORTHO, on);
@@ -531,9 +531,10 @@ void View::toggleOrtho(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::togglePolar(bool on)
+void
+View::togglePolar(bool on)
 {
-    qDebug("View togglePolar()");
+    debug("View togglePolar()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty(ENABLE_POLAR, on);
@@ -541,9 +542,10 @@ void View::togglePolar(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleQSnap(bool on)
+void
+View::toggleQSnap(bool on)
 {
-    qDebug("View toggleQSnap()");
+    debug("View toggleQSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     vdata.qSnapToggle = on;
     gscene->setProperty(ENABLE_QSNAP, on);
@@ -551,9 +553,10 @@ void View::toggleQSnap(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleQTrack(bool on)
+void
+View::toggleQTrack(bool on)
 {
-    qDebug("View toggleQTrack()");
+    debug("View toggleQTrack()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty(ENABLE_QTRACK, on);
@@ -561,18 +564,20 @@ void View::toggleQTrack(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleLwt(bool on)
+void
+View::toggleLwt(bool on)
 {
-    qDebug("View toggleLwt()");
+    debug("View toggleLwt()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty(ENABLE_LWT, on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleReal(bool on)
+void
+View::toggleReal(bool on)
 {
-    qDebug("View toggleReal()");
+    debug("View toggleReal()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty(ENABLE_REAL, on);
     gscene->update();
@@ -1098,13 +1103,13 @@ void View::setCornerButton()
 
 void View::cornerButtonClicked()
 {
-    qDebug("Corner Button Clicked.");
+    debug("Corner Button Clicked.");
     //actionHash.value(st[ST_SCROLLBAR_WIDGET_NUM].i)->trigger();
 }
 
 void View::zoomIn()
 {
-    qDebug("View zoomIn()");
+    debug("View zoomIn()");
     if (!allowZoomIn()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2, height()/2));
@@ -1117,7 +1122,7 @@ void View::zoomIn()
 
 void View::zoomOut()
 {
-    qDebug("View zoomOut()");
+    debug("View zoomOut()");
     if (!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2, height()/2));
@@ -1575,13 +1580,13 @@ void View::mouseReleaseEvent(QMouseEvent* event)
         event->accept();
     }
     if (event->button() == Qt::XButton1) {
-        qDebug("XButton1");
+        debug("XButton1");
         _mainWin->cmd("undo");
         //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2) {
-        qDebug("XButton2");
+        debug("XButton2");
         _mainWin->cmd("redo");
         //TODO: Make this customizable
         event->accept();
@@ -1597,9 +1602,10 @@ bool View::allowZoomIn()
     qreal maxHeight = corner.y() - origin.y();
 
     qreal zoomInLimit = 0.0000000001;
-    if (qMin(maxWidth, maxHeight) < zoomInLimit)
-    {
-        qDebug("ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
+    if (qMin(maxWidth, maxHeight) < zoomInLimit) {
+        char msg[200];
+        sprintf(msg, "ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
+        debug(msg);
         return false;
     }
 
@@ -1616,7 +1622,9 @@ bool View::allowZoomOut()
     qreal zoomOutLimit = 10000000000000.0;
     if (qMax(maxWidth, maxHeight) > zoomOutLimit)
     {
-        qDebug("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
+        char msg[200];
+        sprintf(msg, "ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
+        debug(msg);        
         return false;
     }
 
@@ -1679,7 +1687,7 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 
 void View::contextMenuEvent(QContextMenuEvent* event)
 {
-    QString iconTheme = st[ST_ICON_THEME].s.c_str();
+    QString iconTheme = st[ST_ICON_THEME].s;
 
     QMenu menu;
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
@@ -1753,7 +1761,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
 void
 View::deletePressed()
 {
-    qDebug("View deletePressed()");
+    debug("View deletePressed()");
     if (vdata.pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
@@ -1769,7 +1777,7 @@ View::deletePressed()
 void
 View::escapePressed()
 {
-    qDebug("View escapePressed()");
+    debug("View escapePressed()");
     if (vdata.pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;

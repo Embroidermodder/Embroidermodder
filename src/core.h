@@ -18,9 +18,13 @@
 extern "C" {
 #endif
 
-#include <stdlib.h>
+#include <stdbool.h>
 #include <inttypes.h>
-#include <math.h>
+#include <stdarg.h>
+
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
 
 #include "embroidery.h"
 
@@ -493,6 +497,16 @@ extern "C" {
 #define VIEW_COLOR_CROSSHAIR      "VIEW_COLOR_CROSSHAIR"
 #define VIEW_COLOR_GRID           "VIEW_COLOR_GRID"
 
+typedef struct ScriptValue_ {
+    char s[200];
+    char l[20][200];
+    int32_t i;
+    uint32_t u;
+    double r;
+    bool b;
+    int length;
+} ScriptValue;
+
 /* Type declarations */
 typedef struct ViewData_ {
     uint8_t grippingActive;
@@ -517,6 +531,8 @@ typedef struct State_ {
     uint64_t docIndex;
 
     char *command_names[MAX_COMMANDS];
+    char *fill_list[MAX_COMMANDS];
+    char *generate_list[MAX_COMMANDS];
 
     uint8_t testing;
     uint64_t test_script_pos;
@@ -532,16 +548,29 @@ typedef struct State_ {
     uint64_t mode;
 } State;
 
+/* Utilities */
+uint8_t willUnderflowInt32(int64_t a, int64_t b);
+uint8_t willOverflowInt32(int64_t a, int64_t b);
+int32_t roundToMultiple(bool roundUp, int32_t numToRound, int32_t multiple);
+void debug(const char *msg, ...);
+void temp_name(char *name, int *err);
+uint64_t current_time(void);
+
+/* Scripting and state */
 void run_cmd(const char *line);
 bool script_env_boot(void);
 void script_env_free(void);
 void load_data();
+int unpack_args(lua_State *L, const char *function, ScriptValue *args,
+    const char *type_string);
 
-uint8_t willUnderflowInt32(int64_t a, int64_t b);
-uint8_t willOverflowInt32(int64_t a, int64_t b);
-int32_t roundToMultiple(bool roundUp, int32_t numToRound, int32_t multiple);
-
+/* Global data */
 extern State state;
+extern lua_State *Lua;
+extern ScriptValue st[N_SETTINGS];
+extern const char *usage_msg;
+extern const char* _appName_;
+extern const char* _appVer_;
 
 #ifdef __cplusplus
 }

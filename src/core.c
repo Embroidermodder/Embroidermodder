@@ -12,8 +12,18 @@
 
 #include <assert.h>
 #include <limits.h>
+#include <time.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 #include "core.h"
+
+/* Functions which refer to lua_State and need declaration. */
+int unpack_args(lua_State *L, const char *function, ScriptValue *args, const char *type_string);
+int cmd_f(lua_State *L);
+int get_f(lua_State *L);
+int set_f(lua_State *L);
 
 State state = {
     .debug = 1,
@@ -112,6 +122,20 @@ State state = {
         [CMD_FILL] = "fill",
         [N_COMMANDS] = "_END"
     },
+    .generate_list = {
+        [GEN_PHOTO] = "photo",
+        [GEN_DRAWING] = "drawing",
+        [GEN_QR] = "qr",
+        [GEN_GUILLOCHE] = "guilloche",
+        [GEN_KNOT] = "knot",
+        [N_GEN] = "_END"
+    },
+    .fill_list = {
+        [FILL_SATIN] = "satin",
+        [FILL_GRADIENT] = "gradient",
+        [FILL_BRICK] = "brick",
+        [N_FILLS] = "_END"
+    },
 
     /* Testing */
     .testing = 0,
@@ -129,6 +153,29 @@ State state = {
     .context_flag = CONTEXT_MAIN,
     .mode = 0
 };
+
+lua_State *Lua;
+
+const char *usage_msg = \
+    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n" \
+    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n" \
+    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/"           "\n" \
+    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n" \
+    " _____________________________________________________________________________ "           "\n" \
+    "|                                                                             | "          "\n" \
+    "|                   http://embroidermodder.github.io                          | "          "\n" \
+    "|_____________________________________________________________________________| "          "\n" \
+    "                                                                               "           "\n" \
+    "Usage: embroidermodder [options] files ..."                                      "\n" \
+   //80CHARS======================================================================MAX
+    "Options:"                                                                        "\n" \
+    "  -d, --debug      Print lots of debugging information."                         "\n" \
+    "  -h, --help       Print this message and exit."                                 "\n" \
+    "  -v, --version    Print the version number of embroidermodder and exit."        "\n" \
+    "\n";
+
+const char* _appName_ = "Embroidermodder";
+const char* _appVer_  = "v2.0 alpha";
 
 uint8_t
 willUnderflowInt32(int64_t a, int64_t b)
@@ -152,7 +199,7 @@ roundToMultiple(bool roundUp, int32_t numToRound, int32_t multiple)
     if (multiple == 0) {
         return numToRound;
     }
-    int remainder = numToRound % multiple;
+    int32_t remainder = numToRound % multiple;
     if (remainder == 0) {
         return numToRound;
     }
@@ -168,5 +215,266 @@ roundToMultiple(bool roundUp, int32_t numToRound, int32_t multiple)
         return numToRound - multiple - remainder;
     }
     return numToRound - remainder;
+}
+
+/*
+ * Timestamps all debugging output with the ISO formatted GMT time
+ * and writes it to the file "debug.log".
+ */
+void
+debug(const char *msg, ...)
+{
+    char time_s[200];
+    time_t t;
+    char formatted_msg[1000];
+    int n_args;
+    va_list args;
+    struct tm* time_data;
+    char arg_fmt[10];
+
+    /* Get time string, in case of failure return the error message in the
+     * time_s string.
+     */
+    time(&t);
+    time_data = gmtime(&t);
+    if (time_data != NULL) {
+        size_t bytes = strftime(time_s, sizeof(time_s),
+            "%Y-%m-%d %H:%M:%S", time_data);
+        if (bytes == 0) {
+            sprintf(time_s, "strftime failed");
+        }
+    }
+    else {
+        sprintf(time_s, "localtime failed");
+    }
+
+    /* Argument parsing */
+    int pos = 0;
+    formatted_msg[0] = 0;
+    va_start(args, n_args);
+    for (int i=0; msg[i]; i++) {
+        /* If the formatting character '%' appears, and it is not followed
+         * by '%' then we need to interpret another argument.
+         */
+        if ((msg[i] == '%') && (msg[i+1] != '%') && (msg[i])) {
+            switch (msg[i+1]) {
+            default:
+            case 's':
+                sprintf(formatted_msg, "%s%s",
+                    formatted_msg, va_arg(args, const char*));
+                break;
+            case 'c':
+                /* FIXME:
+                sprintf(formatted_msg, "%s%c",
+                    formatted_msg, va_arg(args, char));
+                */
+                break;
+            case 'd':
+                sprintf(formatted_msg, "%s%d",
+                    formatted_msg, va_arg(args, int32_t));
+                break;
+            case 'f':
+                sprintf(formatted_msg, "%s%f",
+                    formatted_msg, va_arg(args, float));
+                break;
+            }
+            pos = strlen(formatted_msg);
+            i++;
+        }
+        else {
+            formatted_msg[pos] = msg[i];
+            formatted_msg[pos+1] = 0;
+            pos++;
+        }
+    }
+    va_end(args);
+
+    /* Output */
+    FILE *f = fopen("debug.log", "a");
+    fprintf(f, "(%s) %s\n", time_s, formatted_msg);
+    printf("(%s) %s\n", time_s, formatted_msg);
+    fclose(f);
+}
+
+/* Unpacks the lua state according to the type_string where the possible
+ * types are:
+ *
+ * | char | C++ type  | description                            |
+ * |------|-----------|----------------------------------------|
+ * | `r`  | `double`  | Real number: checks for NaN by default |
+ * | `i`  | `int32_t` | 32-bit signed integer                  |
+ * | `b`  | `bool`    | Boolean: true or false.                |
+ * | `s`  | `QString` | A string TODO: check for type          |
+ *
+ * TODO: better type checking
+ *
+ * Note the the lua_to* calls add one to account for lua's indexing from 1.
+ */
+int
+unpack_args(lua_State *L, const char *function, ScriptValue *args, const char *type_string)
+{
+    int expected = strlen(type_string);
+    if (lua_gettop(L) < expected) {
+        return 0;
+    }
+
+    for (int i=0; type_string[i]; i++) {
+        switch (type_string[i]) {
+        case 'r': {
+            args[i].r = lua_tonumber(L, i+1);
+            if (isnan(args[i].r)) {
+                char message[100];
+                sprintf(message, "ERROR: %s argument %d is not a number.",
+                   function, i+1);
+                debug((const char*)message);
+                return 0;
+            }
+            break;
+        }
+        case 'i': {
+            args[i].i = lua_tointeger(L, i+1);
+            break;
+        }
+        case 's': {
+            strncpy(args[i].s, lua_tostring(L, i+1), 200);
+            break;
+        }
+        case 'b': {
+            args[i].b = lua_toboolean(L, i+1);
+            break;
+        }
+        default:
+            debug("ERROR: invalid character passed to type_string in arg_check");
+            break;
+        }
+    }
+    return 1;
+}
+
+/*
+ * Lua interface to core commands.
+ *
+ * User based interaction comes via this interface so we can parse
+ * the differences between interaction contexts.
+ *
+ * TODO: currently can't pass arguments through to core commands.
+ */
+int
+cmd_f(lua_State *L)
+{
+    ScriptValue args[2];
+    if (!unpack_args(L, "cmd_f", args, "s")) {
+        return 0;
+    }
+    if (state.context_flag == CONTEXT_MAIN) {
+        run_cmd("clear_rubber");
+        /* Some selection based commands need to override this. */
+        run_cmd("clear");
+    }
+    run_cmd(args[0].s);
+    /* TODO: conditional on if the command is open ended or not. */
+    run_cmd("end");
+    return 0;
+}
+
+/**
+ * @brief Set a state variable to a lua variable.
+ *
+ * EXAMPLE: set("text_font", "Arial")
+ *
+ * FIXME: this is an untested draft.
+ */
+int
+set_f(lua_State *L)
+{
+    if (!lua_isstring(L, 1)) {
+        debug("set: first argument not a string");
+        return 0;
+    }
+    const char *key = lua_tostring(L, 1);
+    ScriptValue value;
+    value.b = false;
+    if (lua_isboolean(L, 2)) {
+        value.b = lua_toboolean(L, 2);
+        return 0;
+    }
+    if (lua_isinteger(L, 2)) {
+        value.i = lua_tointeger(L, 2);
+        return 0;
+    }
+    if (lua_isstring(L, 2)) {
+        strncpy(value.s, lua_tostring(L, 2), 200);
+        return 0;
+    }
+    //FIXME: _mainWin->set(key, value);
+    return 0;
+}
+
+/**
+ * @brief Get a state variable and pass it as a lua variable.
+ *
+ * EXAMPLE: font = get("text_font")
+ *
+ * @fixme this is an untested draft.
+ */
+int
+get_f(lua_State *L)
+{
+    if (!lua_isstring(L, 1)) {
+        debug("get: first argument not a string");
+        return 0;
+    }
+    //FIXME: ScriptValue result = _mainWin->get(lua_tostring(L, 1));
+    //FIXME: lua_pushnumber(L, result.i);
+    return 1;
+}
+
+/*
+ * Load TOML data and initialise lua registerables.
+ *
+ * Lua in Embroidermodder 2 uses a 2 stage boot process.
+ *
+ * 1. Built-in style hookups to Embroidermodder2 features which are
+ *    lua functions.
+ * 2. Commands written in lua-only which represent the QActions used by
+ *    the interface in the menus, toolbars and command line.
+ *
+ * Each command loaded in boot step 3 has up to 5 contexts
+ * (see the list of defines in the headers: grep for "CONTEXT_") and will switch
+ * depending on what context it is called in.
+ */
+bool
+script_env_boot(void)
+{
+    /** Setting up Lua. */
+    Lua = luaL_newstate();
+    luaL_openlibs(Lua);
+
+    /*
+     * Bootstrapping function to support complex scripting.
+     *
+     * Allow scripts to act on the program state using the command line like this::
+     *
+     *     -- Convert an example file from Tajima dst to Brother pes format.
+     *     cmd("open example.dst")
+     *     cmd("saveas example.pes")
+     */
+    lua_register(Lua, "cmd", cmd_f);
+    lua_register(Lua, "get", get_f);
+    lua_register(Lua, "set", set_f);
+
+    return true;
+}
+
+/**
+ * @brief Free up the memory used by the scripting environment.
+ *
+ * This is necessary since all the script variables and headers are only
+ * present in this file. Currently just the Lua state.
+ */
+void
+script_env_free(void)
+{
+    lua_close(Lua);
 }
 

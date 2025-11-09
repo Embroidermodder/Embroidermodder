@@ -105,7 +105,7 @@ set_label_visible(QObject* parent, const char *key, bool visibility)
         label->setVisible(visibility);
     }
     else {
-        qDebug("ERROR: Failed to find label with the key \"%s\".", key);
+        debug("ERROR: Failed to find label with the key \"%s\".", key);
     }
 }
 
@@ -117,7 +117,7 @@ set_double_spinbox_visible(QObject* parent, const char *key, bool visibility)
         spinbox->setVisible(visibility);
     }
     else {
-        qDebug("ERROR: Failed to find spinbox with the key \"%s\".", key);
+        debug("ERROR: Failed to find spinbox with the key \"%s\".", key);
     }
 }
 
@@ -241,7 +241,7 @@ Settings_Dialog::createTabGeneral()
         dirName[0] = dirName[0].toUpper();
         comboBoxLanguage->addItem(dirName);
     }
-    QString current = st_dialog[ST_LANGUAGE].s.c_str();
+    QString current = st_dialog[ST_LANGUAGE].s;
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
     connect(comboBoxLanguage, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxLanguageCurrentIndexChanged(const QString&)));
@@ -254,7 +254,7 @@ Settings_Dialog::createTabGeneral()
     //Icons
     QGroupBox* groupBoxIcon = new QGroupBox(tr("Icons"), widget);
 
-    QString theme = st_dialog[ST_ICON_THEME].s.c_str();
+    QString theme = st_dialog[ST_ICON_THEME].s;
     QLabel* labelIconTheme = new QLabel(tr("Icon Theme"), groupBoxIcon);
     QComboBox* comboBoxIconTheme = new QComboBox(groupBoxIcon);
     QDir dir(qApp->applicationDirPath());
@@ -1340,14 +1340,14 @@ Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 void
 Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
 {
-    st_dialog[ST_LANGUAGE].s = qPrintable(lang.toLower());
+    strncpy(st_dialog[ST_LANGUAGE].s, qPrintable(lang.toLower()), 200);
 }
 
 /* Combobox callback for the general interface icon theme. */
 void
 Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
 {
-    st_dialog[ST_ICON_THEME].s = qPrintable(theme);
+    strncpy(st_dialog[ST_ICON_THEME].s, qPrintable(theme), 200);
 }
 
 /* Combobox callback for the general interface icon size.
@@ -1806,7 +1806,7 @@ void Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
     if(checkBox)
     {
         QString format = checkBox->text();
-        qDebug("CustomFilter: %s %d", qPrintable(format), checked);
+        debug("CustomFilter: %s %d", qPrintable(format), checked);
         if(checked)
             dialog.opensave_custom_filter.append(" *." + format.toLower());
         else

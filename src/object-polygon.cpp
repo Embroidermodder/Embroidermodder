@@ -12,15 +12,14 @@
 
 PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PolygonObject Constructor()");
+    debug("PolygonObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PolygonObject Constructor()");
-    if(obj)
-    {
+    debug("PolygonObject Constructor()");
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
@@ -29,7 +28,7 @@ PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseOb
 
 PolygonObject::~PolygonObject()
 {
-    qDebug("PolygonObject Destructor()");
+    debug("PolygonObject Destructor()");
 }
 
 void PolygonObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)

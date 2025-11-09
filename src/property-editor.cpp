@@ -490,7 +490,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         default:
-            qDebug("ERROR: Unrecognised OBJ_TYPE id.");
+            debug("ERROR: Unrecognised OBJ_TYPE id.");
             break;
         }
     }
@@ -553,7 +553,7 @@ PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const
 {
     fieldOldText = fontComboBox->property("FontFamily").toString();
     fieldNewText = str;
-    //qDebug("old: %d %s, new: %d %s", oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str));
+    //debug("old: %d %s, new: %d %s", oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str));
     if (fieldOldText.isEmpty()) {
         fontComboBox->setCurrentFont(QFont(fieldNewText));
         fontComboBox->setProperty("FontFamily", fieldNewText);
@@ -865,7 +865,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         return;
     }
 
-    qDebug("==========Field was Edited==========");
+    debug("==========Field was Edited==========");
     QString objName = fieldObj->objectName();
     int objType = fieldObj->property(qPrintable(objName)).toInt();
 
@@ -884,7 +884,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         case OBJ_TYPE_ARC: {
             ArcObject* tempArcObj = static_cast<ArcObject*>(item);
             if (!tempArcObj) {
-                qDebug("ERROR: failed to cast item as ArcObject.");
+                debug("ERROR: failed to cast item as ArcObject.");
                 break;
             }
             if (objName.startsWith("lineEdit")) {
@@ -909,7 +909,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         case OBJ_TYPE_BLOCK: {
             /* BlockObject* tempBlockObj = static_cast<BlockObject*>(item);
             if (!tempBlockObj) {
-                qDebug("ERROR: failed to cast item as BlockObject.");
+                debug("ERROR: failed to cast item as BlockObject.");
                 break;
             }
             TODO: field editing */
@@ -918,7 +918,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         case OBJ_TYPE_CIRCLE: {
             CircleObject* tempCircleObj = static_cast<CircleObject*>(item);
             if (!tempCircleObj) {
-                qDebug("ERROR: failed to cast item as CircleObject.");
+                debug("ERROR: failed to cast item as CircleObject.");
                 break;
             }
             if (objName.startsWith("lineEdit")) {
@@ -946,7 +946,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         case OBJ_TYPE_DIMALIGNED: {
             /* DimAlignedObject* tempDimAlignedObj = static_cast<DimAlignedObject*>(item);
             if (!tempDimAlignedObj) {
-                qDebug("ERROR: failed to cast item as DimAlignedObject.");
+                debug("ERROR: failed to cast item as DimAlignedObject.");
                 break;
             }
             TODO: field editing. */

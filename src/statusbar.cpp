@@ -145,96 +145,128 @@ void StatusBarButton::settingsLwt()
     mainWin->settingsDialog("LineWeight");
 }
 
-void StatusBarButton::toggleSnap(bool on)
+void
+StatusBarButton::toggleSnap(bool on)
 {
-    qDebug("StatusBarButton toggleSnap()");
+    debug("StatusBarButton toggleSnap()");
     View* gview = activeView();
-    if(gview) { gview->toggleSnap(on); }
+    if (gview) {
+        gview->toggleSnap(on);
+    }
 }
 
-void StatusBarButton::toggleGrid(bool on)
+void
+StatusBarButton::toggleGrid(bool on)
 {
-    qDebug("StatusBarButton toggleGrid()");
+    debug("StatusBarButton toggleGrid()");
     View* gview = activeView();
-    if(gview) { gview->toggleGrid(on); }
+    if (gview) {
+        gview->toggleGrid(on);
+    }
 }
 
-void StatusBarButton::toggleRuler(bool on)
+void
+StatusBarButton::toggleRuler(bool on)
 {
-    qDebug("StatusBarButton toggleRuler()");
+    debug("StatusBarButton toggleRuler()");
     View* gview = activeView();
-    if(gview) { gview->toggleRuler(on); }
+    if (gview) {
+        gview->toggleRuler(on);
+    }
 }
 
-void StatusBarButton::toggleOrtho(bool on)
+void
+StatusBarButton::toggleOrtho(bool on)
 {
-    qDebug("StatusBarButton toggleOrtho()");
+    debug("StatusBarButton toggleOrtho()");
     View* gview = activeView();
-    if(gview) { gview->toggleOrtho(on); }
+    if (gview) {
+        gview->toggleOrtho(on);
+    }
 }
 
-void StatusBarButton::togglePolar(bool on)
+void
+StatusBarButton::togglePolar(bool on)
 {
-    qDebug("StatusBarButton togglePolar()");
+    debug("StatusBarButton togglePolar()");
     View* gview = activeView();
-    if(gview) { gview->togglePolar(on); }
+    if (gview) {
+        gview->togglePolar(on);
+    }
 }
 
-void StatusBarButton::toggleQSnap(bool on)
+void
+StatusBarButton::toggleQSnap(bool on)
 {
-    qDebug("StatusBarButton toggleQSnap()");
+    debug("StatusBarButton toggleQSnap()");
     View* gview = activeView();
-    if(gview) { gview->toggleQSnap(on); }
+    if (gview) {
+        gview->toggleQSnap(on);
+    }
 }
 
-void StatusBarButton::toggleQTrack(bool on)
+void
+StatusBarButton::toggleQTrack(bool on)
 {
-    qDebug("StatusBarButton toggleQTrack()");
+    debug("StatusBarButton toggleQTrack()");
     View* gview = activeView();
-    if(gview) { gview->toggleQTrack(on); }
+    if (gview) {
+        gview->toggleQTrack(on);
+    }
 }
 
-void StatusBarButton::toggleLwt(bool on)
+void
+StatusBarButton::toggleLwt(bool on)
 {
-    qDebug("StatusBarButton toggleLwt()");
+    debug("StatusBarButton toggleLwt()");
     View* gview = activeView();
-    if(gview) { gview->toggleLwt(on); }
+    if (gview) {
+        gview->toggleLwt(on);
+    }
 }
 
-void StatusBarButton::enableLwt()
+void
+StatusBarButton::enableLwt()
 {
-    qDebug("StatusBarButton enableLwt()");
+    debug("StatusBarButton enableLwt()");
     View* gview = activeView();
-    if(gview)
-    {
-        if(!gview->isLwtEnabled())
+    if (gview) {
+        if (!gview->isLwtEnabled()) {
             gview->toggleLwt(true);
+        }
     }
 }
 
-void StatusBarButton::disableLwt()
+void
+StatusBarButton::disableLwt()
 {
-    qDebug("StatusBarButton disableLwt()");
+    debug("StatusBarButton disableLwt()");
     View* gview = activeView();
-    if(gview)
-    {
-        if(gview->isLwtEnabled())
+    if (gview) {
+        if (gview->isLwtEnabled()) {
             gview->toggleLwt(false);
+        }
     }
 }
 
-void StatusBarButton::enableReal()
+void
+StatusBarButton::enableReal()
 {
-    qDebug("StatusBarButton enableReal()");
+    debug("StatusBarButton enableReal()");
     View* gview = activeView();
-    if(gview) { gview->toggleReal(true); }
+    if (gview) {
+        gview->toggleReal(true);
+    }
 }
 
-void StatusBarButton::disableReal()
+void
+StatusBarButton::disableReal()
 {
-    qDebug("StatusBarButton disableReal()");
+    debug("StatusBarButton disableReal()");
     View* gview = activeView();
-    if(gview) { gview->toggleReal(false); }
+    if (gview) {
+        gview->toggleReal(false);
+    }
 }
 
 StatusBar::StatusBar(MainWindow* mw, QWidget *parent) : QStatusBar(parent)

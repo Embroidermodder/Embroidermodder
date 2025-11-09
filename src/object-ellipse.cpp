@@ -11,15 +11,14 @@
 
 EllipseObject::EllipseObject(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("EllipseObject Constructor()");
+    debug("EllipseObject Constructor()");
     init(centerX, centerY, width, height, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("EllipseObject Constructor()");
-    if(obj)
-    {
+    debug("EllipseObject Constructor()");
+    if (obj) {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
@@ -27,7 +26,7 @@ EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseOb
 
 EllipseObject::~EllipseObject()
 {
-    qDebug("EllipseObject Destructor()");
+    debug("EllipseObject Destructor()");
 }
 
 void EllipseObject::init(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, Qt::PenStyle lineType)

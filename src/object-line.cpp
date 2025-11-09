@@ -11,22 +11,21 @@
 
 LineObject::LineObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("LineObject Constructor()");
+    debug("LineObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("LineObject Constructor()");
-    if(obj)
-    {
+    debug("LineObject Constructor()");
+    if (obj) {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
 }
 
 LineObject::~LineObject()
 {
-    qDebug("LineObject Destructor()");
+    debug("LineObject Destructor()");
 }
 
 void LineObject::init(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, Qt::PenStyle lineType)

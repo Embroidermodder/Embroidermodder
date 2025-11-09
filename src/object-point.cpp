@@ -11,15 +11,14 @@
 
 PointObject::PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PointObject Constructor()");
+    debug("PointObject Constructor()");
     init(x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PointObject Constructor()");
-    if(obj)
-    {
+    debug("PointObject Constructor()");
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
@@ -27,7 +26,7 @@ PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(p
 
 PointObject::~PointObject()
 {
-    qDebug("PointObject Destructor()");
+    debug("PointObject Destructor()");
 }
 
 void PointObject::init(qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)

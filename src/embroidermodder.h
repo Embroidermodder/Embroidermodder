@@ -253,15 +253,6 @@ typedef struct Command_ {
     unsigned char checkable;
 } Command;
 
-typedef struct ScriptValue_ {
-    String s;
-    QStringList l;
-    int32_t i;
-    uint32_t u;
-    double r;
-    bool b;
-} ScriptValue;
-
 /** @brief Data for a given interface setting. */
 typedef struct SettingsData_ {
     String section;
@@ -293,7 +284,7 @@ View* activeView(void);
 QGraphicsScene* activeScene(void);
 QUndoStack* activeUndoStack(void);
 
-int get_id(const char **table, const char *cmd);
+int get_id(char *table[], const char *cmd);
 
 /* ---- Global data --------------------------------------------------------- */
 extern MainWindow* _mainWin;
@@ -306,7 +297,6 @@ extern StatusBar* statusbar;
 extern QHash<QString, QAction*> actionHash;
 extern std::vector<Command> command_map;
 extern SettingsData settings_table[N_SETTINGS];
-extern ScriptValue st[N_SETTINGS];
 extern std::unordered_map<std::string, ToolbarData> toolbar_table;
 extern std::unordered_map<std::string, MenuData> menu_table;
 extern std::unordered_map<std::string, StringList> string_tables;

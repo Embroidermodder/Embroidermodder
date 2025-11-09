@@ -11,15 +11,14 @@
 
 ImageObject::ImageObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ImageObject Constructor()");
+    debug("ImageObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ImageObject Constructor()");
-    if(obj)
-    {
+    debug("ImageObject Constructor()");
+    if (obj) {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -28,7 +27,7 @@ ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(p
 
 ImageObject::~ImageObject()
 {
-    qDebug("ImageObject Destructor()");
+    debug("ImageObject Destructor()");
 }
 
 void ImageObject::init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lineType)

@@ -1,6 +1,5 @@
-/**
- * @file mainwindow.cpp
- * @brief The main starting point for loading the application and main window.
+/*
+ * The main starting point for loading the application and main window.
  *
  * This is the most frequently updated part of the source: new core developers would
  * benefit most from understanding the rough approach of this file and making
@@ -47,36 +46,27 @@ QHash<QString, QMenu*> menuHash;
 QString formatFilterOpen;
 QString formatFilterSave;
 
-const char* _appName_ = "Embroidermodder";
-const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
 
-uint64_t current_time(void);
+/* Pointer access */
+MainWindow* _mainWin = NULL;
+MdiArea* mdiArea = NULL;
+CmdPrompt* prompt = NULL;
+PropertyEditor* dockPropEdit = NULL;
+UndoEditor* dockUndoEdit = NULL;
+StatusBar* statusbar = NULL;
 
-static void usage(void)
-{
-    fprintf(stderr,
-    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"
-    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n"
-    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/"           "\n"
-    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
-    " _____________________________________________________________________________ "           "\n"
-    "|                                                                             | "          "\n"
-    "|                   http://embroidermodder.github.io                          | "          "\n"
-    "|_____________________________________________________________________________| "          "\n"
-    "                                                                               "           "\n"
-    "Usage: embroidermodder [options] files ..."                                      "\n"
-   //80CHARS======================================================================MAX
-    "Options:"                                                                        "\n"
-    "  -d, --debug      Print lots of debugging information."                         "\n"
-    "  -h, --help       Print this message and exit."                                 "\n"
-    "  -v, --version    Print the version number of embroidermodder and exit."        "\n"
-    "\n"
-           );
-    exitApp = true;
-}
+/* Tables */
+std::vector<Command> command_map;
+std::unordered_map<std::string, ToolbarData> toolbar_table;
+std::unordered_map<std::string, MenuData> menu_table;
+std::unordered_map<std::string, StringList> string_tables;
+std::unordered_map<std::string, std::vector<PropertiesData>> properties_table;
+std::unordered_map<QString, QString> aliases;
+SettingsData settings_table[N_SETTINGS];
 
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
     load_data();
 
@@ -94,7 +84,8 @@ int main(int argc, char* argv[])
         if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
         }
         else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
-            usage();
+            fprintf(stdout, "%s", usage_msg);
+            exitApp = true;
         }
         else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
             fprintf(stdout, "%s %s\n", _appName_, _appVer_);
@@ -107,7 +98,8 @@ int main(int argc, char* argv[])
             filesToOpen << argv[i];
         }
         else {
-            usage();
+            fprintf(stdout, "%s", usage_msg);
+            exitApp = true;
         }
     }
 
@@ -150,11 +142,11 @@ bool Application::event(QEvent *event)
     }
 }
 
-/**
- * @brief Identify command id by its name in the supplied table.
+/*
+ * Identify command id by its name in the supplied table.
  */
 int
-get_id(const char *table[], const char *cmd)
+get_id(char *table[], const char *cmd)
 {
     for (int i=0; table[i][0]!='_'; i++) {
         if (!strncmp(table[i], cmd, 50)) {
@@ -171,7 +163,7 @@ run_cmd(const char *line)
     _mainWin->cmd(line);
 }
 
-/**
+/*
  * The main command processor.
  *
  * It is important that there is as little as possible before the switch: this
@@ -201,14 +193,14 @@ MainWindow::cmd(const char *line)
     if (aliases.find(list[0]) != aliases.end()) {
         cmd = qPrintable(aliases.at(list[0]));
     }
-    int id = get_id((const char**)state.command_names, cmd);
+    int id = get_id(state.command_names, cmd);
     if (id < 0) {
-        qDebug("ERROR: unrecognised command id.");
+        debug("ERROR: unrecognised command id.");
         return;
     }
 
     if (state.debug > 0) {
-        qDebug("COMMAND %d (%s)", id, state.command_names[id]);
+        debug("COMMAND %s", state.command_names[id]);
     }
 
     switch (id) {
@@ -269,22 +261,19 @@ MainWindow::cmd(const char *line)
 
 
     case CMD_UPDATES: {
-        qDebug("checkForUpdates()");
-        /* TODO: Check website for new versions, commands, etc... */
+        debug("TODO: Check website for new versions, commands, etc...");
         break;
     }
 
     case CMD_WHATS_THIS: {
-        qDebug("whatsThisContextHelp()");
         QWhatsThis::enterWhatsThisMode();
         break;
     }
 
     case CMD_PRINT: {
-        qDebug("print()");
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
         if (mdiWin == NULL) {
-            qDebug("ERROR: No active window for printing.");
+            debug("ERROR: No active window for printing.");
             break;
         }
         View *gview = activeView();
@@ -311,8 +300,6 @@ MainWindow::cmd(const char *line)
     }
 
     case CMD_HELP: {
-        qDebug("help()");
-
         // Open the HTML Help in the default browser
         QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
         QDesktopServices::openUrl(helpURL);
@@ -328,8 +315,6 @@ MainWindow::cmd(const char *line)
     }
 
     case CMD_CHANGELOG: {
-        qDebug("changelog()");
-
         QUrl changelogURL("help/changelog.html");
         QDesktopServices::openUrl(changelogURL);
         break;
@@ -457,7 +442,7 @@ MainWindow::cmd(const char *line)
             return;
         }
 
-        openFilesPath = st[ST_RECENT_DIRECTORY].s.c_str();
+        openFilesPath = st[ST_RECENT_DIRECTORY].s;
         QString file = QFileDialog::getSaveFileName(this, tr("Save As"),
             openFilesPath, formatFilterSave);
 
@@ -565,19 +550,19 @@ MainWindow::cmd(const char *line)
 
     /* . */
     case CMD_ZOOM_ALL: {
-        qDebug("TODO: Implement zoomAll.");
+        debug("TODO: Implement zoomAll.");
         break;
     }
 
     /* . */
     case CMD_ZOOM_CENTER: {
-        qDebug("TODO: Implement zoomCenter.");
+        debug("TODO: Implement zoomCenter.");
         break;
     }
 
     /* . */
     case CMD_ZOOM_DYNAMIC: {
-        qDebug("TODO: Implement zoomDynamic.");
+        debug("TODO: Implement zoomDynamic.");
         break;
     }
 
@@ -612,19 +597,19 @@ MainWindow::cmd(const char *line)
 
     /* . */
     case CMD_ZOOM_SCALE: {
-        qDebug("TODO: Implement zoomScale.");
+        debug("TODO: Implement zoomScale.");
         break;
     }
 
     /* . */
     case CMD_ZOOM_PREVIOUS: {
-        qDebug("TODO: Implement zoomPrevious.");
+        debug("TODO: Implement zoomPrevious.");
         break;
     }
 
     /* . */
     case CMD_ZOOM_REAL_TIME: {
-        qDebug("TODO: Implement zoomRealtime.");
+        debug("TODO: Implement zoomRealtime.");
         break;
     }
 
@@ -711,7 +696,7 @@ MainWindow::cmd(const char *line)
     }
 
     case CMD_MACRO: {
-        qDebug("TODO: macro support");
+        debug("TODO: macro support");
         break;
     }
 
@@ -733,7 +718,7 @@ MainWindow::cmd(const char *line)
 
     case CMD_SET: {
         ScriptValue value;
-        value.s = qPrintable(list[2]);
+        strncpy(value.s, qPrintable(list[2]), 200);
         set(qPrintable(list[1]), value);
         break;
     }
@@ -1030,11 +1015,11 @@ MainWindow::get(const char *key)
         return result;
     }
     if (!strncmp(key, "platform", 20)) {
-        result.s = qPrintable(platformString());
+        strncpy(result.s, qPrintable(platformString()), 200);
         return result;
     }
     if (!strncmp(key, "prefix", 20)) {
-        result.s = qPrintable(prompt->promptInput->prefix);
+        strncpy(result.s, qPrintable(prompt->promptInput->prefix), 200);
         return result;
     }
     /* Report the current x-position of the mouse and return it. */
@@ -1093,7 +1078,7 @@ MainWindow::set(const char *key, ScriptValue value)
         double num = value.i;
 
         if (std::isnan(num)) {
-            qDebug("TypeError, setTextSize(): first argument failed isNaN check.");
+            debug("TypeError, setTextSize(): first argument failed isNaN check.");
             return;
         }
 
@@ -1130,7 +1115,7 @@ MainWindow::set(const char *key, ScriptValue value)
         return;
     }
     if (!strncmp(key, "prefix", 20)) {
-        prompt->setPrefix(value.s.c_str());
+        prompt->setPrefix(value.s);
         return;
     }
 }
@@ -1160,8 +1145,8 @@ MainWindow::MainWindow() : QMainWindow(0)
         }
     }
 
-    QString lang = st[ST_LANGUAGE].s.c_str();
-    qDebug("language: %s", qPrintable(lang));
+    QString lang = st[ST_LANGUAGE].s;
+    debug("language: %s", qPrintable(lang));
     if(lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
 
@@ -1218,8 +1203,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     mdiArea->useBackgroundLogo(st[ST_MDI_BG_USE_LOGO].b);
     mdiArea->useBackgroundTexture(st[ST_MDI_BG_USE_TEXTURE].b);
     mdiArea->useBackgroundColor(st[ST_MDI_BG_USE_COLOR].b);
-    mdiArea->setBackgroundLogo(st[ST_MDI_BG_LOGO].s.c_str());
-    mdiArea->setBackgroundTexture(st[ST_MDI_BG_TEXTURE].s.c_str());
+    mdiArea->setBackgroundLogo(st[ST_MDI_BG_LOGO].s);
+    mdiArea->setBackgroundTexture(st[ST_MDI_BG_TEXTURE].s);
     mdiArea->setBackgroundColor(QColor(st[ST_MDI_BG_COLOR].u));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -1273,13 +1258,13 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + QString(st[ST_ICON_THEME].s.c_str()),
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + QString(st[ST_ICON_THEME].s),
         st[ST_SELECTION_MODE_PICKADD].b, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + QString(st[ST_ICON_THEME].s.c_str()),
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + QString(st[ST_ICON_THEME].s),
         prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
@@ -1318,7 +1303,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
 MainWindow::~MainWindow()
 {
-    qDebug("MainWindow::Destructor()");
+    debug("MainWindow::Destructor()");
 
     script_env_free();
 
@@ -1334,7 +1319,8 @@ MainWindow::timerEvent(QTimerEvent * /* event */)
     if (state.testing) {
         StringList test_script = string_tables["test_script"];
         if (state.test_script_pos < test_script.size()) {
-            cmd(test_script[state.test_script_pos].c_str());
+            const char *line = test_script[state.test_script_pos].c_str();
+            cmd(line);
             cmd("sleep");
             state.test_script_pos++;
         }
@@ -1345,17 +1331,17 @@ MainWindow::timerEvent(QTimerEvent * /* event */)
 
 void MainWindow::recentMenuAboutToShow()
 {
-    qDebug("MainWindow::recentMenuAboutToShow()");
+    debug("MainWindow::recentMenuAboutToShow()");
     menuHash["RECENT"]->clear();
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for (int i = 0; i < st[ST_RECENT_FILES].l.size(); ++i) {
+    for (int i = 0; i < st[ST_RECENT_FILES].length; ++i) {
         /* If less than the max amount of entries add to menu. */
         if (i >= st[ST_RECENT_MAX_FILES].i) {
             break;
         }
-        recentFileInfo = QFileInfo(st[ST_RECENT_FILES].l.at(i));
+        recentFileInfo = QFileInfo(st[ST_RECENT_FILES].l[i]);
         if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
             recentValue.setNum(i+1);
             QAction* rAction;
@@ -1369,20 +1355,21 @@ void MainWindow::recentMenuAboutToShow()
                 rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
             }
             rAction->setCheckable(false);
-            rAction->setData(st[ST_RECENT_FILES].l.at(i));
+            const char *s = st[ST_RECENT_FILES].l[i];
+            rAction->setData(s);
             menuHash["RECENT"]->addAction(rAction);
             connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
         }
     }
     /* Ensure the list only has max amount of entries. */
-    while (st[ST_RECENT_FILES].l.size() > st[ST_RECENT_MAX_FILES].i) {
-        st[ST_RECENT_FILES].l.removeLast();
+    if (st[ST_RECENT_FILES].length > st[ST_RECENT_MAX_FILES].i) {
+        st[ST_RECENT_FILES].length = st[ST_RECENT_MAX_FILES].i;
     }
 }
 
 void MainWindow::windowMenuAboutToShow()
 {
-    qDebug("MainWindow::windowMenuAboutToShow()");
+    debug("MainWindow::windowMenuAboutToShow()");
     menuHash["WINDOW"]->clear();
     menuHash["WINDOW"]->addAction(actionHash.value("windowclose"));
     menuHash["WINDOW"]->addAction(actionHash.value("windowcloseall"));
@@ -1407,7 +1394,7 @@ void MainWindow::windowMenuAboutToShow()
 
 void MainWindow::windowMenuActivated(bool checked)
 {
-    qDebug("MainWindow::windowMenuActivated()");
+    debug("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
     if (!aSender)
         return;
@@ -1418,13 +1405,13 @@ void MainWindow::windowMenuActivated(bool checked)
 
 void MainWindow::openFile(bool recent, const QString& recentFile)
 {
-    qDebug("MainWindow::openFile()");
+    debug("MainWindow::openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     QStringList files;
     bool preview = st[ST_OPEN_THUMBNAIL].b;
-    openFilesPath = st[ST_RECENT_DIRECTORY].s.c_str();
+    openFilesPath = st[ST_RECENT_DIRECTORY].s;
 
     //Check to see if this from the recent files list
     if(recent) {
@@ -1477,6 +1464,7 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 statusbar->showMessage(tr("File(s) loaded"), 2000);
                 mdiWin->show();
                 mdiWin->showMaximized();
+                /* FIXME:
                 //Prevent duplicate entries in the recent files list
                 if (!st[ST_RECENT_FILES].l.contains(filesToOpen.at(i), Qt::CaseInsensitive)) {
                     st[ST_RECENT_FILES].l.prepend(filesToOpen.at(i));
@@ -1486,8 +1474,9 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
                     st[ST_RECENT_FILES].l.removeAll(filesToOpen.at(i));
                     st[ST_RECENT_FILES].l.prepend(filesToOpen.at(i));
                 }
+                */
                 QString recent_dir = QFileInfo(filesToOpen.at(i)).absolutePath();
-                st[ST_RECENT_DIRECTORY].s = qPrintable(recent_dir);
+                strncpy(st[ST_RECENT_DIRECTORY].s, qPrintable(recent_dir), 200);
 
                 View* v = mdiWin->gview;
                 if (v) {
@@ -1506,7 +1495,7 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
 void MainWindow::openrecentfile()
 {
-    qDebug("MainWindow::openrecentfile()");
+    debug("MainWindow::openrecentfile()");
 
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
@@ -1517,7 +1506,7 @@ void MainWindow::openrecentfile()
 
 QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
 {
-    qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
+    debug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
@@ -1538,22 +1527,26 @@ void MainWindow::closeEvent(QCloseEvent* event)
     event->accept();
 }
 
-void MainWindow::onCloseWindow()
+void
+MainWindow::onCloseWindow()
 {
-    qDebug("MainWindow::onCloseWindow()");
+    debug("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if(mdiWin) {
         onCloseMdiWin(mdiWin);
     }
 }
 
-void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
+void
+MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
-    qDebug("MainWindow::onCloseMdiWin()");
+    debug("MainWindow::onCloseMdiWin()");
     state.numOfDocs--;
 
     bool keepMaximized;
-    if(theMdiWin) { keepMaximized = theMdiWin->isMaximized(); }
+    if (theMdiWin) {
+        keepMaximized = theMdiWin->isMaximized();
+    }
 
     mdiArea->removeSubWindow(theMdiWin);
     theMdiWin->deleteLater();
@@ -1561,39 +1554,50 @@ void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
     updateMenuToolbarStatusbar();
     windowMenuAboutToShow();
 
-    if(keepMaximized) {
+    if (keepMaximized) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if(mdiWin) { mdiWin->showMaximized(); }
+        if (mdiWin) {
+            mdiWin->showMaximized();
+        }
     }
 }
 
-/*! */
-void MainWindow::onWindowActivated(QMdiSubWindow* w)
+/*
+ */
+void
+MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
-    qDebug("MainWindow::onWindowActivated()");
+    debug("MainWindow::onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
-    if(mdiWin) { mdiWin->onWindowActivated(); }
+    if (mdiWin) {
+        mdiWin->onWindowActivated();
+    }
 }
 
-/*! */
-void MainWindow::resizeEvent(QResizeEvent* e)
+/*
+ */
+void
+MainWindow::resizeEvent(QResizeEvent* e)
 {
-    qDebug("MainWindow::resizeEvent()");
+    debug("MainWindow::resizeEvent()");
     QMainWindow::resizeEvent(e);
     statusBar()->setSizeGripEnabled(!isMaximized());
 }
 
-/*! */
+/* TODO: remove this.
+ */
 QAction* MainWindow::getFileSeparator()
 {
-    qDebug("MainWindow::getFileSeparator()");
+    debug("MainWindow::getFileSeparator()");
     return myFileSeparator;
 }
 
-/*! */
-void MainWindow::updateMenuToolbarStatusbar()
+/*
+ */
+void
+MainWindow::updateMenuToolbarStatusbar()
 {
-    qDebug("MainWindow::updateMenuToolbarStatusbar()");
+    debug("MainWindow::updateMenuToolbarStatusbar()");
 
     actionHash.value("print")->setEnabled(state.numOfDocs > 0);
     actionHash.value("windowclose")->setEnabled(state.numOfDocs > 0);
@@ -1611,8 +1615,9 @@ void MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        for (int i=0; i<string_tables["menubar_order"].size(); i++) {
-            const char *key = string_tables["menubar_order"][i].c_str();
+        StringList order = string_tables["menubar_order"];
+        for (int i=0; i<order.size(); i++) {
+            const char *key = order[i].c_str();
             menuBar()->addMenu(menuHash[key]);
             menuHash[key]->setEnabled(true);
         }
@@ -1643,8 +1648,9 @@ void MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        for (int i=0; i<string_tables["menubar_order"].size(); i++) {
-            const char *key = string_tables["menubar_order"][i].c_str();
+        StringList order = string_tables["menubar_order"];
+        for (int i=0; i<order.size(); i++) {
+            const char *key = order[i].c_str();
             menuBar()->addMenu(menuHash[key]);
             if (menu_table[key].mdi_only) {
                 menuHash[key]->setEnabled(false);
@@ -1671,7 +1677,7 @@ void MainWindow::updateMenuToolbarStatusbar()
 
 void MainWindow::hideUnimplemented()
 {
-    qDebug("MainWindow::hideUnimplemented()");
+    debug("MainWindow::hideUnimplemented()");
 }
 
 bool MainWindow::validFileFormat(const QString& fileName)
@@ -1743,7 +1749,7 @@ void MainWindow::loadFormats()
     formatFilterSave = supportedWriters + individualWriters;
 
     //TODO: Fixup custom filter
-    QString custom = st[ST_CUSTOM_FILTER].s.c_str();
+    QString custom = st[ST_CUSTOM_FILTER].s;
     if (custom.contains("supported", Qt::CaseInsensitive)) {
         custom = ""; //This will hide it
     }
@@ -1762,7 +1768,7 @@ void MainWindow::closeToolBar(QAction* action)
     if(action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
         if(tb) {
-            qDebug("%s closed.", qPrintable(tb->objectName()));
+            debug("%s closed.", qPrintable(tb->objectName()));
             tb->hide();
         }
     }
@@ -1832,7 +1838,7 @@ MainWindow::addToMenu(QMenu *menu, StringList data)
 void
 MainWindow::createAllMenus(void)
 {
-    qDebug("MainWindow createAllMenus()");
+    debug("MainWindow createAllMenus()");
 
     /* We loop twice through the menu data so all the submenus exist before
      * they are attached the leaf above.
@@ -1882,7 +1888,7 @@ QIcon
 MainWindow::createIcon(QString label)
 {
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = st[ST_ICON_THEME].s.c_str();
+    QString icontheme = st[ST_ICON_THEME].s;
     return QIcon(appDir + "/icons/" + icontheme + "/" + label + ".png");
 }
 
@@ -1923,7 +1929,7 @@ MainWindow::place_toolbars(Qt::ToolBarArea toolbar_area, const char *toolbar_lis
 void
 MainWindow::createAllToolbars()
 {
-    qDebug("MainWindow createAllToolbars()");
+    debug("MainWindow createAllToolbars()");
 
     addToToolbar("FILE", "toolbarFile", "file_toolbar_list");
     addToToolbar("EDIT", "toolbarEdit", "edit_toolbar_list");
@@ -1967,7 +1973,7 @@ MainWindow::createAllToolbars()
 
     toolbarHash["TEXT"]->setObjectName("toolbarText");
     toolbarHash["TEXT"]->addWidget(textFontSelector);
-    textFontSelector->setCurrentFont(QFont(st[ST_TEXT_FONT].s.c_str()));
+    textFontSelector->setCurrentFont(QFont(st[ST_TEXT_FONT].s));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
     toolbarHash["TEXT"]->addAction(actionHash.value("textbold"));
@@ -2049,7 +2055,7 @@ QString SettingsPath()
 
 void MainWindow::readSettings()
 {
-    qDebug("Reading Settings...");
+    debug("Reading Settings...");
     // This file needs to be read from the users home directory to ensure it is writable
     QString settingsPath = SettingsPath();
     QString settingsDir = SettingsDir();
@@ -2060,7 +2066,7 @@ void MainWindow::readSettings()
 
     layoutState = settings_file.value("LayoutState").toByteArray();
     if (!restoreState(layoutState)) {
-        qDebug("LayoutState NOT restored! Setting Default Layout...");
+        debug("LayoutState NOT restored! Setting Default Layout...");
         //someToolBar->setVisible(true);
     }
 
@@ -2069,8 +2075,10 @@ void MainWindow::readSettings()
         key_ += QString("/") + QString(settings_table[i].key.c_str());
         switch (settings_table[i].type) {
         case 's': {
-            const char *s = st[i].s.c_str();
-            st[i].s = qPrintable(settings_file.value(key_, s).toString());
+            const char *s = st[i].s;
+            strncpy(st[i].s,
+                qPrintable(settings_file.value(key_, s).toString()),
+                200);
             break;
         }
         case 'r':
@@ -2087,7 +2095,7 @@ void MainWindow::readSettings()
             st[i].b = settings_file.value(key_, st[i].b).toBool();
             break;
         default:
-            qDebug("ERROR: unknown settings type starting with the character %c.",
+            debug("ERROR: unknown settings type starting with the character %c.",
                 settings_table[i].type);
             break;
         }
@@ -2099,7 +2107,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    qDebug("Writing Settings...");
+    debug("Writing Settings...");
     QString settingsPath = SettingsPath();
     // This file needs to be read from the users home directory to ensure it is writable
     QSettings settings_file(settingsPath, QSettings::IniFormat);
@@ -2111,9 +2119,11 @@ void MainWindow::writeSettings()
         QString key_(settings_table[i].section.c_str());
         key_ += QString("/") + QString(settings_table[i].key.c_str());
         switch (settings_table[i].type) {
-        case 's':
-            settings_file.setValue(key_, st[i].s.c_str());
+        case 's': {
+            const char *s = st[i].s;
+            settings_file.setValue(key_, s);
             break;
+        }
         case 'i':
             settings_file.setValue(key_, tmp.setNum(st[i].i));
             break;
@@ -2128,7 +2138,7 @@ void MainWindow::writeSettings()
             settings_file.setValue(key_, st[i].b);
             break;
         default:
-            qDebug("ERROR: unknown settings type starting with the character %c.",
+            debug("ERROR: unknown settings type starting with the character %c.",
                 settings_table[i].type);
             break;
         }

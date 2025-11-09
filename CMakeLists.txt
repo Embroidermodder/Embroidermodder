@@ -113,6 +113,7 @@ file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 include_directories(
 	${CMAKE_SOURCE_DIR}/embroidermodder2
 	${CMAKE_SOURCE_DIR}/extern/libembroidery
+	${CMAKE_SOURCE_DIR}/extern/lua/src
 )
 
 target_link_libraries(embroidermodder2 PRIVATE

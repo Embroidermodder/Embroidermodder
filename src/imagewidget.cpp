@@ -7,7 +7,7 @@
 
 ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
 {
-    qDebug("ImageWidget Constructor");
+    debug("ImageWidget Constructor");
 
     img.load(filename);
 
@@ -33,7 +33,7 @@ bool ImageWidget::save(const QString &fileName)
 
 ImageWidget::~ImageWidget()
 {
-    qDebug("ImageWidget Destructor");
+    debug("ImageWidget Destructor");
 }
 
 void ImageWidget::paintEvent(QPaintEvent*)

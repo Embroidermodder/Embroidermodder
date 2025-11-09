@@ -12,15 +12,14 @@
 
 PathObject::PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PathObject Constructor()");
+    debug("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PathObject Constructor()");
-    if(obj)
-    {
+    debug("PathObject Constructor()");
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
@@ -29,7 +28,7 @@ PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(pare
 
 PathObject::~PathObject()
 {
-    qDebug("PathObject Destructor()");
+    debug("PathObject Destructor()");
 }
 
 void PathObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)

@@ -13,7 +13,7 @@
 
 BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
-    qDebug("BaseObject Constructor()");
+    debug("BaseObject Constructor()");
 
     objPen.setCapStyle(Qt::RoundCap);
     objPen.setJoinStyle(Qt::RoundJoin);
@@ -25,7 +25,7 @@ BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
 
 BaseObject::~BaseObject()
 {
-    qDebug("BaseObject Destructor()");
+    debug("BaseObject Destructor()");
 }
 
 void BaseObject::setObjectColor(const QColor& color)

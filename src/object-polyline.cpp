@@ -10,19 +10,6 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 
-/*! \brief Our preferred current time format: milliseconds since epoch as an uint64_t.
- *
- * \todo Check for failure due to porting or the 2038 problem.
- */
-uint64_t
-current_time(void)
-{
-    const std::chrono::time_point now = std::chrono::system_clock::now();
-    const auto now_t = now.time_since_epoch();
-    const auto time_s = std::chrono::duration_cast<std::chrono::milliseconds>(now_t);
-    return time_s.count();
-}
-
 /*! Calculate what position the embroidery machine is at given the current time.
  *
  * HACK: this is very inefficient because there is no storage of data from previous
@@ -34,7 +21,9 @@ QPainterPath
 simulation_step(QPainterPath normalPath)
 {
     double simulation_time = (current_time() - state.simulation_start)/1000.0;
-    qDebug("Simulation time: %lu", simulation_time);
+    char msg[200];
+    sprintf(msg, "Simulation time: %lu", simulation_time);
+    debug(msg);
 
     QPainterPath animatePath;
     QPointF start_pt = normalPath.elementAt(0);
@@ -54,15 +43,14 @@ simulation_step(QPainterPath normalPath)
 
 PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PolylineObject Constructor()");
+    debug("PolylineObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PolylineObject Constructor()");
-    if(obj)
-    {
+    debug("PolylineObject Constructor()");
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
@@ -71,7 +59,7 @@ PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : Bas
 
 PolylineObject::~PolylineObject()
 {
-    qDebug("PolylineObject Destructor()");
+    debug("PolylineObject Destructor()");
 }
 
 void PolylineObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)

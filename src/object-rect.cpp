@@ -11,15 +11,14 @@
 
 RectObject::RectObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("RectObject Constructor()");
+    debug("RectObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("RectObject Constructor()");
-    if(obj)
-    {
+    debug("RectObject Constructor()");
+    if (obj) {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -28,7 +27,7 @@ RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(pare
 
 RectObject::~RectObject()
 {
-    qDebug("RectObject Destructor()");
+    debug("RectObject Destructor()");
 }
 
 void RectObject::init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lineType)

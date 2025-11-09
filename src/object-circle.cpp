@@ -11,15 +11,14 @@
 
 CircleObject::CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("CircleObject Constructor()");
+    debug("CircleObject Constructor()");
     init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("CircleObject Constructor()");
-    if(obj)
-    {
+    debug("CircleObject Constructor()");
+    if (obj) {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
@@ -27,7 +26,7 @@ CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObjec
 
 CircleObject::~CircleObject()
 {
-    qDebug("CircleObject Destructor()");
+    debug("CircleObject Destructor()");
 }
 
 void CircleObject::init(qreal centerX, qreal centerY, qreal radius, QRgb rgb, Qt::PenStyle lineType)

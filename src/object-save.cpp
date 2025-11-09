@@ -12,14 +12,14 @@
 
 SaveObject::SaveObject(QGraphicsScene* theScene, QObject* parent) : QObject(parent)
 {
-    qDebug("SaveObject Constructor()");
+    debug("SaveObject Constructor()");
     gscene = theScene;
     formatType = EMBFORMAT_UNSUPPORTED;
 }
 
 SaveObject::~SaveObject()
 {
-    qDebug("SaveObject Destructor()");
+    debug("SaveObject Destructor()");
 }
 
 /* TODO: Before saving to a stitch only format, Embroidermodder needs
@@ -32,11 +32,11 @@ SaveObject::~SaveObject()
  */
 bool SaveObject::save(const QString &fileName)
 {
-    qDebug("SaveObject save(%s)", qPrintable(fileName));
+    debug("SaveObject save(%s)", qPrintable(fileName));
 
     EmbPattern* pattern = emb_pattern_create();
     if (!pattern) {
-        qDebug("Could not allocate memory for embroidery pattern");
+        debug("Could not allocate memory for embroidery pattern");
         return false;
     }
 
@@ -131,7 +131,7 @@ bool SaveObject::save(const QString &fileName)
      * convert geometry into stitches based on the filetype.
      */
     if (!emb_pattern_writeAuto(pattern, qPrintable(fileName))) {
-        qDebug("Writing file %s was unsuccessful", qPrintable(fileName));
+        debug("Writing file %s was unsuccessful", qPrintable(fileName));
         return false;
     }
 
@@ -202,7 +202,7 @@ void SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
 {
     EllipseObject* obj = static_cast<EllipseObject*>(item);
     if (!obj) {
-        qDebug("Failed to add ellipse object to pattern.");
+        debug("Failed to add ellipse object to pattern.");
         return;
     }
     if (formatType == EMBFORMAT_STITCHONLY) {
@@ -257,7 +257,7 @@ void SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
 {
     //TODO: Reimplement addPolyline() using the libembroidery C API
     /*
-    qDebug("addPolyline()");
+    debug("addPolyline()");
     QGraphicsPathItem* polylineItem = (QGraphicsPathItem*)item;
     if(polylineItem)
     {

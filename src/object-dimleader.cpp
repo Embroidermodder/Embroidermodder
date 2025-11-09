@@ -11,22 +11,21 @@
 
 DimLeaderObject::DimLeaderObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("DimLeaderObject Constructor()");
+    debug("DimLeaderObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("DimLeaderObject Constructor()");
-    if(obj)
-    {
+    debug("DimLeaderObject Constructor()");
+    if (obj) {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
 }
 
 DimLeaderObject::~DimLeaderObject()
 {
-    qDebug("DimLeaderObject Destructor()");
+    debug("DimLeaderObject Destructor()");
 }
 
 void DimLeaderObject::init(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, Qt::PenStyle lineType)

@@ -58,7 +58,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
 MdiWindow::~MdiWindow()
 {
-    qDebug("MdiWindow Destructor()");
+    debug("MdiWindow Destructor()");
 }
 
 bool MdiWindow::saveFile(const QString &fileName)
@@ -74,7 +74,7 @@ bool MdiWindow::saveFile(const QString &fileName)
  */
 bool MdiWindow::loadFile(const QString &fileName)
 {
-    qDebug("MdiWindow loadFile()");
+    debug("MdiWindow loadFile()");
 
     QRgb tmpColor = getCurrentColor();
 
@@ -90,7 +90,7 @@ bool MdiWindow::loadFile(const QString &fileName)
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QString ext = fileExtension(fileName);
-    qDebug("ext: %s", qPrintable(ext));
+    debug("ext: %s", qPrintable(ext));
 
     // Read
     EmbPattern* p = emb_pattern_create();
@@ -366,13 +366,13 @@ QString MdiWindow::fileExtension(const QString& fileName)
 
 void MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
-    qDebug("MdiWindow closeEvent()");
+    debug("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
 void MdiWindow::onWindowActivated()
 {
-    qDebug("MdiWindow onWindowActivated()");
+    debug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
     mainWin->setUndoCleanIcon(fileWasLoaded);
     statusbar->statusBarSnapButton->setChecked(gscene->property(ENABLE_SNAP).toBool());
@@ -388,7 +388,7 @@ void MdiWindow::onWindowActivated()
 
 QSize MdiWindow::sizeHint() const
 {
-    qDebug("MdiWindow sizeHint()");
+    debug("MdiWindow sizeHint()");
     return QSize(450, 300);
 }
 
@@ -489,7 +489,7 @@ MdiWindow::promptInputPrevNext(bool prev)
             QMessageBox::critical(this, tr("Prompt Next Error"),
                 tr("The prompt input is empty! Please report this as a bug!"));
         }
-        qDebug("The prompt input is empty! Please report this as a bug!");
+        debug("The prompt input is empty! Please report this as a bug!");
         return;
     }
 

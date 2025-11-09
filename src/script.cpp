@@ -30,85 +30,20 @@
 
 #include "embroidermodder.h"
 
-/* Note that lua does not have interfacing outside of this file.
- * The wrappers like script_env_boot, script_env_free, etc. allow us to not
- * use the lua_State and lua_* functions outside of this file.
- */
-#include "../extern/lua/src/lua.hpp"
-
-/* Functions with C linkage which refer to lua_State and need declaration. */
-extern "C" {
-    void temp_name(char *name, int *err);
-    int cmd_f(lua_State *L);
-    int get_f(lua_State *L);
-    int set_f(lua_State *L);
-}
-
-/* ---- State ------------------------------------------------------------------
- *
- * TODO: Set defaults for all state variables.
- */
-lua_State *Lua;
-
 const char *temporary_name_format = "tmp_%d";
 int temporary_name = 0;
 
-void debug(const char *msg);
-int unpack_args(lua_State *L, const char *function, ScriptValue *args, const char *type_string);
-
-/* Unpacks the lua state according to the type_string where the possible
- * types are:
+/*! \brief Our preferred current time format: milliseconds since epoch as an uint64_t.
  *
- * | char | C++ type  | description                            |
- * |------|-----------|----------------------------------------|
- * | `r`  | `double`  | Real number: checks for NaN by default |
- * | `i`  | `int32_t` | 32-bit signed integer                  |
- * | `b`  | `bool`    | Boolean: true or false.                |
- * | `s`  | `QString` | A string TODO: check for type          |
- *
- * TODO: better type checking
- *
- * Note the the lua_to* calls add one to account for lua's indexing from 1.
+ * \todo Check for failure due to porting or the 2038 problem.
  */
-int
-unpack_args(lua_State *L, const char *function, ScriptValue *args, const char *type_string)
+uint64_t
+current_time(void)
 {
-    int expected = strlen(type_string);
-    if (lua_gettop(L) < expected) {
-        return 0;
-    }
-
-    for (int i=0; type_string[i]; i++) {
-        switch (type_string[i]) {
-        case 'r': {
-            args[i].r = lua_tonumber(L, i+1);
-            if (std::isnan(args[i].r)) {
-                char message[100];
-                sprintf(message, "ERROR: %s argument %d is not a number.",
-                   function, i+1);
-                debug((const char*)message);
-                return 0;
-            }
-            break;
-        }
-        case 'i': {
-            args[i].i = lua_tointeger(L, i+1);
-            break;
-        }
-        case 's': {
-            args[i].s = lua_tostring(L, i+1);
-            break;
-        }
-        case 'b': {
-            args[i].b = lua_toboolean(L, i+1);
-            break;
-        }
-        default:
-            debug("ERROR: invalid character passed to type_string in arg_check");
-            break;
-        }
-    }
-    return 1;
+    const std::chrono::time_point now = std::chrono::system_clock::now();
+    const auto now_t = now.time_since_epoch();
+    const auto time_s = std::chrono::duration_cast<std::chrono::milliseconds>(now_t);
+    return time_s.count();
 }
 
 /* Convenience function to simplify unpacking vectors supplied as
@@ -151,7 +86,7 @@ void MainWindow::stub_testing()
 /* TODO: Append QSysInfo to string where applicable. */
 QString MainWindow::platformString()
 {
-    qDebug("Platform: %s", OS_STR);
+    debug("Platform: %s", OS_STR);
     return OS_STR;
 }
 
@@ -160,7 +95,7 @@ MainWindow::about()
 {
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    qDebug("about()");
+    debug("about()");
     QString appDir = qApp->applicationDirPath();
     QString appName = QApplication::applicationName();
     QString title = "About " + appName;
@@ -205,9 +140,10 @@ MainWindow::about()
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::tipOfTheDay()
+void
+MainWindow::tipOfTheDay()
 {
-    qDebug("tipOfTheDay()");
+    debug("tipOfTheDay()");
 
     QString appDir = qApp->applicationDirPath();
 
@@ -260,14 +196,16 @@ void MainWindow::tipOfTheDay()
     wizardTipOfTheDay->exec();
 }
 
-void MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
+void
+MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 {
     st[ST_TIP_OF_THE_DAY].b = checked;
 }
 
-void MainWindow::buttonTipOfTheDayClicked(int button)
+void
+MainWindow::buttonTipOfTheDayClicked(int button)
 {
-    qDebug("buttonTipOfTheDayClicked(%d)", button);
+    debug("buttonTipOfTheDayClicked(%d)", button);
     StringList tip_list = string_tables["tips"];
     if (button == QWizard::CustomButton1) {
         if (st[ST_CURRENT_TIP].i > 0) {
@@ -291,7 +229,8 @@ void MainWindow::buttonTipOfTheDayClicked(int button)
 }
 
 // Icons
-void MainWindow::iconResize(int iconSize)
+void
+MainWindow::iconResize(int iconSize)
 {
     this->setIconSize(QSize(iconSize, iconSize));
     layerSelector->     setIconSize(QSize(iconSize*4, iconSize));
@@ -391,75 +330,87 @@ void MainWindow::pickAddModeToggled()
     updatePickAddMode(val);
 }
 
-// Layer ToolBar
-void MainWindow::makeLayerActive()
+/* Layer ToolBar */
+void
+MainWindow::makeLayerActive()
 {
-    qDebug("makeLayerActive()");
-    qDebug("TODO: Implement makeLayerActive.");
+    debug("makeLayerActive()");
+    debug("TODO: Implement makeLayerActive.");
 }
 
-void MainWindow::layerManager()
+void
+MainWindow::layerManager()
 {
-    qDebug("layerManager()");
-    qDebug("TODO: Implement layerManager.");
-    LayerManager layman(this, this);
+    debug("layerManager()");
+    debug("TODO: Implement layerManager.");
+    LayerManager layman(_mainWin, _mainWin);
     layman.exec();
 }
 
-void MainWindow::layerPrevious()
+void
+MainWindow::layerPrevious()
 {
-    qDebug("layerPrevious()");
-    qDebug("TODO: Implement layerPrevious.");
+    debug("layerPrevious()");
+    debug("TODO: Implement layerPrevious.");
 }
 
-void MainWindow::layerSelectorIndexChanged(int index)
+void
+MainWindow::layerSelectorIndexChanged(int index)
 {
-    qDebug("layerSelectorIndexChanged(%d)", index);
+    debug("layerSelectorIndexChanged(%d)", index);
 }
 
-void MainWindow::colorSelectorIndexChanged(int index)
+void
+MainWindow::colorSelectorIndexChanged(int index)
 {
-    qDebug("colorSelectorIndexChanged(%d)", index);
+    debug("colorSelectorIndexChanged(%d)", index);
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     QRgb newColor;
-    if(comboBox)
-    {
+    if (comboBox) {
         bool ok = 0;
         //TODO: Handle ByLayer and ByBlock and Other...
         newColor = comboBox->itemData(index).toUInt(&ok);
-        if(!ok)
+        if (!ok) {
             QMessageBox::warning(this, tr("Color Selector Conversion Error"), tr("<b>An error has occured while changing colors.</b>"));
+        }
     }
-    else
+    else {
         QMessageBox::warning(this, tr("Color Selector Pointer Error"), tr("<b>An error has occured while changing colors.</b>"));
+    }
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { mdiWin->currentColorChanged(newColor); }
+    if (mdiWin) {
+        mdiWin->currentColorChanged(newColor);
+    }
 }
 
-void MainWindow::linetypeSelectorIndexChanged(int index)
+void
+MainWindow::linetypeSelectorIndexChanged(int index)
 {
-    qDebug("linetypeSelectorIndexChanged(%d)", index);
+    debug("linetypeSelectorIndexChanged(%d)", index);
 }
 
-void MainWindow::lineweightSelectorIndexChanged(int index)
+void
+MainWindow::lineweightSelectorIndexChanged(int index)
 {
-    qDebug("lineweightSelectorIndexChanged(%d)", index);
+    debug("lineweightSelectorIndexChanged(%d)", index);
 }
 
-void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
+void
+MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
-    qDebug("textFontSelectorCurrentFontChanged()");
+    debug("textFontSelectorCurrentFontChanged()");
     char command[200];
     sprintf(command, "set_text_font(%s)", qPrintable(font.family()));
     cmd(command);
 }
 
 // TODO: check that the toReal() conversion is ok
-void MainWindow::textSizeSelectorIndexChanged(int index)
+void
+MainWindow::textSizeSelectorIndexChanged(int index)
 {
-    qDebug("textSizeSelectorIndexChanged(%d)", index);
+    debug("textSizeSelectorIndexChanged(%d)", index);
     st[ST_TEXT_SIZE].i = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
@@ -493,7 +444,7 @@ QString MainWindow::getCurrentLineWeight()
 
 void MainWindow::deletePressed()
 {
-    qDebug("deletePressed()");
+    debug("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if(mdiWin) { mdiWin->deletePressed(); }
@@ -503,7 +454,7 @@ void MainWindow::deletePressed()
 void
 MainWindow::escapePressed()
 {
-    qDebug("escapePressed()");
+    debug("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if(mdiWin) { mdiWin->escapePressed(); }
@@ -515,20 +466,20 @@ MainWindow::escapePressed()
 void
 MainWindow::toggleGrid()
 {
-    qDebug("toggleGrid()");
+    debug("toggleGrid()");
     statusbar->statusBarGridButton->toggle();
 }
 
 void
 MainWindow::toggleRuler()
 {
-    qDebug("toggleRuler()");
+    debug("toggleRuler()");
     statusbar->statusBarRulerButton->toggle();
 }
 
 void MainWindow::toggleLwt()
 {
-    qDebug("toggleLwt()");
+    debug("toggleLwt()");
     statusbar->statusBarLwtButton->toggle();
 }
 
@@ -569,7 +520,7 @@ MainWindow::run(const char *filename)
     int status = luaL_dofile(Lua, filename);
     if (status) {
         printf("ERROR: %d\n", status);
-        qDebug("Failed to boot scripting environment.");
+        debug("Failed to boot scripting environment.");
     }
 }
 
@@ -581,7 +532,7 @@ MainWindow::runCommand(void)
 {
     QAction* act = qobject_cast<QAction*>(sender());
     if (act) {
-        qDebug("runCommand(%s)", qPrintable(act->objectName()));
+        debug("runCommand(%s)", qPrintable(act->objectName()));
         prompt->endCommand();
         prompt->setCurrentText(act->objectName());
         prompt->processInput();
@@ -594,7 +545,9 @@ MainWindow::runCommand(void)
 void
 MainWindow::runCommandMain(const QString& line)
 {
-    qDebug("runCommandMain(%s)", qPrintable(line));
+    char msg[200];
+    sprintf(msg, "runCommandMain(%s)", qPrintable(line));
+    debug(msg);
     // TODO: Uncomment this line when post-selection is available
     // if (!st[ST_SELECTION_MODE_PICKFIRST].b) {
     //     clear_selection();
@@ -606,7 +559,10 @@ MainWindow::runCommandMain(const QString& line)
 void
 MainWindow::runCommandClick(const QString& line, qreal x, qreal y)
 {
-    qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(line), x, y);
+    char msg[200];
+    sprintf(msg, "runCommandClick(%s, %.2f, %.2f)", qPrintable(line), x, y);
+    debug(msg);
+
     char mouse_pos[100];
     sprintf(mouse_pos, "mouse = {%f, %f}", x, y);
     state.context_flag = CONTEXT_CLICK;
@@ -616,27 +572,40 @@ MainWindow::runCommandClick(const QString& line, qreal x, qreal y)
 void
 MainWindow::runCommandMove(const QString& line, qreal x, qreal y)
 {
-    qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(line), x, y);
+    char msg[200];
+    sprintf(msg, "runCommandMove(%s, %.2f, %.2f)", qPrintable(line), x, y);
+    debug(msg);
+
     char mouse_pos[100];
     sprintf(mouse_pos, "mouse = {%f, %f}", x, y);
     state.context_flag = CONTEXT_MOVE;
     cmd(qPrintable(line));
 }
 
+/*
+ */
 void
 MainWindow::runCommandContext(const QString& line, const QString& str)
 {
-    qDebug("runCommandContext(%s, %s)", qPrintable(line), qPrintable(str));
+    char msg[200];
+    sprintf(msg, "runCommandContext(%s, %s)", qPrintable(line), qPrintable(str));
+    debug(msg);
+
     char context_str[100];
     sprintf(context_str, "prompt = \"%s\"", qPrintable(str));
     state.context_flag = CONTEXT_CONTEXT;
     cmd(qPrintable(line));
 }
 
+/*
+ */
 void
 MainWindow::runCommandPrompt(const QString& line, const QString& str)
 {
-    qDebug("runCommandPrompt(%s, %s)", qPrintable(line), qPrintable(str));
+    char msg[200];
+    sprintf(msg, "runCommandPrompt(%s, %s)", qPrintable(line), qPrintable(str));
+    debug(msg);
+
     char prompt[100];
     sprintf(prompt, "(define prompt \"%s\")", qPrintable(str));
     QString safeStr = str;
@@ -696,7 +665,7 @@ MainWindow::add_text_single(const QString& str, EmbVector position, qreal rot, b
     if(gview && gscene && stack)
     {
         TextSingleObject* obj = new TextSingleObject(str, position.x, -position.y, getCurrentColor());
-        obj->setObjectTextFont(st[ST_TEXT_FONT].s.c_str());
+        obj->setObjectTextFont(st[ST_TEXT_FONT].s);
         obj->setObjectTextSize(st[ST_TEXT_SIZE].i);
         obj->setObjectTextStyle(st[ST_TEXT_BOLD].b,
                                 st[ST_TEXT_ITALIC].b,
@@ -1260,7 +1229,7 @@ activeScene(void)
 MdiWindow*
 activeMdiWindow(void)
 {
-    qDebug("activeMdiWindow()");
+    debug("activeMdiWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     return mdiWin;
 }
@@ -1268,7 +1237,7 @@ activeMdiWindow(void)
 QUndoStack*
 activeUndoStack(void)
 {
-    qDebug("activeUndoStack()");
+    debug("activeUndoStack()");
     View* v = activeView();
     if (v) {
         QUndoStack* u = v->getUndoStack();
@@ -1285,12 +1254,6 @@ getCurrentColor(void)
         return mdiWin->curColor;
     }
     return 0; //TODO: return color ByLayer
-}
-
-void
-debug(const char *msg)
-{
-    qDebug(msg);
 }
 
 /* -- lua registerables --------------------------------------------------------
@@ -1382,8 +1345,8 @@ preview_on_f(lua_State *L)
         return 0;
     }
 
-    QString cloneStr = QString(args[0].s.c_str()).toUpper();
-    QString modeStr = QString(args[1].s.c_str()).toUpper();
+    QString cloneStr = QString(args[0].s).toUpper();
+    QString modeStr = QString(args[1].s).toUpper();
     double x = args[2].r;
     double y = args[3].r;
     double data = args[4].r;
@@ -1435,7 +1398,7 @@ print_area_f(lua_State *L)
     double w = args[2].r;
     double h = args[3].r;
 
-    qDebug("print_area_f(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
+    debug("print_area_f(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
     _mainWin->cmd("print");
     return 0;
@@ -1449,38 +1412,12 @@ rubber_f(lua_State *L)
     return 0;
 }
 
-/**
- * @brief Lua interface to core commands.
- *
- * User based interaction comes via this interface so we can parse
- * the differences between interaction contexts.
- *
- * TODO: currently can't pass arguments through to core commands.
- */
-int
-cmd_f(lua_State *L)
-{
-    ScriptValue args[2];
-    if (!unpack_args(L, "cmd_f", args, "s")) {
-        return 0;
-    }
-    if (state.context_flag == CONTEXT_MAIN) {
-        _mainWin->cmd("clear_rubber");
-        /* Some selection based commands need to override this. */
-        _mainWin->cmd("clear");
-    }
-    _mainWin->cmd(args[0].s.c_str());
-    /* TODO: conditional on if the command is open ended or not. */
-    _mainWin->cmd("end");
-    return 0;
-}
-
 /* . */
 int
 text_font_f(lua_State *L)
 {
     debug("TODO: text_font_f");
-    /* return QScriptValue(st[ST_TEXT_FONT].s.c_str()); */
+    /* return QScriptValue(st[ST_TEXT_FONT].s); */
     return 0;
 }
 
@@ -1503,7 +1440,7 @@ set_color_f(lua_State *L)
     if (!unpack_args(L, "set_color_f", args, "srrr")) {
         return 0;
     }
-    QString key = args[0].s.c_str();
+    QString key = args[0].s;
     double r = args[1].r;
     double g = args[2].r;
     double b = args[3].r;
@@ -1619,8 +1556,8 @@ set_rubber_text_f(lua_State *L)
     if (!unpack_args(L, "set_rubber_text_f", args, "ss")) {
         return 0;
     }
-    QString key = QString(args[0].s.c_str()).toUpper();
-    QString txt = args[1].s.c_str();
+    QString key = QString(args[0].s).toUpper();
+    QString txt = args[1].s;
 
     View* gview = activeView();
     if (gview) {
@@ -1637,7 +1574,7 @@ set_text_font_f(lua_State *L)
     const char *str = luaL_checkstring(L, 1);
 
     _mainWin->textFontSelector->setCurrentFont(QFont(str));
-    st[ST_TEXT_FONT].s = str;
+    strncpy(st[ST_TEXT_FONT].s, str, 200);
     return 0;
 }
 
@@ -1674,7 +1611,7 @@ alert_f(lua_State *L)
     if (!unpack_args(L, "alert_f", args, "s")) {
         return 0;
     }
-    prompt->alert(args[0].s.c_str());
+    prompt->alert(args[0].s);
     return 0;
 }
 
@@ -1687,7 +1624,7 @@ append_prompt_history_f(lua_State *L)
     if (!unpack_args(L, "append_prompt_history_f", args, "s")) {
         return 0;
     }
-    prompt->appendHistory(args[0].s.c_str());
+    prompt->appendHistory(args[0].s);
     return 0;
 }
 
@@ -1710,7 +1647,7 @@ debug_f(lua_State *L)
     if (!unpack_args(L, "debug_f", args, "s")) {
         return 0;
     }
-    qDebug("%s", args[0]);
+    debug(args[0].s);
     return 0;
 }
 
@@ -1724,8 +1661,9 @@ error_f(lua_State *L)
         return 0;
     }
 
-    String msg = "ERROR: (" + args[0].s + ") " + args[1].s;
-    prompt->setPrefix(QString(msg.c_str()));
+    char msg[1000];
+    sprintf(msg, "ERROR: (%s) %s", args[0].s, args[1].s);
+    prompt->setPrefix(QString(msg));
     prompt->appendHistory(QString());
     return 0;
 }
@@ -2108,7 +2046,7 @@ spare_rubber_f(lua_State *L)
         return 0;
     }
 
-    QString objID = QString(args[0].s.c_str()).toUpper();
+    QString objID = QString(args[0].s).toUpper();
 
     if (objID == "PATH") {
         _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);
@@ -2141,7 +2079,7 @@ set_cursor_shape_f(lua_State *L)
         return 0;
     }
 
-    QString shape = args[0].s.c_str();
+    QString shape = args[0].s;
     _mainWin->nativeSetCursorShape(shape);
     return 0;
 }
@@ -2305,107 +2243,6 @@ mirror_selected_f(lua_State *L)
 }
 
 /**
- * @brief Set a state variable to a lua variable.
- *
- * EXAMPLE: set("text_font", "Arial")
- *
- * FIXME: this is an untested draft.
- */
-int
-set_f(lua_State *L)
-{
-    if (!lua_isstring(L, 1)) {
-        debug("set: first argument not a string");
-        return 0;
-    }
-    const char *key = lua_tostring(L, 1);
-    ScriptValue value;
-    value.b = false;
-    if (lua_isboolean(L, 2)) {
-        value.b = lua_toboolean(L, 2);
-        return 0;
-    }
-    if (lua_isinteger(L, 2)) {
-        value.i = lua_tointeger(L, 2);
-        return 0;
-    }
-    if (lua_isstring(L, 2)) {
-        value.s = lua_tostring(L, 2);
-        return 0;
-    }
-    _mainWin->set(key, value);
-    return 0;
-}
-
-/**
- * @brief Get a state variable and pass it as a lua variable.
- *
- * EXAMPLE: font = get("text_font")
- *
- * @fixme this is an untested draft.
- */
-int
-get_f(lua_State *L)
-{
-    if (!lua_isstring(L, 1)) {
-        debug("get: first argument not a string");
-        return 0;
-    }
-    ScriptValue result = _mainWin->get(lua_tostring(L, 1));
-    lua_pushnumber(L, result.i);
-    return 1;
-}
-
-/*!
- * \brief Load TOML data and initialise lua registerables.
- *
- * Lua in Embroidermodder 2 uses a 2 stage boot process.
- *
- * 1. Built-in style hookups to Embroidermodder2 features which are
- *    lua functions.
- * 2. Commands written in lua-only which represent the QActions used by
- *    the interface in the menus, toolbars and command line.
- *
- * Each command loaded in boot step 3 has up to 5 contexts
- * (see the list of defines in the headers: grep for "CONTEXT_") and will switch
- * depending on what context it is called in.
- */
-bool
-script_env_boot(void)
-{
-    /** Setting up Lua. */
-    Lua = luaL_newstate();
-    luaL_openlibs(Lua);
-
-    /**
-     * Bootstrapping function to support complex scripting.
-     *
-     * Allow scripts to act on the program state using the command line like this::
-     *
-     *     -- Convert an example file from Tajima dst to Brother pes format.
-     *     cmd("open example.dst")
-     *     cmd("saveas example.pes")
-     */
-    lua_register(Lua, "cmd", cmd_f);
-    lua_register(Lua, "get", get_f);
-    lua_register(Lua, "set", set_f);
-
-    return true;
-}
-
-/**
- * @brief Free up the memory used by the scripting environment.
- *
- * This is necessary since all the script variables and headers are only
- * present in this file. Currently just the Lua state.
- */
-void
-script_env_free(void)
-{
-    lua_close(Lua);
-}
-
-/**
  * @note This has to run after script_env_boot because the command_map is
  *       populated by the script files called by it.
  *
@@ -2419,7 +2256,7 @@ script_env_free(void)
 void
 MainWindow::createAllActions()
 {
-    qDebug("Creating All Actions...");
+    debug("Creating All Actions...");
 
     for (int i=0; i<(int)command_map.size(); i++) {
         QString tooltip = tr(qPrintable(command_map[i].tooltip));

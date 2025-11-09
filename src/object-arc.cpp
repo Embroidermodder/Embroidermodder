@@ -11,15 +11,14 @@
 
 ArcObject::ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ArcObject Constructor()");
+    debug("ArcObject Constructor()");
     init(startX, startY, midX, midY, endX, endY, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ArcObject Constructor()");
-    if(obj)
-    {
+    debug("ArcObject Constructor()");
+    if (obj) {
         init(obj->objectStartX(), obj->objectStartY(), obj->objectMidX(), obj->objectMidY(), obj->objectEndX(), obj->objectEndY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
@@ -27,7 +26,7 @@ ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 
 ArcObject::~ArcObject()
 {
-    qDebug("ArcObject Destructor()");
+    debug("ArcObject Destructor()");
 }
 
 void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, Qt::PenStyle lineType)
@@ -54,7 +53,7 @@ void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal m
     EmbGeometry arc = emb_arc(startX, startY, midX, midY, endX, endY);
     EmbVector center = emb_center(&arc, &error);
     if (error) {
-        qDebug("Failed to find center.");
+        debug("Failed to find center.");
     }
 
     arcStartPoint = QPointF(startX - center.x, startY - center.y);
@@ -339,7 +338,7 @@ void ArcObject::updateRubber(QPainter* painter)
 
 void ArcObject::vulcanize()
 {
-    qDebug("ArcObject vulcanize()");
+    debug("ArcObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);

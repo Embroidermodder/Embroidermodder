@@ -11,13 +11,13 @@
 
 TextSingleObject::TextSingleObject(const QString& str, qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("TextSingleObject Constructor()");
+    debug("TextSingleObject Constructor()");
     init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("TextSingleObject Constructor()");
+    debug("TextSingleObject Constructor()");
     if(obj)
     {
         setObjectTextFont(obj->objectTextFont());
@@ -33,7 +33,7 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
 
 TextSingleObject::~TextSingleObject()
 {
-    qDebug("TextSingleObject Destructor()");
+    debug("TextSingleObject Destructor()");
 }
 
 void TextSingleObject::init(const QString& str, qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)
@@ -279,7 +279,7 @@ void TextSingleObject::updateRubber(QPainter* painter)
 
 void TextSingleObject::vulcanize()
 {
-    qDebug("TextSingleObject vulcanize()");
+    debug("TextSingleObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
