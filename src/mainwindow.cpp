@@ -1271,11 +1271,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    // Scripting
-    if (!script_env_boot()) {
-        return;
-    }
-
     statusbar = new StatusBar(this, this);
     this->setStatusBar(statusbar);
 
@@ -1304,8 +1299,6 @@ MainWindow::MainWindow() : QMainWindow(0)
 MainWindow::~MainWindow()
 {
     debug("MainWindow::Destructor()");
-
-    script_env_free();
 
     /* Prevent memory leaks by deleting any unpasted objects. */
     qDeleteAll(clipboard.begin(), clipboard.end());

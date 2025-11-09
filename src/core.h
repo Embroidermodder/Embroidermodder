@@ -22,10 +22,6 @@ extern "C" {
 #include <inttypes.h>
 #include <stdarg.h>
 
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-
 #include "embroidery.h"
 
 /* Integer and string constants and external table declarations.
@@ -558,15 +554,10 @@ uint64_t current_time(void);
 
 /* Scripting and state */
 void run_cmd(const char *line);
-bool script_env_boot(void);
-void script_env_free(void);
 void load_data();
-int unpack_args(lua_State *L, const char *function, ScriptValue *args,
-    const char *type_string);
 
 /* Global data */
 extern State state;
-extern lua_State *Lua;
 extern ScriptValue st[N_SETTINGS];
 extern const char *usage_msg;
 extern const char* _appName_;

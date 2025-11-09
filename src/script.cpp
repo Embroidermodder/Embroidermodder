@@ -1,13 +1,10 @@
-/*!
- * \file script.cpp
- * \brief Lua support for Embroidermodder.
- *
- * Having scripting available for users to alter their software reflects a
+/*
+ * Users having the ability to reconfigure their software reflects a
  * core principle of open source software. The full build environment for
  * Embroidermodder is too complex for most users to set up, especially on
  * Windows. So the "freedom" to alter the program would be seldom used.
- * Being able to write a script in any text editor and add it to
- * the build by adding a load call to "boot.lua" is therefore a core
+ * Being able to write macros and configuration files in any text editor
+ * and add it to the build by adding a load call to "boot.lua" is therefore a core
  * feature. We as core developers won't be using this flexibility much.
  *
  * While relying more on lua could make some core developers' work easier
@@ -44,22 +41,6 @@ current_time(void)
     const auto now_t = now.time_since_epoch();
     const auto time_s = std::chrono::duration_cast<std::chrono::milliseconds>(now_t);
     return time_s.count();
-}
-
-/* Convenience function to simplify unpacking vectors supplied as
- * neighboring arguments. Inverts the y-axis because generally that is
- * needed: if you need to override this, use the `no_y_invert` version.
- */
-EmbVector
-unpack_vector(ScriptValue *args, int offset)
-{
-    return emb_vector(args[offset].r, -args[offset+1].r);
-}
-
-EmbVector
-unpack_vector_no_y_invert(ScriptValue *args, int offset)
-{
-    return emb_vector(args[offset].r, args[offset+1].r);
 }
 
 /* A version which doesn't produce the same error message.
@@ -517,11 +498,13 @@ void MainWindow::promptInputNext()
 void
 MainWindow::run(const char *filename)
 {
+    /*
     int status = luaL_dofile(Lua, filename);
     if (status) {
         printf("ERROR: %d\n", status);
         debug("Failed to boot scripting environment.");
     }
+    */
 }
 
 /**
@@ -1266,7 +1249,7 @@ getCurrentColor(void)
 
 /* . */
 int
-allow_rubber_f(lua_State *L)
+allow_rubber_f(void)
 {
     View* gview = activeView();
     /*
@@ -1280,7 +1263,7 @@ allow_rubber_f(lua_State *L)
 
 /* . */
 int
-clear_rubber_f(lua_State *L)
+clear_rubber_f(void)
 {
     View* gview = activeView();
     if (gview) {
@@ -1291,7 +1274,7 @@ clear_rubber_f(lua_State *L)
 
 /* . */
 int
-delete_selected_f(lua_State *L)
+delete_selected_f(void)
 {
     View* gview = activeView();
     if (gview) {
@@ -1303,7 +1286,7 @@ delete_selected_f(lua_State *L)
 
 /* . */
 int
-messagebox_f(lua_State *L)
+messagebox_f(void)
 {
     debug("TODO: add_to_menu");
     /*
@@ -1326,7 +1309,7 @@ messagebox_f(lua_State *L)
 
 /* . */
 int
-preview_off_f(lua_State *L)
+preview_off_f(void)
 {
     debug("TODO: preview_off_f");
     View* gview = activeView();
@@ -1338,18 +1321,11 @@ preview_off_f(lua_State *L)
 
 /* . */
 int
-preview_on_f(lua_State *L)
+preview_on_f(const char *clone_str, const char *mode_str,
+    double x, double y, double data)
 {
-    ScriptValue args[5];
-    if (!unpack_args(L, "preview_on_f", args, "ssrrr")) {
-        return 0;
-    }
-
-    QString cloneStr = QString(args[0].s).toUpper();
-    QString modeStr = QString(args[1].s).toUpper();
-    double x = args[2].r;
-    double y = args[3].r;
-    double data = args[4].r;
+    QString cloneStr = QString(clone_str).toUpper();
+    QString modeStr = QString(mode_str).toUpper();
 
     int clone = PREVIEW_CLONE_NULL;
     int mode = PREVIEW_MODE_NULL;
@@ -1387,17 +1363,8 @@ preview_on_f(lua_State *L)
 
 /* . */
 int
-print_area_f(lua_State *L)
+print_area_f(double x, double y, double w, double h)
 {
-    ScriptValue args[5];
-    if (!unpack_args(L, "preview_on_f", args, "rrrr")) {
-        return 0;
-    }
-    double x = args[0].r;
-    double y = args[1].r;
-    double w = args[2].r;
-    double h = args[3].r;
-
     debug("print_area_f(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
     _mainWin->cmd("print");
@@ -1406,7 +1373,7 @@ print_area_f(lua_State *L)
 
 /* . */
 int
-rubber_f(lua_State *L)
+rubber_f(void)
 {
     debug("TODO: add_to_menu");
     return 0;
@@ -1414,7 +1381,7 @@ rubber_f(lua_State *L)
 
 /* . */
 int
-text_font_f(lua_State *L)
+text_font_f(void)
 {
     debug("TODO: text_font_f");
     /* return QScriptValue(st[ST_TEXT_FONT].s); */
@@ -1423,7 +1390,7 @@ text_font_f(lua_State *L)
 
 /* . */
 int
-vulcanize_f(lua_State *L)
+vulcanize_f(void)
 {
     View* gview = activeView();
     if (gview) {
@@ -1434,16 +1401,9 @@ vulcanize_f(lua_State *L)
 
 /* . */
 int
-set_color_f(lua_State *L)
+set_color_f(const char *key_, double r, double g, double b)
 {
-    ScriptValue args[4];
-    if (!unpack_args(L, "set_color_f", args, "srrr")) {
-        return 0;
-    }
-    QString key = args[0].s;
-    double r = args[1].r;
-    double g = args[2].r;
-    double b = args[3].r;
+    QString key = key_;
 
     if ((r < 0) || (r > 255)) {
         debug("ERROR set_color(): r value must be in range 0-255");
@@ -1478,7 +1438,7 @@ set_color_f(lua_State *L)
 
 /* . */
 int
-set_rubber_mode_f(lua_State *L)
+set_rubber_mode_f(void)
 {
     debug("TODO: add_to_menu");
     /*
@@ -1550,14 +1510,10 @@ set_rubber_mode_f(lua_State *L)
 
 /* . */
 int
-set_rubber_text_f(lua_State *L)
+set_rubber_text_f(const char *key_, const char *txt_)
 {
-    ScriptValue args[2];
-    if (!unpack_args(L, "set_rubber_text_f", args, "ss")) {
-        return 0;
-    }
-    QString key = QString(args[0].s).toUpper();
-    QString txt = args[1].s;
+    QString key = QString(key_).toUpper();
+    QString txt = txt_;
 
     View* gview = activeView();
     if (gview) {
@@ -1568,11 +1524,9 @@ set_rubber_text_f(lua_State *L)
 
 /* . */
 int
-set_text_font_f(lua_State *L)
+set_text_font_f(const char *str)
 {
     debug("TODO: add_to_menu");
-    const char *str = luaL_checkstring(L, 1);
-
     _mainWin->textFontSelector->setCurrentFont(QFont(str));
     strncpy(st[ST_TEXT_FONT].s, str, 200);
     return 0;
@@ -1580,11 +1534,9 @@ set_text_font_f(lua_State *L)
 
 /* TODO: convert set_rubber_point_f. */
 int
-set_rubber_point_f(lua_State *L)
+set_rubber_point_f(const char *key_, double x, double y)
 {
-    QString key = QString(luaL_checkstring(L, 1)).toUpper();
-    double x = lua_tonumber(L, 2);
-    double y = lua_tonumber(L, 3);
+    QString key = QString(key_).toUpper();
 
     if (std::isnan(x)) {
         debug("TypeError, set_rubber_point_f: second argument failed isNaN check.");
@@ -1605,33 +1557,25 @@ set_rubber_point_f(lua_State *L)
 /* Adds the lua function (alert "EXAMPLE ALERT").
  */
 int
-alert_f(lua_State *L)
+alert_f(const char *msg)
 {
-    ScriptValue args[1];
-    if (!unpack_args(L, "alert_f", args, "s")) {
-        return 0;
-    }
-    prompt->alert(args[0].s);
+    prompt->alert(msg);
     return 0;
 }
 
 /*
  */
 int
-append_prompt_history_f(lua_State *L)
+append_prompt_history_f(const char *msg)
 {
-    ScriptValue args[1];
-    if (!unpack_args(L, "append_prompt_history_f", args, "s")) {
-        return 0;
-    }
-    prompt->appendHistory(args[0].s);
+    prompt->appendHistory(msg);
     return 0;
 }
 
 /* Adds the lua function (blink-prompt).
  */
 int
-blink_f(lua_State *L)
+blink_f(void)
 {
     prompt->startBlinking();
     return 0;
@@ -1641,29 +1585,20 @@ blink_f(lua_State *L)
  *     (debug "message")
  */
 int
-debug_f(lua_State *L)
+debug_f(const char *msg)
 {
-    ScriptValue args[1];
-    if (!unpack_args(L, "debug_f", args, "s")) {
-        return 0;
-    }
-    debug(args[0].s);
+    debug(msg);
     return 0;
 }
 
 /* Adds the lua function (error "EXAMPLE ERROR").
  */
 int
-error_f(lua_State *L)
+error_f(const char *context, const char *msg)
 {
-    ScriptValue args[1];
-    if (!unpack_args(L, "error_f", args, "ss")) {
-        return 0;
-    }
-
-    char msg[1000];
-    sprintf(msg, "ERROR: (%s) %s", args[0].s, args[1].s);
-    prompt->setPrefix(QString(msg));
+    char msg_[1000];
+    sprintf(msg_, "ERROR: (%s) %s", context, msg);
+    prompt->setPrefix(QString(msg_));
     prompt->appendHistory(QString());
     return 0;
 }
@@ -1676,7 +1611,7 @@ error_f(lua_State *L)
  * TODO: finish reporting here.
  */
 int
-report_state_f(lua_State *L)
+report_state_f(void)
 {
     FILE *f = fopen("state.txt", "w");
     if (!f) {
@@ -1689,21 +1624,21 @@ report_state_f(lua_State *L)
 
 /* . */
 int
-color_selector_f(lua_State *L)
+color_selector_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-design_details_f(lua_State *L)
+design_details_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-disable_move_rapid_fire_f(lua_State *L)
+disable_move_rapid_fire_f(void)
 {
     View* gview = activeView();
     if (gview) {
@@ -1714,7 +1649,7 @@ disable_move_rapid_fire_f(lua_State *L)
 
 /* . */
 int
-disable_prompt_rapid_fire_f(lua_State *L)
+disable_prompt_rapid_fire_f(void)
 {
     prompt->disableRapidFire();
     return 0;
@@ -1722,21 +1657,21 @@ disable_prompt_rapid_fire_f(lua_State *L)
 
 /* . */
 int
-distance_f(lua_State *L)
+distance_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-dolphin_f(lua_State *L)
+dolphin_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-enable_move_rapid_fire_f(lua_State *L)
+enable_move_rapid_fire_f(void)
 {
     View* gview = activeView();
     if (gview) {
@@ -1747,7 +1682,7 @@ enable_move_rapid_fire_f(lua_State *L)
 
 /* . */
 int
-enable_prompt_rapid_fire_f(lua_State *L)
+enable_prompt_rapid_fire_f(void)
 {
     prompt->enableRapidFire();
     return 0;
@@ -1755,187 +1690,187 @@ enable_prompt_rapid_fire_f(lua_State *L)
 
 /* . */
 int
-erase_f(lua_State *L)
+erase_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-freeze_all_layers_f(lua_State *L)
+freeze_all_layers_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-heart_f(lua_State *L)
+heart_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-hide_all_layers_f(lua_State *L)
+hide_all_layers_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-layers_f(lua_State *L)
+layers_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-layer_previous_f(lua_State *L)
+layer_previous_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-layer_selector_f(lua_State *L)
+layer_selector_f(void)
 {
     return 0;
 }
 
 int
-line_type_selector_f(lua_State *L)
+line_type_selector_f(void)
 {
     return 0;
 }
 
 int
-line_weight_selector_f(lua_State *L)
+line_weight_selector_f(void)
 {
     return 0;
 }
 
 int
-locate_point_f(lua_State *L)
-{
-    return 0;
-}
-
-/* . */
-int
-lock_all_layers_f(lua_State *L)
+locate_point_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-make_layer_current_f(lua_State *L)
+lock_all_layers_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-move_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-path_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-polygon_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-polyline_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-quickleader_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-rgb_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-rotate_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-selectall_f(lua_State *L)
-{
-    return 0;
-}
-
-int
-singlelinetext_f(lua_State *L)
+make_layer_current_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-print_f(lua_State *L)
+move_f(void)
 {
     return 0;
 }
 
 int
-scale_f(lua_State *L)
+path_f(void)
 {
     return 0;
 }
 
 int
-show_all_layers_f(lua_State *L)
+polygon_f(void)
 {
     return 0;
 }
 
 int
-snowflake_f(lua_State *L)
+polyline_f(void)
 {
     return 0;
 }
 
 int
-star_f(lua_State *L)
+quickleader_f(void)
 {
     return 0;
 }
 
 int
-syswindows_f(lua_State *L)
+rgb_f(void)
+{
+    return 0;
+}
+
+int
+rotate_f(void)
+{
+    return 0;
+}
+
+int
+selectall_f(void)
+{
+    return 0;
+}
+
+int
+singlelinetext_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-thaw_all_layers_f(lua_State *L)
+print_f(void)
+{
+    return 0;
+}
+
+int
+scale_f(void)
+{
+    return 0;
+}
+
+int
+show_all_layers_f(void)
+{
+    return 0;
+}
+
+int
+snowflake_f(void)
+{
+    return 0;
+}
+
+int
+star_f(void)
+{
+    return 0;
+}
+
+int
+syswindows_f(void)
 {
     return 0;
 }
 
 /* . */
 int
-tip_of_the_day_f(lua_State *L)
+thaw_all_layers_f(void)
+{
+    return 0;
+}
+
+/* . */
+int
+tip_of_the_day_f(void)
 {
     _mainWin->tipOfTheDay();
     return 0;
@@ -1945,24 +1880,23 @@ tip_of_the_day_f(lua_State *L)
  *     (todo "Missing feature description")
  */
 int
-todo_f(lua_State *L)
+todo(const char *strCmd, const char *strTodo)
 {
-    QString strCmd(luaL_checkstring(L, 1));
-    QString strTodo(luaL_checkstring(L, 2));
-
-    prompt->alert("TODO: (" + strCmd + ") " + strTodo);
+    char msg[200];
+    sprintf(msg, "TODO: (%s) %s", strCmd, strTodo);
+    prompt->alert(msg);
     return 0;
 }
 
 int
-unlock_all_layers_f(lua_State *L)
+unlock_all_layers_f(void)
 {
     return 0;
 }
 
 /* TODO: move add_rubber to script */
 int
-add_rubber_f(lua_State *L)
+add_rubber_f(void)
 {
     /*
     if (context->argumentCount() != 1) {
@@ -2039,14 +1973,9 @@ add_rubber_f(lua_State *L)
 
 /* . */
 int
-spare_rubber_f(lua_State *L)
+spare_rubber_f(const char *obj_type)
 {
-    ScriptValue args[1];
-    if (!unpack_args(L, "spare_rubber_f", args, "s")) {
-        return 0;
-    }
-
-    QString objID = QString(args[0].s).toUpper();
+    QString objID = QString(obj_type).toUpper();
 
     if (objID == "PATH") {
         _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);
@@ -2072,42 +2001,27 @@ spare_rubber_f(lua_State *L)
 
 
 int
-set_cursor_shape_f(lua_State *L)
+set_cursor_shape_f(const char *shape)
 {
-    ScriptValue args[1];
-    if (!unpack_args(L, "set_cursor_shape_f", args, "s")) {
-        return 0;
-    }
-
-    QString shape = args[0].s;
-    _mainWin->nativeSetCursorShape(shape);
+    _mainWin->nativeSetCursorShape(QString(shape));
     return 0;
 }
 
 int
-calculate_angle_f(lua_State *L)
+calculate_angle_f(double x1, double y1, double x2, double y2)
 {
-    ScriptValue args[4];
-    if (!unpack_args(L, "calculate_angle_f", args, "rrrr")) {
-        return 0;
-    }
-
-    EmbVector start = emb_vector(args[0].r, args[1].r);
-    EmbVector end = emb_vector(args[2].r, args[3].r);
+    EmbVector start = emb_vector(x1, y1);
+    EmbVector end = emb_vector(x2, y2);
     //return QScriptValue(_mainWin->nativeCalculateAngle(x1, y1, x2, y2));
     return 0;
 }
 
 /* . */
 int
-calculate_distance_f(lua_State *L)
+calculate_distance_f(double x1, double y1, double x2, double y2)
 {
-    ScriptValue args[4];
-    if (!unpack_args(L, "calculate_distance_f", args, "rrrr")) {
-        return 0;
-    }
-    EmbVector start = emb_vector(args[0].r, args[1].r);
-    EmbVector end = emb_vector(args[2].r, args[3].r);
+    EmbVector start = emb_vector(x1, y1);
+    EmbVector end = emb_vector(x2, y2);
     EmbVector line = emb_vector_subtract(end, start);
 
     //return QScriptValue(emb_vector_length(line));
@@ -2116,20 +2030,15 @@ calculate_distance_f(lua_State *L)
 
 /* . */
 int
-perpendicular_distance_f(lua_State *L)
+perpendicular_distance_f(double px, double py, double x1, double y1, double x2, double y2)
 {
-    ScriptValue args[6];
-    if (!unpack_args(L, "perpendicular_distance_f", args, "rrrrrr")) {
-        return 0;
-    }
-
 //    return QScriptValue(_mainWin->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
     return 0;
 }
 
 /* . */
 int
-add_to_selection_f(lua_State *L)
+add_to_selection_f(void)
 {
     //TODO: finish
     return 0;
@@ -2137,56 +2046,36 @@ add_to_selection_f(lua_State *L)
 
 /* . */
 int
-cut_selected_f(lua_State *L)
+cut_selected_f(double x1, double y1)
 {
-    ScriptValue args[2];
-    if (!unpack_args(L, "cut_selected_f", args, "rr")) {
-        return 0;
-    }
-
-    EmbVector position = unpack_vector(args, 0);
+    EmbVector position = emb_vector(x1, -y1);
     // TODO: cut selected at position
     return 0;
 }
 
 /* . */
 int
-copy_selected_f(lua_State *L)
+copy_selected_f(double x1, double y1)
 {
-    ScriptValue args[2];
-    if (!unpack_args(L, "copy_selected_f", args, "rr")) {
-        return 0;
-    }
-
-    EmbVector position = unpack_vector(args, 0);
+    EmbVector position = emb_vector(x1, -y1);
     // TODO: copy selected at position
     return 0;
 }
 
 /* . */
 int
-paste_selected_f(lua_State *L)
+paste_selected_f(double x1, double y1)
 {
-    ScriptValue args[2];
-    if (!unpack_args(L, "paste_selected_f", args, "rr")) {
-        return 0;
-    }
-
-    EmbVector position = unpack_vector(args, 0);
+    EmbVector position = emb_vector(x1, -y1);
     // TODO: paste selected at position
     return 0;
 }
 
 /* . */
 int
-move_selected_f(lua_State *L)
+move_selected_f(double x1, double y1)
 {
-    ScriptValue args[2];
-    if (!unpack_args(L, "move_selected_f", args, "rr")) {
-        return 0;
-    }
-
-    EmbVector delta = unpack_vector(args, 0);
+    EmbVector delta = emb_vector(x1, -y1);
     View* gview = activeView();
     if (gview) {
         gview->moveSelected(delta.x, delta.y);
@@ -2196,17 +2085,8 @@ move_selected_f(lua_State *L)
 
 /* . */
 int
-scale_selected_f(lua_State *L)
+scale_selected_f(double x, double y, double factor)
 {
-    ScriptValue args[3];
-    if (!unpack_args(L, "scale_selected_f", args, "rrr")) {
-        return 0;
-    }
-
-    double x = args[0].r;
-    double y = args[1].r;
-    double factor = args[2].r;
-
     if (factor <= 0.0) {
         debug("ERROR scale_selected_f: scale factor must be greater than zero");
         return 0;
@@ -2218,27 +2098,17 @@ scale_selected_f(lua_State *L)
 
 /* . */
 int
-rotate_selected_f(lua_State *L)
+rotate_selected_f(double x, double y, double angle)
 {
-    ScriptValue args[3];
-    if (!unpack_args(L, "rotate_selected_f", args, "rrr")) {
-        return 0;
-    }
-
-    _mainWin->nativeRotateSelected(args[0].r, args[1].r, args[2].r);
+    _mainWin->nativeRotateSelected(x, y, angle);
     return 0;
 }
 
 /* . */
 int
-mirror_selected_f(lua_State *L)
+mirror_selected_f(double x1, double y1, double x2, double y2)
 {
-    ScriptValue args[4];
-    if (!unpack_args(L, "mirror_selected_f", args, "rrrr")) {
-        return 0;
-    }
-
-    _mainWin->nativeMirrorSelected(args[0].r, args[1].r, args[2].r, args[3].r);
+    _mainWin->nativeMirrorSelected(x1, y1, x2, y2);
     return 0;
 }
 

@@ -19,12 +19,6 @@
 
 #include "core.h"
 
-/* Functions which refer to lua_State and need declaration. */
-int unpack_args(lua_State *L, const char *function, ScriptValue *args, const char *type_string);
-int cmd_f(lua_State *L);
-int get_f(lua_State *L);
-int set_f(lua_State *L);
-
 State state = {
     .debug = 1,
     .play_mode = 0,
@@ -154,8 +148,6 @@ State state = {
     .mode = 0
 };
 
-lua_State *Lua;
-
 const char *usage_msg = \
     " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n" \
     "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n" \
@@ -251,7 +243,7 @@ debug(const char *msg, ...)
     /* Argument parsing */
     int pos = 0;
     formatted_msg[0] = 0;
-    va_start(args, n_args);
+    va_start(args, msg);
     for (int i=0; msg[i]; i++) {
         /* If the formatting character '%' appears, and it is not followed
          * by '%' then we need to interpret another argument.
@@ -296,61 +288,7 @@ debug(const char *msg, ...)
     fclose(f);
 }
 
-/* Unpacks the lua state according to the type_string where the possible
- * types are:
- *
- * | char | C++ type  | description                            |
- * |------|-----------|----------------------------------------|
- * | `r`  | `double`  | Real number: checks for NaN by default |
- * | `i`  | `int32_t` | 32-bit signed integer                  |
- * | `b`  | `bool`    | Boolean: true or false.                |
- * | `s`  | `QString` | A string TODO: check for type          |
- *
- * TODO: better type checking
- *
- * Note the the lua_to* calls add one to account for lua's indexing from 1.
- */
-int
-unpack_args(lua_State *L, const char *function, ScriptValue *args, const char *type_string)
-{
-    int expected = strlen(type_string);
-    if (lua_gettop(L) < expected) {
-        return 0;
-    }
-
-    for (int i=0; type_string[i]; i++) {
-        switch (type_string[i]) {
-        case 'r': {
-            args[i].r = lua_tonumber(L, i+1);
-            if (isnan(args[i].r)) {
-                char message[100];
-                sprintf(message, "ERROR: %s argument %d is not a number.",
-                   function, i+1);
-                debug((const char*)message);
-                return 0;
-            }
-            break;
-        }
-        case 'i': {
-            args[i].i = lua_tointeger(L, i+1);
-            break;
-        }
-        case 's': {
-            strncpy(args[i].s, lua_tostring(L, i+1), 200);
-            break;
-        }
-        case 'b': {
-            args[i].b = lua_toboolean(L, i+1);
-            break;
-        }
-        default:
-            debug("ERROR: invalid character passed to type_string in arg_check");
-            break;
-        }
-    }
-    return 1;
-}
-
+#if 0
 /*
  * Lua interface to core commands.
  *
@@ -477,4 +415,5 @@ script_env_free(void)
 {
     lua_close(Lua);
 }
+#endif
 

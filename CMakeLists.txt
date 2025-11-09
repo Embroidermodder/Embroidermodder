@@ -42,7 +42,6 @@ endif()
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 
 add_subdirectory(extern/libembroidery)
-add_subdirectory(extern/lua)
 
 # The makers of CMake advise that you do not glob source files.
 #
@@ -60,22 +59,9 @@ qt_add_executable(embroidermodder2
     ${SRC}/mainwindow.cpp
     ${SRC}/mdiarea.cpp
     ${SRC}/mdiwindow.cpp
-    ${SRC}/object-arc.cpp
-    ${SRC}/object-base.cpp
-    ${SRC}/object-circle.cpp
-    ${SRC}/object-dimleader.cpp
-    ${SRC}/object-ellipse.cpp
-    ${SRC}/object-image.cpp
-    ${SRC}/object-line.cpp
-    ${SRC}/object-path.cpp
-    ${SRC}/object-point.cpp
-    ${SRC}/object-polygon.cpp
-    ${SRC}/object-polyline.cpp
-    ${SRC}/object-rect.cpp
-    ${SRC}/object-save.cpp
-    ${SRC}/object-textsingle.cpp
     ${SRC}/preview-dialog.cpp
     ${SRC}/property-editor.cpp
+    ${SRC}/save.cpp
     ${SRC}/script.cpp
     ${SRC}/selectbox.cpp
     ${SRC}/settings-dialog.cpp
@@ -83,6 +69,25 @@ qt_add_executable(embroidermodder2
     ${SRC}/undo-commands.cpp
     ${SRC}/undo-editor.cpp
     ${SRC}/view.cpp
+
+    ${SRC}/objects/arc.cpp
+    ${SRC}/objects/base.cpp
+    ${SRC}/objects/circle.cpp
+    ${SRC}/objects/dimleader.cpp
+    ${SRC}/objects/ellipse.cpp
+    ${SRC}/objects/image.cpp
+    ${SRC}/objects/line.cpp
+    ${SRC}/objects/path.cpp
+    ${SRC}/objects/point.cpp
+    ${SRC}/objects/polygon.cpp
+    ${SRC}/objects/polyline.cpp
+    ${SRC}/objects/rectangle.cpp
+    ${SRC}/objects/textsingle.cpp
+
+    ${SRC}/designs/dolphin.cpp
+    ${SRC}/designs/heart.cpp
+    ${SRC}/designs/snowflake.cpp
+    ${SRC}/designs/star.cpp
 
     ${SRC}/embroidermodder.h
 
@@ -96,8 +101,6 @@ qt_add_executable(embroidermodder2
 file(COPY "${CMAKE_SOURCE_DIR}/images"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/icons"
-	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_SOURCE_DIR}/scripts"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/samples"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
@@ -113,7 +116,6 @@ file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 include_directories(
 	${CMAKE_SOURCE_DIR}/embroidermodder2
 	${CMAKE_SOURCE_DIR}/extern/libembroidery
-	${CMAKE_SOURCE_DIR}/extern/lua/src
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
@@ -121,7 +123,6 @@ target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Widgets
 	Qt6::PrintSupport
 	embroidery_static
-	lua
 	${OPENGL_LIBRARIES}
 )
 
