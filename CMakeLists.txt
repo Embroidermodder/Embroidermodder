@@ -114,7 +114,7 @@ file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/embroidermodder2
+	${CMAKE_SOURCE_DIR}/src
 	${CMAKE_SOURCE_DIR}/extern/libembroidery
 )
 

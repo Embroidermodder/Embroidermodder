@@ -667,7 +667,7 @@ function prompt(str)
     }
     else if(global.mode == global.mode_RAPID)
     {
-        if (str == "RAPID_ENTER") then
+        if (str == "RAPID_ENTER") {
             if(global.text == "")
             {
                 endCommand();
@@ -677,12 +677,13 @@ function prompt(str)
                 vulcanize();
                 endCommand()-- -- TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point
             }
-        else
+        }
+        else {
             global.text = str;
             setRubberText("TEXT_RAPID", global.text);
-        end
-    end
-end
+        }
+    }
+}
 
 #endif
 
