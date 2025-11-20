@@ -226,7 +226,7 @@ load_settings_data(void)
     for (size_t i=0; i<N_SETTINGS; i++) {
         auto current = table.at(i);
 
-        settings_table[i].section = get_toml_string(current, "section");
+        strncpy(settings_table[i].section, get_toml_string(current, "section"), MAX_STRING_LENGTH-1);
         settings_table[i].key = get_toml_string(current, "key");
         settings_table[i].default_value = get_toml_string(current, "default_value");
         settings_table[i].type = get_toml_string(current, "type")[0];

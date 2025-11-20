@@ -20,6 +20,10 @@ elif [ "$1" = "Windows" ]; then
 
 fi
 
+cd extern/SDL_ttf/external || exit 31
+./download.sh || exit 32
+cd ../../.. || exit 33
+
 git submodule init || exit 2
 git submodule update || exit 3
 
@@ -27,3 +31,4 @@ mkdir build || exit 4
 cd build
 cmake .. || exit 5
 cmake --build .
+

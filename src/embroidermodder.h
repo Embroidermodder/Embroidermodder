@@ -255,7 +255,7 @@ typedef struct Command_ {
 
 /** @brief Data for a given interface setting. */
 typedef struct SettingsData_ {
-    String section;
+    EmbString section;
     String key;
     String default_value;
     char type;

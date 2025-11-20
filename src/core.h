@@ -40,8 +40,7 @@ extern "C" {
 #define VERSION_PATCH                  0
 #define VERSION_TAG              "alpha"
 
-/* FIXME: this needs changing in libembroidery. */
-#undef N_COMMANDS
+#define MAX_TABLE                    200
 
 /* Command IDs: for faster internal calls of CAD commands
  * (see the switch table in command.cpp).
@@ -493,14 +492,17 @@ extern "C" {
 #define VIEW_COLOR_CROSSHAIR      "VIEW_COLOR_CROSSHAIR"
 #define VIEW_COLOR_GRID           "VIEW_COLOR_GRID"
 
+/* Each instance of a ScriptValue occupies about 217 bytes and we allow for
+ * N_SETTINGS = 107 of them this means the "st" array uses less than 24 kb.
+ */
 typedef struct ScriptValue_ {
-    char s[200];
-    char l[20][200];
-    int32_t i;
+    EmbString s; /* Allows for 200 byte long strings including the null terminator. */
+    int32_t i; /* Explicitly stated to be the 4-byte version of integers
+                * so we don't go out of bounds. */
     uint32_t u;
-    double r;
-    bool b;
-    int length;
+    EmbReal r; /* Size determined by libembroidery: either 4 byte floats or 8 byte. */
+    uint8_t b; /* Not "bool" because we then don't have to declare stdbool
+                * in the global header. */
 } ScriptValue;
 
 /* Type declarations */
@@ -520,11 +522,25 @@ typedef struct ViewData_ {
 } ViewData;
 
 typedef struct State_ {
+    /* Meta */
+    char* name;
+    char* version;
+
+    /* Mode */
     uint8_t debug;
     uint8_t play_mode;
     uint8_t shift;
     uint64_t numOfDocs;
     uint64_t docIndex;
+
+    /* String tables */
+    EmbStringTable groupbox_order;
+    EmbStringTable menubar_order;
+    EmbStringTable top_toolbar_order;
+    EmbStringTable bottom_toolbar_order;
+    EmbStringTable left_toolbar_order;
+    EmbStringTable recent_files;
+    EmbStringTable test_script;
 
     char *command_names[MAX_COMMANDS];
     char *fill_list[MAX_COMMANDS];
@@ -544,24 +560,33 @@ typedef struct State_ {
     uint64_t mode;
 } State;
 
+void sdl_version(int argc, char *argv[]);
+
 /* Utilities */
 uint8_t willUnderflowInt32(int64_t a, int64_t b);
 uint8_t willOverflowInt32(int64_t a, int64_t b);
 int32_t roundToMultiple(bool roundUp, int32_t numToRound, int32_t multiple);
 void debug(const char *msg, ...);
-void temp_name(char *name, int *err);
 uint64_t current_time(void);
 
 /* Scripting and state */
 void run_cmd(const char *line);
-void load_data();
+void load_data(void);
+void free_data(void);
 
-/* Global data */
+/* Global data
+ *
+ * NOTE: Strings and string tables are fixed length whereever it doesn't
+ * significantly increase the size of the binary (for example, a variable larger
+ * than 200kb).
+ *
+ * Embroidermodder 2 is built to be mostly on stack memory to reduce misallocation
+ * of memory and invalid memory usage. This means when interacting with these
+ * structures we manually check the MAX_TABLE or MAX_STRING_LENGTH bounds.
+ */
 extern State state;
 extern ScriptValue st[N_SETTINGS];
 extern const char *usage_msg;
-extern const char* _appName_;
-extern const char* _appVer_;
 
 #ifdef __cplusplus
 }

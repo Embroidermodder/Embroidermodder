@@ -8,25 +8,81 @@
  * ----------------------------------------------------------------------------
  *
  * Core state manipulation tools and the declaration of the state.
+ *
+ * Main entry point for the experimental SDL version of Embroidermodder 2.
+ *
+ * This is mainly a graphical frontend to as much as possible of the same
+ * codebase as the Qt version.
  */
 
 #include <assert.h>
 #include <limits.h>
 #include <time.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <math.h>
 
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <SDL3_ttf/SDL_ttf.h>
+
 #include "core.h"
+#include "toml.h"
+
+#define WIDGET_BUTTON                  0
+#define WIDGET_SPINBOX                 1
+#define WIDGET_CHECKBOX                2
+#define WIDGET_LABEL                   3
+
+#define UI_VIEW                        0
+#define UI_TOOLBAR                     1
+#define UI_MESSAGEBOX                  2
+#define UI_PROMPT                      3
+#define UI_                      4
+
+typedef struct Widget_ {
+    SDL_FRect bounds;
+    unsigned char color[4];
+    unsigned char data[200];
+    int type;
+    int layer;
+} Widget;
 
 State state = {
+    /* Meta */
+    .name = "Embroidermodder",
+    .version  = "v2.0 alpha",
+
+    /* Modes */
     .debug = 1,
     .play_mode = 0,
     .shift = 0,
     .numOfDocs = 0,
     .docIndex = 0,
 
+    /* Widgets */
+
     /* String tables */
+    .groupbox_order = {
+        END_SYMBOL
+    },
+    .menubar_order = {
+        END_SYMBOL
+    },
+    .top_toolbar_order = {
+        END_SYMBOL
+    },
+    .bottom_toolbar_order = {
+        END_SYMBOL
+    },
+    .left_toolbar_order = {
+        END_SYMBOL
+    },
+    .recent_files = {
+        END_SYMBOL
+    },
     .command_names = {
         [CMD_NULL] = "null",
         [CMD_ABOUT] = "about",
@@ -166,8 +222,224 @@ const char *usage_msg = \
     "  -v, --version    Print the version number of embroidermodder and exit."        "\n" \
     "\n";
 
-const char* _appName_ = "Embroidermodder";
-const char* _appVer_  = "v2.0 alpha";
+EmbStringTable recent_files;
+
+int interface_padding = 10;
+int menubar_height = 40;
+int toolbar_height = 40;
+int window_width = 640;
+int window_height = 480;
+
+void render_label(SDL_Renderer *renderer, Widget *widget);
+void render_button(SDL_Renderer *renderer, Widget *widget);
+void render_error(SDL_Renderer *renderer, Widget *widget);
+void render_widget(SDL_Renderer *renderer, Widget *widget);
+void render_menubar(SDL_Renderer *renderer);
+void render_toolbars(SDL_Renderer *renderer, int n_toolbars);
+void render_mdiarea(SDL_Renderer *renderer);
+void render_view(SDL_Renderer *renderer);
+void render_prompt(SDL_Renderer *renderer);
+
+void
+sdl_version(int argc, char *argv[])
+{
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    SDL_Surface *surface;
+    SDL_Texture *texture;
+
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        debug("ERROR: Failed to initialize SDL.");
+        return;
+    }
+
+    if (!SDL_CreateWindowAndRenderer("Embroidermodder 2.0.0-alpha",
+        window_width, window_height, 0, &window, &renderer)) {
+        debug("ERROR: Failed to create window or renderer.");
+        return;
+    }
+
+    surface = SDL_LoadBMP("images/logo-spirals.bmp");
+    if (!surface) {
+        debug("ERROR: Failed to create main window surface.");
+        return;
+    }
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) {
+        debug("ERROR: Failed to create main window texture.");
+        return;
+    }
+
+    bool running = true;
+    while (running) {
+        SDL_Event event;
+        SDL_PollEvent(&event);
+        if (event.type == SDL_EVENT_QUIT) {
+            break;
+        }
+        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+        SDL_RenderClear(renderer);
+        SDL_RenderTexture(renderer, texture, NULL, NULL);
+        render_menubar(renderer);
+        render_toolbars(renderer, 2);
+        SDL_RenderPresent(renderer);
+    }
+
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
+    SDL_Quit();
+}
+
+/*
+ */
+void
+render_label(SDL_Renderer *renderer, Widget *widget)
+{
+    SDL_SetRenderDrawColor(renderer,
+        widget->color[0],
+        widget->color[1],
+        widget->color[2],
+        widget->color[3]);
+    SDL_RenderFillRect(renderer, &(widget->bounds));
+}
+
+/*
+ */
+void
+render_button(SDL_Renderer *renderer, Widget *widget)
+{
+    SDL_SetRenderDrawColor(renderer,
+        widget->color[0],
+        widget->color[1],
+        widget->color[2],
+        widget->color[3]);
+    SDL_RenderFillRect(renderer, &(widget->bounds));
+}
+
+/*
+ */
+void
+render_spinbox(SDL_Renderer *renderer, Widget *widget)
+{
+    SDL_SetRenderDrawColor(renderer,
+        widget->color[0],
+        widget->color[1],
+        widget->color[2],
+        widget->color[3]);
+    SDL_RenderFillRect(renderer, &(widget->bounds));
+}
+
+/*
+ */
+void
+render_checkbox(SDL_Renderer *renderer, Widget *widget)
+{
+    SDL_SetRenderDrawColor(renderer,
+        widget->color[0],
+        widget->color[1],
+        widget->color[2],
+        widget->color[3]);
+    SDL_RenderFillRect(renderer, &(widget->bounds));
+}
+
+/*
+ */
+void
+render_error(SDL_Renderer *renderer, Widget *widget)
+{
+    SDL_SetRenderDrawColor(renderer,
+        widget->color[0],
+        widget->color[1],
+        widget->color[2],
+        widget->color[3]);
+    SDL_RenderFillRect(renderer, &(widget->bounds));
+}
+
+/*
+ */
+void
+render_widget(SDL_Renderer *renderer, Widget *widget)
+{
+    switch (widget->type) {
+    case WIDGET_BUTTON:
+        render_button(renderer, widget);
+        break;
+    case WIDGET_SPINBOX:
+        render_spinbox(renderer, widget);
+        break;
+    case WIDGET_CHECKBOX:
+        render_checkbox(renderer, widget);
+        break;
+    case WIDGET_LABEL:
+        render_label(renderer, widget);
+        break;
+    default:
+        debug("ERROR: widget type unknown, renderering as a filled rectangle.");
+        render_error(renderer, widget);
+        break;
+    }
+}
+
+/* TODO: establish layers to order how widgets are rendered.
+ */
+void
+render_all_widgets(SDL_Renderer *renderer, Widget *widget_list, int n_widgets)
+{
+    for (int i=0; i<n_widgets; i++) {
+        render_widget(renderer, widget_list);
+    }
+}
+
+/*
+ */
+void
+render_menubar(SDL_Renderer *renderer)
+{
+    SDL_FRect rect;
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0x00);
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = window_width;
+    rect.h = menubar_height;
+    SDL_RenderFillRect(renderer, &rect);
+}
+
+/*
+ */
+void
+render_toolbars(SDL_Renderer *renderer, int n_toolbars)
+{
+    SDL_FRect rect;
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0x00);
+    rect.x = 0;
+    rect.y = menubar_height + interface_padding;
+    rect.w = window_width;
+    rect.h = n_toolbars * toolbar_height + (n_toolbars - 1) * interface_padding;
+    SDL_RenderFillRect(renderer, &rect);
+}
+
+/*
+ */
+void
+render_mdiarea(SDL_Renderer *renderer)
+{
+}
+
+/*
+ */
+void
+render_view(SDL_Renderer *renderer)
+{
+}
+
+/*
+ */
+void
+render_prompt(SDL_Renderer *renderer)
+{
+}
 
 uint8_t
 willUnderflowInt32(int64_t a, int64_t b)

@@ -38,14 +38,24 @@ sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind cmake
 
 ## Building
 
-We use a CMake build:
+Due to using the SDL_ttf library we recommend that, for the first build, developers
+use the provided build script `bin/build.sh` since some dependencies are gathered
+by this script. Call it as follows:
 
 ```
-mkdir build
+bash bin/build.sh
+```
+
+In subsequent builds you can use:
+
+```
 cd build
 cmake ..
 cmake --build .
 ```
+
+which will catch changes made to configuration files and add them to the built
+version.
 
 To run the build with a specified number of cores you can use:
 

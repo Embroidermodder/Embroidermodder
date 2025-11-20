@@ -5,6 +5,9 @@ project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 find_package(OpenGL REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -14,6 +17,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SDLTTF_VENDORED ON)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
@@ -42,6 +47,8 @@ endif()
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 
 add_subdirectory(extern/libembroidery)
+add_subdirectory(extern/SDL)
+add_subdirectory(extern/SDL_ttf)
 
 # The makers of CMake advise that you do not glob source files.
 #
@@ -91,8 +98,11 @@ qt_add_executable(embroidermodder2
 
     ${SRC}/embroidermodder.h
 
+    # C source code
     ${SRC}/core.c
     ${SRC}/core.h
+
+    ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 )
 
 # WARNING: This does NOT regenerate when the assets change, so you have to
@@ -116,6 +126,9 @@ file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 include_directories(
 	${CMAKE_SOURCE_DIR}/src
 	${CMAKE_SOURCE_DIR}/extern/libembroidery
+	${CMAKE_SOURCE_DIR}/extern/SDL/include
+	${CMAKE_SOURCE_DIR}/extern/SDL_ttf/include
+	${CMAKE_SOURCE_DIR}/extern/tomlc99
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
@@ -123,6 +136,8 @@ target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Widgets
 	Qt6::PrintSupport
 	embroidery_static
+	SDL3_ttf::SDL3_ttf
+	SDL3::SDL3
 	${OPENGL_LIBRARIES}
 )
 

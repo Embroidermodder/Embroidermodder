@@ -1,4 +1,12 @@
 /*
+ * Embroidermodder 2
+ * Copyright 2011-2025 The Embroidermodder Team
+ *
+ * Embroidermodder 2 is free and open software under the zlib license:
+ * see LICENSE.md for details.
+ *
+ * ----------------------------------------------------------------------------
+ *
  * The main starting point for loading the application and main window.
  *
  * This is the most frequently updated part of the source: new core developers would
@@ -75,20 +83,24 @@ main(int argc, char* argv[])
 #else
     QApplication app(argc, argv);
 #endif
-    app.setApplicationName(_appName_);
-    app.setApplicationVersion(_appVer_);
+    app.setApplicationName(state.name);
+    app.setApplicationVersion(state.version);
 
     QStringList filesToOpen;
 
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
         }
+        else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--sdl")  ) {
+            sdl_version(argc, argv);
+            exitApp = true;
+        }
         else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
             fprintf(stdout, "%s", usage_msg);
             exitApp = true;
         }
         else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
-            fprintf(stdout, "%s %s\n", _appName_, _appVer_);
+            fprintf(stdout, "%s %s\n", state.name, state.version);
             exitApp = true;
         }
         else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--test")) {
@@ -1322,19 +1334,20 @@ MainWindow::timerEvent(QTimerEvent * /* event */)
     update();
 }
 
-void MainWindow::recentMenuAboutToShow()
+void
+MainWindow::recentMenuAboutToShow()
 {
     debug("MainWindow::recentMenuAboutToShow()");
     menuHash["RECENT"]->clear();
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for (int i = 0; i < st[ST_RECENT_FILES].length; ++i) {
+    for (int i = 0; state.recent_files[i][0] != '_'; ++i) {
         /* If less than the max amount of entries add to menu. */
         if (i >= st[ST_RECENT_MAX_FILES].i) {
             break;
         }
-        recentFileInfo = QFileInfo(st[ST_RECENT_FILES].l[i]);
+        recentFileInfo = QFileInfo(state.recent_files[i]);
         if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
             recentValue.setNum(i+1);
             QAction* rAction;
@@ -1348,15 +1361,23 @@ void MainWindow::recentMenuAboutToShow()
                 rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
             }
             rAction->setCheckable(false);
-            const char *s = st[ST_RECENT_FILES].l[i];
+            const char *s = state.recent_files[i];
             rAction->setData(s);
             menuHash["RECENT"]->addAction(rAction);
             connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
         }
     }
+
+    /* Check that the maximum entries in table do not exceed the maximum table length. */
+    if (st[ST_RECENT_MAX_FILES].i >= MAX_TABLE) {
+        st[ST_RECENT_MAX_FILES].i = MAX_TABLE;
+    }
+
     /* Ensure the list only has max amount of entries. */
-    if (st[ST_RECENT_FILES].length > st[ST_RECENT_MAX_FILES].i) {
-        st[ST_RECENT_FILES].length = st[ST_RECENT_MAX_FILES].i;
+    int length = table_length((char**)state.recent_files);
+    int max_length = st[ST_RECENT_MAX_FILES].i;
+    if (length > max_length) {
+        strcpy(state.recent_files[max_length-1], END_SYMBOL);
     }
 }
 
@@ -2064,7 +2085,7 @@ void MainWindow::readSettings()
     }
 
     for (int i=0; i<N_SETTINGS; i++) {
-        QString key_(settings_table[i].section.c_str());
+        QString key_(settings_table[i].section);
         key_ += QString("/") + QString(settings_table[i].key.c_str());
         switch (settings_table[i].type) {
         case 's': {
@@ -2109,7 +2130,7 @@ void MainWindow::writeSettings()
     settings_file.setValue("Window/Size", size());
 
     for (int i=0; i<N_SETTINGS; i++) {
-        QString key_(settings_table[i].section.c_str());
+        QString key_(settings_table[i].section);
         key_ += QString("/") + QString(settings_table[i].key.c_str());
         switch (settings_table[i].type) {
         case 's': {
