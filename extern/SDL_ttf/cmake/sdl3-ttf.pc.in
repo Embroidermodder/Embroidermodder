@@ -1,0 +1,13 @@
+prefix=@SDL_PKGCONFIG_PREFIX@
+exec_prefix=${prefix}
+libdir=@LIBDIR_FOR_PKG_CONFIG@
+includedir=@INCLUDEDIR_FOR_PKG_CONFIG@
+
+Name: SDL3_ttf
+Description: ttf library for Simple DirectMedia Layer with FreeType 2 support
+Version: @PROJECT_VERSION@
+Requires: sdl3 >= @SDL_REQUIRED_VERSION@
+Libs: -L${libdir} -lSDL3_ttf
+Requires.private: @PC_REQUIRES@
+Libs.private: @PC_LIBS@
+Cflags: -I${includedir}
