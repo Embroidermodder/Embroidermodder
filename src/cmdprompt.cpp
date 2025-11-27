@@ -416,7 +416,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
         }
     }
     else {
-        _mainWin->cmd(qPrintable(cmdtxt));
+        cmd(qPrintable(cmdtxt));
         /*
         if (aliasHash->contains(cmdtxt)) {
             cmdActive = true;

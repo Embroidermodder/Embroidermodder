@@ -41,97 +41,6 @@ extern "C" {
 #define VERSION_TAG              "alpha"
 
 #define MAX_TABLE                    200
-
-/* Command IDs: for faster internal calls of CAD commands
- * (see the switch table in command.cpp).
- */
-#define CMD_NULL                       0
-#define CMD_ABOUT                      1
-#define CMD_STUB                       2
-#define CMD_CUT                        3
-#define CMD_COPY                       4
-#define CMD_PASTE                      5
-#define CMD_SELECT_ALL                 6
-#define CMD_DETAILS                    7
-#define CMD_UPDATES                    8
-#define CMD_WHATS_THIS                 9
-#define CMD_PRINT                     10
-#define CMD_HELP                      11
-#define CMD_CHANGELOG                 12
-#define CMD_UNDO                      13
-#define CMD_REDO                      14
-#define CMD_REPEAT                    15
-#define CMD_ICON16                    16
-#define CMD_ICON24                    17
-#define CMD_ICON32                    18
-#define CMD_ICON48                    19
-#define CMD_ICON64                    20
-#define CMD_ICON128                   21
-#define CMD_PLAY                      22
-#define CMD_SLEEP                     23
-#define CMD_NEW                       24
-#define CMD_OPEN                      25
-#define CMD_SAVE                      26
-#define CMD_SAVE_AS                   27
-#define CMD_PAN_LEFT                  28
-#define CMD_PAN_DOWN                  29
-#define CMD_PAN_RIGHT                 30
-#define CMD_PAN_UP                    31
-#define CMD_PAN_POINT                 32
-#define CMD_PAN_REAL_TIME             33
-#define CMD_WINDOW_CASCADE            34
-#define CMD_WINDOW_CLOSE_ALL          35
-#define CMD_WINDOW_CLOSE              36
-#define CMD_WINDOW_NEXT               37
-#define CMD_WINDOW_PREVIOUS           38
-#define CMD_WINDOW_TILE               39
-#define CMD_ZOOM_ALL                  40
-#define CMD_ZOOM_CENTER               41
-#define CMD_ZOOM_DYNAMIC              42
-#define CMD_ZOOM_EXTENTS              43
-#define CMD_ZOOM_IN                   44
-#define CMD_ZOOM_OUT                  45
-#define CMD_ZOOM_PREVIOUS             46
-#define CMD_ZOOM_REAL_TIME            47
-#define CMD_ZOOM_SCALE                48
-#define CMD_ZOOM_SELECTED             49
-#define CMD_ZOOM_WINDOW               50
-#define CMD_DAY                       51
-#define CMD_NIGHT                     52
-#define CMD_CLEAR_RUBBER              53
-#define CMD_CLEAR_SELECTION           54
-#define CMD_END                       55
-#define CMD_EXIT                      56
-#define CMD_MACRO                     57
-#define CMD_SCRIPT                    58
-#define CMD_SETTINGS                  59
-#define CMD_SET                       60
-#define CMD_GET                       61
-#define CMD_TEXT_MULTI                62
-#define CMD_TEXT_SINGLE               63
-#define CMD_INFINITE_LINE             64
-#define CMD_RAY                       65
-#define CMD_LINE                      66
-#define CMD_TRIANGLE                  67
-#define CMD_RECTANGLE                 68
-#define CMD_ROUNDED_RECTANGLE         69
-#define CMD_ARC                       70
-#define CMD_CIRCLE                    71
-#define CMD_SLOT                      72
-#define CMD_ELLIPSE                   73
-#define CMD_POINT                     74
-#define CMD_REGULAR_POLYGON           75
-#define CMD_POLYGON                   76
-#define CMD_POLYLINE                  77
-#define CMD_PATH                      78
-#define CMD_IMAGE                     79
-#define CMD_DIM_LEADER                80
-#define CMD_HORIZONTAL_DIM            81
-#define CMD_VERTICAL_DIM              82
-#define CMD_STOP                      83
-#define CMD_GENERATE                  84
-#define CMD_FILL                      85
-#define N_COMMANDS                    86
 #define MAX_COMMANDS                 200
 
 /* Generate pattern */
@@ -521,6 +430,11 @@ typedef struct ViewData_ {
     uint8_t qSnapToggle;
 } ViewData;
 
+typedef struct CommandPtr_ {
+    char name[30];
+    int (*function)(int argc, char *argv[]);
+} CommandPtr;
+
 typedef struct State_ {
     /* Meta */
     char* name;
@@ -542,7 +456,8 @@ typedef struct State_ {
     EmbStringTable recent_files;
     EmbStringTable test_script;
 
-    char *command_names[MAX_COMMANDS];
+    CommandPtr commands[MAX_COMMANDS];
+
     char *fill_list[MAX_COMMANDS];
     char *generate_list[MAX_COMMANDS];
 
@@ -568,11 +483,93 @@ uint8_t willOverflowInt32(int64_t a, int64_t b);
 int32_t roundToMultiple(bool roundUp, int32_t numToRound, int32_t multiple);
 void debug(const char *msg, ...);
 uint64_t current_time(void);
+int get_index(char *table[], const char *cmd);
+uint8_t to_boolean(const char *value);
 
 /* Scripting and state */
-void run_cmd(const char *line);
+void cmd(const char *line);
+ScriptValue get(const char *key);
+void no_arguments(const char *name, int argc, char *argv[]);
+int excess_arguments(const char *name, int expected, int argc, char *argv[]);
 void load_data(void);
 void free_data(void);
+
+/* Update interface: only necessary because Qt is not immediate mode. */
+void update_text_size(void);
+void update_prompt_prefix(const char *);
+
+EmbArray *generate(const char *type);
+EmbArray *fill(const char *type);
+
+/* Commands: use the same function prototype to main, because they are imitating
+ * the command line program calls.
+ *
+ * Please keep this list alphabetized: running the script "bash bin/tidy.sh" will
+ * fix this.
+ */
+
+/* COMMANDS START */
+int about_command(int argc, char *argv[]);
+int arc_command(int argc, char *argv[]);
+int changelog_command(int argc, char *argv[]);
+int circle_command(int argc, char *argv[]);
+int clear_command(int argc, char *argv[]);
+int clear_rubber_command(int argc, char *argv[]);
+int copy_command(int argc, char *argv[]);
+int cut_command(int argc, char *argv[]);
+int day_command(int argc, char *argv[]);
+int details_command(int argc, char *argv[]);
+int dim_leader_command(int argc, char *argv[]);
+int ellipse_command(int argc, char *argv[]);
+int end_command(int argc, char *argv[]);
+int exit_command(int argc, char *argv[]);
+int fill_command(int argc, char *argv[]);
+int generate_command(int argc, char *argv[]);
+int help_command(int argc, char *argv[]);
+int horizontal_dimension_command(int argc, char *argv[]);
+int icon_command(int argc, char *argv[]);
+int image_command(int argc, char *argv[]);
+int infinite_line_command(int argc, char *argv[]);
+int line_command(int argc, char *argv[]);
+int macro_command(int argc, char *argv[]);
+int new_command(int argc, char *argv[]);
+int night_command(int argc, char *argv[]);
+int null_command(int argc, char *argv[]);
+int open_command(int argc, char *argv[]);
+int pan_command(int argc, char *argv[]);
+int paste_command(int argc, char *argv[]);
+int path_command(int argc, char *argv[]);
+int play_command(int argc, char *argv[]);
+int point_command(int argc, char *argv[]);
+int polygon_command(int argc, char *argv[]);
+int polyline_command(int argc, char *argv[]);
+int print_command(int argc, char *argv[]);
+int ray_command(int argc, char *argv[]);
+int rectangle_command(int argc, char *argv[]);
+int redo_command(int argc, char *argv[]);
+int regular_polygon_command(int argc, char *argv[]);
+int repeat_command(int argc, char *argv[]);
+int rounded_rectangle_command(int argc, char *argv[]);
+int run_command(int argc, char *argv[]);
+int save_as_command(int argc, char *argv[]);
+int save_command(int argc, char *argv[]);
+int select_all_command(int argc, char *argv[]);
+int set_command(int argc, char *argv[]);
+int settings_command(int argc, char *argv[]);
+int sleep_command(int argc, char *argv[]);
+int slot_command(int argc, char *argv[]);
+int stop_command(int argc, char *argv[]);
+int stub_command(int argc, char *argv[]);
+int text_multi_command(int argc, char *argv[]);
+int text_single_command(int argc, char *argv[]);
+int triangle_command(int argc, char *argv[]);
+int undo_command(int argc, char *argv[]);
+int update_command(int argc, char *argv[]);
+int vertical_dimension_command(int argc, char *argv[]);
+int whats_this_command(int argc, char *argv[]);
+int window_command(int argc, char *argv[]);
+int zoom_command(int argc, char *argv[]);
+/* COMMANDS END */
 
 /* Global data
  *

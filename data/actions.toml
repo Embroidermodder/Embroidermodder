@@ -416,37 +416,37 @@ alias = [
 
 [[actions]]
 icon = "pandown"
-command = "pan_down"
+command = "pan down"
 tooltip = "&Pan Down"
 statustip = "Moves the view down."
 
 [[actions]]
 icon = "panleft"
-command = "pan_left"
+command = "pan left"
 tooltip = "&Pan Left"
 statustip = "Moves the view to the left."
 
 [[actions]]
 icon = "panpoint"
-command = "pan_point"
+command = "pan point"
 tooltip = "&Pan Point"
 statustip = "Moves the view by the specified distance."
 
 [[actions]]
 icon = "panrealtime"
-command = "pan_real-time"
+command = "pan real-time"
 tooltip = "&Pan Realtime"
 statustip = "Moves the view in the current viewport."
 
 [[actions]]
 icon = "panright"
-command = "pan_right"
+command = "pan right"
 tooltip = "&Pan Right"
 statustip = "Moves the view to the right."
 
 [[actions]]
 icon = "panup"
-command = "pan_up"
+command = "pan up"
 tooltip = "&Pan Up"
 statustip = "Moves the view up."
 

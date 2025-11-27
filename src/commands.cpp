@@ -6,9 +6,1306 @@
  * see LICENSE.md for details.
  *
  * ----------------------------------------------------------------------------
+ *
+ * Definitions of the command functions used by "cmd": all user actions are
+ * described here.
+ *
+ * Please keep the parts of this file not commented out in alphabetical
+ * order by function name.
+ *
+ * All functions should be of the form:
+ *
+ *     int
+ *     *_command(int argc, char *argv[])
+ *
+ * If the function takes arguments then a table is supplied to describe the
+ * arguments. Otherwise the statement "This command takes no arguments." is
+ * written at the bottom of the description.
  */
 
+#if 0
+    switch (id) {
+    case CMD_DETAILS: {
+        QGraphicsScene* scene = activeScene();
+        if (scene) {
+            EmbDetailsDialog dialog(scene, _mainWin);
+            dialog.exec();
+        }
+        break;
+    }
+
+    case CMD_PRINT: {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+        if (mdiWin == NULL) {
+            debug("ERROR: No active window for printing.");
+            break;
+        }
+        View *gview = activeView();
+
+        QPrintDialog dialog(&_mainWin->printer, mdiWin);
+        if (dialog.exec() == QDialog::Accepted) {
+            QPainter painter(&_mainWin->printer);
+            if (st[ST_PRINTING_DISABLE_BG].b) {
+                //Save current bg
+                QBrush brush = gview->backgroundBrush();
+                //Save ink by not printing the bg at all
+                gview->setBackgroundBrush(Qt::NoBrush);
+                //Print, fitting the viewport contents into a full page
+                gview->render(&painter);
+                //Restore the bg
+                gview->setBackgroundBrush(brush);
+            }
+            else {
+                //Print, fitting the viewport contents into a full page
+                gview->render(&painter);
+            }
+        }
+        break;
+    }
+
+    case CMD_HELP: {
+        // Open the HTML Help in the default browser
+        QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
+        QDesktopServices::openUrl(helpURL);
+
+        /* TODO: This is how to start an external program. Use this elsewhere...
+         * QString program = "firefox";
+         * QStringList arguments;
+         * arguments << "help/commands.html";
+         * QProcess *myProcess = new QProcess(this);
+         * myProcess->start(program, arguments);
+         */
+        break;
+    }
+
+    case CMD_CHANGELOG: {
+        QUrl changelogURL("help/changelog.html");
+        QDesktopServices::openUrl(changelogURL);
+        break;
+    }
+
+    case CMD_UNDO: {
+        QString prefix = prompt->getPrefix();
+        if (dockUndoEdit->canUndo()) {
+            prompt->setPrefix("Undo " + dockUndoEdit->undoText());
+            prompt->appendHistory(QString());
+            dockUndoEdit->undo();
+            prompt->setPrefix(prefix);
+        }
+        else {
+            prompt->alert("Nothing to undo");
+            prompt->setPrefix(prefix);
+        }
+        break;
+    }
+
+    case CMD_REDO: {
+        QString prefix = prompt->getPrefix();
+        if (dockUndoEdit->canRedo()) {
+            prompt->setPrefix("Redo " + dockUndoEdit->redoText());
+            prompt->appendHistory(QString());
+            dockUndoEdit->redo();
+            prompt->setPrefix(prefix);
+        }
+        else {
+            prompt->alert("Nothing to redo");
+            prompt->setPrefix(prefix);
+        }
+        break;
+    }
+
+    case CMD_REPEAT: {
+        break;
+    }
+
+    case CMD_ICON16: {
+        _mainWin->iconResize(16);
+        break;
+    }
+
+    case CMD_ICON24: {
+        _mainWin->iconResize(24);
+        break;
+    }
+
+    case CMD_ICON32: {
+        _mainWin->iconResize(32);
+        break;
+    }
+
+    case CMD_ICON48: {
+        _mainWin->iconResize(48);
+        break;
+    }
+
+    case CMD_ICON64: {
+        _mainWin->iconResize(64);
+        break;
+    }
+
+    case CMD_ICON128: {
+        _mainWin->iconResize(128);
+        break;
+    }
+
+    case CMD_PLAY: {
+        state.play_mode = 1;
+        state.simulation_start = current_time();
+        break;
+    }
+
+    case CMD_STOP: {
+        state.play_mode = 0;
+        break;
+    }
+
+    case CMD_SLEEP: {
+        std::this_thread::sleep_for(100ms);
+        break;
+    }
+
+    case CMD_NEW: {
+        new_file_command(argc-1, (char**)argv);
+        break;
+    }
+
+    case CMD_OPEN: {
+        if (list.size() == 1) {
+            _mainWin->openFile();
+            break;
+        }
+        list.remove(0);
+        _mainWin->openFilesSelected(list);
+        break;
+    }
+
+    /* TODO: Make day vision color settings. */
+    case CMD_DAY: {
+        View* gview = activeView();
+        if (gview) {
+            gview->setBackgroundColor(qRgb(255,255,255)); 
+            gview->setCrossHairColor(qRgb(0,0,0));
+            gview->setGridColor(qRgb(0,0,0));
+        }
+        break;
+    }
+
+    /* TODO: Make night vision color settings. */
+    case CMD_NIGHT: {
+        View* gview = activeView();
+        if (gview) {
+            gview->setBackgroundColor(qRgb(0,0,0));
+            gview->setCrossHairColor(qRgb(255,255,255));
+            gview->setGridColor(qRgb(255,255,255));
+        }
+        break;
+    }
+
+    case CMD_CLEAR_RUBBER: {
+        View* gview = activeView();
+        if (gview) {
+            gview->clearRubberRoom();
+        }
+        break;
+    }
+
+    case CMD_CLEAR_SELECTION: {
+        View* gview = activeView();
+        if (gview) {
+            gview->clearSelection();
+        }
+        break;
+    }
+
+    case CMD_MACRO: {
+        debug("TODO: macro support");
+        break;
+    }
+
+    case CMD_SCRIPT:
+        run_command(argc, (char**)argv);
+        break;
+
+    case CMD_SETTINGS: {
+        _mainWin->settingsDialog("General");
+        break;
+    }
+
+    /** @todo Report the value. */
+    case CMD_GET: {
+        ScriptValue value = get(qPrintable(list[1]));
+        break;
+    }
+
+    case CMD_SET:
+        set_command(argc, (char**)argv);
+        break;
+
+    /** @todo argument parsing
+     */
+    case CMD_INFINITE_LINE: {
+        EmbVector point1 = emb_vector(0.0f, 0.0f);
+        EmbVector point2 = emb_vector(0.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        _mainWin->add_infinite_line(point1, point2, rot);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_RAY: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        EmbVector point = emb_vector(0.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        _mainWin->add_ray(start, point, rot);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_LINE: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        EmbVector end = emb_vector(0.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_line(start, end, rot, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_TRIANGLE: {
+        EmbVector point1 = emb_vector(0.0f, 0.0f);
+        EmbVector point2 = emb_vector(0.0f, 10.0f);
+        EmbVector point3 = emb_vector(0.0f, 10.0f);
+        EmbReal rot = 0.0f;
+        bool fill = false;
+        _mainWin->add_triangle(point1, point2, point3, rot, fill);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_RECTANGLE: {
+        EmbReal x = 0.0f;
+        EmbReal y = 0.0f;
+        EmbReal w = 10.0f;
+        EmbReal h = 20.0f;
+        EmbReal rot = 0.0f;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_rectangle(x, y, w, h, rot, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_ROUNDED_RECTANGLE: {
+        EmbReal x = 0.0f;
+        EmbReal y = 0.0f;
+        EmbReal w = 10.0f;
+        EmbReal h = 20.0f;
+        EmbReal rad = 2.0f;
+        EmbReal rot = 0.0f;
+        bool fill = false;
+        _mainWin->add_rounded_rectangle(x, y, w, h, rad, rot, fill);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_ARC: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        EmbVector mid = emb_vector(10.0f, 0.0f);
+        EmbVector end = emb_vector(10.0f, 10.0f);
+        _mainWin->add_arc(start, mid, end, OBJ_RUBBER_OFF);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_CIRCLE: {
+        EmbVector center = emb_vector(0.0f, 0.0f);
+        EmbReal radius = 10.0;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_circle(center, radius, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_SLOT: {
+        EmbVector center = emb_vector(0.0f, 0.0f);
+        EmbReal diameter = 1.0;
+        EmbReal length = 10.0;
+        EmbReal rot = 0.0;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_slot(center, diameter, length, rot, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_ELLIPSE: {
+        EmbVector center = emb_vector(0.0f, 0.0f);
+        EmbReal width = 10.0;
+        EmbReal height = 30.0;
+        EmbReal rot = 1.0;
+        bool fill = false;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_ellipse(center, width, height, rot, fill, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_POINT: {
+        EmbVector position = emb_vector(10.0f, 10.0f);
+        _mainWin->add_point(position);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_REGULAR_POLYGON: {
+        EmbVector center = emb_vector(10.0f, 10.0f);
+        int sides = 5;
+        int mode = 0;
+        EmbReal rad = 10.0;
+        EmbReal rot = 0.0;
+        bool fill = false;
+        _mainWin->add_regular_polygon(center, sides, mode, rad, rot, fill);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_POLYGON: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        QPainterPath p;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_polygon(start, p, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_POLYLINE: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        QPainterPath p;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_polyline(start, p, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_PATH: {
+        EmbVector start = emb_vector(0.0f, 0.0f);
+        QPainterPath p;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_path(start, p, rubberMode);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_HORIZONTAL_DIM: {
+        EmbVector start = emb_vector(8.0f, 12.0f);
+        EmbVector end = emb_vector(18.0f, 11.0f);
+        EmbReal legHeight = 10.0f;
+        _mainWin->add_horizontal_dimension(start, end, legHeight);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_VERTICAL_DIM: {
+        EmbVector start = emb_vector(-8.0f, 10.0f);
+        EmbVector end = emb_vector(1.0f, 13.0f);
+        EmbReal legHeight = 10.0f;
+        _mainWin->add_vertical_dimension(start, end, legHeight);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_IMAGE: {
+        QString img = "icons/default/app.png";
+        double x = 10.0;
+        double y = 10.0;
+        double w = 30.0;
+        double h = 20.0;
+        double rot = 10.0;
+        _mainWin->add_image(img, x, y, w, h, rot);
+        break;
+    }
+
+    /** @todo argument parsing
+     */
+    case CMD_DIM_LEADER: {
+        EmbVector start = emb_vector(8.0f, 1.0f);
+        EmbVector end = emb_vector(1.0f, 3.0f);
+        EmbReal rot = 10.0;
+        int rubberMode = OBJ_RUBBER_OFF;
+        _mainWin->add_dim_leader(start.x, start.y, end.x, end.y, rot, rubberMode);
+        break;
+    }
+
+    case CMD_GENERATE: {
+        generate(qPrintable(list[1]));
+        break;
+    }
+
+    case CMD_FILL: {
+        fill(qPrintable(list[1]));
+        break;
+    }
+
+#endif
+
+#include <math.h>
+
 #include "embroidermodder.h"
+
+/*
+ * Shows the about dialog.
+ *
+ * This command takes no arguments.
+ */
+int
+about_command(int argc, char *argv[])
+{
+    no_arguments("about_command", argc, argv);
+    _mainWin->about();
+    return 0;
+}
+
+/*
+ */
+int
+arc_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+changelog_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+circle_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+clear_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+clear_rubber_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ * This command takes no arguments.
+ */
+int
+copy_command(int argc, char *argv[])
+{
+    no_arguments("copy_command", argc, argv);
+    View* gview = activeView();
+    if (gview) {
+        gview->copy();
+    }
+    return 0;
+}
+
+/*
+ * This command takes no arguments.
+ */
+int
+cut_command(int argc, char *argv[])
+{
+    no_arguments("cut_command", argc, argv);
+    View* gview = activeView();
+    if (gview) {
+        gview->cut();
+    }
+    return 0;
+}
+
+/*
+ */
+int
+day_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+details_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+dim_leader_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+ellipse_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ * This command takes no arguments.
+ */
+int
+end_command(int argc, char *argv[])
+{
+    no_arguments("", argc, argv);
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
+        gview->previewOff();
+        gview->disableMoveRapidFire();
+    }
+    prompt->endCommand();
+    return 0;
+}
+
+/*
+ * This command takes no arguments.
+ */
+int
+exit_command(int argc, char *argv[])
+{
+    no_arguments("", argc, argv);
+    if (st[ST_PROMPT_SAVE_HISTORY].b) {
+        /* TODO: get filename from settings. */
+        prompt->saveHistory("prompt.log", st[ST_PROMPT_SAVE_AS_HTML].b);
+    }
+    qApp->closeAllWindows();
+    /* Force the MainWindow destructor to run before exiting.
+     * Makes Valgrind "still reachable" happy :)
+     */
+    _mainWin->deleteLater();
+    return 0;
+}
+
+/*
+ */
+int
+fill_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+generate_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+help_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+horizontal_dimension_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+icon_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+image_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+infinite_line_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+line_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+macro_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ * Open a new file and establish a view for it.
+ *
+ * This command takes no arguments.
+ */
+int
+new_command(int argc, char *argv[])
+{
+    no_arguments("new_file_command", argc, argv);
+    state.docIndex++;
+    state.numOfDocs++;
+    MdiWindow* mdiWin = new MdiWindow(state.docIndex, _mainWin, mdiArea, Qt::SubWindow);
+    _mainWin->connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _mainWin,
+        SLOT(onCloseMdiWin(MdiWindow*)));
+    _mainWin->connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _mainWin,
+        SLOT(onWindowActivated(QMdiSubWindow*)));
+
+    _mainWin->updateMenuToolbarStatusbar();
+    _mainWin->windowMenuAboutToShow();
+
+    View* v = mdiWin->gview;
+    if (v) {
+        v->recalculateLimits();
+        v->zoomExtents();
+    }
+    return 0;
+}
+
+/*
+ */
+int
+night_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ * The null command intensionally does nothing.
+ * 
+ * This command takes no arguments.
+ */
+int
+null_command(int argc, char *argv[])
+{
+    no_arguments("null_command", argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+open_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ * Moves the view: the subcommand determines the direction.
+ *
+ * This command takes 1 argument and it is the subcommand.
+ */
+int
+pan_command(int argc, char *argv[])
+{
+    excess_arguments("pan_command", 1, argc, argv);
+
+    View* gview = activeView();
+    if (!gview) {
+        return 3;
+    }
+    /* Commands that only use the view. */
+    if (strcmp(argv[0], "point")) {
+        gview->panPoint();
+        return 0;
+    }
+    if (strcmp(argv[0], "real-time")) {
+        gview->panRealTime();
+        return 0;
+    }
+
+    QUndoStack* stack = gview->getUndoStack();
+    if (!stack) {
+        return 4;
+    }
+    /* Commands that use the view and the undo stack. */
+    if (strcmp(argv[0], "left")) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+        stack->push(cmd);
+        return 0;
+    }
+    if (strcmp(argv[0], "right")) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+        stack->push(cmd);
+        return 0;
+    }
+    if (strcmp(argv[0], "down")) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+        stack->push(cmd);
+        return 0;
+    }
+    if (strcmp(argv[0], "up")) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
+        stack->push(cmd);
+        return 0;
+    }
+    return 2;
+}
+
+/*
+ */
+int
+paste_command(int argc, char *argv[])
+{
+    no_arguments("paste_command", argc, argv);
+    View* gview = activeView();
+    if (gview) {
+        gview->paste();
+    }
+    return 0;
+}
+
+/*
+ */
+int
+path_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+play_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+point_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+polygon_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+polyline_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+print_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+ray_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+rectangle_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+redo_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+regular_polygon_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+repeat_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+rounded_rectangle_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ * Run the macro in the file supplied.
+ *
+ * This command take one argument, the file name, and discards the rest.
+ *
+ * @todo warning box
+ */
+int
+run_command(int argc, char *argv[])
+{
+    /*
+    int status = luaL_dofile(Lua, filename);
+    if (status) {
+        printf("ERROR: %d\n", status);
+        debug("Failed to boot scripting environment.");
+    }
+    */
+    return 0;
+}
+
+/*
+ */
+int
+save_as_command(int argc, char *argv[])
+{
+    excess_arguments("save_as_command", 0, argc, argv);
+
+    /* need to find the activeSubWindow before it loses focus to the FileDialog. */
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (!mdiWin) {
+        return 5;
+    }
+
+    _mainWin->openFilesPath = st[ST_RECENT_DIRECTORY].s;
+    QString file = QFileDialog::getSaveFileName(_mainWin, _mainWin->tr("Save As"),
+        _mainWin->openFilesPath, formatFilterSave);
+
+    mdiWin->saveFile(file);
+    return 0;
+}
+
+/*
+ * FIXME
+ *
+ * This command takes no arguments.
+ */
+int
+save_command(int argc, char *argv[])
+{
+    no_arguments("save_command", argc, argv);
+    return 0;
+}
+
+/*
+ * This command takes no arguments.
+ */
+int
+select_all_command(int argc, char *argv[])
+{
+    no_arguments("select_all_command", argc, argv);
+    View* gview = activeView();
+    if (gview) {
+        gview->selectAll();
+    }
+    return 0;
+}
+
+/*
+ * Set a value that is stored in a state variable within a macro.
+ *
+ * This command takes two arguments.
+ *
+ * ARGUMENTS
+ * |-------|--------|-----------------------------------------------|
+ * | index | type   | description                                   |
+ * |-------|--------|-----------------------------------------------|
+ * | 0     | char * | the variable name                             |
+ * | 1     | any    | its value, the type is determined by the name |
+ * |-------|--------|-----------------------------------------------|
+ *
+ * ERROR CODES
+ * |-------|-------------------------------------------------------|
+ * | Code  | Description                                           |
+ * |-------|-------------------------------------------------------|
+ * | 0     | No error.                                             |
+ * | 1     | Failed to convert types from char array.              |
+ * | 2     | Did not recognise the variable name.                  |
+ * |-------|-------------------------------------------------------|
+ */
+int
+set_command(int argc, char *argv[])
+{
+    char *key = argv[0];
+    char *value = argv[1];
+    if (!strncmp(key, "text_angle", 20)) {
+        st[ST_TEXT_ANGLE].r = atof(value);
+        return 0;
+    }
+    if (!strncmp(key, "text_size", 20)) {
+        double num = atof(value);
+
+        if (isnan(num)) {
+            debug("TypeError, setTextSize(): first argument failed isNaN check.");
+            return 1;
+        }
+
+        st[ST_TEXT_SIZE].i = fabs(num);
+        update_text_size();
+        return 0;
+    }
+    if (!strncmp(key, "text_bold", 20)) {
+        st[ST_TEXT_BOLD].b = to_boolean(value);
+        return 0;
+    }
+    if (!strncmp(key, "text_italic", 20)) {
+        st[ST_TEXT_ITALIC].b = to_boolean(value);
+        return 0;
+    }
+    if (!strncmp(key, "text_underline", 20)) {
+        st[ST_TEXT_UNDERLINE].b = to_boolean(value);
+        return 0;
+    }
+    if (!strncmp(key, "text_strikeout", 20)) {
+        st[ST_TEXT_STRIKEOUT].b = to_boolean(value);
+        return 0;
+    }
+    if (!strncmp(key, "text_overline", 20)) {
+        st[ST_TEXT_OVERLINE].b = to_boolean(value);
+        return 0;
+    }
+    if (!strncmp(key, "prefix", 20)) {
+        update_prompt_prefix(value);
+        return 0;
+    }
+    return 2;
+}
+
+/*
+ */
+int
+settings_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+sleep_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+slot_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+stop_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+/*
+ */
+int
+stub_command(int argc, char *argv[])
+{
+    no_arguments("stub_command", argc, argv);
+    QMessageBox::warning(_mainWin, _mainWin->tr("Testing Feature"),
+        _mainWin->tr("<b>This feature is in testing.</b>"));
+    return 0;
+}
+
+/*
+ * Add a EmbTextMulti object to the design.
+ * TODO: argument parsing
+ */
+int
+text_multi_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    const QString& str = "Lorem ipsum\ndolor sit amet,";
+    EmbVector position = emb_vector(10.0f, 10.0f);
+    EmbReal rot = 0.0f;
+    bool fill = false;
+    int rubberMode = OBJ_RUBBER_OFF;
+    _mainWin->add_text_multi(str, position, rot, fill, rubberMode);
+    return 0;
+}
+
+/* TODO: argument parsing
+ */
+int
+text_single_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    const QString& str = "Lorem ipsum dolor sit amet,";
+    EmbVector position = emb_vector(10.0f, 10.0f);
+    EmbReal rot = 0.0f;
+    bool fill = false;
+    int rubberMode = OBJ_RUBBER_OFF;
+    _mainWin->add_text_single(str, position, rot, fill, rubberMode);
+    return 0;
+}
+
+/*
+ */
+int
+triangle_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+undo_command(int argc, char *argv[])
+{
+    excess_arguments("", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+update_command(int argc, char *argv[])
+{
+    no_arguments("update_command", argc, argv);
+    debug("TODO: Check website for new versions, commands, etc...");
+    return 0;
+}
+
+/*
+ */
+int
+vertical_dimension_command(int argc, char *argv[])
+{
+    excess_arguments("vertical_dimension_command", 0, argc, argv);
+    return 0;
+}
+
+/*
+ */
+int
+whats_this_command(int argc, char *argv[])
+{
+    no_arguments("whats_this_command", argc, argv);
+    QWhatsThis::enterWhatsThisMode();
+    return 0;
+}
+
+/*
+ * Alters the MDI windows, the subcommand determines the behaviour.
+ *
+ * This command always expects exactly one argument.
+ *
+ * ARGUMENTS
+ * |-------|--------|-----------------------------------------------|
+ * | index | type   | description                                   |
+ * |-------|--------|-----------------------------------------------|
+ * | 0     | char * | the subcommand                                |
+ * |-------|--------|-----------------------------------------------|
+ */
+int
+window_command(int argc, char *argv[])
+{
+    excess_arguments("zoom_command", 1, argc, argv);
+    char *key = argv[1];
+    if (!strncmp(key, "cascade", 20)) {
+        mdiArea->cascade();
+        return 0;
+    }
+    if (!strncmp(key, "close_all", 20)) {
+        _mainWin->onCloseWindow();
+        return 0;
+    }
+    if (!strncmp(key, "close", 20)) {
+        mdiArea->closeAllSubWindows();
+        return 0;
+    }
+    if (!strncmp(key, "next", 20)) {
+        mdiArea->activateNextSubWindow();
+        return 0;
+    }
+    if (!strncmp(key, "previous", 20)) {
+        mdiArea->activatePreviousSubWindow();
+        return 0;
+    }
+    if (!strncmp(key, "tile", 20)) {
+        mdiArea->tile();
+        return 0;
+    }
+    return 2;
+}
+
+/*
+ * This command always expects exactly one argument.
+ *
+ * ARGUMENTS
+ * |-------|--------|-----------------------------------------------|
+ * | index | type   | description                                   |
+ * |-------|--------|-----------------------------------------------|
+ * | 0     | char * | the subcommand                                |
+ * |-------|--------|-----------------------------------------------|
+ */
+int
+zoom_command(int argc, char *argv[])
+{
+    excess_arguments("window_command", 1, argc, argv);
+    char *key = argv[1];
+    if (!strncmp(key, "all", 20)) {
+        debug("TODO: Implement zoomAll.");
+        return 0;
+    }
+    if (!strncmp(key, "center", 20)) {
+        debug("TODO: Implement zoomCenter.");
+        return 0;
+    }
+    if (!strncmp(key, "dynamic", 20)) {
+        debug("TODO: Implement zoomDynamic.");
+        return 0;
+    }
+    if (!strncmp(key, "extents", 20)) {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+            stack->push(cmd);
+        }
+        return 0;
+    }
+    if (!strncmp(key, "in", 20)) {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomIn();
+        }
+        return 0;
+    }
+    if (!strncmp(key, "out", 20)) {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomOut();
+        }
+        return 0;
+    }
+    if (!strncmp(key, "previous", 20)) {
+        debug("TODO: Implement zoomPrevious.");
+        return 0;
+    }
+    if (!strncmp(key, "real_time", 20)) {
+        debug("TODO: Implement zoomRealtime.");
+        return 0;
+    }
+    if (!strncmp(key, "scale", 20)) {
+        debug("TODO: Implement zoomScale.");
+        return 0;
+    }
+    if (!strncmp(key, "selected", 20)) {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+            stack->push(cmd);
+        }
+        return 0;
+    }
+    if (!strncmp(key, "window", 20)) {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomWindow();
+        }
+        return 0;
+    }
+    return 2;
+}
 
 #if 0
 -- Command: Distance

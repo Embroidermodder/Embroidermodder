@@ -1,14 +1,13 @@
-/*!
- * \file generate.cpp
- * \brief Generate patterns without an existing design to fit to.
+/*
+ * Generate patterns without an existing design to fit to.
  */
 
-#include "embroidermodder.h"
+#include "core.h"
 
-void
-MainWindow::generate(const char *type)
+EmbArray *
+generate(const char *type)
 {
-    int id = get_id(state.generate_list, type);
+    int id = get_index(state.generate_list, type);
     switch (id) {
     case GEN_PHOTO: {
         break;
@@ -30,5 +29,6 @@ MainWindow::generate(const char *type)
         debug("ERROR: failed to identify generation pattern.");
         break;
     }
+    return NULL;
 }
 

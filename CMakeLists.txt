@@ -56,10 +56,9 @@ add_subdirectory(extern/SDL_ttf)
 #
 qt_add_executable(embroidermodder2
     ${SRC}/cmdprompt.cpp
+    ${SRC}/commands.cpp
     ${SRC}/data.cpp
     ${SRC}/embdetails-dialog.cpp
-    ${SRC}/fill.cpp
-    ${SRC}/generate.cpp
     ${SRC}/geometry.cpp
     ${SRC}/imagewidget.cpp
     ${SRC}/layer-manager.cpp
@@ -100,6 +99,8 @@ qt_add_executable(embroidermodder2
 
     # C source code
     ${SRC}/core.c
+    ${SRC}/fill.c
+    ${SRC}/generate.c
     ${SRC}/core.h
 
     ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c

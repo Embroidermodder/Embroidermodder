@@ -284,8 +284,6 @@ View* activeView(void);
 QGraphicsScene* activeScene(void);
 QUndoStack* activeUndoStack(void);
 
-int get_id(char *table[], const char *cmd);
-
 /* ---- Global data --------------------------------------------------------- */
 extern MainWindow* _mainWin;
 extern MdiArea* mdiArea;
@@ -293,6 +291,9 @@ extern CmdPrompt* prompt;
 extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
+
+extern QString formatFilterOpen;
+extern QString formatFilterSave;
 
 extern QHash<QString, QAction*> actionHash;
 extern std::vector<Command> command_map;
@@ -603,11 +604,6 @@ public:
     MainWindow();
     ~MainWindow();
 
-    void cmd(const char *line);
-    void run(const char *filename);
-    ScriptValue get(const char *key);
-    void set(const char *key, ScriptValue value);
-
     QPrinter printer;
     QBasicTimer timer;
 
@@ -627,9 +623,6 @@ public:
     QString activeCommand() { return prompt->activeCommand(); }
 
     QString platformString();
-
-    void generate(const char *type);
-    void fill(const char *type);
 
 public slots:
     void onCloseWindow();
@@ -682,14 +675,6 @@ public:
 
     void createAllActions(void);
     void createAllToolbars();
-
-    // Selectors
-    QComboBox* layerSelector;
-    QComboBox* colorSelector;
-    QComboBox* linetypeSelector;
-    QComboBox* lineweightSelector;
-    QFontComboBox* textFontSelector;
-    QComboBox* textSizeSelector;
 
     // Menus
     void createAllMenus();

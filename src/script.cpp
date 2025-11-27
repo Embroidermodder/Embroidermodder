@@ -27,9 +27,6 @@
 
 #include "embroidermodder.h"
 
-const char *temporary_name_format = "tmp_%d";
-int temporary_name = 0;
-
 /*! \brief Our preferred current time format: milliseconds since epoch as an uint64_t.
  *
  * \todo Check for failure due to porting or the 2038 problem.
@@ -43,23 +40,8 @@ current_time(void)
     return time_s.count();
 }
 
-/* A version which doesn't produce the same error message.
- * TODO: This needs to be checked for whether it functions similarly.
- */
 void
-temp_name(char *name, int *err)
-{
-    FILE *f = 0;
-    *err = 0;
-    while (!f) {
-        sprintf(name, temporary_name_format, temporary_name);
-        f = fopen(name, "w");
-        temporary_name++;
-    }
-    fclose(f);
-}
-
-void MainWindow::stub_testing()
+MainWindow::stub_testing()
 {
     QMessageBox::warning(this, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
 }
@@ -207,26 +189,6 @@ MainWindow::buttonTipOfTheDayClicked(int button)
     else if(button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
     }
-}
-
-// Icons
-void
-MainWindow::iconResize(int iconSize)
-{
-    this->setIconSize(QSize(iconSize, iconSize));
-    layerSelector->     setIconSize(QSize(iconSize*4, iconSize));
-    colorSelector->     setIconSize(QSize(iconSize,   iconSize));
-    linetypeSelector->  setIconSize(QSize(iconSize*4, iconSize));
-    lineweightSelector->setIconSize(QSize(iconSize*4, iconSize));
-    //set the minimum combobox width so the text is always readable
-    layerSelector->     setMinimumWidth(iconSize*4);
-    colorSelector->     setMinimumWidth(iconSize*2);
-    linetypeSelector->  setMinimumWidth(iconSize*4);
-    lineweightSelector->setMinimumWidth(iconSize*4);
-
-    //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
-
-    st[ST_ICON_SIZE].i = iconSize;
 }
 
 void MainWindow::setUndoCleanIcon(bool opened)
@@ -387,14 +349,6 @@ MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
     cmd(command);
 }
 
-// TODO: check that the toReal() conversion is ok
-void
-MainWindow::textSizeSelectorIndexChanged(int index)
-{
-    debug("textSizeSelectorIndexChanged(%d)", index);
-    st[ST_TEXT_SIZE].i = qFabs(textSizeSelector->itemData(index).toReal());
-}
-
 QString
 MainWindow::getCurrentLayer()
 {
@@ -488,23 +442,6 @@ void MainWindow::promptInputNext()
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if(mdiWin) mdiWin->promptInputNext();
-}
-
-/**
- * @brief Run the lua script in the file supplied.
- *
- * @todo warning box
- */
-void
-MainWindow::run(const char *filename)
-{
-    /*
-    int status = luaL_dofile(Lua, filename);
-    if (status) {
-        printf("ERROR: %d\n", status);
-        debug("Failed to boot scripting environment.");
-    }
-    */
 }
 
 /**
@@ -1280,7 +1217,7 @@ delete_selected_f(void)
     if (gview) {
         gview->deleteSelected();
     }
-    _mainWin->cmd("clear");
+    cmd("clear");
     return 0;
 }
 
@@ -1367,7 +1304,7 @@ print_area_f(double x, double y, double w, double h)
 {
     debug("print_area_f(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
-    _mainWin->cmd("print");
+    cmd("print");
     return 0;
 }
 
@@ -1519,16 +1456,6 @@ set_rubber_text_f(const char *key_, const char *txt_)
     if (gview) {
         gview->setRubberText(key, txt);
     }
-    return 0;
-}
-
-/* . */
-int
-set_text_font_f(const char *str)
-{
-    debug("TODO: add_to_menu");
-    _mainWin->textFontSelector->setCurrentFont(QFont(str));
-    strncpy(st[ST_TEXT_FONT].s, str, 200);
     return 0;
 }
 

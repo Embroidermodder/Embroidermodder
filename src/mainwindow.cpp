@@ -40,6 +40,8 @@
 
 #include "embroidermodder.h"
 
+#include <math.h>
+
 #define KEY_SHORTCUT(F, CMD) \
     connect(prompt, SIGNAL(F()), this, SLOT([=]() { cmd(CMD); }))
 
@@ -63,6 +65,14 @@ CmdPrompt* prompt = NULL;
 PropertyEditor* dockPropEdit = NULL;
 UndoEditor* dockUndoEdit = NULL;
 StatusBar* statusbar = NULL;
+
+/* Selectors */
+QComboBox* layerSelector;
+QComboBox* colorSelector;
+QComboBox* linetypeSelector;
+QComboBox* lineweightSelector;
+QFontComboBox* textFontSelector;
+QComboBox* textSizeSelector;
 
 /* Tables */
 std::vector<Command> command_map;
@@ -158,7 +168,7 @@ bool Application::event(QEvent *event)
  * Identify command id by its name in the supplied table.
  */
 int
-get_id(char *table[], const char *cmd)
+get_index(char *table[], const char *cmd)
 {
     for (int i=0; table[i][0]!='_'; i++) {
         if (!strncmp(table[i], cmd, 50)) {
@@ -166,13 +176,6 @@ get_id(char *table[], const char *cmd)
         }
     }
     return -1;
-}
-
-/* Wrapper for C calls of the main command processor. */
-void
-run_cmd(const char *line)
-{
-    _mainWin->cmd(line);
 }
 
 /*
@@ -193,10 +196,25 @@ run_cmd(const char *line)
  * on lua style functions, but we either assume that the runCommand* family of functions
  * has vetted the data before it gets to this point or it is the caller's
  * responsibility to get it right within a C++ function.
+ *
+ * TODO: Appropriate state changes for user issued commands like this:
+ *
+ *     if (state.context_flag == CONTEXT_MAIN) {
+ *         cmd("clear_rubber");
+ *         // Some selection based commands need to override this.
+ *         cmd("clear");
+ *     }
+ *     cmd(args[0].s);
+ *     // TODO: conditional on if the command is open ended or not.
+ *     cmd("end");
+ *     return 0;
  */
 void
-MainWindow::cmd(const char *line)
+cmd(const char *line)
 {
+    int argc = 0;
+    char argv[20][200];
+
     prompt->appendHistory(line);
 
     QString qstr(line);
@@ -205,794 +223,40 @@ MainWindow::cmd(const char *line)
     if (aliases.find(list[0]) != aliases.end()) {
         cmd = qPrintable(aliases.at(list[0]));
     }
-    int id = get_id(state.command_names, cmd);
+    int id = -1;
+    for (int i=0; i<MAX_COMMANDS; i++) {
+        if (!strncmp(state.commands[i].name, cmd, 20)) {
+            id = i;
+            break;
+        }
+    }
     if (id < 0) {
         debug("ERROR: unrecognised command id.");
         return;
     }
 
+    if (argc > 20) {
+        debug("ERROR: too many arguments supplied.");
+    }
+    for (int i=1; i<list.size(); i++) {
+        strncpy(argv[i], qPrintable(list.at(i)), 200-1);
+    }
+    argc = list.size() - 1;
+
     if (state.debug > 0) {
-        debug("COMMAND %s", state.command_names[id]);
+        debug("COMMAND %s", state.commands[id].name);
     }
 
-    switch (id) {
-    /* This action intentionally does nothing. */
-    case CMD_NULL:
-        break;
-
-    /* Show the about dialog. */
-    case CMD_ABOUT:
-        about();
-        break;
-
-    case CMD_STUB:
-        QMessageBox::warning(this, tr("Testing Feature"),
-            tr("<b>This feature is in testing.</b>"));
-        break;
-
-    case CMD_CUT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->cut();
-        }
-        break;
-    }
-
-    case CMD_COPY: {
-        View* gview = activeView();
-        if (gview) {
-            gview->copy();
-        }
-        break;
-    }
-
-    case CMD_PASTE: {
-        View* gview = activeView();
-        if (gview) {
-            gview->paste();
-        }
-        break;
-    }
-
-    case CMD_SELECT_ALL: {
-        View* gview = activeView();
-        if (gview) {
-            gview->selectAll();
-        }
-        break;
-    }
-
-    case CMD_DETAILS: {
-        QGraphicsScene* scene = activeScene();
-        if (scene) {
-            EmbDetailsDialog dialog(scene, this);
-            dialog.exec();
-        }
-        break;
-    }
-
-
-    case CMD_UPDATES: {
-        debug("TODO: Check website for new versions, commands, etc...");
-        break;
-    }
-
-    case CMD_WHATS_THIS: {
-        QWhatsThis::enterWhatsThisMode();
-        break;
-    }
-
-    case CMD_PRINT: {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if (mdiWin == NULL) {
-            debug("ERROR: No active window for printing.");
-            break;
-        }
-        View *gview = activeView();
-
-        QPrintDialog dialog(&printer, mdiWin);
-        if (dialog.exec() == QDialog::Accepted) {
-            QPainter painter(&printer);
-            if (st[ST_PRINTING_DISABLE_BG].b) {
-                //Save current bg
-                QBrush brush = gview->backgroundBrush();
-                //Save ink by not printing the bg at all
-                gview->setBackgroundBrush(Qt::NoBrush);
-                //Print, fitting the viewport contents into a full page
-                gview->render(&painter);
-                //Restore the bg
-                gview->setBackgroundBrush(brush);
-            }
-            else {
-                //Print, fitting the viewport contents into a full page
-                gview->render(&painter);
-            }
-        }
-        break;
-    }
-
-    case CMD_HELP: {
-        // Open the HTML Help in the default browser
-        QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
-        QDesktopServices::openUrl(helpURL);
-
-        /* TODO: This is how to start an external program. Use this elsewhere...
-         * QString program = "firefox";
-         * QStringList arguments;
-         * arguments << "help/commands.html";
-         * QProcess *myProcess = new QProcess(this);
-         * myProcess->start(program, arguments);
-         */
-        break;
-    }
-
-    case CMD_CHANGELOG: {
-        QUrl changelogURL("help/changelog.html");
-        QDesktopServices::openUrl(changelogURL);
-        break;
-    }
-
-    case CMD_UNDO: {
-        QString prefix = prompt->getPrefix();
-        if (dockUndoEdit->canUndo()) {
-            prompt->setPrefix("Undo " + dockUndoEdit->undoText());
-            prompt->appendHistory(QString());
-            dockUndoEdit->undo();
-            prompt->setPrefix(prefix);
-        }
-        else {
-            prompt->alert("Nothing to undo");
-            prompt->setPrefix(prefix);
-        }
-        break;
-    }
-
-    case CMD_REDO: {
-        QString prefix = prompt->getPrefix();
-        if (dockUndoEdit->canRedo()) {
-            prompt->setPrefix("Redo " + dockUndoEdit->redoText());
-            prompt->appendHistory(QString());
-            dockUndoEdit->redo();
-            prompt->setPrefix(prefix);
-        }
-        else {
-            prompt->alert("Nothing to redo");
-            prompt->setPrefix(prefix);
-        }
-        break;
-    }
-
-    case CMD_REPEAT: {
-        break;
-    }
-
-    case CMD_ICON16: {
-        iconResize(16);
-        break;
-    }
-
-    case CMD_ICON24: {
-        iconResize(24);
-        break;
-    }
-
-    case CMD_ICON32: {
-        iconResize(32);
-        break;
-    }
-
-    case CMD_ICON48: {
-        iconResize(48);
-        break;
-    }
-
-    case CMD_ICON64: {
-        iconResize(64);
-        break;
-    }
-
-    case CMD_ICON128: {
-        iconResize(128);
-        break;
-    }
-
-    case CMD_PLAY: {
-        state.play_mode = 1;
-        state.simulation_start = current_time();
-        break;
-    }
-
-    case CMD_STOP: {
-        state.play_mode = 0;
-        break;
-    }
-
-    case CMD_SLEEP: {
-        std::this_thread::sleep_for(100ms);
-        break;
-    }
-
-    case CMD_NEW: {
-        state.docIndex++;
-        state.numOfDocs++;
-        MdiWindow* mdiWin = new MdiWindow(state.docIndex, _mainWin, mdiArea, Qt::SubWindow);
-        connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this,
-            SLOT(onCloseMdiWin(MdiWindow*)));
-        connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this,
-            SLOT(onWindowActivated(QMdiSubWindow*)));
-
-        updateMenuToolbarStatusbar();
-        windowMenuAboutToShow();
-
-        View* v = mdiWin->gview;
-        if (v) {
-            v->recalculateLimits();
-            v->zoomExtents();
-        }
-        break;
-    }
-
-    case CMD_OPEN: {
-        if (list.size() == 1) {
-            openFile();
-            break;
-        }
-        list.remove(0);
-        openFilesSelected(list);
-        break;
-    }
-
-    case CMD_SAVE: {
-        /* FIXME */
-        break;
-    }
-
-    case CMD_SAVE_AS: {
-        /* need to find the activeSubWindow before it loses focus to the FileDialog. */
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if (!mdiWin) {
-            return;
-        }
-
-        openFilesPath = st[ST_RECENT_DIRECTORY].s;
-        QString file = QFileDialog::getSaveFileName(this, tr("Save As"),
-            openFilesPath, formatFilterSave);
-
-        mdiWin->saveFile(file);
-        break;
-    }
-
-    /* Moves the view to the left. */
-    case CMD_PAN_LEFT: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* Moves the view down. */
-    case CMD_PAN_DOWN: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* Moves the view to the right. */
-    case CMD_PAN_RIGHT: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* Moves the view up. */
-    case CMD_PAN_UP: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_PAN_POINT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->panPoint();
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_PAN_REAL_TIME: {
-        View* gview = activeView();
-        if (gview) {
-            gview->panRealTime();
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_CASCADE: {
-        mdiArea->cascade();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_CLOSE: {
-        _mainWin->onCloseWindow();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_CLOSE_ALL: {
-        mdiArea->closeAllSubWindows();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_NEXT: {
-        mdiArea->activateNextSubWindow();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_PREVIOUS: {
-        mdiArea->activatePreviousSubWindow();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_TILE: {
-        mdiArea->tile();
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_ALL: {
-        debug("TODO: Implement zoomAll.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_CENTER: {
-        debug("TODO: Implement zoomCenter.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_DYNAMIC: {
-        debug("TODO: Implement zoomDynamic.");
-        break;
-    }
-
-    /* Zooms to display the drawing extents. */
-    case CMD_ZOOM_EXTENTS: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* Zooms to increase the apparent size of objects. */
-    case CMD_ZOOM_IN: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomIn();
-        }
-        break;
-    }
-
-    /* Zooms to decrease the apparent size of objects. */
-    case CMD_ZOOM_OUT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomOut();
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_SCALE: {
-        debug("TODO: Implement zoomScale.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_PREVIOUS: {
-        debug("TODO: Implement zoomPrevious.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_REAL_TIME: {
-        debug("TODO: Implement zoomRealtime.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_SELECTED: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_WINDOW: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomWindow();
-        }
-        break;
-    }
-
-    /* TODO: Make day vision color settings. */
-    case CMD_DAY: {
-        View* gview = activeView();
-        if (gview) {
-            gview->setBackgroundColor(qRgb(255,255,255)); 
-            gview->setCrossHairColor(qRgb(0,0,0));
-            gview->setGridColor(qRgb(0,0,0));
-        }
-        break;
-    }
-
-    /* TODO: Make night vision color settings. */
-    case CMD_NIGHT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->setBackgroundColor(qRgb(0,0,0));
-            gview->setCrossHairColor(qRgb(255,255,255));
-            gview->setGridColor(qRgb(255,255,255));
-        }
-        break;
-    }
-
-    case CMD_CLEAR_RUBBER: {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearRubberRoom();
-        }
-        break;
-    }
-
-    case CMD_CLEAR_SELECTION: {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearSelection();
-        }
-        break;
-    }
-
-    case CMD_END: {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearRubberRoom();
-            gview->previewOff();
-            gview->disableMoveRapidFire();
-        }
-        prompt->endCommand();
-        break;
-    }
-
-    case CMD_EXIT: {
-        if (st[ST_PROMPT_SAVE_HISTORY].b) {
-            /* TODO: get filename from settings. */
-            prompt->saveHistory("prompt.log", st[ST_PROMPT_SAVE_AS_HTML].b);
-        }
-        qApp->closeAllWindows();
-        /* Force the MainWindow destructor to run before exiting.
-         * Makes Valgrind "still reachable" happy :)
-         */
-        _mainWin->deleteLater();
-        break;
-    }
-
-    case CMD_MACRO: {
-        debug("TODO: macro support");
-        break;
-    }
-
-    case CMD_SCRIPT: {
-        run(qPrintable(list[1]));
-        break;
-    }
-
-    case CMD_SETTINGS: {
-        settingsDialog("General");
-        break;
-    }
-
-    /** @todo Report the value. */
-    case CMD_GET: {
-        ScriptValue value = get(qPrintable(list[1]));
-        break;
-    }
-
-    case CMD_SET: {
-        ScriptValue value;
-        strncpy(value.s, qPrintable(list[2]), 200);
-        set(qPrintable(list[1]), value);
-        break;
-    }
-
-    /** Add a EmbTextMulti object to the design.
-     * @todo argument parsing
-     */
-    case CMD_TEXT_MULTI: {
-        const QString& str = "Lorem ipsum\ndolor sit amet,";
-        EmbVector position = emb_vector(10.0f, 10.0f);
-        EmbReal rot = 0.0f;
-        bool fill = false;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_text_multi(str, position, rot, fill, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_TEXT_SINGLE: {
-        const QString& str = "Lorem ipsum dolor sit amet,";
-        EmbVector position = emb_vector(10.0f, 10.0f);
-        EmbReal rot = 0.0f;
-        bool fill = false;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_text_single(str, position, rot, fill, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_INFINITE_LINE: {
-        EmbVector point1 = emb_vector(0.0f, 0.0f);
-        EmbVector point2 = emb_vector(0.0f, 10.0f);
-        EmbReal rot = 0.0f;
-        add_infinite_line(point1, point2, rot);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_RAY: {
-        EmbVector start = emb_vector(0.0f, 0.0f);
-        EmbVector point = emb_vector(0.0f, 10.0f);
-        EmbReal rot = 0.0f;
-        add_ray(start, point, rot);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_LINE: {
-        EmbVector start = emb_vector(0.0f, 0.0f);
-        EmbVector end = emb_vector(0.0f, 10.0f);
-        EmbReal rot = 0.0f;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_line(start, end, rot, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_TRIANGLE: {
-        EmbVector point1 = emb_vector(0.0f, 0.0f);
-        EmbVector point2 = emb_vector(0.0f, 10.0f);
-        EmbVector point3 = emb_vector(0.0f, 10.0f);
-        EmbReal rot = 0.0f;
-        bool fill = false;
-        add_triangle(point1, point2, point3, rot, fill);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_RECTANGLE: {
-        EmbReal x = 0.0f;
-        EmbReal y = 0.0f;
-        EmbReal w = 10.0f;
-        EmbReal h = 20.0f;
-        EmbReal rot = 0.0f;
-        bool fill = false;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_rectangle(x, y, w, h, rot, fill, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_ROUNDED_RECTANGLE: {
-        EmbReal x = 0.0f;
-        EmbReal y = 0.0f;
-        EmbReal w = 10.0f;
-        EmbReal h = 20.0f;
-        EmbReal rad = 2.0f;
-        EmbReal rot = 0.0f;
-        bool fill = false;
-        add_rounded_rectangle(x, y, w, h, rad, rot, fill);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_ARC: {
-        EmbVector start = emb_vector(0.0f, 0.0f);
-        EmbVector mid = emb_vector(10.0f, 0.0f);
-        EmbVector end = emb_vector(10.0f, 10.0f);
-        add_arc(start, mid, end, OBJ_RUBBER_OFF);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_CIRCLE: {
-        EmbVector center = emb_vector(0.0f, 0.0f);
-        EmbReal radius = 10.0;
-        bool fill = false;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_circle(center, radius, fill, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_SLOT: {
-        EmbVector center = emb_vector(0.0f, 0.0f);
-        EmbReal diameter = 1.0;
-        EmbReal length = 10.0;
-        EmbReal rot = 0.0;
-        bool fill = false;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_slot(center, diameter, length, rot, fill, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_ELLIPSE: {
-        EmbVector center = emb_vector(0.0f, 0.0f);
-        EmbReal width = 10.0;
-        EmbReal height = 30.0;
-        EmbReal rot = 1.0;
-        bool fill = false;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_ellipse(center, width, height, rot, fill, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_POINT: {
-        EmbVector position = emb_vector(10.0f, 10.0f);
-        add_point(position);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_REGULAR_POLYGON: {
-        EmbVector center = emb_vector(10.0f, 10.0f);
-        int sides = 5;
-        int mode = 0;
-        EmbReal rad = 10.0;
-        EmbReal rot = 0.0;
-        bool fill = false;
-        add_regular_polygon(center, sides, mode, rad, rot, fill);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_POLYGON: {
-        EmbVector start = emb_vector(0.0f, 0.0f);
-        QPainterPath p;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_polygon(start, p, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_POLYLINE: {
-        EmbVector start = emb_vector(0.0f, 0.0f);
-        QPainterPath p;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_polyline(start, p, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_PATH: {
-        EmbVector start = emb_vector(0.0f, 0.0f);
-        QPainterPath p;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_path(start, p, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_HORIZONTAL_DIM: {
-        EmbVector start = emb_vector(8.0f, 12.0f);
-        EmbVector end = emb_vector(18.0f, 11.0f);
-        EmbReal legHeight = 10.0f;
-        add_horizontal_dimension(start, end, legHeight);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_VERTICAL_DIM: {
-        EmbVector start = emb_vector(-8.0f, 10.0f);
-        EmbVector end = emb_vector(1.0f, 13.0f);
-        EmbReal legHeight = 10.0f;
-        add_vertical_dimension(start, end, legHeight);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_IMAGE: {
-        QString img = "icons/default/app.png";
-        double x = 10.0;
-        double y = 10.0;
-        double w = 30.0;
-        double h = 20.0;
-        double rot = 10.0;
-        add_image(img, x, y, w, h, rot);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_DIM_LEADER: {
-        EmbVector start = emb_vector(8.0f, 1.0f);
-        EmbVector end = emb_vector(1.0f, 3.0f);
-        EmbReal rot = 10.0;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_dim_leader(start.x, start.y, end.x, end.y, rot, rubberMode);
-        break;
-    }
-
-    case CMD_GENERATE: {
-        generate(qPrintable(list[1]));
-        break;
-    }
-
-    case CMD_FILL: {
-        fill(qPrintable(list[1]));
-        break;
-    }
-
-    default:
-        printf("ERROR: unrecognised command id %d\n", id);
-        break;
-    }
+    int error = state.commands[id].function(argc, (char**)argv);
 }
 
-/*!
+/*
+ * Get a value that is stored in a state variable within a macro.
+ *
+ * Note that this is a C-linked function.
  */
 ScriptValue
-MainWindow::get(const char *key)
+get(const char *key)
 {
     ScriptValue result;
     result.r = 0.0;
@@ -1027,7 +291,7 @@ MainWindow::get(const char *key)
         return result;
     }
     if (!strncmp(key, "platform", 20)) {
-        strncpy(result.s, qPrintable(platformString()), 200);
+        strncpy(result.s, qPrintable(_mainWin->platformString()), 200);
         return result;
     }
     if (!strncmp(key, "prefix", 20)) {
@@ -1077,59 +341,63 @@ MainWindow::get(const char *key)
     return result;
 }
 
-/*!
- */
-void
-MainWindow::set(const char *key, ScriptValue value)
+/* . */
+int
+set_text_font_f(const char *str)
 {
-    if (!strncmp(key, "text_angle", 20)) {
-        st[ST_TEXT_ANGLE].r = value.r;
-        return;
-    }
-    if (!strncmp(key, "text_size", 20)) {
-        double num = value.i;
+    debug("TODO: add_to_menu");
+    textFontSelector->setCurrentFont(QFont(str));
+    strncpy(st[ST_TEXT_FONT].s, str, 200);
+    return 0;
+}
 
-        if (std::isnan(num)) {
-            debug("TypeError, setTextSize(): first argument failed isNaN check.");
-            return;
-        }
+void
+update_text_size(void)
+{
+    int index = textSizeSelector->findText("Custom", Qt::MatchContains);
+    if (index != -1) {
+        textSizeSelector->removeItem(index);
+    }
+    qreal num = st[ST_TEXT_SIZE].i;
+    textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
+    index = textSizeSelector->findText("Custom", Qt::MatchContains);
+    if (index != -1) {
+        textSizeSelector->setCurrentIndex(index);
+    }
+}
 
-        st[ST_TEXT_SIZE].i = std::fabs(num);
-        int index = textSizeSelector->findText("Custom", Qt::MatchContains);
-        if (index != -1) {
-            textSizeSelector->removeItem(index);
-        }
-        textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
-        index = textSizeSelector->findText("Custom", Qt::MatchContains);
-        if (index != -1) {
-            textSizeSelector->setCurrentIndex(index);
-        }
-        return;
-    }
-    if (!strncmp(key, "text_bold", 20)) {
-        st[ST_TEXT_BOLD].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "text_italic", 20)) {
-        st[ST_TEXT_ITALIC].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "text_underline", 20)) {
-        st[ST_TEXT_UNDERLINE].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "text_strikeout", 20)) {
-        st[ST_TEXT_STRIKEOUT].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "text_overline", 20)) {
-        st[ST_TEXT_OVERLINE].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "prefix", 20)) {
-        prompt->setPrefix(value.s);
-        return;
-    }
+void
+update_prompt_prefix(const char *prefix)
+{
+    prompt->setPrefix(prefix);
+}
+
+// Icons
+void
+MainWindow::iconResize(int iconSize)
+{
+    this->setIconSize(QSize(iconSize, iconSize));
+    layerSelector->     setIconSize(QSize(iconSize*4, iconSize));
+    colorSelector->     setIconSize(QSize(iconSize,   iconSize));
+    linetypeSelector->  setIconSize(QSize(iconSize*4, iconSize));
+    lineweightSelector->setIconSize(QSize(iconSize*4, iconSize));
+    //set the minimum combobox width so the text is always readable
+    layerSelector->     setMinimumWidth(iconSize*4);
+    colorSelector->     setMinimumWidth(iconSize*2);
+    linetypeSelector->  setMinimumWidth(iconSize*4);
+    lineweightSelector->setMinimumWidth(iconSize*4);
+
+    //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
+
+    st[ST_ICON_SIZE].i = iconSize;
+}
+
+// TODO: check that the toReal() conversion is ok
+void
+MainWindow::textSizeSelectorIndexChanged(int index)
+{
+    debug("textSizeSelectorIndexChanged(%d)", index);
+    st[ST_TEXT_SIZE].i = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
 MainWindow::MainWindow() : QMainWindow(0)
@@ -1141,7 +409,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
     QStringList folders = {
-        "scripts",
         "docs",
         "icons",
         "images",

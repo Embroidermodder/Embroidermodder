@@ -1581,13 +1581,13 @@ void View::mouseReleaseEvent(QMouseEvent* event)
     }
     if (event->button() == Qt::XButton1) {
         debug("XButton1");
-        _mainWin->cmd("undo");
+        cmd("undo");
         //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2) {
         debug("XButton2");
-        _mainWin->cmd("redo");
+        cmd("redo");
         //TODO: Make this customizable
         event->accept();
     }

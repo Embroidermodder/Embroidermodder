@@ -83,95 +83,263 @@ State state = {
     .recent_files = {
         END_SYMBOL
     },
-    .command_names = {
-        [CMD_NULL] = "null",
-        [CMD_ABOUT] = "about",
-        [CMD_STUB] = "stub",
-        [CMD_CUT] = "cut",
-        [CMD_COPY] = "copy",
-        [CMD_PASTE] = "paste",
-        [CMD_SELECT_ALL] = "select_all",
-        [CMD_DETAILS] = "details",
-        [CMD_UPDATES] = "update",
-        [CMD_WHATS_THIS] = "whats_this",
-        [CMD_PRINT] = "print",
-        [CMD_HELP] = "help",
-        [CMD_CHANGELOG] = "changelog",
-        [CMD_UNDO] = "undo",
-        [CMD_REDO] = "redo",
-        [CMD_REPEAT] = "repeat",
-        [CMD_ICON16] = "icon16",
-        [CMD_ICON24] = "icon24",
-        [CMD_ICON32] = "icon32",
-        [CMD_ICON48] = "icon48",
-        [CMD_ICON64] = "icon64",
-        [CMD_ICON128] = "icon128",
-        [CMD_PLAY] = "play",
-        [CMD_SLEEP] = "sleep",
-        [CMD_NEW] = "new",
-        [CMD_OPEN] = "open",
-        [CMD_SAVE] = "save",
-        [CMD_SAVE_AS] = "save_as",
-        [CMD_PAN_LEFT] = "pan_left",
-        [CMD_PAN_DOWN] = "pan_down",
-        [CMD_PAN_RIGHT] = "pan_right",
-        [CMD_PAN_UP] = "pan_up",
-        [CMD_PAN_POINT] = "pan_point",
-        [CMD_PAN_REAL_TIME] = "pan_real_time",
-        [CMD_WINDOW_CASCADE] = "window_cascade",
-        [CMD_WINDOW_CLOSE_ALL] = "window_close_all",
-        [CMD_WINDOW_CLOSE] = "window_close",
-        [CMD_WINDOW_NEXT] = "window_next",
-        [CMD_WINDOW_PREVIOUS] = "window_previous",
-        [CMD_WINDOW_TILE] = "window_tile",
-        [CMD_ZOOM_ALL] = "zoom_all",
-        [CMD_ZOOM_CENTER] = "zoom_center",
-        [CMD_ZOOM_DYNAMIC] = "zoom_dynamic",
-        [CMD_ZOOM_EXTENTS] = "zoom_extents",
-        [CMD_ZOOM_IN] = "zoom_in",
-        [CMD_ZOOM_OUT] = "zoom_out",
-        [CMD_ZOOM_PREVIOUS] = "zoom_previous",
-        [CMD_ZOOM_REAL_TIME] = "zoom_real_time",
-        [CMD_ZOOM_SCALE] = "zoom_scale",
-        [CMD_ZOOM_SELECTED] = "zoom_selected",
-        [CMD_ZOOM_WINDOW] = "zoom_window",
-        [CMD_DAY] = "day",
-        [CMD_NIGHT] = "night",
-        [CMD_CLEAR_RUBBER] = "clear_rubber",
-        [CMD_CLEAR_SELECTION] = "clear",
-        [CMD_END] = "end",
-        [CMD_EXIT] = "exit",
-        [CMD_MACRO] = "macro",
-        [CMD_SCRIPT] = "run",
-        [CMD_SETTINGS] = "settings",
-        [CMD_SET] = "set",
-        [CMD_GET] = "get",
-        [CMD_TEXT_MULTI] = "text_multi",
-        [CMD_TEXT_SINGLE] = "text_single",
-        [CMD_INFINITE_LINE] = "infinite_line",
-        [CMD_RAY] = "ray",
-        [CMD_LINE] = "line",
-        [CMD_TRIANGLE] = "triangle",
-        [CMD_RECTANGLE] = "rectangle",
-        [CMD_ROUNDED_RECTANGLE] = "rounded_rectangle",
-        [CMD_ARC] = "arc",
-        [CMD_CIRCLE] = "circle",
-        [CMD_SLOT] = "slot",
-        [CMD_ELLIPSE] = "ellipse",
-        [CMD_POINT] = "point",
-        [CMD_REGULAR_POLYGON] = "regular_polygon",
-        [CMD_POLYGON] = "polygon",
-        [CMD_POLYLINE] = "polyline",
-        [CMD_PATH] = "path",
-        [CMD_IMAGE] = "image",
-        [CMD_DIM_LEADER] = "dim_leader",
-        [CMD_HORIZONTAL_DIM] = "horizontal_dimension",
-        [CMD_VERTICAL_DIM] = "vertical_dimension",
-        [CMD_STOP] = "stop",
-        [CMD_GENERATE] = "generate",
-        [CMD_FILL] = "fill",
-        [N_COMMANDS] = "_END"
+    /* TODO: Keep this list alphabetized with the exception of the null command
+     * which is kept in position zero for clarity and the terminator which
+     * has to be at the end to determining the length of the array.
+     */
+    .commands = {
+        {
+            .name = "null",
+            .function = null_command
+        },
+        {
+            .name = "about",
+            .function = about_command
+        },
+        {
+            .name = "stub",
+            .function = stub_command
+        },
+        {
+            .name = "cut",
+            .function = cut_command
+        },
+        {
+            .name = "copy",
+            .function = copy_command
+        },
+        {
+            .name = "paste",
+            .function = paste_command
+        },
+        {
+            .name = "select_all",
+            .function = select_all_command
+        },
+        {
+            .name = "details",
+            .function = details_command
+        },
+        {
+            .name = "update",
+            .function = update_command
+        },
+        {
+            .name = "whats_this",
+            .function = whats_this_command
+        },
+        {
+            .name = "print",
+            .function = print_command
+        },
+        {
+            .name = "help",
+            .function = help_command
+        },
+        {
+            .name = "changelog",
+            .function = changelog_command
+        },
+        {
+            .name = "undo",
+            .function = undo_command
+        },
+        {
+            .name = "redo",
+            .function = redo_command
+        },
+        {
+            .name = "repeat",
+            .function = repeat_command
+        },
+        {
+            .name = "icon",
+            .function = icon_command
+        },
+        {
+            .name = "play",
+            .function = play_command
+        },
+        {
+            .name = "sleep",
+            .function = sleep_command
+        },
+        {
+            .name = "new",
+            .function = new_command
+        },
+        {
+            .name = "open",
+            .function = open_command
+        },
+        {
+            .name = "save",
+            .function = save_command
+        },
+        {
+            .name = "save_as",
+            .function = save_as_command
+        },
+        {
+            .name = "pan",
+            .function = pan_command
+        },
+        {
+            .name = "window",
+            .function = window_command
+        },
+        {
+            .name = "zoom",
+            .function = zoom_command
+        },
+        {
+            .name = "day",
+            .function = day_command
+        },
+        {
+            .name = "night",
+            .function = night_command
+        },
+        {
+            .name = "clear_rubber",
+            .function = clear_rubber_command
+        },
+        {
+            .name = "clear",
+            .function = clear_command
+        },
+        {
+            .name = "end",
+            .function = end_command
+        },
+        {
+            .name = "exit",
+            .function = exit_command
+        },
+        {
+            .name = "macro",
+            .function = macro_command
+        },
+        {
+            .name = "run",
+            .function = run_command
+        },
+        {
+            .name = "settings",
+            .function = settings_command
+        },
+        {
+            .name = "set",
+            .function = set_command
+        },
+        /*
+        {
+            .name = "get",
+            .function = null_command
+        },
+        */
+        {
+            .name = "text_multi",
+            .function = text_multi_command
+        },
+        {
+            .name = "text_single",
+            .function = text_single_command
+        },
+        {
+            .name = "infinite_line",
+            .function = infinite_line_command
+        },
+        {
+            .name = "ray",
+            .function = ray_command
+        },
+        {
+            .name = "line",
+            .function = line_command
+        },
+        {
+            .name = "triangle",
+            .function = triangle_command
+        },
+        {
+            .name = "rectangle",
+            .function = rectangle_command
+        },
+        {
+            .name = "rounded_rectangle",
+            .function = rounded_rectangle_command
+        },
+        {
+            .name = "arc",
+            .function = arc_command
+        },
+        {
+            .name = "circle",
+            .function = circle_command
+        },
+        {
+            .name = "slot",
+            .function = slot_command
+        },
+        {
+            .name = "ellipse",
+            .function = ellipse_command
+        },
+        {
+            .name = "point",
+            .function = point_command
+        },
+        {
+            .name = "regular_polygon",
+            .function = regular_polygon_command
+        },
+        {
+            .name = "polygon",
+            .function = polygon_command
+        },
+        {
+            .name = "polyline",
+            .function = polyline_command
+        },
+        {
+            .name = "path",
+            .function = path_command
+        },
+        {
+            .name = "image",
+            .function = image_command
+        },
+        {
+            .name = "dim_leader",
+            .function = dim_leader_command
+        },
+        {
+            .name = "horizontal_dimension",
+            .function = horizontal_dimension_command
+        },
+        {
+            .name = "vertical_dimension",
+            .function = vertical_dimension_command
+        },
+        {
+            .name = "stop",
+            .function = stop_command
+        },
+        {
+            .name = "generate",
+            .function = generate_command
+        },
+        {
+            .name = "fill",
+            .function = fill_command
+        },
+        {
+            .name = "_END",
+            .function = null_command
+        }
     },
+
     .generate_list = {
         [GEN_PHOTO] = "photo",
         [GEN_DRAWING] = "drawing",
@@ -560,132 +728,64 @@ debug(const char *msg, ...)
     fclose(f);
 }
 
-#if 0
 /*
- * Lua interface to core commands.
+ * To avoid unused arguments warnings and catch stray arguments in macros
+ * we warn the user that they have passed arguments to functions that take
+ * none. These are listed out in the debug.
  *
- * User based interaction comes via this interface so we can parse
- * the differences between interaction contexts.
+ * For functions that use more than the expected number of arguments
+ * use "excess_arguments".
  *
- * TODO: currently can't pass arguments through to core commands.
- */
-int
-cmd_f(lua_State *L)
-{
-    ScriptValue args[2];
-    if (!unpack_args(L, "cmd_f", args, "s")) {
-        return 0;
-    }
-    if (state.context_flag == CONTEXT_MAIN) {
-        run_cmd("clear_rubber");
-        /* Some selection based commands need to override this. */
-        run_cmd("clear");
-    }
-    run_cmd(args[0].s);
-    /* TODO: conditional on if the command is open ended or not. */
-    run_cmd("end");
-    return 0;
-}
-
-/**
- * @brief Set a state variable to a lua variable.
- *
- * EXAMPLE: set("text_font", "Arial")
- *
- * FIXME: this is an untested draft.
- */
-int
-set_f(lua_State *L)
-{
-    if (!lua_isstring(L, 1)) {
-        debug("set: first argument not a string");
-        return 0;
-    }
-    const char *key = lua_tostring(L, 1);
-    ScriptValue value;
-    value.b = false;
-    if (lua_isboolean(L, 2)) {
-        value.b = lua_toboolean(L, 2);
-        return 0;
-    }
-    if (lua_isinteger(L, 2)) {
-        value.i = lua_tointeger(L, 2);
-        return 0;
-    }
-    if (lua_isstring(L, 2)) {
-        strncpy(value.s, lua_tostring(L, 2), 200);
-        return 0;
-    }
-    //FIXME: _mainWin->set(key, value);
-    return 0;
-}
-
-/**
- * @brief Get a state variable and pass it as a lua variable.
- *
- * EXAMPLE: font = get("text_font")
- *
- * @fixme this is an untested draft.
- */
-int
-get_f(lua_State *L)
-{
-    if (!lua_isstring(L, 1)) {
-        debug("get: first argument not a string");
-        return 0;
-    }
-    //FIXME: ScriptValue result = _mainWin->get(lua_tostring(L, 1));
-    //FIXME: lua_pushnumber(L, result.i);
-    return 1;
-}
-
-/*
- * Load TOML data and initialise lua registerables.
- *
- * Lua in Embroidermodder 2 uses a 2 stage boot process.
- *
- * 1. Built-in style hookups to Embroidermodder2 features which are
- *    lua functions.
- * 2. Commands written in lua-only which represent the QActions used by
- *    the interface in the menus, toolbars and command line.
- *
- * Each command loaded in boot step 3 has up to 5 contexts
- * (see the list of defines in the headers: grep for "CONTEXT_") and will switch
- * depending on what context it is called in.
- */
-bool
-script_env_boot(void)
-{
-    /** Setting up Lua. */
-    Lua = luaL_newstate();
-    luaL_openlibs(Lua);
-
-    /*
-     * Bootstrapping function to support complex scripting.
-     *
-     * Allow scripts to act on the program state using the command line like this::
-     *
-     *     -- Convert an example file from Tajima dst to Brother pes format.
-     *     cmd("open example.dst")
-     *     cmd("saveas example.pes")
-     */
-    lua_register(Lua, "cmd", cmd_f);
-    lua_register(Lua, "get", get_f);
-    lua_register(Lua, "set", set_f);
-
-    return true;
-}
-
-/**
- * @brief Free up the memory used by the scripting environment.
- *
- * This is necessary since all the script variables and headers are only
- * present in this file. Currently just the Lua state.
+ * This is never considered a failure condition for a function.
  */
 void
-script_env_free(void)
+no_arguments(const char *name, int argc, char *argv[])
 {
-    lua_close(Lua);
+    if (argc > 0) {
+        int i;
+        debug("%s expected no arguments but these were supplied:", name);
+        for (i = 0; i < argc; i++) {
+            debug("    %d: %s", i, argv[i]);
+        }
+    }
 }
-#endif
+
+/*
+ * Report to the debug log that the current command supplied more arguments
+ * than the function expected.
+ *
+ * If the number of arguments is not the expected number then this is potentially
+ * an error, particularly if the number of arguments is less than the expected
+ * amount.
+ */
+int
+excess_arguments(const char *name, int expected, int argc, char *argv[])
+{
+    if (argc > expected) {
+        int i;
+        debug("%s expected %d arguments but these were also supplied:", name, expected);
+        for (i = expected; i < argc; i++) {
+            debug("    %d: %s", i, argv[i]);
+        }
+        return 1;
+    }
+    if (argc < expected) {
+        return -1;
+    }
+    return 0;
+}
+
+/*
+ * If the string appears not to be specifically "false", "False" or "0" then
+ * we can assume it to be true. So we just check that the first character doesn't
+ * match these.
+ *
+ * In C, the if statement goes ahead with all values other than 0, so we can take
+ * the view that "15" is "true" for example.
+ */
+uint8_t
+to_boolean(const char *value)
+{
+    return !((value[0] == 'f') || (value[0] == 'F') || (value[0] == '0'));
+}
 
