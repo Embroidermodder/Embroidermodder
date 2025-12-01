@@ -72,7 +72,8 @@ bool MdiWindow::saveFile(const QString &fileName)
  * NOTE: libembroidery is responsible for converting all geometry into stitches
  *       based on the format.
  */
-bool MdiWindow::loadFile(const QString &fileName)
+bool
+MdiWindow::loadFile(const QString &fileName)
 {
     debug("MdiWindow loadFile()");
 
@@ -96,7 +97,7 @@ bool MdiWindow::loadFile(const QString &fileName)
     EmbPattern* p = emb_pattern_create();
     if (!p) {
         printf("Could not allocate memory for embroidery pattern\n");
-        exit(1);
+        return false;
     }
     /* FIXME: differentiate between error types. */
     int success = emb_pattern_readAuto(p, qPrintable(fileName));
@@ -106,7 +107,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 .arg(fileName)
                 .arg("libembroidery could not parse the file"));
         emb_pattern_free(p);
-        return  false;
+        return false;
     }
 
     /* FIXME: flattens all colors to black */
@@ -129,7 +130,7 @@ bool MdiWindow::loadFile(const QString &fileName)
         }
     }
     polylinePath.translate(-start.x, -start.y);
-    mainWin->add_polyline(start, polylinePath, OBJ_RUBBER_OFF);
+    polyline_c(start, polylinePath, OBJ_RUBBER_OFF);
 
     /* FIXME: loading geometry
         QPainterPath path;
@@ -414,16 +415,6 @@ void MdiWindow::currentLineweightChanged(const QString& weight)
 
 void MdiWindow::updateColorLinetypeLineweight()
 {
-}
-
-void MdiWindow::deletePressed()
-{
-    gview->deletePressed();
-}
-
-void MdiWindow::escapePressed()
-{
-    gview->escapePressed();
 }
 
 void MdiWindow::showViewScrollBars(bool val)

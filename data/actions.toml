@@ -68,7 +68,7 @@ statustip = "Updates the current view using day vision settings."
 
 [[actions]]
 icon = "designdetails"
-command = "design_details"
+command = "details"
 tooltip = "&Details"
 statustip = "Details of the current design."
 shortcut = "Ctrl+D"
@@ -95,7 +95,7 @@ alias = [
 
 [[actions]]
 icon = "donothing"
-command = "do_nothing"
+command = "null"
 tooltip = "&Do Nothing"
 statustip = "Does Nothing"
 
@@ -129,7 +129,7 @@ command = "error"
 
 [[actions]]
 icon = "exit"
-command = "exit_program"
+command = "exit"
 tooltip = "E&xit"
 statustip = "Exit the application: EXIT."
 shortcut = "Ctrl+Q"
@@ -167,37 +167,37 @@ statustip = "Turns the visibility off for all layers in the current drawing."
 
 [[actions]]
 icon = "icon128"
-command = "icon128"
+command = "icon_resize 128"
 tooltip = "Icon12&8"
 statustip = "Sets the toolbar icon size to 128x128."
 
 [[actions]]
 icon = "icon16"
-command = "icon16"
+command = "icon_resize 16"
 tooltip = "Icon&16"
 statustip = "Sets the toolbar icon size to 16x16."
 
 [[actions]]
 icon = "icon24"
-command = "icon24"
+command = "icon_resize 24"
 tooltip = "Icon&24"
 statustip = "Sets the toolbar icon size to 24x24."
 
 [[actions]]
 icon = "icon32"
-command = "icon32"
+command = "icon_resize 32"
 tooltip = "Icon&32"
 statustip = "Sets the toolbar icon size to 32x32."
 
 [[actions]]
 icon = "icon48"
-command = "icon48"
+command = "icon_resize 48"
 tooltip = "Icon&48"
 statustip = "Sets the toolbar icon size to 48x48."
 
 [[actions]]
 icon = "icon64"
-command = "icon64"
+command = "icon_resize 64"
 tooltip = "Icon&64"
 statustip = "Sets the toolbar icon size to 64x64."
 
@@ -416,37 +416,37 @@ alias = [
 
 [[actions]]
 icon = "pandown"
-command = "pan_down"
+command = "pan down"
 tooltip = "&Pan Down"
 statustip = "Moves the view down."
 
 [[actions]]
 icon = "panleft"
-command = "pan_left"
+command = "pan left"
 tooltip = "&Pan Left"
 statustip = "Moves the view to the left."
 
 [[actions]]
 icon = "panpoint"
-command = "pan_point"
+command = "pan point"
 tooltip = "&Pan Point"
 statustip = "Moves the view by the specified distance."
 
 [[actions]]
 icon = "panrealtime"
-command = "pan_real-time"
+command = "pan real-time"
 tooltip = "&Pan Realtime"
 statustip = "Moves the view in the current viewport."
 
 [[actions]]
 icon = "panright"
-command = "pan_right"
+command = "pan right"
 tooltip = "&Pan Right"
 statustip = "Moves the view to the right."
 
 [[actions]]
 icon = "panup"
-command = "pan_up"
+command = "pan up"
 tooltip = "&Pan Up"
 statustip = "Moves the view up."
 
@@ -621,103 +621,103 @@ statustip = "What's This? Context Help!"
 
 [[actions]]
 icon = "windowcascade"
-command = "window_cascade"
+command = "window cascade"
 tooltip = "&Cascade"
 statustip = "Cascade the windows."
 
 [[actions]]
 icon = "windowclose"
-command = "window_close"
+command = "window close"
 tooltip = "Cl&ose"
 statustip = "Close the active window."
 
 [[actions]]
 icon = "windowcloseall"
-command = "window_close_all"
+command = "window close-all"
 tooltip = "Close &All"
 statustip = "Close all the windows."
 
 [[actions]]
 icon = "windownext"
-command = "window_next"
+command = "window next"
 tooltip = "Ne&xt"
 statustip = "Move the focus to the next window."
 
 [[actions]]
 icon = "windowprevious"
-command = "window_previous"
+command = "window previous"
 tooltip = "Pre&vious"
 statustip = "Move the focus to the previous window."
 
 [[actions]]
 icon = "windowtile"
-command = "window_tile"
+command = "window tile"
 tooltip = "&Tile"
 statustip = "Tile the windows."
 
 [[actions]]
 icon = "zoomall"
-command = "zoom_all"
+command = "zoom all"
 tooltip = "Zoom &All"
 statustip = "Zooms to display the drawing extents or the grid limits."
 
 [[actions]]
 icon = "zoomcenter"
-command = "zoom_center"
+command = "zoom center"
 tooltip = "Zoom &Center"
 statustip = "Zooms to display a view specified by a center point and magnification or height."
 
 [[actions]]
 icon = "zoomdynamic"
-command = "zoom_dynamic"
+command = "zoom dynamic"
 tooltip = "Zoom &Dynamic"
 statustip = "Zooms to display the generated portion of the drawing."
 
 [[actions]]
 icon = "zoomextents"
-command = "zoom_extents"
+command = "zoom extents"
 tooltip = "Zoom &Extents"
 statustip = "Zooms to display the drawing extents."
 
 [[actions]]
 icon = "zoomin"
-command = "zoom_in"
+command = "zoom in"
 tooltip = "Zoom &In"
 statustip = "Zooms to increase the apparent size of objects."
 
 [[actions]]
 icon = "zoomout"
-command = "zoom_out"
+command = "zoom out"
 tooltip = "Zoom &Out"
 statustip = "Zooms to decrease the apparent size of objects."
 
 [[actions]]
 icon = "zoomscale"
-command = "zoom_scale"
+command = "zoom scale"
 tooltip = "Zoom &Scale"
 statustip = "Zooms the display using a specified scale factor."
 
 [[actions]]
 icon = "zoomprevious"
-command = "zoom_previous"
+command = "zoom previous"
 tooltip = "Zoom &Previous"
 statustip = "Zooms to display the previous view."
 
 [[actions]]
 icon = "zoomrealtime"
-command = "zoom_real_time"
+command = "zoom real-time"
 tooltip = "Zoom &Realtime"
 statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport."
 
 [[actions]]
 icon = "zoomselected"
-command = "zoom_selected"
+command = "zoom selected"
 tooltip = "Zoom Selec&ted"
 statustip = "Zooms to display the selected objects."
 
 [[actions]]
 icon = "zoomwindow"
-command = "zoom-window"
+command = "zoom window"
 tooltip = "Zoom &Window"
 statustip = "Zooms to display an area specified by a rectangular window."
 

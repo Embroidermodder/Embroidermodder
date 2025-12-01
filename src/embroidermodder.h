@@ -278,13 +278,14 @@ typedef struct PropertiesData_ {
 
 /* ---- Function declarations (that aren't in a class) ---------------------- */
 QRgb getCurrentColor();
+QString translate_str(const char *msg);
 
 MdiWindow* activeMdiWindow(void);
 View* activeView(void);
 QGraphicsScene* activeScene(void);
 QUndoStack* activeUndoStack(void);
 
-int get_id(char *table[], const char *cmd);
+int polyline_c(EmbVector start, QPainterPath p, int32_t rubber_mode);
 
 /* ---- Global data --------------------------------------------------------- */
 extern MainWindow* _mainWin;
@@ -293,6 +294,7 @@ extern CmdPrompt* prompt;
 extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
+extern State state;
 
 extern QHash<QString, QAction*> actionHash;
 extern std::vector<Command> command_map;
@@ -604,9 +606,6 @@ public:
     ~MainWindow();
 
     void cmd(const char *line);
-    void run(const char *filename);
-    ScriptValue get(const char *key);
-    void set(const char *key, ScriptValue value);
 
     QPrinter printer;
     QBasicTimer timer;
@@ -627,9 +626,6 @@ public:
     QString activeCommand() { return prompt->activeCommand(); }
 
     QString platformString();
-
-    void generate(const char *type);
-    void fill(const char *type);
 
 public slots:
     void onCloseWindow();
@@ -666,7 +662,6 @@ protected:
     void loadFormats();
 
 public:
-
     QByteArray layoutState;
 
     QList<MdiWindow*> listMdiWin;
@@ -699,9 +694,6 @@ private slots:
     void hideUnimplemented();
 
 public slots:
-
-    void stub_testing();
-
     void promptHistoryAppended(const QString& txt);
     void logPromptInput(const QString& txt);
     void promptInputPrevious();
@@ -721,7 +713,6 @@ public slots:
     void tipOfTheDay();
     void buttonTipOfTheDayClicked(int);
     void checkBoxTipOfTheDayStateChanged(int);
-    void about();
 
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
@@ -744,63 +735,10 @@ public slots:
     QString getCurrentLineType();
     QString getCurrentLineWeight();
 
-    void deletePressed();
-    void escapePressed();
-
     // Layer Toolbar
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
-
-public:
-    //Natives
-    void nativeMessageBox(const QString& type, const QString& title, const QString& text);
-
-    void nativePrintArea(qreal x, qreal y, qreal w, qreal h);
-
-    bool nativeAllowRubber();
-    void nativeSpareRubber(qint64 id);
-    // TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    void nativeSetRubberMode(int mode);
-    void nativeSetRubberPoint(const QString& key, qreal x, qreal y);
-    void nativeSetRubberText(const QString& key, const QString& txt);
-
-    /* Geometry */
-    void add_text_multi(const QString& str, EmbVector position, qreal rot, bool fill, int rubberMode);
-    void add_text_single(const QString& str, EmbVector position, qreal rot, bool fill, int rubberMode);
-    void add_infinite_line(EmbVector point1, EmbVector point2, qreal rot);
-    void add_ray(EmbVector start, EmbVector point, qreal rot);
-    void add_line(EmbVector start, EmbVector end, qreal rot, int rubberMode);
-    void add_triangle(EmbVector point1, EmbVector point2, EmbVector point3, qreal rot, bool fill);
-    void add_rectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
-    void add_rounded_rectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
-    void add_arc(EmbVector start, EmbVector mid, EmbVector end, int rubberMode);
-    void add_circle(EmbVector center, qreal radius, bool fill, int rubberMode);
-    void add_slot(EmbVector center, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);
-    void add_ellipse(EmbVector center, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
-    void add_point(EmbVector position);
-    void add_regular_polygon(EmbVector center, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
-    void add_polygon(EmbVector start, const QPainterPath& p, int rubberMode);
-    void add_polyline(EmbVector start, const QPainterPath& p, int rubberMode);
-    void add_path(EmbVector start, const QPainterPath& p, int rubberMode);
-    void add_image(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);
-
-    /* Annotations */
-    void add_dim_leader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
-    void add_horizontal_dimension(EmbVector start, EmbVector end, qreal legHeight);
-    void add_vertical_dimension(EmbVector start, EmbVector end, qreal legHeight);
-
-    void  nativeSetCursorShape(const QString& str);
-    qreal nativeCalculateAngle(qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal nativeCalculateDistance(qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal nativePerpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
-
-    void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-    void nativePasteSelected(qreal x, qreal y);
-    void nativeMoveSelected(qreal dx, qreal dy);
-    void nativeScaleSelected(qreal x, qreal y, qreal factor);
-    void nativeRotateSelected(qreal x, qreal y, qreal rot);
-    void nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
 };
 
 class ImageWidget : public QWidget
@@ -910,8 +848,6 @@ public slots:
     void currentLineweightChanged(const QString& weight);
 
     void updateColorLinetypeLineweight();
-    void deletePressed();
-    void escapePressed();
 
     void showViewScrollBars(bool val);
     void setViewCrossHairColor(QRgb color);

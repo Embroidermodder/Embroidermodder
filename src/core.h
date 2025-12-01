@@ -7,8 +7,16 @@
  *
  * ----------------------------------------------------------------------------
  *
- * The C11 core: works by calling commands and altering the state directly.
- * Note that the global "state" variable is defined here.
+ * Minimal include for commands/, fills/ and designs/ directories.
+ *
+ * To speed up compilation, this is the referenced header for much of the
+ * codebase allowing access to enough of the program state via calls of this
+ * form:
+ *
+ *     int function(State *state);
+ *
+ * These function declarations are collected into the headers "commands.h",
+ * "fills.h" and "designs.h".
  */
 
 #ifndef __EM2_CORE__
@@ -18,13 +26,14 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <inttypes.h>
+#include <stdbool.h>
 #include <stdarg.h>
 
 #include "embroidery.h"
 
-/* Integer and string constants and external table declarations.
+/*
+ * Integer and string constants and external table declarations.
  *
  * These macros are all for optimization of either lookup using explicit indicies
  * or tokens for switch tables.
@@ -43,116 +52,16 @@ extern "C" {
 /* FIXME: this needs changing in libembroidery. */
 #undef N_COMMANDS
 
-/* Command IDs: for faster internal calls of CAD commands
- * (see the switch table in command.cpp).
- */
-#define CMD_NULL                       0
-#define CMD_ABOUT                      1
-#define CMD_STUB                       2
-#define CMD_CUT                        3
-#define CMD_COPY                       4
-#define CMD_PASTE                      5
-#define CMD_SELECT_ALL                 6
-#define CMD_DETAILS                    7
-#define CMD_UPDATES                    8
-#define CMD_WHATS_THIS                 9
-#define CMD_PRINT                     10
-#define CMD_HELP                      11
-#define CMD_CHANGELOG                 12
-#define CMD_UNDO                      13
-#define CMD_REDO                      14
-#define CMD_REPEAT                    15
-#define CMD_ICON16                    16
-#define CMD_ICON24                    17
-#define CMD_ICON32                    18
-#define CMD_ICON48                    19
-#define CMD_ICON64                    20
-#define CMD_ICON128                   21
-#define CMD_PLAY                      22
-#define CMD_SLEEP                     23
-#define CMD_NEW                       24
-#define CMD_OPEN                      25
-#define CMD_SAVE                      26
-#define CMD_SAVE_AS                   27
-#define CMD_PAN_LEFT                  28
-#define CMD_PAN_DOWN                  29
-#define CMD_PAN_RIGHT                 30
-#define CMD_PAN_UP                    31
-#define CMD_PAN_POINT                 32
-#define CMD_PAN_REAL_TIME             33
-#define CMD_WINDOW_CASCADE            34
-#define CMD_WINDOW_CLOSE_ALL          35
-#define CMD_WINDOW_CLOSE              36
-#define CMD_WINDOW_NEXT               37
-#define CMD_WINDOW_PREVIOUS           38
-#define CMD_WINDOW_TILE               39
-#define CMD_ZOOM_ALL                  40
-#define CMD_ZOOM_CENTER               41
-#define CMD_ZOOM_DYNAMIC              42
-#define CMD_ZOOM_EXTENTS              43
-#define CMD_ZOOM_IN                   44
-#define CMD_ZOOM_OUT                  45
-#define CMD_ZOOM_PREVIOUS             46
-#define CMD_ZOOM_REAL_TIME            47
-#define CMD_ZOOM_SCALE                48
-#define CMD_ZOOM_SELECTED             49
-#define CMD_ZOOM_WINDOW               50
-#define CMD_DAY                       51
-#define CMD_NIGHT                     52
-#define CMD_CLEAR_RUBBER              53
-#define CMD_CLEAR_SELECTION           54
-#define CMD_END                       55
-#define CMD_EXIT                      56
-#define CMD_MACRO                     57
-#define CMD_SCRIPT                    58
-#define CMD_SETTINGS                  59
-#define CMD_SET                       60
-#define CMD_GET                       61
-#define CMD_TEXT_MULTI                62
-#define CMD_TEXT_SINGLE               63
-#define CMD_INFINITE_LINE             64
-#define CMD_RAY                       65
-#define CMD_LINE                      66
-#define CMD_TRIANGLE                  67
-#define CMD_RECTANGLE                 68
-#define CMD_ROUNDED_RECTANGLE         69
-#define CMD_ARC                       70
-#define CMD_CIRCLE                    71
-#define CMD_SLOT                      72
-#define CMD_ELLIPSE                   73
-#define CMD_POINT                     74
-#define CMD_REGULAR_POLYGON           75
-#define CMD_POLYGON                   76
-#define CMD_POLYLINE                  77
-#define CMD_PATH                      78
-#define CMD_IMAGE                     79
-#define CMD_DIM_LEADER                80
-#define CMD_HORIZONTAL_DIM            81
-#define CMD_VERTICAL_DIM              82
-#define CMD_STOP                      83
-#define CMD_GENERATE                  84
-#define CMD_FILL                      85
-#define N_COMMANDS                    86
+#define MAX_ARG_LENGTH               200
+#define MAX_ARGUMENTS                 20
+#define MAX_COMMANDS                 200
+#define MAX_SETTINGS                 200
 #define MAX_COMMANDS                 200
 
-/* Generate pattern */
-#define GEN_PHOTO                      0
-#define GEN_DRAWING                    1
-#define GEN_QR                         2
-#define GEN_GUILLOCHE                  3
-#define GEN_KNOT                       4
-#define N_GEN                          5
-
-/* Fills */
-#define FILL_SATIN                     0
-#define FILL_GRADIENT                  1
-#define FILL_BRICK                     2
-#define N_FILLS                        3
-
-/* Contexts for Lua calls */
+/* Contexts for command calls. */
 #define CONTEXT_MAIN                   0
 #define CONTEXT_CLICK                  1
-#define CONTEXT_CONTEXT                2
+#define CONTEXT_MENU                   2
 #define CONTEXT_MOVE                   3
 #define CONTEXT_PROMPT                 4
 
@@ -519,16 +428,42 @@ typedef struct ViewData_ {
     uint8_t qSnapToggle;
 } ViewData;
 
-typedef struct State_ {
+typedef struct State_ State;
+
+typedef struct FunctionPtr_ {
+    char name[100];
+    int (*function)(State *state);
+} FunctionPtr;
+
+/*
+ * This state variable encapuslates the command line's "scripting environment"
+ * and also all of the flags that control behaviour outside of that.
+ *
+ * TODO: include the settings variables as elements in the state.
+ *
+ * TODO: move over remaining global data.
+ */
+struct State_ {
+    char name[100];
+    char version[100];
+    char usage_msg[1000];
+
     uint8_t debug;
     uint8_t play_mode;
     uint8_t shift;
     uint64_t numOfDocs;
     uint64_t docIndex;
 
-    char *command_names[MAX_COMMANDS];
-    char *fill_list[MAX_COMMANDS];
-    char *generate_list[MAX_COMMANDS];
+    char command_line[MAX_ARGUMENTS*MAX_ARG_LENGTH];
+    char command[100];
+    char arguments[MAX_ARGUMENTS][MAX_ARG_LENGTH];
+    int argument_count;
+
+    char command_names[MAX_COMMANDS][100];
+    FunctionPtr command_list[MAX_COMMANDS];
+    FunctionPtr design_list[MAX_COMMANDS];
+    FunctionPtr fill_list[MAX_COMMANDS];
+    FunctionPtr generator_list[MAX_COMMANDS];
 
     uint8_t testing;
     uint64_t test_script_pos;
@@ -542,26 +477,118 @@ typedef struct State_ {
 
     uint64_t context_flag;
     uint64_t mode;
-} State;
+};
 
 /* Utilities */
 uint8_t willUnderflowInt32(int64_t a, int64_t b);
 uint8_t willOverflowInt32(int64_t a, int64_t b);
 int32_t roundToMultiple(bool roundUp, int32_t numToRound, int32_t multiple);
-void debug(const char *msg, ...);
-void temp_name(char *name, int *err);
 uint64_t current_time(void);
 
-/* Scripting and state */
-void run_cmd(const char *line);
-void load_data();
+/* Debugging */
+void debug(const char *msg, ...);
+int report_state(State state);
 
-/* Global data */
-extern State state;
+/* Scripting */
+void run_cmd(const char *line);
+void no_arguments(State *state);
+void load_data(void);
+ViewData *view_data(int32_t index);
+int get_index(FunctionPtr list[MAX_COMMANDS], char *entry);
+
+/*
+ * Qt/C++ commands
+ *
+ * ----------------------------------------------------------------------------
+ *
+ * C++ commands have the suffix "_c": some of the the "_command" functions
+ * are just wrappers for these, others perform parsing work.
+ *
+ * Note that they have C linkage so they can be called by the "_command"
+ * functions which are all in C source code.
+ *
+ * FIXME: the path-like commands need to pass QPainterPath which can't be
+ *        supplied with C linkage.
+ *
+ */
+
+/* Dialogs: housed in commands.cpp */
+int about_dialog_c(void);
+int changelog_dialog_c(void);
+int details_dialog_c(void);
+int help_dialog_c(void);
+int settings_dialog_c(void);
+int tip_of_the_day_dialog_c(void);
+
+/* Geometry C++ commands: housed in geometry.cpp */
+int arc_c(EmbVector start, EmbVector mid, EmbVector end, int32_t rubber_mode);
+int circle_c(EmbVector center, EmbReal radius, bool fill, int32_t rubber_mode);
+int dim_leader_c(EmbVector start, EmbVector end, EmbReal legHeight, int32_t rubber_mode);
+int ellipse_c(EmbVector center, EmbReal width, EmbReal height, EmbReal rot, bool fill,
+    int32_t rubber_mode);
+int horizontal_dim_c(EmbVector start, EmbVector end, EmbReal legHeight);
+int image_c(const char *img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot);
+int infinite_line_c(EmbVector point1, EmbVector point2, EmbReal rot);
+int line_c(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode);
+int path_c(void);
+int polygon_c(void);
+int polyline_c(void);
+int point_c(void);
+int rounded_rectangle_c(void);
+int ray_c(void);
+int rectangle_c(void);
+int regular_polygon_c(void);
+int slot_c(void);
+int text_multi_c(void);
+int text_single_c(void);
+int triangle_c(void);
+int vertical_dim_c(void);
+
+/* Rubber C++ commands: housed in rubber.cpp */
+int add_rubber_c(void);
+int allow_rubber_c(void);
+int clear_rubber_c(void);
+int rubber_c(void);
+int spare_rubber_c(const char *obj_type);
+int set_rubber_mode_c(void);
+int set_rubber_point_c(const char *key_, double x, double y);
+int set_rubber_text_c(const char *key_, const char *txt_);
+
+/* Key callbacks */
+void delete_pressed(void);
+void escape_pressed(void);
+
+/* Others */
+int clear_selection_c(void);
+int copy_c(void);
+int cut_c(void);
+int day_c(void);
+int end_c(void);
+int exit_program_c(void);
+ScriptValue get_c(const char *key);
+int icon_resize_c(int size);
+int messagebox_c(const char *type, const char *title, const char *text);
+int new_file_c(void);
+int night_c(void);
+int open_c(const char *filename);
+int pan_c(const char *subcommand);
+int paste_c(void);
+int print_file_c(void);
+int redo_c(void);
+int repeat_c(void);
+int save_c(void);
+int save_as_c(void);
+int script_c(const char *filename);
+int select_all_c(void);
+int set_c(const char *key, ScriptValue v);
+int sleep_c(void);
+int stub_testing_c(void);
+int undo_c(void);
+int whats_this_c(void);
+int window_c(const char *subcommand);
+int zoom_c(char *subcommand);
+
 extern ScriptValue st[N_SETTINGS];
-extern const char *usage_msg;
-extern const char* _appName_;
-extern const char* _appVer_;
 
 #ifdef __cplusplus
 }

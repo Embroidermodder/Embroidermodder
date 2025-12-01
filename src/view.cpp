@@ -7,6 +7,13 @@
 
 extern QList<QGraphicsItem*> clipboard;
 
+ViewData *
+view_data(int32_t index)
+{
+    /* _mainWin-> */
+    return NULL;
+}
+
 View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
     mainWin = mw;

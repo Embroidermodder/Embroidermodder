@@ -1,4 +1,12 @@
 /*
+ * Embroidermodder 2
+ * Copyright 2011-2025 The Embroidermodder Team
+ *
+ * Embroidermodder 2 is free and open software under the zlib license:
+ * see LICENSE.md for details.
+ *
+ * ----------------------------------------------------------------------------
+ *
  * The main starting point for loading the application and main window.
  *
  * This is the most frequently updated part of the source: new core developers would
@@ -75,8 +83,8 @@ main(int argc, char* argv[])
 #else
     QApplication app(argc, argv);
 #endif
-    app.setApplicationName(_appName_);
-    app.setApplicationVersion(_appVer_);
+    app.setApplicationName(state.name);
+    app.setApplicationVersion(state.version);
 
     QStringList filesToOpen;
 
@@ -84,11 +92,11 @@ main(int argc, char* argv[])
         if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
         }
         else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
-            fprintf(stdout, "%s", usage_msg);
+            fprintf(stdout, "%s", state.usage_msg);
             exitApp = true;
         }
         else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
-            fprintf(stdout, "%s %s\n", _appName_, _appVer_);
+            fprintf(stdout, "%s %s\n", state.name, state.version);
             exitApp = true;
         }
         else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--test")) {
@@ -98,7 +106,7 @@ main(int argc, char* argv[])
             filesToOpen << argv[i];
         }
         else {
-            fprintf(stdout, "%s", usage_msg);
+            fprintf(stdout, "%s", state.usage_msg);
             exitApp = true;
         }
     }
@@ -141,7 +149,7 @@ bool Application::event(QEvent *event)
         return QApplication::event(event);
     }
 }
-
+ 
 /*
  * Identify command id by its name in the supplied table.
  */
@@ -154,6 +162,12 @@ get_id(char *table[], const char *cmd)
         }
     }
     return -1;
+}
+
+QString
+translate_str(const char *msg)
+{
+    return _mainWin->tr(msg);
 }
 
 /* Wrapper for C calls of the main command processor. */
@@ -181,6 +195,15 @@ run_cmd(const char *line)
  * on lua style functions, but we either assume that the runCommand* family of functions
  * has vetted the data before it gets to this point or it is the caller's
  * responsibility to get it right within a C++ function.
+ *
+    if (state.context_flag == CONTEXT_MAIN) {
+        run_cmd("clear_rubber");
+        // Some selection based commands need to override this.
+        run_cmd("clear");
+    }
+    run_cmd(args[0].s);
+    // TODO: conditional on if the command is open ended or not.
+    run_cmd("end");
  */
 void
 MainWindow::cmd(const char *line)
@@ -189,236 +212,41 @@ MainWindow::cmd(const char *line)
 
     QString qstr(line);
     QStringList list = qstr.split(" ");
+    
+    /* Identify command */
     const char *cmd = qPrintable(list[0]);
     if (aliases.find(list[0]) != aliases.end()) {
         cmd = qPrintable(aliases.at(list[0]));
     }
-    int id = get_id(state.command_names, cmd);
-    if (id < 0) {
-        debug("ERROR: unrecognised command id.");
-        return;
-    }
-
-    if (state.debug > 0) {
-        debug("COMMAND %s", state.command_names[id]);
-    }
-
-    switch (id) {
-    /* This action intentionally does nothing. */
-    case CMD_NULL:
-        break;
-
-    /* Show the about dialog. */
-    case CMD_ABOUT:
-        about();
-        break;
-
-    case CMD_STUB:
-        QMessageBox::warning(this, tr("Testing Feature"),
-            tr("<b>This feature is in testing.</b>"));
-        break;
-
-    case CMD_CUT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->cut();
+    int id = get_index(state.command_list, (char*)cmd);
+    if (id >= 0) {
+        if (state.debug > 0) {
+            debug("COMMAND %s", state.command_list[id].name);
         }
-        break;
-    }
-
-    case CMD_COPY: {
-        View* gview = activeView();
-        if (gview) {
-            gview->copy();
+        state.argument_count = list.size()-1;
+        for (int i=1; i<list.size(); i++) {
+            strncpy(state.arguments[i-1], qPrintable(list.at(i)), 200-1);
         }
-        break;
-    }
 
-    case CMD_PASTE: {
-        View* gview = activeView();
-        if (gview) {
-            gview->paste();
+        int error = state.command_list[id].function(&state);
+        if (error) {
+            debug("ERROR CODE: %d", error);
         }
-        break;
+    }
+    else {
+        debug("ERROR: command %s not found", cmd);
     }
 
-    case CMD_SELECT_ALL: {
-        View* gview = activeView();
-        if (gview) {
-            gview->selectAll();
-        }
-        break;
-    }
-
-    case CMD_DETAILS: {
-        QGraphicsScene* scene = activeScene();
-        if (scene) {
-            EmbDetailsDialog dialog(scene, this);
-            dialog.exec();
-        }
-        break;
-    }
-
-
-    case CMD_UPDATES: {
-        debug("TODO: Check website for new versions, commands, etc...");
-        break;
-    }
-
-    case CMD_WHATS_THIS: {
-        QWhatsThis::enterWhatsThisMode();
-        break;
-    }
-
-    case CMD_PRINT: {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if (mdiWin == NULL) {
-            debug("ERROR: No active window for printing.");
-            break;
-        }
-        View *gview = activeView();
-
-        QPrintDialog dialog(&printer, mdiWin);
-        if (dialog.exec() == QDialog::Accepted) {
-            QPainter painter(&printer);
-            if (st[ST_PRINTING_DISABLE_BG].b) {
-                //Save current bg
-                QBrush brush = gview->backgroundBrush();
-                //Save ink by not printing the bg at all
-                gview->setBackgroundBrush(Qt::NoBrush);
-                //Print, fitting the viewport contents into a full page
-                gview->render(&painter);
-                //Restore the bg
-                gview->setBackgroundBrush(brush);
-            }
-            else {
-                //Print, fitting the viewport contents into a full page
-                gview->render(&painter);
-            }
-        }
-        break;
-    }
-
-    case CMD_HELP: {
-        // Open the HTML Help in the default browser
-        QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
-        QDesktopServices::openUrl(helpURL);
-
-        /* TODO: This is how to start an external program. Use this elsewhere...
-         * QString program = "firefox";
-         * QStringList arguments;
-         * arguments << "help/commands.html";
-         * QProcess *myProcess = new QProcess(this);
-         * myProcess->start(program, arguments);
-         */
-        break;
-    }
-
-    case CMD_CHANGELOG: {
-        QUrl changelogURL("help/changelog.html");
-        QDesktopServices::openUrl(changelogURL);
-        break;
-    }
-
-    case CMD_UNDO: {
-        QString prefix = prompt->getPrefix();
-        if (dockUndoEdit->canUndo()) {
-            prompt->setPrefix("Undo " + dockUndoEdit->undoText());
-            prompt->appendHistory(QString());
-            dockUndoEdit->undo();
-            prompt->setPrefix(prefix);
-        }
-        else {
-            prompt->alert("Nothing to undo");
-            prompt->setPrefix(prefix);
-        }
-        break;
-    }
-
-    case CMD_REDO: {
-        QString prefix = prompt->getPrefix();
-        if (dockUndoEdit->canRedo()) {
-            prompt->setPrefix("Redo " + dockUndoEdit->redoText());
-            prompt->appendHistory(QString());
-            dockUndoEdit->redo();
-            prompt->setPrefix(prefix);
-        }
-        else {
-            prompt->alert("Nothing to redo");
-            prompt->setPrefix(prefix);
-        }
-        break;
-    }
-
-    case CMD_REPEAT: {
-        break;
-    }
-
-    case CMD_ICON16: {
-        iconResize(16);
-        break;
-    }
-
-    case CMD_ICON24: {
-        iconResize(24);
-        break;
-    }
-
-    case CMD_ICON32: {
-        iconResize(32);
-        break;
-    }
-
-    case CMD_ICON48: {
-        iconResize(48);
-        break;
-    }
-
-    case CMD_ICON64: {
-        iconResize(64);
-        break;
-    }
-
-    case CMD_ICON128: {
-        iconResize(128);
-        break;
-    }
-
-    case CMD_PLAY: {
+    /* TODO: check pan, window, zoom subcommands work */
+    #if 0
+    case CMD_PLAY:
         state.play_mode = 1;
         state.simulation_start = current_time();
         break;
-    }
 
-    case CMD_STOP: {
+    case CMD_STOP:
         state.play_mode = 0;
         break;
-    }
-
-    case CMD_SLEEP: {
-        std::this_thread::sleep_for(100ms);
-        break;
-    }
-
-    case CMD_NEW: {
-        state.docIndex++;
-        state.numOfDocs++;
-        MdiWindow* mdiWin = new MdiWindow(state.docIndex, _mainWin, mdiArea, Qt::SubWindow);
-        connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this,
-            SLOT(onCloseMdiWin(MdiWindow*)));
-        connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this,
-            SLOT(onWindowActivated(QMdiSubWindow*)));
-
-        updateMenuToolbarStatusbar();
-        windowMenuAboutToShow();
-
-        View* v = mdiWin->gview;
-        if (v) {
-            v->recalculateLimits();
-            v->zoomExtents();
-        }
-        break;
-    }
 
     case CMD_OPEN: {
         if (list.size() == 1) {
@@ -427,276 +255,6 @@ MainWindow::cmd(const char *line)
         }
         list.remove(0);
         openFilesSelected(list);
-        break;
-    }
-
-    case CMD_SAVE: {
-        /* FIXME */
-        break;
-    }
-
-    case CMD_SAVE_AS: {
-        /* need to find the activeSubWindow before it loses focus to the FileDialog. */
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if (!mdiWin) {
-            return;
-        }
-
-        openFilesPath = st[ST_RECENT_DIRECTORY].s;
-        QString file = QFileDialog::getSaveFileName(this, tr("Save As"),
-            openFilesPath, formatFilterSave);
-
-        mdiWin->saveFile(file);
-        break;
-    }
-
-    /* Moves the view to the left. */
-    case CMD_PAN_LEFT: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* Moves the view down. */
-    case CMD_PAN_DOWN: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* Moves the view to the right. */
-    case CMD_PAN_RIGHT: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* Moves the view up. */
-    case CMD_PAN_UP: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_PAN_POINT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->panPoint();
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_PAN_REAL_TIME: {
-        View* gview = activeView();
-        if (gview) {
-            gview->panRealTime();
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_CASCADE: {
-        mdiArea->cascade();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_CLOSE: {
-        _mainWin->onCloseWindow();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_CLOSE_ALL: {
-        mdiArea->closeAllSubWindows();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_NEXT: {
-        mdiArea->activateNextSubWindow();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_PREVIOUS: {
-        mdiArea->activatePreviousSubWindow();
-        break;
-    }
-
-    /* . */
-    case CMD_WINDOW_TILE: {
-        mdiArea->tile();
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_ALL: {
-        debug("TODO: Implement zoomAll.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_CENTER: {
-        debug("TODO: Implement zoomCenter.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_DYNAMIC: {
-        debug("TODO: Implement zoomDynamic.");
-        break;
-    }
-
-    /* Zooms to display the drawing extents. */
-    case CMD_ZOOM_EXTENTS: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* Zooms to increase the apparent size of objects. */
-    case CMD_ZOOM_IN: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomIn();
-        }
-        break;
-    }
-
-    /* Zooms to decrease the apparent size of objects. */
-    case CMD_ZOOM_OUT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomOut();
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_SCALE: {
-        debug("TODO: Implement zoomScale.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_PREVIOUS: {
-        debug("TODO: Implement zoomPrevious.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_REAL_TIME: {
-        debug("TODO: Implement zoomRealtime.");
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_SELECTED: {
-        View* gview = activeView();
-        QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
-            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-
-    /* . */
-    case CMD_ZOOM_WINDOW: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomWindow();
-        }
-        break;
-    }
-
-    /* TODO: Make day vision color settings. */
-    case CMD_DAY: {
-        View* gview = activeView();
-        if (gview) {
-            gview->setBackgroundColor(qRgb(255,255,255)); 
-            gview->setCrossHairColor(qRgb(0,0,0));
-            gview->setGridColor(qRgb(0,0,0));
-        }
-        break;
-    }
-
-    /* TODO: Make night vision color settings. */
-    case CMD_NIGHT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->setBackgroundColor(qRgb(0,0,0));
-            gview->setCrossHairColor(qRgb(255,255,255));
-            gview->setGridColor(qRgb(255,255,255));
-        }
-        break;
-    }
-
-    case CMD_CLEAR_RUBBER: {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearRubberRoom();
-        }
-        break;
-    }
-
-    case CMD_CLEAR_SELECTION: {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearSelection();
-        }
-        break;
-    }
-
-    case CMD_END: {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearRubberRoom();
-            gview->previewOff();
-            gview->disableMoveRapidFire();
-        }
-        prompt->endCommand();
-        break;
-    }
-
-    case CMD_EXIT: {
-        if (st[ST_PROMPT_SAVE_HISTORY].b) {
-            /* TODO: get filename from settings. */
-            prompt->saveHistory("prompt.log", st[ST_PROMPT_SAVE_AS_HTML].b);
-        }
-        qApp->closeAllWindows();
-        /* Force the MainWindow destructor to run before exiting.
-         * Makes Valgrind "still reachable" happy :)
-         */
-        _mainWin->deleteLater();
-        break;
-    }
-
-    case CMD_MACRO: {
-        debug("TODO: macro support");
         break;
     }
 
@@ -712,20 +270,17 @@ MainWindow::cmd(const char *line)
 
     /** @todo Report the value. */
     case CMD_GET: {
-        ScriptValue value = get(qPrintable(list[1]));
+        ScriptValue value = get_c(qPrintable(list[1]));
         break;
     }
 
     case CMD_SET: {
         ScriptValue value;
         strncpy(value.s, qPrintable(list[2]), 200);
-        set(qPrintable(list[1]), value);
+        set_c(qPrintable(list[1]), value);
         break;
     }
 
-    /** Add a EmbTextMulti object to the design.
-     * @todo argument parsing
-     */
     case CMD_TEXT_MULTI: {
         const QString& str = "Lorem ipsum\ndolor sit amet,";
         EmbVector position = emb_vector(10.0f, 10.0f);
@@ -736,8 +291,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
     case CMD_TEXT_SINGLE: {
         const QString& str = "Lorem ipsum dolor sit amet,";
         EmbVector position = emb_vector(10.0f, 10.0f);
@@ -748,18 +301,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
-    case CMD_INFINITE_LINE: {
-        EmbVector point1 = emb_vector(0.0f, 0.0f);
-        EmbVector point2 = emb_vector(0.0f, 10.0f);
-        EmbReal rot = 0.0f;
-        add_infinite_line(point1, point2, rot);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
     case CMD_RAY: {
         EmbVector start = emb_vector(0.0f, 0.0f);
         EmbVector point = emb_vector(0.0f, 10.0f);
@@ -768,19 +309,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
-    case CMD_LINE: {
-        EmbVector start = emb_vector(0.0f, 0.0f);
-        EmbVector end = emb_vector(0.0f, 10.0f);
-        EmbReal rot = 0.0f;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_line(start, end, rot, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
     case CMD_TRIANGLE: {
         EmbVector point1 = emb_vector(0.0f, 0.0f);
         EmbVector point2 = emb_vector(0.0f, 10.0f);
@@ -791,8 +319,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
     case CMD_RECTANGLE: {
         EmbReal x = 0.0f;
         EmbReal y = 0.0f;
@@ -805,8 +331,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
     case CMD_ROUNDED_RECTANGLE: {
         EmbReal x = 0.0f;
         EmbReal y = 0.0f;
@@ -819,29 +343,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
-    case CMD_ARC: {
-        EmbVector start = emb_vector(0.0f, 0.0f);
-        EmbVector mid = emb_vector(10.0f, 0.0f);
-        EmbVector end = emb_vector(10.0f, 10.0f);
-        add_arc(start, mid, end, OBJ_RUBBER_OFF);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_CIRCLE: {
-        EmbVector center = emb_vector(0.0f, 0.0f);
-        EmbReal radius = 10.0;
-        bool fill = false;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_circle(center, radius, fill, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
     case CMD_SLOT: {
         EmbVector center = emb_vector(0.0f, 0.0f);
         EmbReal diameter = 1.0;
@@ -853,29 +354,12 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
-    case CMD_ELLIPSE: {
-        EmbVector center = emb_vector(0.0f, 0.0f);
-        EmbReal width = 10.0;
-        EmbReal height = 30.0;
-        EmbReal rot = 1.0;
-        bool fill = false;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_ellipse(center, width, height, rot, fill, rubberMode);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
     case CMD_POINT: {
         EmbVector position = emb_vector(10.0f, 10.0f);
         add_point(position);
         break;
     }
 
-    /** @todo argument parsing
-     */
     case CMD_REGULAR_POLYGON: {
         EmbVector center = emb_vector(10.0f, 10.0f);
         int sides = 5;
@@ -887,8 +371,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
     case CMD_POLYGON: {
         EmbVector start = emb_vector(0.0f, 0.0f);
         QPainterPath p;
@@ -897,8 +379,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
     case CMD_POLYLINE: {
         EmbVector start = emb_vector(0.0f, 0.0f);
         QPainterPath p;
@@ -907,8 +387,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
     case CMD_PATH: {
         EmbVector start = emb_vector(0.0f, 0.0f);
         QPainterPath p;
@@ -917,18 +395,6 @@ MainWindow::cmd(const char *line)
         break;
     }
 
-    /** @todo argument parsing
-     */
-    case CMD_HORIZONTAL_DIM: {
-        EmbVector start = emb_vector(8.0f, 12.0f);
-        EmbVector end = emb_vector(18.0f, 11.0f);
-        EmbReal legHeight = 10.0f;
-        add_horizontal_dimension(start, end, legHeight);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
     case CMD_VERTICAL_DIM: {
         EmbVector start = emb_vector(-8.0f, 10.0f);
         EmbVector end = emb_vector(1.0f, 13.0f);
@@ -936,188 +402,7 @@ MainWindow::cmd(const char *line)
         add_vertical_dimension(start, end, legHeight);
         break;
     }
-
-    /** @todo argument parsing
-     */
-    case CMD_IMAGE: {
-        QString img = "icons/default/app.png";
-        double x = 10.0;
-        double y = 10.0;
-        double w = 30.0;
-        double h = 20.0;
-        double rot = 10.0;
-        add_image(img, x, y, w, h, rot);
-        break;
-    }
-
-    /** @todo argument parsing
-     */
-    case CMD_DIM_LEADER: {
-        EmbVector start = emb_vector(8.0f, 1.0f);
-        EmbVector end = emb_vector(1.0f, 3.0f);
-        EmbReal rot = 10.0;
-        int rubberMode = OBJ_RUBBER_OFF;
-        add_dim_leader(start.x, start.y, end.x, end.y, rot, rubberMode);
-        break;
-    }
-
-    case CMD_GENERATE: {
-        generate(qPrintable(list[1]));
-        break;
-    }
-
-    case CMD_FILL: {
-        fill(qPrintable(list[1]));
-        break;
-    }
-
-    default:
-        printf("ERROR: unrecognised command id %d\n", id);
-        break;
-    }
-}
-
-/*!
- */
-ScriptValue
-MainWindow::get(const char *key)
-{
-    ScriptValue result;
-    result.r = 0.0;
-    result.i = 0;
-    result.b = false;
-    if (!strncmp(key, "text_angle", 20)) {
-        result.r = st[ST_TEXT_ANGLE].r;
-        return result;
-    }
-    if (!strncmp(key, "text_size", 20)) {
-        result.i = st[ST_TEXT_SIZE].i;
-        return result;
-    }
-    if (!strncmp(key, "text_bold", 20)) {
-        result.b = st[ST_TEXT_BOLD].b;
-        return result;
-    }
-    if (!strncmp(key, "text_italic", 20)) {
-        result.b = st[ST_TEXT_ITALIC].b;
-        return result;
-    }
-    if (!strncmp(key, "text_underline", 20)) {
-        result.b = st[ST_TEXT_UNDERLINE].b;
-        return result;
-    }
-    if (!strncmp(key, "text_strikeout", 20)) {
-        result.b = st[ST_TEXT_STRIKEOUT].b;
-        return result;
-    }
-    if (!strncmp(key, "text_overline", 20)) {
-        result.b = st[ST_TEXT_OVERLINE].b;
-        return result;
-    }
-    if (!strncmp(key, "platform", 20)) {
-        strncpy(result.s, qPrintable(platformString()), 200);
-        return result;
-    }
-    if (!strncmp(key, "prefix", 20)) {
-        strncpy(result.s, qPrintable(prompt->promptInput->prefix), 200);
-        return result;
-    }
-    /* Report the current x-position of the mouse and return it. */
-    if (!strncmp(key, "mousex", 20)) {
-        QGraphicsScene* scene = activeScene();
-        if (scene) {
-            result.r = scene->property(SCENE_MOUSE_POINT).toPointF().x();
-        }
-        return result;
-    }
-    /* Report the current y-position of the mouse and return it. */
-    if (!strncmp(key, "mousey", 20)) {
-        QGraphicsScene* scene = activeScene();
-        if (scene) {
-            result.r = -scene->property(SCENE_MOUSE_POINT).toPointF().y();
-        }
-        return result;
-    }
-    /* Return the current x-position of the quicksnap position. */
-    if (!strncmp(key, "qsnapx", 20)) {
-        QGraphicsScene* scene = activeScene();
-        if (scene) {
-            result.r = scene->property(SCENE_QSNAP_POINT).toPointF().x();
-        }
-        return result;
-    }
-    /* Return the current y-position of the quicksnap position. */
-    if (!strncmp(key, "qsnapy", 20)) {
-        QGraphicsScene* scene = activeScene();
-        if (scene) {
-            result.r = -scene->property(SCENE_QSNAP_POINT).toPointF().y();
-        }
-        return result;
-    }
-    /* Return the current y-position of the quicksnap position. */
-    if (!strncmp(key, "num_selected", 20)) {
-        View* gview = activeView();
-        if (gview) {
-            result.i = gview->numSelected();
-        }
-        return result;
-    }
-    return result;
-}
-
-/*!
- */
-void
-MainWindow::set(const char *key, ScriptValue value)
-{
-    if (!strncmp(key, "text_angle", 20)) {
-        st[ST_TEXT_ANGLE].r = value.r;
-        return;
-    }
-    if (!strncmp(key, "text_size", 20)) {
-        double num = value.i;
-
-        if (std::isnan(num)) {
-            debug("TypeError, setTextSize(): first argument failed isNaN check.");
-            return;
-        }
-
-        st[ST_TEXT_SIZE].i = std::fabs(num);
-        int index = textSizeSelector->findText("Custom", Qt::MatchContains);
-        if (index != -1) {
-            textSizeSelector->removeItem(index);
-        }
-        textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
-        index = textSizeSelector->findText("Custom", Qt::MatchContains);
-        if (index != -1) {
-            textSizeSelector->setCurrentIndex(index);
-        }
-        return;
-    }
-    if (!strncmp(key, "text_bold", 20)) {
-        st[ST_TEXT_BOLD].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "text_italic", 20)) {
-        st[ST_TEXT_ITALIC].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "text_underline", 20)) {
-        st[ST_TEXT_UNDERLINE].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "text_strikeout", 20)) {
-        st[ST_TEXT_STRIKEOUT].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "text_overline", 20)) {
-        st[ST_TEXT_OVERLINE].b = value.b;
-        return;
-    }
-    if (!strncmp(key, "prefix", 20)) {
-        prompt->setPrefix(value.s);
-        return;
-    }
+    #endif
 }
 
 MainWindow::MainWindow() : QMainWindow(0)
@@ -1129,7 +414,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
     QStringList folders = {
-        "scripts",
         "docs",
         "icons",
         "images",
@@ -1396,7 +680,8 @@ void MainWindow::windowMenuActivated(bool checked)
         w->setFocus();
 }
 
-void MainWindow::openFile(bool recent, const QString& recentFile)
+void
+MainWindow::openFile(bool recent, const QString& recentFile)
 {
     debug("MainWindow::openFile()");
 
@@ -1407,7 +692,7 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     openFilesPath = st[ST_RECENT_DIRECTORY].s;
 
     //Check to see if this from the recent files list
-    if(recent) {
+    if (recent) {
         files.append(recentFile);
         openFilesSelected(files);
     }
@@ -1426,13 +711,14 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::openFilesSelected(const QStringList& filesToOpen)
+void
+MainWindow::openFilesSelected(const QStringList& filesToOpen)
 {
     bool doOnce = true;
 
-    if(filesToOpen.count()) {
-        for(int i = 0; i < filesToOpen.count(); i++) {
-            if(!validFileFormat(filesToOpen[i]))
+    if (filesToOpen.count()) {
+        for (int i = 0; i < filesToOpen.count(); i++) {
+            if (!validFileFormat(filesToOpen[i]))
                 continue;
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
@@ -2147,5 +1433,101 @@ void MainWindow::settingsDialog(const QString& showTab)
 {
     Settings_Dialog dialog(showTab, this);
     dialog.exec();
+}
+
+/**
+ * @note This has to run after script_env_boot because the command_map is
+ *       populated by the script files called by it.
+ *
+ * @todo Set What's This Context Help to statustip for now so there is some infos there.
+ * Make custom whats this context help popup with more descriptive help than just
+ * the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+ * at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+ *
+ * @todo Finish All Commands ... <.<
+ */
+void
+MainWindow::createAllActions()
+{
+    debug("Creating All Actions...");
+
+    for (int i=0; i<(int)command_map.size(); i++) {
+        QString tooltip = tr(qPrintable(command_map[i].tooltip));
+        QString statustip = tr(qPrintable(command_map[i].statustip));
+        QAction *ACTION = new QAction(createIcon(command_map[i].icon),
+            tooltip, this);
+        ACTION->setStatusTip(statustip);
+        ACTION->setObjectName(command_map[i].icon);
+        ACTION->setWhatsThis(statustip);
+
+        if (command_map[i].shortcut != "") {
+            ACTION->setShortcut(command_map[i].shortcut);
+        }
+        if (command_map[i].checkable != 0) {
+            ACTION->setCheckable(true);
+            /** @fixme connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool))); */
+        }
+
+        connect(ACTION, &QAction::triggered, this,
+            [=]() { cmd(qPrintable(command_map[i].command)); } );
+
+        actionHash.insert(command_map[i].icon, ACTION);
+    }
+
+    actionHash.value("windowclose")->setEnabled(state.numOfDocs > 0);
+    actionHash.value("designdetails")->setEnabled(state.numOfDocs > 0);
+}
+
+/* -- Basic wrappers of MainWindow functions -------------------------------- */
+View*
+activeView(void)
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        View* v = mdiWin->gview;
+        return v;
+    }
+    return NULL;
+}
+
+QGraphicsScene*
+activeScene(void)
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        QGraphicsScene* s = mdiWin->gscene;
+        return s;
+    }
+    return 0;
+}
+
+MdiWindow*
+activeMdiWindow(void)
+{
+    debug("activeMdiWindow()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    return mdiWin;
+}
+
+QUndoStack*
+activeUndoStack(void)
+{
+    debug("activeUndoStack()");
+    View* v = activeView();
+    if (v) {
+        QUndoStack* u = v->getUndoStack();
+        return u;
+    }
+    return 0;
+}
+
+QRgb
+getCurrentColor(void)
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        return mdiWin->curColor;
+    }
+    return 0; //TODO: return color ByLayer
 }
 
