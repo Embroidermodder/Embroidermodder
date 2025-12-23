@@ -7,16 +7,68 @@
  *
  * ----------------------------------------------------------------------------
  *
- * Geometry commands for the MainWindow with C linkage.
+ * Geometry commands for the MainWindow with C linkage and general geometry
+ * tools that work with our custom objects.
  */
 
 #include "embroidermodder.h"
 
 /*
+ * Returns the closest snap point to the mouse point
+ */
+QPointF
+closest_point(QList<QPointF> list, const QPointF& mousePoint)
+{
+    size_t result = 0;
+    qreal closest = 1.0e10;
+    for (size_t i=0; i<list.size(); i++) {
+        qreal distance = QLineF(mousePoint, list.at(i)).length();
+        if (distance < closest) {
+            result = i;
+            closest = distance;
+        }
+    }
+    return list.at(result);
+}
+
+/*
+ * Find the angle of a line within the range (0.0, 360.0).
+ */
+qreal
+line_angle(QLineF line)
+{
+    qreal angle = line.angle();
+    while (angle >= 360.0) {
+        angle -= 360.0;
+    }
+    while (angle < 0.0) {
+        angle += 360.0;
+    }
+    return angle;
+}
+
+/*
+ * Scale and rotate a vector to place it into a scene.
+ */
+QPointF
+scale_and_rotate(QPointF point, qreal scale, qreal rotation)
+{
+    qreal rot = radians(rotation);
+    qreal cosRot = qCos(rot);
+    qreal sinRot = qSin(rot);
+    qreal x = point.x() * scale;
+    qreal y = point.y() * scale;
+    qreal rotX = x * cosRot - y * sinRot;
+    qreal rotY = x * sinRot + y * cosRot;
+
+    return QPointF(rotX, rotY);
+}
+
+/*
  * Adds an EmbArc to the design.
  */
 int
-arc_c(EmbVector start, EmbVector mid, EmbVector end, int32_t rubber_mode)
+arc_create(EmbVector start, EmbVector mid, EmbVector end, int32_t rubber_mode)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
@@ -39,7 +91,7 @@ arc_c(EmbVector start, EmbVector mid, EmbVector end, int32_t rubber_mode)
  * Adds an EmbCircle to the design.
  */
 int
-circle_c(EmbVector center, EmbReal radius, bool fill, int32_t rubber_mode)
+circle_create(EmbVector center, EmbReal radius, bool fill, int32_t rubber_mode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -66,7 +118,7 @@ circle_c(EmbVector center, EmbReal radius, bool fill, int32_t rubber_mode)
  * Adds an EmbDimLeader to the design.
  */
 int
-dim_leader_c(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode)
+dim_leader_create(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -94,7 +146,7 @@ dim_leader_c(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode)
  * Adds an EmbEllipse to the design.
  */
 int
-ellipse_c(EmbVector center, EmbReal width, EmbReal height, EmbReal rot, bool fill,
+ellipse_create(EmbVector center, EmbReal width, EmbReal height, EmbReal rot, bool fill,
     int32_t rubber_mode)
 {
     View* gview = activeView();
@@ -125,7 +177,7 @@ ellipse_c(EmbVector center, EmbReal width, EmbReal height, EmbReal rot, bool fil
  * Adds a EmbHorizontalDimension to the design.
  */
 int
-horizontal_dim_c(EmbVector start, EmbVector end, EmbReal legHeight)
+horizontal_dim_create(EmbVector start, EmbVector end, EmbReal legHeight)
 {
 
     return 0;
@@ -135,7 +187,7 @@ horizontal_dim_c(EmbVector start, EmbVector end, EmbReal legHeight)
  * Adds a EmbImage to the design.
  */
 int
-image_c(const char *img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
+image_create(const char *img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
 {
 
     return 0;
@@ -145,7 +197,7 @@ image_c(const char *img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot
  * Adds a EmbInfiniteLine to the design.
  */
 int
-infinite_line_c(EmbVector point1, EmbVector point2, EmbReal rot)
+infinite_line_create(EmbVector point1, EmbVector point2, EmbReal rot)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -158,7 +210,7 @@ infinite_line_c(EmbVector point1, EmbVector point2, EmbReal rot)
 }
 
 int
-line_c(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode)
+line_create(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -189,7 +241,7 @@ line_c(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode)
  *       (scripters need not worry about this).
  */
 int
-path_c(void)
+path_create(void)
 {
     EmbVector start = emb_vector(0.0f, 0.0f);
     QPainterPath p;
@@ -202,9 +254,9 @@ path_c(void)
  * Adds and EmbPoint to the design.
  */
 int
-point_c(void)
+point_create(EmbVector position)
 {
-    EmbVector position = emb_vector(10.0f, 10.0f);
+    /* default: EmbVector position = emb_vector(10.0f, 10.0f); */
 
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -226,7 +278,7 @@ point_c(void)
  *       (scripters need not worry about this).
  */
 int
-polygon_c(void)
+polygon_create(void)
 {
     EmbVector start = emb_vector(0.0f, 0.0f);
     QPainterPath p;
@@ -307,7 +359,7 @@ polygon_c(void)
  *       (scripters need not worry about this).
  */
 int
-polyline_c(EmbVector start, QPainterPath p, int32_t rubber_mode)
+polyline_create(EmbVector start, QPainterPath p, int32_t rubber_mode)
 {
     /* DEFUALTS
     EmbVector start = emb_vector(0.0f, 0.0f);
@@ -386,7 +438,7 @@ polyline_c(EmbVector start, QPainterPath p, int32_t rubber_mode)
  * Adds a EmbRay to the design.
  */
 int
-ray_c(void)
+ray_create(void)
 {
     EmbVector start = emb_vector(0.0f, 0.0f);
     EmbVector point = emb_vector(0.0f, 10.0f);
@@ -399,7 +451,7 @@ ray_c(void)
  * Adds an EmbRect to the design.
  */
 int
-rectangle_c(void)
+rectangle_create(void)
 {
     EmbReal x = 0.0f;
     EmbReal y = 0.0f;
@@ -436,7 +488,7 @@ rectangle_c(void)
  * Add an EmbRegularPolygon to the design.
  */
 int
-regular_polygon_c(void)
+regular_polygon_create(void)
 {
     EmbVector center = emb_vector(10.0f, 10.0f);
     int sides = 5;
@@ -449,7 +501,7 @@ regular_polygon_c(void)
 }
 
 int
-rounded_rectangle_c(void)
+rounded_rectangle_create(void)
 {
     EmbReal x = 0.0f;
     EmbReal y = 0.0f;
@@ -467,7 +519,7 @@ rounded_rectangle_c(void)
  * Adds a EmbSlot to the design.
  */
 int
-slot_c(void)
+slot_create(void)
 {
     EmbVector center = emb_vector(0.0f, 0.0f);
     EmbReal diameter = 1.0;
@@ -495,7 +547,7 @@ slot_c(void)
  * TODO: shift defaults to text_multi_command and add arguments.
  */
 int
-text_multi_c(void)
+text_multi_create(void)
 {
     const QString& str = "Lorem ipsum\ndolor sit amet,";
     EmbVector position = emb_vector(10.0f, 10.0f);
@@ -512,7 +564,7 @@ text_multi_c(void)
  * TODO: shift defaults to text_single_command and add arguments.
  */
 int
-text_single_c(void)
+text_single_create(void)
 {
     const QString& str = "Lorem ipsum dolor sit amet,";
     EmbVector position = emb_vector(10.0f, 10.0f);
@@ -557,7 +609,7 @@ text_single_c(void)
  * Adds a EmbPath object to the design with the three points specified.
  */
 int
-triangle_c(void)
+triangle_create(void)
 {
     EmbVector point1 = emb_vector(0.0f, 0.0f);
     EmbVector point2 = emb_vector(0.0f, 10.0f);
@@ -572,7 +624,7 @@ triangle_c(void)
  * Adds a EmbVerticalDimension to the design.
  */
 int
-vertical_dim_c(void)
+vertical_dim_create(void)
 {
     EmbVector start = emb_vector(-8.0f, 10.0f);
     EmbVector end = emb_vector(1.0f, 13.0f);

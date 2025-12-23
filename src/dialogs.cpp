@@ -14,7 +14,7 @@
 
 /* Show the about dialog. */
 int
-about_dialog_c(void)
+about_dialog(void)
 {
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -67,7 +67,7 @@ about_dialog_c(void)
 
 /* Show the changelog dialog. */
 int
-changelog_dialog_c(void)
+changelog_dialog(void)
 {
     QUrl changelogURL("help/changelog.html");
     QDesktopServices::openUrl(changelogURL);
@@ -76,7 +76,7 @@ changelog_dialog_c(void)
 
 /* . */
 int
-details_dialog_c(void)
+details_dialog(void)
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -88,7 +88,7 @@ details_dialog_c(void)
 
 /* . */
 int
-help_dialog_c(void)
+help_dialog(void)
 {
     // Open the HTML Help in the default browser
     QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
@@ -106,7 +106,7 @@ help_dialog_c(void)
 
 /* . */
 int
-settings_dialog_c(void)
+settings_dialog(void)
 {
     _mainWin->settingsDialog("General");
     return 0;
@@ -114,7 +114,7 @@ settings_dialog_c(void)
 
 /* . */
 int
-tip_of_the_day_dialog_c(void)
+tip_of_the_day_dialog(void)
 {
     _mainWin->tipOfTheDay();
     return 0;

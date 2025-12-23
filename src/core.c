@@ -432,7 +432,7 @@ State state = {
     .stitch_time = 0.05f,
 
     /* User interaction mode */
-    .context_flag = CONTEXT_MAIN,
+    .context = CONTEXT_MAIN,
     .mode = 0
 };
 
@@ -498,4 +498,35 @@ get_index(FunctionPtr table[MAX_COMMANDS], char *cmd)
     }
     return -1;
 }
+
+/*
+ * Unpack a vector from arguments supplied to the command line.
+ */
+EmbVector
+get_vector(State *state, int index)
+{
+    EmbVector v;
+    v.x = atof(state->arguments[index]);
+    v.y = atof(state->arguments[index+1]);
+    return v;
+}
+
+/*
+ * FIXME
+ */
+void
+prompt_output(const char *msg)
+{
+    debug(msg);
+}
+
+/*
+ * FIXME
+ */
+const char *
+translate(const char *msg)
+{
+    return msg;
+}
+
 

@@ -15,6 +15,6 @@
 int
 about_command(State *state)
 {
-    return about_dialog_c();
+    return about_dialog();
 }
 

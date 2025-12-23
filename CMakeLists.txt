@@ -150,6 +150,7 @@ qt_add_executable(embroidermodder2
     ${SRC}/mainwindow.cpp
     ${SRC}/mdiarea.cpp
     ${SRC}/mdiwindow.cpp
+    ${SRC}/object.cpp
     ${SRC}/preview-dialog.cpp
     ${SRC}/property-editor.cpp
     ${SRC}/rubber.cpp
@@ -160,20 +161,6 @@ qt_add_executable(embroidermodder2
     ${SRC}/undo-commands.cpp
     ${SRC}/undo-editor.cpp
     ${SRC}/view.cpp
-
-    ${SRC}/objects/arc.cpp
-    ${SRC}/objects/base.cpp
-    ${SRC}/objects/circle.cpp
-    ${SRC}/objects/dimleader.cpp
-    ${SRC}/objects/ellipse.cpp
-    ${SRC}/objects/image.cpp
-    ${SRC}/objects/line.cpp
-    ${SRC}/objects/path.cpp
-    ${SRC}/objects/point.cpp
-    ${SRC}/objects/polygon.cpp
-    ${SRC}/objects/polyline.cpp
-    ${SRC}/objects/rectangle.cpp
-    ${SRC}/objects/textsingle.cpp
 
     ${SRC}/embroidermodder.h
 )

@@ -23,7 +23,7 @@
 
 /* TODO: move add_rubber to script */
 int
-add_rubber_c(void)
+add_rubber(void)
 {
     /*
     if (context->argumentCount() != 1) {
@@ -100,7 +100,7 @@ add_rubber_c(void)
 
 /* . */
 int
-allow_rubber_c(void)
+allow_rubber(void)
 {
     View* gview = activeView();
     /*
@@ -114,7 +114,7 @@ allow_rubber_c(void)
 
 /* . */
 int
-clear_rubber_c(void)
+clear_rubber(void)
 {
     View* gview = activeView();
     if (gview) {
@@ -129,7 +129,7 @@ clear_rubber_c(void)
  * FIXME:
  */
 int
-rubber_c(void)
+rubber(void)
 {
     debug("TODO: add_to_menu");
     return 0;
@@ -137,7 +137,7 @@ rubber_c(void)
 
 /* . */
 int
-set_rubber_mode_c(void)
+set_rubber_mode(void)
 {
     debug("TODO: add_to_menu");
     View* gview = activeView();
@@ -213,7 +213,7 @@ set_rubber_mode_c(void)
 
 /* TODO: convert set_rubber_point_f. */
 int
-set_rubber_point_c(const char *key_, double x, double y)
+set_rubber_point(const char *key_, double x, double y)
 {
     QString key = QString(key_).toUpper();
 
@@ -235,7 +235,7 @@ set_rubber_point_c(const char *key_, double x, double y)
 
 /* . */
 int
-set_rubber_text_c(const char *key_, const char *txt_)
+set_rubber_text(const char *key_, const char *txt_)
 {
     QString key = QString(key_).toUpper();
     QString txt = txt_;
@@ -249,7 +249,7 @@ set_rubber_text_c(const char *key_, const char *txt_)
 
 /* . */
 int
-spare_rubber_c(const char *obj_type)
+spare_rubber(const char *obj_type)
 {
     View* gview = activeView();
     if (!gview) {
@@ -282,7 +282,7 @@ spare_rubber_c(const char *obj_type)
 
 /* Fix all rubber points. */
 int
-vulcanize_c(void)
+vulcanize(void)
 {
     View* gview = activeView();
     if (gview) {

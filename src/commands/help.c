@@ -15,6 +15,6 @@
 int
 help_command(State *state)
 {
-    return help_dialog_c();
+    return help_dialog();
 }
 

@@ -22,6 +22,6 @@ image_command(State *state)
     double w = 30.0;
     double h = 20.0;
     double rot = 10.0;
-    return image_c(img, x, y, w, h, rot);
+    return image_create(img, x, y, w, h, rot);
 }
 

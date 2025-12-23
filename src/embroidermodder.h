@@ -285,7 +285,11 @@ View* activeView(void);
 QGraphicsScene* activeScene(void);
 QUndoStack* activeUndoStack(void);
 
-int polyline_c(EmbVector start, QPainterPath p, int32_t rubber_mode);
+QPointF closest_point(QList<QPointF> list, const QPointF& mousePoint);
+qreal line_angle(QLineF line);
+QPointF scale_and_rotate(QPointF point, qreal scale, qreal rotation);
+
+int polyline_create(EmbVector start, QPainterPath p, int32_t rubber_mode);
 
 /* ---- Global data --------------------------------------------------------- */
 extern MainWindow* _mainWin;
@@ -931,7 +935,6 @@ public:
     void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
 
     virtual void vulcanize() = 0;
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint) = 0;
     virtual QList<QPointF> allGripPoints() = 0;
     virtual void gripEdit(const QPointF& before, const QPointF& after) = 0;
 protected:
@@ -967,14 +970,8 @@ public:
     qreal   objectStartAngle()    const;
     qreal   objectEndAngle()      const;
     QPointF objectStartPoint()    const;
-    qreal   objectStartX()        const;
-    qreal   objectStartY()        const;
     QPointF objectMidPoint()      const;
-    qreal   objectMidX()          const;
-    qreal   objectMidY()          const;
     QPointF objectEndPoint()      const;
-    qreal   objectEndX()          const;
-    qreal   objectEndY()          const;
     qreal   objectArea()          const;
     qreal   objectArcLength()     const;
     qreal   objectChord()         const;
@@ -997,7 +994,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1049,7 +1045,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1109,7 +1104,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1166,7 +1160,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1198,7 +1191,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1243,7 +1235,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1276,7 +1267,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1311,7 +1301,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1344,7 +1333,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1381,7 +1369,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1420,7 +1407,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
@@ -1525,7 +1511,6 @@ public:
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual QList<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:

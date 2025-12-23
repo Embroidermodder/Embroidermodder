@@ -18,5 +18,5 @@ horizontal_dim_command(State *state)
     EmbVector start = emb_vector(8.0f, 12.0f);
     EmbVector end = emb_vector(18.0f, 11.0f);
     EmbReal legHeight = 10.0f;
-    return horizontal_dim_c(start, end, legHeight);
+    return horizontal_dim_create(start, end, legHeight);
 }

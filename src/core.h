@@ -458,8 +458,11 @@ struct State_ {
     char command[100];
     char arguments[MAX_ARGUMENTS][MAX_ARG_LENGTH];
     int argument_count;
+    uint8_t first_run;
+    EmbVector mouse_position;
+    EmbVector point1;
+    EmbVector point2;
 
-    char command_names[MAX_COMMANDS][100];
     FunctionPtr command_list[MAX_COMMANDS];
     FunctionPtr design_list[MAX_COMMANDS];
     FunctionPtr fill_list[MAX_COMMANDS];
@@ -475,7 +478,7 @@ struct State_ {
     float machine_speed;
     float stitch_time;
 
-    uint64_t context_flag;
+    uint64_t context;
     uint64_t mode;
 };
 
@@ -495,6 +498,9 @@ void no_arguments(State *state);
 void load_data(void);
 ViewData *view_data(int32_t index);
 int get_index(FunctionPtr list[MAX_COMMANDS], char *entry);
+EmbVector get_vector(State *state, int index);
+const char *translate(const char *msg);
+void prompt_output(const char *msg);
 
 /*
  * Qt/C++ commands
@@ -513,46 +519,46 @@ int get_index(FunctionPtr list[MAX_COMMANDS], char *entry);
  */
 
 /* Dialogs: housed in commands.cpp */
-int about_dialog_c(void);
-int changelog_dialog_c(void);
-int details_dialog_c(void);
-int help_dialog_c(void);
-int settings_dialog_c(void);
-int tip_of_the_day_dialog_c(void);
+int about_dialog(void);
+int changelog_dialog(void);
+int details_dialog(void);
+int help_dialog(void);
+int settings_dialog(void);
+int tip_of_the_day_dialog(void);
 
 /* Geometry C++ commands: housed in geometry.cpp */
-int arc_c(EmbVector start, EmbVector mid, EmbVector end, int32_t rubber_mode);
-int circle_c(EmbVector center, EmbReal radius, bool fill, int32_t rubber_mode);
-int dim_leader_c(EmbVector start, EmbVector end, EmbReal legHeight, int32_t rubber_mode);
-int ellipse_c(EmbVector center, EmbReal width, EmbReal height, EmbReal rot, bool fill,
+int arc_create(EmbVector start, EmbVector mid, EmbVector end, int32_t rubber_mode);
+int circle_create(EmbVector center, EmbReal radius, bool fill, int32_t rubber_mode);
+int dim_leader_create(EmbVector start, EmbVector end, EmbReal legHeight, int32_t rubber_mode);
+int ellipse_create(EmbVector center, EmbReal width, EmbReal height, EmbReal rot, bool fill,
     int32_t rubber_mode);
-int horizontal_dim_c(EmbVector start, EmbVector end, EmbReal legHeight);
-int image_c(const char *img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot);
-int infinite_line_c(EmbVector point1, EmbVector point2, EmbReal rot);
-int line_c(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode);
-int path_c(void);
-int polygon_c(void);
-int polyline_c(void);
-int point_c(void);
-int rounded_rectangle_c(void);
-int ray_c(void);
-int rectangle_c(void);
-int regular_polygon_c(void);
-int slot_c(void);
-int text_multi_c(void);
-int text_single_c(void);
-int triangle_c(void);
-int vertical_dim_c(void);
+int horizontal_dim_create(EmbVector start, EmbVector end, EmbReal legHeight);
+int image_create(const char *img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot);
+int infinite_line_create(EmbVector point1, EmbVector point2, EmbReal rot);
+int line_create(EmbVector start, EmbVector end, EmbReal rot, int32_t rubber_mode);
+int path_create(void);
+int polygon_create(void);
+int polyline_create(void);
+int point_create(EmbVector position);
+int rounded_rectangle_create(void);
+int ray_create(void);
+int rectangle_create(void);
+int regular_polygon_create(void);
+int slot_create(void);
+int text_multi_create(void);
+int text_single_create(void);
+int triangle_create(void);
+int vertical_dim_create(void);
 
 /* Rubber C++ commands: housed in rubber.cpp */
-int add_rubber_c(void);
-int allow_rubber_c(void);
-int clear_rubber_c(void);
-int rubber_c(void);
-int spare_rubber_c(const char *obj_type);
-int set_rubber_mode_c(void);
-int set_rubber_point_c(const char *key_, double x, double y);
-int set_rubber_text_c(const char *key_, const char *txt_);
+int add_rubber(void);
+int allow_rubber(void);
+int clear_rubber(void);
+int rubber(void);
+int spare_rubber(const char *obj_type);
+int set_rubber_mode(void);
+int set_rubber_point(const char *key_, double x, double y);
+int set_rubber_text(const char *key_, const char *txt_);
 
 /* Key callbacks */
 void delete_pressed(void);

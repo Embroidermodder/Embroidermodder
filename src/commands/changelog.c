@@ -15,6 +15,6 @@
 int
 changelog_command(State *state)
 {
-    return changelog_dialog_c();
+    return changelog_dialog();
 }
 

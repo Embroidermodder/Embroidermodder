@@ -21,6 +21,6 @@ arc_command(State *state)
     EmbVector mid = emb_vector(10.0f, 0.0f);
     EmbVector end = emb_vector(10.0f, 10.0f);
     int32_t rubber_mode = OBJ_RUBBER_OFF;
-    return arc_c(start, mid, end, rubber_mode);
+    return arc_create(start, mid, end, rubber_mode);
 }
 

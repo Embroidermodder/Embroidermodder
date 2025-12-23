@@ -130,7 +130,7 @@ MdiWindow::loadFile(const QString &fileName)
         }
     }
     polylinePath.translate(-start.x, -start.y);
-    polyline_c(start, polylinePath, OBJ_RUBBER_OFF);
+    polyline_create(start, polylinePath, OBJ_RUBBER_OFF);
 
     /* FIXME: loading geometry
         QPainterPath path;
@@ -323,7 +323,8 @@ MdiWindow::loadFile(const QString &fileName)
 //TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
 //TODO: Is there/should there be other embedded data in the bitmap besides the image itself?
 //NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
-void MdiWindow::saveBMC()
+void
+MdiWindow::saveBMC()
 {
     //TODO: figure out how to center the image, right now it just plops it to the left side.
     QImage img(150, 150, QImage::Format_ARGB32_Premultiplied);
@@ -348,7 +349,8 @@ void MdiWindow::saveBMC()
     img.convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither|Qt::AvoidDither).save("test.bmc", "BMP");
 }
 
-void MdiWindow::setCurrentFile(const QString &fileName)
+void
+MdiWindow::setCurrentFile(const QString &fileName)
 {
     curFile = QFileInfo(fileName).canonicalFilePath();
     setWindowModified(false);
@@ -365,13 +367,15 @@ QString MdiWindow::fileExtension(const QString& fileName)
     return QFileInfo(fileName).suffix().toLower();
 }
 
-void MdiWindow::closeEvent(QCloseEvent* /*e*/)
+void
+MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
     debug("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
-void MdiWindow::onWindowActivated()
+void
+MdiWindow::onWindowActivated()
 {
     debug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
@@ -393,77 +397,92 @@ QSize MdiWindow::sizeHint() const
     return QSize(450, 300);
 }
 
-void MdiWindow::currentLayerChanged(const QString& layer)
+void
+MdiWindow::currentLayerChanged(const QString& layer)
 {
     curLayer = layer;
 }
 
-void MdiWindow::currentColorChanged(const QRgb& color)
+void
+MdiWindow::currentColorChanged(const QRgb& color)
 {
     curColor = color;
 }
 
-void MdiWindow::currentLinetypeChanged(const QString& type)
+void
+MdiWindow::currentLinetypeChanged(const QString& type)
 {
     curLineType = type;
 }
 
-void MdiWindow::currentLineweightChanged(const QString& weight)
+void
+MdiWindow::currentLineweightChanged(const QString& weight)
 {
     curLineWeight = weight;
 }
 
-void MdiWindow::updateColorLinetypeLineweight()
+void
+MdiWindow::updateColorLinetypeLineweight()
 {
 }
 
-void MdiWindow::showViewScrollBars(bool val)
+void
+MdiWindow::showViewScrollBars(bool val)
 {
     gview->showScrollBars(val);
 }
 
-void MdiWindow::setViewCrossHairColor(QRgb color)
+void
+MdiWindow::setViewCrossHairColor(QRgb color)
 {
     gview->setCrossHairColor(color);
 }
 
-void MdiWindow::setViewBackgroundColor(QRgb color)
+void
+MdiWindow::setViewBackgroundColor(QRgb color)
 {
     gview->setBackgroundColor(color);
 }
 
-void MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+void
+MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
 }
 
-void MdiWindow::setViewGridColor(QRgb color)
+void
+MdiWindow::setViewGridColor(QRgb color)
 {
     gview->setGridColor(color);
 }
 
-void MdiWindow::setViewRulerColor(QRgb color)
+void
+MdiWindow::setViewRulerColor(QRgb color)
 {
     gview->setRulerColor(color);
 }
 
-void MdiWindow::promptHistoryAppended(const QString& txt)
+void
+MdiWindow::promptHistoryAppended(const QString& txt)
 {
     promptHistory.append("<br/>" + txt);
 }
 
-void MdiWindow::logPromptInput(const QString& txt)
+void
+MdiWindow::logPromptInput(const QString& txt)
 {
     promptInputList << txt;
     promptInputNum = promptInputList.size();
 }
 
-void MdiWindow::promptInputPrevious()
+void
+MdiWindow::promptInputPrevious()
 {
     promptInputPrevNext(true);
 }
 
-void MdiWindow::promptInputNext()
+void
+MdiWindow::promptInputNext()
 {
     promptInputPrevNext(false);
 }

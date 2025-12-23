@@ -326,10 +326,10 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             updateLineEditNumIfVaries(line_edits["ArcRadius"], obj->objectRadius(), false);
             updateLineEditNumIfVaries(line_edits["ArcStartAngle"], obj->objectStartAngle(), true);
             updateLineEditNumIfVaries(line_edits["ArcEndAngle"], obj->objectEndAngle(), true);
-            updateLineEditNumIfVaries(line_edits["ArcStartX"], obj->objectStartX(), false);
-            updateLineEditNumIfVaries(line_edits["ArcStartY"], -obj->objectStartY(), false);
-            updateLineEditNumIfVaries(line_edits["ArcEndX"], obj->objectEndX(), false);
-            updateLineEditNumIfVaries(line_edits["ArcEndY"], -obj->objectEndY(), false);
+            updateLineEditNumIfVaries(line_edits["ArcStartX"], obj->objectStartPoint().x(), false);
+            updateLineEditNumIfVaries(line_edits["ArcStartY"], -obj->objectStartPoint().y(), false);
+            updateLineEditNumIfVaries(line_edits["ArcEndX"], obj->objectEndPoint().x(), false);
+            updateLineEditNumIfVaries(line_edits["ArcEndY"], -obj->objectEndPoint().y(), false);
             updateLineEditNumIfVaries(line_edits["ArcArea"], obj->objectArea(), false);
             updateLineEditNumIfVaries(line_edits["ArcLength"], obj->objectArcLength(), false);
             updateLineEditNumIfVaries(line_edits["ArcChord"], obj->objectChord(), false);

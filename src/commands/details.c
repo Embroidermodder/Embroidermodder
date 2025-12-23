@@ -15,5 +15,5 @@
 int
 details_command(State *state)
 {
-    return details_dialog_c();
+    return details_dialog();
 }

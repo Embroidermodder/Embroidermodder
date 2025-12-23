@@ -20,5 +20,5 @@ infinite_line_command(State *state)
     EmbVector point1 = emb_vector(0.0f, 0.0f);
     EmbVector point2 = emb_vector(0.0f, 10.0f);
     EmbReal rot = 0.0f;
-    return infinite_line_c(point1, point2, rot);
+    return infinite_line_create(point1, point2, rot);
 }

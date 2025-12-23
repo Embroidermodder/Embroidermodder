@@ -15,6 +15,6 @@
 int
 clear_rubber_command(State *state)
 {
-    return clear_rubber_c();
+    return clear_rubber();
 }
 

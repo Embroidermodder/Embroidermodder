@@ -118,7 +118,7 @@ report_state(State state)
     fprintf(f, "numOfDocs = %d\n", state.numOfDocs);
     fprintf(f, "docIndex = %d\n", state.docIndex);
 
-    fprintf(f, "context_flag = %d\n", state.context_flag);
+    fprintf(f, "context = %d\n", state.context);
     fprintf(f, "mode = %d\n", state.mode);
     fclose(f);
     return 0;

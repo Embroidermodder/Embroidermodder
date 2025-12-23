@@ -1584,7 +1584,7 @@ MainWindow::runCommandMain(const QString& line)
     // if (!st[ST_SELECTION_MODE_PICKFIRST].b) {
     //     clear_selection();
     // }
-    state.context_flag = CONTEXT_MAIN;
+    state.context = CONTEXT_MAIN;
     cmd(qPrintable(line));
 }
 
@@ -1597,7 +1597,7 @@ MainWindow::runCommandClick(const QString& line, qreal x, qreal y)
 
     char mouse_pos[100];
     sprintf(mouse_pos, "mouse = {%f, %f}", x, y);
-    state.context_flag = CONTEXT_CLICK;
+    state.context = CONTEXT_CLICK;
     cmd(qPrintable(line));
 }
 
@@ -1610,7 +1610,7 @@ MainWindow::runCommandMove(const QString& line, qreal x, qreal y)
 
     char mouse_pos[100];
     sprintf(mouse_pos, "mouse = {%f, %f}", x, y);
-    state.context_flag = CONTEXT_MOVE;
+    state.context = CONTEXT_MOVE;
     cmd(qPrintable(line));
 }
 
@@ -1625,7 +1625,7 @@ MainWindow::runCommandContext(const QString& line, const QString& str)
 
     char context_str[100];
     sprintf(context_str, "prompt = \"%s\"", qPrintable(str));
-    state.context_flag = CONTEXT_MENU;
+    state.context = CONTEXT_MENU;
     cmd(qPrintable(line));
 }
 
@@ -1651,7 +1651,7 @@ MainWindow::runCommandPrompt(const QString& line, const QString& str)
         engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName);
     }
     */
-    state.context_flag = CONTEXT_PROMPT;
+    state.context = CONTEXT_PROMPT;
     cmd(qPrintable(line));
 }
 

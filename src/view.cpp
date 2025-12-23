@@ -904,7 +904,10 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
         foreach(QGraphicsItem* item, apertureItemList) {
             if (item->type() >= OBJ_TYPE_BASE) {
                 tempBaseObj = static_cast<BaseObject*>(item);
-                if (tempBaseObj) { apertureSnapPoints << tempBaseObj->mouseSnapPoint(sceneMousePoint); }
+                if (tempBaseObj) {
+                    QPointF point = closest_point(tempBaseObj->allGripPoints(), sceneMousePoint);
+                    apertureSnapPoints << point;
+                }
             }
         }
         //TODO: Check for intersection snap points and add them to the list
@@ -1270,7 +1273,7 @@ void View::mousePressEvent(QMouseEvent* event)
                 if (!base) return;
 
                 QPoint qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
-                QPointF gripPoint = base->mouseSnapPoint(sceneMousePoint);
+                QPointF gripPoint = closest_point(base->allGripPoints(), sceneMousePoint);
                 QPoint p1 = mapFromScene(gripPoint) - qsnapOffset;
                 QPoint q1 = mapFromScene(gripPoint) + qsnapOffset;
                 QRectF gripRect = QRectF(mapToScene(p1), mapToScene(q1));
@@ -1803,10 +1806,12 @@ View::escapePressed()
 
 void View::startGripping(BaseObject* obj)
 {
-    if (!obj) return;
+    if (!obj) {
+        return;
+    }
     vdata.grippingActive = true;
     gripBaseObj = obj;
-    sceneGripPoint = gripBaseObj->mouseSnapPoint(sceneMousePoint);
+    sceneGripPoint = closest_point(gripBaseObj->allGripPoints(), sceneMousePoint);
     gripBaseObj->setObjectRubberPoint("GRIP_POINT", sceneGripPoint);
     gripBaseObj->setObjectRubberMode(OBJ_RUBBER_GRIP);
 }
@@ -1814,11 +1819,9 @@ void View::startGripping(BaseObject* obj)
 void View::stopGripping(bool accept)
 {
     vdata.grippingActive = false;
-    if (gripBaseObj)
-    {
+    if (gripBaseObj) {
         gripBaseObj->vulcanize();
-        if (accept)
-        {
+        if (accept) {
             UndoableGripEditCommand* cmd = new UndoableGripEditCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
             if (cmd) undoStack->push(cmd);
             selectionChanged(); //Update the Property Editor
