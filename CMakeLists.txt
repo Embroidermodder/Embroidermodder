@@ -137,6 +137,7 @@ qt_add_executable(embroidermodder2
 
     ${SRC}/core.c
     ${SRC}/debug.c
+    ${SRC}/settings.c
     ${SRC}/core.h
 
     ${SRC}/commands.cpp

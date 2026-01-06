@@ -15,7 +15,7 @@
 int
 settings_command(State *state)
 {
-    //FIXME: settings();
+    settings_dialog();
     return 0;
 }
 

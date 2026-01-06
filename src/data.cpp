@@ -220,27 +220,9 @@ void
 load_settings_data(void)
 {
     debug("Loading settings...");
-    auto data = toml::parse("data/settings.toml", toml::spec::v(1, 1, 0));
-
-    auto table = data.at("settings_table");
-    for (size_t i=0; i<N_SETTINGS; i++) {
-        auto current = table.at(i);
-
-        settings_table[i].section = get_toml_string(current, "section");
-        settings_table[i].key = get_toml_string(current, "key");
-        settings_table[i].default_value = get_toml_string(current, "default_value");
-        settings_table[i].type = get_toml_string(current, "type")[0];
-        settings_table[i].enabled = get_toml_boolean(current, "enabled");
-        settings_table[i].description = get_toml_string(current, "description");
-        settings_table[i].icon = get_toml_string(current, "icon");
-        settings_table[i].lower = get_toml_float(current, "lower");
-        settings_table[i].upper = get_toml_float(current, "upper");
-        settings_table[i].single_step = get_toml_float(current, "single_step");
-    }
-
     /* Set up settings data. */
     for (size_t i=0; i<N_SETTINGS; i++) {
-        const char *value = settings_table[i].default_value.c_str();
+        const char *value = settings_table[i].default_value;
         switch (settings_table[i].type) {
         case 's':
             strncpy(st[i].s, value, 200);

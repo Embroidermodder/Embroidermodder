@@ -71,7 +71,6 @@ std::unordered_map<std::string, MenuData> menu_table;
 std::unordered_map<std::string, StringList> string_tables;
 std::unordered_map<std::string, std::vector<PropertiesData>> properties_table;
 std::unordered_map<QString, QString> aliases;
-SettingsData settings_table[N_SETTINGS];
 
 int
 main(int argc, char* argv[])
@@ -1350,8 +1349,8 @@ void MainWindow::readSettings()
     }
 
     for (int i=0; i<N_SETTINGS; i++) {
-        QString key_(settings_table[i].section.c_str());
-        key_ += QString("/") + QString(settings_table[i].key.c_str());
+        QString key_(settings_table[i].section);
+        key_ += QString("/") + QString(settings_table[i].key);
         switch (settings_table[i].type) {
         case 's': {
             const char *s = st[i].s;
@@ -1395,8 +1394,8 @@ void MainWindow::writeSettings()
     settings_file.setValue("Window/Size", size());
 
     for (int i=0; i<N_SETTINGS; i++) {
-        QString key_(settings_table[i].section.c_str());
-        key_ += QString("/") + QString(settings_table[i].key.c_str());
+        QString key_(settings_table[i].section);
+        key_ += QString("/") + QString(settings_table[i].key);
         switch (settings_table[i].type) {
         case 's': {
             const char *s = st[i].s;

@@ -253,20 +253,6 @@ typedef struct Command_ {
     unsigned char checkable;
 } Command;
 
-/** @brief Data for a given interface setting. */
-typedef struct SettingsData_ {
-    String section;
-    String key;
-    String default_value;
-    char type;
-    bool enabled;
-    String description;
-    String icon;
-    double lower;
-    double upper;
-    double single_step;
-} SettingsData;
-
 /** @brief Property data for a given geometric object. */
 typedef struct PropertiesData_ {
     String key;
@@ -1673,6 +1659,18 @@ public:
     QCheckBox *basic_checkbox(QGroupBox *gb, int id);
     QDoubleSpinBox *basic_double_spinbox(QGroupBox *gb, int id);
     QSpinBox *basic_spinbox(QGroupBox *gb, int id);
+    QColor colorDialog(QPushButton* button, int id);
+    void update_interface(void);
+
+    /* Temporary until dialog closes. */
+    ScriptValue st_dialog[N_SETTINGS];
+    /* Temporary for changes accepted without the dialog closing. */
+    ScriptValue st_accept[N_SETTINGS];
+    /* Temporary for instant preview. */
+    ScriptValue st_preview[N_SETTINGS];
+
+    QTabWidget* tabWidget;
+    QDialogButtonBox* buttonBox;
 
 private:
     QWidget* createTabGeneral();

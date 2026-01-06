@@ -497,7 +497,7 @@ alias = [
 
 [[actions]]
 icon = "settingsdialog"
-command = "settings_dialog"
+command = "settings"
 tooltip = "&Settings"
 statustip = "Configure settings specific to this product."
 

@@ -412,6 +412,20 @@ typedef struct ScriptValue_ {
     int length;
 } ScriptValue;
 
+/* Data for a given interface setting. */
+typedef struct SettingsData_ {
+    char section[100];
+    char key[100];
+    char default_value[100];
+    char type;
+    bool enabled;
+    char description[1000];
+    char icon[1000];
+    double lower;
+    double upper;
+    double single_step;
+} SettingsData;
+
 /* Type declarations */
 typedef struct ViewData_ {
     uint8_t grippingActive;
@@ -595,6 +609,7 @@ int window_c(const char *subcommand);
 int zoom_c(char *subcommand);
 
 extern ScriptValue st[N_SETTINGS];
+extern SettingsData settings_table[N_SETTINGS];
 
 #ifdef __cplusplus
 }
