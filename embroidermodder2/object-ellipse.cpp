@@ -201,7 +201,7 @@ void EllipseObject::updateRubber(QPainter* painter)
         qreal dy = py-y1;
         norm.translate(dx, dy);
         QPointF iPoint;
-        norm.intersect(line, &iPoint);
+        norm.intersects(line, &iPoint);
         qreal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
         setObjectCenter(sceneCenterPoint);
@@ -233,7 +233,7 @@ void EllipseObject::updateRubber(QPainter* painter)
         qreal dy = py-y1;
         norm.translate(dx, dy);
         QPointF iPoint;
-        norm.intersect(line, &iPoint);
+        norm.intersects(line, &iPoint);
         qreal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
         setObjectCenter(sceneCenterPoint);

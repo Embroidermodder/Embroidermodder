@@ -452,38 +452,31 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
     cmdtxt.replace(0, prefix.length(), "");
     if(!rapidFireEnabled) cmdtxt = cmdtxt.toLower();
 
-    if(cmdActive)
-    {
-        if(rapidFireEnabled)
-        {
-            if(rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return)
-            {
+    if (cmdActive) {
+        if (rapidFireEnabled) {
+            if (rapidChar == QChar::LineFeed || rapidChar == QChar::CarriageReturn) {
                 emit appendHistory(curText, prefix.length());
                 emit runCommand(curCmd, "RAPID_ENTER");
                 curText.clear();
                 clear();
                 return;
             }
-            else if(rapidChar == Qt::Key_Space)
-            {
+            else if (rapidChar == QChar::Space) {
                 updateCurrentText(curText + " ");
                 emit runCommand(curCmd, cmdtxt + " ");
                 return;
             }
-            else
-            {
+            else {
                 emit runCommand(curCmd, cmdtxt);
                 return;
             }
         }
-        else
-        {
+        else {
             emit appendHistory(curText, prefix.length());
             emit runCommand(curCmd, cmdtxt);
         }
     }
-    else
-    {
+    else {
         if(aliasHash->contains(cmdtxt))
         {
             cmdActive = true;

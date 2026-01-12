@@ -11,7 +11,6 @@
 #include "undo-editor.h"
 
 #include "native-scripting.h"
-#include "native-javascript.h"
 
 #include "preview-dialog.h"
 
@@ -131,7 +130,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //create the mdiArea
     QFrame* vbox = new QFrame(this);
     QVBoxLayout* layout = new QVBoxLayout(vbox);
-    layout->setMargin(0);
+    // FIXME: layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(this, vbox);
     mdiArea->useBackgroundLogo(getSettingsGeneralMdiBGUseLogo());
@@ -204,14 +203,10 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    //Javascript
-    initMainWinPointer(this);
-
-    engine = new QScriptEngine(this);
-    engine->installTranslatorFunctions();
-    debugger = new QScriptEngineDebugger(this);
-    debugger->attachTo(engine);
-    javaInitNatives(engine);
+    // engine = new QJSEngine(this);
+    // FIXME: engine->installTranslatorFunctions();
+    engine.installExtensions(QJSEngine::ConsoleExtension);
+    javaInitNatives();
 
     //Load all commands in a loop
     QDir commandDir(appDir + "/commands");

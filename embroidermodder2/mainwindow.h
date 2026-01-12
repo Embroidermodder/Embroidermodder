@@ -5,8 +5,7 @@
 #include <QList>
 #include <QHash>
 #include <QDir>
-#include <QtScript>
-#include <QtScriptTools>
+#include <QJSEngine>
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
@@ -28,8 +27,6 @@ class QAction;
 class QToolBar;
 class QCloseEvent;
 class QMenu;
-class QScriptEngine;
-class QScriptEngineDebugger;
 class QScriptProgram;
 class QUndoStack;
 QT_END_NAMESPACE
@@ -650,13 +647,11 @@ public slots:
 
     void doNothing();
 
-private:
-    QScriptEngine*         engine;
-    QScriptEngineDebugger* debugger;
-    void                   javaInitNatives(QScriptEngine* engine);
-    void                   javaLoadCommand(const QString& cmdName);
-
 public:
+    QJSEngine engine;
+    void javaInitNatives(void);
+    void javaLoadCommand(const QString& cmdName);
+
     //Natives
     void nativeAlert                  (const QString& txt);
     void nativeBlinkPrompt            ();
@@ -796,4 +791,3 @@ public:
 
 #endif
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

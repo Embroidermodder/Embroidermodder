@@ -1,6 +1,5 @@
 #include "format-dxf.h"
 #include "helpers-misc.h"
-#include "emb-hash.h"
 #include "emb-logging.h"
 
 #include "geom-arc.h"
@@ -313,7 +312,7 @@ int readDxf(EmbPattern* pattern, const char* fileName)
     char* tableName = "";
     char* layerName = "";
     char* entityType = "";
-    EmbHash* layerColorHash = 0; /* hash <layerName, EmbColor> */
+    /* FIXME: EmbHash* layerColorHash = 0; hash <layerName, EmbColor> */
 
     int eof = 0; /* End Of File */
 
@@ -326,8 +325,10 @@ int readDxf(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-dxf.c readDxf(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-dxf.c readDxf(), fileName argument is null\n"); return 0; }
 
+    /* FIXME
     layerColorHash = embHash_create();
     if(!layerColorHash) { embLog_error("format-dxf.c readDxf(), unable to allocate memory for layerColorHash\n"); return 0; }
+    */
 
     file = fopen(fileName, "r");
     if(!file)
