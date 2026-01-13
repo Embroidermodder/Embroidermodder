@@ -39,9 +39,10 @@ add_compile_options(
 )
 endif()
 
-set(SRC ${CMAKE_SOURCE_DIR}/embroidermodder2)
+set(SRC ${CMAKE_SOURCE_DIR}/src/embroidermodder2)
+set(DATA ${CMAKE_SOURCE_DIR}/data)
 
-add_subdirectory(libembroidery)
+add_subdirectory(src/libembroidery)
 
 # The makers of CMake advise that you do not glob source files.
 #
@@ -125,27 +126,26 @@ qt_add_executable(embroidermodder2
 # WARNING: This does NOT regenerate when the assets change, so you have to
 # rerun cmake to ensure that this retriggers.
 #
-file(COPY "${SRC}/commands"
+file(COPY "${DATA}/commands"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${SRC}/images"
+file(COPY "${DATA}/images"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${SRC}/icons"
+file(COPY "${DATA}/icons"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${SRC}/samples"
+file(COPY "${DATA}/samples"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${SRC}/translations"
+file(COPY "${DATA}/translations"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${SRC}/help"
+file(COPY "${DATA}/help"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${SRC}/tips.txt"
+file(COPY "${DATA}/tips.txt"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/embroidermodder2
-	${CMAKE_SOURCE_DIR}/embroidermodder2/javascript
-	${CMAKE_SOURCE_DIR}/libembroidery
+	${CMAKE_SOURCE_DIR}/src/embroidermodder2
+	${CMAKE_SOURCE_DIR}/src/libembroidery
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
