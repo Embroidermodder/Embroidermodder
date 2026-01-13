@@ -1,0 +1,41 @@
+@titlepage
+@title Embroidermodder 2
+
+@page
+@insertcopying
+@end titlepage
+
+@contents
+
+@node Top
+@top Embroidermodder 2
+
+@node Introduction
+@nodedescription Overview of features and build advice
+@chapter Introduction
+
+@cindex Introduction
+
+Embroidermodder 2 is a graphical user interface (GUI) for
+editing machine embroidery files.
+
+@node Software License
+@nodedescription The license for this software.
+@appendix Software License
+@verbatiminclude ../LICENSE.md
+
+@node Code of Conduct
+@nodedescription The code of conduct that contributors are held to.
+@appendix Code of Conduct
+@verbatiminclude ../CODE_OF_CONDUCT.md
+
+@node Free Documentation License
+@nodedescription The license for this documentation.
+@appendix Free Documentation License
+@include fdl-1.3.texi
+
+@node Index
+@unnumbered Index
+@printindex cp
+
+@bye
