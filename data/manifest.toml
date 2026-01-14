@@ -1,0 +1,6 @@
+
+manifest = [
+    "tables/menus.toml",
+    "tables/toolbars.toml",
+    "tables/tips.toml"
+]

@@ -42,7 +42,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    this->setWindowIcon(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    this->setWindowIcon(QIcon("icons/" + state.settings.general_icon_theme + "/" + "app" + ".png"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(mainWin, gscene, this);
@@ -96,7 +96,7 @@ bool MdiWindow::loadFile(const QString &fileName)
     QRgb tmpColor = getCurrentColor();
 
     QFile file(fileName);
-    if(!file.open(QFile::ReadOnly | QFile::Text))
+    if (!file.open(QFile::ReadOnly | QFile::Text))
     {
         QMessageBox::warning(this, tr("Error reading file"),
                              tr("Cannot read file %1:\n%2.")
@@ -112,11 +112,11 @@ bool MdiWindow::loadFile(const QString &fileName)
 
     //Read
     EmbPattern* p = embPattern_create();
-    if(!p) { printf("Could not allocate memory for embroidery pattern\n"); exit(1); }
+    if (!p) { printf("Could not allocate memory for embroidery pattern\n"); exit(1); }
     int readSuccessful = 0;
     QString readError;
     EmbReaderWriter* reader = embReaderWriter_getByFileName(qPrintable(fileName));
-    if(!reader)
+    if (!reader)
     {
         readSuccessful = 0;
         readError = "Unsupported read file type: " + fileName;
@@ -125,25 +125,25 @@ bool MdiWindow::loadFile(const QString &fileName)
     else
     {
         readSuccessful = reader->reader(p, qPrintable(fileName));
-        if(!readSuccessful)
+        if (!readSuccessful)
         {
             readError = "Reading file was unsuccessful: " + fileName;
             qDebug("Reading file was unsuccessful: %s\n", qPrintable(fileName));
         }
     }
     free(reader);
-    if(!readSuccessful)
+    if (!readSuccessful)
     {
         QMessageBox::warning(this, tr("Error reading pattern"), tr(qPrintable(readError)));
     }
 
-    if(readSuccessful)
+    if (readSuccessful)
     {
         embPattern_moveStitchListToPolylines(p); //TODO: Test more
         int stitchCount = embStitchList_count(p->stitchList);
         QPainterPath path;
 
-        if(p->circleObjList)
+        if (p->circleObjList)
         {
             EmbCircleObjectList* curCircleObj = p->circleObjList;
             while(curCircleObj)
@@ -156,7 +156,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curCircleObj = curCircleObj->next;
             }
         }
-        if(p->ellipseObjList)
+        if (p->ellipseObjList)
         {
             EmbEllipseObjectList* curEllipseObj = p->ellipseObjList;
             while(curEllipseObj)
@@ -169,7 +169,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curEllipseObj = curEllipseObj->next;
             }
         }
-        if(p->lineObjList)
+        if (p->lineObjList)
         {
             EmbLineObjectList* curLineObj = p->lineObjList;
             while(curLineObj)
@@ -182,7 +182,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curLineObj = curLineObj->next;
             }
         }
-        if(p->pathObjList)
+        if (p->pathObjList)
         {
             //TODO: This is unfinished. It needs more work
             EmbPathObjectList* curPathObjList = p->pathObjList;
@@ -191,7 +191,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 QPainterPath pathPath;
                 EmbPointList* curPointList = curPathObjList->pathObj->pointList;
                 EmbColor thisColor = curPathObjList->pathObj->color;
-                if(curPointList)
+                if (curPointList)
                 {
                     EmbPoint pp = curPointList->point;
                     pathPath.moveTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
@@ -216,7 +216,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curPathObjList = curPathObjList->next;
             }
         }
-        if(p->pointObjList)
+        if (p->pointObjList)
         {
             EmbPointObjectList* curPointObj = p->pointObjList;
             while(curPointObj)
@@ -229,7 +229,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curPointObj = curPointObj->next;
             }
         }
-        if(p->polygonObjList)
+        if (p->polygonObjList)
         {
             EmbPolygonObjectList* curPolygonObjList = p->polygonObjList;
             while(curPolygonObjList)
@@ -247,7 +247,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                     x = embPoint_x(pp);
                     y = -embPoint_y(pp); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
 
-                    if(firstPoint) { polygonPath.lineTo(x,y); }
+                    if (firstPoint) { polygonPath.lineTo(x,y); }
                     else           { polygonPath.moveTo(x,y); firstPoint = true; startX = x; startY = y; }
 
                     curPointList = curPointList->next;
@@ -260,7 +260,7 @@ bool MdiWindow::loadFile(const QString &fileName)
             }
         }
         /* NOTE: Polylines should only contain NORMAL stitches. */
-        if(p->polylineObjList)
+        if (p->polylineObjList)
         {
             EmbPolylineObjectList* curPolylineObjList = p->polylineObjList;
             while(curPolylineObjList)
@@ -278,7 +278,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                     x = embPoint_x(pp);
                     y = -embPoint_y(pp); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
 
-                    if(firstPoint) { polylinePath.lineTo(x,y); }
+                    if (firstPoint) { polylinePath.lineTo(x,y); }
                     else           { polylinePath.moveTo(x,y); firstPoint = true; startX = x; startY = y; }
 
                     curPointList = curPointList->next;
@@ -290,7 +290,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curPolylineObjList = curPolylineObjList->next;
             }
         }
-        if(p->rectObjList)
+        if (p->rectObjList)
         {
             EmbRectObjectList* curRectObj = p->rectObjList;
             while(curRectObj)
@@ -309,8 +309,7 @@ bool MdiWindow::loadFile(const QString &fileName)
         QString stitches;
         stitches.setNum(stitchCount);
 
-        if(mainWin->getSettingsGridLoadFromFile())
-        {
+        if (state.settings.grid_load_from_file) {
             //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
         }
 
@@ -336,11 +335,9 @@ bool MdiWindow::loadFile(const QString &fileName)
 void MdiWindow::print()
 {
     QPrintDialog dialog(&printer, this);
-    if(dialog.exec() == QDialog::Accepted)
-    {
+    if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
-        if(mainWin->getSettingsPrintingDisableBG())
-        {
+        if (state.settings.printing_disable_bg) {
             //Save current bg
             QBrush brush = gview->backgroundBrush();
             //Save ink by not printing the bg at all
@@ -350,8 +347,7 @@ void MdiWindow::print()
             //Restore the bg
             gview->setBackgroundBrush(brush);
         }
-        else
-        {
+        else {
             //Print, fitting the viewport contents into a full page
             gview->render(&painter);
         }
@@ -372,7 +368,7 @@ void MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if(mainWin->getSettingsPrintingDisableBG()) //TODO: Make BMC background into it's own setting?
+    if (state.settings.printing_disable_bg) //TODO: Make BMC background into it's own setting?
     {
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
@@ -521,21 +517,20 @@ void MdiWindow::promptInputNext()
 
 void MdiWindow::promptInputPrevNext(bool prev)
 {
-    if(promptInputList.isEmpty())
+    if (promptInputList.isEmpty())
     {
-        if(prev) QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
+        if (prev) QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
         else     QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
         qDebug("The prompt input is empty! Please report this as a bug!");
     }
     else
     {
-        if(prev) promptInputNum--;
+        if (prev) promptInputNum--;
         else     promptInputNum++;
         int maxNum = promptInputList.size();
         if     (promptInputNum < 0)       { promptInputNum = 0;      mainWin->prompt->setCurrentText(""); }
-        else if(promptInputNum >= maxNum) { promptInputNum = maxNum; mainWin->prompt->setCurrentText(""); }
+        else if (promptInputNum >= maxNum) { promptInputNum = maxNum; mainWin->prompt->setCurrentText(""); }
         else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

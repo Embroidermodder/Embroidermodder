@@ -43,6 +43,7 @@ set(SRC ${CMAKE_SOURCE_DIR}/src/embroidermodder2)
 set(DATA ${CMAKE_SOURCE_DIR}/data)
 
 add_subdirectory(src/libembroidery)
+add_subdirectory(extern/tomlc99)
 
 # The makers of CMake advise that you do not glob source files.
 #
@@ -121,6 +122,8 @@ qt_add_executable(embroidermodder2
 	${SRC}/undo-editor.h
 	${SRC}/view.cpp
 	${SRC}/view.h
+
+	${SRC}/state.h
 )
 
 # WARNING: This does NOT regenerate when the assets change, so you have to
@@ -138,7 +141,9 @@ file(COPY "${DATA}/translations"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${DATA}/help"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${DATA}/tips.txt"
+file(COPY "${DATA}/tables"
+	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${DATA}/manifest.toml"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
@@ -146,6 +151,7 @@ file(COPY "${CMAKE_SOURCE_DIR}/LICENSE.md"
 include_directories(
 	${CMAKE_SOURCE_DIR}/src/embroidermodder2
 	${CMAKE_SOURCE_DIR}/src/libembroidery
+	${CMAKE_SOURCE_DIR}/extern/tomlc99
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
@@ -154,6 +160,7 @@ target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::PrintSupport
 	Qt6::Qml
 	embroidery_static
+	tomlc99
 	${OPENGL_LIBRARIES}
 )
 

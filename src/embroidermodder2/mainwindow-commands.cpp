@@ -49,9 +49,9 @@ void MainWindow::stub_testing()
 void MainWindow::exit()
 {
     qDebug("exit()");
-    if(getSettingsPromptSaveHistory())
-    {
-        prompt->saveHistory("prompt.log", getSettingsPromptSaveHistoryAsHtml()); //TODO: get filename from settings
+    if (state.settings.prompt_save_history) {
+        /* TODO: get filename from settings */
+        prompt->saveHistory("prompt.log", state.settings.prompt_save_history_as_html);
     }
     qApp->closeAllWindows();
     this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
@@ -253,14 +253,15 @@ void MainWindow::tipOfTheDay()
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if(settings_general_current_tip >= listTipOfTheDay.size())
-        settings_general_current_tip = 0;
-    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(settings_general_current_tip), wizardTipOfTheDay);
+    if (state.settings.general_current_tip >= state.tables["tips"].size()) {
+        state.settings.general_current_tip = 0;
+    }
+    labelTipOfTheDay = new QLabel(state.tables["tips"].value(state.settings.general_current_tip), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    settings_general_tip_of_the_day = mainWin->getSettingsGeneralTipOfTheDay();
-    checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
+    state.settings.general_tip_of_the_day = state.settings.general_tip_of_the_day;
+    checkBoxTipOfTheDay->setChecked(state.settings.general_tip_of_the_day);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
@@ -294,7 +295,7 @@ void MainWindow::tipOfTheDay()
 
 void MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 {
-    settings_general_tip_of_the_day = checked;
+    state.settings.general_tip_of_the_day = checked;
 }
 
 void MainWindow::buttonTipOfTheDayClicked(int button)
@@ -302,18 +303,18 @@ void MainWindow::buttonTipOfTheDayClicked(int button)
     qDebug("buttonTipOfTheDayClicked(%d)", button);
     if(button == QWizard::CustomButton1)
     {
-        if(settings_general_current_tip > 0)
-            settings_general_current_tip--;
+        if(state.settings.general_current_tip > 0)
+            state.settings.general_current_tip--;
         else
-            settings_general_current_tip = listTipOfTheDay.size()-1;
-        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
+            state.settings.general_current_tip = state.tables["tips"].size() - 1;
+        labelTipOfTheDay->setText(state.tables["tips"].value(state.settings.general_current_tip));
     }
     else if(button == QWizard::CustomButton2)
     {
-        settings_general_current_tip++;
-        if(settings_general_current_tip >= listTipOfTheDay.size())
-            settings_general_current_tip = 0;
-        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
+        state.settings.general_current_tip++;
+        if(state.settings.general_current_tip >= state.tables["tips"].size())
+            state.settings.general_current_tip = 0;
+        labelTipOfTheDay->setText(state.tables["tips"].value(state.settings.general_current_tip));
     }
     else if(button == QWizard::CustomButton3)
     {
@@ -413,7 +414,7 @@ void MainWindow::iconResize(int iconSize)
 
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
-    setSettingsGeneralIconSize(iconSize);
+    state.settings.general_icon_size = iconSize;
 }
 
 void MainWindow::icon16()
@@ -562,13 +563,13 @@ void MainWindow::updateAllViewRulerColors(QRgb color)
 
 void MainWindow::updatePickAddMode(bool val)
 {
-    setSettingsSelectionModePickAdd(val);
+    state.settings.selection_mode_pickadd = val;
     dockPropEdit->updatePickAddModeButton(val);
 }
 
 void MainWindow::pickAddModeToggled()
 {
-    bool val = !getSettingsSelectionModePickAdd();
+    bool val = !state.settings.selection_mode_pickadd;
     updatePickAddMode(val);
 }
 
@@ -810,58 +811,59 @@ void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 void MainWindow::textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
-    setSettingsTextSize(qFabs(textSizeSelector->itemData(index).toReal())); //TODO: check that the toReal() conversion is ok
+    /* TODO: check that the toReal() conversion is ok */
+    state.settings.text_size = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
 QString MainWindow::textFont()
 {
-    return getSettingsTextFont();
+    return state.settings.text_font;
 }
 
 qreal MainWindow::textSize()
 {
-    return getSettingsTextSize();
+    return state.settings.text_size;
 }
 
 qreal MainWindow::textAngle()
 {
-    return getSettingsTextAngle();
+    return state.settings.text_angle;
 }
 
 bool MainWindow::textBold()
 {
-    return getSettingsTextStyleBold();
+    return state.settings.text_style_bold;
 }
 
 bool MainWindow::textItalic()
 {
-    return getSettingsTextStyleItalic();
+    return state.settings.text_style_italic;
 }
 
 bool MainWindow::textUnderline()
 {
-    return getSettingsTextStyleUnderline();
+    return state.settings.text_style_underline;
 }
 
 bool MainWindow::textStrikeOut()
 {
-    return getSettingsTextStyleStrikeOut();
+    return state.settings.text_style_strikeout;
 }
 
 bool MainWindow::textOverline()
 {
-    return getSettingsTextStyleOverline();
+    return state.settings.text_style_overline;
 }
 
 void MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    setSettingsTextFont(str);
+    state.settings.text_font = str;
 }
 
 void MainWindow::setTextSize(qreal num)
 {
-    setSettingsTextSize(qFabs(num));
+    state.settings.text_size = qFabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
     if(index != -1)
         textSizeSelector->removeItem(index);
@@ -873,32 +875,32 @@ void MainWindow::setTextSize(qreal num)
 
 void MainWindow::setTextAngle(qreal num)
 {
-    setSettingsTextAngle(num);
+    state.settings.text_angle = num;
 }
 
 void MainWindow::setTextBold(bool val)
 {
-    setSettingsTextStyleBold(val);
+    state.settings.text_style_bold = val;
 }
 
 void MainWindow::setTextItalic(bool val)
 {
-    setSettingsTextStyleItalic(val);
+    state.settings.text_style_italic = val;
 }
 
 void MainWindow::setTextUnderline(bool val)
 {
-    setSettingsTextStyleUnderline(val);
+    state.settings.text_style_underline = val;
 }
 
 void MainWindow::setTextStrikeOut(bool val)
 {
-    setSettingsTextStyleStrikeOut(val);
+    state.settings.text_style_strikeout = val;
 }
 
 void MainWindow::setTextOverline(bool val)
 {
-    setSettingsTextStyleOverline(val);
+    state.settings.text_style_overline = val;
 }
 
 QString MainWindow::getCurrentLayer()
@@ -1028,7 +1030,7 @@ void MainWindow::runCommandMain(const QString& cmd)
 {
     qDebug("runCommandMain(%s)", qPrintable(cmd));
     QString fileName = "commands/" + cmd + "/" + cmd + ".js";
-    //if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
+    //if(!state.settings.selection_mode_pick_first) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
     engine.evaluate(cmd + "_main()", fileName);
 }
 
@@ -1293,19 +1295,19 @@ void MainWindow::nativeNightVision()
 
 void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsDisplayBGColor(qRgb(r,g,b));
+    state.settings.display_bg_color = qRgb(r,g,b);
     updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
 void MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsDisplayCrossHairColor(qRgb(r,g,b));
+    state.settings.display_crosshair_color = qRgb(r,g,b);
     updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
 void MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsGridColor(qRgb(r,g,b));
+    state.settings.grid_color = qRgb(r,g,b);
     updateAllViewGridColors(qRgb(r,g,b));
 }
 
@@ -1456,13 +1458,13 @@ void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal
     if(gview && gscene && stack)
     {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
-        obj->setObjectTextFont(getSettingsTextFont());
-        obj->setObjectTextSize(getSettingsTextSize());
-        obj->setObjectTextStyle(getSettingsTextStyleBold(),
-                                getSettingsTextStyleItalic(),
-                                getSettingsTextStyleUnderline(),
-                                getSettingsTextStyleStrikeOut(),
-                                getSettingsTextStyleOverline());
+        obj->setObjectTextFont(state.settings.text_font);
+        obj->setObjectTextSize(state.settings.text_size);
+        obj->setObjectTextStyle(state.settings.text_style_bold,
+                                state.settings.text_style_italic,
+                                state.settings.text_style_underline,
+                                state.settings.text_style_strikeout,
+                                state.settings.text_style_overline);
         obj->setObjectTextBackward(false);
         obj->setObjectTextUpsideDown(false);
         obj->setRotation(-rot);
