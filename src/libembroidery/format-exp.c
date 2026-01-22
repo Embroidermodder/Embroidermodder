@@ -1,10 +1,4 @@
-#include "format-exp.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "emb-stitch.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
-#include <stdio.h>
+#include "embroidery.h"
 
 static char expDecode(unsigned char a1)
 {

@@ -1,8 +1,5 @@
-#include "compound-file-directory.h"
-#include "compound-file-common.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
-#include <stdio.h>
+#include "embroidery.h"
+
 #include <stdlib.h>
 #include <string.h>
 

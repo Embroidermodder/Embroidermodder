@@ -1,12 +1,6 @@
-#include "format-jef.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "emb-time.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
-#include "emb-stitch.h"
-#include <stdio.h>
 #include <stdlib.h>
+
+#include "embroidery.h"
 
 static char sewDecode(unsigned char inputByte)
 {

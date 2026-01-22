@@ -1,10 +1,7 @@
-#include "format-ofm.h"
-#include "compound-file.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
 #include <stdlib.h>
 #include <string.h>
+
+#include "embroidery.h"
 
 static char* ofmReadLibrary(EmbFile* file)
 {

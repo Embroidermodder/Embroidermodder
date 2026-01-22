@@ -1,6 +1,6 @@
-#include "emb-rect.h"
-#include "emb-logging.h"
 #include <stdlib.h>
+
+#include "embroidery.h"
 
 /**************************************************/
 /* EmbRect                                        */

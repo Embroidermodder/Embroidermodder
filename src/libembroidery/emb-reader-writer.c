@@ -1,10 +1,8 @@
-#include "emb-reader-writer.h"
-#include "emb-logging.h"
-#include "formats.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
+#include "embroidery.h"
 
 /*! Returns a pointer to an EmbReaderWriter if the \a fileName is a supported file type. */
 EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)

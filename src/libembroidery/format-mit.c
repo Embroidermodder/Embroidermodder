@@ -1,7 +1,4 @@
-#include "format-mit.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
+#include "embroidery.h"
 
 static int mitDecodeStitch(unsigned char value)
 {

@@ -1,6 +1,7 @@
 /* Computational Geometry for Circles */
-#include "geom-circle.h"
 #include <math.h>
+
+#include "embroidery.h"
 
 /****************************************************************
  * Calculates the intersection points of two overlapping circles.

@@ -1,7 +1,4 @@
-#include "format-txt.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-misc.h"
+#include "embroidery.h"
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */

@@ -1,9 +1,4 @@
-#include "format-tap.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
-#include <stdio.h>
+#include "embroidery.h"
 
 static int decodeRecordFlags(unsigned char b2)
 {

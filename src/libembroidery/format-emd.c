@@ -1,7 +1,4 @@
-#include "format-emd.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
+#include "embroidery.h"
 
 static char emdDecode(unsigned char inputByte)
 {

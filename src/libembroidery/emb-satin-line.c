@@ -1,9 +1,7 @@
-#include "emb-satin-line.h"
-#include "emb-line.h"
-#include "emb-logging.h"
-#include "emb-vector.h"
 #include <math.h>
 #include <stdlib.h>
+
+#include "embroidery.h"
 
 void embSatinOutline_generateSatinOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result)
 {

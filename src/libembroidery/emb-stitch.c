@@ -1,6 +1,5 @@
-#include "emb-stitch.h"
-#include "emb-logging.h"
-#include <stdio.h>
+#include "embroidery.h"
+
 #include <stdlib.h>
 
 EmbStitchList* embStitchList_create(EmbStitch data)

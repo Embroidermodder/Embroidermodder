@@ -1,9 +1,7 @@
-#include "format-vp3.h"
-#include "helpers-binary.h"
-#include "emb-file.h"
-#include "emb-logging.h"
 #include <stdlib.h>
 #include <string.h>
+
+#include "embroidery.h"
 
 static unsigned char* vp3ReadString(EmbFile* file)
 {

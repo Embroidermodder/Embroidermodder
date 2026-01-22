@@ -1,5 +1,4 @@
-#include "emb-outline.h"
-#include "emb-pattern.h"
+#include "embrodiery.h"
 
 #ifdef ARDUINO /* ARDUINO TODO: remove this line when emb-outline is C89 complete. This is a temporary arduino build fix. */
 #else          /* ARDUINO TODO: remove this line when emb-outline is C89 complete. This is a temporary arduino build fix. */

@@ -1,5 +1,5 @@
-#include "compound-file-header.h"
-#include "helpers-binary.h"
+#include "embroidery.h"
+
 #include <string.h>
 #include <stdio.h>
 
@@ -39,4 +39,3 @@ int bcfFileHeader_isValid(bcf_file_header header)
     return 1;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

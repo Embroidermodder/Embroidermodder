@@ -1,8 +1,4 @@
-#include "format-pcs.h"
-#include "emb-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
+#include "embroidery.h"
 
 static double pcsDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {

@@ -1,6 +1,6 @@
-#include "emb-polygon.h"
-#include "emb-logging.h"
 #include <stdlib.h>
+
+#include "embroidery.h"
 
 /**************************************************/
 /* EmbPolygonObject                              */

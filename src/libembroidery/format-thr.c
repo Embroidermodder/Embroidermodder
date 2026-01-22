@@ -1,8 +1,6 @@
-#include "format-thr.h"
-#include "helpers-binary.h"
-#include "emb-file.h"
-#include "emb-logging.h"
 #include <string.h>
+
+#include "embroidery.h"
 
 #define NOTFRM 0x00080000
 

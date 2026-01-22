@@ -1,7 +1,4 @@
-#include "emb-logging.h"
-
-#include <stdio.h>
-#include <stdarg.h>
+#include "embroidery.h"
 
 /* printf() abstraction. Uses Serial.print() on ARDUINO */
 void embLog_print(const char* format, ...)
@@ -44,4 +41,3 @@ void embLog_error(const char* format, ...)
 #endif /* ARDUINO */
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

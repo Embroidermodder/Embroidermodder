@@ -1,6 +1,4 @@
-#include "format-exy.h"
-#include "emb-file.h"
-#include "emb-logging.h"
+#include "embroidery.h"
 
 static int exyDecodeFlags(unsigned char b2)
 {

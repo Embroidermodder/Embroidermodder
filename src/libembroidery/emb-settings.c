@@ -1,4 +1,4 @@
-#include "emb-settings.h"
+#include "embroidery.h"
 
 /*! Initializes and returns an EmbSettings */
 EmbSettings embSettings_init(void)
@@ -21,4 +21,3 @@ void embSettings_setHome(EmbSettings* settings, EmbPoint point)
     settings->home = point;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

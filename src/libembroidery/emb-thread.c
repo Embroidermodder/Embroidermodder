@@ -1,7 +1,7 @@
-#include "emb-thread.h"
-#include "emb-logging.h"
-#include <stdio.h>
+#include "embroidery.h"
+
 #include <stdlib.h>
+#include <math.h>
 
 int embThread_findNearestColor(EmbColor color, EmbThreadList* colors)
 {

@@ -1,5 +1,5 @@
-#include "emb-vector.h"
-#include "emb-logging.h"
+#include "embroidery.h"
+
 #include <math.h>
 #include <stdlib.h>
 
@@ -82,4 +82,3 @@ void embVectorList_free(EmbVectorList* pointer)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

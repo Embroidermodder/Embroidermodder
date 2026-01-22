@@ -1,6 +1,6 @@
-#include "emb-polyline.h"
-#include "emb-logging.h"
 #include <stdlib.h>
+
+#include "embroidery.h"
 
 /**************************************************/
 /* EmbPolylineObject                              */

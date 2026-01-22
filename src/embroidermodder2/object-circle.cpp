@@ -1,10 +1,9 @@
-#include "object-circle.h"
-#include "object-data.h"
-#include "geom-arc.h" //TODO: make a geom-circle.h that simply includes arc.h so it's more intuitive
-
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
+
+#include "object-circle.h"
+#include "embroidery.h"
 
 CircleObject::CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {

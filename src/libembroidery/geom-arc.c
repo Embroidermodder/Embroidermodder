@@ -1,6 +1,4 @@
 /* Computational Geometry for Arcs */
-#include "geom-arc.h"
-#include "geom-line.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979
@@ -8,6 +6,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+
+#include "embroidery.h"
 
 double radians(double degree) { return (double)(degree*M_PI/180.0); }
 double degrees(double radian) { return (double)(radian*180.0/M_PI); }

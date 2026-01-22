@@ -1,6 +1,5 @@
-#include "emb-format.h"
-#include "emb-logging.h"
-#include <stdio.h>
+#include "embroidery.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>

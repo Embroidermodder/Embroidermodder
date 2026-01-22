@@ -1,10 +1,9 @@
-#include "object-arc.h"
-#include "object-data.h"
-#include "geom-arc.h"
-
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
+
+#include "object-arc.h"
+#include "embroidery.h"
 
 ArcObject::ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
