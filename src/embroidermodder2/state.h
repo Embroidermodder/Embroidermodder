@@ -121,6 +121,8 @@ typedef struct Settings_ {
 typedef struct State_ {
     Settings settings;
     QHash<QString, QList<QString>> tables;
+
+    MainWindow *mainWin;
 } State;
 
 extern State state;

@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "mainwindow-actions.h"
 
 #include "statusbar.h"
 #include "statusbar-button.h"
@@ -49,6 +48,8 @@ State state;
 MainWindow::MainWindow() : QMainWindow(0)
 {
     readSettings();
+
+    state.mainWin = this;
 
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.

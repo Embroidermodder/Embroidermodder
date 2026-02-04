@@ -9,7 +9,7 @@
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
-#include "mainwindow-actions.h"
+#include "commands.h"
 #include "cmdprompt.h"
 #include "state.h"
 

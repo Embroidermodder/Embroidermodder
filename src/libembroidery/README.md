@@ -1,5 +1,5 @@
-What is libembroidery ?
------------------------
+libembroidery
+=============
 
 libembroidery is the underlying library that is used and
 developed by [Embroidermodder 2](http://embroidermodder.github.io).
@@ -18,4 +18,24 @@ doxygen libembroidery.doxyfile
 - For verbose docs that includes undocumented items (core developers):
 ```
 doxygen libembroidery-undocumented.doxyfile
+```
+
+Converting
+----------
+
+This folder contains the command line conversion tool: libembroidery-convert.
+
+Display usage information and supported formats:
+
+```
+./sew --help
+```
+
+Testing
+-------
+
+This folder also contains tests that verify various aspects of the software are working correctly.
+
+```
+./sew --test
 ```

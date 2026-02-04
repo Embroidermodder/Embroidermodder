@@ -126,3 +126,6 @@ set(LIBRARY_SRC
 )
 
 add_library(embroidery_static STATIC ${LIBRARY_SRC})
+
+add_executable(sew sew.c)
+target_link_libraries(sew PRIVATE embroidery_static)
