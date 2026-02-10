@@ -50,12 +50,12 @@ public:
     Q_INVOKABLE bool isInt(qreal x);
     Q_INVOKABLE void undo(void) { mainwin->nativeUndo(); }
     Q_INVOKABLE void redo(void) { mainwin->nativeRedo(); }
-    Q_INVOKABLE void icon16(void) { mainwin->nativeIcon16(); }
-    Q_INVOKABLE void icon24(void) { mainwin->nativeIcon24(); }
-    Q_INVOKABLE void icon32(void) { mainwin->nativeIcon32(); }
-    Q_INVOKABLE void icon48(void) { mainwin->nativeIcon48(); }
-    Q_INVOKABLE void icon64(void) { mainwin->nativeIcon64(); }
-    Q_INVOKABLE void icon128(void) { mainwin->nativeIcon128(); }
+    Q_INVOKABLE void icon16(void) { mainwin->icon16(); }
+    Q_INVOKABLE void icon24(void) { mainwin->icon24(); }
+    Q_INVOKABLE void icon32(void) { mainwin->icon32(); }
+    Q_INVOKABLE void icon48(void) { mainwin->icon48(); }
+    Q_INVOKABLE void icon64(void) { mainwin->icon64(); }
+    Q_INVOKABLE void icon128(void) { mainwin->icon128(); }
     Q_INVOKABLE void panLeft(void) { mainwin->nativePanLeft(); }
     Q_INVOKABLE void panRight(void) { mainwin->nativePanRight(); }
     Q_INVOKABLE void panUp(void) { mainwin->nativePanUp(); }

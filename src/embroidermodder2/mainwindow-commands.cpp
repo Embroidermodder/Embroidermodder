@@ -36,6 +36,33 @@
 #include <QComboBox>
 #include <QWhatsThis>
 
+/* Call a command from the command table using the name of the command. */
+int
+MainWindow::call(QString name)
+{
+    int index = -1;
+    for (int i=0; command_table[i].id >= 0; i++) {
+        if (QString(command_table[i].label) == name) {
+            index = i;
+            break;
+        }
+    }
+    if (index >= 0) {
+        qDebug("> %s", qPrintable(name));
+        return command_table[index].command(&state);
+    }
+    else {
+        qDebug("[ERROR]: Unknown command %s.", qPrintable(name));
+    }
+    return -1;
+}
+
+/* Wrapper for the in-built Qt debug for the commands to use. */
+void MainWindow::debug(QString txt)
+{
+    qDebug("%s", qPrintable(txt));
+}
+
 void MainWindow::stub_implement(QString txt)
 {
     qDebug("TODO: %s", qPrintable(txt));
@@ -444,7 +471,7 @@ void MainWindow::icon48()
 void MainWindow::icon64()
 {
     qDebug("icon64()");
-    iconResize(64);;
+    iconResize(64);
 }
 
 void MainWindow::icon128()
@@ -1209,36 +1236,6 @@ void MainWindow::nativeUndo()
 void MainWindow::nativeRedo()
 {
     redo();
-}
-
-void MainWindow::nativeIcon16()
-{
-    icon16();
-}
-
-void MainWindow::nativeIcon24()
-{
-    icon24();
-}
-
-void MainWindow::nativeIcon32()
-{
-    icon32();
-}
-
-void MainWindow::nativeIcon48()
-{
-    icon48();
-}
-
-void MainWindow::nativeIcon64()
-{
-    icon64();
-}
-
-void MainWindow::nativeIcon128()
-{
-    icon128();
 }
 
 void MainWindow::nativePanLeft()
