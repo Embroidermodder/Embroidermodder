@@ -1,0 +1,29 @@
+name: Test
+
+# Note that we don't allow reuseable workflows as a security measure.
+# This mainly is a setup to call bin/coverage.sh.
+
+on:
+  push:
+    branches:
+      - current
+    paths-ignore:
+      - '**.md'
+      - '**.texi'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-linux:
+    runs-on: ubuntu-latest
+    env:
+      HOST_SYSTEM: 'Ubuntu'
+      CMAKE_GENERATOR: 'Ninja'
+    steps:
+      - name: Build
+        run: |
+          git clone https://github.com/embroidermodder/embroidermodder
+          cd embroidermodder
+          git checkout current
+          bash bin/coverage.sh "Ubuntu"
+

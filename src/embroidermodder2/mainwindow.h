@@ -202,6 +202,9 @@ private slots:
 
 public slots:
 
+    int call(QString name);
+    void debug(QString txt);
+
     void stub_implement(QString txt);
     void stub_testing();
 
@@ -368,13 +371,6 @@ public:
     void nativeUndo                   ();
     void nativeRedo                   ();
 
-    void nativeIcon16                 ();
-    void nativeIcon24                 ();
-    void nativeIcon32                 ();
-    void nativeIcon48                 ();
-    void nativeIcon64                 ();
-    void nativeIcon128                ();
-
     void nativePanLeft                ();
     void nativePanRight               ();
     void nativePanUp                  ();
@@ -470,6 +466,8 @@ public:
     qreal nativeMouseX                ();
     qreal nativeMouseY                ();
 };
+
+extern MainWindow *mainWin;
 
 #endif
 

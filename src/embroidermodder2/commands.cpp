@@ -3,12 +3,14 @@
  * Copyright 2011-2026 The Embroidermodder Team
  */
 
+#include "mainwindow.h"
+
 #include "commands.h"
 
 int
 about_cmd(State *state)
 {
-    state->mainWin->about();
+    mainWin->about();
     return 0;
 }
 

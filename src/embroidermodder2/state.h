@@ -1,12 +1,21 @@
 #ifndef EMBROIDERMODDER_STATE_H
 #define EMBROIDERMODDER_STATE_H
 
+/*
+ * TODO: Convert this file to C99 allowing for a core that only interacts with the state
+ * that doesn't use C++.
+ */
+
 #include <QString>
 #include <QStringList>
 #include <QRgb>
 #include <QHash>
 
-#include <cinttypes>
+#include <stdbool.h>
+#include <inttypes.h>
+
+#define MAX_ARGS                    10
+#define MAX_ARG_LENGTH             500
 
 typedef struct Settings_ {
     QString general_language;
@@ -122,10 +131,10 @@ typedef struct State_ {
     Settings settings;
     QHash<QString, QList<QString>> tables;
 
-    MainWindow *mainWin;
+    char arguments[MAX_ARGS][MAX_ARG_LENGTH];
+    int argument_count;
 } State;
 
 extern State state;
 
 #endif
-
