@@ -7,7 +7,27 @@
         return 1; \
     }
 
+QStringList core_command = {
+    "exit",
+    "help",
+    "about",
+    "tipOfTheDay",
+    "windowCascade",
+    "windowTile",
+    "windowClose",
+    "windowCloseAll",
+    "windowNext",
+    "windowPrevious",
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128"
+};
+
 QStringList function_names = {
+    "call",
     "debug"
     "error",
     "todo",
@@ -23,27 +43,11 @@ QStringList function_names = {
     "endCommand",
     "newFile",
     "openFile",
-    "exit",
-    "help",
-    "about",
-    "tipOfTheDay",
-    "windowCascade",
-    "windowTile",
-    "windowClose",
-    "windowCloseAll",
-    "windowNext",
-    "windowPrevious",
     "platformString",
     "messageBox",
     "isInt",
     "undo",
     "redo",
-    "icon16",
-    "icon24",
-    "icon32",
-    "icon48",
-    "icon64",
-    "icon128",
     "panLeft",
     "panRight",
     "panUp",
@@ -135,6 +139,23 @@ MainWindow::javaInitNatives(void)
     for (int i=0; i<function_names.count(); i++) {
         QString label = function_names.at(i);
         engine.globalObject().setProperty(label, native.property(label));
+    }
+
+    /*
+     * Write a simple JS function that just uses the call function like this:
+     *
+     *      function windowCascade() { call("windowcascade"); }
+     * 
+     * for the given core command "windowcascade". Then pass this string to the engine.
+     *
+     * NOTE: This is only used for "void function(void)" functions.
+     * NOTE: The JS function is mixed case, whereas the core command is lower case.
+     */
+    for (int i=0; i<core_command.count(); i++) {
+        QString script = "function " + core_command[i] + "() { call(\"";
+        script += core_command[i].toLower();
+        script += "\"); }";
+        engine.evaluate(script);
     }
 }
 
@@ -247,7 +268,18 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
     QString statusTip   = settings.value("Tips/StatusTip",           "").toString();
     QStringList aliases = settings.value("Prompt/Alias")                .toStringList();
 
-    QAction* ACTION = createAction(cmdName, toolTip, statusTip, true);
+    CommandData command;
+    command.id = ACTION_scripted;
+    command.type = CMD_TYPE_TRIGGER;
+    strcpy(command.label, qPrintable(cmdName));
+    strcpy(command.tooltip, qPrintable(toolTip));
+    strcpy(command.statustip, qPrintable(statusTip));
+    strcpy(command.shortcut, "");
+    strcpy(command.mac_shortcut, "");
+    /* NOTE: we feed in a dummy argument because the action will call the scripted function. */
+    command.command = do_nothing_cmd;
+
+    QAction* ACTION = createAction(command, true);
 
     if (toolbarName.toUpper() != "NONE") {
         //If the toolbar doesn't exist, create it.

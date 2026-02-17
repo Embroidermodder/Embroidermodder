@@ -1163,56 +1163,6 @@ void MainWindow::nativeOpenFile()
     openFile();
 }
 
-void MainWindow::nativeExit()
-{
-    exit();
-}
-
-void MainWindow::nativeHelp()
-{
-    help();
-}
-
-void MainWindow::nativeAbout()
-{
-    about();
-}
-
-void MainWindow::nativeTipOfTheDay()
-{
-    tipOfTheDay();
-}
-
-void MainWindow::nativeWindowCascade()
-{
-    mdiArea->cascade();
-}
-
-void MainWindow::nativeWindowTile()
-{
-    mdiArea->tile();
-}
-
-void MainWindow::nativeWindowClose()
-{
-    onCloseWindow();
-}
-
-void MainWindow::nativeWindowCloseAll()
-{
-    mdiArea->closeAllSubWindows();
-}
-
-void MainWindow::nativeWindowNext()
-{
-    mdiArea->activateNextSubWindow();
-}
-
-void MainWindow::nativeWindowPrevious()
-{
-    mdiArea->activatePreviousSubWindow();
-}
-
 QString MainWindow::nativePlatformString()
 {
     return platformString();

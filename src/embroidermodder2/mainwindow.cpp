@@ -44,13 +44,12 @@
 #include <QLocale>
 
 State state;
-MainWindow *mainWin;
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
     readSettings();
 
-    mainWin = this;
+    script_env.mainWin = this;
 
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.

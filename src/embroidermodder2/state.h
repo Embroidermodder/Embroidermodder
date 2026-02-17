@@ -1,10 +1,19 @@
+/*
+ * Embroidermodder 2 -- State
+ * Copyright 2011-2026 The Embroidermodder Team
+ *
+ * TODO: Convert this file to C99 allowing for a core that only interacts with the state
+ * that doesn't use C++.
+ */
+
 #ifndef EMBROIDERMODDER_STATE_H
 #define EMBROIDERMODDER_STATE_H
 
 /*
- * TODO: Convert this file to C99 allowing for a core that only interacts with the state
- * that doesn't use C++.
- */
+#ifdef __cplusplus
+extern "C" {
+#endif
+*/
 
 #include <QString>
 #include <QStringList>
@@ -137,4 +146,11 @@ typedef struct State_ {
 
 extern State state;
 
+/*
+#ifdef __cplusplus
+}
 #endif
+*/
+
+#endif
+

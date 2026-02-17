@@ -20,6 +20,9 @@ public:
     void throwError(const char *message);
     void throwError(QJSValue::ErrorType type, const char *message);
 
+    /* Call a function in the command_table. */
+    Q_INVOKABLE void call(const char *command) { mainwin->call(command); }
+
     Q_INVOKABLE void debug(QString msg);
     Q_INVOKABLE void error(QString cmd, QString err);
     Q_INVOKABLE void todo(QString cmd, QString msg);
@@ -35,27 +38,11 @@ public:
     Q_INVOKABLE void endCommand(void) { mainwin->nativeEndCommand(); }
     Q_INVOKABLE void newFile(void) { mainwin->nativeNewFile(); }
     Q_INVOKABLE void openFile(void) { mainwin->nativeOpenFile(); }
-    Q_INVOKABLE void exit(void) { mainwin->nativeExit(); }
-    Q_INVOKABLE void help(void) { mainwin->nativeHelp(); }
-    Q_INVOKABLE void about(void) { mainwin->nativeAbout(); }
-    Q_INVOKABLE void tipOfTheDay(void) { mainwin->nativeTipOfTheDay(); }
-    Q_INVOKABLE void windowCascade(void) { mainwin->nativeWindowCascade(); }
-    Q_INVOKABLE void windowTile(void) { mainwin->nativeWindowTile(); }
-    Q_INVOKABLE void windowClose(void) { mainwin->nativeWindowClose(); }
-    Q_INVOKABLE void windowCloseAll(void) { mainwin->nativeWindowCloseAll(); }
-    Q_INVOKABLE void windowNext(void) { mainwin->nativeWindowNext(); }
-    Q_INVOKABLE void windowPrevious(void) { mainwin->nativeWindowPrevious(); }
     Q_INVOKABLE QString platformString(void) { return mainwin->nativePlatformString(); }
     Q_INVOKABLE void messageBox(QString type, QString title, QString msg);
     Q_INVOKABLE bool isInt(qreal x);
     Q_INVOKABLE void undo(void) { mainwin->nativeUndo(); }
     Q_INVOKABLE void redo(void) { mainwin->nativeRedo(); }
-    Q_INVOKABLE void icon16(void) { mainwin->icon16(); }
-    Q_INVOKABLE void icon24(void) { mainwin->icon24(); }
-    Q_INVOKABLE void icon32(void) { mainwin->icon32(); }
-    Q_INVOKABLE void icon48(void) { mainwin->icon48(); }
-    Q_INVOKABLE void icon64(void) { mainwin->icon64(); }
-    Q_INVOKABLE void icon128(void) { mainwin->icon128(); }
     Q_INVOKABLE void panLeft(void) { mainwin->nativePanLeft(); }
     Q_INVOKABLE void panRight(void) { mainwin->nativePanRight(); }
     Q_INVOKABLE void panUp(void) { mainwin->nativePanUp(); }

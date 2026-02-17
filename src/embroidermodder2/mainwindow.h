@@ -136,7 +136,7 @@ private:
     QCheckBox*  checkBoxTipOfTheDay;
 
     void                            createAllActions();
-    QAction*                        createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted = false);
+    QAction*                        createAction(CommandData command, bool scripted = false);
     //====================================================
     //Toolbars
     //====================================================
@@ -353,16 +353,7 @@ public:
     void nativeNewFile                ();
     void nativeOpenFile               ();
 
-    void nativeExit                   ();
-    void nativeHelp                   ();
-    void nativeAbout                  ();
     void nativeTipOfTheDay            ();
-    void nativeWindowCascade          ();
-    void nativeWindowTile             ();
-    void nativeWindowClose            ();
-    void nativeWindowCloseAll         ();
-    void nativeWindowNext             ();
-    void nativeWindowPrevious         ();
 
     QString nativePlatformString      ();
 
@@ -467,7 +458,12 @@ public:
     qreal nativeMouseY                ();
 };
 
-extern MainWindow *mainWin;
+/* Pointer access for Qt based types */
+typedef struct QtScriptEnv_ {
+    MainWindow *mainWin;
+} QtScriptEnv;
+
+extern QtScriptEnv script_env;
 
 #endif
 
