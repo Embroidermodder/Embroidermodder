@@ -41,7 +41,6 @@ public:
     ~MainWindow();
 
     int loadData(void);
-    int loadDataFile(QString filename);
 
     MdiArea* getMdiArea();
     MainWindow* getApplication();

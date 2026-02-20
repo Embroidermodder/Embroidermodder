@@ -40,93 +40,97 @@ add_compile_options(
 )
 endif()
 
-set(SRC ${CMAKE_SOURCE_DIR}/src/embroidermodder2)
+set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(DATA ${CMAKE_SOURCE_DIR}/data)
 
 add_subdirectory(src/libembroidery)
 add_subdirectory(extern/tomlc99)
+add_subdirectory(extern/sds)
 
 # The makers of CMake advise that you do not glob source files.
 #
 # https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
 #
 qt_add_executable(embroidermodder2
-	${SRC}/application.cpp
-	${SRC}/application.h
-	${SRC}/cmdprompt.cpp
-	${SRC}/cmdprompt.h
-	${SRC}/commands.cpp
-	${SRC}/commands.h
-	${SRC}/command-table.cpp
-	${SRC}/embdetails-dialog.cpp
-	${SRC}/embdetails-dialog.h
-	${SRC}/imagewidget.cpp
-	${SRC}/imagewidget.h
-	${SRC}/layer-manager.cpp
-	${SRC}/layer-manager.h
-	${SRC}/main.cpp
-	${SRC}/mainwindow-actions.cpp
-	${SRC}/mainwindow-commands.cpp
-	${SRC}/mainwindow.cpp
-	${SRC}/mainwindow.h
-	${SRC}/mainwindow-menus.cpp
-	${SRC}/mainwindow-settings.cpp
-	${SRC}/mainwindow-toolbars.cpp
-	${SRC}/mdiarea.cpp
-	${SRC}/mdiarea.h
-	${SRC}/mdiwindow.cpp
-	${SRC}/mdiwindow.h
-	${SRC}/native-scripting.cpp
-	${SRC}/native-scripting.h
-	${SRC}/object-arc.cpp
-	${SRC}/object-arc.h
-	${SRC}/object-base.cpp
-	${SRC}/object-base.h
-	${SRC}/object-circle.cpp
-	${SRC}/object-circle.h
-	${SRC}/object-data.h
-	${SRC}/object-dimleader.cpp
-	${SRC}/object-dimleader.h
-	${SRC}/object-ellipse.cpp
-	${SRC}/object-ellipse.h
-	${SRC}/object-image.cpp
-	${SRC}/object-image.h
-	${SRC}/object-line.cpp
-	${SRC}/object-line.h
-	${SRC}/object-path.cpp
-	${SRC}/object-path.h
-	${SRC}/object-point.cpp
-	${SRC}/object-point.h
-	${SRC}/object-polygon.cpp
-	${SRC}/object-polygon.h
-	${SRC}/object-polyline.cpp
-	${SRC}/object-polyline.h
-	${SRC}/object-rect.cpp
-	${SRC}/object-rect.h
-	${SRC}/object-save.cpp
-	${SRC}/object-save.h
-	${SRC}/object-textsingle.cpp
-	${SRC}/object-textsingle.h
-	${SRC}/preview-dialog.cpp
-	${SRC}/preview-dialog.h
-	${SRC}/property-editor.cpp
-	${SRC}/property-editor.h
-	${SRC}/selectbox.cpp
-	${SRC}/selectbox.h
-	${SRC}/settings-dialog.cpp
-	${SRC}/settings-dialog.h
-	${SRC}/statusbar-button.cpp
-	${SRC}/statusbar-button.h
-	${SRC}/statusbar.cpp
-	${SRC}/statusbar.h
-	${SRC}/undo-commands.cpp
-	${SRC}/undo-commands.h
-	${SRC}/undo-editor.cpp
-	${SRC}/undo-editor.h
-	${SRC}/view.cpp
-	${SRC}/view.h
+	${SRC}/core/sdsarray.c
+	${SRC}/core/core.h
 
-	${SRC}/state.h
+	${SRC}/gui/state.h
+
+	${SRC}/gui/application.cpp
+	${SRC}/gui/application.h
+	${SRC}/gui/cmdprompt.cpp
+	${SRC}/gui/cmdprompt.h
+	${SRC}/gui/commands.cpp
+	${SRC}/gui/commands.h
+	${SRC}/gui/command-table.cpp
+	${SRC}/gui/embdetails-dialog.cpp
+	${SRC}/gui/embdetails-dialog.h
+	${SRC}/gui/imagewidget.cpp
+	${SRC}/gui/imagewidget.h
+	${SRC}/gui/layer-manager.cpp
+	${SRC}/gui/layer-manager.h
+	${SRC}/gui/main.cpp
+	${SRC}/gui/mainwindow-actions.cpp
+	${SRC}/gui/mainwindow-commands.cpp
+	${SRC}/gui/mainwindow.cpp
+	${SRC}/gui/mainwindow.h
+	${SRC}/gui/mainwindow-menus.cpp
+	${SRC}/gui/mainwindow-settings.cpp
+	${SRC}/gui/mainwindow-toolbars.cpp
+	${SRC}/gui/mdiarea.cpp
+	${SRC}/gui/mdiarea.h
+	${SRC}/gui/mdiwindow.cpp
+	${SRC}/gui/mdiwindow.h
+	${SRC}/gui/native-scripting.cpp
+	${SRC}/gui/native-scripting.h
+	${SRC}/gui/object-arc.cpp
+	${SRC}/gui/object-arc.h
+	${SRC}/gui/object-base.cpp
+	${SRC}/gui/object-base.h
+	${SRC}/gui/object-circle.cpp
+	${SRC}/gui/object-circle.h
+	${SRC}/gui/object-data.h
+	${SRC}/gui/object-dimleader.cpp
+	${SRC}/gui/object-dimleader.h
+	${SRC}/gui/object-ellipse.cpp
+	${SRC}/gui/object-ellipse.h
+	${SRC}/gui/object-image.cpp
+	${SRC}/gui/object-image.h
+	${SRC}/gui/object-line.cpp
+	${SRC}/gui/object-line.h
+	${SRC}/gui/object-path.cpp
+	${SRC}/gui/object-path.h
+	${SRC}/gui/object-point.cpp
+	${SRC}/gui/object-point.h
+	${SRC}/gui/object-polygon.cpp
+	${SRC}/gui/object-polygon.h
+	${SRC}/gui/object-polyline.cpp
+	${SRC}/gui/object-polyline.h
+	${SRC}/gui/object-rect.cpp
+	${SRC}/gui/object-rect.h
+	${SRC}/gui/object-save.cpp
+	${SRC}/gui/object-save.h
+	${SRC}/gui/object-textsingle.cpp
+	${SRC}/gui/object-textsingle.h
+	${SRC}/gui/preview-dialog.cpp
+	${SRC}/gui/preview-dialog.h
+	${SRC}/gui/property-editor.cpp
+	${SRC}/gui/property-editor.h
+	${SRC}/gui/selectbox.cpp
+	${SRC}/gui/selectbox.h
+	${SRC}/gui/settings-dialog.cpp
+	${SRC}/gui/settings-dialog.h
+	${SRC}/gui/statusbar-button.cpp
+	${SRC}/gui/statusbar-button.h
+	${SRC}/gui/statusbar.cpp
+	${SRC}/gui/statusbar.h
+	${SRC}/gui/undo-commands.cpp
+	${SRC}/gui/undo-commands.h
+	${SRC}/gui/undo-editor.cpp
+	${SRC}/gui/undo-editor.h
+	${SRC}/gui/view.cpp
+	${SRC}/gui/view.h
 
 	${DATA}/commands/about/about.ini
 	${DATA}/commands/about/about.js
@@ -795,9 +799,11 @@ file(COPY
 	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/src/embroidermodder2
+	${CMAKE_SOURCE_DIR}/src/core
+	${CMAKE_SOURCE_DIR}/src/gui
 	${CMAKE_SOURCE_DIR}/src/libembroidery
 	${CMAKE_SOURCE_DIR}/extern/tomlc99
+	${CMAKE_SOURCE_DIR}/extern/sds
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
@@ -807,6 +813,7 @@ target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Qml
 	embroidery_static
 	tomlc99
+	sds
 	${OPENGL_LIBRARIES}
 )
 

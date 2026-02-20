@@ -122,7 +122,8 @@ crash the program.
 
 ## Documentation
 
-See the `docs/` directory. To build run the `make` command.
+New developers should start by reading [CONTRIBUTING.md](./CONTRIBUTING.md) which gives
+an overview of the structure and design of Embroidermodder.
 
 ## Sample Files
 

@@ -47,6 +47,8 @@ State state;
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    state_create();
+
     readSettings();
 
     script_env.mainWin = this;
@@ -254,14 +256,36 @@ MainWindow::~MainWindow()
 {
     qDebug("MainWindow::Destructor()");
 
+    state_free();
+
     //Prevent memory leaks by deleting any unpasted objects
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
     cutCopyObjectList.clear();
 }
 
-/* Loads a list of string tables from the named file. */
+void
+state_create(void)
+{
+    state.manifest = sdsarray_create(); 
+    state.tips = sdsarray_create(); 
+    state.arguments = sdsarray_create(); 
+}
+
+void
+state_free(void)
+{
+    sdsarray_free(state.manifest); 
+    sdsarray_free(state.tips); 
+    sdsarray_free(state.arguments); 
+}
+
+/*
+ * Loads a string table from the named file.
+ *
+ * It assumes that the sdsarray has been created already.
+ */
 int
-MainWindow::loadDataFile(QString filename)
+load_sdsarray(QString filename, const char *key, sdsarray *arr)
 {
     char errbuffer[200];
 
@@ -280,23 +304,18 @@ MainWindow::loadDataFile(QString filename)
         return 0;
     }
 
-    for (int j=0; ; j++) {
-        const char *key = toml_key_in(table, j);
-        if (!key) {
+    /* FIXME: check key is present */
+ 
+    sdsarray_empty(arr);
+ 
+    toml_array_t* array = toml_array_in(table, key);
+    for (int i=0; ; i++) {
+        toml_datum_t str = toml_string_at(array, i);
+        if (!str.ok) {
             break;
-        }
-
-        state.tables[key] = {};
-
-        toml_array_t* array = toml_array_in(table, key);
-        for (int i=0; ; i++) {
-            toml_datum_t str = toml_string_at(array, i);
-            if (!str.ok) {
-                break;
-            }
-            state.tables[key].append(QString(str.u.s));
-            free(str.u.s);
-        }
+         }
+        sdsarray_append(arr, str.u.s);
+        free(str.u.s);
     }
 
     fclose(fp);
@@ -310,23 +329,11 @@ MainWindow::loadDataFile(QString filename)
 int
 MainWindow::loadData(void)
 {
-    if (!loadDataFile("manifest.toml")) {
+    if (!load_sdsarray("manifest.toml", "manifest", state.manifest)) {
         return 0;
     }
-    for (int i=0; i<state.tables["manifest"].count(); i++) {
-        if (!loadDataFile(state.tables["manifest"].at(i))) {
-            return 0;
-        }
-    }
-
-    qDebug("Reporting loaded data....");
-    for (auto i = state.tables.begin(), end = state.tables.end(); i != end; i++) {
-        QString key = i.key();
-        QList<QString> table = state.tables[key];
-        qDebug("%s", qPrintable(key));
-        for (int i=0; i<table.count(); i++) {
-            qDebug("%d: %s", i, qPrintable(state.tables[key].at(i)));
-        }
+    if (!load_sdsarray("tables/tips.toml", "tips", state.tips)) {
+        return 0;
     }
     return 1;
 }

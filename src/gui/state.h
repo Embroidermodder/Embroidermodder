@@ -23,8 +23,7 @@ extern "C" {
 #include <stdbool.h>
 #include <inttypes.h>
 
-#define MAX_ARGS                    10
-#define MAX_ARG_LENGTH             500
+#include "core.h"
 
 typedef struct Settings_ {
     QString general_language;
@@ -138,10 +137,10 @@ typedef struct Settings_ {
 
 typedef struct State_ {
     Settings settings;
-    QHash<QString, QList<QString>> tables;
+    sdsarray *manifest;
+    sdsarray *tips;
 
-    char arguments[MAX_ARGS][MAX_ARG_LENGTH];
-    int argument_count;
+    sdsarray *arguments;
 } State;
 
 extern State state;

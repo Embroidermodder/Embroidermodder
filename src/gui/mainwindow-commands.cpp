@@ -280,10 +280,10 @@ void MainWindow::tipOfTheDay()
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if (state.settings.general_current_tip >= state.tables["tips"].size()) {
+    if (state.settings.general_current_tip >= state.tips->count) {
         state.settings.general_current_tip = 0;
     }
-    labelTipOfTheDay = new QLabel(state.tables["tips"].value(state.settings.general_current_tip), wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(state.tips->data[state.settings.general_current_tip], wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
@@ -325,26 +325,27 @@ void MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
     state.settings.general_tip_of_the_day = checked;
 }
 
-void MainWindow::buttonTipOfTheDayClicked(int button)
+void
+MainWindow::buttonTipOfTheDayClicked(int button)
 {
     qDebug("buttonTipOfTheDayClicked(%d)", button);
-    if(button == QWizard::CustomButton1)
-    {
-        if(state.settings.general_current_tip > 0)
+    if (button == QWizard::CustomButton1) {
+        if (state.settings.general_current_tip > 0) {
             state.settings.general_current_tip--;
-        else
-            state.settings.general_current_tip = state.tables["tips"].size() - 1;
-        labelTipOfTheDay->setText(state.tables["tips"].value(state.settings.general_current_tip));
+        }
+        else {
+            state.settings.general_current_tip = state.tips->count - 1;
+        }
+        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]);
     }
-    else if(button == QWizard::CustomButton2)
-    {
+    else if (button == QWizard::CustomButton2) {
         state.settings.general_current_tip++;
-        if(state.settings.general_current_tip >= state.tables["tips"].size())
+        if (state.settings.general_current_tip >= state.tips->count) {
             state.settings.general_current_tip = 0;
-        labelTipOfTheDay->setText(state.tables["tips"].value(state.settings.general_current_tip));
+        }
+        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]);
     }
-    else if(button == QWizard::CustomButton3)
-    {
+    else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
     }
 }
