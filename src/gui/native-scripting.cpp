@@ -18,6 +18,15 @@ QStringList core_command = {
     "windowCloseAll",
     "windowNext",
     "windowPrevious",
+    "undo",
+    "redo",
+    "panLeft",
+    "panRight",
+    "panUp",
+    "panDown",
+    "zoomIn",
+    "zoomOut",
+    "zoomExtents",
     "icon16",
     "icon24",
     "icon32",
@@ -46,15 +55,6 @@ QStringList function_names = {
     "platformString",
     "messageBox",
     "isInt",
-    "undo",
-    "redo",
-    "panLeft",
-    "panRight",
-    "panUp",
-    "panDown",
-    "zoomIn",
-    "zoomOut",
-    "zoomExtents",
     "printArea",
     "dayVision",
     "nightVision",
@@ -363,17 +363,17 @@ JavaScriptEnv::debug(QString message)
 void
 JavaScriptEnv::error(QString cmd, QString err)
 {
-    mainwin->nativeSetPromptPrefix("ERROR: (" + cmd + ") " + err);
-    mainwin->nativeAppendPromptHistory(QString());
-    mainwin->nativeEndCommand();
+    mainwin->setPromptPrefix("ERROR: (" + cmd + ") " + err);
+    mainwin->appendPromptHistory(QString());
+    mainwin->endCommand();
 }
 
 void
 JavaScriptEnv::todo(QString cmd, QString msg)
 {
-    mainwin->nativeAlert("TODO: (" + cmd + ") " + msg);
+    mainwin->alert("TODO: (" + cmd + ") " + msg);
     // Why was this here?
-    mainwin->nativeEndCommand();
+    mainwin->endCommand();
 }
 
 void
@@ -386,7 +386,7 @@ JavaScriptEnv::messageBox(QString type, QString title, QString text)
         return;
     }
 
-    mainwin->nativeMessageBox(type, title, text);
+    mainwin->messageBox(type, title, text);
 }
 
 bool
@@ -405,7 +405,7 @@ JavaScriptEnv::printArea(qreal x, qreal y, qreal w, qreal h)
     NAN_CHECK("printArea", "third", w)
     NAN_CHECK("printArea", "fourth", h)
 
-    mainwin->nativePrintArea(x, y, w, h);
+    mainwin->printArea(x, y, w, h);
     return 0;
 }
 
@@ -429,7 +429,7 @@ JavaScriptEnv::setBackgroundColor(qreal r, qreal g, qreal b)
         return 1;
     }
 
-    mainwin->nativeSetBackgroundColor(r, g, b);
+    mainwin->setBackgroundColor(r, g, b);
     return 0;
 }
 
@@ -453,7 +453,7 @@ JavaScriptEnv::setCrossHairColor(qreal r, qreal g, qreal b)
         return 1;
     }
 
-    mainwin->nativeSetCrossHairColor(r, g, b);
+    mainwin->setCrossHairColor(r, g, b);
     return 0;
 }
 
@@ -477,7 +477,7 @@ JavaScriptEnv::setGridColor(qreal r, qreal g, qreal b)
         return 1;
     }
 
-    mainwin->nativeSetGridColor(r, g, b);
+    mainwin->setGridColor(r, g, b);
     return 0;
 }
 
@@ -486,7 +486,7 @@ JavaScriptEnv::setTextSize(qreal num)
 {
     NAN_CHECK("setTextSize", "first", num)
 
-    mainwin->nativeSetTextSize(num);
+    mainwin->setTextSize(num);
     return 0;
 }
 
@@ -495,7 +495,7 @@ JavaScriptEnv::setTextAngle(qreal num)
 {
     NAN_CHECK("setTextAngle", "first", num)
 
-    mainwin->nativeSetTextAngle(num);
+    mainwin->setTextAngle(num);
     return 0;
 }
 
@@ -536,7 +536,7 @@ JavaScriptEnv::previewOn(QString cloneStr, QString modeStr, qreal x, qreal y, qr
     NAN_CHECK("previewOn", "fourth", y)
     NAN_CHECK("previewOn", "fifth", data)
 
-    mainwin->nativePreviewOn(clone, mode, x, y, data);
+    mainwin->previewOn(clone, mode, x, y, data);
     return 0;
 }
 
@@ -546,32 +546,32 @@ JavaScriptEnv::setRubberMode(QString mode)
     mode = mode.toUpper();
 
     if (mode == "CIRCLE_1P_RAD") {
-        mainwin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
+        mainwin->setRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
     }
-    else if (mode == "CIRCLE_1P_DIA")                     { mainwin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if (mode == "CIRCLE_2P")                         { mainwin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if (mode == "CIRCLE_3P")                         { mainwin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if (mode == "CIRCLE_TTR")                        { mainwin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if (mode == "CIRCLE_TTR")                        { mainwin->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
+    else if (mode == "CIRCLE_1P_DIA")                     { mainwin->setRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
+    else if (mode == "CIRCLE_2P")                         { mainwin->setRubberMode(OBJ_RUBBER_CIRCLE_2P); }
+    else if (mode == "CIRCLE_3P")                         { mainwin->setRubberMode(OBJ_RUBBER_CIRCLE_3P); }
+    else if (mode == "CIRCLE_TTR")                        { mainwin->setRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
+    else if (mode == "CIRCLE_TTR")                        { mainwin->setRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
 
-    else if (mode == "DIMLEADER_LINE")                    { mainwin->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
+    else if (mode == "DIMLEADER_LINE")                    { mainwin->setRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
 
-    else if (mode == "ELLIPSE_LINE")                      { mainwin->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainwin->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { mainwin->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if (mode == "ELLIPSE_ROTATION")                  { mainwin->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
+    else if (mode == "ELLIPSE_LINE")                      { mainwin->setRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
+    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainwin->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
+    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { mainwin->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
+    else if (mode == "ELLIPSE_ROTATION")                  { mainwin->setRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
 
-    else if (mode == "LINE")                              { mainwin->nativeSetRubberMode(OBJ_RUBBER_LINE); }
+    else if (mode == "LINE")                              { mainwin->setRubberMode(OBJ_RUBBER_LINE); }
 
-    else if (mode == "POLYGON")                           { mainwin->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
-    else if (mode == "POLYGON_INSCRIBE")                  { mainwin->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if (mode == "POLYGON_CIRCUMSCRIBE")              { mainwin->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
+    else if (mode == "POLYGON")                           { mainwin->setRubberMode(OBJ_RUBBER_POLYGON); }
+    else if (mode == "POLYGON_INSCRIBE")                  { mainwin->setRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
+    else if (mode == "POLYGON_CIRCUMSCRIBE")              { mainwin->setRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
 
-    else if (mode == "POLYLINE")                          { mainwin->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
+    else if (mode == "POLYLINE")                          { mainwin->setRubberMode(OBJ_RUBBER_POLYLINE); }
 
-    else if (mode == "RECTANGLE")                         { mainwin->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
+    else if (mode == "RECTANGLE")                         { mainwin->setRubberMode(OBJ_RUBBER_RECTANGLE); }
 
-    else if (mode == "TEXTSINGLE")                        { mainwin->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
+    else if (mode == "TEXTSINGLE")                        { mainwin->setRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
     else {
         throwError(QJSValue::GenericError, "setRubberMode(): unknown rubberMode value");
@@ -588,7 +588,7 @@ JavaScriptEnv::setRubberPoint(QString key, qreal x, qreal y)
     NAN_CHECK("setRubberPoint", "second", x)
     NAN_CHECK("setRubberPoint", "third", y)
 
-    mainwin->nativeSetRubberPoint(key, x, y);
+    mainwin->setRubberPoint(key, x, y);
     return 0;
 }
 
@@ -597,7 +597,7 @@ JavaScriptEnv::setRubberText(QString key, QString txt)
 {
     key = key.toUpper();
 
-    mainwin->nativeSetRubberText(key, txt);
+    mainwin->setRubberText(key, txt);
     return 0;
 }
 
@@ -606,40 +606,40 @@ JavaScriptEnv::addRubber(QString objType)
 {
     objType = objType.toUpper();
 
-    if (!mainwin->nativeAllowRubber()) {
+    if (!mainwin->allowRubber()) {
         throwError(QJSValue::GenericError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
         return 1;
     }
 
-    qreal mx = mainwin->nativeMouseX();
-    qreal my = mainwin->nativeMouseY();
+    qreal mx = mainwin->mouseX();
+    qreal my = mainwin->mouseY();
 
     if     (objType == "ARC")          {} //TODO: handle this type
     else if (objType == "BLOCK")        {} //TODO: handle this type
-    else if (objType == "CIRCLE")       { mainwin->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "CIRCLE")       { mainwin->addCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
     else if (objType == "DIMALIGNED")   {} //TODO: handle this type
     else if (objType == "DIMANGULAR")   {} //TODO: handle this type
     else if (objType == "DIMARCLENGTH") {} //TODO: handle this type
     else if (objType == "DIMDIAMETER")  {} //TODO: handle this type
-    else if (objType == "DIMLEADER")    { mainwin->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "DIMLEADER")    { mainwin->addDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "DIMLINEAR")    {} //TODO: handle this type
     else if (objType == "DIMORDINATE")  {} //TODO: handle this type
     else if (objType == "DIMRADIUS")    {} //TODO: handle this type
-    else if (objType == "ELLIPSE")      { mainwin->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "ELLIPSE")      { mainwin->addEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "ELLIPSEARC")   {} //TODO: handle this type
     else if (objType == "HATCH")        {} //TODO: handle this type
     else if (objType == "IMAGE")        {} //TODO: handle this type
     else if (objType == "INFINITELINE") {} //TODO: handle this type
-    else if (objType == "LINE")         { mainwin->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "LINE")         { mainwin->addLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "PATH")         {} //TODO: handle this type
     else if (objType == "POINT")        {} //TODO: handle this type
-    else if (objType == "POLYGON")      { mainwin->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "POLYLINE")     { mainwin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYGON")      { mainwin->addPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYLINE")     { mainwin->addPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "RAY")          {} //TODO: handle this type
-    else if (objType == "RECTANGLE")    { mainwin->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "RECTANGLE")    { mainwin->addRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "SPLINE")       {} //TODO: handle this type
     else if (objType == "TEXTMULTI")    {} //TODO: handle this type
-    else if (objType == "TEXTSINGLE")   { mainwin->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "TEXTSINGLE")   { mainwin->addTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
 
     return 0;
 }
@@ -649,9 +649,9 @@ JavaScriptEnv::spareRubber(QString objID)
 {
     objID = objID.toUpper();
 
-    if (objID == "PATH")     { mainwin->nativeSpareRubber(SPARE_RUBBER_PATH);     }
-    else if (objID == "POLYGON")  { mainwin->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
-    else if (objID == "POLYLINE") { mainwin->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
+    if (objID == "PATH")     { mainwin->spareRubber(SPARE_RUBBER_PATH);     }
+    else if (objID == "POLYGON")  { mainwin->spareRubber(SPARE_RUBBER_POLYGON);  }
+    else if (objID == "POLYLINE") { mainwin->spareRubber(SPARE_RUBBER_POLYLINE); }
     else {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
@@ -659,7 +659,7 @@ JavaScriptEnv::spareRubber(QString objID)
             throwError(QJSValue::TypeError, "spareRubber(): error converting object ID into an int64");
             return 1;
         }
-        mainwin->nativeSpareRubber(id);
+        mainwin->spareRubber(id);
     }
 
     return 0;
@@ -672,7 +672,7 @@ JavaScriptEnv::addTextMulti(QString str, qreal x, qreal y, qreal rot, bool fill)
     NAN_CHECK("addTextMulti", "third", y)
     NAN_CHECK("addTextMulti", "fourth", rot)
 
-    mainwin->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    mainwin->addTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -683,7 +683,7 @@ JavaScriptEnv::addTextSingle(QString str, qreal x, qreal y, qreal rot, bool fill
     NAN_CHECK("addTextSingle", "third", y)
     NAN_CHECK("addTextSingle", "fourth", rot)
 
-    mainwin->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    mainwin->addTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -712,7 +712,7 @@ JavaScriptEnv::addLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot)
     NAN_CHECK("addLine", "fourth", y2)
     NAN_CHECK("addLine", "fifth", rot)
 
-    mainwin->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    mainwin->addLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -727,7 +727,7 @@ JavaScriptEnv::addTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qre
     NAN_CHECK("addTriangle", "sixth", y3)
     NAN_CHECK("addTriangle", "seventh", rot)
 
-    mainwin->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
+    mainwin->addTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
     return 0;
 }
 
@@ -740,7 +740,7 @@ JavaScriptEnv::addRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool 
     NAN_CHECK("addRectangle", "fourth", h)
     NAN_CHECK("addRectangle", "fifth", rot)
 
-    mainwin->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
+    mainwin->addRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -754,7 +754,7 @@ JavaScriptEnv::addRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad
     NAN_CHECK("addRoundedRectangle", "fifth", rad)
     NAN_CHECK("addRoundedRectangle", "sixth", rot)
 
-    mainwin->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
+    mainwin->addRoundedRectangle(x, y, w, h, rad, rot, fill);
     return 0;
 }
 
@@ -768,7 +768,7 @@ JavaScriptEnv::addArc(qreal startX, qreal startY, qreal midX, qreal midY, qreal 
     NAN_CHECK("addArc", "fifth", endX)
     NAN_CHECK("addArc", "sixth", endY)
 
-    mainwin->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
+    mainwin->addArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -779,7 +779,7 @@ JavaScriptEnv::addCircle(qreal centerX, qreal centerY, qreal radius, bool fill)
     NAN_CHECK("addCircle", "second", centerY)
     NAN_CHECK("addCircle", "third", radius)
 
-    mainwin->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
+    mainwin->addCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -792,7 +792,7 @@ JavaScriptEnv::addSlot(qreal centerX, qreal centerY, qreal diameter, qreal lengt
     NAN_CHECK("addSlot", "fourth", length)
     NAN_CHECK("addSlot", "fifth", rot)
 
-    mainwin->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
+    mainwin->addSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -805,7 +805,7 @@ JavaScriptEnv::addEllipse(qreal centerX, qreal centerY, qreal radX, qreal radY, 
     NAN_CHECK("addSlot", "fourth", radY)
     NAN_CHECK("addSlot", "fifth", rot)
 
-    mainwin->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
+    mainwin->addEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -815,7 +815,7 @@ JavaScriptEnv::addPoint(qreal x, qreal y)
     NAN_CHECK("addPoint", "first", x)
     NAN_CHECK("addPoint", "second", y)
 
-    mainwin->nativeAddPoint(x,y);
+    mainwin->addPoint(x,y);
     return 0;
 }
 
@@ -882,7 +882,7 @@ JavaScriptEnv::addPolygon(QJSValueList args)
 
     path.translate(-startX, -startY);
 
-    mainwin->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    mainwin->addPolygon(startX, startY, path, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -938,7 +938,7 @@ JavaScriptEnv::addPolyline(QJSValueList args)
 
     path.translate(-startX, -startY);
 
-    mainwin->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    mainwin->addPolyline(startX, startY, path, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -983,7 +983,7 @@ JavaScriptEnv::addDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot)
     NAN_CHECK("addDimLeader", "fourth", y2)
     NAN_CHECK("addDimLeader", "fifth", rot)
 
-    mainwin->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    mainwin->addDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return 0;
 }
 
@@ -995,7 +995,7 @@ JavaScriptEnv::calculateAngle(qreal x1, qreal y1, qreal x2, qreal y2)
     NAN_CHECK("calculateAngle", "third", x2)
     NAN_CHECK("calculateAngle", "fourth", y2)
 
-    return mainwin->nativeCalculateAngle(x1, y1, x2, y2);
+    return mainwin->calculateAngle(x1, y1, x2, y2);
 }
 
 qreal
@@ -1006,7 +1006,7 @@ JavaScriptEnv::calculateDistance(qreal x1, qreal y1, qreal x2, qreal y2)
     NAN_CHECK("calculateDistance", "third", x2)
     NAN_CHECK("calculateDistance", "fourth", y2)
 
-    return mainwin->nativeCalculateDistance(x1, y1, x2, y2);
+    return mainwin->calculateDistance(x1, y1, x2, y2);
 }
 
 qreal
@@ -1019,7 +1019,7 @@ JavaScriptEnv::perpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qre
     NAN_CHECK("perpendicularDistance", "fifth", x2)
     NAN_CHECK("perpendicularDistance", "sixth", y2)
 
-    return mainwin->nativePerpendicularDistance(px, py, x1, y1, x2, y2);
+    return mainwin->perpendicularDistance(px, py, x1, y1, x2, y2);
 }
 
 int
@@ -1035,7 +1035,7 @@ JavaScriptEnv::cutSelected(qreal x, qreal y)
     NAN_CHECK("cutSelected", "first", x)
     NAN_CHECK("cutSelected", "second", y)
 
-    mainwin->nativeCutSelected(x, y);
+    mainwin->cutSelected(x, y);
     return 0;
 }
 
@@ -1045,7 +1045,7 @@ JavaScriptEnv::copySelected(qreal x, qreal y)
     NAN_CHECK("copySelected", "first", x)
     NAN_CHECK("copySelected", "second", y)
 
-    mainwin->nativeCopySelected(x, y);
+    mainwin->copySelected(x, y);
     return 0;
 }
 
@@ -1055,7 +1055,7 @@ JavaScriptEnv::pasteSelected(qreal x, qreal y)
     NAN_CHECK("pasteSelected", "first", x)
     NAN_CHECK("pasteSelected", "second", y)
 
-    mainwin->nativePasteSelected(x, y);
+    mainwin->pasteSelected(x, y);
     return 0;
 }
 
@@ -1065,7 +1065,7 @@ JavaScriptEnv::moveSelected(qreal dx, qreal dy)
     NAN_CHECK("moveSelected", "first", dx)
     NAN_CHECK("moveSelected", "second", dy)
 
-    mainwin->nativeMoveSelected(dx, dy);
+    mainwin->moveSelected(dx, dy);
     return 0;
 }
 
@@ -1081,7 +1081,7 @@ JavaScriptEnv::scaleSelected(qreal x, qreal y, qreal factor)
         return 1;
     }
 
-    mainwin->nativeScaleSelected(x, y, factor);
+    mainwin->scaleSelected(x, y, factor);
     return 0;
 }
 
@@ -1092,7 +1092,7 @@ JavaScriptEnv::rotateSelected(qreal x, qreal y, qreal rot)
     NAN_CHECK("mirrorSelected", "second", y)
     NAN_CHECK("mirrorSelected", "third", rot)
 
-    mainwin->nativeRotateSelected(x, y, rot);
+    mainwin->rotateSelected(x, y, rot);
     return 0;
 }
 
@@ -1104,7 +1104,7 @@ JavaScriptEnv::mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
     NAN_CHECK("mirrorSelected", "third", x2)
     NAN_CHECK("mirrorSelected", "fourth", y2)
 
-    mainwin->nativeMirrorSelected(x1, y1, x2, y2);
+    mainwin->mirrorSelected(x1, y1, x2, y2);
     return 0;
 }
 

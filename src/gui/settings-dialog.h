@@ -44,13 +44,6 @@ private:
 
     void addColorsToComboBox(QComboBox* comboBox);
 
-    /* Temporary for instant preview */
-    Settings preview;
-    Settings accept_;
-
-    /* Temporary until changes are accepted */
-    Settings dialog;
-
 private slots:
     void comboBoxLanguageCurrentIndexChanged(const QString&);
     void comboBoxIconThemeCurrentIndexChanged(const QString&);

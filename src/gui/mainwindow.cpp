@@ -263,22 +263,6 @@ MainWindow::~MainWindow()
     cutCopyObjectList.clear();
 }
 
-void
-state_create(void)
-{
-    state.manifest = sdsarray_create(); 
-    state.tips = sdsarray_create(); 
-    state.arguments = sdsarray_create(); 
-}
-
-void
-state_free(void)
-{
-    sdsarray_free(state.manifest); 
-    sdsarray_free(state.tips); 
-    sdsarray_free(state.arguments); 
-}
-
 /*
  * Loads a string table from the named file.
  *

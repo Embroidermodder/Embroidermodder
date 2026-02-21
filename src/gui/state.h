@@ -17,8 +17,6 @@ extern "C" {
 
 #include <QString>
 #include <QStringList>
-#include <QRgb>
-#include <QHash>
 
 #include <stdbool.h>
 #include <inttypes.h>
@@ -34,7 +32,7 @@ typedef struct Settings_ {
     bool general_mdi_bg_use_color;
     QString general_mdi_bg_logo;
     QString general_mdi_bg_texture;
-    QRgb general_mdi_bg_color;
+    uint32_t general_mdi_bg_color;
     bool general_tip_of_the_day;
     uint16_t general_current_tip;
     bool general_system_help_browser;
@@ -47,19 +45,19 @@ typedef struct Settings_ {
     bool display_renderhint_noncosmetic;
     bool display_show_scrollbars;
     int display_scrollbar_widget_num;
-    QRgb display_crosshair_color;
-    QRgb display_bg_color;
-    QRgb display_selectbox_left_color;
-    QRgb display_selectbox_left_fill;
-    QRgb display_selectbox_right_color;
-    QRgb display_selectbox_right_fill;
+    uint32_t display_crosshair_color;
+    uint32_t display_bg_color;
+    uint32_t display_selectbox_left_color;
+    uint32_t display_selectbox_left_fill;
+    uint32_t display_selectbox_right_color;
+    uint32_t display_selectbox_right_fill;
     uint8_t display_selectbox_alpha;
     double display_zoomscale_in;
     double display_zoomscale_out;
     uint8_t display_crosshair_percent;
     QString display_units;
-    QRgb prompt_text_color;
-    QRgb prompt_bg_color;
+    uint32_t prompt_text_color;
+    uint32_t prompt_bg_color;
     QString prompt_font_family;
     QString prompt_font_style;
     uint8_t prompt_font_size;
@@ -81,7 +79,7 @@ typedef struct Settings_ {
     bool grid_show_on_load;
     bool grid_show_origin;
     bool grid_color_match_crosshair;
-    QRgb grid_color;
+    uint32_t grid_color;
     bool grid_load_from_file;
     QString grid_type;
     bool grid_center_on_origin;
@@ -96,10 +94,10 @@ typedef struct Settings_ {
     double grid_spacing_angle;
     bool ruler_show_on_load;
     bool ruler_metric;
-    QRgb ruler_color;
+    uint32_t ruler_color;
     uint8_t ruler_pixel_size;
     bool qsnap_enabled;
-    QRgb qsnap_locator_color;
+    uint32_t qsnap_locator_color;
     uint8_t qsnap_locator_size;
     uint8_t qsnap_aperture_size;
     bool qsnap_endpoint;
@@ -121,8 +119,8 @@ typedef struct Settings_ {
     bool selection_mode_pickfirst;
     bool selection_mode_pickadd;
     bool selection_mode_pickdrag;
-    QRgb selection_coolgrip_color;
-    QRgb selection_hotgrip_color;
+    uint32_t selection_coolgrip_color;
+    uint32_t selection_hotgrip_color;
     uint8_t selection_grip_size;
     uint8_t selection_pickbox_size;
     QString text_font;
@@ -137,11 +135,27 @@ typedef struct Settings_ {
 
 typedef struct State_ {
     Settings settings;
+
+    /* Temporary for instant preview */
+    Settings preview;
+    Settings accept;
+
+    /* Temporary until changes are accepted */
+    Settings dialog;
+
     sdsarray *manifest;
     sdsarray *tips;
 
     sdsarray *arguments;
 } State;
+
+void settings_create(Settings *settings); /* FIXME: convert to Settings *settings_create(void); */
+void settings_validate(Settings *settings);
+void settings_copy(Settings *dest, Settings *src);
+void settings_free(Settings *settings);
+
+void state_create(void);
+void state_free(void);
 
 extern State state;
 

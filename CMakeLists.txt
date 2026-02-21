@@ -53,6 +53,8 @@ add_subdirectory(extern/sds)
 #
 qt_add_executable(embroidermodder2
 	${SRC}/core/sdsarray.c
+	${SRC}/core/settings.cpp
+	${SRC}/core/state.cpp
 	${SRC}/core/core.h
 
 	${SRC}/gui/state.h

@@ -42,6 +42,10 @@ public:
 
     int loadData(void);
 
+    QJSEngine engine;
+    void javaInitNatives(void);
+    void javaLoadCommand(const QString& cmdName);
+
     MdiArea* getMdiArea();
     MainWindow* getApplication();
     MdiWindow* activeMdiWindow();
@@ -49,9 +53,9 @@ public:
     QGraphicsScene* activeScene();
     QUndoStack* activeUndoStack();
 
-    void                            setUndoCleanIcon(bool opened);
+    void setUndoCleanIcon(bool opened);
 
-    virtual void                    updateMenuToolbarStatusbar();
+    virtual void updateMenuToolbarStatusbar();
 
     MainWindow*     mainWin;
     MdiArea*        mdiArea;
@@ -69,52 +73,52 @@ public:
     QString formatFilterOpen;
     QString formatFilterSave;
 
-    bool                            isCommandActive() { return prompt->isCommandActive(); }
-    QString                         activeCommand() { return prompt->activeCommand(); }
+    bool isCommandActive() { return prompt->isCommandActive(); }
+    QString activeCommand() { return prompt->activeCommand(); }
 
     QString platformString();
 
 public slots:
 
-    void                            enablePromptRapidFire();
-    void                            disablePromptRapidFire();
+    void enablePromptRapidFire();
+    void disablePromptRapidFire();
 
-    void                            enableMoveRapidFire();
-    void                            disableMoveRapidFire();
+    void enableMoveRapidFire();
+    void disableMoveRapidFire();
 
-    void                            onCloseWindow();
-    virtual void                    onCloseMdiWin(MdiWindow*);
+    void onCloseWindow();
+    virtual void onCloseMdiWin(MdiWindow*);
 
-    void                            recentMenuAboutToShow();
+    void recentMenuAboutToShow();
 
-    void                            onWindowActivated (QMdiSubWindow* w);
-    void                            windowMenuAboutToShow();
-    void                            windowMenuActivated( bool checked/*int id*/ );
+    void onWindowActivated(QMdiSubWindow* w);
+    void windowMenuAboutToShow();
+    void windowMenuActivated( bool checked/*int id*/ );
     QAction*                        getAction(int actionEnum);
 
-    void                            updateAllViewScrollBars(bool val);
-    void                            updateAllViewCrossHairColors(QRgb color);
-    void                            updateAllViewBackgroundColors(QRgb color);
-    void                            updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-    void                            updateAllViewGridColors(QRgb color);
-    void                            updateAllViewRulerColors(QRgb color);
+    void updateAllViewScrollBars(bool val);
+    void updateAllViewCrossHairColors(QRgb color);
+    void updateAllViewBackgroundColors(QRgb color);
+    void updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
+    void updateAllViewGridColors(QRgb color);
+    void updateAllViewRulerColors(QRgb color);
 
-    void                            updatePickAddMode(bool val);
-    void                            pickAddModeToggled();
+    void updatePickAddMode(bool val);
+    void pickAddModeToggled();
 
-    void                            settingsPrompt();
+    void settingsPrompt();
 
-    void                            settingsDialog(const QString& showTab = QString());
-    void                            readSettings();
-    void                            writeSettings();
+    void settingsDialog(const QString& showTab = QString());
+    void readSettings();
+    void writeSettings();
 
     static bool                     validFileFormat(const QString &fileName);
 
 protected:
-    virtual void                    resizeEvent(QResizeEvent*);
-    void                            closeEvent(QCloseEvent *event);
+    virtual void resizeEvent(QResizeEvent*);
+    void closeEvent(QCloseEvent *event);
     QAction*                        getFileSeparator();
-    void                            loadFormats();
+    void loadFormats();
 
 private:
     bool                            shiftKeyPressedState;
@@ -134,7 +138,7 @@ private:
     QLabel*     labelTipOfTheDay;
     QCheckBox*  checkBoxTipOfTheDay;
 
-    void                            createAllActions();
+    void createAllActions();
     QAction*                        createAction(CommandData command, bool scripted = false);
     //====================================================
     //Toolbars
@@ -239,11 +243,6 @@ public slots:
     void about();
     void whatsThisContextHelp();
 
-    void cut();
-    void copy();
-    void paste();
-    void selectAll();
-
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
 
@@ -329,132 +328,86 @@ public slots:
     void dayVision();
     void nightVision();
 
-    void doNothing();
+    /* Prompt */
+    void alert(const QString& txt);
+    void blinkPrompt();
+    void setPromptPrefix(const QString& txt);
+    void appendPromptHistory(const QString& txt);
 
-public:
-    QJSEngine engine;
-    void javaInitNatives(void);
-    void javaLoadCommand(const QString& cmdName);
+    void initCommand();
+    void endCommand();
+    void messageBox(const QString& type, const QString& title, const QString& text);
 
-    //Natives
-    void nativeAlert                  (const QString& txt);
-    void nativeBlinkPrompt            ();
-    void nativeSetPromptPrefix        (const QString& txt);
-    void nativeAppendPromptHistory    (const QString& txt);
-    void nativeEnablePromptRapidFire  ();
-    void nativeDisablePromptRapidFire ();
-    void nativeInitCommand            ();
-    void nativeEndCommand             ();
+    void printArea(qreal x, qreal y, qreal w, qreal h);
 
-    void nativeEnableMoveRapidFire    ();
-    void nativeDisableMoveRapidFire   ();
+    void setBackgroundColor(quint8 r, quint8 g, quint8 b);
+    void setCrossHairColor(quint8 r, quint8 g, quint8 b);
+    void setGridColor(quint8 r, quint8 g, quint8 b);
 
-    void nativeNewFile                ();
-    void nativeOpenFile               ();
+    void previewOn(int clone, int mode, qreal x, qreal y, qreal data);
+    void previewOff();
 
-    void nativeTipOfTheDay            ();
-
-    QString nativePlatformString      ();
-
-    void nativeMessageBox             (const QString& type, const QString& title, const QString& text);
-
-    void nativeUndo                   ();
-    void nativeRedo                   ();
-
-    void nativePanLeft                ();
-    void nativePanRight               ();
-    void nativePanUp                  ();
-    void nativePanDown                ();
-
-    void nativeZoomIn                 ();
-    void nativeZoomOut                ();
-    void nativeZoomExtents            ();
-
-    void nativePrintArea              (qreal x, qreal y, qreal w, qreal h);
-
-    void nativeDayVision              ();
-    void nativeNightVision            ();
-
-    void nativeSetBackgroundColor     (quint8 r, quint8 g, quint8 b);
-    void nativeSetCrossHairColor      (quint8 r, quint8 g, quint8 b);
-    void nativeSetGridColor           (quint8 r, quint8 g, quint8 b);
-
-    QString nativeTextFont            ();
-    qreal   nativeTextSize            ();
-    qreal   nativeTextAngle           ();
-    bool    nativeTextBold            ();
-    bool    nativeTextItalic          ();
-    bool    nativeTextUnderline       ();
-    bool    nativeTextStrikeOut       ();
-    bool    nativeTextOverline        ();
-
-    void nativeSetTextFont            (const QString& str);
-    void nativeSetTextSize            (qreal num);
-    void nativeSetTextAngle           (qreal num);
-    void nativeSetTextBold            (bool val);
-    void nativeSetTextItalic          (bool val);
-    void nativeSetTextUnderline       (bool val);
-    void nativeSetTextStrikeOut       (bool val);
-    void nativeSetTextOverline        (bool val);
-
-    void nativePreviewOn              (int clone, int mode, qreal x, qreal y, qreal data);
-    void nativePreviewOff             ();
-
-    void nativeVulcanize              ();
-    void nativeClearRubber            ();
-    bool nativeAllowRubber            ();
-    void nativeSpareRubber            (qint64 id);
+    /* Rubber */
+    void vulcanize();
+    void clearRubber();
+    bool allowRubber();
+    void spareRubber(qint64 id);
     //TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    void nativeSetRubberMode          (int mode);
-    void nativeSetRubberPoint         (const QString& key, qreal x, qreal y);
-    void nativeSetRubberText          (const QString& key, const QString& txt);
+    void setRubberMode(int mode);
+    void setRubberPoint(const QString& key, qreal x, qreal y);
+    void setRubberText(const QString& key, const QString& txt);
 
-    void nativeAddTextMulti           (const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
-    void nativeAddTextSingle          (const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
+    /* Geometry */
+    void addTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
+    void addTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
 
-    void nativeAddInfiniteLine        (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddRay                 (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddLine                (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
-    void nativeAddTriangle            (qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
-    void nativeAddRectangle           (qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
-    void nativeAddRoundedRectangle    (qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
-    void nativeAddArc                 (qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode);
-    void nativeAddCircle              (qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode);
-    void nativeAddSlot                (qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);
-    void nativeAddEllipse             (qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
-    void nativeAddPoint               (qreal x, qreal y);
-    void nativeAddRegularPolygon      (qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
-    void nativeAddPolygon             (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPolyline            (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPath                (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddHorizontalDimension (qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
-    void nativeAddVerticalDimension   (qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
-    void nativeAddImage               (const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);
+    void addInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
+    void addRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
+    void addLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
+    void addTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
+    void addRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
+    void addRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
+    void addArc(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode);
+    void addCircle(qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode);
+    void addSlot(qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);
+    void addEllipse(qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
+    void addPoint(qreal x, qreal y);
+    void addRegularPolygon(qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
+    void addPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+    void addPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+    void addPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+    void addHorizontalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
+    void addVerticalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
+    void addImage(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);
 
-    void nativeAddDimLeader           (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
+    void addDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
 
-    void  nativeSetCursorShape        (const QString& str);
-    qreal nativeCalculateAngle        (qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal nativeCalculateDistance     (qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal nativePerpendicularDistance (qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
+    void setCursorShape(const QString& str);
+    qreal calculateAngle(qreal x1, qreal y1, qreal x2, qreal y2);
+    qreal calculateDistance(qreal x1, qreal y1, qreal x2, qreal y2);
+    qreal perpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
 
-    int  nativeNumSelected            ();
-    void nativeSelectAll              ();
-    void nativeAddToSelection         (const QPainterPath path, Qt::ItemSelectionMode mode);
-    void nativeClearSelection         ();
-    void nativeDeleteSelected         ();
-    void nativeCutSelected            (qreal x, qreal y);
-    void nativeCopySelected           (qreal x, qreal y);
-    void nativePasteSelected          (qreal x, qreal y);
-    void nativeMoveSelected           (qreal dx, qreal dy);
-    void nativeScaleSelected          (qreal x, qreal y, qreal factor);
-    void nativeRotateSelected         (qreal x, qreal y, qreal rot);
-    void nativeMirrorSelected         (qreal x1, qreal y1, qreal x2, qreal y2);
+    /* Selection Management */
+    void cut();
+    void copy();
+    void paste();
+    int numSelected();
+    void selectAll();
+    void addToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
+    void clearSelection();
+    void deleteSelected();
+    void cutSelected(qreal x, qreal y);
+    void copySelected(qreal x, qreal y);
+    void pasteSelected(qreal x, qreal y);
+    void moveSelected(qreal dx, qreal dy);
+    void scaleSelected(qreal x, qreal y, qreal factor);
+    void rotateSelected(qreal x, qreal y, qreal rot);
+    void mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
 
-    qreal nativeQSnapX                ();
-    qreal nativeQSnapY                ();
-    qreal nativeMouseX                ();
-    qreal nativeMouseY                ();
+    qreal qSnapX();
+    qreal qSnapY();
+    qreal mouseX();
+    qreal mouseY();
 };
 
 /* Pointer access for Qt based types */

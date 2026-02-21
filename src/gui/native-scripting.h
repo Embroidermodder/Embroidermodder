@@ -26,61 +26,52 @@ public:
     Q_INVOKABLE void debug(QString msg);
     Q_INVOKABLE void error(QString cmd, QString err);
     Q_INVOKABLE void todo(QString cmd, QString msg);
-    Q_INVOKABLE void alert(QString message) { mainwin->nativeAlert(message); }
-    Q_INVOKABLE void blinkPrompt(void) { mainwin->nativeBlinkPrompt(); }
-    Q_INVOKABLE void setPromptPrefix(QString prefix) { mainwin->nativeSetPromptPrefix(prefix); }
-    Q_INVOKABLE void appendPromptHistory(QString message) { mainwin->nativeAppendPromptHistory(message); }
-    Q_INVOKABLE void enablePromptRapidFire(void) { mainwin->nativeEnablePromptRapidFire(); }
-    Q_INVOKABLE void disablePromptRapidFire(void) { mainwin->nativeDisablePromptRapidFire(); }
-    Q_INVOKABLE void enableMoveRapidFire(void) { mainwin->nativeEnableMoveRapidFire(); }
-    Q_INVOKABLE void disableMoveRapidFire(void) { mainwin->nativeDisableMoveRapidFire(); }
-    Q_INVOKABLE void initCommand(void) { mainwin->nativeInitCommand(); }
-    Q_INVOKABLE void endCommand(void) { mainwin->nativeEndCommand(); }
-    Q_INVOKABLE void newFile(void) { mainwin->nativeNewFile(); }
-    Q_INVOKABLE void openFile(void) { mainwin->nativeOpenFile(); }
-    Q_INVOKABLE QString platformString(void) { return mainwin->nativePlatformString(); }
+    Q_INVOKABLE void alert(QString message) { mainwin->alert(message); }
+    Q_INVOKABLE void blinkPrompt(void) { mainwin->blinkPrompt(); }
+    Q_INVOKABLE void setPromptPrefix(QString prefix) { mainwin->setPromptPrefix(prefix); }
+    Q_INVOKABLE void appendPromptHistory(QString message) { mainwin->appendPromptHistory(message); }
+    Q_INVOKABLE void enablePromptRapidFire(void) { mainwin->enablePromptRapidFire(); }
+    Q_INVOKABLE void disablePromptRapidFire(void) { mainwin->disablePromptRapidFire(); }
+    Q_INVOKABLE void enableMoveRapidFire(void) { mainwin->enableMoveRapidFire(); }
+    Q_INVOKABLE void disableMoveRapidFire(void) { mainwin->disableMoveRapidFire(); }
+    Q_INVOKABLE void initCommand(void) { mainwin->initCommand(); }
+    Q_INVOKABLE void endCommand(void) { mainwin->endCommand(); }
+    Q_INVOKABLE void newFile(void) { mainwin->newFile(); }
+    Q_INVOKABLE void openFile(void) { mainwin->openFile(); }
+    Q_INVOKABLE QString platformString(void) { return mainwin->platformString(); }
     Q_INVOKABLE void messageBox(QString type, QString title, QString msg);
     Q_INVOKABLE bool isInt(qreal x);
-    Q_INVOKABLE void undo(void) { mainwin->nativeUndo(); }
-    Q_INVOKABLE void redo(void) { mainwin->nativeRedo(); }
-    Q_INVOKABLE void panLeft(void) { mainwin->nativePanLeft(); }
-    Q_INVOKABLE void panRight(void) { mainwin->nativePanRight(); }
-    Q_INVOKABLE void panUp(void) { mainwin->nativePanUp(); }
-    Q_INVOKABLE void panDown(void) { mainwin->nativePanDown(); }
-    Q_INVOKABLE void zoomIn(void) { mainwin->nativeZoomIn(); }
-    Q_INVOKABLE void zoomOut(void) { mainwin->nativeZoomOut(); }
-    Q_INVOKABLE void zoomExtents(void) { mainwin->nativeZoomExtents(); }
     Q_INVOKABLE int printArea(qreal x, qreal y, qreal w, qreal h);
-    Q_INVOKABLE void dayVision(void) { mainwin->nativeDayVision(); }
-    Q_INVOKABLE void nightVision(void) { mainwin->nativeNightVision(); }
+    Q_INVOKABLE void dayVision(void) { mainwin->dayVision(); }
+    Q_INVOKABLE void nightVision(void) { mainwin->nightVision(); }
     Q_INVOKABLE int setBackgroundColor(qreal r, qreal g, qreal b);
     Q_INVOKABLE int setCrossHairColor(qreal r, qreal g, qreal b);
     Q_INVOKABLE int setGridColor(qreal r, qreal g, qreal b);
-    Q_INVOKABLE QString textFont(void) { return mainwin->nativeTextFont(); }
-    Q_INVOKABLE qreal textSize(void) { return mainwin->nativeTextSize(); }
-    Q_INVOKABLE qreal textAngle(void) { return mainwin->nativeTextAngle(); }
-    Q_INVOKABLE bool textBold(void) { return mainwin->nativeTextBold(); }
-    Q_INVOKABLE bool textItalic(void) { return mainwin->nativeTextItalic(); }
-    Q_INVOKABLE bool textUnderline(void) { return mainwin->nativeTextUnderline(); }
-    Q_INVOKABLE bool textStrikeOut(void) { return mainwin->nativeTextStrikeOut(); }
-    Q_INVOKABLE bool textOverline(void) { return mainwin->nativeTextOverline(); }
-    Q_INVOKABLE void setTextFont(QString font) { mainwin->nativeSetTextFont(font); }
+    Q_INVOKABLE QString textFont(void) { return mainwin->textFont(); }
+    Q_INVOKABLE qreal textSize(void) { return mainwin->textSize(); }
+    Q_INVOKABLE qreal textAngle(void) { return mainwin->textAngle(); }
+    Q_INVOKABLE bool textBold(void) { return mainwin->textBold(); }
+    Q_INVOKABLE bool textItalic(void) { return mainwin->textItalic(); }
+    Q_INVOKABLE bool textUnderline(void) { return mainwin->textUnderline(); }
+    Q_INVOKABLE bool textStrikeOut(void) { return mainwin->textStrikeOut(); }
+    Q_INVOKABLE bool textOverline(void) { return mainwin->textOverline(); }
+    Q_INVOKABLE void setTextFont(QString font) { mainwin->setTextFont(font); }
     Q_INVOKABLE int setTextSize(qreal num);
     Q_INVOKABLE int setTextAngle(qreal num);
-    Q_INVOKABLE void setTextBold(bool enabled) { mainwin->nativeSetTextBold(enabled); }
-    Q_INVOKABLE void setTextItalic(bool enabled) { mainwin->nativeSetTextItalic(enabled); }
-    Q_INVOKABLE void setTextUnderline(bool enabled) { mainwin->nativeSetTextUnderline(enabled); }
-    Q_INVOKABLE void setTextStrikeOut(bool enabled) { mainwin->nativeSetTextStrikeOut(enabled); }
-    Q_INVOKABLE void setTextOverline(bool enabled) { mainwin->nativeSetTextOverline(enabled); }
+    Q_INVOKABLE void setTextBold(bool enabled) { mainwin->setTextBold(enabled); }
+    Q_INVOKABLE void setTextItalic(bool enabled) { mainwin->setTextItalic(enabled); }
+    Q_INVOKABLE void setTextUnderline(bool enabled) { mainwin->setTextUnderline(enabled); }
+    Q_INVOKABLE void setTextStrikeOut(bool enabled) { mainwin->setTextStrikeOut(enabled); }
+    Q_INVOKABLE void setTextOverline(bool enabled) { mainwin->setTextOverline(enabled); }
     Q_INVOKABLE int previewOn(QString cloneStr, QString modeStr, qreal x, qreal y, qreal data);
-    Q_INVOKABLE void previewOff(void) { mainwin->nativePreviewOff(); }
-    Q_INVOKABLE void vulcanize(void) { mainwin->nativeVulcanize(); }
-    Q_INVOKABLE bool allowRubber(void) { return mainwin->nativeAllowRubber(); }
+    Q_INVOKABLE void previewOff(void) { mainwin->previewOff(); }
+    Q_INVOKABLE void vulcanize(void) { mainwin->vulcanize(); }
+    Q_INVOKABLE bool allowRubber(void) { return mainwin->allowRubber(); }
     Q_INVOKABLE int setRubberMode(QString mode);
     Q_INVOKABLE int setRubberPoint(QString key, qreal x, qreal y);
     Q_INVOKABLE int setRubberText(QString key, QString value);
     Q_INVOKABLE int addRubber(QString objType);
-    Q_INVOKABLE void clearRubber(void) { mainwin->nativeClearRubber(); }
+    Q_INVOKABLE void clearRubber(void) { mainwin->clearRubber(); }
     Q_INVOKABLE int spareRubber(QString objID);
     Q_INVOKABLE int addTextMulti(QString str, qreal x, qreal y, qreal rot, bool fill);
     Q_INVOKABLE int addTextSingle(QString str, qreal x, qreal y, qreal rot, bool fill);
@@ -103,15 +94,15 @@ public:
     Q_INVOKABLE int addVerticalDimension(void);
     Q_INVOKABLE int addImage(void);
     Q_INVOKABLE int addDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    Q_INVOKABLE void setCursorShape(QString shape) { mainwin->nativeSetCursorShape(shape); }
+    Q_INVOKABLE void setCursorShape(QString shape) { mainwin->setCursorShape(shape); }
     Q_INVOKABLE qreal calculateAngle(qreal x1, qreal y1, qreal x2, qreal y2);
     Q_INVOKABLE qreal calculateDistance(qreal x1, qreal y1, qreal x2, qreal y2);
     Q_INVOKABLE qreal perpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
-    Q_INVOKABLE int numSelected(void) { return mainwin->nativeNumSelected(); }
-    Q_INVOKABLE void selectAll(void) { mainwin->nativeSelectAll(); }
+    Q_INVOKABLE int numSelected(void) { return mainwin->numSelected(); }
+    Q_INVOKABLE void selectAll(void) { mainwin->selectAll(); }
     Q_INVOKABLE int addToSelection(void);
-    Q_INVOKABLE void clearSelection(void) { mainwin->nativeClearSelection(); }
-    Q_INVOKABLE void deleteSelected(void) { mainwin->nativeDeleteSelected(); }
+    Q_INVOKABLE void clearSelection(void) { mainwin->clearSelection(); }
+    Q_INVOKABLE void deleteSelected(void) { mainwin->deleteSelected(); }
     Q_INVOKABLE int cutSelected(qreal x, qreal y);
     Q_INVOKABLE int copySelected(qreal x, qreal y);
     Q_INVOKABLE int pasteSelected(qreal x, qreal y);
@@ -119,10 +110,10 @@ public:
     Q_INVOKABLE int scaleSelected(qreal x, qreal y, qreal factor);
     Q_INVOKABLE int rotateSelected(qreal x, qreal y, qreal angle);
     Q_INVOKABLE int mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
-    Q_INVOKABLE qreal qSnapX(void) { return mainwin->nativeQSnapX(); }
-    Q_INVOKABLE qreal qSnapY(void) { return mainwin->nativeQSnapY(); }
-    Q_INVOKABLE qreal mouseX(void) { return mainwin->nativeMouseX(); }
-    Q_INVOKABLE qreal mouseY(void) { return mainwin->nativeMouseY(); }
+    Q_INVOKABLE qreal qSnapX(void) { return mainwin->qSnapX(); }
+    Q_INVOKABLE qreal qSnapY(void) { return mainwin->qSnapY(); }
+    Q_INVOKABLE qreal mouseX(void) { return mainwin->mouseX(); }
+    Q_INVOKABLE qreal mouseY(void) { return mainwin->mouseY(); }
     Q_INVOKABLE int includeScript(QString filename);
 };
 

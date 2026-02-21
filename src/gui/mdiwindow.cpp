@@ -152,7 +152,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 EmbColor thisColor = curCircleObj->circleObj.color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
+                mainWin->addCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
                 curCircleObj = curCircleObj->next;
             }
         }
@@ -165,7 +165,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 EmbColor thisColor = curEllipseObj->ellipseObj.color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddEllipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                mainWin->addEllipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curEllipseObj = curEllipseObj->next;
             }
         }
@@ -178,7 +178,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 EmbColor thisColor = curLineObj->lineObj.color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddLine(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
+                mainWin->addLine(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
                 curLineObj = curLineObj->next;
             }
         }
@@ -225,7 +225,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 EmbColor thisColor = curPointObj->pointObj.color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddPoint(embPoint_x(po), embPoint_y(po));
+                mainWin->addPoint(embPoint_x(po), embPoint_y(po));
                 curPointObj = curPointObj->next;
             }
         }
@@ -254,7 +254,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polygonPath.translate(-startX, -startY);
-                mainWin->nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
+                mainWin->addPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
 
                 curPolygonObjList = curPolygonObjList->next;
             }
@@ -285,7 +285,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polylinePath.translate(-startX, -startY);
-                mainWin->nativeAddPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
+                mainWin->addPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
 
                 curPolylineObjList = curPolylineObjList->next;
             }
@@ -299,7 +299,7 @@ bool MdiWindow::loadFile(const QString &fileName)
                 EmbColor thisColor = curRectObj->rectObj.color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddRectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                mainWin->addRectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curRectObj = curRectObj->next;
             }
         }
