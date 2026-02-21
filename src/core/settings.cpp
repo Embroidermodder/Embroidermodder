@@ -8,7 +8,7 @@
 void
 settings_create(Settings *settings)
 {
-     
+
 }
 
 /* Make sure that all the settings are within acceptable parameters. */

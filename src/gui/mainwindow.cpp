@@ -288,9 +288,9 @@ load_sdsarray(QString filename, const char *key, sdsarray *arr)
     }
 
     /* FIXME: check key is present */
- 
+
     sdsarray_empty(arr);
- 
+
     toml_array_t* array = toml_array_in(table, key);
     for (int i=0; ; i++) {
         toml_datum_t str = toml_string_at(array, i);

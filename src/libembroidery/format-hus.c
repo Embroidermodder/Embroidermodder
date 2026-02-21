@@ -53,7 +53,7 @@ static short husDecode(unsigned char a1, unsigned char a2)
     else
     {
         return (res);
-	}
+    }
 }
 */
 

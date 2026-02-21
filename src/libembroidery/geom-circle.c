@@ -21,7 +21,7 @@ int getCircleCircleIntersections(/* Circle 0 Radius */
                                  /* Intersection Point */
                                  double* px4, double* py4)
 {
-	double a, h, px2, py2, mx, my;
+    double a, h, px2, py2, mx, my;
     double dx = px1-px0;
     double dy = py1-py0;
     double d = sqrt(dx*dx + dy*dy); /* Distance between centers */
@@ -40,9 +40,9 @@ int getCircleCircleIntersections(/* Circle 0 Radius */
     /*
      * Considering the two right triangles p0p2p3 and p1p2p3 we can write:
      * a^2 + h^2 = r0^2 and b^2 + h^2 = r1^2
-     * 
+     *
      * BEGIN PROOF
-     * 
+     *
      * Remove h^2 from the equation by setting them equal to themselves:
      *     r0^2 - a^2 = r1^2 - b^2
      * Substitute b with (d - a) since it is proven that d = a + b:
@@ -59,7 +59,7 @@ int getCircleCircleIntersections(/* Circle 0 Radius */
      *     r0^2 - r1^2 + d^2 = 2da
      * Divide by 2d to finally solve for a:
      *     a = (r0^2 - r1^2 + d^2)/ (2d)
-     * 
+     *
      * END PROOF
      */
 
@@ -107,7 +107,7 @@ int getCircleTangentPoints(/* Circle Radius and Center */
                            /* Tangent Point 1 */
                            double* tx1, double* ty1)
 {
-	double pr;
+    double pr;
     double dx  = px-cx;
     double dy  = py-cy;
     double hyp = sqrt(dx*dx + dy*dy); /* Distance to center of circle */

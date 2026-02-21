@@ -79,7 +79,7 @@ int readPcs(EmbPattern* pattern, const char* fileName)
     for(i = 0; i < colorCount; i++)
     {
         EmbThread t;
-		t.color.r = binaryReadByte(file);
+        t.color.r = binaryReadByte(file);
         t.color.g = binaryReadByte(file);
         t.color.b = binaryReadByte(file);
         t.catalogNumber = "";

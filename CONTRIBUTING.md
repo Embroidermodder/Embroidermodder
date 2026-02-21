@@ -11,32 +11,15 @@
 Throughout the source code we use keywords that are specific to our model of computer
 aided design (CAD) so it would help to keep these at hand.
 
-+-----------------+------------------------------------------------------------------+
-| *Term*          | *Definition*                                                     |
-+=================+==================================================================+
-| _command_       | A CAD instruction issued by the user. All user interaction       |
-|                 | should break into some sequence of commands.                     |
-+-----------------+------------------------------------------------------------------+
-| _configuration_ | Data that is established early at runtime that defines the       |
-|                 | behaviour of the program. If data is part of configuration we do |
-|                 | not expect to reload it during runtime after this boot process.  |
-+-----------------+------------------------------------------------------------------+
-| _core_          | All processing that is not specific to file input/output or GUI  |
-|                 | toolkit tasks.                                                   |
-+-----------------+------------------------------------------------------------------+
-| _design_        | A command that creates a template in the vector layer.           |
-+-----------------+------------------------------------------------------------------+
-| _generator_     | A command that creates a stitch list in the current pattern.     |
-+-----------------+------------------------------------------------------------------+
-| _pattern_       | All data associated with a given run of an embroidery machine:   |
-|                 | this includes all the stitch lists, geometric primatives,        |
-|                 | designs and fills. On export, a lot of this will be flattened    |
-|                 | into just stitch lists in most formats.                          |
-+-----------------+------------------------------------------------------------------+
-| _state_         | A specific memory structure that allows access to all of the     |
-|                 | accessible data within the core. This does not include GUI       |
-|                 | toolkit specific data structures.                                |
-+-----------------+------------------------------------------------------------------+
+| Term            | Definition |
+| --------------- | ---------- |
+| _command_       | A CAD instruction issued by the user. All user interaction should break into some sequence of commands.                     |
+| _configuration_ | Data that is established early at runtime that defines the behaviour of the program. If data is part of configuration we do not expect to reload it during runtime after this boot process.  |
+| _core_          | All processing that is not specific to file input/output or GUI toolkit tasks. |
+| _design_        | A command that creates a template in the vector layer. |
+| _generator_     | A command that creates a stitch list in the current pattern. |
+| _pattern_       | All data associated with a given run of an embroidery machine: this includes all the stitch lists, geometric primatives, designs and fills. On export, a lot of this will be flattened into just stitch lists in most formats. |
+| _state_         | A specific memory structure that allows access to all of the accessible data within the core. This does not include GUI toolkit specific data structures. |
 
 ### What Belongs Where
 
@@ -96,11 +79,6 @@ All files and directories shall be lowercase and contain no spaces.
 
 Tabs should not be used when indenting. Setup your IDE or text editor to use 4 spaces.
 
-If you use KATE (KDE Advanced Text Editor), modelines are included in our code to enforce 
-some of our coding standards. When creating new C/C++ files, please add
-the modeline to the bottom of the file followed by a blank line. Always make sure there
-is an extra blank line at the end of a file.
-
 When using braces, please put the brace on a new line, unless the code is specially formatted
 for easier reading such as a block of one liner if/else statements.
 
@@ -120,9 +98,13 @@ at any time, although occasionally we do break the build. In these instances,
 please provide a patch, pull request which fixes the issue or open an issue and
 notify us of the problem, as we may not be aware of it and we can build fine.
 
-Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...
+Try to group commits based on what they are related to:
+features/bugs/comments/graphics/commands/etc...
 
 ### Comments
+
+Always use C style comments even in C++ code. We're in the process of changing the
+comments over.
 
 When writing code, sometimes there are items that we know can be improved,
 incomplete or need special clarification. In these cases, use the types of
@@ -166,60 +148,55 @@ gcc. In any C code, you must use:
 - Update all formats without color to check for edr or rgb files
 - Fix issues with DST (VERY important that DST work well)
 
-```
---------------------------------
-libembroidery C formats
---------------------------------
-FORMAT | READ  | WRITE | NOTES
---------------------------------
-10o    | YES   |       | read (need to fix external color loading) (maybe find out what ctrl code flags of 0x10, 0x08, 0x04, and 0x02 mean)
-100    |       |       | none (4 byte codes) 61 00 10 09 (type, type2, x, y ?) x & y (signed char)
-art    |       |       | none
-bro    | YES   |       | read (complete)(maybe figure out detail of header)
-cnd    |       |       | none
-col    |       |       | (color file no design) read(final) write(final)
-csd    | YES   |       | read (complete)
-dat    |       |       | read ()
-dem    |       |       | none (looks like just encrypted cnd)
-dsb    | YES   |       | read (unknown how well) (stitch data looks same as 10o)
-dst    | YES   |       | read (complete) / write(unknown)
-dsz    | YES   |       | read (unknown)
-dxf    |       |       | read (Port to C. needs refactored)
-edr    |       |       | read (C version is broken) / write (complete)
-emd    |       |       | read (unknown)
-exp    | YES   |       | read (unknown) / write(unknown)
-exy    | YES   |       | read (need to fix external color loading)
-fxy    | YES   |       | read (need to fix external color loading)
-gnc    |       |       | none
-gt     |       |       | read (need to fix external color loading)
-hus    | YES   |       | read (unknown) / write (C version is broken)
-inb    | YES   |       | read (buggy?)
-jef    | YES   |       | write (need to fix the offsets when it is moving to another spot)
-ksm    | YES   |       | read (unknown) / write (unknown)
-pcd    |       |       | 
-pcm    |       |       | 
-pcq    |       |       | read (Port to C)
-pcs    | BUGGY |       | read (buggy / colors are not correct / after reading, writing any other format is messed up)
-pec    |       |       | read / write (without embedded images, sometimes overlooks some stitches leaving a gap)
-pel    |       |       | none
-pem    |       |       | none
-pes    | YES   |       | 
-phb    |       |       | 
-phc    |       |       | 
-rgb    |       |       | 
-sew    | YES   |       | 
-shv    |       |       | read (C version is broken)
-sst    |       |       | none
-svg    |       | YES   | 
-tap    | YES   |       | read (unknown)
-u01    |       |       | 
-vip    | YES   |       | 
-vp3    | YES   |       | 
-xxx    | YES   |       | 
-zsk    |       |       | read (complete)
-```
+### File Formats
+
+| FORMAT | READ  | WRITE | NOTES |
+| ------ | ----- | ----- | ----- |
+| `10o`  | YES   |       | read (need to fix external color loading) (maybe find out what ctrl code flags of 0x10, 0x08, 0x04, and 0x02 mean) |
+| `100`  |       |       | none (4 byte codes) 61 00 10 09 (type, type2, x, y ?) x & y (signed char) |
+| `art`  |       |       | none |
+| `bro`  | YES   |       | read (complete)(maybe figure out detail of header) |
+| `cnd`  |       |       | none |
+| `col`  |       |       | (color file no design) read(final) write(final) |
+| `csd`  | YES   |       | read (complete) | 
+| `dat`  |       |       | read () |
+| `dem`  |       |       | none (looks like just encrypted cnd) |
+| `dsb`  | YES   |       | read (unknown how well) (stitch data looks same as 10o) |
+| `dst`  | YES   |       | read (complete) / write(unknown) |
+| `dsz`  | YES   |       | read (unknown) |
+| `dxf`  |       |       | read (Port to C. needs refactored) |
+| `edr`  |       |       | read (C version is broken) / write (complete) |
+| `emd`  |       |       | read (unknown) |
+| `exp`  | YES   |       | read (unknown) / write(unknown) |
+| `exy`  | YES   |       | read (need to fix external color loading) |
+| `fxy`  | YES   |       | read (need to fix external color loading) |
+| `gnc`  |       |       | none |
+| `gt`   |       |       | read (need to fix external color loading) |
+| `hus`  | YES   |       | read (unknown) / write (C version is broken) |
+| `inb`  | YES   |       | read (buggy?) |
+| `jef`  | YES   |       | write (need to fix the offsets when it is moving to another spot) |
+| `ksm`  | YES   |       | read (unknown) / write (unknown) |
+| `pcd`  |       |       |  |
+| `pcm`  |       |       |  |
+| `pcq`  |       |       | read (Port to C) |
+| `pcs`  | BUGGY |       | read (buggy / colors are not correct / after reading, writing any other format is messed up) |
+| `pec`  |       |       | read / write (without embedded images, sometimes overlooks some stitches leaving a gap) |
+| `pel`  |       |       | none |
+| `pem`  |       |       | none |
+| `pes`  | YES   |       |  |
+| `phb`  |       |       |  |
+| `phc`  |       |       |  |
+| `rgb`  |       |       |  |
+| `sew`  | YES   |       |  |
+| `shv`  |       |       | read (C version is broken) |
+| `sst`  |       |       | none |
+| `svg`  |       | YES   |  |
+| `tap`  | YES   |       | read (unknown) |
+| `u01`  |       |       |  |
+| `vip`  | YES   |       |  |
+| `vp3`  | YES   |       |  |
+| `xxx`  | YES   |       |  |
+| `zsk`  |       |       | read (complete) |
 
 Support for Singer FHE, CHE (Compucon) formats?
-
-
 

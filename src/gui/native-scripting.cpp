@@ -145,7 +145,7 @@ MainWindow::javaInitNatives(void)
      * Write a simple JS function that just uses the call function like this:
      *
      *      function windowCascade() { call("windowcascade"); }
-     * 
+     *
      * for the given core command "windowcascade". Then pass this string to the engine.
      *
      * NOTE: This is only used for "void function(void)" functions.

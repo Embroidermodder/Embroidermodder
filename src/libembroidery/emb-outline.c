@@ -355,7 +355,7 @@ double DistancePointLine(EmbPoint p, EmbPoint a, EmbPoint b)
         return DistancePointPoint(p, a);
 
     // otherwise use comp.graphics.algorithms Frequently Asked Questions method
-    /*(1)     	      AC dot AB
+    /*(1)               AC dot AB
                 r =   ---------
                       ||AB||^2
 

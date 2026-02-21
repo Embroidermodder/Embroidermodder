@@ -2,7 +2,7 @@
  * Embroidermodder 2 -- C Core
  * Copyright 2011-2026 The Embroidermodder Team
  */
- 
+
 #ifndef EMBROIDERMODDER_CORE_H
 #define EMBROIDERMODDER_CORE_H
 

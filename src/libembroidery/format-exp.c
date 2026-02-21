@@ -20,13 +20,13 @@ static void expEncode(unsigned char* b, char dx, char dy, int flags)
         b[2] = dx;
         b[3] = dy;
     }
-	else if (flags == END)
-	{
-		b[0] = 0x80;
-		b[1] = 0x10;
-		b[2] = 0;
-		b[3] = 0;
-	}
+    else if (flags == END)
+    {
+        b[0] = 0x80;
+        b[1] = 0x10;
+        b[2] = 0;
+        b[3] = 0;
+    }
     else if(flags == TRIM || flags == JUMP)
     {
         b[0] = 0x80;

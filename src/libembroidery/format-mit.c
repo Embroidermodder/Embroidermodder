@@ -2,10 +2,10 @@
 
 static int mitDecodeStitch(unsigned char value)
 {
-	if (value & 0x80)
-	{
-		return -(value & 0x1F);
-	}
+    if (value & 0x80)
+    {
+        return -(value & 0x1F);
+    }
     return value;
 }
 
@@ -44,21 +44,21 @@ int readMit(EmbPattern* pattern, const char* fileName)
 
 static unsigned char mitEncodeStitch(double value)
 {
-	if (value < 0)
-	{
-		return 0x80 | (unsigned char)(-value);
-	}
-	return (unsigned char)value;
+    if (value < 0)
+    {
+        return 0x80 | (unsigned char)(-value);
+    }
+    return (unsigned char)value;
 }
 
 /*! Writes the data from \a pattern to a file with the given \a fileName.
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeMit(EmbPattern* pattern, const char* fileName)
 {
-	EmbFile* file = 0;
-	EmbStitchList* pointer = 0;
-	double xx = 0, yy = 0, dx = 0, dy = 0;
-	int flags = 0;
+    EmbFile* file = 0;
+    EmbStitchList* pointer = 0;
+    double xx = 0, yy = 0, dx = 0, dy = 0;
+    int flags = 0;
 
     if(!pattern) { embLog_error("format-mit.c writeMit(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-mit.c writeMit(), fileName argument is null\n"); return 0; }
@@ -70,31 +70,31 @@ int writeMit(EmbPattern* pattern, const char* fileName)
     }
 
     /* Check for an END stitch and add one if it is not present */
-	if (pattern->lastStitch->stitch.flags != END)
-	{
-		embPattern_addStitchRel(pattern, 0, 0, END, 1);
-	}
-	file = embFile_open(fileName, "wb");
-	if (!file)
-	{
-		embLog_error("format-mit.c writeMit(), cannot open %s for writing\n", fileName);
-		return 0;
-	}
-	embPattern_correctForMaxStitchLength(pattern, 0x1F, 0x1F);
-	xx = yy = 0;
-	pointer = pattern->stitchList;
-	while (pointer)
-	{
-		dx = pointer->stitch.xx - xx;
-		dy = pointer->stitch.yy - yy;
-		xx = pointer->stitch.xx;
-		yy = pointer->stitch.yy;
-		flags = pointer->stitch.flags;
-		embFile_putc(mitEncodeStitch(dx), file);
-		embFile_putc(mitEncodeStitch(dy), file);
-		pointer = pointer->next;
-	}
-	embFile_close(file);
+    if (pattern->lastStitch->stitch.flags != END)
+    {
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+    }
+    file = embFile_open(fileName, "wb");
+    if (!file)
+    {
+        embLog_error("format-mit.c writeMit(), cannot open %s for writing\n", fileName);
+        return 0;
+    }
+    embPattern_correctForMaxStitchLength(pattern, 0x1F, 0x1F);
+    xx = yy = 0;
+    pointer = pattern->stitchList;
+    while (pointer)
+    {
+        dx = pointer->stitch.xx - xx;
+        dy = pointer->stitch.yy - yy;
+        xx = pointer->stitch.xx;
+        yy = pointer->stitch.yy;
+        flags = pointer->stitch.flags;
+        embFile_putc(mitEncodeStitch(dx), file);
+        embFile_putc(mitEncodeStitch(dy), file);
+        pointer = pointer->next;
+    }
+    embFile_close(file);
     return 1;
 }
 
