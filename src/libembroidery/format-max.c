@@ -5,7 +5,7 @@
 static double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
     int res = a1 + (a2 << 8) + (a3 << 16);
-    if(res > 0x7FFFFF)
+    if (res > 0x7FFFFF)
     {
         return (-((~(res) & 0x7FFFFF) - 1));
     }
@@ -14,7 +14,7 @@ static double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 
 static void maxEncode(EmbFile* file, int x, int y)
 {
-    if(!file) { embLog_error("format-max.c maxEncode(), file argument is null\n"); return; }
+    if (!file) { embLog_error("format-max.c maxEncode(), file argument is null\n"); return; }
 
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(x & 0xFF));
@@ -38,11 +38,11 @@ int readMax(EmbPattern* pattern, const char* fileName)
     int stitchCount;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-max.c readMax(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-max.c readMax(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-max.c readMax(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-max.c readMax(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-max.c readMax(), cannot open %s for reading\n", fileName);
         return 0;
@@ -52,10 +52,10 @@ int readMax(EmbPattern* pattern, const char* fileName)
     stitchCount = binaryReadUInt32(file);
 
     /* READ STITCH RECORDS */
-    for(i = 0; i < stitchCount; i++)
+    for (i = 0; i < stitchCount; i++)
     {
         flags = NORMAL;
-        if(embFile_read(b, 1, 8, file) != 8)
+        if (embFile_read(b, 1, 8, file) != 8)
             break;
 
         dx = maxDecode(b[0], b[1], b[2]);
@@ -65,7 +65,7 @@ int readMax(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);
@@ -95,21 +95,21 @@ int writeMax(EmbPattern* pattern, const char* fileName)
         0x01,0x38,0x09,0x31,0x33,0x30,0x2F,0x37,0x30,0x35,0x20,0x48,0xFA,0x00,0x00,0x00,
         0x00,0x00,0x00,0x00,0x00 };
 
-    if(!pattern) { embLog_error("format-max.c writeMax(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-max.c writeMax(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-max.c writeMax(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-max.c writeMax(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-max.c writeMax(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-max.c writeMax(), cannot open %s for writing\n", fileName);
         return 0;

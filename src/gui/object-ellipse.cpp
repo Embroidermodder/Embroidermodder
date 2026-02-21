@@ -14,7 +14,7 @@ EllipseObject::EllipseObject(qreal centerX, qreal centerY, qreal width, qreal he
 EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("EllipseObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -87,7 +87,7 @@ void EllipseObject::setObjectRadiusMinor(qreal radius)
 void EllipseObject::setObjectDiameterMajor(qreal diameter)
 {
     QRectF elRect = rect();
-    if(elRect.width() > elRect.height())
+    if (elRect.width() > elRect.height())
         elRect.setWidth(diameter);
     else
         elRect.setHeight(diameter);
@@ -98,7 +98,7 @@ void EllipseObject::setObjectDiameterMajor(qreal diameter)
 void EllipseObject::setObjectDiameterMinor(qreal diameter)
 {
     QRectF elRect = rect();
-    if(elRect.width() < elRect.height())
+    if (elRect.width() < elRect.height())
         elRect.setWidth(diameter);
     else
         elRect.setHeight(diameter);
@@ -156,13 +156,13 @@ void EllipseObject::updatePath()
 void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawEllipse(rect());
@@ -171,17 +171,17 @@ void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 void EllipseObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
+    if (rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
     {
         QPointF sceneLinePoint1 = objectRubberPoint("ELLIPSE_LINE_POINT1");
         QPointF sceneLinePoint2 = objectRubberPoint("ELLIPSE_LINE_POINT2");
         QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
         QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
         QLineF itemLine(itemLinePoint1, itemLinePoint2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
+    else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
     {
         QPointF sceneAxis1Point1 = objectRubberPoint("ELLIPSE_AXIS1_POINT1");
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
@@ -211,10 +211,10 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
+    else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
     {
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
@@ -243,10 +243,10 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
         //TODO: updateRubber() gripping for EllipseObject
     }
@@ -278,10 +278,10 @@ QPointF EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
 
     if     (minDist == cntrDist) return center;
-    else if(minDist == q0Dist)   return quad0;
-    else if(minDist == q90Dist)  return quad90;
-    else if(minDist == q180Dist) return quad180;
-    else if(minDist == q270Dist) return quad270;
+    else if (minDist == q0Dist)   return quad0;
+    else if (minDist == q90Dist)  return quad90;
+    else if (minDist == q180Dist) return quad180;
+    else if (minDist == q270Dist) return quad270;
 
     return scenePos();
 }

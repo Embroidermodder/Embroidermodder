@@ -14,7 +14,7 @@ ArcObject::ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal e
 ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ArcObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectStartX(), obj->objectStartY(), obj->objectMidX(), obj->objectMidY(), obj->objectEndX(), obj->objectEndY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -98,7 +98,7 @@ void ArcObject::setObjectCenterY(qreal pointY)
 void ArcObject::setObjectRadius(qreal radius)
 {
     qreal rad;
-    if(radius <= 0)
+    if (radius <= 0)
     {
         rad = 0.0000001;
     }
@@ -266,20 +266,20 @@ qreal ArcObject::objectIncludedAngle() const
 {
     qreal chord = objectChord();
     qreal rad = objectRadius();
-    if(chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existant circles
+    if (chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existant circles
 
     //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
     //      If the quotient is out of that range, then the result of asin() will be NaN.
     qreal quotient = chord/(2.0*rad);
-    if(quotient > 1.0) quotient = 1.0;
-    if(quotient < 0.0) quotient = 0.0; //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
+    if (quotient > 1.0) quotient = 1.0;
+    if (quotient < 0.0) quotient = 0.0; //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
 }
 
 bool ArcObject::objectClockwise() const
 {
     //NOTE: Y values are inverted here on purpose
-    if(isArcClockwise(objectStartX(), -objectStartY(), objectMidX(), -objectMidY(), objectEndX(), -objectEndY()))
+    if (isArcClockwise(objectStartX(), -objectStartY(), objectMidX(), -objectMidY(), objectEndX(), -objectEndY()))
         return true;
     return false;
 }
@@ -289,7 +289,7 @@ void ArcObject::updatePath()
     qreal startAngle = (objectStartAngle() + rotation());
     qreal spanAngle = objectIncludedAngle();
 
-    if(objectClockwise())
+    if (objectClockwise())
         spanAngle = -spanAngle;
 
     QPainterPath path;
@@ -303,19 +303,19 @@ void ArcObject::updatePath()
 void ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     qreal startAngle = (objectStartAngle() + rotation())*16;
     qreal spanAngle = objectIncludedAngle()*16;
 
-    if(objectClockwise())
+    if (objectClockwise())
         spanAngle = -spanAngle;
 
     qreal rad = objectRadius();
@@ -355,9 +355,9 @@ QPointF ArcObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(cntrDist, startDist), qMin(midDist, endDist));
 
     if     (minDist == cntrDist)  return center;
-    else if(minDist == startDist) return start;
-    else if(minDist == midDist)   return mid;
-    else if(minDist == endDist)   return end;
+    else if (minDist == startDist) return start;
+    else if (minDist == midDist)   return mid;
+    else if (minDist == endDist)   return end;
 
     return scenePos();
 }

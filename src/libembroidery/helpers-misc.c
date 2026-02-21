@@ -8,7 +8,7 @@
 /*! Rounds a double (\a src) and returns it as an \c int. */
 int roundDouble(double src)
 {
-    if(src < 0.0)
+    if (src < 0.0)
         return (int) ceil(src - 0.5);
     return (int)floor(src+0.5);
 }
@@ -19,14 +19,14 @@ char startsWith(const char* pre, const char* str)
     char result = 0;
     size_t lenpre;
     size_t lenstr;
-    if(!pre) { embLog_error("helpers-misc.c startsWith(), pre argument is null\n"); return 0; }
-    if(!str) { embLog_error("helpers-misc.c startsWith(), str argument is null\n"); return 0; }
+    if (!pre) { embLog_error("helpers-misc.c startsWith(), pre argument is null\n"); return 0; }
+    if (!str) { embLog_error("helpers-misc.c startsWith(), str argument is null\n"); return 0; }
     lenpre = strlen(pre);
     lenstr = strlen(str);
-    if(lenstr < lenpre)
+    if (lenstr < lenpre)
         return 0;
     result = (char)strncmp(pre, str, lenpre);
-    if(result == 0)
+    if (result == 0)
         return 1;
     return 0;
 }
@@ -48,7 +48,7 @@ char* lTrim(char* const str, char junk)
     int trimmed = 0;
     do
     {
-        if(*original != junk || trimmed)
+        if (*original != junk || trimmed)
         {
             trimmed = 1;
             *p++ = *original;
@@ -121,9 +121,9 @@ char* emb_optOut(double num, char* str)
 char* emb_strdup(const char* src)
 {
     char* dest = 0;
-    if(!src) { embLog_error("helpers-misc.c emb_strdup(), src argument is null\n"); return 0; }
+    if (!src) { embLog_error("helpers-misc.c emb_strdup(), src argument is null\n"); return 0; }
     dest = (char*)malloc(strlen(src) + 1);
-    if(!dest) { embLog_error("helpers-misc.c emb_strdup(), cannot allocate memory\n"); }
+    if (!dest) { embLog_error("helpers-misc.c emb_strdup(), cannot allocate memory\n"); }
     else { strcpy(dest, src); }
     return dest;
 }

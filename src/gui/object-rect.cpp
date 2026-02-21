@@ -14,7 +14,7 @@ RectObject::RectObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsIt
 RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("RectObject Constructor()");
-    if(obj)
+    if (obj)
     {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -131,13 +131,13 @@ void RectObject::updatePath()
 void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawRect(rect());
@@ -146,7 +146,7 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 void RectObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_RECTANGLE)
+    if (rubberMode == OBJ_RUBBER_RECTANGLE)
     {
         QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
         QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
@@ -157,9 +157,9 @@ void RectObject::updateRubber(QPainter* painter)
         setObjectRect(x,y,w,h);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
-        if(painter)
+        if (painter)
         {
             //TODO: Make this work with rotation & scaling
             /*
@@ -167,9 +167,9 @@ void RectObject::updateRubber(QPainter* painter)
             QPointF after = objectRubberPoint(QString());
             QPointF delta = after-gripPoint;
             if     (gripPoint == objectTopLeft())     { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
-            else if(gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
-            else if(gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
-            else if(gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
+            else if (gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
+            else if (gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
+            else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -209,9 +209,9 @@ QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
 
     if     (minDist == ptlDist) return ptl;
-    else if(minDist == ptrDist) return ptr;
-    else if(minDist == pblDist) return pbl;
-    else if(minDist == pbrDist) return pbr;
+    else if (minDist == ptrDist) return ptr;
+    else if (minDist == pblDist) return pbl;
+    else if (minDist == pbrDist) return pbr;
 
     return scenePos();
 }
@@ -227,9 +227,9 @@ void RectObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     QPointF delta = after-before;
     if     (before == objectTopLeft())     { setObjectRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()); }
-    else if(before == objectTopRight())    { setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()); }
-    else if(before == objectBottomLeft())  { setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()); }
-    else if(before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
+    else if (before == objectTopRight())    { setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()); }
+    else if (before == objectBottomLeft())  { setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()); }
+    else if (before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
 }
 
 QPainterPath RectObject::objectSavePath() const

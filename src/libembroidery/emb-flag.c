@@ -9,7 +9,7 @@
 EmbFlagList* embFlagList_create(EmbFlag data)
 {
     EmbFlagList* heapFlagList = (EmbFlagList*)malloc(sizeof(EmbFlagList));
-    if(!heapFlagList) { embLog_error("emb-flag.c embFlagList_create(), cannot allocate memory for heapFlagList\n"); return 0; }
+    if (!heapFlagList) { embLog_error("emb-flag.c embFlagList_create(), cannot allocate memory for heapFlagList\n"); return 0; }
     heapFlagList->flag = data;
     heapFlagList->next = 0;
     return heapFlagList;
@@ -17,10 +17,10 @@ EmbFlagList* embFlagList_create(EmbFlag data)
 
 EmbFlagList* embFlagList_add(EmbFlagList* pointer, EmbFlag data)
 {
-    if(!pointer) { embLog_error("emb-flag.c embFlagList_add(), pointer argument is null\n"); return 0; }
-    if(pointer->next) { embLog_error("emb-flag.c embFlagList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-flag.c embFlagList_add(), pointer argument is null\n"); return 0; }
+    if (pointer->next) { embLog_error("emb-flag.c embFlagList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbFlagList*)malloc(sizeof(EmbFlagList));
-    if(!pointer->next) { embLog_error("emb-flag.c embFlagList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) { embLog_error("emb-flag.c embFlagList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->flag = data;
     pointer->next = 0;
@@ -30,7 +30,7 @@ EmbFlagList* embFlagList_add(EmbFlagList* pointer, EmbFlag data)
 int embFlagList_count(EmbFlagList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -41,7 +41,7 @@ int embFlagList_count(EmbFlagList* pointer)
 
 int embFlagList_empty(EmbFlagList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }

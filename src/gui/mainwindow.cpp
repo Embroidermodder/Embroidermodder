@@ -333,7 +333,7 @@ void MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for(int i = 0; i < state.settings.opensave_recent_list_of_files.size(); ++i)
+    for (int i = 0; i < state.settings.opensave_recent_list_of_files.size(); ++i)
     {
         //If less than the max amount of entries add to menu
         if (i < state.settings.opensave_recent_max_files)
@@ -374,7 +374,7 @@ void MainWindow::windowMenuAboutToShow()
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
-    for(int i = 0; i < windows.count(); ++i)
+    for (int i = 0; i < windows.count(); ++i)
     {
         QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
         aAction->setCheckable(true);
@@ -467,7 +467,7 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
     if (filesToOpen.count())
     {
-        for(int i = 0; i < filesToOpen.count(); i++)
+        for (int i = 0; i < filesToOpen.count(); i++)
         {
             if (!validFileFormat(filesToOpen[i]))
                 continue;
@@ -857,7 +857,7 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
         else
         {
             QList<QAction*> actList = tb->actions();
-            for(int i = 0; i < actList.size(); ++i)
+            for (int i = 0; i < actList.size(); ++i)
             {
                 QAction* ACTION = actList.value(i);
                 if (ACTION->objectName() == "toolbarclose")

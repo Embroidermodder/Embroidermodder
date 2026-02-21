@@ -14,7 +14,7 @@ ImageObject::ImageObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphics
 ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ImageObject Constructor()");
-    if(obj)
+    if (obj)
     {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -131,13 +131,13 @@ void ImageObject::updatePath()
 void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawRect(rect());
@@ -146,7 +146,7 @@ void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 void ImageObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_IMAGE)
+    if (rubberMode == OBJ_RUBBER_IMAGE)
     {
         QPointF sceneStartPoint = objectRubberPoint("IMAGE_START");
         QPointF sceneEndPoint = objectRubberPoint("IMAGE_END");
@@ -157,7 +157,7 @@ void ImageObject::updateRubber(QPainter* painter)
         setObjectRect(x,y,w,h);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
         //TODO: updateRubber() gripping for ImageObject
     }
@@ -187,9 +187,9 @@ QPointF ImageObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
 
     if     (minDist == ptlDist) return ptl;
-    else if(minDist == ptrDist) return ptr;
-    else if(minDist == pblDist) return pbl;
-    else if(minDist == pbrDist) return pbr;
+    else if (minDist == ptrDist) return ptr;
+    else if (minDist == pblDist) return pbl;
+    else if (minDist == pbrDist) return pbr;
 
     return scenePos();
 }

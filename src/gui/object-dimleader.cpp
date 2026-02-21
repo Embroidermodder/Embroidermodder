@@ -14,7 +14,7 @@ DimLeaderObject::DimLeaderObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rg
 DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("DimLeaderObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
@@ -172,7 +172,7 @@ void DimLeaderObject::updateLeader()
     //                \|                         \|
     //                 .(ap2)                     .(lp2)
 
-    if(arrowStyle == Open)
+    if (arrowStyle == Open)
     {
         arrowStylePath = QPainterPath();
         arrowStylePath.moveTo(ap1);
@@ -181,7 +181,7 @@ void DimLeaderObject::updateLeader()
         arrowStylePath.lineTo(ap0);
         arrowStylePath.lineTo(ap1);
     }
-    else if(arrowStyle == Closed)
+    else if (arrowStyle == Closed)
     {
         arrowStylePath = QPainterPath();
         arrowStylePath.moveTo(ap1);
@@ -189,12 +189,12 @@ void DimLeaderObject::updateLeader()
         arrowStylePath.lineTo(ap2);
         arrowStylePath.lineTo(ap1);
     }
-    else if(arrowStyle == Dot)
+    else if (arrowStyle == Dot)
     {
         arrowStylePath = QPainterPath();
         arrowStylePath.addEllipse(ap0, arrowStyleLength, arrowStyleLength);
     }
-    else if(arrowStyle == Box)
+    else if (arrowStyle == Box)
     {
         arrowStylePath = QPainterPath();
         qreal side = QLineF(ap1, ap2).length();
@@ -202,7 +202,7 @@ void DimLeaderObject::updateLeader()
         ar0.moveCenter(ap0);
         arrowStylePath.addRect(ar0);
     }
-    else if(arrowStyle == Tick)
+    else if (arrowStyle == Tick)
     {
     }
 
@@ -214,26 +214,26 @@ void DimLeaderObject::updateLeader()
 void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPath(lineStylePath);
     painter->drawPath(arrowStylePath);
 
-    if(filled)
+    if (filled)
         painter->fillPath(arrowStylePath, objectColor());
 }
 
 void DimLeaderObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_DIMLEADER_LINE)
+    if (rubberMode == OBJ_RUBBER_DIMLEADER_LINE)
     {
         QPointF sceneStartPoint = objectRubberPoint("DIMLEADER_LINE_START");
         QPointF sceneQSnapPoint = objectRubberPoint("DIMLEADER_LINE_END");
@@ -241,14 +241,14 @@ void DimLeaderObject::updateRubber(QPainter* painter)
         setObjectEndPoint1(sceneStartPoint);
         setObjectEndPoint2(sceneQSnapPoint);
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
-        if(painter)
+        if (painter)
         {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if     (gripPoint == objectEndPoint1()) painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
-            else if(gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
-            else if(gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+            else if (gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+            else if (gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
         }
     }
 }
@@ -274,12 +274,12 @@ QPointF DimLeaderObject::mouseSnapPoint(const QPointF& mousePoint)
 
     qreal minDist = qMin(end1Dist, end2Dist);
 
-    if(curved)
+    if (curved)
         minDist = qMin(minDist, midDist);
 
     if     (minDist == end1Dist) return endPoint1;
-    else if(minDist == end2Dist) return endPoint2;
-    else if(minDist == midDist)  return midPoint;
+    else if (minDist == end2Dist) return endPoint2;
+    else if (minDist == midDist)  return midPoint;
 
     return scenePos();
 }
@@ -288,7 +288,7 @@ QList<QPointF> DimLeaderObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2();
-    if(curved)
+    if (curved)
         gripPoints << objectMidPoint();
     return gripPoints;
 }
@@ -296,8 +296,8 @@ QList<QPointF> DimLeaderObject::allGripPoints()
 void DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
-    else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
-    else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    else if (before == objectEndPoint2()) { setObjectEndPoint2(after); }
+    else if (before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

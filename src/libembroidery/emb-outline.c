@@ -100,7 +100,7 @@ StitchBlock * BreakIntoSeparateObjects(EmbStitchBlock* blocks)
         //        //float dy = GetRelativeY(sa[i + 1].XY, sa[i + 2].XY, sa[i + 3].XY);
         //        //float dy2 = GetRelativeY(sa[i].XY, sa[i + 1].XY, sa[i + 2].XY);
         //        //float dy3 = GetRelativeY(sa[i + 2].XY, sa[i + 3].XY, sa[i + 4].XY);
-        //        //if(dy)
+        //        //if (dy)
         //        if (sa.Stitches[i - 1].Type == VectorStitchType.Run || sa.Stitches[i + 1].Type == VectorStitchType.Run)
         //        {
         //            sa.Stitches[i].Type = VectorStitchType.Tatami;
@@ -138,7 +138,7 @@ StitchObject * FindOutline(EmbStitchBlock* stitchData)
             //        //float dy = GetRelativeY(sa[i + 1].XY, sa[i + 2].XY, sa[i + 3].XY);
             //        //float dy2 = GetRelativeY(sa[i].XY, sa[i + 1].XY, sa[i + 2].XY);
             //        //float dy3 = GetRelativeY(sa[i + 2].XY, sa[i + 3].XY, sa[i + 4].XY);
-            //        //if(dy)
+            //        //if (dy)
             //        if (sa.Stitches[i - 1].Type == VectorStitchType.Run || sa.Stitches[i + 1].Type == VectorStitchType.Run)
             //        {
             //            sa.Stitches[i].Type = VectorStitchType.Tatami;
@@ -186,7 +186,7 @@ EmbPattern DrawGraphics(EmbPattern p)
     //{
     //    foreach (var stitch in block.Stitches)
     //    {
-    //        if(stitch.Angle != 0)
+    //        if (stitch.Angle != 0)
     //        {
     //            int aaa = 1;
     //        }

@@ -105,7 +105,7 @@ CmdPrompt::~CmdPrompt()
 void CmdPrompt::floatingChanged(bool isFloating)
 {
     qDebug("CmdPrompt floatingChanged(%d)", isFloating);
-    if(isFloating) promptSplitter->hide();
+    if (isFloating) promptSplitter->hide();
     else           promptSplitter->show();
 }
 
@@ -118,7 +118,7 @@ void CmdPrompt::saveHistory(const QString& fileName, bool html)
 
     //TODO: save during input in case of crash
     QTextStream output(&file);
-    if(html) { output << promptHistory->toHtml();      }
+    if (html) { output << promptHistory->toHtml();      }
     else     { output << promptHistory->toPlainText(); }
 }
 
@@ -144,7 +144,7 @@ void CmdPrompt::stopBlinking()
 void CmdPrompt::blink()
 {
     blinkState = !blinkState;
-    if(blinkState)
+    if (blinkState)
     {
         qDebug("CmdPrompt blink1");
     }
@@ -203,7 +203,7 @@ void CmdPrompt::updateStyle()
 
 void CmdPrompt::appendHistory(const QString& txt)
 {
-    if(txt.isNull())
+    if (txt.isNull())
     {
         emit appendTheHistory(promptInput->curText, promptInput->prefix.length());
         return;
@@ -314,15 +314,15 @@ QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
     //Keywords
     start = prefix.indexOf('[');
     stop = prefix.lastIndexOf(']');
-    if(start != -1 && stop != -1 && start < stop)
+    if (start != -1 && stop != -1 && start < stop)
     {
-        for(int i = stop; i >= start; i--)
+        for (int i = stop; i >= start; i--)
         {
-            if(prefix.at(i) == ']')
+            if (prefix.at(i) == ']')
                 prefix.insert(i, "</font>");
-            if(prefix.at(i) == '[')
+            if (prefix.at(i) == '[')
                 prefix.insert(i+1, "<font color=\"#0095FF\">");
-            if(prefix.at(i) == '/')
+            if (prefix.at(i) == '/')
             {
                 prefix.insert(i+1, "<font color=\"#0095FF\">");
                 prefix.insert(i, "</font>");
@@ -333,13 +333,13 @@ QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
     //Default Values
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
-    if(start != -1 && stop != -1 && start < stop)
+    if (start != -1 && stop != -1 && start < stop)
     {
-        for(int i = stop; i >= start; i--)
+        for (int i = stop; i >= start; i--)
         {
-            if(prefix.at(i) == '}')
+            if (prefix.at(i) == '}')
                 prefix.insert(i, "</font>");
-            if(prefix.at(i) == '{')
+            if (prefix.at(i) == '{')
                 prefix.insert(i+1, "<font color=\"#00AA00\">");
         }
     }
@@ -368,7 +368,7 @@ void CmdPromptHistory::stopResizeHistory(int /*y*/)
 void CmdPromptHistory::resizeHistory(int y)
 {
     int newHeight = tmpHeight - y;
-    if(newHeight < 0)
+    if (newHeight < 0)
         newHeight = 0;
     setMaximumHeight(newHeight);
 }
@@ -450,7 +450,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
 
     QString cmdtxt(curText);
     cmdtxt.replace(0, prefix.length(), "");
-    if(!rapidFireEnabled) cmdtxt = cmdtxt.toLower();
+    if (!rapidFireEnabled) cmdtxt = cmdtxt.toLower();
 
     if (cmdActive) {
         if (rapidFireEnabled) {
@@ -477,7 +477,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
         }
     }
     else {
-        if(aliasHash->contains(cmdtxt))
+        if (aliasHash->contains(cmdtxt))
         {
             cmdActive = true;
             lastCmd = curCmd;
@@ -485,7 +485,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
             emit appendHistory(curText, prefix.length());
             emit startCommand(curCmd);
         }
-        else if(cmdtxt.isEmpty())
+        else if (cmdtxt.isEmpty())
         {
             cmdActive = true;
             emit appendHistory(curText, prefix.length());
@@ -498,23 +498,23 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
         }
     }
 
-    if(!rapidFireEnabled)
+    if (!rapidFireEnabled)
         clear();
 }
 
 void CmdPromptInput::checkSelection()
 {
     //qDebug("CmdPromptInput::checkSelection");
-    if(this->hasSelectedText())
+    if (this->hasSelectedText())
         this->deselect();
 }
 
 void CmdPromptInput::checkCursorPosition(int /*oldpos*/, int newpos)
 {
     //qDebug("CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos);
-    if(this->hasSelectedText())
+    if (this->hasSelectedText())
         this->deselect();
-    if(newpos < prefix.length())
+    if (newpos < prefix.length())
         this->setCursorPosition(prefix.length());
 }
 
@@ -559,7 +559,7 @@ void CmdPromptInput::applyFormatting()
     //Keywords
     start = prefix.indexOf('[');
     stop = prefix.lastIndexOf(']');
-    if(start != -1 && stop != -1 && start < stop)
+    if (start != -1 && stop != -1 && start < stop)
     {
         QTextCharFormat formatKeyword;
         formatKeyword.setFontWeight(QFont::Bold);
@@ -567,13 +567,13 @@ void CmdPromptInput::applyFormatting()
 
         int rangeStart = -1;
         int rangeStop = -1;
-        for(int i = stop; i >= start; i--)
+        for (int i = stop; i >= start; i--)
         {
-            if(prefix.at(i) == ']')
+            if (prefix.at(i) == ']')
             {
                 rangeStop = i;
             }
-            if(prefix.at(i) == '[' || prefix.at(i) == '/')
+            if (prefix.at(i) == '[' || prefix.at(i) == '/')
             {
                 rangeStart = i;
 
@@ -591,7 +591,7 @@ void CmdPromptInput::applyFormatting()
     //Default Values
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
-    if(start != -1 && stop != -1 && start < stop)
+    if (start != -1 && stop != -1 && start < stop)
     {
         QTextCharFormat formatKeyword;
         formatKeyword.setFontWeight(QFont::Bold);
@@ -599,13 +599,13 @@ void CmdPromptInput::applyFormatting()
 
         int rangeStart = -1;
         int rangeStop = -1;
-        for(int i = stop; i >= start; i--)
+        for (int i = stop; i >= start; i--)
         {
-            if(prefix.at(i) == '}')
+            if (prefix.at(i) == '}')
             {
                 rangeStop = i;
             }
-            if(prefix.at(i) == '{')
+            if (prefix.at(i) == '{')
             {
                 rangeStart = i;
 
@@ -626,11 +626,11 @@ void CmdPromptInput::applyFormatting()
 void CmdPromptInput::updateCurrentText(const QString& txt)
 {
     int cursorPos = cursorPosition();
-    if(!txt.startsWith(prefix))
+    if (!txt.startsWith(prefix))
     {
-        if(txt.length() < prefix.length())
+        if (txt.length() < prefix.length())
             this->setText(prefix);
-        else if(txt.length() != prefix.length())
+        else if (txt.length() != prefix.length())
             this->setText(prefix + txt);
         else
             this->setText(curText);
@@ -650,7 +650,7 @@ void CmdPromptInput::checkEditedText(const QString& txt)
 {
     updateCurrentText(txt);
 
-    if(rapidFireEnabled)
+    if (rapidFireEnabled)
         processInput();
 }
 
@@ -696,44 +696,44 @@ void CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
 
 bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 {
-    if(event->type() == QEvent::KeyPress)
+    if (event->type() == QEvent::KeyPress)
     {
-        if(isBlinking) emit stopBlinking();
+        if (isBlinking) emit stopBlinking();
 
         QKeyEvent* pressedKey = (QKeyEvent*)event;
 
         //NOTE: These shortcuts need to be caught since QLineEdit uses them
-        if(pressedKey->matches(QKeySequence::Cut))
+        if (pressedKey->matches(QKeySequence::Cut))
         {
             pressedKey->accept();
             emit cutPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Copy))
+        else if (pressedKey->matches(QKeySequence::Copy))
         {
             pressedKey->accept();
             emit copyPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Paste))
+        else if (pressedKey->matches(QKeySequence::Paste))
         {
             pressedKey->accept();
             emit pastePressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::SelectAll))
+        else if (pressedKey->matches(QKeySequence::SelectAll))
         {
             pressedKey->accept();
             emit selectAllPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Undo))
+        else if (pressedKey->matches(QKeySequence::Undo))
         {
             pressedKey->accept();
             emit undoPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Redo))
+        else if (pressedKey->matches(QKeySequence::Redo))
         {
             pressedKey->accept();
             emit redoPressed();
@@ -848,7 +848,7 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         }
     }
 
-    if(event->type() == QEvent::KeyRelease)
+    if (event->type() == QEvent::KeyRelease)
     {
         QKeyEvent* releasedKey = (QKeyEvent*)event;
         int key = releasedKey->key();

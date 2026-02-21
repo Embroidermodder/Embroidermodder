@@ -28,13 +28,13 @@ int getCircleCircleIntersections(/* Circle 0 Radius */
 
     /*Circles share centers. This results in division by zero,
       infinite solutions or one circle being contained within the other. */
-    if(d == 0.0)
+    if (d == 0.0)
         return 0;
     /* Circles do not touch each other */
-    else if(d > (r0 + r1))
+    else if (d > (r0 + r1))
         return 0;
     /* One circle is contained within the other */
-    else if(d < (r0 - r1))
+    else if (d < (r0 - r1))
         return 0;
 
     /*
@@ -72,7 +72,7 @@ int getCircleCircleIntersections(/* Circle 0 Radius */
     py2 = py0 + (dy * a/d);
 
     /* Tangent circles have only one intersection */
-    if(d == (r0 + r1))
+    if (d == (r0 + r1))
     {
         *px3 = *py4 = px2;
         *py3 = *py4 = py2;
@@ -113,10 +113,10 @@ int getCircleTangentPoints(/* Circle Radius and Center */
     double hyp = sqrt(dx*dx + dy*dy); /* Distance to center of circle */
 
     /* Point is inside the circle */
-    if(hyp < cr)
+    if (hyp < cr)
         return 0;
     /* Point is lies on the circle, so there is only one tangent point */
-    else if(hyp == cr)
+    else if (hyp == cr)
     {
         *tx0 = *tx1 = px;
         *ty0 = *ty1 = py;
@@ -150,7 +150,7 @@ void testTangentPoints(double  cr, double  cx, double  cy,
 {
     double tx0, ty0, tx1, ty1;
 
-    if(!getCircleTangentPoints(cr, cx, cy,
+    if (!getCircleTangentPoints(cr, cx, cy,
                                px, py,
                                &tx0, &ty0,
                                &tx1, &ty1))

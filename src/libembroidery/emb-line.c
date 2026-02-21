@@ -45,7 +45,7 @@ EmbLineObject embLineObject_make(double x1, double y1, double x2, double y2)
 EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2)
 {
     EmbLineObject* heapLineObj = (EmbLineObject*)malloc(sizeof(EmbLineObject));
-    if(!heapLineObj) { embLog_error("emb-line.c embLineObject_create(), cannot allocate memory for heapLineObj\n"); return 0; }
+    if (!heapLineObj) { embLog_error("emb-line.c embLineObject_create(), cannot allocate memory for heapLineObj\n"); return 0; }
     heapLineObj->line.x1 = x1;
     heapLineObj->line.y1 = y1;
     heapLineObj->line.x2 = x2;
@@ -60,7 +60,7 @@ EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2)
 EmbLineObjectList* embLineObjectList_create(EmbLineObject data)
 {
     EmbLineObjectList* heapLineObjList = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
-    if(!heapLineObjList) { embLog_error("emb-line.c embLineObjectList_create(), cannot allocate memory for heapLineObjList\n"); return 0; }
+    if (!heapLineObjList) { embLog_error("emb-line.c embLineObjectList_create(), cannot allocate memory for heapLineObjList\n"); return 0; }
     heapLineObjList->lineObj = data;
     heapLineObjList->next = 0;
     return heapLineObjList;
@@ -68,10 +68,10 @@ EmbLineObjectList* embLineObjectList_create(EmbLineObject data)
 
 EmbLineObjectList* embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
 {
-    if(!pointer) { embLog_error("emb-line.c embLineObjectList_add(), pointer argument is null\n"); return 0; }
-    if(pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-line.c embLineObjectList_add(), pointer argument is null\n"); return 0; }
+    if (pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
-    if(!pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->lineObj = data;
     pointer->next = 0;
@@ -81,7 +81,7 @@ EmbLineObjectList* embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObje
 int embLineObjectList_count(EmbLineObjectList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -92,7 +92,7 @@ int embLineObjectList_count(EmbLineObjectList* pointer)
 
 int embLineObjectList_empty(EmbLineObjectList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }
@@ -116,14 +116,14 @@ void embLineObjectList_free(EmbLineObjectList* pointer)
 void embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* result, int clockwise)
 {
     double temp;
-    if(!result) { embLog_error("emb-line.c embLine_normalVector(), result argument is null\n"); return; }
+    if (!result) { embLog_error("emb-line.c embLine_normalVector(), result argument is null\n"); return; }
     result->X = vector2.X - vector1.X;
     result->Y = vector2.Y - vector1.Y;
     embVector_normalize(*result, result);
     temp = result->X;
     result->X = result->Y;
     result->Y = -temp;
-    if(!clockwise)
+    if (!clockwise)
     {
         result->X = -result->X;
         result->Y = -result->Y;
@@ -148,9 +148,9 @@ void embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVect
 
     double det = A1 * B2 - A2 * B1;
 
-    if(!result) { embLog_error("emb-line.c embLine_intersectionPoint(), result argument is null\n"); return; }
+    if (!result) { embLog_error("emb-line.c embLine_intersectionPoint(), result argument is null\n"); return; }
     /*TODO: The code below needs revised since division by zero can still occur */
-    if(det < 1e-10 && det > -1e-10)
+    if (det < 1e-10 && det > -1e-10)
     {
         result->X = -10000; /* TODO: What is significant about these numbers? Leave the point, undefined */
         result->Y = -10000; /* TODO: A better solution would be to return an unsigned char(0 parallel, 1 intersecting, 2 not-intersecting) */

@@ -10,11 +10,11 @@ EmbFile* embFile_open(const char* fileName, const char* mode)
 #else
     EmbFile* eFile = 0;
     FILE* oFile = fopen(fileName, mode);
-    if(!oFile)
+    if (!oFile)
         return 0;
 
     eFile = (EmbFile*)malloc(sizeof(EmbFile));
-    if(!eFile)
+    if (!eFile)
     {
         fclose(oFile);
         return 0;
@@ -98,11 +98,11 @@ EmbFile* embFile_tmpfile(void)
 #else
     EmbFile* eFile = 0;
     FILE* tFile = tmpfile();
-    if(!tFile)
+    if (!tFile)
         return 0;
 
     eFile = (EmbFile*)malloc(sizeof(EmbFile));
-    if(!eFile)
+    if (!eFile)
     {
         fclose(tFile);
         return 0;

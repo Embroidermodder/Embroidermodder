@@ -15,7 +15,7 @@ PathObject::PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphi
 PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PathObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -57,13 +57,13 @@ void PathObject::updatePath(const QPainterPath& p)
 void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPath(objectPath());
@@ -84,7 +84,7 @@ void PathObject::vulcanize()
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
-    if(!normalPath.elementCount())
+    if (!normalPath.elementCount())
         QMessageBox::critical(0, QObject::tr("Empty Path Error"), QObject::tr("The path added contains no points. The command that created this object has flawed logic."));
 }
 

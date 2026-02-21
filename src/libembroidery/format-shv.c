@@ -54,7 +54,7 @@ const EmbThread shvThreads[] = {
 
 static char shvDecode(unsigned char inputByte)
 {
-    if(inputByte >= 0x80)
+    if (inputByte >= 0x80)
     {
         return (char)-((unsigned char)((~inputByte) + 1));
     }
@@ -63,7 +63,7 @@ static char shvDecode(unsigned char inputByte)
 
 static short shvDecodeShort(unsigned short inputByte)
 {
-    if(inputByte > 0x8000)
+    if (inputByte > 0x8000)
     {
         return (short)-((unsigned short)((~inputByte) + 1));
     }
@@ -91,11 +91,11 @@ int readShv(EmbPattern* pattern, const char* fileName)
     int currColorIndex = 0;
     unsigned short sx, sy;
 
-    if(!pattern) { embLog_error("format-shv.c readShv(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-shv.c readShv(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-shv.c readShv(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-shv.c readShv(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-shv.c readShv(), cannot open %s for reading\n", fileName);
         return 0;
@@ -110,7 +110,7 @@ int readShv(EmbPattern* pattern, const char* fileName)
     halfDesignHeight = binaryReadUInt8(file);
     halfDesignWidth2 = binaryReadUInt8(file);
     halfDesignHeight2 = binaryReadUInt8(file);
-    if((designHeight % 2) == 1)
+    if ((designHeight % 2) == 1)
     {
         embFile_seek(file, ((designHeight + 1)*designWidth)/2, SEEK_CUR);
     }
@@ -131,7 +131,7 @@ int readShv(EmbPattern* pattern, const char* fileName)
     numberOfSections = binaryReadUInt8(file);
     something3 = binaryReadByte(file);
 
-    for(i = 0; i < numberOfColors; i++)
+    for (i = 0; i < numberOfColors; i++)
     {
         unsigned int stitchCount, colorNumber;
         stitchCount = binaryReadUInt32BE(file);
@@ -143,11 +143,11 @@ int readShv(EmbPattern* pattern, const char* fileName)
 
     embFile_seek(file, -2, SEEK_CUR);
 
-    for(i = 0; !embFile_eof(file); i++)
+    for (i = 0; !embFile_eof(file); i++)
     {
         unsigned char b0, b1;
         int flags;
-        if(inJump)
+        if (inJump)
         {
             flags = JUMP;
         }
@@ -157,25 +157,25 @@ int readShv(EmbPattern* pattern, const char* fileName)
         }
         b0 = binaryReadUInt8(file);
         b1 = binaryReadUInt8(file);
-        if(stitchesSinceChange >= stitchesPerColor[currColorIndex])
+        if (stitchesSinceChange >= stitchesPerColor[currColorIndex])
         {
             embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
             currColorIndex++;
             stitchesSinceChange = 0;
         }
-        if(b0 == 0x80)
+        if (b0 == 0x80)
         {
             stitchesSinceChange++;
-            if(b1 == 3)
+            if (b1 == 3)
             {
                 continue;
             }
-            else if(b1 == 0x02)
+            else if (b1 == 0x02)
             {
                 inJump = 0;
                 continue;
             }
-            else if(b1 == 0x01)
+            else if (b1 == 0x01)
             {
         stitchesSinceChange += 2;
                 sx = binaryReadUInt8(file);
@@ -196,7 +196,7 @@ int readShv(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);
@@ -208,17 +208,17 @@ int readShv(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeShv(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-shv.c writeShv(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-shv.c writeShv(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-shv.c writeShv(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-shv.c writeShv(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-shv.c writeShv(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */

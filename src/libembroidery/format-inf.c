@@ -11,11 +11,11 @@ int readInf(EmbPattern* pattern, const char* fileName)
     int i;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-inf.c readInf(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-inf.c readInf(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-inf.c readInf(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-inf.c readInf(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         /* NOTE: The .inf format is an optional color file. Do not log an error if the file does not exist */
         return 0;
@@ -30,7 +30,7 @@ int readInf(EmbPattern* pattern, const char* fileName)
     pattern->threadList = 0;
     pattern->lastThread = 0;
 
-    for(i = 0; i < numberOfColors; i++)
+    for (i = 0; i < numberOfColors; i++)
     {
         char colorType[50];
         char colorDescription[50];
@@ -59,11 +59,11 @@ int writeInf(EmbPattern* pattern, const char* fileName)
     int i = 1, bytesRemaining;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-inf.c writeInf(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-inf.c writeInf(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-inf.c writeInf(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-inf.c writeInf(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-inf.c writeInf(), cannot open %s for writing\n", fileName);
         return 0;

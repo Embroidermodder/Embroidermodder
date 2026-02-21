@@ -27,7 +27,7 @@ int embThread_findNearestColor(EmbColor color, EmbThreadList* colors)
         deltaGreen = blue - c.b;
 
         dist = sqrt((double)(deltaRed * deltaRed) + (deltaBlue * deltaBlue) + (deltaGreen * deltaGreen));
-        if(dist <= currentClosestValue)
+        if (dist <= currentClosestValue)
         {
             currentClosestValue = dist;
             closestIndex = i;
@@ -46,7 +46,7 @@ int embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int
     int green = color.g;
     int blue = color.b;
     int i = 0;
-    for(i = 0; i < count; i++)
+    for (i = 0; i < count; i++)
     {
         int deltaRed;
         int deltaBlue;
@@ -60,7 +60,7 @@ int embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int
         deltaGreen = blue - c.b;
 
         dist = sqrt((double)(deltaRed * deltaRed) + (deltaBlue * deltaBlue) + (deltaGreen * deltaGreen));
-        if(dist <= currentClosestValue)
+        if (dist <= currentClosestValue)
         {
             currentClosestValue = dist;
             closestIndex = i;
@@ -83,7 +83,7 @@ EmbThread embThread_getRandom(void)
 EmbThreadList* embThreadList_create(EmbThread data)
 {
     EmbThreadList* heapThreadList = (EmbThreadList*)malloc(sizeof(EmbThreadList));
-    if(!heapThreadList) { embLog_error("emb-thread.c embThreadList_create(), cannot allocate memory for heapThreadList\n"); return 0; }
+    if (!heapThreadList) { embLog_error("emb-thread.c embThreadList_create(), cannot allocate memory for heapThreadList\n"); return 0; }
     heapThreadList->thread = data;
     heapThreadList->next = 0;
     return heapThreadList;
@@ -91,10 +91,10 @@ EmbThreadList* embThreadList_create(EmbThread data)
 
 EmbThreadList* embThreadList_add(EmbThreadList* pointer, EmbThread data)
 {
-    if(!pointer) { embLog_error("emb-thread.c embThreadList_add(), pointer argument is null\n"); return 0; }
-    if(pointer->next) { embLog_error("emb-thread.c embThreadList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-thread.c embThreadList_add(), pointer argument is null\n"); return 0; }
+    if (pointer->next) { embLog_error("emb-thread.c embThreadList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbThreadList*)malloc(sizeof(EmbThreadList));
-    if(!pointer->next) { embLog_error("emb-thread.c embThreadList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) { embLog_error("emb-thread.c embThreadList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->thread = data;
     pointer->next = 0;
@@ -105,9 +105,9 @@ EmbThread embThreadList_getAt(EmbThreadList* pointer, int num)
 {
     /* TODO: pointer safety */
     int i = 0;
-    for(i = 0; i < num; i++)
+    for (i = 0; i < num; i++)
     {
-        if(pointer->next)
+        if (pointer->next)
         {
             pointer = pointer->next;
         }
@@ -118,7 +118,7 @@ EmbThread embThreadList_getAt(EmbThreadList* pointer, int num)
 int embThreadList_count(EmbThreadList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -129,7 +129,7 @@ int embThreadList_count(EmbThreadList* pointer)
 
 int embThreadList_empty(EmbThreadList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }

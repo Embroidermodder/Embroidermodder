@@ -8,11 +8,11 @@ int readZsk(EmbPattern* pattern, const char* fileName)
     EmbFile* file = 0;
     int stitchType;
     unsigned char colorNumber;
-    if(!pattern) { embLog_error("format-zsk.c readZsk(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-zsk.c readZsk(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-zsk.c readZsk(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-zsk.c readZsk(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-zsk.c readZsk(), cannot open %s for reading\n", fileName);
         return 0;
@@ -49,7 +49,7 @@ int readZsk(EmbPattern* pattern, const char* fileName)
         {
             stitchType = JUMP;
         }
-        if(b[0] & 0x20)
+        if (b[0] & 0x20)
         {
             if (b[1] == 2)
             {
@@ -87,17 +87,17 @@ int readZsk(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeZsk(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-zsk.c writeZsk(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-zsk.c writeZsk(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-zsk.c writeZsk(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-zsk.c writeZsk(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-zsk.c writeZsk(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */

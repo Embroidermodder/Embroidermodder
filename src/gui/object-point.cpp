@@ -14,7 +14,7 @@ PointObject::PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : Ba
 PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PointObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -47,13 +47,13 @@ void PointObject::init(qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)
 void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPoint(0,0);
@@ -62,12 +62,12 @@ void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 void PointObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_GRIP)
+    if (rubberMode == OBJ_RUBBER_GRIP)
     {
-        if(painter)
+        if (painter)
         {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripPoint == scenePos())
+            if (gripPoint == scenePos())
             {
                 QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
                 drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -99,7 +99,7 @@ QList<QPointF> PointObject::allGripPoints()
 
 void PointObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 QPainterPath PointObject::objectSavePath() const

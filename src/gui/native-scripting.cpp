@@ -230,14 +230,14 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
             }
             else {
                 QChar charBefore = script.at(index - 1);
-                if(validBeforeChars.contains(charBefore))
+                if (validBeforeChars.contains(charBefore))
                 {
                     int i = 0;
                     QChar charAfter;
                     do
                     {
                         charAfter = script.at(index + i + findFunc.length());
-                        if(charAfter == '(')
+                        if (charAfter == '(')
                         {
                             found++;
                             script.replace(index, findFunc.length(), funcName);
@@ -283,7 +283,7 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
 
     if (toolbarName.toUpper() != "NONE") {
         //If the toolbar doesn't exist, create it.
-        if(!toolbarHash.value(toolbarName))
+        if (!toolbarHash.value(toolbarName))
         {
             QToolBar* tb = new QToolBar(toolbarName, this);
             tb->setObjectName("toolbar" + toolbarName);
@@ -299,7 +299,7 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
 
     if (menuName.toUpper() != "NONE") {
         //If the menu doesn't exist, create it.
-        if(!menuHash.value(menuName))
+        if (!menuHash.value(menuName))
         {
             QMenu* menu = new QMenu(menuName, this);
             menu->setTearOffEnabled(true);

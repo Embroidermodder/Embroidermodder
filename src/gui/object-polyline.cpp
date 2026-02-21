@@ -15,7 +15,7 @@ PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb
 PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolylineObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -58,39 +58,39 @@ void PolylineObject::updatePath(const QPainterPath& p)
 void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPath(normalPath);
 
-    if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, normalPath); }
+    if (objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, normalPath); }
 }
 
 void PolylineObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_POLYLINE)
+    if (rubberMode == OBJ_RUBBER_POLYLINE)
     {
         setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
 
         QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
-        if(painter) drawRubberLine(rubberLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(rubberLine, painter, VIEW_COLOR_CROSSHAIR);
 
         bool ok = false;
         QString numStr = objectRubberText("POLYLINE_NUM_POINTS");
-        if(numStr.isNull()) return;
+        if (numStr.isNull()) return;
         int num = numStr.toInt(&ok);
-        if(!ok) return;
+        if (!ok) return;
 
         QString appendStr;
         QPainterPath rubberPath;
-        for(int i = 1; i <= num; i++)
+        for (int i = 1; i <= num; i++)
         {
             appendStr = "POLYLINE_POINT_" + QString().setNum(i);
             QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
@@ -101,22 +101,22 @@ void PolylineObject::updateRubber(QPainter* painter)
         //Ensure the path isn't updated until the number of points is changed again
         setObjectRubberText("POLYLINE_NUM_POINTS", QString());
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
-        if(painter)
+        if (painter)
         {
             int elemCount = normalPath.elementCount();
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripIndex == -1) gripIndex = findIndex(gripPoint);
-            if(gripIndex == -1) return;
+            if (gripIndex == -1) gripIndex = findIndex(gripPoint);
+            if (gripIndex == -1) return;
 
-            if(!gripIndex) //First
+            if (!gripIndex) //First
             {
                 QPainterPath::Element ef = normalPath.elementAt(1);
                 QPointF efPoint = QPointF(ef.x, ef.y);
                 painter->drawLine(efPoint, mapFromScene(objectRubberPoint(QString())));
             }
-            else if(gripIndex == elemCount-1) //Last
+            else if (gripIndex == elemCount-1) //Last
             {
                 QPainterPath::Element el = normalPath.elementAt(gripIndex-1);
                 QPointF elPoint = QPointF(el.x, el.y);
@@ -145,7 +145,7 @@ void PolylineObject::vulcanize()
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
-    if(!normalPath.elementCount())
+    if (!normalPath.elementCount())
         QMessageBox::critical(0, QObject::tr("Empty Polyline Error"), QObject::tr("The polyline added contains no points. The command that created this object has flawed logic."));
 }
 
@@ -156,12 +156,12 @@ QPointF PolylineObject::mouseSnapPoint(const QPointF& mousePoint)
     QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
     qreal closestDist = QLineF(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
-    for(int i = 0; i < elemCount; ++i)
+    for (int i = 0; i < elemCount; ++i)
     {
         element = normalPath.elementAt(i);
         QPointF elemPoint = mapToScene(element.x, element.y);
         qreal elemDist = QLineF(mousePoint, elemPoint).length();
-        if(elemDist < closestDist)
+        if (elemDist < closestDist)
         {
             closestPoint = elemPoint;
             closestDist = elemDist;
@@ -174,7 +174,7 @@ QList<QPointF> PolylineObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     QPainterPath::Element element;
-    for(int i = 0; i < normalPath.elementCount(); ++i)
+    for (int i = 0; i < normalPath.elementCount(); ++i)
     {
         element = normalPath.elementAt(i);
         gripPoints << mapToScene(element.x, element.y);
@@ -187,11 +187,11 @@ int PolylineObject::findIndex(const QPointF& point)
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     QPointF itemPoint = mapFromScene(point);
-    for(int i = 0; i < elemCount; i++)
+    for (int i = 0; i < elemCount; i++)
     {
         QPainterPath::Element e = normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);
-        if(itemPoint == elemPoint) return i;
+        if (itemPoint == elemPoint) return i;
     }
     return -1;
 }
@@ -199,7 +199,7 @@ int PolylineObject::findIndex(const QPointF& point)
 void PolylineObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     gripIndex = findIndex(before);
-    if(gripIndex == -1) return;
+    if (gripIndex == -1) return;
     QPointF a = mapFromScene(after);
     normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
     updatePath(normalPath);

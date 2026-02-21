@@ -10,11 +10,11 @@ int readPhc(EmbPattern* pattern, const char* fileName)
     EmbFile* file = 0;
     int i;
 
-    if(!pattern) { embLog_error("format-phc.c readPhc(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-phc.c readPhc(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-phc.c readPhc(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-phc.c readPhc(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-phc.c readPhc(), cannot open %s for reading\n", fileName);
         return 0;
@@ -25,7 +25,7 @@ int readPhc(EmbPattern* pattern, const char* fileName)
     embFile_seek(file, 0x4D, SEEK_SET);
     colorChanges = binaryReadUInt16(file);
 
-    for(i = 0; i < colorChanges; i++)
+    for (i = 0; i < colorChanges; i++)
     {
         EmbThread t = pecThreads[(int)binaryReadByte(file)];
         embPattern_addThread(pattern, t);
@@ -46,7 +46,7 @@ int readPhc(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);
@@ -57,17 +57,17 @@ int readPhc(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writePhc(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-phc.c writePhc(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-phc.c writePhc(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-phc.c writePhc(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-phc.c writePhc(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-phc.c writePhc(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */

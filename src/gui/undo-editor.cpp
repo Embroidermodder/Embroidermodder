@@ -30,7 +30,7 @@ UndoEditor::~UndoEditor()
 
 void UndoEditor::updateCleanIcon(bool opened)
 {
-    if(opened)
+    if (opened)
     {
         undoView->setEmptyLabel(tr("Open"));
         undoView->setCleanIcon(QIcon(iconDir + "/" + "open" + ".png"));

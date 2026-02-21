@@ -16,7 +16,7 @@ EmbColor embColor_make(unsigned char r, unsigned char g, unsigned char b)
 EmbColor* embColor_create(unsigned char r, unsigned char g, unsigned char b)
 {
     EmbColor* heapColor = (EmbColor*)malloc(sizeof(EmbColor));
-    if(!heapColor) { embLog_error("emb-color.c embColor_create(), cannot allocate memory for heapColor\n"); return 0; }
+    if (!heapColor) { embLog_error("emb-color.c embColor_create(), cannot allocate memory for heapColor\n"); return 0; }
     heapColor->r = r;
     heapColor->g = g;
     heapColor->b = b;

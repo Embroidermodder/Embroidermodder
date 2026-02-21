@@ -39,7 +39,7 @@ EmbCircleObject embCircleObject_make(double cx, double cy, double r)
 EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 {
     EmbCircleObject* heapCircleObj = (EmbCircleObject*)malloc(sizeof(EmbCircleObject));
-    if(!heapCircleObj) { embLog_error("emb-circle.c embCircleObject_create(), cannot allocate memory for heapCircleObj\n"); return 0; }
+    if (!heapCircleObj) { embLog_error("emb-circle.c embCircleObject_create(), cannot allocate memory for heapCircleObj\n"); return 0; }
     heapCircleObj->circle.centerX = cx;
     heapCircleObj->circle.centerY = cy;
     heapCircleObj->circle.radius  = r;
@@ -53,7 +53,7 @@ EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 EmbCircleObjectList* embCircleObjectList_create(EmbCircleObject data)
 {
     EmbCircleObjectList* heapCircleObjList = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
-    if(!heapCircleObjList) { embLog_error("emb-circle.c embCircleObjectList_create(), cannot allocate memory for heapCircleObjList\n"); return 0; }
+    if (!heapCircleObjList) { embLog_error("emb-circle.c embCircleObjectList_create(), cannot allocate memory for heapCircleObjList\n"); return 0; }
     heapCircleObjList->circleObj = data;
     heapCircleObjList->next = 0;
     return heapCircleObjList;
@@ -61,10 +61,10 @@ EmbCircleObjectList* embCircleObjectList_create(EmbCircleObject data)
 
 EmbCircleObjectList* embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data)
 {
-    if(!pointer) { embLog_error("emb-circle.c embCircleObjectList_add(), pointer argument is null\n"); return 0; }
-    if(pointer->next) { embLog_error("emb-circle.c embCircleObjectList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-circle.c embCircleObjectList_add(), pointer argument is null\n"); return 0; }
+    if (pointer->next) { embLog_error("emb-circle.c embCircleObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
-    if(!pointer->next) { embLog_error("emb-circle.c embCircleObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) { embLog_error("emb-circle.c embCircleObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->circleObj = data;
     pointer->next = 0;
@@ -74,7 +74,7 @@ EmbCircleObjectList* embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCi
 int embCircleObjectList_count(EmbCircleObjectList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -85,7 +85,7 @@ int embCircleObjectList_count(EmbCircleObjectList* pointer)
 
 int embCircleObjectList_empty(EmbCircleObjectList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }

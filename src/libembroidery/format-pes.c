@@ -9,11 +9,11 @@ int readPes(EmbPattern* pattern, const char* fileName)
     int pecstart, numColors, x;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-pes.c readPes(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-pes.c readPes(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-pes.c readPes(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-pes.c readPes(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-pes.c readPes(), cannot open %s for reading\n", fileName);
         return 0;
@@ -24,7 +24,7 @@ int readPes(EmbPattern* pattern, const char* fileName)
 
     embFile_seek(file, pecstart + 48, SEEK_SET);
     numColors = embFile_getc(file) + 1;
-    for(x = 0; x < numColors; x++)
+    for (x = 0; x < numColors; x++)
     {
         embPattern_addThread(pattern, pecThreads[(unsigned char) embFile_getc(file)]);
     }
@@ -35,7 +35,7 @@ int readPes(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);
@@ -68,7 +68,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
         flag = pointer->stitch.flags;
         color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
         newColorCode = embThread_findNearestColorInArray(color, (EmbThread*)pecThreads, pecThreadCount);
-        if(newColorCode != colorCode)
+        if (newColorCode != colorCode)
         {
             colorCount++;
             colorCode = newColorCode;
@@ -99,7 +99,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
         flag = pointer->stitch.flags;
         color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
         newColorCode = embThread_findNearestColorInArray(color, (EmbThread*)pecThreads, pecThreadCount);
-        if(newColorCode != colorCode)
+        if (newColorCode != colorCode)
         {
             colorInfo[colorInfoIndex++] = (short)blockCount;
             colorInfo[colorInfoIndex++] = (short)newColorCode;
@@ -111,7 +111,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
             count++;
             pointer = pointer->next;
         }
-        if(flag & JUMP)
+        if (flag & JUMP)
         {
             stitchType = 1;
         }
@@ -131,7 +131,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
             binaryWriteShort(file, (short)(s.yy + bounds.top));
             pointer = pointer->next;
         }
-        if(pointer)
+        if (pointer)
         {
             binaryWriteShort(file, 0x8003);
         }
@@ -139,13 +139,13 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
         mainPointer = pointer;
     }
     binaryWriteShort(file, (short)colorCount);
-    for(i = 0; i < colorCount; i++)
+    for (i = 0; i < colorCount; i++)
     {
         binaryWriteShort(file, colorInfo[i * 2]);
         binaryWriteShort(file, colorInfo[i * 2 + 1]);
     }
     binaryWriteInt(file, 0);
-    if(colorInfo)
+    if (colorInfo)
     {
         free(colorInfo);
         colorInfo = 0;
@@ -186,7 +186,7 @@ static void pesWriteEmbOneSection(EmbPattern* pattern, EmbFile* file)
     binaryWriteShort(file, (short)embRect_width(bounds));
     binaryWriteShort(file, (short)embRect_height(bounds));
 
-    for(i = 0; i < 8; i++)
+    for (i = 0; i < 8; i++)
     {
         binaryWriteByte(file, 0);
     }
@@ -201,24 +201,24 @@ int writePes(EmbPattern* pattern, const char* fileName)
     int pecLocation;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-pes.c writePes(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-pes.c writePes(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-pes.c writePes(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-pes.c writePes(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-pes.c writePes(), cannot open %s for writing\n", fileName);
         return 0;
     }
 
-    if(!pattern->stitchList || embStitchList_count(pattern->stitchList) == 0) /* TODO: review this. seems like only embStitchList_count should be needed. */
+    if (!pattern->stitchList || embStitchList_count(pattern->stitchList) == 0) /* TODO: review this. seems like only embStitchList_count should be needed. */
     {
         embLog_error("format-pes.c writePes(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);

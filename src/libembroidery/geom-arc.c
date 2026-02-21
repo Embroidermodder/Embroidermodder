@@ -19,7 +19,7 @@ char isArcClockwise(double startx, double starty, double midx, double midy, doub
     double edge1 = (midx-startx)*(midy+starty);
     double edge2 = (endx-midx)*(endy+midy);
     double edge3 = (startx-endx)*(starty+endy);
-    if(edge1 + edge2 + edge3 >= 0.0)
+    if (edge1 + edge2 + edge3 >= 0.0)
         return 1;
     return 0;
 }
@@ -81,7 +81,7 @@ char getArcDataFromBulge(double bulge,
     double w, h, fx ,fy, dx, dy;
 
     /* Confirm the direction of the Bulge */
-    if(bulge >= 0.0) { *clockwise = 0; }
+    if (bulge >= 0.0) { *clockwise = 0; }
     else             { *clockwise = 1; }
 
     /* Calculate the Included Angle in Radians */
@@ -114,7 +114,7 @@ char getArcDataFromBulge(double bulge,
     chordAngleInRadians = atan2(dy, dx);
 
     /* Calculate the Sagitta Angle (from chordMid to arcMid) */
-    if(*clockwise) sagittaAngleInRadians = chordAngleInRadians + radians(90.0);
+    if (*clockwise) sagittaAngleInRadians = chordAngleInRadians + radians(90.0);
     else           sagittaAngleInRadians = chordAngleInRadians - radians(90.0);
 
     /* Calculate the Arc MidPoint */
@@ -130,7 +130,7 @@ char getArcDataFromBulge(double bulge,
     *incAngleInDegrees = degrees(incAngleInRadians);
 
     /* Confirm the direction of the Arc, it should match the Bulge */
-    if(*clockwise != isArcClockwise(arcStartX, arcStartY, *arcMidX, *arcMidY, arcEndX, arcEndY))
+    if (*clockwise != isArcClockwise(arcStartX, arcStartY, *arcMidX, *arcMidY, arcEndX, arcEndY))
     {
         fprintf(stderr, "Arc and Bulge direction do not match.\n");
         return 0;
@@ -219,7 +219,7 @@ int main(void)
     startY = 0.0;
     endX   = 2.0;
     endY   = 1.0;
-    if(getArcDataFromBulge(bulge,
+    if (getArcDataFromBulge(bulge,
                            startX,     startY,
                            endX,       endY,
                            /* returned data */
@@ -249,7 +249,7 @@ int main(void)
     startY = 0.0;
     endX   = 5.0;
     endY   = 1.0;
-    if(getArcDataFromBulge(bulge,
+    if (getArcDataFromBulge(bulge,
                            startX,     startY,
                            endX,       endY,
                            /* returned data */

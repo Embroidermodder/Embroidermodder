@@ -16,11 +16,11 @@ int readMit(EmbPattern* pattern, const char* fileName)
     unsigned char data[2];
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-mit.c readMit(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-mit.c readMit(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-mit.c readMit(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-mit.c readMit(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-mit.c readMit(), cannot open %s for reading\n", fileName);
         return 0;
@@ -36,7 +36,7 @@ int readMit(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -60,10 +60,10 @@ int writeMit(EmbPattern* pattern, const char* fileName)
     double xx = 0, yy = 0, dx = 0, dy = 0;
     int flags = 0;
 
-    if(!pattern) { embLog_error("format-mit.c writeMit(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-mit.c writeMit(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-mit.c writeMit(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-mit.c writeMit(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-mit.c writeMit(), pattern contains no stitches\n");
         return 0;

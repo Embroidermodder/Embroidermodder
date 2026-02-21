@@ -26,11 +26,11 @@ int readT01(EmbPattern* pattern, const char* fileName)
     unsigned char b[3];
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-t01.c readt01(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-t01.c readt01(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-t01.c readt01(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-t01.c readt01(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-t01.c readt01(), cannot open %s for reading\n", fileName);
         return 0;
@@ -43,55 +43,55 @@ int readT01(EmbPattern* pattern, const char* fileName)
         int flags;
         int x = 0;
         int y = 0;
-        if(b[0] & 0x01)
+        if (b[0] & 0x01)
             x += 1;
-        if(b[0] & 0x02)
+        if (b[0] & 0x02)
             x -= 1;
-        if(b[0] & 0x04)
+        if (b[0] & 0x04)
             x += 9;
-        if(b[0] & 0x08)
+        if (b[0] & 0x08)
             x -= 9;
-        if(b[0] & 0x80)
+        if (b[0] & 0x80)
             y += 1;
-        if(b[0] & 0x40)
+        if (b[0] & 0x40)
             y -= 1;
-        if(b[0] & 0x20)
+        if (b[0] & 0x20)
             y += 9;
-        if(b[0] & 0x10)
+        if (b[0] & 0x10)
             y -= 9;
-        if(b[1] & 0x01)
+        if (b[1] & 0x01)
             x += 3;
-        if(b[1] & 0x02)
+        if (b[1] & 0x02)
             x -= 3;
-        if(b[1] & 0x04)
+        if (b[1] & 0x04)
             x += 27;
-        if(b[1] & 0x08)
+        if (b[1] & 0x08)
             x -= 27;
-        if(b[1] & 0x80)
+        if (b[1] & 0x80)
             y += 3;
-        if(b[1] & 0x40)
+        if (b[1] & 0x40)
             y -= 3;
-        if(b[1] & 0x20)
+        if (b[1] & 0x20)
             y += 27;
-        if(b[1] & 0x10)
+        if (b[1] & 0x10)
             y -= 27;
-        if(b[2] & 0x04)
+        if (b[2] & 0x04)
             x += 81;
-        if(b[2] & 0x08)
+        if (b[2] & 0x08)
             x -= 81;
-        if(b[2] & 0x20)
+        if (b[2] & 0x20)
             y += 81;
-        if(b[2] & 0x10)
+        if (b[2] & 0x10)
             y -= 81;
         flags = decodeRecordFlags(b[2]);
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, flags, 1);
-        if(flags == END)
+        if (flags == END)
             break;
     }
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;

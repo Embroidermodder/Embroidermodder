@@ -13,13 +13,13 @@ static void BuildDecryptionTable(int seed)
     const int mul1 = 0x41C64E6D;
     const int add1 = 0x3039;
 
-    for(i = 0; i < CsdSubMaskSize; i++)
+    for (i = 0; i < CsdSubMaskSize; i++)
     {
         seed *= mul1;
         seed += add1;
         _subMask[i] = (char) ((seed >> 16) & 0xFF);
     }
-    for(i = 0; i < CsdXorMaskSize; i++)
+    for (i = 0; i < CsdXorMaskSize; i++)
     {
         seed *= mul1;
         seed += add1;
@@ -51,7 +51,7 @@ static unsigned char DecodeCsdByte(long fileOffset, unsigned char val, int type)
     int newOffset;
 
     fileOffset = fileOffset - 1;
-    if(type != 0)
+    if (type != 0)
     {
         int final;
         int fileOffsetHigh = (int) (fileOffset & 0xFFFFFF00);
@@ -60,19 +60,19 @@ static unsigned char DecodeCsdByte(long fileOffset, unsigned char val, int type)
         newOffset = fileOffsetLow;
         fileOffsetLow = fileOffsetHigh;
         final = fileOffsetLow%0x300;
-        if(final != 0x100 && final != 0x200)
+        if (final != 0x100 && final != 0x200)
         {
             newOffset = _decryptArray[newOffset] | fileOffsetHigh;
         }
-        else if(final != 0x100 && final == 0x200)
+        else if (final != 0x100 && final == 0x200)
         {
-            if(newOffset == 0)
+            if (newOffset == 0)
             {
                 fileOffsetHigh = fileOffsetHigh - 0x100;
             }
             newOffset = _decryptArray[newOffset] | fileOffsetHigh;
         }
-        else if(newOffset != 1 && newOffset != 0)
+        else if (newOffset != 1 && newOffset != 0)
         {
             newOffset = _decryptArray[newOffset] | fileOffsetHigh;
         }
@@ -103,11 +103,11 @@ int readCsd(EmbPattern* pattern, const char* fileName)
     EmbFile* file = 0;
     unsigned char colorOrder[14];
 
-    if(!pattern) { embLog_error("format-csd.c readCsd(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-csd.c readCsd(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-csd.c readCsd(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-csd.c readCsd(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-csd.c readCsd(), cannot open %s for reading\n", fileName);
         return 0;
@@ -115,11 +115,11 @@ int readCsd(EmbPattern* pattern, const char* fileName)
 
     binaryReadBytes(file, identifier, 8); /* TODO: check return value */
 
-    if(identifier[0] != 0x7C && identifier[2] != 0xC3)
+    if (identifier[0] != 0x7C && identifier[2] != 0xC3)
     {
         type = 1;
     }
-    if(type == 0)
+    if (type == 0)
     {
         BuildDecryptionTable(0xC);
     }
@@ -128,7 +128,7 @@ int readCsd(EmbPattern* pattern, const char* fileName)
         BuildDecryptionTable(identifier[0]);
     }
     embFile_seek(file, 8, SEEK_SET);
-    for(i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++)
     {
         EmbThread thread;
         thread.color.r = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
@@ -141,18 +141,18 @@ int readCsd(EmbPattern* pattern, const char* fileName)
     unknown1 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
     unknown2 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
 
-    for(i = 0; i < 14; i++)
+    for (i = 0; i < 14; i++)
     {
         colorOrder[i] = (unsigned char) DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
     }
-    for(i = 0; !endOfStream; i++)
+    for (i = 0; !endOfStream; i++)
     {
         char negativeX, negativeY;
         unsigned char b0 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
         unsigned char b1 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
         unsigned char b2 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
 
-        if(b0 == 0xF8 || b0 == 0x87 || b0 == 0x91)
+        if (b0 == 0xF8 || b0 == 0x87 || b0 == 0x91)
         {
             break;
         }
@@ -160,30 +160,30 @@ int readCsd(EmbPattern* pattern, const char* fileName)
         negativeY = ((b0 & 0x40) > 0);
         b0 = (unsigned char)(b0 & (0xFF ^ 0xE0));
 
-        if((b0 & 0x1F) == 0) flags = NORMAL;
-        else if((b0 & 0x0C) > 0)
+        if ((b0 & 0x1F) == 0) flags = NORMAL;
+        else if ((b0 & 0x0C) > 0)
         {
             flags = STOP;
-            if(colorChange >= 14)
+            if (colorChange >= 14)
             {
                 printf("Invalid color change detected\n");
             }
             embPattern_changeColor(pattern, colorOrder[colorChange  % 14]);
             colorChange += 1;
         }
-        else if((b0 & 0x1F) > 0) flags = TRIM;
+        else if ((b0 & 0x1F) > 0) flags = TRIM;
         else flags = NORMAL;
         dx = (char) b2;
         dy = (char) b1;
-        if(negativeX) dx = (char) -dx;
-        if(negativeY) dy = (char) -dy;
-        if(flags == STOP) embPattern_addStitchRel(pattern, 0, 0, flags, 1);
+        if (negativeX) dx = (char) -dx;
+        if (negativeY) dy = (char) -dy;
+        if (flags == STOP) embPattern_addStitchRel(pattern, 0, 0, flags, 1);
         else embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -193,17 +193,17 @@ int readCsd(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeCsd(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-csd.c writeCsd(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-csd.c writeCsd(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-csd.c writeCsd(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-csd.c writeCsd(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-csd.c writeCsd(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */

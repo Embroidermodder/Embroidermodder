@@ -14,7 +14,7 @@ TextSingleObject::TextSingleObject(const QString& str, qreal x, qreal y, QRgb rg
 TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("TextSingleObject Constructor()");
-    if(obj)
+    if (obj)
     {
         setObjectTextFont(obj->objectTextFont());
         setObjectTextSize(obj->objectTextSize());
@@ -79,28 +79,28 @@ void TextSingleObject::setObjectText(const QString& str)
     //Translate the path based on the justification
     QRectF jRect = textPath.boundingRect();
     if     (objTextJustify == "Left")          { textPath.translate(-jRect.left(), 0); }
-    else if(objTextJustify == "Center")        { textPath.translate(-jRect.center().x(), 0); }
-    else if(objTextJustify == "Right")         { textPath.translate(-jRect.right(), 0); }
-    else if(objTextJustify == "Aligned")       { } //TODO: TextSingleObject Aligned Justification
-    else if(objTextJustify == "Middle")        { textPath.translate(-jRect.center()); }
-    else if(objTextJustify == "Fit")           { } //TODO: TextSingleObject Fit Justification
-    else if(objTextJustify == "Top Left")      { textPath.translate(-jRect.topLeft()); }
-    else if(objTextJustify == "Top Center")    { textPath.translate(-jRect.center().x(), -jRect.top()); }
-    else if(objTextJustify == "Top Right")     { textPath.translate(-jRect.topRight()); }
-    else if(objTextJustify == "Middle Left")   { textPath.translate(-jRect.left(), -jRect.top()/2.0); }
-    else if(objTextJustify == "Middle Center") { textPath.translate(-jRect.center().x(), -jRect.top()/2.0); }
-    else if(objTextJustify == "Middle Right")  { textPath.translate(-jRect.right(), -jRect.top()/2.0); }
-    else if(objTextJustify == "Bottom Left")   { textPath.translate(-jRect.bottomLeft()); }
-    else if(objTextJustify == "Bottom Center") { textPath.translate(-jRect.center().x(), -jRect.bottom()); }
-    else if(objTextJustify == "Bottom Right")  { textPath.translate(-jRect.bottomRight()); }
+    else if (objTextJustify == "Center")        { textPath.translate(-jRect.center().x(), 0); }
+    else if (objTextJustify == "Right")         { textPath.translate(-jRect.right(), 0); }
+    else if (objTextJustify == "Aligned")       { } //TODO: TextSingleObject Aligned Justification
+    else if (objTextJustify == "Middle")        { textPath.translate(-jRect.center()); }
+    else if (objTextJustify == "Fit")           { } //TODO: TextSingleObject Fit Justification
+    else if (objTextJustify == "Top Left")      { textPath.translate(-jRect.topLeft()); }
+    else if (objTextJustify == "Top Center")    { textPath.translate(-jRect.center().x(), -jRect.top()); }
+    else if (objTextJustify == "Top Right")     { textPath.translate(-jRect.topRight()); }
+    else if (objTextJustify == "Middle Left")   { textPath.translate(-jRect.left(), -jRect.top()/2.0); }
+    else if (objTextJustify == "Middle Center") { textPath.translate(-jRect.center().x(), -jRect.top()/2.0); }
+    else if (objTextJustify == "Middle Right")  { textPath.translate(-jRect.right(), -jRect.top()/2.0); }
+    else if (objTextJustify == "Bottom Left")   { textPath.translate(-jRect.bottomLeft()); }
+    else if (objTextJustify == "Bottom Center") { textPath.translate(-jRect.center().x(), -jRect.bottom()); }
+    else if (objTextJustify == "Bottom Right")  { textPath.translate(-jRect.bottomRight()); }
 
     //Backward or Upside Down
-    if(objTextBackward || objTextUpsideDown)
+    if (objTextBackward || objTextUpsideDown)
     {
         qreal horiz = 1.0;
         qreal vert = 1.0;
-        if(objTextBackward) horiz = -1.0;
-        if(objTextUpsideDown) vert = -1.0;
+        if (objTextBackward) horiz = -1.0;
+        if (objTextUpsideDown) vert = -1.0;
 
         QPainterPath flippedPath;
 
@@ -108,18 +108,18 @@ void TextSingleObject::setObjectText(const QString& str)
         QPainterPath::Element P2;
         QPainterPath::Element P3;
         QPainterPath::Element P4;
-        for(int i = 0; i < textPath.elementCount(); ++i)
+        for (int i = 0; i < textPath.elementCount(); ++i)
         {
             element = textPath.elementAt(i);
-            if(element.isMoveTo())
+            if (element.isMoveTo())
             {
                 flippedPath.moveTo(horiz * element.x, vert * element.y);
             }
-            else if(element.isLineTo())
+            else if (element.isLineTo())
             {
                 flippedPath.lineTo(horiz * element.x, vert * element.y);
             }
-            else if(element.isCurveTo())
+            else if (element.isCurveTo())
             {
                                               // start point P1 is not needed
                 P2 = textPath.elementAt(i);   // control point
@@ -153,20 +153,20 @@ void TextSingleObject::setObjectTextJustify(const QString& justify)
 {
     //Verify the string is a valid option
     if     (justify == "Left")          { objTextJustify = justify; }
-    else if(justify == "Center")        { objTextJustify = justify; }
-    else if(justify == "Right")         { objTextJustify = justify; }
-    else if(justify == "Aligned")       { objTextJustify = justify; }
-    else if(justify == "Middle")        { objTextJustify = justify; }
-    else if(justify == "Fit")           { objTextJustify = justify; }
-    else if(justify == "Top Left")      { objTextJustify = justify; }
-    else if(justify == "Top Center")    { objTextJustify = justify; }
-    else if(justify == "Top Right")     { objTextJustify = justify; }
-    else if(justify == "Middle Left")   { objTextJustify = justify; }
-    else if(justify == "Middle Center") { objTextJustify = justify; }
-    else if(justify == "Middle Right")  { objTextJustify = justify; }
-    else if(justify == "Bottom Left")   { objTextJustify = justify; }
-    else if(justify == "Bottom Center") { objTextJustify = justify; }
-    else if(justify == "Bottom Right")  { objTextJustify = justify; }
+    else if (justify == "Center")        { objTextJustify = justify; }
+    else if (justify == "Right")         { objTextJustify = justify; }
+    else if (justify == "Aligned")       { objTextJustify = justify; }
+    else if (justify == "Middle")        { objTextJustify = justify; }
+    else if (justify == "Fit")           { objTextJustify = justify; }
+    else if (justify == "Top Left")      { objTextJustify = justify; }
+    else if (justify == "Top Center")    { objTextJustify = justify; }
+    else if (justify == "Top Right")     { objTextJustify = justify; }
+    else if (justify == "Middle Left")   { objTextJustify = justify; }
+    else if (justify == "Middle Center") { objTextJustify = justify; }
+    else if (justify == "Middle Right")  { objTextJustify = justify; }
+    else if (justify == "Bottom Left")   { objTextJustify = justify; }
+    else if (justify == "Bottom Center") { objTextJustify = justify; }
+    else if (justify == "Bottom Right")  { objTextJustify = justify; }
     else                                { objTextJustify = "Left";  } //Default
     setObjectText(objText);
 }
@@ -232,13 +232,13 @@ void TextSingleObject::setObjectTextUpsideDown(bool val)
 void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPath(objTextPath);
@@ -247,7 +247,7 @@ void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 void TextSingleObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_TEXTSINGLE)
+    if (rubberMode == OBJ_RUBBER_TEXTSINGLE)
     {
         setObjectTextFont(objectRubberText("TEXT_FONT"));
         setObjectTextJustify(objectRubberText("TEXT_JUSTIFY"));
@@ -257,12 +257,12 @@ void TextSingleObject::updateRubber(QPainter* painter)
         setRotation(hr.y());
         setObjectText(objectRubberText("TEXT_RAPID"));
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
-        if(painter)
+        if (painter)
         {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripPoint == scenePos())
+            if (gripPoint == scenePos())
             {
                 painter->drawPath(objectPath().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
             }
@@ -296,7 +296,7 @@ QList<QPointF> TextSingleObject::allGripPoints()
 
 void TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 QList<QPainterPath> TextSingleObject::subPathList() const
@@ -314,10 +314,10 @@ QList<QPainterPath> TextSingleObject::subPathList() const
     QList<int> pathMoves;
     int numMoves = 0;
 
-    for(int i = 0; i < path.elementCount(); i++)
+    for (int i = 0; i < path.elementCount(); i++)
     {
         element = path.elementAt(i);
-        if(element.isMoveTo())
+        if (element.isMoveTo())
         {
             pathMoves << i;
             numMoves++;
@@ -326,21 +326,21 @@ QList<QPainterPath> TextSingleObject::subPathList() const
 
     pathMoves << path.elementCount();
 
-    for(int p = 0; p < pathMoves.size()-1 && p < numMoves; p++)
+    for (int p = 0; p < pathMoves.size()-1 && p < numMoves; p++)
     {
         QPainterPath subPath;
-        for(int i = pathMoves.value(p); i < pathMoves.value(p+1); i++)
+        for (int i = pathMoves.value(p); i < pathMoves.value(p+1); i++)
         {
             element = path.elementAt(i);
-            if(element.isMoveTo())
+            if (element.isMoveTo())
             {
                 subPath.moveTo(element.x, element.y);
             }
-            else if(element.isLineTo())
+            else if (element.isLineTo())
             {
                 subPath.lineTo(element.x, element.y);
             }
-            else if(element.isCurveTo())
+            else if (element.isCurveTo())
             {
                 subPath.cubicTo(path.elementAt(i  ).x, path.elementAt(i  ).y,  //control point 1
                                 path.elementAt(i+1).x, path.elementAt(i+1).y,  //control point 2

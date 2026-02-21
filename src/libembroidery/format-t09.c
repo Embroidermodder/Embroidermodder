@@ -7,11 +7,11 @@ int readT09(EmbPattern* pattern, const char* fileName)
     unsigned char b[3];
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-t09.c readT09(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-t09.c readT09(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-t09.c readT09(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-t09.c readT09(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-t09.c readT09(), cannot open %s for reading\n", fileName);
         return 0;
@@ -25,21 +25,21 @@ int readT09(EmbPattern* pattern, const char* fileName)
         int b1 = b[0];
         int b2 = b[1];
         unsigned char commandByte = b[2];
-        if(commandByte == 0x00)
+        if (commandByte == 0x00)
         {
             embPattern_addStitchRel(pattern, 0, 0, END, 1);
             break;
         }
-        if(commandByte & 0x10) stitchType = STOP;
-        if(commandByte & 0x20) b1 = -b1;
-        if(commandByte & 0x40) b2 = -b2;
+        if (commandByte & 0x10) stitchType = STOP;
+        if (commandByte & 0x20) b1 = -b1;
+        if (commandByte & 0x40) b2 = -b2;
 
         embPattern_addStitchRel(pattern, b2 / 10.0, b1 / 10.0, stitchType, 1);
     }
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -49,17 +49,17 @@ int readT09(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeT09(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-t09.c writeT09(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-t09.c writeT09(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-t09.c writeT09(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-t09.c writeT09(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-t09.c writeT09(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */

@@ -19,7 +19,7 @@ void getLineIntersection(double  lineAx1,    double  lineAy1,
 
     double det = A1*B2 - A2*B1;
 
-    if(det == 0)
+    if (det == 0)
     {
         printf("Intersecting lines cannot be parallel.\n");
         return;

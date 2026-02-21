@@ -12,24 +12,24 @@ bcf_file_difat* bcf_difat_create(EmbFile* file, unsigned int fatSectors, const u
     unsigned int sectorRef;
 
     difat = (bcf_file_difat*)malloc(sizeof(bcf_file_difat));
-    if(!difat) { embLog_error("compound-file-difat.c bcf_difat_create(), cannot allocate memory for difat\n"); } /* TODO: avoid crashing. null pointer will be accessed */
+    if (!difat) { embLog_error("compound-file-difat.c bcf_difat_create(), cannot allocate memory for difat\n"); } /* TODO: avoid crashing. null pointer will be accessed */
 
     difat->sectorSize = sectorSize;
-    if(fatSectors > NumberOfDifatEntriesInHeader)
+    if (fatSectors > NumberOfDifatEntriesInHeader)
     {
         fatSectors = NumberOfDifatEntriesInHeader;
     }
 
-    for(i = 0; i < fatSectors; ++i)
+    for (i = 0; i < fatSectors; ++i)
     {
         sectorRef = binaryReadUInt32(file);
         difat->fatSectorEntries[i] = sectorRef;
     }
     difat->fatSectorCount = fatSectors;
-    for(i = fatSectors; i < NumberOfDifatEntriesInHeader; ++i)
+    for (i = fatSectors; i < NumberOfDifatEntriesInHeader; ++i)
     {
         sectorRef = binaryReadUInt32(file);
-        if(sectorRef != CompoundFileSector_FreeSector)
+        if (sectorRef != CompoundFileSector_FreeSector)
         {
             embLog_error("compound-file-difat.c bcf_difat_create(), Unexpected sector value %x at DIFAT[%d]\n", sectorRef, i);
         }
@@ -48,7 +48,7 @@ unsigned int readFullSector(EmbFile* file, bcf_file_difat* bcfFile, unsigned int
     unsigned int sectorRef;
     unsigned int nextDifatSectorInChain;
     unsigned int entriesToReadInThisSector = 0;
-    if(*numberOfDifatEntriesStillToRead > numberOfEntriesInDifatSector(bcfFile))
+    if (*numberOfDifatEntriesStillToRead > numberOfEntriesInDifatSector(bcfFile))
     {
         entriesToReadInThisSector = numberOfEntriesInDifatSector(bcfFile);
         *numberOfDifatEntriesStillToRead -= entriesToReadInThisSector;
@@ -59,16 +59,16 @@ unsigned int readFullSector(EmbFile* file, bcf_file_difat* bcfFile, unsigned int
         *numberOfDifatEntriesStillToRead = 0;
     }
 
-    for(i = 0; i < entriesToReadInThisSector; ++i)
+    for (i = 0; i < entriesToReadInThisSector; ++i)
     {
         sectorRef = binaryReadUInt32(file);
         bcfFile->fatSectorEntries[bcfFile->fatSectorCount]= sectorRef;
         bcfFile->fatSectorCount++;
     }
-    for(i = entriesToReadInThisSector; i < numberOfEntriesInDifatSector(bcfFile); ++i)
+    for (i = entriesToReadInThisSector; i < numberOfEntriesInDifatSector(bcfFile); ++i)
     {
         sectorRef = binaryReadUInt32(file);
-        if(sectorRef != CompoundFileSector_FreeSector)
+        if (sectorRef != CompoundFileSector_FreeSector)
         {
             embLog_error("compound-file-difat.c readFullSector(), Unexpected sector value %x at DIFAT[%d]]\n", sectorRef, i);
         }

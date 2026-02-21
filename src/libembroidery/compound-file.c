@@ -9,11 +9,11 @@ static unsigned int sizeOfDirectoryEntry = 128;
 static unsigned int sectorSize(bcf_file* bcfFile)
 {
     /* version 3 uses 512 byte */
-    if(bcfFile->header.majorVersion == 3)
+    if (bcfFile->header.majorVersion == 3)
     {
         return 512;
     }
-    else if(bcfFile->header.majorVersion == 4)
+    else if (bcfFile->header.majorVersion == 4)
     {
         return 4096;
     }
@@ -53,20 +53,20 @@ int bcfFile_read(EmbFile* file, bcf_file* bcfFile)
     unsigned int i, numberOfDirectoryEntriesPerSector, directorySectorToReadFrom;
 
     bcfFile->header = bcfFileHeader_read(file);
-    if(!bcfFileHeader_isValid(bcfFile->header))
+    if (!bcfFileHeader_isValid(bcfFile->header))
     {
         printf( "Failed to parse header\n" );
         return 0;
     }
 
     bcfFile->difat = bcf_difat_create(file, bcfFile->header.numberOfFATSectors, sectorSize(bcfFile));
-    if(haveExtraDIFATSectors(bcfFile))
+    if (haveExtraDIFATSectors(bcfFile))
     {
         parseDIFATSectors(file, bcfFile);
     }
 
     bcfFile->fat = bcfFileFat_create(sectorSize(bcfFile));
-    for(i = 0; i < bcfFile->header.numberOfFATSectors; ++i)
+    for (i = 0; i < bcfFile->header.numberOfFATSectors; ++i)
     {
         unsigned int fatSectorNumber = bcfFile->difat->fatSectorEntries[i];
         seekToSector(bcfFile, file, fatSectorNumber);
@@ -94,22 +94,22 @@ EmbFile* GetFile(bcf_file* bcfFile, EmbFile* file, char* fileToFind)
     bcf_directory_entry* pointer = bcfFile->directory->dirEntries;
     while(pointer)
     {
-        if(strcmp(fileToFind, pointer->directoryEntryName) == 0)
+        if (strcmp(fileToFind, pointer->directoryEntryName) == 0)
         break;
         pointer = pointer->next;
     }
     filesize = pointer->streamSize;
     sectorSize = bcfFile->difat->sectorSize;
     input = (char*)malloc(sectorSize);
-    if(!input) { embLog_error("compound-file.c GetFile(), cannot allocate memory for input\n"); } /* TODO: avoid crashing. null pointer will be accessed */
+    if (!input) { embLog_error("compound-file.c GetFile(), cannot allocate memory for input\n"); } /* TODO: avoid crashing. null pointer will be accessed */
     currentSize = 0;
     currentSector = pointer->startingSectorLocation;
     totalSectors = (int)ceil((float)filesize / sectorSize);
-    for(i = 0; i < totalSectors; i++)
+    for (i = 0; i < totalSectors; i++)
     {
         seekToSector(bcfFile, file, currentSector);
         sizeToWrite = filesize - currentSize;
-        if(sectorSize < sizeToWrite)
+        if (sectorSize < sizeToWrite)
         {
             sizeToWrite = sectorSize;
         }

@@ -13,11 +13,11 @@ int readNew(EmbPattern* pattern, const char* fileName)
     unsigned char data[3];
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-new.c readNew(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-new.c readNew(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-new.c readNew(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-new.c readNew(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-new.c readNew(), cannot open %s for reading\n", fileName);
         return 0;
@@ -31,23 +31,23 @@ int readNew(EmbPattern* pattern, const char* fileName)
         int y = decodeNewStitch(data[1]);
         int flag = NORMAL;
         char val = data[2];
-        if(data[2] & 0x40)
+        if (data[2] & 0x40)
         {
             x = -x;
         }
-        if(data[2] & 0x20)
+        if (data[2] & 0x20)
         {
             y = -y;
         }
-        if(data[2] & 0x10)
+        if (data[2] & 0x10)
         {
             flag = TRIM;
         }
-        if(data[2] & 0x01)
+        if (data[2] & 0x01)
         {
             flag = JUMP;
         }
-        if((val & 0x1E) == 0x02)
+        if ((val & 0x1E) == 0x02)
         {
             flag = STOP;
         }
@@ -56,7 +56,7 @@ int readNew(EmbPattern* pattern, const char* fileName)
         145 = 1001 0001 = 0x91
         */
         /*val = (data[2] & 0x1C);
-        if(val != 0 && data[2] != 0x9B && data[2] != 0x91)
+        if (val != 0 && data[2] != 0x9B && data[2] != 0x91)
         {
             int z = 1;
         }*/
@@ -66,7 +66,7 @@ int readNew(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -76,17 +76,17 @@ int readNew(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeNew(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-new.c writeNew(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-new.c writeNew(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-new.c writeNew(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-new.c writeNew(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-new.c writeNew(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */

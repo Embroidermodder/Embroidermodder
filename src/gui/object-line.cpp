@@ -14,7 +14,7 @@ LineObject::LineObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphi
 LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("LineObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
@@ -119,24 +119,24 @@ qreal LineObject::objectAngle() const
 void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    if(objectRubberMode() != OBJ_RUBBER_LINE) painter->drawLine(line());
+    if (objectRubberMode() != OBJ_RUBBER_LINE) painter->drawLine(line());
 
-    if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, path()); }
+    if (objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, path()); }
 }
 
 void LineObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_LINE)
+    if (rubberMode == OBJ_RUBBER_LINE)
     {
         QPointF sceneStartPoint = objectRubberPoint("LINE_START");
         QPointF sceneQSnapPoint = objectRubberPoint("LINE_END");
@@ -146,14 +146,14 @@ void LineObject::updateRubber(QPainter* painter)
 
         drawRubberLine(line(), painter, VIEW_COLOR_CROSSHAIR);
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
-        if(painter)
+        if (painter)
         {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if     (gripPoint == objectEndPoint1()) painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
-            else if(gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
-            else if(gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+            else if (gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+            else if (gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -183,8 +183,8 @@ QPointF LineObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(end1Dist, end2Dist), midDist);
 
     if     (minDist == end1Dist) return endPoint1;
-    else if(minDist == end2Dist) return endPoint2;
-    else if(minDist == midDist)  return midPoint;
+    else if (minDist == end2Dist) return endPoint2;
+    else if (minDist == midDist)  return midPoint;
 
     return scenePos();
 }
@@ -199,8 +199,8 @@ QList<QPointF> LineObject::allGripPoints()
 void LineObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
-    else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
-    else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    else if (before == objectEndPoint2()) { setObjectEndPoint2(after); }
+    else if (before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 QPainterPath LineObject::objectSavePath() const

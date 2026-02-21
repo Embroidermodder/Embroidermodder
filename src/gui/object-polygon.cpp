@@ -15,7 +15,7 @@ PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, 
 PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolygonObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -60,16 +60,16 @@ void PolygonObject::updatePath(const QPainterPath& p)
 void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    if(normalPath.elementCount())
+    if (normalPath.elementCount())
     {
         painter->drawPath(normalPath);
         QPainterPath::Element zero = normalPath.elementAt(0);
@@ -81,20 +81,20 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 void PolygonObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_POLYGON)
+    if (rubberMode == OBJ_RUBBER_POLYGON)
     {
         setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
 
         bool ok = false;
         QString numStr = objectRubberText("POLYGON_NUM_POINTS");
-        if(numStr.isNull()) return;
+        if (numStr.isNull()) return;
         int num = numStr.toInt(&ok);
-        if(!ok) return;
+        if (!ok) return;
 
         QString appendStr;
         QPainterPath rubberPath;
         rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
-        for(int i = 1; i <= num; i++)
+        for (int i = 1; i <= num; i++)
         {
             appendStr = "POLYGON_POINT_" + QString().setNum(i);
             QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
@@ -106,7 +106,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         //Ensure the path isn't updated until the number of points is changed again
         setObjectRubberText("POLYGON_NUM_POINTS", QString());
     }
-    else if(rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE)
+    else if (rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE)
     {
         setObjectPos(objectRubberPoint("POLYGON_CENTER"));
 
@@ -117,20 +117,20 @@ void PolygonObject::updateRubber(QPainter* painter)
         qreal inscribeAngle = inscribeLine.angle();
         qreal inscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
 
         QPainterPath inscribePath;
         //First Point
         inscribePath.moveTo(inscribePoint);
         //Remaining Points
-        for(int i = 1; i < numSides; i++)
+        for (int i = 1; i < numSides; i++)
         {
             inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
             inscribePath.lineTo(inscribeLine.p2());
         }
         updatePath(inscribePath);
     }
-    else if(rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE)
+    else if (rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE)
     {
         setObjectPos(objectRubberPoint("POLYGON_CENTER"));
 
@@ -141,7 +141,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         qreal circumscribeAngle = circumscribeLine.angle();
         qreal circumscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
 
         QPainterPath circumscribePath;
         //First Point
@@ -154,7 +154,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         perp.intersects(prev, &iPoint);
         circumscribePath.moveTo(iPoint);
         //Remaining Points
-        for(int i = 2; i <= numSides; i++)
+        for (int i = 2; i <= numSides; i++)
         {
             prev = perp;
             circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
@@ -165,20 +165,20 @@ void PolygonObject::updateRubber(QPainter* painter)
         }
         updatePath(circumscribePath);
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
-        if(painter)
+        if (painter)
         {
             int elemCount = normalPath.elementCount();
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripIndex == -1) gripIndex = findIndex(gripPoint);
-            if(gripIndex == -1) return;
+            if (gripIndex == -1) gripIndex = findIndex(gripPoint);
+            if (gripIndex == -1) return;
 
             int m = 0;
             int n = 0;
 
-            if(!gripIndex)                    { m = elemCount-1; n = 1; }
-            else if(gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
+            if (!gripIndex)                    { m = elemCount-1; n = 1; }
+            else if (gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
             else                              { m = gripIndex-1; n = gripIndex+1; }
             QPainterPath::Element em = normalPath.elementAt(m);
             QPainterPath::Element en = normalPath.elementAt(n);
@@ -200,7 +200,7 @@ void PolygonObject::vulcanize()
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
-    if(!normalPath.elementCount())
+    if (!normalPath.elementCount())
         QMessageBox::critical(0, QObject::tr("Empty Polygon Error"), QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
 }
 
@@ -211,12 +211,12 @@ QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
     QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
     qreal closestDist = QLineF(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
-    for(int i = 0; i < elemCount; ++i)
+    for (int i = 0; i < elemCount; ++i)
     {
         element = normalPath.elementAt(i);
         QPointF elemPoint = mapToScene(element.x, element.y);
         qreal elemDist = QLineF(mousePoint, elemPoint).length();
-        if(elemDist < closestDist)
+        if (elemDist < closestDist)
         {
             closestPoint = elemPoint;
             closestDist = elemDist;
@@ -229,7 +229,7 @@ QList<QPointF> PolygonObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     QPainterPath::Element element;
-    for(int i = 0; i < normalPath.elementCount(); ++i)
+    for (int i = 0; i < normalPath.elementCount(); ++i)
     {
         element = normalPath.elementAt(i);
         gripPoints << mapToScene(element.x, element.y);
@@ -243,11 +243,11 @@ int PolygonObject::findIndex(const QPointF& point)
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     QPointF itemPoint = mapFromScene(point);
-    for(i = 0; i < elemCount; i++)
+    for (i = 0; i < elemCount; i++)
     {
         QPainterPath::Element e = normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);
-        if(itemPoint == elemPoint) return i;
+        if (itemPoint == elemPoint) return i;
     }
     return -1;
 }
@@ -255,7 +255,7 @@ int PolygonObject::findIndex(const QPointF& point)
 void PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     gripIndex = findIndex(before);
-    if(gripIndex == -1) return;
+    if (gripIndex == -1) return;
     QPointF a = mapFromScene(after);
     normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
     updatePath(normalPath);
