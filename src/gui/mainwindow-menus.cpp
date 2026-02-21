@@ -43,6 +43,7 @@ void MainWindow::createEditMenu()
     editMenu->addAction(actionHash.value(ACTION_copy));
     editMenu->addAction(actionHash.value(ACTION_paste));
     editMenu->addSeparator();
+    editMenu->addAction(actionHash.value(ACTION_settingsdialog));
     editMenu->setTearOffEnabled(true);
 }
 
@@ -90,15 +91,6 @@ void MainWindow::createViewMenu()
     panMenu->setTearOffEnabled(true);
 }
 
-void MainWindow::createSettingsMenu()
-{
-    qDebug("MainWindow createSettingsMenu()");
-    menuBar()->addMenu(settingsMenu);
-    settingsMenu->addAction(actionHash.value(ACTION_settingsdialog));
-    settingsMenu->addSeparator();
-    settingsMenu->setTearOffEnabled(true);
-}
-
 void MainWindow::createWindowMenu()
 {
     qDebug("MainWindow createWindowMenu()");
@@ -131,10 +123,8 @@ void MainWindow::createAllMenus()
     createFileMenu();
     createEditMenu();
     createViewMenu();
-    createSettingsMenu();
     createWindowMenu();
     createHelpMenu();
 
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

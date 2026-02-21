@@ -183,14 +183,12 @@ private:
     void createFileMenu();
     void createEditMenu();
     void createViewMenu();
-    void createSettingsMenu();
     void createWindowMenu();
     void createHelpMenu();
 
     QMenu* fileMenu;
     QMenu* editMenu;
     QMenu* viewMenu;
-    QMenu* settingsMenu;
     QMenu* windowMenu;
     QMenu* helpMenu;
     //====================================================

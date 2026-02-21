@@ -104,7 +104,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     fileMenu     = new QMenu(tr("&File"),     this);
     editMenu     = new QMenu(tr("&Edit"),     this);
     viewMenu     = new QMenu(tr("&View"),     this);
-    settingsMenu = new QMenu(tr("&Settings"), this);
     windowMenu   = new QMenu(tr("&Window"),   this);
     helpMenu     = new QMenu(tr("&Help"),     this);
     //SubMenus
@@ -674,7 +673,6 @@ void MainWindow::updateMenuToolbarStatusbar()
             menuBar()->addMenu(menu);
         }
 
-        menuBar()->addMenu(settingsMenu);
         menuBar()->addMenu(windowMenu);
         menuBar()->addMenu(helpMenu);
 
@@ -717,7 +715,6 @@ void MainWindow::updateMenuToolbarStatusbar()
         menuBar()->clear();
         menuBar()->addMenu(fileMenu);
         menuBar()->addMenu(editMenu);
-        menuBar()->addMenu(settingsMenu);
         menuBar()->addMenu(windowMenu);
         menuBar()->addMenu(helpMenu);
 
