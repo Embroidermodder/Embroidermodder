@@ -10,7 +10,7 @@
  *      "windowprevious" QKeySequence::PreviousChild
  */
 
-#include "commands.h"
+#include "core.h"
 
 CommandData command_table[] = {
     {

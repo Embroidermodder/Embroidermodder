@@ -875,22 +875,26 @@ bool MainWindow::textOverline()
     return state.settings.text_style_overline;
 }
 
-void MainWindow::setTextFont(const QString& str)
+void
+MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    state.settings.text_font = str;
+    state.settings.text_font = sdscpy(state.settings.text_font, qPrintable(str));
 }
 
-void MainWindow::setTextSize(qreal num)
+void
+MainWindow::setTextSize(qreal num)
 {
     state.settings.text_size = qFabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
-    if (index != -1)
+    if (index != -1) {
         textSizeSelector->removeItem(index);
+    }
     textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
     index = textSizeSelector->findText("Custom", Qt::MatchContains);
-    if (index != -1)
+    if (index != -1) {
         textSizeSelector->setCurrentIndex(index);
+    }
 }
 
 void MainWindow::setTextAngle(qreal num)

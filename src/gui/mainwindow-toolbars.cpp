@@ -316,4 +316,3 @@ void MainWindow::createAllToolbars()
     //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -9,9 +9,8 @@
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
-#include "commands.h"
 #include "cmdprompt.h"
-#include "state.h"
+#include "core.h"
 
 class MdiArea;
 class MdiWindow;

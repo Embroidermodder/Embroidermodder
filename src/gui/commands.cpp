@@ -4,7 +4,6 @@
  */
 
 #include "mainwindow.h"
-#include "commands.h"
 
 QtScriptEnv script_env;
 

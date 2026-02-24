@@ -52,20 +52,18 @@ add_subdirectory(extern/sds)
 # https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
 #
 qt_add_executable(embroidermodder2
+	${SRC}/core/command-table.c
+	${SRC}/core/load.c
 	${SRC}/core/sdsarray.c
-	${SRC}/core/settings.cpp
-	${SRC}/core/state.cpp
+	${SRC}/core/settings.c
+	${SRC}/core/state.c
 	${SRC}/core/core.h
-
-	${SRC}/gui/state.h
 
 	${SRC}/gui/application.cpp
 	${SRC}/gui/application.h
 	${SRC}/gui/cmdprompt.cpp
 	${SRC}/gui/cmdprompt.h
 	${SRC}/gui/commands.cpp
-	${SRC}/gui/commands.h
-	${SRC}/gui/command-table.cpp
 	${SRC}/gui/embdetails-dialog.cpp
 	${SRC}/gui/embdetails-dialog.h
 	${SRC}/gui/imagewidget.cpp
@@ -73,12 +71,10 @@ qt_add_executable(embroidermodder2
 	${SRC}/gui/layer-manager.cpp
 	${SRC}/gui/layer-manager.h
 	${SRC}/gui/main.cpp
-	${SRC}/gui/mainwindow-actions.cpp
 	${SRC}/gui/mainwindow-commands.cpp
 	${SRC}/gui/mainwindow.cpp
 	${SRC}/gui/mainwindow.h
 	${SRC}/gui/mainwindow-menus.cpp
-	${SRC}/gui/mainwindow-settings.cpp
 	${SRC}/gui/mainwindow-toolbars.cpp
 	${SRC}/gui/mdiarea.cpp
 	${SRC}/gui/mdiarea.h

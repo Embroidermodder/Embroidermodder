@@ -1,27 +1,3 @@
-#include "mainwindow.h"
-
-#include "statusbar.h"
-#include "statusbar-button.h"
-
-#include "view.h"
-#include "cmdprompt.h"
-
-#include "property-editor.h"
-#include "undo-editor.h"
-
-#include "native-scripting.h"
-
-#include "preview-dialog.h"
-
-#include "embroidery.h"
-
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <stdlib.h>
-
-#include "toml.h"
-
 #include <QDebug>
 #include <QFrame>
 #include <QVBoxLayout>
@@ -42,18 +18,56 @@
 #include <QCloseEvent>
 #include <QMetaObject>
 #include <QLocale>
+#include <QtGlobal>
+#include <QtGui>
+#include <QStandardPaths>
+#include <QDir>
+#include <QtGlobal>
+#include <QPoint>
+#include <QSize>
+#include <QAction>
+
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <stdlib.h>
+
+#include "mainwindow.h"
+#include "settings-dialog.h"
+#include "statusbar.h"
+#include "statusbar-button.h"
+#include "view.h"
+#include "cmdprompt.h"
+#include "property-editor.h"
+#include "undo-editor.h"
+#include "native-scripting.h"
+#include "preview-dialog.h"
+
+#include "embroidery.h"
+
+#include "toml.h"
 
 State state;
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
-    state_create();
+    char settings_dir[2000];
+    /* Needs to preceed reading settings to establish the home path etc. */
+#if unix || __linux__ || __APPLE__
+    QString homePath = QDir::homePath();
+    /* Note: on Unix we include the trailing separator. For Windows compatibility we omit it. */
+    sprintf(settings_dir, "%s/.embroidermodder2/", qPrintable(homePath));
+#else
+    /* FIXME */
+    sprintf(settings_dir, "");
+#endif
+    QString appDir = qApp->applicationDirPath();
+    state_create(settings_dir, (char*)qPrintable(appDir));
 
     readSettings();
 
     script_env.mainWin = this;
 
-    QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
     QFileInfo check(appDir + "/commands");
     if (!check.exists())
@@ -262,6 +276,106 @@ MainWindow::~MainWindow()
     cutCopyObjectList.clear();
 }
 
+void
+MainWindow::createAllActions()
+{
+    qDebug("Creating All Actions...");
+    for (int i=0; command_table[i].id != ACTION_null; i++) {
+        /* TODO: override the shortcuts here. */
+        QAction *ACTION = createAction(command_table[i]);
+        actionHash.insert(command_table[i].id, ACTION);
+    }
+
+    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+}
+
+QAction *
+MainWindow::createAction(CommandData command, bool scripted)
+{
+    QString appDir = qApp->applicationDirPath();
+
+    QString icon_path = appDir + "/icons/" + state.settings.general_icon_theme
+        + "/" + QString(command.label) + ".png";
+    QAction *ACTION = new QAction(QIcon(icon_path), command.tooltip, this);
+    ACTION->setStatusTip(command.statustip);
+    ACTION->setObjectName(command.label);
+    // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
+    // Make custom whats this context help popup with more descriptive help than just
+    // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+    // at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+    ACTION->setWhatsThis(command.statustip);
+    // TODO: Finish All Commands ... <.<
+
+
+    /* FIXME: detect if we should use PC or mac shortcuts here. This only supports PC. */
+    if (strlen(command.shortcut) > 0) {
+        ACTION->setShortcut(QKeySequence(command.shortcut));
+    }
+    /*
+    if (strlen(command.mac_shortcut) > 0) {
+        ACTION->setShortcut(QKeySequence(command.mac_shortcut));
+    }
+    */
+
+    if (scripted) {
+        ACTION->setIcon(QIcon(appDir + "/commands/" + QString(command.label)
+            + "/" + QString(command.label) + ".png"));
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(runCommand()));
+    }
+    else {
+        switch (command.type) {
+        case CMD_TYPE_TOGGLE: {
+            ACTION->setCheckable(true);
+            connect(ACTION, &QAction::toggle, this, [=]() { call(command.label); });
+            break;
+        }
+        default:
+        case CMD_TYPE_TRIGGER:
+            connect(ACTION, &QAction::triggered, this, [=]() { call(command.label); });
+            break;
+        }
+    }
+    return ACTION;
+}
+
+void
+MainWindow::readSettings(void)
+{
+    qDebug("Reading Settings...");
+    int window_pos[2] = {0, 0};
+    int window_size[2] = {800, 600};
+
+    settings_load(&state.settings, window_pos, window_size);
+    // qDebug("NOTE: settings_load failed, using defaults.");
+
+    QPoint pos(window_pos[0], window_pos[1]);
+    QSize size(window_size[0], window_size[1]);
+    move(pos);
+    resize(size);
+}
+
+void
+MainWindow::writeSettings()
+{
+    qDebug("Writing Settings...");
+    int window_pos[2] = {0, 0};
+    int window_size[2] = {800, 600};
+    settings_save(&state.settings, window_pos, window_size);
+    /* FIXME: return value. */
+}
+
+void MainWindow::settingsPrompt()
+{
+    settingsDialog("Prompt");
+}
+
+void MainWindow::settingsDialog(const QString& showTab)
+{
+    Settings_Dialog dialog(this, showTab, this);
+    dialog.exec();
+}
+
 /*
  * Loads a string table from the named file.
  *
@@ -271,9 +385,7 @@ int
 load_sdsarray(QString filename, const char *key, sdsarray *arr)
 {
     char errbuffer[200];
-
-    QString appDir = qApp->applicationDirPath();
-    filename = appDir + "/" + filename;
+    filename = QString(state.app_dir) + "/" + filename;
     FILE *fp = fopen(qPrintable(filename), "r");
     if (!fp) {
         qDebug("ERROR: failed to open file \"%s\".", qPrintable(filename));
@@ -333,29 +445,33 @@ void MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for (int i = 0; i < state.settings.opensave_recent_list_of_files.size(); ++i)
-    {
-        //If less than the max amount of entries add to menu
-        if (i < state.settings.opensave_recent_max_files)
-        {
-            recentFileInfo = QFileInfo(state.settings.opensave_recent_list_of_files.at(i));
-            if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName()))
-            {
+    for (int i = 0; i < state.settings.opensave_recent_list_of_files->count; ++i) {
+        /* If less than the max amount of entries add to menu. */
+        if (i < state.settings.opensave_recent_max_files) {
+            recentFileInfo = QFileInfo(state.settings.opensave_recent_list_of_files->data[i]);
+            if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
                 recentValue.setNum(i+1);
                 QAction* rAction;
-                if     (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
-                else if (recentValue.toInt() == 10)                            rAction = new QAction("1&0 "                  + recentFileInfo.fileName(), this);
-                else                                                          rAction = new QAction(      recentValue + " " + recentFileInfo.fileName(), this);
+                if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) {
+                    rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
+                }
+                else if (recentValue.toInt() == 10) {
+                    rAction = new QAction("1&0 " + recentFileInfo.fileName(), this);
+                }
+                else {
+                    rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
+                }
                 rAction->setCheckable(false);
-                rAction->setData(state.settings.opensave_recent_list_of_files.at(i));
+                rAction->setData(QString(state.settings.opensave_recent_list_of_files->data[i]));
                 recentMenu->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
         }
     }
-    //Ensure the list only has max amount of entries
-    while (state.settings.opensave_recent_list_of_files.size() > state.settings.opensave_recent_max_files) {
-        state.settings.opensave_recent_list_of_files.removeLast();
+
+    /* Ensure the list only has max amount of entries */
+    if (state.settings.opensave_recent_list_of_files->count > state.settings.opensave_recent_max_files) {
+        state.settings.opensave_recent_list_of_files->count = state.settings.opensave_recent_max_files;
     }
 }
 
@@ -465,16 +581,14 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
 {
     bool doOnce = true;
 
-    if (filesToOpen.count())
-    {
-        for (int i = 0; i < filesToOpen.count(); i++)
-        {
-            if (!validFileFormat(filesToOpen[i]))
+    if (filesToOpen.count()) {
+        for (int i = 0; i < filesToOpen.count(); i++) {
+            if (!validFileFormat(filesToOpen[i])) {
                 continue;
+            }
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
-            if (existing)
-            {
+            if (existing) {
                 mdiArea->setActiveSubWindow(existing);
                 continue;
             }
@@ -486,35 +600,36 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
             //Make sure the toolbars/etc... are shown before doing their zoomExtents
-            if (doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
+            if (doOnce) {
+                updateMenuToolbarStatusbar();
+                doOnce = false;
+            }
 
-            if (mdiWin->loadFile(filesToOpen.at(i)))
-            {
+            if (mdiWin->loadFile(filesToOpen.at(i))) {
                 statusbar->showMessage(tr("File(s) loaded"), 2000);
                 mdiWin->show();
                 mdiWin->showMaximized();
-                //Prevent duplicate entries in the recent files list
-                if (!state.settings.opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
-                {
+                #if 0
+                /* FIXME: stronger sdsarray. */
+                /* Prevent duplicate entries in the recent files list */
+                if (!state.settings.opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive)) {
                     state.settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
-                //Move the recent file to the top of the list
-                else
-                {
+                else {
+                    /* Move the recent file to the top of the list */
                     state.settings.opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
                     state.settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
                 state.settings.opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
+                #endif
 
                 View* v = mdiWin->getView();
-                if (v)
-                {
+                if (v) {
                     v->recalculateLimits();
                     v->zoomExtents();
                 }
             }
-            else
-            {
+            else {
                 mdiWin->close();
             }
         }
@@ -529,8 +644,7 @@ void MainWindow::openrecentfile()
 
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
-    if (recentSender)
-    {
+    if (recentSender) {
         openFile(true, recentSender->data().toString());
     }
 }
@@ -560,13 +674,10 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
-    foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList())
-    {
+    foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
-        if (mdiWin)
-        {
-            if (mdiWin->getCurrentFile() == canonicalFilePath)
-            {
+        if (mdiWin) {
+            if (mdiWin->getCurrentFile() == canonicalFilePath) {
                 return subWindow;
             }
         }
@@ -585,8 +696,7 @@ void MainWindow::onCloseWindow()
 {
     qDebug("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin)
-    {
+    if (mdiWin) {
         onCloseMdiWin(mdiWin);
     }
 }

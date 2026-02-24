@@ -98,6 +98,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     //Icons
     QGroupBox* groupBoxIcon = new QGroupBox(tr("Icons"), widget);
 
+    QString icon_theme = state.dialog.general_icon_theme;
     QLabel* labelIconTheme = new QLabel(tr("Icon Theme"), groupBoxIcon);
     QComboBox* comboBoxIconTheme = new QComboBox(groupBoxIcon);
     QDir dir(qApp->applicationDirPath());
@@ -111,12 +112,12 @@ QWidget* Settings_Dialog::createTabGeneral()
 
     QLabel* labelIconSize = new QLabel(tr("Icon Size"), groupBoxIcon);
     QComboBox* comboBoxIconSize = new QComboBox(groupBoxIcon);
-    comboBoxIconSize->addItem(QIcon("icons/" + state.dialog.general_icon_theme + "/" + "icon16"  + ".png"), "Very Small", 16);
-    comboBoxIconSize->addItem(QIcon("icons/" + state.dialog.general_icon_theme + "/" + "icon24"  + ".png"), "Small",      24);
-    comboBoxIconSize->addItem(QIcon("icons/" + state.dialog.general_icon_theme + "/" + "icon32"  + ".png"), "Medium",     32);
-    comboBoxIconSize->addItem(QIcon("icons/" + state.dialog.general_icon_theme + "/" + "icon48"  + ".png"), "Large",      48);
-    comboBoxIconSize->addItem(QIcon("icons/" + state.dialog.general_icon_theme + "/" + "icon64"  + ".png"), "Very Large", 64);
-    comboBoxIconSize->addItem(QIcon("icons/" + state.dialog.general_icon_theme + "/" + "icon128" + ".png"), "I'm Blind", 128);
+    comboBoxIconSize->addItem(QIcon("icons/" + icon_theme + "/" + "icon16"  + ".png"), "Very Small", 16);
+    comboBoxIconSize->addItem(QIcon("icons/" + icon_theme + "/" + "icon24"  + ".png"), "Small",      24);
+    comboBoxIconSize->addItem(QIcon("icons/" + icon_theme + "/" + "icon32"  + ".png"), "Medium",     32);
+    comboBoxIconSize->addItem(QIcon("icons/" + icon_theme + "/" + "icon48"  + ".png"), "Large",      48);
+    comboBoxIconSize->addItem(QIcon("icons/" + icon_theme + "/" + "icon64"  + ".png"), "Very Large", 64);
+    comboBoxIconSize->addItem(QIcon("icons/" + icon_theme + "/" + "icon128" + ".png"), "I'm Blind", 128);
     comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(state.dialog.general_icon_size));
     connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxIconSizeCurrentIndexChanged(int)));
 
@@ -488,219 +489,220 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QWidget* widget = new QWidget(this);
 
     //Custom Filter
+    QString filter = state.dialog.opensave_custom_filter;
     QGroupBox* groupBoxCustomFilter = new QGroupBox(tr("Custom Filter"), widget);
     groupBoxCustomFilter->setEnabled(false); //TODO: Fixup custom filter
 
     QCheckBox* checkBoxCustomFilter100 = new QCheckBox("100", groupBoxCustomFilter);
-    checkBoxCustomFilter100->setChecked(state.dialog.opensave_custom_filter.contains("*.100", Qt::CaseInsensitive));
+    checkBoxCustomFilter100->setChecked(filter.contains("*.100", Qt::CaseInsensitive));
     connect(checkBoxCustomFilter100, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilter10o = new QCheckBox("10o", groupBoxCustomFilter);
-    checkBoxCustomFilter10o->setChecked(state.dialog.opensave_custom_filter.contains("*.10o", Qt::CaseInsensitive));
+    checkBoxCustomFilter10o->setChecked(filter.contains("*.10o", Qt::CaseInsensitive));
     connect(checkBoxCustomFilter10o, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterART = new QCheckBox("ART", groupBoxCustomFilter);
-    checkBoxCustomFilterART->setChecked(state.dialog.opensave_custom_filter.contains("*.ART", Qt::CaseInsensitive));
+    checkBoxCustomFilterART->setChecked(filter.contains("*.ART", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterART, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterBMC = new QCheckBox("BMC", groupBoxCustomFilter);
-    checkBoxCustomFilterBMC->setChecked(state.dialog.opensave_custom_filter.contains("*.BMC", Qt::CaseInsensitive));
+    checkBoxCustomFilterBMC->setChecked(filter.contains("*.BMC", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterBMC, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterBRO = new QCheckBox("BRO", groupBoxCustomFilter);
-    checkBoxCustomFilterBRO->setChecked(state.dialog.opensave_custom_filter.contains("*.BRO", Qt::CaseInsensitive));
+    checkBoxCustomFilterBRO->setChecked(filter.contains("*.BRO", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterBRO, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterCND = new QCheckBox("CND", groupBoxCustomFilter);
-    checkBoxCustomFilterCND->setChecked(state.dialog.opensave_custom_filter.contains("*.CND", Qt::CaseInsensitive));
+    checkBoxCustomFilterCND->setChecked(filter.contains("*.CND", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterCND, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterCOL = new QCheckBox("COL", groupBoxCustomFilter);
-    checkBoxCustomFilterCOL->setChecked(state.dialog.opensave_custom_filter.contains("*.COL", Qt::CaseInsensitive));
+    checkBoxCustomFilterCOL->setChecked(filter.contains("*.COL", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterCOL, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterCSD = new QCheckBox("CSD", groupBoxCustomFilter);
-    checkBoxCustomFilterCSD->setChecked(state.dialog.opensave_custom_filter.contains("*.CSD", Qt::CaseInsensitive));
+    checkBoxCustomFilterCSD->setChecked(filter.contains("*.CSD", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterCSD, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterCSV = new QCheckBox("CSV", groupBoxCustomFilter);
-    checkBoxCustomFilterCSV->setChecked(state.dialog.opensave_custom_filter.contains("*.CSV", Qt::CaseInsensitive));
+    checkBoxCustomFilterCSV->setChecked(filter.contains("*.CSV", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterCSV, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterDAT = new QCheckBox("DAT", groupBoxCustomFilter);
-    checkBoxCustomFilterDAT->setChecked(state.dialog.opensave_custom_filter.contains("*.DAT", Qt::CaseInsensitive));
+    checkBoxCustomFilterDAT->setChecked(filter.contains("*.DAT", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterDAT, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterDEM = new QCheckBox("DEM", groupBoxCustomFilter);
-    checkBoxCustomFilterDEM->setChecked(state.dialog.opensave_custom_filter.contains("*.DEM", Qt::CaseInsensitive));
+    checkBoxCustomFilterDEM->setChecked(filter.contains("*.DEM", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterDEM, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterDSB = new QCheckBox("DSB", groupBoxCustomFilter);
-    checkBoxCustomFilterDSB->setChecked(state.dialog.opensave_custom_filter.contains("*.DSB", Qt::CaseInsensitive));
+    checkBoxCustomFilterDSB->setChecked(filter.contains("*.DSB", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterDSB, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterDST = new QCheckBox("DST", groupBoxCustomFilter);
-    checkBoxCustomFilterDST->setChecked(state.dialog.opensave_custom_filter.contains("*.DST", Qt::CaseInsensitive));
+    checkBoxCustomFilterDST->setChecked(filter.contains("*.DST", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterDST, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterDSZ = new QCheckBox("DSZ", groupBoxCustomFilter);
-    checkBoxCustomFilterDSZ->setChecked(state.dialog.opensave_custom_filter.contains("*.DSZ", Qt::CaseInsensitive));
+    checkBoxCustomFilterDSZ->setChecked(filter.contains("*.DSZ", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterDSZ, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterDXF = new QCheckBox("DXF", groupBoxCustomFilter);
-    checkBoxCustomFilterDXF->setChecked(state.dialog.opensave_custom_filter.contains("*.DXF", Qt::CaseInsensitive));
+    checkBoxCustomFilterDXF->setChecked(filter.contains("*.DXF", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterDXF, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterEDR = new QCheckBox("EDR", groupBoxCustomFilter);
-    checkBoxCustomFilterEDR->setChecked(state.dialog.opensave_custom_filter.contains("*.EDR", Qt::CaseInsensitive));
+    checkBoxCustomFilterEDR->setChecked(filter.contains("*.EDR", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterEDR, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterEMD = new QCheckBox("EMD", groupBoxCustomFilter);
-    checkBoxCustomFilterEMD->setChecked(state.dialog.opensave_custom_filter.contains("*.EMD", Qt::CaseInsensitive));
+    checkBoxCustomFilterEMD->setChecked(filter.contains("*.EMD", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterEMD, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterEXP = new QCheckBox("EXP", groupBoxCustomFilter);
-    checkBoxCustomFilterEXP->setChecked(state.dialog.opensave_custom_filter.contains("*.EXP", Qt::CaseInsensitive));
+    checkBoxCustomFilterEXP->setChecked(filter.contains("*.EXP", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterEXP, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterEXY = new QCheckBox("EXY", groupBoxCustomFilter);
-    checkBoxCustomFilterEXY->setChecked(state.dialog.opensave_custom_filter.contains("*.EXY", Qt::CaseInsensitive));
+    checkBoxCustomFilterEXY->setChecked(filter.contains("*.EXY", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterEXY, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterEYS = new QCheckBox("EYS", groupBoxCustomFilter);
-    checkBoxCustomFilterEYS->setChecked(state.dialog.opensave_custom_filter.contains("*.EYS", Qt::CaseInsensitive));
+    checkBoxCustomFilterEYS->setChecked(filter.contains("*.EYS", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterEYS, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterFXY = new QCheckBox("FXY", groupBoxCustomFilter);
-    checkBoxCustomFilterFXY->setChecked(state.dialog.opensave_custom_filter.contains("*.FXY", Qt::CaseInsensitive));
+    checkBoxCustomFilterFXY->setChecked(filter.contains("*.FXY", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterFXY, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterGNC = new QCheckBox("GNC", groupBoxCustomFilter);
-    checkBoxCustomFilterGNC->setChecked(state.dialog.opensave_custom_filter.contains("*.GNC", Qt::CaseInsensitive));
+    checkBoxCustomFilterGNC->setChecked(filter.contains("*.GNC", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterGNC, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterGT = new QCheckBox("GT", groupBoxCustomFilter);
-    checkBoxCustomFilterGT->setChecked(state.dialog.opensave_custom_filter.contains("*.GT", Qt::CaseInsensitive));
+    checkBoxCustomFilterGT->setChecked(filter.contains("*.GT", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterGT, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterHUS = new QCheckBox("HUS", groupBoxCustomFilter);
-    checkBoxCustomFilterHUS->setChecked(state.dialog.opensave_custom_filter.contains("*.HUS", Qt::CaseInsensitive));
+    checkBoxCustomFilterHUS->setChecked(filter.contains("*.HUS", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterHUS, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterINB = new QCheckBox("INB", groupBoxCustomFilter);
-    checkBoxCustomFilterINB->setChecked(state.dialog.opensave_custom_filter.contains("*.INB", Qt::CaseInsensitive));
+    checkBoxCustomFilterINB->setChecked(filter.contains("*.INB", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterINB, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterJEF = new QCheckBox("JEF", groupBoxCustomFilter);
-    checkBoxCustomFilterJEF->setChecked(state.dialog.opensave_custom_filter.contains("*.JEF", Qt::CaseInsensitive));
+    checkBoxCustomFilterJEF->setChecked(filter.contains("*.JEF", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterJEF, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterKSM = new QCheckBox("KSM", groupBoxCustomFilter);
-    checkBoxCustomFilterKSM->setChecked(state.dialog.opensave_custom_filter.contains("*.KSM", Qt::CaseInsensitive));
+    checkBoxCustomFilterKSM->setChecked(filter.contains("*.KSM", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterKSM, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPCD = new QCheckBox("PCD", groupBoxCustomFilter);
-    checkBoxCustomFilterPCD->setChecked(state.dialog.opensave_custom_filter.contains("*.PCD", Qt::CaseInsensitive));
+    checkBoxCustomFilterPCD->setChecked(filter.contains("*.PCD", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPCD, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPCM = new QCheckBox("PCM", groupBoxCustomFilter);
-    checkBoxCustomFilterPCM->setChecked(state.dialog.opensave_custom_filter.contains("*.PCM", Qt::CaseInsensitive));
+    checkBoxCustomFilterPCM->setChecked(filter.contains("*.PCM", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPCM, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPCQ = new QCheckBox("PCQ", groupBoxCustomFilter);
-    checkBoxCustomFilterPCQ->setChecked(state.dialog.opensave_custom_filter.contains("*.PCQ", Qt::CaseInsensitive));
+    checkBoxCustomFilterPCQ->setChecked(filter.contains("*.PCQ", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPCQ, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPCS = new QCheckBox("PCS", groupBoxCustomFilter);
-    checkBoxCustomFilterPCS->setChecked(state.dialog.opensave_custom_filter.contains("*.PCS", Qt::CaseInsensitive));
+    checkBoxCustomFilterPCS->setChecked(filter.contains("*.PCS", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPCS, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPEC = new QCheckBox("PEC", groupBoxCustomFilter);
-    checkBoxCustomFilterPEC->setChecked(state.dialog.opensave_custom_filter.contains("*.PEC", Qt::CaseInsensitive));
+    checkBoxCustomFilterPEC->setChecked(filter.contains("*.PEC", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPEC, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPEL = new QCheckBox("PEL", groupBoxCustomFilter);
-    checkBoxCustomFilterPEL->setChecked(state.dialog.opensave_custom_filter.contains("*.PEL", Qt::CaseInsensitive));
+    checkBoxCustomFilterPEL->setChecked(filter.contains("*.PEL", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPEL, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPEM = new QCheckBox("PEM", groupBoxCustomFilter);
-    checkBoxCustomFilterPEM->setChecked(state.dialog.opensave_custom_filter.contains("*.PEM", Qt::CaseInsensitive));
+    checkBoxCustomFilterPEM->setChecked(filter.contains("*.PEM", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPEM, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPES = new QCheckBox("PES", groupBoxCustomFilter);
-    checkBoxCustomFilterPES->setChecked(state.dialog.opensave_custom_filter.contains("*.PES", Qt::CaseInsensitive));
+    checkBoxCustomFilterPES->setChecked(filter.contains("*.PES", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPES, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPHB = new QCheckBox("PHB", groupBoxCustomFilter);
-    checkBoxCustomFilterPHB->setChecked(state.dialog.opensave_custom_filter.contains("*.PHB", Qt::CaseInsensitive));
+    checkBoxCustomFilterPHB->setChecked(filter.contains("*.PHB", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPHB, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterPHC = new QCheckBox("PHC", groupBoxCustomFilter);
-    checkBoxCustomFilterPHC->setChecked(state.dialog.opensave_custom_filter.contains("*.PHC", Qt::CaseInsensitive));
+    checkBoxCustomFilterPHC->setChecked(filter.contains("*.PHC", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterPHC, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterRGB = new QCheckBox("RGB", groupBoxCustomFilter);
-    checkBoxCustomFilterRGB->setChecked(state.dialog.opensave_custom_filter.contains("*.RGB", Qt::CaseInsensitive));
+    checkBoxCustomFilterRGB->setChecked(filter.contains("*.RGB", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterRGB, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterSEW = new QCheckBox("SEW", groupBoxCustomFilter);
-    checkBoxCustomFilterSEW->setChecked(state.dialog.opensave_custom_filter.contains("*.SEW", Qt::CaseInsensitive));
+    checkBoxCustomFilterSEW->setChecked(filter.contains("*.SEW", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterSEW, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterSHV = new QCheckBox("SHV", groupBoxCustomFilter);
-    checkBoxCustomFilterSHV->setChecked(state.dialog.opensave_custom_filter.contains("*.SHV", Qt::CaseInsensitive));
+    checkBoxCustomFilterSHV->setChecked(filter.contains("*.SHV", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterSHV, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterSST = new QCheckBox("SST", groupBoxCustomFilter);
-    checkBoxCustomFilterSST->setChecked(state.dialog.opensave_custom_filter.contains("*.SST", Qt::CaseInsensitive));
+    checkBoxCustomFilterSST->setChecked(filter.contains("*.SST", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterSST, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterSTX = new QCheckBox("STX", groupBoxCustomFilter);
-    checkBoxCustomFilterSTX->setChecked(state.dialog.opensave_custom_filter.contains("*.STX", Qt::CaseInsensitive));
+    checkBoxCustomFilterSTX->setChecked(filter.contains("*.STX", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterSTX, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterSVG = new QCheckBox("SVG", groupBoxCustomFilter);
-    checkBoxCustomFilterSVG->setChecked(state.dialog.opensave_custom_filter.contains("*.SVG", Qt::CaseInsensitive));
+    checkBoxCustomFilterSVG->setChecked(filter.contains("*.SVG", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterSVG, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterT09 = new QCheckBox("T09", groupBoxCustomFilter);
-    checkBoxCustomFilterT09->setChecked(state.dialog.opensave_custom_filter.contains("*.T09", Qt::CaseInsensitive));
+    checkBoxCustomFilterT09->setChecked(filter.contains("*.T09", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterT09, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterTAP = new QCheckBox("TAP", groupBoxCustomFilter);
-    checkBoxCustomFilterTAP->setChecked(state.dialog.opensave_custom_filter.contains("*.TAP", Qt::CaseInsensitive));
+    checkBoxCustomFilterTAP->setChecked(filter.contains("*.TAP", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterTAP, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterTHR = new QCheckBox("THR", groupBoxCustomFilter);
-    checkBoxCustomFilterTHR->setChecked(state.dialog.opensave_custom_filter.contains("*.THR", Qt::CaseInsensitive));
+    checkBoxCustomFilterTHR->setChecked(filter.contains("*.THR", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterTHR, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterTXT = new QCheckBox("TXT", groupBoxCustomFilter);
-    checkBoxCustomFilterTXT->setChecked(state.dialog.opensave_custom_filter.contains("*.TXT", Qt::CaseInsensitive));
+    checkBoxCustomFilterTXT->setChecked(filter.contains("*.TXT", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterTXT, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterU00 = new QCheckBox("U00", groupBoxCustomFilter);
-    checkBoxCustomFilterU00->setChecked(state.dialog.opensave_custom_filter.contains("*.U00", Qt::CaseInsensitive));
+    checkBoxCustomFilterU00->setChecked(filter.contains("*.U00", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterU00, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterU01 = new QCheckBox("U01", groupBoxCustomFilter);
-    checkBoxCustomFilterU01->setChecked(state.dialog.opensave_custom_filter.contains("*.U01", Qt::CaseInsensitive));
+    checkBoxCustomFilterU01->setChecked(filter.contains("*.U01", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterU01, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterVIP = new QCheckBox("VIP", groupBoxCustomFilter);
-    checkBoxCustomFilterVIP->setChecked(state.dialog.opensave_custom_filter.contains("*.VIP", Qt::CaseInsensitive));
+    checkBoxCustomFilterVIP->setChecked(filter.contains("*.VIP", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterVIP, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterVP3 = new QCheckBox("VP3", groupBoxCustomFilter);
-    checkBoxCustomFilterVP3->setChecked(state.dialog.opensave_custom_filter.contains("*.VP3", Qt::CaseInsensitive));
+    checkBoxCustomFilterVP3->setChecked(filter.contains("*.VP3", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterVP3, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterXXX = new QCheckBox("XXX", groupBoxCustomFilter);
-    checkBoxCustomFilterXXX->setChecked(state.dialog.opensave_custom_filter.contains("*.XXX", Qt::CaseInsensitive));
+    checkBoxCustomFilterXXX->setChecked(filter.contains("*.XXX", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterXXX, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QCheckBox* checkBoxCustomFilterZSK = new QCheckBox("ZSK", groupBoxCustomFilter);
-    checkBoxCustomFilterZSK->setChecked(state.dialog.opensave_custom_filter.contains("*.ZSK", Qt::CaseInsensitive));
+    checkBoxCustomFilterZSK->setChecked(filter.contains("*.ZSK", Qt::CaseInsensitive));
     connect(checkBoxCustomFilterZSK, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
 
     QPushButton* buttonCustomFilterSelectAll = new QPushButton(tr("Select All"), groupBoxCustomFilter);
@@ -874,7 +876,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     gridLayoutCustomFilter->setColumnStretch(6,1);
     groupBoxCustomFilter->setLayout(gridLayoutCustomFilter);
 
-    if (state.dialog.opensave_custom_filter.contains("supported", Qt::CaseInsensitive)) buttonCustomFilterSelectAllClicked();
+    if (filter.contains("supported", Qt::CaseInsensitive)) buttonCustomFilterSelectAllClicked();
 
     //Opening
     QGroupBox* groupBoxOpening = new QGroupBox(tr("File Open"), widget);
@@ -971,7 +973,7 @@ QWidget* Settings_Dialog::createTabPrinting()
     QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
     foreach(QPrinterInfo info, listAvailPrinters)
     {
-        comboBoxDefaultDevice->addItem(QIcon("icons/" + state.settings.general_icon_theme + "/" + "print" + ".png"), info.printerName());
+        comboBoxDefaultDevice->addItem(QIcon("icons/" + QString(state.settings.general_icon_theme) + "/print.png"), info.printerName());
     }
 
     QVBoxLayout* vboxLayoutDefaultPrinter = new QVBoxLayout(groupBoxDefaultPrinter);
@@ -1187,7 +1189,9 @@ QWidget* Settings_Dialog::createTabGridRuler()
     spinBoxGridSpacingAngle->setEnabled(!state.dialog.grid_load_from_file);
 
     bool visibility = false;
-    if (state.dialog.grid_type == "Circular") visibility = true;
+    if (!strcmp(state.dialog.grid_type, "Circular")) {
+        visibility = true;
+    }
     labelGridSizeX->setVisible(!visibility);
     spinBoxGridSizeX->setVisible(!visibility);
     labelGridSizeY->setVisible(!visibility);
@@ -1650,14 +1654,18 @@ void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
     //TODO: Add Other... so the user can select custom colors
 }
 
-void Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
+void
+Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
 {
-    state.dialog.general_language = lang.toLower();
+    state.dialog.general_language = sdscpy(state.dialog.general_language,
+        qPrintable(lang.toLower()));
 }
 
-void Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
+void
+Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
 {
-    state.dialog.general_icon_theme = theme;
+    state.dialog.general_icon_theme = sdscpy(state.dialog.general_icon_theme,
+        qPrintable(theme));
 }
 
 void Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
@@ -1687,15 +1695,13 @@ void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
     {
         QString selectedImage;
         selectedImage = QFileDialog::getOpenFileName(this, tr("Open File"),
-                        #if QT_VERSION >= 0x050000
-                        QStandardPaths::writableLocation(QStandardPaths::PicturesLocation), //Qt5
-                        #else
-                        QDesktopServices::storageLocation(QDesktopServices::PicturesLocation), //Qt4
-                        #endif
-                        tr("Images (*.bmp *.png *.jpg)"));
+            QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+            tr("Images (*.bmp *.png *.jpg)"));
 
-        if (!selectedImage.isNull())
-            state.accept.general_mdi_bg_logo = selectedImage;
+        if (!selectedImage.isNull()) {
+            state.accept.general_mdi_bg_logo = sdscpy(state.accept.general_mdi_bg_logo,
+                qPrintable(selectedImage));
+        }
 
         //Update immediately so it can be previewed
         mainWin->mdiArea->setBackgroundLogo(state.accept.general_mdi_bg_logo);
@@ -1718,8 +1724,10 @@ void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
                         QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
                         tr("Images (*.bmp *.png *.jpg)"));
 
-        if (!selectedImage.isNull())
-            state.accept.general_mdi_bg_texture = selectedImage;
+        if (!selectedImage.isNull()) {
+            state.accept.general_mdi_bg_texture = sdscpy(state.accept.general_mdi_bg_texture,
+                qPrintable(selectedImage));
+        }
 
         //Update immediately so it can be previewed
         mainWin->mdiArea->setBackgroundTexture(state.accept.general_mdi_bg_texture);
@@ -2123,13 +2131,15 @@ void Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 
 void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
 {
-    state.preview.prompt_font_family = family;
+    state.preview.prompt_font_family = sdscpy(state.preview.prompt_font_family,
+        qPrintable(family));
     mainWin->prompt->setPromptFontFamily(state.preview.prompt_font_family);
 }
 
 void Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(const QString& style)
 {
-    state.preview.prompt_font_style = style;
+    state.preview.prompt_font_style = sdscpy(state.preview.prompt_font_style,
+        qPrintable(style));
     mainWin->prompt->setPromptFontStyle(state.preview.prompt_font_style);
 }
 
@@ -2156,10 +2166,15 @@ void Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
     {
         QString format = checkBox->text();
         qDebug("CustomFilter: %s %d", qPrintable(format), checked);
-        if (checked)
-            state.dialog.opensave_custom_filter.append(" *." + format.toLower());
-        else
-            state.dialog.opensave_custom_filter.remove("*." + format, Qt::CaseInsensitive);
+        QString filter = state.dialog.opensave_custom_filter;
+        if (checked) {
+            filter.append(" *." + format.toLower());
+        }
+        else {
+            filter.remove("*." + format, Qt::CaseInsensitive);
+        }
+        state.dialog.opensave_custom_filter = sdscpy(state.dialog.opensave_custom_filter,
+            qPrintable(filter));
         //dialog.opensave_custom_filter = checked; //TODO
     }
 }
@@ -2167,13 +2182,13 @@ void Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
 void Settings_Dialog::buttonCustomFilterSelectAllClicked()
 {
     emit buttonCustomFilterSelectAll(true);
-    state.dialog.opensave_custom_filter = "supported";
+    state.dialog.opensave_custom_filter = sdscpy(state.dialog.opensave_custom_filter, "supported");
 }
 
 void Settings_Dialog::buttonCustomFilterClearAllClicked()
 {
     emit buttonCustomFilterClearAll(false);
-    state.dialog.opensave_custom_filter.clear();
+    state.dialog.opensave_custom_filter = sdscpy(state.dialog.opensave_custom_filter, "");
 }
 
 void Settings_Dialog::spinBoxRecentMaxFilesValueChanged(int value)
@@ -2304,7 +2319,7 @@ void Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 
 void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
 {
-    state.dialog.grid_type = type;
+    state.dialog.grid_type = sdscpy(state.dialog.grid_type, qPrintable(type));
 
     QObject* senderObj = sender();
     if (senderObj)
