@@ -45,6 +45,10 @@ public:
     void javaInitNatives(void);
     void javaLoadCommand(const QString& cmdName);
 
+    QString promptHistory;
+    QList<QString> promptInputList;
+    int promptInputNum;
+
     MdiArea* getMdiArea();
     MainWindow* getApplication();
     MdiWindow* activeMdiWindow();
@@ -71,9 +75,6 @@ public:
 
     QString formatFilterOpen;
     QString formatFilterSave;
-
-    bool isCommandActive() { return prompt->isCommandActive(); }
-    QString activeCommand() { return prompt->activeCommand(); }
 
     QString platformString();
 
@@ -116,26 +117,21 @@ public slots:
 protected:
     virtual void resizeEvent(QResizeEvent*);
     void closeEvent(QCloseEvent *event);
-    QAction*                        getFileSeparator();
+    QAction* getFileSeparator();
     void loadFormats();
 
 private:
-    bool                            shiftKeyPressedState;
+    QByteArray layoutState;
 
-    QByteArray                      layoutState;
+    QList<MdiWindow*> listMdiWin;
+    QMdiSubWindow* findMdiWindow(const QString &fileName);
+    QString openFilesPath;
 
-    int                             numOfDocs;
-    int                             docIndex;
+    QAction* myFileSeparator;
 
-    QList<MdiWindow*>               listMdiWin;
-    QMdiSubWindow*                  findMdiWindow(const QString &fileName);
-    QString                         openFilesPath;
-
-    QAction*                        myFileSeparator;
-
-    QWizard*    wizardTipOfTheDay;
-    QLabel*     labelTipOfTheDay;
-    QCheckBox*  checkBoxTipOfTheDay;
+    QWizard* wizardTipOfTheDay;
+    QLabel* labelTipOfTheDay;
+    QCheckBox* checkBoxTipOfTheDay;
 
     void createAllActions();
     QAction*                        createAction(CommandData command, bool scripted = false);
@@ -291,7 +287,6 @@ public slots:
     void undo();
     void redo();
 
-    bool isShiftPressed();
     void setShiftPressed();
     void setShiftReleased();
 

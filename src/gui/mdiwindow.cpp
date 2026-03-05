@@ -1,12 +1,7 @@
-#include "mdiwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "object-save.h"
-#include "object-data.h"
-#include "object-path.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
+/*
+ * Embroidermodder 2 -- MDI Window
+ * Copyright 2011-2026 The Embroidermodder Team
+ */
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -24,6 +19,16 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsItem>
+
+#include "mdiwindow.h"
+#include "view.h"
+#include "statusbar.h"
+#include "statusbar-button.h"
+#include "object-save.h"
+#include "object-data.h"
+#include "object-path.h"
+#include "object-polygon.h"
+#include "object-polyline.h"
 
 #include "embroidery.h"
 
@@ -55,11 +60,6 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     gview->setFocusProxy(mainWin->prompt);
 
     resize(sizeHint());
-
-    promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
-    mainWin->prompt->setHistory(promptHistory);
-    promptInputList << "";
-    promptInputNum = 0;
 
     curLayer = "0";
     curColor = 0; //TODO: color ByLayer
@@ -368,16 +368,15 @@ void MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if (state.settings.printing_disable_bg) //TODO: Make BMC background into it's own setting?
-    {
+    if (state.settings.printing_disable_bg) {
+        //TODO: Make BMC background into it's own setting?
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
         gscene->update();
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
         gscene->setBackgroundBrush(brush);
     }
-    else
-    {
+    else {
         gscene->update();
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
     }
@@ -421,7 +420,6 @@ void MdiWindow::onWindowActivated()
     mainWin->statusbar->statusBarQSnapButton->setChecked(gscene->property(ENABLE_QSNAP).toBool());
     mainWin->statusbar->statusBarQTrackButton->setChecked(gscene->property(ENABLE_QTRACK).toBool());
     mainWin->statusbar->statusBarLwtButton->setChecked(gscene->property(ENABLE_LWT).toBool());
-    mainWin->prompt->setHistory(promptHistory);
 }
 
 QSize MdiWindow::sizeHint() const
@@ -496,13 +494,13 @@ void MdiWindow::setViewRulerColor(QRgb color)
 
 void MdiWindow::promptHistoryAppended(const QString& txt)
 {
-    promptHistory.append("<br/>" + txt);
+    mainWin->promptHistory.append("<br/>" + txt);
 }
 
 void MdiWindow::logPromptInput(const QString& txt)
 {
-    promptInputList << txt;
-    promptInputNum = promptInputList.size();
+    mainWin->promptInputList << txt;
+    mainWin->promptInputNum = mainWin->promptInputList.size();
 }
 
 void MdiWindow::promptInputPrevious()
@@ -517,20 +515,34 @@ void MdiWindow::promptInputNext()
 
 void MdiWindow::promptInputPrevNext(bool prev)
 {
-    if (promptInputList.isEmpty())
-    {
-        if (prev) QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
-        else     QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
+    if (mainWin->promptInputList.isEmpty()) {
+        if (prev) {
+            QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
+        }
+        else {
+            QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
+        }
         qDebug("The prompt input is empty! Please report this as a bug!");
     }
-    else
-    {
-        if (prev) promptInputNum--;
-        else     promptInputNum++;
-        int maxNum = promptInputList.size();
-        if     (promptInputNum < 0)       { promptInputNum = 0;      mainWin->prompt->setCurrentText(""); }
-        else if (promptInputNum >= maxNum) { promptInputNum = maxNum; mainWin->prompt->setCurrentText(""); }
-        else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
+    else {
+        if (prev) {
+            mainWin->promptInputNum--;
+        }
+        else {
+            mainWin->promptInputNum++;
+        }
+        int maxNum = mainWin->promptInputList.size();
+        if (mainWin->promptInputNum < 0) {
+            mainWin->promptInputNum = 0;
+            mainWin->prompt->setCurrentText("");
+        }
+        else if (mainWin->promptInputNum >= maxNum) {
+            mainWin->promptInputNum = maxNum;
+            mainWin->prompt->setCurrentText("");
+        }
+        else {
+            mainWin->prompt->setCurrentText(mainWin->promptInputList.at(mainWin->promptInputNum));
+        }
     }
 }
 

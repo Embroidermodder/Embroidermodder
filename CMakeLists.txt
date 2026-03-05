@@ -74,8 +74,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/gui/mainwindow-commands.cpp
 	${SRC}/gui/mainwindow.cpp
 	${SRC}/gui/mainwindow.h
-	${SRC}/gui/mainwindow-menus.cpp
-	${SRC}/gui/mainwindow-toolbars.cpp
 	${SRC}/gui/mdiarea.cpp
 	${SRC}/gui/mdiarea.h
 	${SRC}/gui/mdiwindow.cpp

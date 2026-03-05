@@ -1,3 +1,21 @@
+/*
+ * Embroidermodder 2 -- Main Window (Commands)
+ * Copyright 2011-2026 The Embroidermodder Team
+ */
+
+#include <QLabel>
+#include <QDesktopServices>
+#include <QApplication>
+#include <QUrl>
+#include <QProcess>
+#include <QMessageBox>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QMdiArea>
+#include <QGraphicsScene>
+#include <QComboBox>
+#include <QWhatsThis>
+
 #include "mainwindow.h"
 #include "view.h"
 #include "statusbar.h"
@@ -22,19 +40,6 @@
 #include "undo-editor.h"
 #include "undo-commands.h"
 #include "embdetails-dialog.h"
-
-#include <QLabel>
-#include <QDesktopServices>
-#include <QApplication>
-#include <QUrl>
-#include <QProcess>
-#include <QMessageBox>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QMdiArea>
-#include <QGraphicsScene>
-#include <QComboBox>
-#include <QWhatsThis>
 
 /* Call a command from the command table using the name of the command. */
 int
@@ -377,16 +382,14 @@ void MainWindow::changelog()
 void MainWindow::undo()
 {
     qDebug("undo()");
-    QString prefix = prompt->getPrefix();
-    if (dockUndoEdit->canUndo())
-    {
+    QString prefix = state.prefix;
+    if (dockUndoEdit->canUndo()) {
         prompt->setPrefix("Undo " + dockUndoEdit->undoText());
         prompt->appendHistory(QString());
         dockUndoEdit->undo();
         prompt->setPrefix(prefix);
     }
-    else
-    {
+    else {
         prompt->alert("Nothing to undo");
         prompt->setPrefix(prefix);
     }
@@ -395,34 +398,27 @@ void MainWindow::undo()
 void MainWindow::redo()
 {
     qDebug("redo()");
-    QString prefix = prompt->getPrefix();
-    if (dockUndoEdit->canRedo())
-    {
+    QString prefix = state.prefix;
+    if (dockUndoEdit->canRedo()) {
         prompt->setPrefix("Redo " + dockUndoEdit->redoText());
         prompt->appendHistory(QString());
         dockUndoEdit->redo();
         prompt->setPrefix(prefix);
     }
-    else
-    {
+    else {
         prompt->alert("Nothing to redo");
         prompt->setPrefix(prefix);
     }
 }
 
-bool MainWindow::isShiftPressed()
-{
-    return shiftKeyPressedState;
-}
-
 void MainWindow::setShiftPressed()
 {
-    shiftKeyPressedState = true;
+    state.shift = true;
 }
 
 void MainWindow::setShiftReleased()
 {
-    shiftKeyPressedState = false;
+    state.shift = false;
 }
 
 // Icons
@@ -995,12 +991,12 @@ void MainWindow::toggleLwt()
 
 void MainWindow::enablePromptRapidFire()
 {
-    prompt->enableRapidFire();
+    state.rapid_fire = true;
 }
 
 void MainWindow::disablePromptRapidFire()
 {
-    prompt->disableRapidFire();
+    state.rapid_fire = false;
 }
 
 void MainWindow::enableMoveRapidFire()
@@ -1087,9 +1083,12 @@ void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
     QString safeStr = str;
     safeStr.replace("\\", "\\\\");
     safeStr.replace("\'", "\\\'");
-    if (prompt->isRapidFireEnabled()) { engine.evaluate(cmd + "_prompt('" + safeStr + "')", fileName); }
-    else                             { engine.evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName); }
-
+    if (state.rapid_fire) {
+        engine.evaluate(cmd + "_prompt('" + safeStr + "')", fileName);
+    }
+    else {
+        engine.evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName);
+    }
 }
 
 void MainWindow::alert(const QString& txt)

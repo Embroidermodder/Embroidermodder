@@ -1,0 +1,15 @@
+
+file_toolbar = [
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails",
+    "---",
+    "undo",
+    "redo",
+    "---",
+    "help"
+]
+

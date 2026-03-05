@@ -7,6 +7,8 @@
 #include <QSplitter>
 #include <QTextLayout>
 
+#include "core.h"
+
 QT_BEGIN_NAMESPACE
 class QString;
 class QLineEdit;
@@ -28,15 +30,6 @@ public:
     ~CmdPromptInput();
 
     QString curText;
-    QString defaultPrefix;
-    QString prefix;
-
-    QString lastCmd;
-    QString curCmd;
-    bool cmdActive;
-
-    bool rapidFireEnabled;
-    bool isBlinking;
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
@@ -185,9 +178,7 @@ protected:
 
 public slots:
     QString getHistory() { return promptHistory->toHtml(); }
-    QString getPrefix() { return promptInput->prefix; }
-    QString getCurrentText() { return promptInput->curText; }
-    void setCurrentText(const QString& txt) { promptInput->curText = promptInput->prefix + txt; promptInput->setText(promptInput->curText); }
+    void setCurrentText(const QString& txt) { promptInput->curText = state.prefix + txt; promptInput->setText(promptInput->curText); }
     void setHistory(const QString& txt) { promptHistory->setHtml(txt); promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor); }
     void setPrefix(const QString& txt);
     void appendHistory(const QString& txt);
@@ -196,13 +187,7 @@ public slots:
     void resizeTheHistory(int y) { promptHistory->resizeHistory(y); }
     void addCommand(const QString& alias, const QString& cmd) { promptInput->addCommand(alias, cmd); }
     void endCommand() { promptInput->endCommand(); }
-    bool isCommandActive() { return promptInput->cmdActive; }
-    QString activeCommand() { return promptInput->curCmd; }
-    QString lastCommand() { return promptInput->lastCmd; }
     void processInput() { promptInput->processInput(); }
-    void enableRapidFire() { promptInput->rapidFireEnabled = true; }
-    void disableRapidFire() { promptInput->rapidFireEnabled = false; }
-    bool isRapidFireEnabled() { return promptInput->rapidFireEnabled; }
 
     void alert(const QString& txt);
 
@@ -270,9 +255,7 @@ private:
     QHash<QString, QString>*  styleHash;
     void updateStyle();
     QTimer* blinkTimer;
-    bool blinkState;
 };
 
 #endif
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

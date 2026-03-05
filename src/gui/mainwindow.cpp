@@ -1,3 +1,8 @@
+/*
+ * Embroidermodder 2 -- Main Window
+ * Copyright 2011-2026 The Embroidermodder Team
+ */
+
 #include <QDebug>
 #include <QFrame>
 #include <QVBoxLayout>
@@ -26,6 +31,7 @@
 #include <QPoint>
 #include <QSize>
 #include <QAction>
+#include <QToolBar>
 
 #include <stdio.h>
 #include <string.h>
@@ -136,6 +142,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarProperties = addToolBar(tr("Properties"));
     toolbarText       = addToolBar(tr("Text"));
     toolbarPrompt     = addToolBar(tr("Command Prompt"));
+    toolbarPrompt->show();
     //Selectors
     layerSelector      = new QComboBox(this);
     colorSelector      = new QComboBox(this);
@@ -143,11 +150,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     lineweightSelector = new QComboBox(this);
     textFontSelector   = new QFontComboBox(this);
     textSizeSelector   = new QComboBox(this);
-
-    numOfDocs = 0;
-    docIndex = 0;
-
-    shiftKeyPressedState = false;
 
     setWindowIcon(QIcon(appDir + "/icons/" + state.settings.general_icon_theme + "/" + "app" + ".png"));
     setMinimumSize(800, 480); //Require Minimum WVGA
@@ -178,6 +180,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     prompt->setFocus(Qt::OtherFocusReason);
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
+
+    promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
+    prompt->setHistory(promptHistory);
+    promptInputList << "";
+    promptInputNum = 0;
 
     prompt->setPromptTextColor(QColor(state.settings.prompt_text_color));
     prompt->setPromptBackgroundColor(QColor(state.settings.prompt_bg_color));
@@ -286,8 +293,8 @@ MainWindow::createAllActions()
         actionHash.insert(command_table[i].id, ACTION);
     }
 
-    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_windowclose)->setEnabled(state.num_docs > 0);
+    actionHash.value(ACTION_designdetails)->setEnabled(state.num_docs > 0);
 }
 
 QAction *
@@ -527,9 +534,9 @@ MainWindow* MainWindow::getApplication()
 void MainWindow::newFile()
 {
     qDebug("MainWindow::newFile()");
-    docIndex++;
-    numOfDocs++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    state.doc_index++;
+    state.num_docs++;
+    MdiWindow* mdiWin = new MdiWindow(state.doc_index, mainWin, mdiArea, Qt::SubWindow);
     connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
@@ -593,13 +600,13 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 continue;
             }
 
-            //The docIndex doesn't need increased as it is only used for unnamed files
-            numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            /* The docIndex doesn't need increased as it is only used for unnamed files. */
+            state.num_docs++;
+            MdiWindow* mdiWin = new MdiWindow(state.doc_index, mainWin, mdiArea, Qt::SubWindow);
             connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
-            //Make sure the toolbars/etc... are shown before doing their zoomExtents
+            /* Make sure the toolbars/etc... are shown before doing their zoomExtents. */
             if (doOnce) {
                 updateMenuToolbarStatusbar();
                 doOnce = false;
@@ -704,7 +711,7 @@ void MainWindow::onCloseWindow()
 void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
     qDebug("MainWindow::onCloseMdiWin()");
-    numOfDocs--;
+    state.num_docs--;
 
     bool keepMaximized;
     if (theMdiWin) { keepMaximized = theMdiWin->isMaximized(); }
@@ -746,12 +753,11 @@ void MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_print)->setEnabled(state.num_docs > 0);
+    actionHash.value(ACTION_windowclose)->setEnabled(state.num_docs > 0);
+    actionHash.value(ACTION_designdetails)->setEnabled(state.num_docs > 0);
 
-    if (numOfDocs)
-    {
+    if (state.num_docs) {
         //Toolbars
         toolbarView->show();
         toolbarZoom->show();
@@ -761,10 +767,8 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarLayer->show();
         toolbarText->show();
         toolbarProperties->show();
-        toolbarPrompt->show();
 
-        foreach(QToolBar* tb, toolbarHash)
-        {
+        foreach(QToolBar* tb, toolbarHash) {
             tb->show();
         }
 
@@ -778,8 +782,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         menuBar()->addMenu(editMenu);
         menuBar()->addMenu(viewMenu);
 
-        foreach(QMenu* menu, menuHash)
-        {
+        foreach(QMenu* menu, menuHash) {
             menuBar()->addMenu(menu);
         }
 
@@ -800,8 +803,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         statusbar->statusBarQTrackButton->show();
         statusbar->statusBarLwtButton->show();
     }
-    else
-    {
+    else {
         //Toolbars
         toolbarView->hide();
         toolbarZoom->hide();
@@ -811,9 +813,8 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarLayer->hide();
         toolbarText->hide();
         toolbarProperties->hide();
-        toolbarPrompt->hide();
-        foreach(QToolBar* tb, toolbarHash)
-        {
+
+        foreach(QToolBar* tb, toolbarHash) {
             tb->hide();
         }
 
@@ -981,4 +982,441 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
+void MainWindow::createFileMenu()
+{
+    qDebug("MainWindow createFileMenu()");
+    menuBar()->addMenu(fileMenu);
+    fileMenu->addAction(actionHash.value(ACTION_new));
+    fileMenu->addSeparator();
+    fileMenu->addAction(actionHash.value(ACTION_open));
+
+    fileMenu->addMenu(recentMenu);
+    connect(recentMenu, SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    //Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain.
+    recentMenu->setTearOffEnabled(false);
+
+    fileMenu->addSeparator();
+    fileMenu->addAction(actionHash.value(ACTION_save));
+    fileMenu->addAction(actionHash.value(ACTION_saveas));
+    fileMenu->addSeparator();
+    fileMenu->addAction(actionHash.value(ACTION_print));
+    fileMenu->addSeparator();
+    fileMenu->addAction(actionHash.value(ACTION_windowclose));
+    fileMenu->addSeparator();
+    fileMenu->addAction(actionHash.value(ACTION_designdetails));
+    fileMenu->addSeparator();
+
+    fileMenu->addAction(actionHash.value(ACTION_exit));
+    fileMenu->setTearOffEnabled(false);
+}
+
+void MainWindow::createEditMenu()
+{
+    qDebug("MainWindow createEditMenu()");
+    menuBar()->addMenu(editMenu);
+    editMenu->addAction(actionHash.value(ACTION_undo));
+    editMenu->addAction(actionHash.value(ACTION_redo));
+    editMenu->addSeparator();
+    editMenu->addAction(actionHash.value(ACTION_cut));
+    editMenu->addAction(actionHash.value(ACTION_copy));
+    editMenu->addAction(actionHash.value(ACTION_paste));
+    editMenu->addSeparator();
+    editMenu->addAction(actionHash.value(ACTION_settingsdialog));
+    editMenu->setTearOffEnabled(true);
+}
+
+void MainWindow::createViewMenu()
+{
+    qDebug("MainWindow createViewMenu()");
+
+    QString appDir = qApp->applicationDirPath();
+    QString icontheme = state.settings.general_icon_theme;
+
+    menuBar()->addMenu(viewMenu);
+    viewMenu->addSeparator();
+    viewMenu->addMenu(zoomMenu);
+    zoomMenu->setIcon(QIcon(appDir + "/icons/" + icontheme + "/zoom" + ".png"));
+    zoomMenu->addAction(actionHash.value(ACTION_zoomrealtime));
+    zoomMenu->addAction(actionHash.value(ACTION_zoomprevious));
+    zoomMenu->addSeparator();
+    zoomMenu->addAction(actionHash.value(ACTION_zoomwindow));
+    zoomMenu->addAction(actionHash.value(ACTION_zoomdynamic));
+    zoomMenu->addAction(actionHash.value(ACTION_zoomscale));
+    zoomMenu->addAction(actionHash.value(ACTION_zoomcenter));
+    zoomMenu->addSeparator();
+    zoomMenu->addAction(actionHash.value(ACTION_zoomin));
+    zoomMenu->addAction(actionHash.value(ACTION_zoomout));
+    zoomMenu->addSeparator();
+    zoomMenu->addAction(actionHash.value(ACTION_zoomselected));
+    zoomMenu->addAction(actionHash.value(ACTION_zoomall));
+    zoomMenu->addAction(actionHash.value(ACTION_zoomextents));
+    viewMenu->addMenu(panMenu);
+    panMenu->setIcon(QIcon(appDir + "/icons/" + icontheme + "/pan" + ".png"));
+    panMenu->addAction(actionHash.value(ACTION_panrealtime));
+    panMenu->addAction(actionHash.value(ACTION_panpoint));
+    panMenu->addSeparator();
+    panMenu->addAction(actionHash.value(ACTION_panleft));
+    panMenu->addAction(actionHash.value(ACTION_panright));
+    panMenu->addAction(actionHash.value(ACTION_panup));
+    panMenu->addAction(actionHash.value(ACTION_pandown));
+    viewMenu->addSeparator();
+    viewMenu->addAction(actionHash.value(ACTION_day));
+    viewMenu->addAction(actionHash.value(ACTION_night));
+    viewMenu->addSeparator();
+
+    viewMenu->setTearOffEnabled(true);
+    zoomMenu->setTearOffEnabled(true);
+    panMenu->setTearOffEnabled(true);
+}
+
+void MainWindow::createWindowMenu()
+{
+    qDebug("MainWindow createWindowMenu()");
+    menuBar()->addMenu(windowMenu);
+    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
+    //Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
+    windowMenu->setTearOffEnabled(false);
+
+}
+
+void MainWindow::createHelpMenu()
+{
+    qDebug("MainWindow createHelpMenu()");
+    menuBar()->addMenu(helpMenu);
+    helpMenu->addAction(actionHash.value(ACTION_help));
+    helpMenu->addSeparator();
+    helpMenu->addAction(actionHash.value(ACTION_changelog));
+    helpMenu->addSeparator();
+    helpMenu->addAction(actionHash.value(ACTION_tipoftheday));
+    helpMenu->addSeparator();
+    helpMenu->addAction(actionHash.value(ACTION_about));
+    helpMenu->addSeparator();
+    helpMenu->addAction(actionHash.value(ACTION_whatsthis));
+    helpMenu->setTearOffEnabled(true);
+}
+
+void MainWindow::createAllMenus()
+{
+    qDebug("MainWindow createAllMenus()");
+    createFileMenu();
+    createEditMenu();
+    createViewMenu();
+    createWindowMenu();
+    createHelpMenu();
+
+}
+
+void MainWindow::createFileToolbar()
+{
+    qDebug("MainWindow createFileToolbar()");
+
+    toolbarFile->setObjectName("toolbarFile");
+    toolbarFile->addAction(actionHash.value(ACTION_new));
+    toolbarFile->addAction(actionHash.value(ACTION_open));
+    toolbarFile->addAction(actionHash.value(ACTION_save));
+    toolbarFile->addAction(actionHash.value(ACTION_saveas));
+    toolbarFile->addAction(actionHash.value(ACTION_print));
+    toolbarFile->addAction(actionHash.value(ACTION_designdetails));
+
+    toolbarFile->addSeparator();
+    toolbarFile->addAction(actionHash.value(ACTION_undo));
+    toolbarFile->addAction(actionHash.value(ACTION_redo));
+    toolbarFile->addSeparator();
+    toolbarFile->addAction(actionHash.value(ACTION_help));
+
+    connect(toolbarFile, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createEditToolbar()
+{
+    qDebug("MainWindow createEditToolbar()");
+
+    toolbarEdit->setObjectName("toolbarEdit");
+    toolbarEdit->addAction(actionHash.value(ACTION_cut));
+    toolbarEdit->addAction(actionHash.value(ACTION_copy));
+    toolbarEdit->addAction(actionHash.value(ACTION_paste));
+
+    connect(toolbarEdit, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createViewToolbar()
+{
+    qDebug("MainWindow createViewToolbar()");
+
+    toolbarView->setObjectName("toolbarView");
+    toolbarView->addAction(actionHash.value(ACTION_day));
+    toolbarView->addAction(actionHash.value(ACTION_night));
+
+    connect(toolbarView, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createZoomToolbar()
+{
+    qDebug("MainWindow createZoomToolbar()");
+
+    toolbarZoom->setObjectName("toolbarZoom");
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomwindow));
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomdynamic));
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomscale));
+    toolbarZoom->addSeparator();
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomcenter));
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomin));
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomout));
+    toolbarZoom->addSeparator();
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomselected));
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomall));
+    toolbarZoom->addAction(actionHash.value(ACTION_zoomextents));
+
+    connect(toolbarZoom, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createPanToolbar()
+{
+    qDebug("MainWindow createPanToolbar()");
+
+    toolbarPan->setObjectName("toolbarPan");
+    toolbarPan->addAction(actionHash.value(ACTION_panrealtime));
+    toolbarPan->addAction(actionHash.value(ACTION_panpoint));
+    toolbarPan->addSeparator();
+    toolbarPan->addAction(actionHash.value(ACTION_panleft));
+    toolbarPan->addAction(actionHash.value(ACTION_panright));
+    toolbarPan->addAction(actionHash.value(ACTION_panup));
+    toolbarPan->addAction(actionHash.value(ACTION_pandown));
+
+    connect(toolbarPan, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createIconToolbar()
+{
+    qDebug("MainWindow createIconToolbar()");
+
+    toolbarIcon->setObjectName("toolbarIcon");
+    toolbarIcon->addAction(actionHash.value(ACTION_icon16));
+    toolbarIcon->addAction(actionHash.value(ACTION_icon24));
+    toolbarIcon->addAction(actionHash.value(ACTION_icon32));
+    toolbarIcon->addAction(actionHash.value(ACTION_icon48));
+    toolbarIcon->addAction(actionHash.value(ACTION_icon64));
+    toolbarIcon->addAction(actionHash.value(ACTION_icon128));
+
+    connect(toolbarIcon, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createHelpToolbar()
+{
+    qDebug("MainWindow createHelpToolbar()");
+
+    toolbarHelp->setObjectName("toolbarHelp");
+    toolbarHelp->addAction(actionHash.value(ACTION_help));
+    toolbarHelp->addSeparator();
+    toolbarHelp->addAction(actionHash.value(ACTION_changelog));
+    toolbarHelp->addSeparator();
+    toolbarHelp->addAction(actionHash.value(ACTION_about));
+    toolbarHelp->addSeparator();
+    toolbarHelp->addAction(actionHash.value(ACTION_whatsthis));
+
+    connect(toolbarHelp, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createLayerToolbar()
+{
+    qDebug("MainWindow createLayerToolbar()");
+
+    toolbarLayer->setObjectName("toolbarLayer");
+    toolbarLayer->addAction(actionHash.value(ACTION_makelayercurrent));
+    toolbarLayer->addAction(actionHash.value(ACTION_layers));
+
+    QString appDir = qApp->applicationDirPath();
+    QString icontheme = state.settings.general_icon_theme;
+
+    layerSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    //TODO: Create layer pixmaps by concatenating several icons
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "0");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "1");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "2");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "3");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "4");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "5");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "6");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "7");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "8");
+    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "9");
+    toolbarLayer->addWidget(layerSelector);
+    connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
+
+    toolbarLayer->addAction(actionHash.value(ACTION_layerprevious));
+
+    connect(toolbarLayer, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createPropertiesToolbar()
+{
+    qDebug("MainWindow createPropertiesToolbar()");
+
+    toolbarProperties->setObjectName("toolbarProperties");
+
+    QString appDir = qApp->applicationDirPath();
+    QString icontheme = state.settings.general_icon_theme;
+
+    colorSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorbylayer" + ".png"), "ByLayer");
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorbyblock" + ".png"), "ByBlock");
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorred"     + ".png"), tr("Red"),     qRgb(255,  0,  0));
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "coloryellow"  + ".png"), tr("Yellow"),  qRgb(255,255,  0));
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorgreen"   + ".png"), tr("Green"),   qRgb(  0,255,  0));
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorcyan"    + ".png"), tr("Cyan"),    qRgb(  0,255,255));
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorblue"    + ".png"), tr("Blue"),    qRgb(  0,  0,255));
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colormagenta" + ".png"), tr("Magenta"), qRgb(255,  0,255));
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorwhite"   + ".png"), tr("White"),   qRgb(255,255,255));
+    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorother"   + ".png"), tr("Other..."));
+    toolbarProperties->addWidget(colorSelector);
+    connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
+
+    toolbarProperties->addSeparator();
+    linetypeSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer"    + ".png"), "ByLayer");
+    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebyblock"    + ".png"), "ByBlock");
+    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypecontinuous" + ".png"), "Continuous");
+    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypehidden"     + ".png"), "Hidden");
+    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypecenter"     + ".png"), "Center");
+    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypeother"      + ".png"), "Other...");
+    toolbarProperties->addWidget(linetypeSelector);
+    connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetypeSelectorIndexChanged(int)));
+
+    toolbarProperties->addSeparator();
+    lineweightSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweightbylayer" + ".png"), "ByLayer", -2.00);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweightbyblock" + ".png"), "ByBlock", -1.00);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweightdefault" + ".png"), "Default",  0.00);
+    //TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight01" + ".png"), "0.00 mm", 0.00);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight02" + ".png"), "0.05 mm", 0.05);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight03" + ".png"), "0.15 mm", 0.15);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight04" + ".png"), "0.20 mm", 0.20);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight05" + ".png"), "0.25 mm", 0.25);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight06" + ".png"), "0.30 mm", 0.30);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight07" + ".png"), "0.35 mm", 0.35);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight08" + ".png"), "0.40 mm", 0.40);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight09" + ".png"), "0.45 mm", 0.45);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight10" + ".png"), "0.50 mm", 0.50);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight11" + ".png"), "0.55 mm", 0.55);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight12" + ".png"), "0.60 mm", 0.60);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight13" + ".png"), "0.65 mm", 0.65);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight14" + ".png"), "0.70 mm", 0.70);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight15" + ".png"), "0.75 mm", 0.75);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight16" + ".png"), "0.80 mm", 0.80);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight17" + ".png"), "0.85 mm", 0.85);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight18" + ".png"), "0.90 mm", 0.90);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight19" + ".png"), "0.95 mm", 0.95);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight20" + ".png"), "1.00 mm", 1.00);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight21" + ".png"), "1.05 mm", 1.05);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight22" + ".png"), "1.10 mm", 1.10);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight23" + ".png"), "1.15 mm", 1.15);
+    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight24" + ".png"), "1.20 mm", 1.20);
+    lineweightSelector->setMinimumContentsLength(8); // Prevent dropdown text readability being squish...d.
+    toolbarProperties->addWidget(lineweightSelector);
+    connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));
+
+    connect(toolbarProperties, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createTextToolbar()
+{
+    qDebug("MainWindow createTextToolbar()");
+
+    toolbarText->setObjectName("toolbarText");
+
+    toolbarText->addWidget(textFontSelector);
+    textFontSelector->setCurrentFont(QFont(state.settings.text_font));
+    connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
+
+    toolbarText->addAction(actionHash.value(ACTION_textbold));
+    actionHash.value(ACTION_textbold)->setChecked(state.settings.text_style_bold);
+    toolbarText->addAction(actionHash.value(ACTION_textitalic));
+    actionHash.value(ACTION_textitalic)->setChecked(state.settings.text_style_italic);
+    toolbarText->addAction(actionHash.value(ACTION_textunderline));
+    actionHash.value(ACTION_textunderline)->setChecked(state.settings.text_style_underline);
+    toolbarText->addAction(actionHash.value(ACTION_textstrikeout));
+    actionHash.value(ACTION_textstrikeout)->setChecked(state.settings.text_style_strikeout);
+    toolbarText->addAction(actionHash.value(ACTION_textoverline));
+    actionHash.value(ACTION_textoverline)->setChecked(state.settings.text_style_overline);
+
+    textSizeSelector->setFocusProxy(prompt);
+    textSizeSelector->addItem("6 pt",   6);
+    textSizeSelector->addItem("8 pt",   8);
+    textSizeSelector->addItem("9 pt",   9);
+    textSizeSelector->addItem("10 pt", 10);
+    textSizeSelector->addItem("11 pt", 11);
+    textSizeSelector->addItem("12 pt", 12);
+    textSizeSelector->addItem("14 pt", 14);
+    textSizeSelector->addItem("18 pt", 18);
+    textSizeSelector->addItem("24 pt", 24);
+    textSizeSelector->addItem("30 pt", 30);
+    textSizeSelector->addItem("36 pt", 36);
+    textSizeSelector->addItem("48 pt", 48);
+    textSizeSelector->addItem("60 pt", 60);
+    textSizeSelector->addItem("72 pt", 72);
+    setTextSize(state.settings.text_size);
+    toolbarText->addWidget(textSizeSelector);
+    connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
+
+    connect(toolbarText, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createPromptToolbar()
+{
+    qDebug("MainWindow createPromptToolbar()");
+
+    toolbarPrompt->setObjectName("toolbarPrompt");
+    toolbarPrompt->addWidget(prompt);
+    toolbarPrompt->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    connect(toolbarPrompt, SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
+}
+
+void MainWindow::createAllToolbars()
+{
+    qDebug("MainWindow createAllToolbars()");
+
+    createFileToolbar();
+    createEditToolbar();
+    createViewToolbar();
+    createZoomToolbar();
+    createPanToolbar();
+    createIconToolbar();
+    createHelpToolbar();
+    createLayerToolbar();
+    createPropertiesToolbar();
+    createTextToolbar();
+    createPromptToolbar();
+
+    // Horizontal
+    toolbarView->setOrientation(Qt::Horizontal);
+    toolbarZoom->setOrientation(Qt::Horizontal);
+    toolbarLayer->setOrientation(Qt::Horizontal);
+    toolbarProperties->setOrientation(Qt::Horizontal);
+    toolbarText->setOrientation(Qt::Horizontal);
+    toolbarPrompt->setOrientation(Qt::Horizontal);
+    // Top
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarFile);
+    addToolBar(Qt::TopToolBarArea, toolbarEdit);
+    addToolBar(Qt::TopToolBarArea, toolbarHelp);
+    addToolBar(Qt::TopToolBarArea, toolbarIcon);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarZoom);
+    addToolBar(Qt::TopToolBarArea, toolbarPan);
+    addToolBar(Qt::TopToolBarArea, toolbarView);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarLayer);
+    addToolBar(Qt::TopToolBarArea, toolbarProperties);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarText);
+    // Bottom
+    addToolBar(Qt::BottomToolBarArea, toolbarPrompt);
+
+    //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
+}
+

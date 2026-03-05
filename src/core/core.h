@@ -241,14 +241,53 @@ typedef struct State_ {
     /* Temporary until changes are accepted */
     Settings dialog;
 
+    /* Paths */
     sds settings_dir;
     sds settings_path;
     sds app_dir;
 
+    /* Documents */
+    int32_t num_docs;
+    int32_t doc_index;
+
+    bool shift;
+
+    /* Command */
+    bool command_active;
+    bool rapid_fire;
+    bool is_blinking;
+    bool blink_state;
+    sds command_line;
+    sds prefix;
+    sds current_command;
+    sds last_command;
+    sdsarray *arguments;
+
+    /* Configuration tables */
     sdsarray *manifest;
     sdsarray *tips;
+    sdsarray *aliases;
 
-    sdsarray *arguments;
+    sdsarray *file_menu;
+    sdsarray *edit_menu;
+    sdsarray *view_menu;
+    sdsarray *window_menu;
+    sdsarray *help_menu;
+    sdsarray *recent_menu;
+    sdsarray *zoom_menu;
+    sdsarray *pan_menu;
+
+    sdsarray *file_toolbar;
+    sdsarray *edit_toolbar;
+    sdsarray *view_toolbar;
+    sdsarray *zoom_toolbar;
+    sdsarray *pan_toolbar;
+    sdsarray *icon_toolbar;
+    sdsarray *help_toolbar;
+    sdsarray *layer_toolbar;
+    sdsarray *text_toolbar;
+    sdsarray *properties_toolbar;
+    sdsarray *prompt_toolbar;
 } State;
 
 typedef struct CommandData_ {
