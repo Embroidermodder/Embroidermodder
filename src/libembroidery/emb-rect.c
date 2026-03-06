@@ -85,7 +85,7 @@ EmbRectObject embRectObject_make(double x, double y, double w, double h)
 EmbRectObject* embRectObject_create(double x, double y, double w, double h)
 {
     EmbRectObject* heapRectObj = (EmbRectObject*)malloc(sizeof(EmbRectObject));
-    if(!heapRectObj) { embLog_error("emb-rect.c embRectObject_create(), cannot allocate memory for heapRectObj\n"); return 0; }
+    if (!heapRectObj) { embLog_error("emb-rect.c embRectObject_create(), cannot allocate memory for heapRectObj\n"); return 0; }
     heapRectObj->rect.left = x;
     heapRectObj->rect.top = y;
     heapRectObj->rect.right = x + w;
@@ -100,7 +100,7 @@ EmbRectObject* embRectObject_create(double x, double y, double w, double h)
 EmbRectObjectList* embRectObjectList_create(EmbRectObject data)
 {
     EmbRectObjectList* heapRectObjList = (EmbRectObjectList*)malloc(sizeof(EmbRectObjectList));
-    if(!heapRectObjList) { embLog_error("emb-rect.c embRectObjectList_create(), cannot allocate memory for heapRectObjList\n"); return 0; }
+    if (!heapRectObjList) { embLog_error("emb-rect.c embRectObjectList_create(), cannot allocate memory for heapRectObjList\n"); return 0; }
     heapRectObjList->rectObj = data;
     heapRectObjList->next = 0;
     return heapRectObjList;
@@ -108,10 +108,10 @@ EmbRectObjectList* embRectObjectList_create(EmbRectObject data)
 
 EmbRectObjectList* embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data)
 {
-    if(!pointer) { embLog_error("emb-rect.c embRectObjectList_add(), pointer argument is null\n"); return 0; }
-    if(pointer->next) { embLog_error("emb-rect.c embRectObjectList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-rect.c embRectObjectList_add(), pointer argument is null\n"); return 0; }
+    if (pointer->next) { embLog_error("emb-rect.c embRectObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbRectObjectList*)malloc(sizeof(EmbRectObjectList));
-    if(!pointer->next) { embLog_error("emb-rect.c embRectObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) { embLog_error("emb-rect.c embRectObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->rectObj = data;
     pointer->next = 0;
@@ -121,7 +121,7 @@ EmbRectObjectList* embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObje
 int embRectObjectList_count(EmbRectObjectList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -132,7 +132,7 @@ int embRectObjectList_count(EmbRectObjectList* pointer)
 
 int embRectObjectList_empty(EmbRectObjectList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }

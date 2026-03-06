@@ -116,8 +116,8 @@ void readPecStitches(EmbPattern* pattern, EmbFile* file)
 {
     int stitchNumber = 0;
 
-    if(!pattern) { embLog_error("format-pec.c readPecStitches(), pattern argument is null\n"); return; }
-    if(!file) { embLog_error("format-pec.c readPecStitches(), file argument is null\n"); return; }
+    if (!pattern) { embLog_error("format-pec.c readPecStitches(), pattern argument is null\n"); return; }
+    if (!file) { embLog_error("format-pec.c readPecStitches(), file argument is null\n"); return; }
 
     while(!embFile_eof(file))
     {
@@ -125,12 +125,12 @@ void readPecStitches(EmbPattern* pattern, EmbFile* file)
         int val2 = (int)binaryReadUInt8(file);
 
         int stitchType = NORMAL;
-        if(val1 == 0xFF && val2 == 0x00)
+        if (val1 == 0xFF && val2 == 0x00)
         {
             embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
             break;
         }
-        if(val1 == 0xFE && val2 == 0xB0)
+        if (val1 == 0xFE && val2 == 0xB0)
         {
             (void)binaryReadByte(file);
             embPattern_addStitchRel(pattern, 0.0, 0.0, STOP, 1);
@@ -138,37 +138,37 @@ void readPecStitches(EmbPattern* pattern, EmbFile* file)
             continue;
         }
         /* High bit set means 12-bit offset, otherwise 7-bit signed delta */
-        if(val1 & 0x80)
+        if (val1 & 0x80)
         {
-            if(val1 & 0x20) stitchType = TRIM;
-            if(val1 & 0x10) stitchType = JUMP;
+            if (val1 & 0x20) stitchType = TRIM;
+            if (val1 & 0x10) stitchType = JUMP;
             val1 = ((val1 & 0x0F) << 8) + val2;
 
             /* Signed 12-bit arithmetic */
-            if(val1 & 0x800)
+            if (val1 & 0x800)
             {
                 val1 -= 0x1000;
             }
 
             val2 = binaryReadUInt8(file);
         }
-        else if(val1 >= 0x40)
+        else if (val1 >= 0x40)
         {
             val1 -= 0x80;
         }
-        if(val2 & 0x80)
+        if (val2 & 0x80)
         {
-            if(val2 & 0x20) stitchType = TRIM;
-            if(val2 & 0x10) stitchType = JUMP;
+            if (val2 & 0x20) stitchType = TRIM;
+            if (val2 & 0x10) stitchType = JUMP;
             val2 = ((val2 & 0x0F) << 8) + binaryReadUInt8(file);
 
             /* Signed 12-bit arithmetic */
-            if(val2 & 0x800)
+            if (val2 & 0x800)
             {
                 val2 -= 0x1000;
             }
         }
-        else if(val2 >= 0x40)
+        else if (val2 >= 0x40)
         {
             val2 -= 0x80;
         }
@@ -182,18 +182,18 @@ static void pecEncodeJump(EmbFile* file, int x, int types)
     int outputVal = abs(x) & 0x7FF;
     unsigned int orPart = 0x80;
 
-    if(!file) { embLog_error("format-pec.c pecEncodeJump(), file argument is null\n"); return; }
+    if (!file) { embLog_error("format-pec.c pecEncodeJump(), file argument is null\n"); return; }
 
-    if(types & TRIM)
+    if (types & TRIM)
     {
         orPart |= 0x20;
     }
-    if(types & JUMP)
+    if (types & JUMP)
     {
         orPart |= 0x10;
     }
 
-    if(x < 0)
+    if (x < 0)
     {
         outputVal = x + 0x1000 & 0x7FF;
         outputVal |= 0x800;
@@ -204,7 +204,7 @@ static void pecEncodeJump(EmbFile* file, int x, int types)
 
 static void pecEncodeStop(EmbFile* file, unsigned char val)
 {
-    if(!file) { embLog_error("format-pec.c pecEncodeStop(), file argument is null\n"); return; }
+    if (!file) { embLog_error("format-pec.c pecEncodeStop(), file argument is null\n"); return; }
     binaryWriteByte(file, 0xFE);
     binaryWriteByte(file, 0xB0);
     binaryWriteByte(file, val);
@@ -219,11 +219,11 @@ int readPec(EmbPattern* pattern, const char* fileName)
     int i;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-pec.c readPec(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-pec.c readPec(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-pec.c readPec(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-pec.c readPec(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-pec.c readPec(), cannot open %s for reading\n", fileName);
         return 0;
@@ -231,7 +231,7 @@ int readPec(EmbPattern* pattern, const char* fileName)
 
     embFile_seek(file, 0x38, SEEK_SET);
     colorChanges = (unsigned char)binaryReadByte(file);
-    for(i = 0; i <= colorChanges; i++)
+    for (i = 0; i <= colorChanges; i++)
     {
         embPattern_addThread(pattern, pecThreads[binaryReadByte(file) % 65]);
     }
@@ -264,7 +264,7 @@ int readPec(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);
@@ -279,8 +279,8 @@ static void pecEncode(EmbFile* file, EmbPattern* p)
     unsigned char stopCode = 2;
     EmbStitchList* list = 0;
 
-    if(!file) { embLog_error("format-pec.c pecEncode(), file argument is null\n"); return; }
-    if(!p) { embLog_error("format-pec.c pecEncode(), p argument is null\n"); return; }
+    if (!file) { embLog_error("format-pec.c pecEncode(), file argument is null\n"); return; }
+    if (!p) { embLog_error("format-pec.c pecEncode(), p argument is null\n"); return; }
 
     list = p->stitchList;
     while(list)
@@ -293,10 +293,10 @@ static void pecEncode(EmbFile* file, EmbPattern* p)
         thisX += (double)deltaX;
         thisY += (double)deltaY;
 
-        if(s.flags & STOP)
+        if (s.flags & STOP)
         {
             pecEncodeStop(file, stopCode);
-            if(stopCode == (unsigned char)2)
+            if (stopCode == (unsigned char)2)
             {
                 stopCode = (unsigned char)1;
             }
@@ -305,12 +305,12 @@ static void pecEncode(EmbFile* file, EmbPattern* p)
                 stopCode = (unsigned char)2;
             }
         }
-        else if(s.flags & END)
+        else if (s.flags & END)
         {
             binaryWriteByte(file, 0xFF);
             break;
         }
-        else if(deltaX < 63 && deltaX > -64 && deltaY < 63 && deltaY > -64 && (!(s.flags & (JUMP | TRIM))))
+        else if (deltaX < 63 && deltaX > -64 && deltaY < 63 && deltaY > -64 && (!(s.flags & (JUMP | TRIM))))
         {
             binaryWriteByte(file, (deltaX < 0) ? (unsigned char)(deltaX + 0x80) : (unsigned char)deltaX);
             binaryWriteByte(file, (deltaY < 0) ? (unsigned char)(deltaY + 0x80) : (unsigned char)deltaY);
@@ -333,11 +333,11 @@ static void writeImage(EmbFile* file, unsigned char image[][48])
 {
     int i, j;
 
-    if(!file) { embLog_error("format-pec.c writeImage(), file argument is null\n"); return; }
+    if (!file) { embLog_error("format-pec.c writeImage(), file argument is null\n"); return; }
 
-    for(i = 0; i < 38; i++)
+    for (i = 0; i < 38; i++)
     {
-        for(j = 0; j < 6; j++)
+        for (j = 0; j < 6; j++)
         {
             int offset = j * 8;
             unsigned char output = 0;
@@ -366,19 +366,19 @@ void writePecStitches(EmbPattern* pattern, EmbFile* file, const char* fileName)
     const char* dotPos = strrchr(fileName, '.');
     const char* start = 0;
 
-    if(!pattern) { embLog_error("format-pec.c writePecStitches(), pattern argument is null\n"); return; }
-    if(!file) { embLog_error("format-pec.c writePecStitches(), file argument is null\n"); return; }
-    if(!fileName) { embLog_error("format-pec.c writePecStitches(), fileName argument is null\n"); return; }
+    if (!pattern) { embLog_error("format-pec.c writePecStitches(), pattern argument is null\n"); return; }
+    if (!file) { embLog_error("format-pec.c writePecStitches(), file argument is null\n"); return; }
+    if (!fileName) { embLog_error("format-pec.c writePecStitches(), fileName argument is null\n"); return; }
 
-    if(forwardSlashPos)
+    if (forwardSlashPos)
     {
         start = forwardSlashPos + 1;
     }
-    if(backSlashPos && backSlashPos > start)
+    if (backSlashPos && backSlashPos > start)
     {
         start = backSlashPos + 1;
     }
-    if(!start)
+    if (!start)
     {
         start = fileName;
     }
@@ -393,12 +393,12 @@ void writePecStitches(EmbPattern* pattern, EmbFile* file, const char* fileName)
     {
         binaryWriteByte(file, (unsigned char)*(start + i));
     }
-    for(i = 0; i < (int)(16-flen); i++)
+    for (i = 0; i < (int)(16-flen); i++)
     {
         binaryWriteByte(file, (unsigned char)0x20);
     }
     binaryWriteByte(file, 0x0D);
-    for(i = 0; i < 12; i++)
+    for (i = 0; i < 12; i++)
     {
         binaryWriteByte(file, (unsigned char)0x20);
     }
@@ -407,18 +407,18 @@ void writePecStitches(EmbPattern* pattern, EmbFile* file, const char* fileName)
     binaryWriteByte(file, (unsigned char)0x06);
     binaryWriteByte(file, (unsigned char)0x26);
 
-    for(i = 0; i < 12; i++)
+    for (i = 0; i < 12; i++)
     {
         binaryWriteByte(file, (unsigned char)0x20);
     }
     currentThreadCount = embThreadList_count(pattern->threadList);
     binaryWriteByte(file, (unsigned char)(currentThreadCount-1));
 
-    for(i = 0; i < currentThreadCount; i++)
+    for (i = 0; i < currentThreadCount; i++)
     {
         binaryWriteByte(file, (unsigned char)embThread_findNearestColorInArray(embThreadList_getAt(pattern->threadList, i).color, (EmbThread*)pecThreads, pecThreadCount));
     }
-    for(i = 0; i < (int)(0x1CF - currentThreadCount); i++)
+    for (i = 0; i < (int)(0x1CF - currentThreadCount); i++)
     {
         binaryWriteByte(file, (unsigned char)0x20);
     }
@@ -477,14 +477,14 @@ void writePecStitches(EmbPattern* pattern, EmbFile* file, const char* fileName)
 
     /* Writing each individual color */
     tempStitches = pattern->stitchList;
-    for(i = 0; i < currentThreadCount; i++)
+    for (i = 0; i < currentThreadCount; i++)
     {
         clearImage(image);
         while(tempStitches->next)
         {
             int x = roundDouble((tempStitches->stitch.xx - bounds.left) * xFactor) + 3;
             int y = roundDouble((tempStitches->stitch.yy - bounds.top) * yFactor) + 3;
-            if(tempStitches->stitch.flags & STOP)
+            if (tempStitches->stitch.flags & STOP)
             {
                 tempStitches = tempStitches->next;
                 break;
@@ -502,18 +502,18 @@ int writePec(EmbPattern* pattern, const char* fileName)
 {
     EmbFile* file = 0;
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-pec.c writePec(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-pec.c writePec(), cannot open %s for writing\n", fileName);
         return 0;

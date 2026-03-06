@@ -9,11 +9,11 @@ int readRgb(EmbPattern* pattern, const char* fileName)
     int i, numberOfColors;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-rgb.c readRgb(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-rgb.c readRgb(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-rgb.c readRgb(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-rgb.c readRgb(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         /* NOTE: The .rgb format is an optional color file. Do not log an error if the file does not exist */
         return 0;
@@ -26,7 +26,7 @@ int readRgb(EmbPattern* pattern, const char* fileName)
     pattern->lastThread = 0;
 
     embFile_seek(file, 0x00, SEEK_SET);
-    for(i = 0; i < numberOfColors; i++)
+    for (i = 0; i < numberOfColors; i++)
     {
         EmbThread t;
         t.color.r = binaryReadByte(file);
@@ -48,11 +48,11 @@ int writeRgb(EmbPattern* pattern, const char* fileName)
     EmbThreadList* colors = pattern->threadList;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-rgb.c writeRgb(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-rgb.c writeRgb(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-rgb.c writeRgb(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-rgb.c writeRgb(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-rgb.c writeRgb(), cannot open %s for writing\n", fileName);
         return 0;

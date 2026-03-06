@@ -90,23 +90,23 @@ const EmbThread jefThreads[] = {
 
 static int jefGetHoopSize(int width, int height)
 {
-    if(width <  500 && height <  500) { return HOOP_50X50; }
-    if(width < 1260 && height < 1100) { return HOOP_126X110; }
-    if(width < 1400 && height < 2000) { return HOOP_140X200; }
-	if(width < 2000 && height < 2000) { return HOOP_200X200; }
+    if (width <  500 && height <  500) { return HOOP_50X50; }
+    if (width < 1260 && height < 1100) { return HOOP_126X110; }
+    if (width < 1400 && height < 2000) { return HOOP_140X200; }
+    if (width < 2000 && height < 2000) { return HOOP_200X200; }
     return ((int) HOOP_110X110);
 }
 
 static char jefDecode(unsigned char inputByte)
 {
-    if(inputByte >= 0x80)
+    if (inputByte >= 0x80)
         return (char) ((-~inputByte) - 1);
     return ((char) inputByte);
 }
 
 static void jefSetHoopFromId(EmbPattern* pattern, int hoopCode)
 {
-    if(!pattern) { embLog_error("format-jef.c jefSetHoopFromId(), pattern argument is null\n"); return; }
+    if (!pattern) { embLog_error("format-jef.c jefSetHoopFromId(), pattern argument is null\n"); return; }
 
     switch(hoopCode)
     {
@@ -150,19 +150,19 @@ int readJef(EmbPattern* pattern, const char* fileName)
     struct hoop_padding bounds, rectFrom110x110, rectFrom50x50, rectFrom200x140, rect_from_custom;
     int stitchBytes;
     char date[8], time[8];
-  
+
     EmbFile* file = 0;
- 
+
     unsigned char b0 = 0, b1 = 0;
     char dx = 0, dy = 0;
     int flags = 0;
 
 
-    if(!pattern) { embLog_error("format-jef.c readJef(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-jef.c readJef(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-jef.c readJef(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-jef.c readJef(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-jef.c readJef(), cannot open %s for reading\n", fileName);
         return 0;
@@ -203,40 +203,40 @@ int readJef(EmbPattern* pattern, const char* fileName)
     rect_from_custom.right = binaryReadInt32(file);
     rect_from_custom.bottom = binaryReadInt32(file);
 
-    for(i = 0; i < numberOfColors; i++)
+    for (i = 0; i < numberOfColors; i++)
     {
         embPattern_addThread(pattern, jefThreads[binaryReadInt32(file) % 79]);
     }
     embFile_seek(file, stitchOffset, SEEK_SET);
-	stitchBytes = 0;
+    stitchBytes = 0;
     while(stitchBytes < numberOfStitchBytes)
     {
         flags = NORMAL;
         b0 = (unsigned char)embFile_getc(file);
-        if(embFile_eof(file))
+        if (embFile_eof(file))
         {
             break;
         }
         b1 = (unsigned char)embFile_getc(file);
-        if(embFile_eof(file))
+        if (embFile_eof(file))
         {
             break;
         }
-		stitchBytes += 2;
-        if(b0 == 0x80)
+        stitchBytes += 2;
+        if (b0 == 0x80)
         {
-            if(b1 & 1)
+            if (b1 & 1)
             {
                 b0 = (unsigned char)embFile_getc(file);
-                if(embFile_eof(file))
+                if (embFile_eof(file))
                     break;
                 b1 = (unsigned char)embFile_getc(file);
-                if(embFile_eof(file))
+                if (embFile_eof(file))
                     break;
-				stitchBytes += 2;
+                stitchBytes += 2;
                 flags = STOP;
             }
-            else if((b1 == 2) || (b1 == 4) || b1 == 6)
+            else if ((b1 == 2) || (b1 == 4) || b1 == 6)
             {
                 flags = TRIM;
                 b0 = (unsigned char)embFile_getc(file);
@@ -249,12 +249,12 @@ int readJef(EmbPattern* pattern, const char* fileName)
                 {
                     break;
                 }
-				stitchBytes += 2;
+                stitchBytes += 2;
             }
-            else if(b1 == 0x10)
+            else if (b1 == 0x10)
             {
                 embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
-				stitchBytes += 1;
+                stitchBytes += 1;
                 break;
             }
         }
@@ -274,12 +274,12 @@ int readJef(EmbPattern* pattern, const char* fileName)
 
 static void jefEncode(unsigned char* b, char dx, char dy, int flags)
 {
-    if(!b)
+    if (!b)
     {
         embLog_error("format-jef.c expEncode(), b argument is null\n");
         return;
     }
-    if(flags == STOP)
+    if (flags == STOP)
     {
         b[0] = 0x80;
         b[1] = 1;
@@ -293,20 +293,20 @@ static void jefEncode(unsigned char* b, char dx, char dy, int flags)
         b[2] = 0;
         b[3] = 0;
     }
-    else if(flags == TRIM)
+    else if (flags == TRIM)
     {
         b[0] = 0x80;
         b[1] = 2;
         b[2] = dx;
         b[3] = dy;
     }
-	else if (flags == JUMP)
-	{
-		b[0] = 0x80;
-		b[1] = 4;
-		b[2] = dx;
-		b[3] = dy;
-	}
+    else if (flags == JUMP)
+    {
+        b[0] = 0x80;
+        b[1] = 4;
+        b[2] = dx;
+        b[3] = dy;
+    }
     else
     {
         b[0] = dx;
@@ -329,10 +329,10 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     int flags = 0;
     unsigned char b[4];
 
-    if(!pattern) { embLog_error("format-jef.c writeJef(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-jef.c writeJef(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-jef.c writeJef(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-jef.c writeJef(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-jef.c writeJef(), pattern contains no stitches\n");
         return 0;
@@ -344,7 +344,7 @@ int writeJef(EmbPattern* pattern, const char* fileName)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
     }
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-jef.c writeJef(), cannot open %s for writing\n", fileName);
         return 0;
@@ -365,17 +365,17 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     binaryWriteByte(file, 0x00);
     binaryWriteInt(file, embThreadList_count(pattern->threadList));
 
-	stitches = pattern->stitchList;
-	jumpAndStopCount = 0;
-	while (stitches)
-	{
-		flags = stitches->stitch.flags;
-		if ((flags & (STOP | TRIM | JUMP)) > 0) {
-			jumpAndStopCount++;
-		}
-		stitches = stitches->next;
-	}
-	binaryWriteInt(file, embStitchList_count(pattern->stitchList) + jumpAndStopCount);
+    stitches = pattern->stitchList;
+    jumpAndStopCount = 0;
+    while (stitches)
+    {
+        flags = stitches->stitch.flags;
+        if ((flags & (STOP | TRIM | JUMP)) > 0) {
+            jumpAndStopCount++;
+        }
+        stitches = stitches->next;
+    }
+    binaryWriteInt(file, embStitchList_count(pattern->stitchList) + jumpAndStopCount);
 
     boundingRect = embPattern_calcBoundingBox(pattern);
 
@@ -391,10 +391,10 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     binaryWriteInt(file, (int) (designHeight / 2)); /* bottom */
 
     /* Distance from default 110 x 110 Hoop */
-    if(min(550 - designWidth / 2, 550 - designHeight / 2) >= 0)
+    if (min(550 - designWidth / 2, 550 - designHeight / 2) >= 0)
     {
         binaryWriteInt(file, (int) max(-1, (1100 - designWidth) / 2));  /* left */
-		binaryWriteInt(file, (int)max(-1, (1100 - designWidth) / 2));  /* right */
+        binaryWriteInt(file, (int)max(-1, (1100 - designWidth) / 2));  /* right */
         binaryWriteInt(file, (int) max(-1, (1100 - designHeight) / 2)); /* top */
         binaryWriteInt(file, (int) max(-1, (1100 - designHeight) / 2)); /* bottom */
     }
@@ -407,10 +407,10 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     }
 
     /* Distance from default 50 x 50 Hoop */
-    if(min((500 - designWidth) / 2, (500 - designHeight) / 2) >= 0)
+    if (min((500 - designWidth) / 2, (500 - designHeight) / 2) >= 0)
     {
         binaryWriteInt(file, (int) max(-1, (500 - designWidth) / 2));  /* left */
-		binaryWriteInt(file, (int)max(-1, (500 - designWidth) / 2));  /* right */
+        binaryWriteInt(file, (int)max(-1, (500 - designWidth) / 2));  /* right */
         binaryWriteInt(file, (int) max(-1, (500 - designHeight) / 2)); /* top */
         binaryWriteInt(file, (int) max(-1, (500 - designHeight) / 2)); /* bottom */
     }
@@ -425,14 +425,14 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     /* Distance from default 140 x 200 Hoop */
     binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));   /* left */
     binaryWriteInt(file, (int)max(-1, ((2000 - designHeight) / 2))); /* top */
-	binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));   /* right */
+    binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));   /* right */
     binaryWriteInt(file, (int)max(-1, ((2000 - designHeight) / 2))); /* bottom */
 
     /* repeated Distance from default 140 x 200 Hoop */
     /* TODO: Actually should be distance to custom hoop */
     binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));  /* left */
     binaryWriteInt(file, (int)max(-1, ((2000 - designHeight) / 2))); /* top */
-	binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));  /* right */
+    binaryWriteInt(file, (int)max(-1, ((1400 - designWidth) / 2)));  /* right */
     binaryWriteInt(file, (int)max(-1, ((2000 - designHeight) / 2))); /* bottom */
 
     threadPointer = pattern->threadList;
@@ -442,7 +442,7 @@ int writeJef(EmbPattern* pattern, const char* fileName)
         binaryWriteInt(file, embThread_findNearestColorInArray(threadPointer->thread.color, (EmbThread*)jefThreads, 79));
         threadPointer = threadPointer->next;
     }
-    for(i = 0; i < colorlistSize; i++)
+    for (i = 0; i < colorlistSize; i++)
     {
         binaryWriteInt(file, 0x0D);
     }
@@ -455,7 +455,7 @@ int writeJef(EmbPattern* pattern, const char* fileName)
         yy = stitches->stitch.yy * 10.0;
         flags = stitches->stitch.flags;
         jefEncode(b, (char)roundDouble(dx), (char)roundDouble(dy), flags);
-        if((b[0] == 0x80) && ((b[1] == 1) || (b[1] == 2) || (b[1] == 4)))
+        if ((b[0] == 0x80) && ((b[1] == 1) || (b[1] == 2) || (b[1] == 4)))
         {
             embFile_printf(file, "%c%c%c%c", b[0], b[1], b[2], b[3]);
         }
@@ -463,9 +463,9 @@ int writeJef(EmbPattern* pattern, const char* fileName)
         {
             embFile_printf(file, "%c%c", b[0], b[1]);
         }
-		if (flags & END) {
-			break;
-		}
+        if (flags & END) {
+            break;
+        }
         stitches = stitches->next;
     }
     embFile_close(file);

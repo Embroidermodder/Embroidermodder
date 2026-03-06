@@ -11,9 +11,9 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
     char ending[5];
     EmbReaderWriter* rw = 0;
 
-    if(!fileName) { embLog_error("emb-reader-writer.c embReaderWriter_getByFileName(), fileName argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("emb-reader-writer.c embReaderWriter_getByFileName(), fileName argument is null\n"); return 0; }
 
-    if(strlen(fileName) == 0) return 0;
+    if (strlen(fileName) == 0) return 0;
     strcpy(ending, strrchr(fileName, '.'));
 
     while(ending[i] != '\0')
@@ -22,9 +22,9 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         ++i;
     }
     rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
-    if(!rw) { embLog_error("emb-reader-writer.c embReaderWriter_getByFileName(), cannot allocate memory for rw\n"); return 0; }
+    if (!rw) { embLog_error("emb-reader-writer.c embReaderWriter_getByFileName(), cannot allocate memory for rw\n"); return 0; }
 
-    if(!strcmp(ending, ".10o"))
+    if (!strcmp(ending, ".10o"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -33,7 +33,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = write10o;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".100"))
+    else if (!strcmp(ending, ".100"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -42,7 +42,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = write100;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".art"))
+    else if (!strcmp(ending, ".art"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -51,7 +51,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeArt;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".bmc"))
+    else if (!strcmp(ending, ".bmc"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -60,7 +60,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeBmc;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".bro"))
+    else if (!strcmp(ending, ".bro"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -69,7 +69,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeBro;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".cnd"))
+    else if (!strcmp(ending, ".cnd"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -78,7 +78,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeCnd;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".col"))
+    else if (!strcmp(ending, ".col"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -87,7 +87,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeCol;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".csd"))
+    else if (!strcmp(ending, ".csd"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -96,7 +96,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeCsd;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".csv"))
+    else if (!strcmp(ending, ".csv"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -105,7 +105,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeCsv;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".dat"))
+    else if (!strcmp(ending, ".dat"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -114,7 +114,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeDat;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".dem"))
+    else if (!strcmp(ending, ".dem"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -123,7 +123,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeDem;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".dsb"))
+    else if (!strcmp(ending, ".dsb"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -132,7 +132,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeDsb;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".dst"))
+    else if (!strcmp(ending, ".dst"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -141,7 +141,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeDst;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".dsz"))
+    else if (!strcmp(ending, ".dsz"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -150,7 +150,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeDsz;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".dxf"))
+    else if (!strcmp(ending, ".dxf"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -159,7 +159,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeDxf;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".edr"))
+    else if (!strcmp(ending, ".edr"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -168,7 +168,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeEdr;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".emd"))
+    else if (!strcmp(ending, ".emd"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -177,12 +177,12 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeEmd;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".exp"))
+    else if (!strcmp(ending, ".exp"))
     {
         rw->reader = readExp;
         rw->writer = writeExp;
     }
-    else if(!strcmp(ending, ".exy"))
+    else if (!strcmp(ending, ".exy"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -191,7 +191,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeExy;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".eys"))
+    else if (!strcmp(ending, ".eys"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -200,7 +200,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeEys;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".fxy"))
+    else if (!strcmp(ending, ".fxy"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -209,7 +209,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeFxy;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".gc"))
+    else if (!strcmp(ending, ".gc"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -218,7 +218,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeGc;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".gnc"))
+    else if (!strcmp(ending, ".gnc"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -227,7 +227,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeGnc;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".gt"))
+    else if (!strcmp(ending, ".gt"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -236,7 +236,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeGt;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".hus"))
+    else if (!strcmp(ending, ".hus"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -245,7 +245,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeHus;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".inb"))
+    else if (!strcmp(ending, ".inb"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -254,7 +254,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeInb;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".inf"))
+    else if (!strcmp(ending, ".inf"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -263,7 +263,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeInf;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".jef"))
+    else if (!strcmp(ending, ".jef"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -272,7 +272,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeJef;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".ksm"))
+    else if (!strcmp(ending, ".ksm"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -281,7 +281,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeKsm;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".max"))
+    else if (!strcmp(ending, ".max"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -290,7 +290,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeMax;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".mit"))
+    else if (!strcmp(ending, ".mit"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -299,7 +299,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeMit;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".new"))
+    else if (!strcmp(ending, ".new"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -308,7 +308,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeNew;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".ofm"))
+    else if (!strcmp(ending, ".ofm"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -317,7 +317,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeOfm;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".pcd"))
+    else if (!strcmp(ending, ".pcd"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -326,7 +326,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePcd;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".pcm"))
+    else if (!strcmp(ending, ".pcm"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -335,7 +335,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePcm;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".pcq"))
+    else if (!strcmp(ending, ".pcq"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -344,7 +344,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePcq;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".pcs"))
+    else if (!strcmp(ending, ".pcs"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -353,7 +353,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePcs;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".pec"))
+    else if (!strcmp(ending, ".pec"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -362,7 +362,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePec;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".pel"))
+    else if (!strcmp(ending, ".pel"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -371,7 +371,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePel;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".pem"))
+    else if (!strcmp(ending, ".pem"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -380,7 +380,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePem;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".pes"))
+    else if (!strcmp(ending, ".pes"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -389,7 +389,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePes;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".phb"))
+    else if (!strcmp(ending, ".phb"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -398,7 +398,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePhb;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".phc"))
+    else if (!strcmp(ending, ".phc"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -407,7 +407,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePhc;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".plt"))
+    else if (!strcmp(ending, ".plt"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -416,7 +416,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writePlt;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".rgb"))
+    else if (!strcmp(ending, ".rgb"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -425,7 +425,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeRgb;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".sew"))
+    else if (!strcmp(ending, ".sew"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -434,7 +434,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeSew;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".shv"))
+    else if (!strcmp(ending, ".shv"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -443,7 +443,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeShv;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".sst"))
+    else if (!strcmp(ending, ".sst"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -452,7 +452,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeSst;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".stx"))
+    else if (!strcmp(ending, ".stx"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -461,7 +461,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeStx;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".svg"))
+    else if (!strcmp(ending, ".svg"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -470,7 +470,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeSvg;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".t01"))
+    else if (!strcmp(ending, ".t01"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -479,7 +479,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeT01;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".t09"))
+    else if (!strcmp(ending, ".t09"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -488,7 +488,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeT09;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".tap"))
+    else if (!strcmp(ending, ".tap"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -497,7 +497,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeTap;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".thr"))
+    else if (!strcmp(ending, ".thr"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -506,7 +506,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeThr;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".txt"))
+    else if (!strcmp(ending, ".txt"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -515,7 +515,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeTxt;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".u00"))
+    else if (!strcmp(ending, ".u00"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -524,7 +524,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeU00;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".u01"))
+    else if (!strcmp(ending, ".u01"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -533,7 +533,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeU01;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".vip"))
+    else if (!strcmp(ending, ".vip"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -542,7 +542,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeVip;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".vp3"))
+    else if (!strcmp(ending, ".vp3"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -551,7 +551,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeVp3;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".xxx"))
+    else if (!strcmp(ending, ".xxx"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
@@ -560,7 +560,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeXxx;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
-    else if(!strcmp(ending, ".zsk"))
+    else if (!strcmp(ending, ".zsk"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
         return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */

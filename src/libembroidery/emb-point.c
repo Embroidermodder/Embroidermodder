@@ -32,7 +32,7 @@ EmbPoint embPoint_make(double x, double y)
 EmbPointList* embPointList_create(double x, double y)
 {
     EmbPointList* heapPointList = (EmbPointList*)malloc(sizeof(EmbPointList));
-    if(!heapPointList) { embLog_error("emb-point.c embPointList_create(), cannot allocate memory for heapPointList\n"); return 0; }
+    if (!heapPointList) { embLog_error("emb-point.c embPointList_create(), cannot allocate memory for heapPointList\n"); return 0; }
     heapPointList->point.xx = x;
     heapPointList->point.yy = y;
     heapPointList->next = 0;
@@ -41,10 +41,10 @@ EmbPointList* embPointList_create(double x, double y)
 
 EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data)
 {
-    if(!pointer) { embLog_error("emb-point.c embPointList_add(), pointer argument is null\n"); return 0; }
-    if(pointer->next) { embLog_error("emb-point.c embPointList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-point.c embPointList_add(), pointer argument is null\n"); return 0; }
+    if (pointer->next) { embLog_error("emb-point.c embPointList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPointList*)malloc(sizeof(EmbPointList));
-    if(!pointer->next) { embLog_error("emb-point.c embPointList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) { embLog_error("emb-point.c embPointList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->point = data;
     pointer->next = 0;
@@ -54,7 +54,7 @@ EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data)
 int embPointList_count(EmbPointList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -65,7 +65,7 @@ int embPointList_count(EmbPointList* pointer)
 
 int embPointList_empty(EmbPointList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }
@@ -100,7 +100,7 @@ EmbPointObject embPointObject_make(double x, double y)
 EmbPointObject* embPointObject_create(double x, double y)
 {
     EmbPointObject* heapPointObj = (EmbPointObject*)malloc(sizeof(EmbPointObject));
-    if(!heapPointObj) { embLog_error("emb-point.c embPointObject_create(), cannot allocate memory for heapPointObj\n"); return 0; }
+    if (!heapPointObj) { embLog_error("emb-point.c embPointObject_create(), cannot allocate memory for heapPointObj\n"); return 0; }
     heapPointObj->point.xx = x;
     heapPointObj->point.yy = y;
     return heapPointObj;
@@ -113,7 +113,7 @@ EmbPointObject* embPointObject_create(double x, double y)
 EmbPointObjectList* embPointObjectList_create(EmbPointObject data)
 {
     EmbPointObjectList* heapPointObjList = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
-    if(!heapPointObjList) { embLog_error("emb-point.c embPointObjectList_create(), cannot allocate memory for heapPointObjList\n"); return 0; }
+    if (!heapPointObjList) { embLog_error("emb-point.c embPointObjectList_create(), cannot allocate memory for heapPointObjList\n"); return 0; }
     heapPointObjList->pointObj = data;
     heapPointObjList->next = 0;
     return heapPointObjList;
@@ -121,10 +121,10 @@ EmbPointObjectList* embPointObjectList_create(EmbPointObject data)
 
 EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data)
 {
-    if(!pointer) { embLog_error("emb-point.c embPointObjectList_add(), pointer argument is null\n"); return 0; }
-    if(pointer->next) { embLog_error("emb-point.c embPointObjectList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-point.c embPointObjectList_add(), pointer argument is null\n"); return 0; }
+    if (pointer->next) { embLog_error("emb-point.c embPointObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
-    if(!pointer->next) { embLog_error("emb-point.c embPointObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) { embLog_error("emb-point.c embPointObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->pointObj = data;
     pointer->next = 0;
@@ -134,7 +134,7 @@ EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPoint
 int embPointObjectList_count(EmbPointObjectList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -145,7 +145,7 @@ int embPointObjectList_count(EmbPointObjectList* pointer)
 
 int embPointObjectList_empty(EmbPointObjectList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }

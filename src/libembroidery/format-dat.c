@@ -7,11 +7,11 @@ int readDat(EmbPattern* pattern, const char* fileName)
     int fileLength, stitchesRemaining;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-dat.c readDat(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-dat.c readDat(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-dat.c readDat(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-dat.c readDat(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-dat.c readDat(), cannot open %s for reading\n", fileName);
         return 0;
@@ -33,21 +33,21 @@ int readDat(EmbPattern* pattern, const char* fileName)
         int stitchType = NORMAL;
         stitchesRemaining--;
 
-        if((b0 & 0x02) == 0) stitchType = TRIM;
+        if ((b0 & 0x02) == 0) stitchType = TRIM;
 
-        if(b0 == 0x87)
+        if (b0 == 0x87)
         {
             stitchType = STOP;
         }
-        if(b0 == 0xF8)
+        if (b0 == 0xF8)
         {
             break;
         }
-        if(b1 >= 0x80)
+        if (b1 >= 0x80)
         {
             b1 = -(b1 & 0x7F);
         }
-        if(b2 >= 0x80)
+        if (b2 >= 0x80)
         {
             b2 = -(b2 & 0x7F);
         }
@@ -56,7 +56,7 @@ int readDat(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -66,17 +66,17 @@ int readDat(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeDat(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-dat.c writeDat(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-dat.c writeDat(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-dat.c writeDat(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-dat.c writeDat(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-dat.c writeDat(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */

@@ -2,20 +2,20 @@
 
 static void ksmEncode(unsigned char* b, char dx, char dy, int flags)
 {
-    if(!b)
+    if (!b)
     {
         embLog_error("format-ksm.c ksmEncode(), b argument is null\n");
         return;
     }
     /* TODO: How to encode JUMP stitches? JUMP must be handled. Also check this for the EXP format since it appears to be similar */
-    if(flags == TRIM)
+    if (flags == TRIM)
     {
         b[0] = 128;
         b[1] = 2;
         b[2] = dx;
         b[3] = dy;
     }
-    else if(flags == STOP)
+    else if (flags == STOP)
     {
         b[0] = 128;
         b[1] = 1;
@@ -37,11 +37,11 @@ int readKsm(EmbPattern* pattern, const char* fileName)
     char b[3];
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-ksm.c readKsm(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-ksm.c readKsm(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-ksm.c readKsm(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-ksm.c readKsm(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-ksm.c readKsm(), cannot open %s for reading\n", fileName);
         return 0;
@@ -53,25 +53,25 @@ int readKsm(EmbPattern* pattern, const char* fileName)
     {
         int flags = NORMAL;
 
-        if(((prevStitchType & 0x08) == 0x08) && (b[2] & 0x08) == 0x08)
+        if (((prevStitchType & 0x08) == 0x08) && (b[2] & 0x08) == 0x08)
         {
             flags = STOP;
         }
-        else if((b[2] & 0x1F) != 0)
+        else if ((b[2] & 0x1F) != 0)
         {
             flags = TRIM;
         }
         prevStitchType = b[2];
-        if(b[2] & 0x40)
+        if (b[2] & 0x40)
             b[1] = -b[1];
-        if(b[2] & 0x20)
+        if (b[2] & 0x20)
             b[0] = -b[0];
         embPattern_addStitchRel(pattern, b[1] / 10.0, b[0] / 10.0, flags, 1);
     }
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -88,26 +88,26 @@ int writeKsm(EmbPattern* pattern, const char* fileName)
     int i = 0;
     unsigned char b[4];
 
-    if(!pattern) { embLog_error("format-ksm.c writeKsm(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-ksm.c writeKsm(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-ksm.c writeKsm(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-ksm.c writeKsm(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-ksm.c writeKsm(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-ksm.c writeKsm(), cannot open %s for writing\n", fileName);
         return 0;
     }
-    for(i = 0; i < 0x80; i++)
+    for (i = 0; i < 0x80; i++)
     {
         binaryWriteInt(file, 0);
     }

@@ -11,11 +11,11 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     char input[512];
     FILE* file = 0;
 
-    if(!pattern) { embLog_error("format-plt.c readPlt(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-plt.c readPlt(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-plt.c readPlt(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-plt.c readPlt(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-plt.c readPlt(), cannot open %s for reading\n", fileName);
         return 0;
@@ -25,19 +25,19 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     /* TODO: replace all scanf code */
     while(fscanf(file, "%s", input) >= 0)
     {
-        if(startsWith("PD", input))
+        if (startsWith("PD", input))
         {
             /* TODO: replace all scanf code */
-            if(sscanf(input, "PD%lf,%lf;", &x, &y) < 2)
+            if (sscanf(input, "PD%lf,%lf;", &x, &y) < 2)
             {
                 break;
             }
             embPattern_addStitchAbs(pattern, x / scalingFactor, y / scalingFactor, NORMAL, 1);
         }
-        else if(startsWith("PU", input))
+        else if (startsWith("PU", input))
         {
             /* TODO: replace all scanf code */
-            if(sscanf(input, "PU%lf,%lf;", &x, &y) < 2)
+            if (sscanf(input, "PU%lf,%lf;", &x, &y) < 2)
             {
                 break;
             }
@@ -47,7 +47,7 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     fclose(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -64,11 +64,11 @@ int writePlt(EmbPattern* pattern, const char* fileName)
     char firstStitchOfBlock = 1;
     FILE* file = 0;
 
-    if(!pattern) { embLog_error("format-plt.c writePlt(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-plt.c writePlt(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-plt.c writePlt(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-plt.c writePlt(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-plt.c writePlt(), cannot open %s for writing\n", fileName);
         return 0;
@@ -81,11 +81,11 @@ int writePlt(EmbPattern* pattern, const char* fileName)
     while(pointer)
     {
         stitch = pointer->stitch;
-        if(stitch.flags & STOP)
+        if (stitch.flags & STOP)
         {
             firstStitchOfBlock = 1;
         }
-        if(firstStitchOfBlock)
+        if (firstStitchOfBlock)
         {
             fprintf(file, "PU%f,%f;", stitch.xx * scalingFactor, stitch.yy * scalingFactor);
             fprintf(file, "ST0.00,0.00;");

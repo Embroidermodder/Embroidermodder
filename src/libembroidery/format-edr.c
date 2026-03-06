@@ -10,11 +10,11 @@ int readEdr(EmbPattern* pattern, const char* fileName)
     int i;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-edr.c readEdr(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-edr.c readEdr(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-edr.c readEdr(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-edr.c readEdr(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         /* NOTE: The .edr format is an optional color file. Do not log an error if the file does not exist */
         return 0;
@@ -27,7 +27,7 @@ int readEdr(EmbPattern* pattern, const char* fileName)
     pattern->threadList = 0;
     pattern->lastThread = 0;
 
-    for(i = 0; i < numberOfColors; i++)
+    for (i = 0; i < numberOfColors; i++)
     {
         EmbThread t;
         t.color.r = binaryReadByte(file);
@@ -49,11 +49,11 @@ int writeEdr(EmbPattern* pattern, const char* fileName)
     EmbThreadList* pointer = 0;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-edr.c writeEdr(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-edr.c writeEdr(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-edr.c writeEdr(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-edr.c writeEdr(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-edr.c writeEdr(), cannot open %s for writing\n", fileName);
         return 0;

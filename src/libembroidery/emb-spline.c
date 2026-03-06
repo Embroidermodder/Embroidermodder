@@ -3,7 +3,7 @@
 int embSplineObjectList_count(EmbSplineObjectList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -14,7 +14,7 @@ int embSplineObjectList_count(EmbSplineObjectList* pointer)
 
 int embSplineObjectList_empty(EmbSplineObjectList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }

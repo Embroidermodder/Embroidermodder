@@ -54,7 +54,7 @@ void usage(void)
     printf("|        |       |       |                                                    |\n");
 
     formatList = embFormatList_create();
-    if(!formatList) { embLog_error("libembroidery-convert-main.c usage(), cannot allocate memory for formatList\n"); return; }
+    if (!formatList) { embLog_error("libembroidery-convert-main.c usage(), cannot allocate memory for formatList\n"); return; }
     curFormat = formatList;
     while(curFormat)
     {
@@ -101,17 +101,17 @@ int main(int argc, const char* argv[])
     int successful = 0, i = 0;
     int formatType;
 #ifdef SHORT_WAY
-    if(argc < 3)
+    if (argc < 3)
     {
         usage();
         exit(0);
     }
 
     p = embPattern_create();
-    if(!p) { embLog_error("libembroidery-convert-main.c main(), cannot allocate memory for p\n"); exit(1); }
+    if (!p) { embLog_error("libembroidery-convert-main.c main(), cannot allocate memory for p\n"); exit(1); }
 
     successful = embPattern_read(p, argv[1]);
-    if(!successful)
+    if (!successful)
     {
         embLog_error("libembroidery-convert-main.c main(), reading file %s was unsuccessful\n", argv[1]);
         embPattern_free(p);
@@ -119,18 +119,18 @@ int main(int argc, const char* argv[])
     }
 
     formatType = embFormat_typeFromName(argv[1]);
-    if(formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
+    if (formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
     {
         formatType = embFormat_typeFromName(argv[2]);
-        if(formatType == EMBFORMAT_STITCHONLY)
+        if (formatType == EMBFORMAT_STITCHONLY)
             embPattern_movePolylinesToStitchList(p);
     }
 
     i = 2;
-    for(i = 2; i < argc; i++)
+    for (i = 2; i < argc; i++)
     {
         successful = embPattern_write(p, argv[i]);
-        if(!successful)
+        if (!successful)
             embLog_error("libembroidery-convert-main.c main(), writing file %s was unsuccessful\n", argv[i]);
     }
 
@@ -140,18 +140,18 @@ int main(int argc, const char* argv[])
 
     EmbReaderWriter* reader = 0, *writer = 0;
 
-    if(argc < 3)
+    if (argc < 3)
     {
         usage();
         exit(0);
     }
 
     p = embPattern_create();
-    if(!p) { embLog_error("libembroidery-convert-main.c main(), cannot allocate memory for p\n"); exit(1); }
+    if (!p) { embLog_error("libembroidery-convert-main.c main(), cannot allocate memory for p\n"); exit(1); }
 
     successful = 0;
     reader = embReaderWriter_getByFileName(argv[1]);
-    if(!reader)
+    if (!reader)
     {
         successful = 0;
         embLog_error("libembroidery-convert-main.c main(), unsupported read file type: %s\n", argv[1]);
@@ -159,35 +159,35 @@ int main(int argc, const char* argv[])
     else
     {
         successful = reader->reader(p, argv[1]);
-        if(!successful) embLog_error("libembroidery-convert-main.c main(), reading file was unsuccessful: %s\n", argv[1]);
+        if (!successful) embLog_error("libembroidery-convert-main.c main(), reading file was unsuccessful: %s\n", argv[1]);
     }
     free(reader);
-    if(!successful)
+    if (!successful)
     {
         embPattern_free(p);
         exit(1);
     }
 
     formatType = embFormat_typeFromName(argv[1]);
-    if(formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
+    if (formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
     {
         formatType = embFormat_typeFromName(argv[2]);
-        if(formatType == EMBFORMAT_STITCHONLY)
+        if (formatType == EMBFORMAT_STITCHONLY)
             embPattern_movePolylinesToStitchList(p);
     }
 
     i = 2;
-    for(i = 2; i < argc; i++)
+    for (i = 2; i < argc; i++)
     {
         writer = embReaderWriter_getByFileName(argv[i]);
-        if(!writer)
+        if (!writer)
         {
             embLog_error("libembroidery-convert-main.c main(), unsupported write file type: %s\n", argv[i]);
         }
         else
         {
             successful = writer->writer(p, argv[i]);
-            if(!successful)
+            if (!successful)
                 embLog_error("libembroidery-convert-main.c main(), writing file %s was unsuccessful\n", argv[i]);
         }
         free(writer);
@@ -234,31 +234,31 @@ void testHash(void)
     /* FIXME */
     EmbHash* hash = 0;
     hash = embHash_create();
-    if(!hash) fail(1);
-    if(!embHash_empty(hash)) fail(2);
-    if(embHash_count(hash) != 0) fail(3);
+    if (!hash) fail(1);
+    if (!embHash_empty(hash)) fail(2);
+    if (embHash_count(hash) != 0) fail(3);
 
     /* insert */
-    if(embHash_insert(hash, "four", (void*)4)) fail(4);
-    if(embHash_insert(hash, "five", (void*)5)) fail(5);
-    if(embHash_insert(hash, "six",  (void*)6)) fail(6);
-    if(embHash_count(hash) != 3) fail(7);
+    if (embHash_insert(hash, "four", (void*)4)) fail(4);
+    if (embHash_insert(hash, "five", (void*)5)) fail(5);
+    if (embHash_insert(hash, "six",  (void*)6)) fail(6);
+    if (embHash_count(hash) != 3) fail(7);
 
     /* replace */
-    if(embHash_insert(hash, "four",  (void*)8)) fail(8);
-    if(embHash_insert(hash, "five", (void*)10)) fail(10);
-    if(embHash_insert(hash, "six",  (void*)12)) fail(12);
-    if(embHash_count(hash) != 3) fail(13);
+    if (embHash_insert(hash, "four",  (void*)8)) fail(8);
+    if (embHash_insert(hash, "five", (void*)10)) fail(10);
+    if (embHash_insert(hash, "six",  (void*)12)) fail(12);
+    if (embHash_count(hash) != 3) fail(13);
 
     /* contains */
-    if(!embHash_contains(hash, "four")) fail(14);
-    if(embHash_contains(hash, "empty")) fail(15);
+    if (!embHash_contains(hash, "four")) fail(14);
+    if (embHash_contains(hash, "empty")) fail(15);
 
     /* remove */
     embHash_remove(hash, "four");
-    if(embHash_count(hash) != 2) fail(16);
+    if (embHash_count(hash) != 2) fail(16);
     embHash_clear(hash);
-    if(embHash_count(hash) != 0) fail(17);
+    if (embHash_count(hash) != 0) fail(17);
 
     embHash_free(hash);
     pass();

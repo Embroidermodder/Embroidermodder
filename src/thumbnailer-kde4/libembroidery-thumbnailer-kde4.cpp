@@ -26,7 +26,7 @@ EmbroideryThumbnailer::~EmbroideryThumbnailer()
 const QImage loadThumb(const QString& fileName)
 {
     QFile file(fileName);
-    if(!file.open(QFile::ReadOnly | QFile::Text))
+    if (!file.open(QFile::ReadOnly | QFile::Text))
     {
         //Error opening file
         return QImage();
@@ -34,11 +34,11 @@ const QImage loadThumb(const QString& fileName)
 
     //Read
     EmbPattern* p = embPattern_create();
-    if(!p) { return QImage(); }
+    if (!p) { return QImage(); }
     int readSuccessful = 0;
     QString readError;
     EmbReaderWriter* reader = embReaderWriter_getByFileName(qPrintable(fileName));
-    if(!reader)
+    if (!reader)
     {
         readSuccessful = 0;
     }
@@ -48,12 +48,12 @@ const QImage loadThumb(const QString& fileName)
     }
     free(reader);
 
-    if(readSuccessful)
+    if (readSuccessful)
     {
         QGraphicsScene gscene;
         QPainterPath path;
 
-        if(p->stitchList)
+        if (p->stitchList)
         {
             int previousColor = p->stitchList->stitch.color;
 
@@ -62,9 +62,9 @@ const QImage loadThumb(const QString& fileName)
             {
                 EmbStitch tempStitch = curStitchItem->stitch;
                 curStitchItem = curStitchItem->next;
-                if((tempStitch.flags & STOP) || (tempStitch.flags & END))
+                if ((tempStitch.flags & STOP) || (tempStitch.flags & END))
                 {
-                    if(!path.isEmpty())
+                    if (!path.isEmpty())
                     {
                         EmbColor thisColor = embThreadList_getAt(p->threadList, previousColor).color;
                         QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
@@ -77,7 +77,7 @@ const QImage loadThumb(const QString& fileName)
                     }
                     path.moveTo(tempStitch.xx, -tempStitch.yy);
                 }
-                else if((tempStitch.flags & JUMP) || (tempStitch.flags & TRIM))
+                else if ((tempStitch.flags & JUMP) || (tempStitch.flags & TRIM))
                 {
                     path.moveTo(tempStitch.xx, -tempStitch.yy);
                 }
@@ -104,7 +104,7 @@ bool EmbroideryThumbnailer::create(const QString& path, int /*w*/, int /*h*/, QI
 {
     img = loadThumb(path);
 
-    if(img.isNull())
+    if (img.isNull())
         return false;
 
     return true;

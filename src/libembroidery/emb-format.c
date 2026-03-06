@@ -15,7 +15,7 @@ EmbFormatList* embFormatList_create()
     /* TODO: This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT_STCHANDOBJ). */
 
     EmbFormatList* heapFormatList = (EmbFormatList*)malloc(sizeof(EmbFormatList));
-    if(!heapFormatList) { embLog_error("emb-format.c embFormatList_create(), cannot allocate memory for heapFormatList\n"); return 0; }
+    if (!heapFormatList) { embLog_error("emb-format.c embFormatList_create(), cannot allocate memory for heapFormatList\n"); return 0; }
     heapFormatList->extension = ".10o";
     heapFormatList->description = "Toyota Embroidery Format";
     heapFormatList->reader = 'U';
@@ -91,10 +91,10 @@ EmbFormatList* embFormatList_create()
 
 EmbFormatList* embFormatList_add(EmbFormatList* pointer, char* extension, char* description, char reader, char writer, int type)
 {
-    if(!pointer) { embLog_error("emb-format.c embFormatList_add(), pointer argument is null\n"); return 0; }
-    if(pointer->next) { embLog_error("emb-format.c embFormatList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-format.c embFormatList_add(), pointer argument is null\n"); return 0; }
+    if (pointer->next) { embLog_error("emb-format.c embFormatList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbFormatList*)malloc(sizeof(EmbFormatList));
-    if(!pointer->next) { embLog_error("emb-format.c embFormatList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) { embLog_error("emb-format.c embFormatList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->extension = extension;
     pointer->description = description;
@@ -108,7 +108,7 @@ EmbFormatList* embFormatList_add(EmbFormatList* pointer, char* extension, char* 
 int embFormatList_count(EmbFormatList* pointer)
 {
     int i = 1;
-    if(!pointer) return 0;
+    if (!pointer) return 0;
     while(pointer->next)
     {
         pointer = pointer->next;
@@ -119,7 +119,7 @@ int embFormatList_count(EmbFormatList* pointer)
 
 int embFormatList_empty(EmbFormatList* pointer)
 {
-    if(!pointer)
+    if (!pointer)
         return 1;
     return 0;
 }
@@ -140,31 +140,31 @@ void embFormatList_free(EmbFormatList* pointer)
 
 const char* embFormat_extension(EmbFormatList* pointer)
 {
-    if(!pointer) { embLog_error("emb-format.c embFormat_extension(), pointer argument is null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-format.c embFormat_extension(), pointer argument is null\n"); return 0; }
     return pointer->extension;
 }
 
 const char* embFormat_description(EmbFormatList* pointer)
 {
-    if(!pointer) { embLog_error("emb-format.c embFormat_description(), pointer argument is null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-format.c embFormat_description(), pointer argument is null\n"); return 0; }
     return pointer->description;
 }
 
 char embFormat_readerState(EmbFormatList* pointer)
 {
-    if(!pointer) { embLog_error("emb-format.c embFormat_readerState(), pointer argument is null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-format.c embFormat_readerState(), pointer argument is null\n"); return 0; }
     return pointer->reader;
 }
 
 char embFormat_writerState(EmbFormatList* pointer)
 {
-    if(!pointer) { embLog_error("emb-format.c embFormat_writerState(), pointer argument is null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-format.c embFormat_writerState(), pointer argument is null\n"); return 0; }
     return pointer->writer;
 }
 
 int embFormat_type(EmbFormatList* pointer)
 {
-    if(!pointer) { embLog_error("emb-format.c embFormat_type(), pointer argument is null\n"); return 0; }
+    if (!pointer) { embLog_error("emb-format.c embFormat_type(), pointer argument is null\n"); return 0; }
     return pointer->type;
 }
 
@@ -177,12 +177,12 @@ const char* embFormat_extensionFromName(const char* fileName)
     EmbFormatList* curFormat = 0;
     const char* extension = 0;
 
-    if(!fileName) { embLog_error("emb-format.c embFormat_extensionFromName(), fileName argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("emb-format.c embFormat_extensionFromName(), fileName argument is null\n"); return 0; }
 
     formatList = embFormatList_create();
 
-    if(strlen(fileName) == 0) return 0;
-    if(strrchr(fileName, '.'))
+    if (strlen(fileName) == 0) return 0;
+    if (strrchr(fileName, '.'))
         strcpy(ending, strrchr(fileName, '.'));
     else
         return 0;
@@ -196,7 +196,7 @@ const char* embFormat_extensionFromName(const char* fileName)
     curFormat = formatList;
     while(curFormat)
     {
-        if(!strcmp(ending, curFormat->extension))
+        if (!strcmp(ending, curFormat->extension))
         {
             extension = curFormat->extension;
             break;
@@ -219,12 +219,12 @@ const char* embFormat_descriptionFromName(const char* fileName)
     EmbFormatList* curFormat = 0;
     const char* description = 0;
 
-    if(!fileName) { embLog_error("emb-format.c embFormat_descriptionFromName(), fileName argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("emb-format.c embFormat_descriptionFromName(), fileName argument is null\n"); return 0; }
 
     formatList = embFormatList_create();
 
-    if(strlen(fileName) == 0) return 0;
-    if(strrchr(fileName, '.'))
+    if (strlen(fileName) == 0) return 0;
+    if (strrchr(fileName, '.'))
         strcpy(ending, strrchr(fileName, '.'));
     else
         return 0;
@@ -238,7 +238,7 @@ const char* embFormat_descriptionFromName(const char* fileName)
     curFormat = formatList;
     while(curFormat)
     {
-        if(!strcmp(ending, curFormat->extension))
+        if (!strcmp(ending, curFormat->extension))
         {
             description = curFormat->description;
             break;
@@ -261,12 +261,12 @@ char embFormat_readerStateFromName(const char* fileName)
     EmbFormatList* curFormat = 0;
     char readerState = ' ';
 
-    if(!fileName) { embLog_error("emb-format.c embFormat_readerStateFromName(), fileName argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("emb-format.c embFormat_readerStateFromName(), fileName argument is null\n"); return 0; }
 
     formatList = embFormatList_create();
 
-    if(strlen(fileName) == 0) return 0;
-    if(strrchr(fileName, '.'))
+    if (strlen(fileName) == 0) return 0;
+    if (strrchr(fileName, '.'))
         strcpy(ending, strrchr(fileName, '.'));
     else
         return 0;
@@ -280,7 +280,7 @@ char embFormat_readerStateFromName(const char* fileName)
     curFormat = formatList;
     while(curFormat)
     {
-        if(!strcmp(ending, curFormat->extension))
+        if (!strcmp(ending, curFormat->extension))
         {
             readerState = curFormat->reader;
             break;
@@ -303,12 +303,12 @@ char embFormat_writerStateFromName(const char* fileName)
     EmbFormatList* curFormat = 0;
     char writerState = ' ';
 
-    if(!fileName) { embLog_error("emb-format.c embFormat_writerStateFromName(), fileName argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("emb-format.c embFormat_writerStateFromName(), fileName argument is null\n"); return 0; }
 
     formatList = embFormatList_create();
 
-    if(strlen(fileName) == 0) return 0;
-    if(strrchr(fileName, '.'))
+    if (strlen(fileName) == 0) return 0;
+    if (strrchr(fileName, '.'))
         strcpy(ending, strrchr(fileName, '.'));
     else
         return 0;
@@ -322,7 +322,7 @@ char embFormat_writerStateFromName(const char* fileName)
     curFormat = formatList;
     while(curFormat)
     {
-        if(!strcmp(ending, curFormat->extension))
+        if (!strcmp(ending, curFormat->extension))
         {
             writerState = curFormat->writer;
             break;
@@ -345,12 +345,12 @@ int embFormat_typeFromName(const char* fileName)
     EmbFormatList* curFormat = 0;
     int type = EMBFORMAT_UNSUPPORTED;
 
-    if(!fileName) { embLog_error("emb-format.c embFormat_typeFromName(), fileName argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("emb-format.c embFormat_typeFromName(), fileName argument is null\n"); return 0; }
 
     formatList = embFormatList_create();
 
-    if(strlen(fileName) == 0) return 0;
-    if(strrchr(fileName, '.'))
+    if (strlen(fileName) == 0) return 0;
+    if (strrchr(fileName, '.'))
         strcpy(ending, strrchr(fileName, '.'));
     else
         return 0;
@@ -364,7 +364,7 @@ int embFormat_typeFromName(const char* fileName)
     curFormat = formatList;
     while(curFormat)
     {
-        if(!strcmp(ending, curFormat->extension))
+        if (!strcmp(ending, curFormat->extension))
         {
             type = curFormat->type;
             break;

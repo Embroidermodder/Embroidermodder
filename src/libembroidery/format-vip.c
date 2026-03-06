@@ -56,7 +56,7 @@ static int vipDecodeStitchType(unsigned char b)
 static unsigned char* vipDecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(decompressedContentLength);
-    if(!decompressedData)
+    if (!decompressedData)
     {
         embLog_error("format-vip.c vipDecompressData(), cannot allocate memory for decompressedData\n");
         return 0;
@@ -94,11 +94,11 @@ int readVip(EmbPattern* pattern, const char* fileName)
     VipHeader header;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-vip.c readVip(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-vip.c readVip(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-vip.c readVip(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-vip.c readVip(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-vip.c readVip(), cannot open %s for reading\n", fileName);
         return 0;
@@ -121,7 +121,7 @@ int readVip(EmbPattern* pattern, const char* fileName)
     header.yOffset = binaryReadInt32(file);
 
     /*stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8); TODO: review this and uncomment or remove
-        if(!stringVal) { embLog_error("format-vip.c readVip(), cannot allocate memory for stringVal\n"); return 0; }
+        if (!stringVal) { embLog_error("format-vip.c readVip(), cannot allocate memory for stringVal\n"); return 0; }
      */
 
     binaryReadBytes(file, header.stringVal, 8); /* TODO: check return value */
@@ -130,15 +130,15 @@ int readVip(EmbPattern* pattern, const char* fileName)
 
     header.colorLength = binaryReadInt32(file);
     decodedColors = (unsigned char*)malloc(header.numberOfColors*4);
-    if(!decodedColors) { embLog_error("format-vip.c readVip(), cannot allocate memory for decodedColors\n"); return 0; }
-    for(i = 0; i < header.numberOfColors*4; ++i)
+    if (!decodedColors) { embLog_error("format-vip.c readVip(), cannot allocate memory for decodedColors\n"); return 0; }
+    for (i = 0; i < header.numberOfColors*4; ++i)
     {
         unsigned char inputByte = binaryReadByte(file);
         unsigned char tmpByte = (unsigned char) (inputByte ^ vipDecodingTable[i]);
         decodedColors[i] = (unsigned char) (tmpByte ^ prevByte);
         prevByte = inputByte;
     }
-    for(i = 0; i < header.numberOfColors; i++)
+    for (i = 0; i < header.numberOfColors; i++)
     {
         EmbThread thread;
         int startIndex = i << 2;
@@ -150,23 +150,23 @@ int readVip(EmbPattern* pattern, const char* fileName)
     }
     embFile_seek(file, header.attributeOffset, SEEK_SET);
     attributeData = (unsigned char*)malloc(header.xOffset - header.attributeOffset);
-    if(!attributeData) { embLog_error("format-vip.c readVip(), cannot allocate memory for attributeData\n"); return 0; }
+    if (!attributeData) { embLog_error("format-vip.c readVip(), cannot allocate memory for attributeData\n"); return 0; }
     binaryReadBytes(file, attributeData, header.xOffset - header.attributeOffset); /* TODO: check return value */
     attributeDataDecompressed = vipDecompressData(attributeData, header.xOffset - header.attributeOffset, header.numberOfStitches);
 
     embFile_seek(file, header.xOffset, SEEK_SET);
     xData = (unsigned char*)malloc(header.yOffset - header.xOffset);
-    if(!xData) { embLog_error("format-vip.c readVip(), cannot allocate memory for xData\n"); return 0; }
+    if (!xData) { embLog_error("format-vip.c readVip(), cannot allocate memory for xData\n"); return 0; }
     binaryReadBytes(file, xData, header.yOffset - header.xOffset); /* TODO: check return value */
     xDecompressed = vipDecompressData(xData, header.yOffset - header.xOffset, header.numberOfStitches);
 
     embFile_seek(file, header.yOffset, SEEK_SET);
     yData = (unsigned char*)malloc(fileLength - header.yOffset);
-    if(!yData) { embLog_error("format-vip.c readVip(), cannot allocate memory for yData\n"); return 0; }
+    if (!yData) { embLog_error("format-vip.c readVip(), cannot allocate memory for yData\n"); return 0; }
     binaryReadBytes(file, yData, fileLength - header.yOffset); /* TODO: check return value */
     yDecompressed = vipDecompressData(yData, fileLength - header.yOffset, header.numberOfStitches);
 
-    for(i = 0; i < header.numberOfStitches; i++)
+    for (i = 0; i < header.numberOfStitches; i++)
     {
         embPattern_addStitchRel(pattern,
                                 vipDecodeByte(xDecompressed[i]) / 10.0,
@@ -190,7 +190,7 @@ int readVip(EmbPattern* pattern, const char* fileName)
 static unsigned char* vipCompressData(unsigned char* input, int decompressedInputSize, int* compressedSize)
 {
     unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedInputSize*2);
-    if(!compressedData)
+    if (!compressedData)
     {
         embLog_error("format-vip.c vipCompressData(), cannot allocate memory for compressedData\n");
         return 0;
@@ -244,25 +244,25 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     EmbThreadList* colorPointer = 0;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-vip.c writeVip(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-vip.c writeVip(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-vip.c writeVip(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-vip.c writeVip(), fileName argument is null\n"); return 0; }
 
     stitchCount = embStitchList_count(pattern->stitchList);
-    if(!stitchCount)
+    if (!stitchCount)
     {
         embLog_error("format-vip.c writeVip(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
     {
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
         stitchCount++;
     }
 
     file = embFile_open(fileName, "wb");
-    if(file == 0)
+    if (file == 0)
     {
         embLog_error("format-vip.c writeVip(), cannot open %s for writing\n", fileName);
         return 0;
@@ -270,9 +270,9 @@ int writeVip(EmbPattern* pattern, const char* fileName)
 
     minColors = embThreadList_count(pattern->threadList);
     decodedColors = (unsigned char*)malloc(minColors << 2);
-    if(!decodedColors) return 0;
+    if (!decodedColors) return 0;
     encodedColors = (unsigned char*)malloc(minColors << 2);
-    if(encodedColors) /* TODO: review this line. It looks clearly wrong. If not, note why. */
+    if (encodedColors) /* TODO: review this line. It looks clearly wrong. If not, note why. */
     {
         free(decodedColors);
         decodedColors = 0;
@@ -281,7 +281,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     /* embPattern_correctForMaxStitchLength(pattern, 0x7F, 0x7F); */
 
     patternColor = minColors;
-    if(minColors > 24) minColors = 24;
+    if (minColors > 24) minColors = 24;
 
     binaryWriteUInt(file, 0x0190FC5D);
     binaryWriteUInt(file, stitchCount);
@@ -298,7 +298,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     xValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
     yValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
     attributeValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
-    if(xValues && yValues && attributeValues)
+    if (xValues && yValues && attributeValues)
     {
         pointer = pattern->stitchList;
         while(pointer)
@@ -328,7 +328,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
 
         colorPointer = pattern->threadList;
 
-        for(i = 0; i < minColors; i++)
+        for (i = 0; i < minColors; i++)
         {
             int byteChunk = i << 2;
             EmbColor currentColor = colorPointer->thread.color;
@@ -339,13 +339,13 @@ int writeVip(EmbPattern* pattern, const char* fileName)
             colorPointer = colorPointer->next;
         }
 
-        for(i = 0; i < minColors << 2; ++i)
+        for (i = 0; i < minColors << 2; ++i)
         {
             unsigned char tmpByte = (unsigned char) (decodedColors[i] ^ vipDecodingTable[i]);
             prevByte = (unsigned char) (tmpByte ^ prevByte);
             binaryWriteByte(file, prevByte);
         }
-        for(i = 0; i <= minColors; i++)
+        for (i = 0; i <= minColors; i++)
         {
             binaryWriteInt(file, 1);
         }
@@ -356,16 +356,16 @@ int writeVip(EmbPattern* pattern, const char* fileName)
         binaryWriteBytes(file, (char*) yCompressed, yCompressedSize);
     }
 
-    if(attributeCompressed) { free(attributeCompressed); attributeCompressed = 0; }
-    if(xCompressed) { free(xCompressed); xCompressed = 0; }
-    if(yCompressed) { free(yCompressed); yCompressed = 0; }
+    if (attributeCompressed) { free(attributeCompressed); attributeCompressed = 0; }
+    if (xCompressed) { free(xCompressed); xCompressed = 0; }
+    if (yCompressed) { free(yCompressed); yCompressed = 0; }
 
-    if(attributeValues) { free(attributeValues); attributeValues = 0; }
-    if(xValues) { free(xValues); xValues = 0; }
-    if(yValues) { free(yValues); yValues = 0; }
+    if (attributeValues) { free(attributeValues); attributeValues = 0; }
+    if (xValues) { free(xValues); xValues = 0; }
+    if (yValues) { free(yValues); yValues = 0; }
 
-    if(decodedColors) { free(decodedColors); decodedColors = 0; }
-    if(encodedColors) { free(encodedColors); encodedColors = 0; }
+    if (decodedColors) { free(decodedColors); decodedColors = 0; }
+    if (encodedColors) { free(encodedColors); encodedColors = 0; }
 
     embFile_close(file);
     return 1;

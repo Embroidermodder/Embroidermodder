@@ -87,7 +87,7 @@ void binaryReadString(EmbFile* file, char* buffer, int maxLength)
     while(i < maxLength)
     {
         buffer[i] = (char)embFile_getc(file);
-        if(buffer[i] == '\0') break;
+        if (buffer[i] == '\0') break;
         i++;
     }
 }
@@ -95,10 +95,10 @@ void binaryReadString(EmbFile* file, char* buffer, int maxLength)
 void binaryReadUnicodeString(EmbFile* file, char *buffer, const int stringLength)
 {
     int i = 0;
-    for(i = 0; i < stringLength * 2; i++)
+    for (i = 0; i < stringLength * 2; i++)
     {
         char input = (char)embFile_getc(file);
-        if(input != 0)
+        if (input != 0)
         {
             buffer[i] = input;
         }

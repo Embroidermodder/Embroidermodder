@@ -7,17 +7,17 @@ static unsigned char* vp3ReadString(EmbFile* file)
 {
     int stringLength = 0;
     unsigned char* charString = 0;
-    if(!file) { embLog_error("format-vp3.c vp3ReadString(), file argument is null\n"); return 0; }
+    if (!file) { embLog_error("format-vp3.c vp3ReadString(), file argument is null\n"); return 0; }
     stringLength = binaryReadInt16BE(file);
     charString = (unsigned char*)malloc(stringLength);
-    if(!charString) { embLog_error("format-vp3.c vp3ReadString(), cannot allocate memory for charString\n"); return 0; }
+    if (!charString) { embLog_error("format-vp3.c vp3ReadString(), cannot allocate memory for charString\n"); return 0; }
     binaryReadBytes(file, charString, stringLength); /* TODO: check return value */
     return charString;
 }
 
 static int vp3Decode(unsigned char inputByte)
 {
-    if(inputByte > 0x80)
+    if (inputByte > 0x80)
     {
         return (int)-((unsigned char)((~inputByte) + 1));
     }
@@ -26,7 +26,7 @@ static int vp3Decode(unsigned char inputByte)
 
 static short vp3DecodeInt16(unsigned short inputByte)
 {
-    if(inputByte > 0x8000)
+    if (inputByte > 0x8000)
     {
         return -((short) ((~inputByte) + 1));
     }
@@ -67,15 +67,15 @@ static vp3Hoop vp3ReadHoopSection(EmbFile* file)
 {
     vp3Hoop hoop;
 
-    if(!file) 
-	{ 
-		embLog_error("format-vp3.c vp3ReadHoopSection(), file argument is null\n");
-		hoop.bottom = 0;
-		hoop.left = 0;
-		hoop.right = 0;
-		hoop.top = 0;
-		return hoop; 
-	}
+    if (!file)
+    {
+        embLog_error("format-vp3.c vp3ReadHoopSection(), file argument is null\n");
+        hoop.bottom = 0;
+        hoop.left = 0;
+        hoop.right = 0;
+        hoop.top = 0;
+        return hoop;
+    }
 
     hoop.right = binaryReadInt32BE(file);
     hoop.bottom = binaryReadInt32BE(file);
@@ -128,11 +128,11 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     int i;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-vp3.c readVp3(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-vp3.c readVp3(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-vp3.c readVp3(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-vp3.c readVp3(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-vp3.c readVp3(), cannot open %s for reading\n", fileName);
         return 0;
@@ -180,7 +180,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     embLog_error("format-vp3.c Number of Colors: %d\n", numberOfColors);
     colorSectionOffset = (int)embFile_tell(file);
 
-    for(i = 0; i < numberOfColors; i++)
+    for (i = 0; i < numberOfColors; i++)
     {
         EmbThread t;
         char tableSize;
@@ -223,7 +223,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
 
             int x = vp3Decode(binaryReadByte(file));
             int y = vp3Decode(binaryReadByte(file));
-            if(x == 0x80)
+            if (x == 0x80)
             {
                 switch (y)
                 {
@@ -245,19 +245,19 @@ int readVp3(EmbPattern* pattern, const char* fileName)
                 embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, NORMAL, 1);
             }
 
-            if(embFile_tell(file) == lastFilePosition)
+            if (embFile_tell(file) == lastFilePosition)
             {
                 embLog_error("format-vp3.c could not read stitch block in entirety\n");
                 return 0;
             }
         }
-        if(i + 1 < numberOfColors)
+        if (i + 1 < numberOfColors)
             embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
     }
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);
@@ -295,13 +295,13 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
     int colorSectionStitchBytes;
     int first = 1;
     int numberOfColors = 0;
-	EmbColor color = embColor_make(0xFE, 0xFE, 0xFE);
+    EmbColor color = embColor_make(0xFE, 0xFE, 0xFE);
     EmbStitchList *mainPointer = 0, *pointer = 0;
 
-    if(!pattern) { embLog_error("format-vp3.c writeVp3(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-vp3.c writeVp3(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-vp3.c writeVp3(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-vp3.c writeVp3(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-vp3.c writeVp3(), pattern contains no stitches\n");
         return 0;
@@ -310,7 +310,7 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
     bounds = embPattern_calcBoundingBox(pattern);
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-vp3.c writeVp3(), cannot open %s for writing\n", fileName);
         return 0;
@@ -348,14 +348,14 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         pointer = mainPointer;
         flag = pointer->stitch.flags;
         newColor = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
-        if(newColor.r != color.r || newColor.g != color.g || newColor.b != color.b)
+        if (newColor.r != color.r || newColor.g != color.g || newColor.b != color.b)
         {
             numberOfColors++;
             color.r = newColor.r;
             color.g = newColor.g;
             color.b = newColor.b;
         }
-        else if(flag & END || flag & STOP)
+        else if (flag & END || flag & STOP)
         {
             numberOfColors++;
         }
@@ -412,10 +412,10 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         EmbStitch s;
         int lastColor;
 
-		if (!first)
-		{
-			binaryWriteByte(file, 0);
-		}
+        if (!first)
+        {
+            binaryWriteByte(file, 0);
+        }
         binaryWriteByte(file, 0);
         binaryWriteByte(file, 5);
         binaryWriteByte(file, 0);
@@ -426,10 +426,10 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         pointer = mainPointer;
         color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
 
-		if (first && pointer->stitch.flags & JUMP && pointer->next->stitch.flags & JUMP)
-		{
-			pointer = pointer->next;
-		}
+        if (first && pointer->stitch.flags & JUMP && pointer->next->stitch.flags & JUMP)
+        {
+            pointer = pointer->next;
+        }
 
         s = pointer->stitch;
         embLog_print("format-vp3.c DEBUG %d, %lf, %lf\n", s.flags, s.xx, s.yy);
@@ -481,20 +481,20 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
             int dx, dy;
 
             EmbStitch s = pointer->stitch;
-			if (s.color != lastColor)
-			{
-				break;
-			}
-			if (s.flags & END || s.flags & STOP)
-			{
-				break;
-			}
+            if (s.color != lastColor)
+            {
+                break;
+            }
+            if (s.flags & END || s.flags & STOP)
+            {
+                break;
+            }
             dx = (s.xx - lastX) * 10;
             dy = (s.yy - lastY) * 10;
             lastX = lastX + dx / 10.0; /* output is in ints, ensure rounding errors do not sum up */
             lastY = lastY + dy / 10.0;
 
-            if(dx < -127 || dx > 127 || dy < -127 || dy > 127)
+            if (dx < -127 || dx > 127 || dy < -127 || dy > 127)
             {
                 binaryWriteByte(file, 128);
                 binaryWriteByte(file, 1);

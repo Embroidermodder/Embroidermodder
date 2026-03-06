@@ -51,11 +51,11 @@ int readThr(EmbPattern* pattern, const char* fileName)
     int i;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-thr.c readThr(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-thr.c readThr(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-thr.c readThr(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-thr.c readThr(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-thr.c readThr(), cannot open %s for reading\n", fileName);
         return 0;
@@ -73,7 +73,7 @@ int readThr(EmbPattern* pattern, const char* fileName)
     header.reserved[5] = binaryReadUInt16(file);
     header.reserved[6] = binaryReadUInt16(file);
 
-    if((header.sigVersion & 0xffffff) == 0x746872)
+    if ((header.sigVersion & 0xffffff) == 0x746872)
     {
         unsigned int verVar = (header.sigVersion & 0xff000000) >> 24;
         switch(verVar)
@@ -90,14 +90,14 @@ int readThr(EmbPattern* pattern, const char* fileName)
     }
 
     currentColor = -1;
-    for(i = 0; i < header.numStiches; i++)
+    for (i = 0; i < header.numStiches; i++)
     {
         int type = NORMAL;
         float x = binaryReadFloat(file) / 10.0f;
         float y = binaryReadFloat(file) / 10.0f;
         unsigned int color = binaryReadUInt32(file);
 
-        if((int)(color & 0xF) != currentColor)
+        if ((int)(color & 0xF) != currentColor)
         {
             currentColor = (int)color & 0xF;
             embPattern_changeColor(pattern, currentColor);
@@ -112,7 +112,7 @@ int readThr(EmbPattern* pattern, const char* fileName)
     b = binaryReadByte(file);
     binaryReadByte(file);
 
-    for(i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++)
     {
         EmbThread thread;
         thread.description = NULL;
@@ -129,7 +129,7 @@ int readThr(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -148,25 +148,25 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     EmbThreadList* colorpointer = 0;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-thr.c writeThr(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-thr.c writeThr(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-thr.c writeThr(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-thr.c writeThr(), fileName argument is null\n"); return 0; }
 
     stitchCount = embStitchList_count(pattern->stitchList);
-    if(!stitchCount)
+    if (!stitchCount)
     {
         embLog_error("format-thr.c writeThr(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
     {
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
         stitchCount++;
     }
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-thr.c writeThr(), cannot open %s for writing\n", fileName);
         return 0;
@@ -175,7 +175,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     memset(&header, 0, sizeof(ThredHeader));
     header.sigVersion = 0x746872 | (version << 24);
     header.length = stitchCount * 12 + 16;
-    if(version == 1 || version == 2)
+    if (version == 1 || version == 2)
     {
         header.length = header.length + sizeof(ThredHeader);
     }
@@ -194,7 +194,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     binaryWriteUShort(file, header.reserved[5]);
     binaryWriteUShort(file, header.reserved[6]);
 
-    if(version == 1 || version == 2)
+    if (version == 1 || version == 2)
     {
         memset(&extension, 0, sizeof(ThredExtension));
         extension.auxFormat = 1;
@@ -220,7 +220,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
         binaryWriteUInt(file, NOTFRM | (pointer->stitch.color & 0x0F));
         pointer = pointer->next;
         i++;
-        if(i >= stitchCount) break;
+        if (i >= stitchCount) break;
     }
     binaryWriteBytes(file, bitmapName, 16);
     /* background color */
@@ -239,11 +239,11 @@ int writeThr(EmbPattern* pattern, const char* fileName)
         binaryWriteByte(file, 0);
         colorpointer = colorpointer->next;
         i++;
-        if(i >= 16) break;
+        if (i >= 16) break;
     }
 
     /* write remaining colors if not yet 16 */
-    for(; i < 16; i++)
+    for (; i < 16; i++)
     {
         binaryWriteUInt(file, 0);
     }
@@ -259,16 +259,16 @@ int writeThr(EmbPattern* pattern, const char* fileName)
         binaryWriteByte(file, 0);
         colorpointer = colorpointer->next;
         i++;
-        if(i >= 16) break;
+        if (i >= 16) break;
     }
 
     /* write remaining colors if not yet 16 */
-    for(; i < 16; i++)
+    for (; i < 16; i++)
     {
         binaryWriteUInt(file, 0);
     }
 
-    for(i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++)
     {
         binaryWriteByte(file, '4');
     }

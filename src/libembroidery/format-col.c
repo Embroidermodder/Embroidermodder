@@ -8,11 +8,11 @@ int readCol(EmbPattern* pattern, const char* fileName)
     int numberOfColors, i;
     FILE* file = 0;
 
-    if(!pattern) { embLog_error("format-col.c readCol(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-col.c readCol(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-col.c readCol(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-col.c readCol(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "r");
-    if(!file)
+    if (!file)
     {
         /* NOTE: The .col format is an optional color file. Do not log an error if the file does not exist */
         return 0;
@@ -23,24 +23,24 @@ int readCol(EmbPattern* pattern, const char* fileName)
     pattern->lastThread = 0;
 
     /* TODO: replace all scanf code */
-    if(fscanf(file, "%d\r", &numberOfColors) < 1) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
+    if (fscanf(file, "%d\r", &numberOfColors) < 1) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
     {
         /* TODO: log error */
         return 0;
     }
-    for(i = 0; i < numberOfColors; i++)
+    for (i = 0; i < numberOfColors; i++)
     {
         int num, blue, green, red;
         EmbThread t;
         char line[30];
         /* TODO: replace all scanf code */
-        if(fscanf(file, "%s\r", line) < 1) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
+        if (fscanf(file, "%s\r", line) < 1) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
         {
             /* TODO: log error */
             return 0;
         }
         /* TODO: replace all scanf code */
-        if(sscanf(line,"%d,%d,%d,%d\n\r", &num, &blue, &green, &red) != 4) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
+        if (sscanf(line,"%d,%d,%d,%d\n\r", &num, &blue, &green, &red) != 4) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
         {
             break;
         }
@@ -63,11 +63,11 @@ int writeCol(EmbPattern* pattern, const char* fileName)
     int i, colorCount;
     EmbThreadList *colors;
 
-    if(!pattern) { embLog_error("format-col.c writeCol(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-col.c writeCol(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-col.c writeCol(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-col.c writeCol(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "w");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-col.c writeCol(), cannot open %s for writing\n", fileName);
         return 0;

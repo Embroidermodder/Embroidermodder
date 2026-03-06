@@ -12,7 +12,7 @@ int readU01(EmbPattern* pattern, const char* fileName)
     EmbFile* file = 0;
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         return 0;
     }
@@ -21,19 +21,19 @@ int readU01(EmbPattern* pattern, const char* fileName)
     embFile_seek(file, 0x100, SEEK_SET);
     while(embFile_read(data, 1, 3, file) == 3)
     {
-        if(data[0] == 0xF8 || data[0] == 0x87 || data[0] == 0x91)
+        if (data[0] == 0xF8 || data[0] == 0x87 || data[0] == 0x91)
         {
             break;
         }
-        if((data[0] & 0x0F) == 0)
+        if ((data[0] & 0x0F) == 0)
         {
             flags = NORMAL;
         }
-        else if((data[0] & 0x1f) == 1)
+        else if ((data[0] & 0x1f) == 1)
         {
             flags = JUMP;
         }
-        else if((data[0] & 0x0F) > 0)
+        else if ((data[0] & 0x0F) > 0)
         {
             flags = STOP;
         }
@@ -42,14 +42,14 @@ int readU01(EmbPattern* pattern, const char* fileName)
 
         dx = (char) data[2];
         dy = (char) data[1];
-        if(negativeX) dx = (char) -dx;
-        if(negativeY) dy = (char) -dy;
+        if (negativeX) dx = (char) -dx;
+        if (negativeY) dy = (char) -dy;
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -59,11 +59,11 @@ int readU01(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeU01(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-u01.c writeU01(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-u01.c writeU01(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-u01.c writeU01(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-u01.c writeU01(), fileName argument is null\n"); return 0; }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */

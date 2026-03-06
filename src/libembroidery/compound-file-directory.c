@@ -7,10 +7,10 @@ static void parseDirectoryEntryName(EmbFile* file, bcf_directory_entry* dir)
 {
     int i;
     unsigned short unicodechar;
-    for(i = 0; i < 32; ++i)
+    for (i = 0; i < 32; ++i)
     {
         unicodechar = binaryReadUInt16(file);
-        if(unicodechar != 0x0000)
+        if (unicodechar != 0x0000)
         {
             dir->directoryEntryName[i] = (char)unicodechar;
         }
@@ -22,7 +22,7 @@ static void readCLSID(EmbFile* file, bcf_directory_entry* dir)
     int i;
     unsigned char scratch;
     const int guidSize = 16;
-    for(i = 0; i < guidSize; ++i)
+    for (i = 0; i < guidSize; ++i)
     {
         scratch = binaryReadByte(file);
         dir->CLSID[i] = scratch;
@@ -32,7 +32,7 @@ static void readCLSID(EmbFile* file, bcf_directory_entry* dir)
 bcf_directory* CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntries)
 {
     bcf_directory* dir = (bcf_directory*)malloc(sizeof(bcf_directory));
-    if(!dir) { embLog_error("compound-file-directory.c CompoundFileDirectory(), cannot allocate memory for dir\n"); } /* TODO: avoid crashing. null pointer will be accessed */
+    if (!dir) { embLog_error("compound-file-directory.c CompoundFileDirectory(), cannot allocate memory for dir\n"); } /* TODO: avoid crashing. null pointer will be accessed */
     dir->maxNumberOfDirectoryEntries = maxNumberOfDirectoryEntries;
     dir->dirEntries = 0;
     return dir;
@@ -52,13 +52,13 @@ EmbTime parseTime(EmbFile* file)
 bcf_directory_entry* CompoundFileDirectoryEntry(EmbFile* file)
 {
     bcf_directory_entry* dir = (bcf_directory_entry*)malloc(sizeof(bcf_directory_entry));
-    if(!dir) { embLog_error("compound-file-directory.c CompoundFileDirectoryEntry(), cannot allocate memory for dir\n"); } /* TODO: avoid crashing. null pointer will be accessed */
+    if (!dir) { embLog_error("compound-file-directory.c CompoundFileDirectoryEntry(), cannot allocate memory for dir\n"); } /* TODO: avoid crashing. null pointer will be accessed */
     memset(dir->directoryEntryName, 0, 32);
     parseDirectoryEntryName(file, dir);
     dir->next = 0;
     dir->directoryEntryNameLength = binaryReadUInt16(file);
     dir->objectType = (unsigned char)binaryReadByte(file);
-    if( (dir->objectType != ObjectTypeStorage) &&
+    if ( (dir->objectType != ObjectTypeStorage) &&
         (dir->objectType != ObjectTypeStream) &&
         (dir->objectType != ObjectTypeRootEntry))
     {
@@ -82,11 +82,11 @@ bcf_directory_entry* CompoundFileDirectoryEntry(EmbFile* file)
 void readNextSector(EmbFile* file, bcf_directory* dir)
 {
     unsigned int i;
-    for(i = 0; i < dir->maxNumberOfDirectoryEntries; ++i)
+    for (i = 0; i < dir->maxNumberOfDirectoryEntries; ++i)
     {
         bcf_directory_entry* dirEntry = CompoundFileDirectoryEntry(file);
         bcf_directory_entry* pointer = dir->dirEntries;
-        if(!pointer)
+        if (!pointer)
         {
             dir->dirEntries = dirEntry;
         }
@@ -94,7 +94,7 @@ void readNextSector(EmbFile* file, bcf_directory* dir)
         {
             while(pointer)
             {
-                if(!pointer->next)
+                if (!pointer->next)
                 {
                     pointer->next = dirEntry;
                     break;
@@ -116,7 +116,7 @@ void bcf_directory_free(bcf_directory* dir)
         free(entryToFree);
         entryToFree = 0;
     }
-    if(dir)
+    if (dir)
     {
         free(dir);
         dir = 0;

@@ -6,7 +6,7 @@
 
 static char xxxDecodeByte(unsigned char inputByte)
 {
-    if(inputByte >= 0x80)
+    if (inputByte >= 0x80)
         return (char) ((-~inputByte) - 1);
     return ((char) inputByte);
 }
@@ -27,11 +27,11 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     EmbStitchList* lastStitch = 0;
     EmbStitchList* secondLast = 0;
 
-    if(!pattern) { embLog_error("format-xxx.c readXxx(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-xxx.c readXxx(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-xxx.c readXxx(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-xxx.c readXxx(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-xxx.c readXxx(), cannot open %s for reading\n", fileName);
         return 0;
@@ -43,7 +43,7 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     paletteOffset = binaryReadInt32(file);
     embFile_seek(file, paletteOffset + 6, SEEK_SET);
 
-    for(i = 0; i < numberOfColors; i++)
+    for (i = 0; i < numberOfColors; i++)
     {
         EmbThread thread;
         binaryReadByte(file);
@@ -54,31 +54,31 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     }
     embFile_seek(file, 0x100, SEEK_SET);
 
-    for(i = 0; !endOfStream && embFile_tell(file) < paletteOffset; i++)
+    for (i = 0; !endOfStream && embFile_tell(file) < paletteOffset; i++)
     {
         flags = NORMAL;
-        if(thisStitchJump) flags = TRIM;
+        if (thisStitchJump) flags = TRIM;
         thisStitchJump = 0;
         b0 = binaryReadByte(file);
         b1 = binaryReadByte(file);
 
-        if(b0 == 0x7E || b0 == 0x7D) /* TODO: ARE THERE OTHER BIG JUMP CODES? */
+        if (b0 == 0x7E || b0 == 0x7D) /* TODO: ARE THERE OTHER BIG JUMP CODES? */
         {
             dx = b1 + (binaryReadByte(file) << 8);
             dx = ((short) dx);
             dy = binaryReadInt16(file);
             flags = TRIM;
         }
-        else if(b0 == 0x7F)
+        else if (b0 == 0x7F)
         {
-            if(b1 != 0x17 && b1 != 0x46 && b1 >= 8) /* TODO: LOOKS LIKE THESE CODES ARE IN THE HEADER */
+            if (b1 != 0x17 && b1 != 0x46 && b1 >= 8) /* TODO: LOOKS LIKE THESE CODES ARE IN THE HEADER */
             {
                 b0 = 0;
                 b1 = 0;
                 thisStitchJump = 1;
                 flags = STOP;
             }
-            else if(b1 == 1)
+            else if (b1 == 1)
             {
                 flags = TRIM;
                 b0 = binaryReadByte(file);
@@ -100,14 +100,14 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     }
     lastStitch = pattern->stitchList;
     secondLast = 0;
-    if(lastStitch)
+    if (lastStitch)
     {
         while(lastStitch->next)
         {
             secondLast = lastStitch;
             lastStitch = lastStitch->next;
         }
-        if((!pattern->stitchList) && lastStitch->stitch.flags == STOP && secondLast)
+        if ((!pattern->stitchList) && lastStitch->stitch.flags == STOP && secondLast)
         {
             free(lastStitch);
             lastStitch = 0;
@@ -118,7 +118,7 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -132,7 +132,7 @@ static void xxxEncodeStop(EmbFile* file, EmbStitch s)
 
 static void xxxEncodeStitch(EmbFile* file, double deltaX, double deltaY, int flags)
 {
-    if((flags & (JUMP | TRIM)) && (fabs(deltaX) > 124 || fabs(deltaY) > 124))
+    if ((flags & (JUMP | TRIM)) && (fabs(deltaX) > 124 || fabs(deltaY) > 124))
     {
         binaryWriteByte(file, 0x7E);
         binaryWriteShort(file, (short)deltaX);
@@ -152,7 +152,7 @@ static void xxxEncodeDesign(EmbFile* file, EmbPattern* p)
     double thisY = 0.0f;
     EmbStitchList* stitches = 0;
 
-    if(!embStitchList_empty(p->stitchList))
+    if (!embStitchList_empty(p->stitchList))
     {
         thisX = (float)p->stitchList->stitch.xx;
         thisY = (float)p->stitchList->stitch.yy;
@@ -168,11 +168,11 @@ static void xxxEncodeDesign(EmbFile* file, EmbPattern* p)
         thisY = s.yy;
         deltaX = thisX - previousX;
         deltaY = thisY - previousY;
-        if(s.flags & STOP)
+        if (s.flags & STOP)
         {
             xxxEncodeStop(file, s);
         }
-        else if(s.flags & END)
+        else if (s.flags & END)
         {
         }
         else
@@ -194,21 +194,21 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
     EmbThreadList* colors = 0;
     int curColor = 0;
 
-    if(!pattern) { embLog_error("format-xxx.c writeXxx(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-xxx.c writeXxx(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-xxx.c writeXxx(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-xxx.c writeXxx(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-xxx.c writeXxx(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = embFile_open(fileName, "wb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-xxx.c writeXxx(), cannot open %s for writing\n", fileName);
         return 0;
@@ -216,12 +216,12 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
 
     embPattern_correctForMaxStitchLength(pattern, 124, 127);
 
-    for(i = 0; i < 0x17; i++)
+    for (i = 0; i < 0x17; i++)
     {
         binaryWriteByte(file, 0x00);
     }
     binaryWriteUInt(file, (unsigned int) embStitchList_count(pattern->stitchList));
-    for(i = 0; i < 0x0C; i++)
+    for (i = 0; i < 0x0C; i++)
     {
         binaryWriteByte(file, 0x00);
     }
@@ -236,7 +236,7 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
     binaryWriteShort(file, (short)(embRect_height(rect) / 2.0 * 10)); /*TODO: yEnd from start point y=0 */
     binaryWriteShort(file, (short)(embRect_width(rect)/2.0 * 10));    /*TODO: left from start x = 0     */
     binaryWriteShort(file, (short)(embRect_height(rect)/2.0 * 10));   /*TODO: bottom from start y = 0   */
-    for(i = 0; i < 0xC5; i++)
+    for (i = 0; i < 0xC5; i++)
     {
         binaryWriteByte(file, 0x00);
     }
@@ -268,7 +268,7 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
         curColor++;
         colors = colors->next;
     }
-    for(i = 0; i < (22 - curColor); i++)
+    for (i = 0; i < (22 - curColor); i++)
     {
         binaryWriteUInt(file, 0x01000000);
     }

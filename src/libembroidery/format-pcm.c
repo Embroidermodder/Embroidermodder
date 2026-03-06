@@ -22,7 +22,7 @@ const EmbThread pcmThreads[] = {
 static double pcmDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
     int res = a1 + (a2 << 8) + (a3 << 16);
-    if(res > 0x7FFFFF)
+    if (res > 0x7FFFFF)
     {
         return (-((~(res) & 0x7FFFFF) - 1));
     }
@@ -39,11 +39,11 @@ int readPcm(EmbPattern* pattern, const char* fileName)
     int flags = 0, st = 0;
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-pcm.c readPcm(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-pcm.c readPcm(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-pcm.c readPcm(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-pcm.c readPcm(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
-    if(!file)
+    if (!file)
     {
         embLog_error("format-pcm.c readPcm(), cannot open %s for reading\n", fileName);
         return 0;
@@ -51,7 +51,7 @@ int readPcm(EmbPattern* pattern, const char* fileName)
 
     embFile_seek(file, 4, SEEK_SET);
 
-    for(i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++)
     {
         int colorNumber;
         (void)embFile_getc(file); /* zero */
@@ -60,21 +60,21 @@ int readPcm(EmbPattern* pattern, const char* fileName)
     }
     st = binaryReadUInt16BE(file);
     /* READ STITCH RECORDS */
-    for(i = 0; i < st; i++)
+    for (i = 0; i < st; i++)
     {
         flags = NORMAL;
-        if(embFile_read(b, 1, 9, file) != 9)
+        if (embFile_read(b, 1, 9, file) != 9)
             break;
 
-        if(b[8] & 0x01)
+        if (b[8] & 0x01)
         {
             flags = STOP;
         }
-        else if(b[8] & 0x04)
+        else if (b[8] & 0x04)
         {
             flags = TRIM;
         }
-        else if(b[8] != 0)
+        else if (b[8] != 0)
         {
             /* TODO: ONLY INTERESTED IN THIS CASE TO LEARN MORE ABOUT THE FORMAT */
         }
@@ -85,7 +85,7 @@ int readPcm(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -95,17 +95,17 @@ int readPcm(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writePcm(EmbPattern* pattern, const char* fileName)
 {
-    if(!pattern) { embLog_error("format-pcm.c writePcm(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-pcm.c writePcm(), fileName argument is null\n"); return 0; }
+    if (!pattern) { embLog_error("format-pcm.c writePcm(), pattern argument is null\n"); return 0; }
+    if (!fileName) { embLog_error("format-pcm.c writePcm(), fileName argument is null\n"); return 0; }
 
-    if(!embStitchList_count(pattern->stitchList))
+    if (!embStitchList_count(pattern->stitchList))
     {
         embLog_error("format-pcm.c writePcm(), pattern contains no stitches\n");
         return 0;
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
+    if (pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */
