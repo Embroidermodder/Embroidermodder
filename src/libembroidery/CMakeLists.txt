@@ -104,6 +104,7 @@ set(LIBRARY_SRC
 	format-sst.c
 	format-stx.c
 	format-svg.c
+	svg-data.c
 	format-t01.c
 	format-t09.c
 	format-tap.c
