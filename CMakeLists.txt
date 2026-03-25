@@ -54,6 +54,8 @@ add_subdirectory(extern/sds)
 qt_add_executable(embroidermodder2
 	${SRC}/core/command-table.c
 	${SRC}/core/load.c
+	${SRC}/core/object-data.c
+	${SRC}/core/object-data.h
 	${SRC}/core/sdsarray.c
 	${SRC}/core/settings.c
 	${SRC}/core/state.c
@@ -86,7 +88,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/gui/object-base.h
 	${SRC}/gui/object-circle.cpp
 	${SRC}/gui/object-circle.h
-	${SRC}/gui/object-data.h
 	${SRC}/gui/object-dimleader.cpp
 	${SRC}/gui/object-dimleader.h
 	${SRC}/gui/object-ellipse.cpp

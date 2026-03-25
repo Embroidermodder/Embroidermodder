@@ -1,5 +1,19 @@
-#ifndef OBJECT_DATA_H
-#define OBJECT_DATA_H
+/*
+ * Embroidermodder 2 -- Object Properties
+ * Copyright 2011-2026 The Embroidermodder Team
+ */
+
+#ifndef OBJECT_PROPERTIES_H
+#define OBJECT_PROPERTIES_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
+#include <inttypes.h>
+
+#define MAX_EDITORS                       20
 
 //Custom Data used in QGraphicsItems
 
@@ -223,6 +237,63 @@ const char* const VIEW_COLOR_BACKGROUND = "VIEW_COLOR_BACKGROUND";
 const char* const VIEW_COLOR_CROSSHAIR  = "VIEW_COLOR_CROSSHAIR";
 const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
 
+typedef struct LineEditData_ {
+    char *name;
+    char *icon;
+    char *label;
+    char *data_type;
+    bool signal;
+    bool display_only;
+} LineEditData;
+
+typedef struct GroupBoxData_ {
+    char *name;
+    char *label;
+    int32_t obj_type;
+    LineEditData line_edit_data[MAX_EDITORS];
+} GroupBoxData;
+
+typedef struct GroupBoxID_ {
+    int32_t id;
+    char *label;
+} GroupBoxID;
+
+extern const GroupBoxID property_group_boxes[];
+
+extern const GroupBoxData general_gb;
+extern const GroupBoxData arc_geometry_gb;
+extern const GroupBoxData arc_misc_gb;
+extern const GroupBoxData block_geometry_gb;
+extern const GroupBoxData circle_geometry_gb;
+extern const GroupBoxData dim_aligned_geometry_gb;
+extern const GroupBoxData dim_angular_geometry_gb;
+extern const GroupBoxData dim_arc_length_geometry_gb;
+extern const GroupBoxData dim_diameter_geometry_gb;
+extern const GroupBoxData dim_leader_geometry_gb;
+extern const GroupBoxData dim_linear_geometry_gb;
+extern const GroupBoxData dim_ordinate_geometry_gb;
+extern const GroupBoxData dim_radius_geometry_gb;
+extern const GroupBoxData ellipse_geometry_gb;
+extern const GroupBoxData image_geometry_gb;
+extern const GroupBoxData image_misc_gb;
+extern const GroupBoxData infinite_line_geometry_gb;
+extern const GroupBoxData line_geometry_gb;
+extern const GroupBoxData path_geometry_gb;
+extern const GroupBoxData path_misc_gb;
+extern const GroupBoxData point_geometry_gb;
+extern const GroupBoxData polygon_geometry_gb;
+extern const GroupBoxData polyline_geometry_gb;
+extern const GroupBoxData polyline_misc_gb;
+extern const GroupBoxData ray_geometry_gb;
+extern const GroupBoxData rectangle_geometry_gb;
+extern const GroupBoxData text_multi_geometry_gb;
+extern const GroupBoxData text_single_text_gb;
+extern const GroupBoxData text_single_geometry_gb;
+extern const GroupBoxData text_single_misc_gb;
+
+#ifdef __cplusplus
+}
 #endif
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
+#endif
+
