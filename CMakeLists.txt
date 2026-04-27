@@ -829,3 +829,33 @@ if(WIN32)
 else(WIN32)
 	target_link_libraries(embroidermodder2 PRIVATE m)
 endif()
+
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/commands"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/help"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/images"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/icons"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/samples"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/tables"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/translations"
+    DESTINATION ".")
+install(FILES
+        "${PROJECT_SOURCE_DIR}/data/manifest.toml"
+        "${PROJECT_SOURCE_DIR}/LICENSE.md"
+    DESTINATION ".")
+install(TARGETS embroidermodder2
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION .
+)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "embroidermodder2")
+set(CPACK_NSIS_PACKAGE_NAME "embroidermodder2")
+set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/data/icons/default/app.png")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.md")
+set(CPACK_CREATE_DESKTOP_LINKS embroidermodder2)
+include(CPack)
+

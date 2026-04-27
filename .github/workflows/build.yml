@@ -1,55 +1,44 @@
 name: Build
 
-# Note that we don't allow reuseable workflows as a security measure.
-# This mainly is a setup to call bin/build.sh.
-
 on:
-  push:
-    branches:
-      - current
-    paths-ignore:
-      - '**.md'
-      - '**.texi'
+  schedule:
+    - cron: '10 6 * * *'
   pull_request:
   workflow_dispatch:
 
 jobs:
   build-linux:
     runs-on: ubuntu-latest
-    env:
-      HOST_SYSTEM: 'Ubuntu'
-      CMAKE_GENERATOR: 'Ninja'
     steps:
+      - uses: action/checkout@v6
+        with:
+          ref: 'current'
       - name: Build
-        run: |
-          git clone https://github.com/embroidermodder/embroidermodder
-          cd embroidermodder
-          git checkout current
-          bash bin/build.sh "Ubuntu"
+        run: bash bin/build.sh "Ubuntu"
+      - uses: action/upload-artifact@v7
+        with:
+          path: embroidermodder/build/embroidermodder*.zip.gz
 
   build-macos:
     runs-on: macos-latest
-    env:
-      HOST_SYSTEM: 'MacOS'
-      CMAKE_GENERATOR: 'Ninja'
     steps:
+      - uses: action/checkout@v6
+        with:
+          ref: 'current'
       - name: Build
-        run: |
-          git clone https://github.com/embroidermodder/embroidermodder
-          cd embroidermodder
-          git checkout current
-          bash bin/build.sh "MacOS"
+        run: bash bin/build.sh "MacOS"
+      - uses: action/upload-artifact@v7
+        with:
+          path: embroidermodder/build/embroidermodder*.app
 
   build-windows:
     runs-on: windows-latest
-    env:
-      HOST_SYSTEM: 'Windows'
-      CMAKE_GENERATOR: 'Ninja'
     steps:
+      - uses: action/checkout@v6
+        with:
+          ref: 'current'
       - name: Build
-        run: |
-          git clone https://github.com/embroidermodder/embroidermodder
-          cd embroidermodder
-          git checkout current
-          bash bin/build.sh "Windows"
-
+        run: bash bin/build.sh "Windows"
+      - uses: action/upload-artifact@v7
+        with:
+          path: embroidermodder/build/embroidermodder*.exe

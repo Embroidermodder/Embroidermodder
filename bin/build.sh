@@ -23,5 +23,6 @@ fi
 mkdir build || exit 4
 cd build
 cmake .. || exit 5
-cmake --build .
-
+cmake --build . || exit 6
+cpack || exit 7
+cd ..
