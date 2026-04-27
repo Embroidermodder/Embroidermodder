@@ -98,14 +98,15 @@ MainWindow::MainWindow() : QMainWindow(0)
         exit();
     }
 
-    QString lang = state.settings.general_language;
+    QString lang = state.settings.general_language->data;
     qDebug("language: %s", qPrintable(lang));
     if (lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
 
     //Load translations for the Embroidermodder 2 GUI
     QTranslator translatorEmb;
-    translatorEmb.load(appDir + "/translations/" + lang + "/embroidermodder2_" + lang);
+    QString translations_location = appDir + "/translations/" + lang + "/embroidermodder2_" + lang;
+    translatorEmb.load(translations_location);
     qApp->installTranslator(&translatorEmb);
 
     //Load translations for the commands
@@ -151,7 +152,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     textFontSelector   = new QFontComboBox(this);
     textSizeSelector   = new QComboBox(this);
 
-    setWindowIcon(QIcon(appDir + "/icons/" + state.settings.general_icon_theme + "/" + "app" + ".png"));
+    setWindowIcon(QIcon(appDir + "/icons/" + state.settings.general_icon_theme->data + "/app.png"));
     setMinimumSize(800, 480); //Require Minimum WVGA
 
     loadFormats();
@@ -165,8 +166,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     mdiArea->useBackgroundLogo(state.settings.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(state.settings.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(state.settings.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(state.settings.general_mdi_bg_logo);
-    mdiArea->setBackgroundTexture(state.settings.general_mdi_bg_texture);
+    mdiArea->setBackgroundLogo(state.settings.general_mdi_bg_logo->data);
+    mdiArea->setBackgroundTexture(state.settings.general_mdi_bg_texture->data);
     mdiArea->setBackgroundColor(QColor(state.settings.general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -226,12 +227,12 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + state.settings.general_icon_theme, state.settings.selection_mode_pickadd, prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + state.settings.general_icon_theme->data, state.settings.selection_mode_pickadd, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + state.settings.general_icon_theme, prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + state.settings.general_icon_theme->data, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -245,8 +246,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Load all commands in a loop
     QDir commandDir(appDir + "/commands");
     QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach(QString cmdName, cmdList)
-    {
+    foreach(QString cmdName, cmdList) {
         javaLoadCommand(cmdName);
     }
 
@@ -302,7 +302,7 @@ MainWindow::createAction(CommandData command, bool scripted)
 {
     QString appDir = qApp->applicationDirPath();
 
-    QString icon_path = appDir + "/icons/" + state.settings.general_icon_theme
+    QString icon_path = appDir + "/icons/" + state.settings.general_icon_theme->data
         + "/" + QString(command.label) + ".png";
     QAction *ACTION = new QAction(QIcon(icon_path), command.tooltip, this);
     ACTION->setStatusTip(command.statustip);
@@ -386,13 +386,13 @@ void MainWindow::settingsDialog(const QString& showTab)
 /*
  * Loads a string table from the named file.
  *
- * It assumes that the sdsarray has been created already.
+ * It assumes that the StrArray has been created already.
  */
 int
-load_sdsarray(QString filename, const char *key, sdsarray *arr)
+load_strarray(QString filename, const char *key, StrArray *arr)
 {
     char errbuffer[200];
-    filename = QString(state.app_dir) + "/" + filename;
+    filename = QString(state.app_dir->data) + "/" + filename;
     FILE *fp = fopen(qPrintable(filename), "r");
     if (!fp) {
         qDebug("ERROR: failed to open file \"%s\".", qPrintable(filename));
@@ -408,7 +408,7 @@ load_sdsarray(QString filename, const char *key, sdsarray *arr)
 
     /* FIXME: check key is present */
 
-    sdsarray_empty(arr);
+    strarray_empty(arr);
 
     toml_array_t* array = toml_array_in(table, key);
     for (int i=0; ; i++) {
@@ -416,7 +416,7 @@ load_sdsarray(QString filename, const char *key, sdsarray *arr)
         if (!str.ok) {
             break;
          }
-        sdsarray_append(arr, str.u.s);
+        strarray_append(arr, str.u.s);
         free(str.u.s);
     }
 
@@ -431,10 +431,10 @@ load_sdsarray(QString filename, const char *key, sdsarray *arr)
 int
 MainWindow::loadData(void)
 {
-    if (!load_sdsarray("manifest.toml", "manifest", state.manifest)) {
+    if (!load_strarray("manifest.toml", "manifest", state.manifest)) {
         return 0;
     }
-    if (!load_sdsarray("tables/tips.toml", "tips", state.tips)) {
+    if (!load_strarray("tables/tips.toml", "tips", state.tips)) {
         return 0;
     }
     return 1;
@@ -455,7 +455,7 @@ void MainWindow::recentMenuAboutToShow()
     for (int i = 0; i < state.settings.opensave_recent_list_of_files->count; ++i) {
         /* If less than the max amount of entries add to menu. */
         if (i < state.settings.opensave_recent_max_files) {
-            recentFileInfo = QFileInfo(state.settings.opensave_recent_list_of_files->data[i]);
+            recentFileInfo = QFileInfo(state.settings.opensave_recent_list_of_files->data[i]->data);
             if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
                 recentValue.setNum(i+1);
                 QAction* rAction;
@@ -469,7 +469,7 @@ void MainWindow::recentMenuAboutToShow()
                     rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
                 }
                 rAction->setCheckable(false);
-                rAction->setData(QString(state.settings.opensave_recent_list_of_files->data[i]));
+                rAction->setData(QString(state.settings.opensave_recent_list_of_files->data[i]->data));
                 recentMenu->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
@@ -559,7 +559,7 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
 
     QStringList files;
     bool preview = state.settings.opensave_open_thumbnail;
-    openFilesPath = state.settings.opensave_recent_directory;
+    openFilesPath = state.settings.opensave_recent_directory->data;
 
     //Check to see if this from the recent files list
     if (recent)
@@ -670,7 +670,7 @@ void MainWindow::saveasfile()
         return;
 
     QString file;
-    openFilesPath = state.settings.opensave_recent_directory;
+    openFilesPath = state.settings.opensave_recent_directory->data;
     file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
 
     mdiWin->saveFile(file);
@@ -1030,7 +1030,7 @@ void MainWindow::createViewMenu()
     qDebug("MainWindow createViewMenu()");
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = state.settings.general_icon_theme;
+    QString icontheme = state.settings.general_icon_theme->data;
 
     menuBar()->addMenu(viewMenu);
     viewMenu->addSeparator();
@@ -1226,7 +1226,7 @@ void MainWindow::createLayerToolbar()
     toolbarLayer->addAction(actionHash.value(ACTION_layers));
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = state.settings.general_icon_theme;
+    QString icontheme = state.settings.general_icon_theme->data;
 
     layerSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...
@@ -1256,7 +1256,7 @@ void MainWindow::createPropertiesToolbar()
     toolbarProperties->setObjectName("toolbarProperties");
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = state.settings.general_icon_theme;
+    QString icontheme = state.settings.general_icon_theme->data;
 
     colorSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...
@@ -1330,7 +1330,7 @@ void MainWindow::createTextToolbar()
     toolbarText->setObjectName("toolbarText");
 
     toolbarText->addWidget(textFontSelector);
-    textFontSelector->setCurrentFont(QFont(state.settings.text_font));
+    textFontSelector->setCurrentFont(QFont(state.settings.text_font->data));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
     toolbarText->addAction(actionHash.value(ACTION_textbold));

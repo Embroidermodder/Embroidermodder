@@ -8,10 +8,10 @@
 void
 state_create(char *settings_dir, char *app_dir)
 {
-    state.settings_dir = sdsnew(settings_dir);
-    state.settings_path = sdsnew(settings_dir);
-    state.settings_path = sdscat(state.settings_path, "settings.ini");
-    state.app_dir = sdsnew(app_dir);
+    state.settings_dir = str_create(settings_dir);
+    state.settings_path = str_create(settings_dir);
+    str_concat(state.settings_path, "settings.ini");
+    state.app_dir = str_create(app_dir);
 
     state.shift = false;
     state.num_docs = 0;
@@ -22,36 +22,36 @@ state_create(char *settings_dir, char *app_dir)
     state.rapid_fire = false;
     state.is_blinking = false;
     state.blink_state = false;
-    state.command_line = sdsnew("");
-    state.prefix = sdsnew("> ");
-    state.current_command = sdsnew("donothing");
-    state.last_command = sdsnew("donothing");
-    state.arguments = sdsarray_create();
+    state.command_line = str_create("");
+    state.prefix = str_create("> ");
+    state.current_command = str_create("donothing");
+    state.last_command = str_create("donothing");
+    state.arguments = strarray_create();
 
-    state.manifest = sdsarray_create();
-    state.tips = sdsarray_create();
-    state.aliases = sdsarray_create();
+    state.manifest = strarray_create();
+    state.tips = strarray_create();
+    state.aliases = strarray_create();
 
-    state.file_menu = sdsarray_create();
-    state.edit_menu = sdsarray_create();
-    state.view_menu = sdsarray_create();
-    state.window_menu = sdsarray_create();
-    state.help_menu = sdsarray_create();
-    state.recent_menu = sdsarray_create();
-    state.zoom_menu = sdsarray_create();
-    state.pan_menu = sdsarray_create();
+    state.file_menu = strarray_create();
+    state.edit_menu = strarray_create();
+    state.view_menu = strarray_create();
+    state.window_menu = strarray_create();
+    state.help_menu = strarray_create();
+    state.recent_menu = strarray_create();
+    state.zoom_menu = strarray_create();
+    state.pan_menu = strarray_create();
 
-    state.file_toolbar = sdsarray_create();
-    state.edit_toolbar = sdsarray_create();
-    state.view_toolbar = sdsarray_create();
-    state.zoom_toolbar = sdsarray_create();
-    state.pan_toolbar = sdsarray_create();
-    state.icon_toolbar = sdsarray_create();
-    state.help_toolbar = sdsarray_create();
-    state.layer_toolbar = sdsarray_create();
-    state.text_toolbar = sdsarray_create();
-    state.properties_toolbar = sdsarray_create();
-    state.prompt_toolbar = sdsarray_create();
+    state.file_toolbar = strarray_create();
+    state.edit_toolbar = strarray_create();
+    state.view_toolbar = strarray_create();
+    state.zoom_toolbar = strarray_create();
+    state.pan_toolbar = strarray_create();
+    state.icon_toolbar = strarray_create();
+    state.help_toolbar = strarray_create();
+    state.layer_toolbar = strarray_create();
+    state.text_toolbar = strarray_create();
+    state.properties_toolbar = strarray_create();
+    state.prompt_toolbar = strarray_create();
 
     /* Note that these are created after state.settings_dir so the defaults are corrent. */
     settings_create(&state.settings);
@@ -68,39 +68,39 @@ state_free(void)
     settings_free(&state.preview);
     settings_free(&state.dialog);
 
-    sdsfree(state.settings_dir);
-    sdsfree(state.settings_path);
-    sdsfree(state.app_dir);
+    str_free(state.settings_dir);
+    str_free(state.settings_path);
+    str_free(state.app_dir);
 
-    sdsfree(state.command_line);
-    sdsfree(state.prefix);
-    sdsfree(state.current_command);
-    sdsfree(state.last_command);
-    sdsarray_free(state.arguments);
+    str_free(state.command_line);
+    str_free(state.prefix);
+    str_free(state.current_command);
+    str_free(state.last_command);
+    strarray_free(state.arguments);
 
-    sdsarray_free(state.manifest);
-    sdsarray_free(state.tips);
-    sdsarray_free(state.aliases);
+    strarray_free(state.manifest);
+    strarray_free(state.tips);
+    strarray_free(state.aliases);
 
-    sdsarray_free(state.file_menu);
-    sdsarray_free(state.edit_menu);
-    sdsarray_free(state.view_menu);
-    sdsarray_free(state.window_menu);
-    sdsarray_free(state.help_menu);
-    sdsarray_free(state.recent_menu);
-    sdsarray_free(state.zoom_menu);
-    sdsarray_free(state.pan_menu);
+    strarray_free(state.file_menu);
+    strarray_free(state.edit_menu);
+    strarray_free(state.view_menu);
+    strarray_free(state.window_menu);
+    strarray_free(state.help_menu);
+    strarray_free(state.recent_menu);
+    strarray_free(state.zoom_menu);
+    strarray_free(state.pan_menu);
 
-    sdsarray_free(state.file_toolbar);
-    sdsarray_free(state.edit_toolbar);
-    sdsarray_free(state.view_toolbar);
-    sdsarray_free(state.zoom_toolbar);
-    sdsarray_free(state.pan_toolbar);
-    sdsarray_free(state.icon_toolbar);
-    sdsarray_free(state.help_toolbar);
-    sdsarray_free(state.layer_toolbar);
-    sdsarray_free(state.text_toolbar);
-    sdsarray_free(state.properties_toolbar);
-    sdsarray_free(state.prompt_toolbar);
+    strarray_free(state.file_toolbar);
+    strarray_free(state.edit_toolbar);
+    strarray_free(state.view_toolbar);
+    strarray_free(state.zoom_toolbar);
+    strarray_free(state.pan_toolbar);
+    strarray_free(state.icon_toolbar);
+    strarray_free(state.help_toolbar);
+    strarray_free(state.layer_toolbar);
+    strarray_free(state.text_toolbar);
+    strarray_free(state.properties_toolbar);
+    strarray_free(state.prompt_toolbar);
 }
 

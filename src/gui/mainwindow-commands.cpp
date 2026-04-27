@@ -288,7 +288,7 @@ void MainWindow::tipOfTheDay()
     if (state.settings.general_current_tip >= state.tips->count) {
         state.settings.general_current_tip = 0;
     }
-    labelTipOfTheDay = new QLabel(state.tips->data[state.settings.general_current_tip], wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(state.tips->data[state.settings.general_current_tip]->data, wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
@@ -340,14 +340,14 @@ void MainWindow::buttonTipOfTheDayClicked(int button)
         else {
             state.settings.general_current_tip = state.tips->count - 1;
         }
-        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]);
+        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]->data);
     }
     else if (button == QWizard::CustomButton2) {
         state.settings.general_current_tip++;
         if (state.settings.general_current_tip >= state.tips->count) {
             state.settings.general_current_tip = 0;
         }
-        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]);
+        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]->data);
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
@@ -382,7 +382,7 @@ void MainWindow::changelog()
 void MainWindow::undo()
 {
     qDebug("undo()");
-    QString prefix = state.prefix;
+    QString prefix = state.prefix->data;
     if (dockUndoEdit->canUndo()) {
         prompt->setPrefix("Undo " + dockUndoEdit->undoText());
         prompt->appendHistory(QString());
@@ -398,7 +398,7 @@ void MainWindow::undo()
 void MainWindow::redo()
 {
     qDebug("redo()");
-    QString prefix = state.prefix;
+    QString prefix = state.prefix->data;
     if (dockUndoEdit->canRedo()) {
         prompt->setPrefix("Redo " + dockUndoEdit->redoText());
         prompt->appendHistory(QString());
@@ -833,7 +833,7 @@ void MainWindow::textSizeSelectorIndexChanged(int index)
 
 QString MainWindow::textFont()
 {
-    return state.settings.text_font;
+    return state.settings.text_font->data;
 }
 
 qreal MainWindow::textSize()
@@ -875,7 +875,7 @@ void
 MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    state.settings.text_font = sdscpy(state.settings.text_font, qPrintable(str));
+    str_const(state.settings.text_font, qPrintable(str));
 }
 
 void
@@ -1242,10 +1242,9 @@ void MainWindow::addTextSingle(const QString& str, qreal x, qreal y, qreal rot, 
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack)
-    {
+    if (gview && gscene && stack) {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
-        obj->setObjectTextFont(state.settings.text_font);
+        obj->setObjectTextFont(state.settings.text_font->data);
         obj->setObjectTextSize(state.settings.text_size);
         obj->setObjectTextStyle(state.settings.text_style_bold,
                                 state.settings.text_style_italic,
@@ -1257,14 +1256,12 @@ void MainWindow::addTextSingle(const QString& str, qreal x, qreal y, qreal rot, 
         obj->setRotation(-rot);
         //TODO: single line text fill
         obj->setObjectRubberMode(rubberMode);
-        if (rubberMode)
-        {
+        if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }

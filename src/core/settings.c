@@ -21,16 +21,16 @@ settings_create(Settings *settings)
     char buffer[2000];
 
     /* General */
-    settings->general_language = sdsnew("default");
-    settings->general_icon_theme = sdsnew("default");
+    settings->general_language = str_create("default");
+    settings->general_icon_theme = str_create("default");
     settings->general_icon_size = 16;
     settings->general_mdi_bg_use_logo = true;
     settings->general_mdi_bg_use_texture = true;
     settings->general_mdi_bg_use_color = true;
-    sprintf(buffer, "%s/images/logo-spirals.png", state.app_dir);
-    settings->general_mdi_bg_logo = sdsnew(buffer);
-    sprintf(buffer, "%s/images/texture-spirals.png", state.app_dir);
-    settings->general_mdi_bg_texture = sdsnew(buffer);
+    sprintf(buffer, "%s/images/logo-spirals.png", state.app_dir->data);
+    settings->general_mdi_bg_logo = str_create(buffer);
+    sprintf(buffer, "%s/images/texture-spirals.png", state.app_dir->data);
+    settings->general_mdi_bg_texture = str_create(buffer);
     settings->general_mdi_bg_color = rgb(192, 192, 192);
     settings->general_tip_of_the_day = true;
     settings->general_current_tip = 0;
@@ -55,37 +55,37 @@ settings_create(Settings *settings)
     settings->display_zoomscale_in = 2.0;
     settings->display_zoomscale_out = 0.5;
     settings->display_crosshair_percent = 5;
-    settings->display_units = sdsnew("mm");
+    settings->display_units = str_create("mm");
 
     /* Prompt */
     settings->prompt_text_color = rgb(  0,  0,  0);
     settings->prompt_bg_color = rgb(255,255,255);
-    settings->prompt_font_family = sdsnew("Monospace");
-    settings->prompt_font_style = sdsnew("normal");
+    settings->prompt_font_family = str_create("Monospace");
+    settings->prompt_font_style = str_create("normal");
     settings->prompt_font_size = 12;
     settings->prompt_save_history = true;
     settings->prompt_save_history_as_html = false;
-    settings->prompt_save_history_filename = sdsnew(state.settings_dir);
-    settings->prompt_save_history_filename = sdscat(settings->prompt_save_history_filename, "prompt.log");
+    settings->prompt_save_history_filename = str_create(state.settings_dir->data);
+    str_concat(settings->prompt_save_history_filename, "prompt.log");
 
     /* OpenSave */
-    settings->opensave_custom_filter = sdsnew("supported");
-    settings->opensave_open_format = sdsnew("*.*");
+    settings->opensave_custom_filter = str_create("supported");
+    settings->opensave_open_format = str_create("*.*");
     settings->opensave_open_thumbnail = false;
-    settings->opensave_save_format = sdsnew("*.*");
+    settings->opensave_save_format = str_create("*.*");
     settings->opensave_save_thumbnail = false;
 
     /* Recent */
     settings->opensave_recent_max_files = 10;
-    settings->opensave_recent_list_of_files = sdsarray_create();
-    settings->opensave_recent_directory = sdsnew(state.app_dir);
-    settings->opensave_recent_directory = sdscat(settings->opensave_recent_directory, "/samples");
+    settings->opensave_recent_list_of_files = strarray_create();
+    settings->opensave_recent_directory = str_create(state.app_dir->data);
+    str_concat(settings->opensave_recent_directory, "/samples");
 
     /* Trimming */
     settings->opensave_trim_dst_num_jumps = 5;
 
     /* Printing */
-    settings->printing_default_device = sdsnew("");
+    settings->printing_default_device = str_create("");
     settings->printing_use_last_device = false;
     settings->printing_disable_bg = true;
 
@@ -95,7 +95,7 @@ settings_create(Settings *settings)
     settings->grid_color_match_crosshair = true;
     settings->grid_color = rgb(0, 0, 0);
     settings->grid_load_from_file = true;
-    settings->grid_type = sdsnew("Rectangular");
+    settings->grid_type = str_create("Rectangular");
     settings->grid_center_on_origin = true;
     settings->grid_center_x = 0.0;
     settings->grid_center_y = 0.0;
@@ -147,7 +147,7 @@ settings_create(Settings *settings)
     settings->selection_pickbox_size = 4;
 
     /* Text */
-    settings->text_font = sdsnew("Arial");
+    settings->text_font = str_create("Arial");
     settings->text_size = 12;
     settings->text_angle = 0;
     settings->text_style_bold = false;
@@ -161,20 +161,18 @@ int
 settings_load(Settings *settings, int *window_pos, int *window_size)
 {
     char errbuffer[200];
-    FILE *fp = fopen(state.settings_path, "r");
+    FILE *fp = fopen(state.settings_path->data, "r");
     if (!fp) {
-        printf("ERROR: failed to open file \"%s\".", state.settings_path);
+        printf("ERROR: failed to open file \"%s\".", state.settings_path->data);
         return 0;
     }
 
     toml_table_t* table = toml_parse_file(fp, errbuffer, sizeof(errbuffer));
     if (!table) {
-        printf("ERROR: failed to parse file \"%s\".", state.settings_path);
+        printf("ERROR: failed to parse file \"%s\".", state.settings_path->data);
         printf("ERROR: %s", errbuffer);
         return 0;
     }
-
-    char result[1000];
 
     /* General */
     toml_table_t* general = toml_table_in(table, "General");
@@ -186,16 +184,18 @@ settings_load(Settings *settings, int *window_pos, int *window_size)
         /*
     }
     */
-    settings->general_language = toml_readstr(general, "Language", "default", result);
-    settings->general_icon_theme = toml_readstr(general, "IconTheme", "default", result);
+    toml_readstr(general, "Language", "default",
+        settings->general_language);
+    toml_readstr(general, "IconTheme", "default",
+        settings->general_icon_theme);
     settings->general_icon_size = toml_readint(general, "IconSize", 16);
     settings->general_mdi_bg_use_logo = toml_readbool(general, "MdiBGUseLogo", true);
     settings->general_mdi_bg_use_texture = toml_readbool(general, "MdiBGUseTexture", true);
     settings->general_mdi_bg_use_color = toml_readbool(general, "MdiBGUseColor", true);
-    settings->general_mdi_bg_logo = toml_readstr(general, "MdiBGLogo",
-        settings->general_mdi_bg_logo, result);
-    settings->general_mdi_bg_texture = toml_readstr(general, "MdiBGTexture",
-        settings->general_mdi_bg_texture, result);
+    toml_readstr(general, "MdiBGLogo", "",
+        settings->general_mdi_bg_logo);
+    toml_readstr(general, "MdiBGTexture", "",
+        settings->general_mdi_bg_texture);
     settings->general_mdi_bg_color = toml_readint(general, "MdiBGColor", rgb(192, 192, 192));
     settings->general_tip_of_the_day = toml_readbool(general, "TipOfTheDay", true);
     settings->general_current_tip = toml_readint(general, "CurrentTip", 0);
@@ -221,37 +221,44 @@ settings_load(Settings *settings, int *window_pos, int *window_size)
     settings->display_zoomscale_in = toml_readreal(display, "ZoomScaleIn", 2.0);
     settings->display_zoomscale_out = toml_readreal(display, "ZoomScaleOut", 0.5);
     settings->display_crosshair_percent = toml_readint(display, "CrossHairPercent", 5);
-    settings->display_units = toml_readstr(display, "Units", "mm", result);
+    toml_readstr(display, "Units", "mm", settings->display_units);
 
     /* Prompt */
     toml_table_t* prompt = toml_table_in(table, "Prompt");
     settings->prompt_text_color = toml_readint(prompt, "TextColor", rgb(0, 0, 0));
     settings->prompt_bg_color = toml_readint(prompt, "BackgroundColor", rgb(255, 255, 255));
-    settings->prompt_font_family = toml_readstr(prompt, "FontFamily", "Monospace", result);
-    settings->prompt_font_style = toml_readstr(prompt, "FontStyle", "normal", result);
+    toml_readstr(prompt, "FontFamily", "Monospace",
+        settings->prompt_font_family);
+    toml_readstr(prompt, "FontStyle", "normal",
+        settings->prompt_font_style);
     settings->prompt_font_size = toml_readint(prompt, "FontSize", 12);
     settings->prompt_save_history = toml_readint(prompt, "SaveHistory", true);
     settings->prompt_save_history_as_html = toml_readint(prompt, "SaveHistoryAsHtml", false);
-    settings->prompt_save_history_filename = toml_readstr(prompt, "SaveHistoryFilename", settings->prompt_save_history_filename, result);
+    toml_readstr(prompt, "SaveHistoryFilename", "history.log",
+        settings->prompt_save_history_filename);
 
     /* OpenSave */
     toml_table_t* opensave = toml_table_in(table, "OpenSave");
-    settings->opensave_custom_filter = toml_readstr(opensave, "CustomFilter", "supported", result);
-    settings->opensave_open_format = toml_readstr(opensave, "OpenFormat", "*.*", result);
+    toml_readstr(opensave, "CustomFilter", "supported",
+        settings->opensave_custom_filter);
+    toml_readstr(opensave, "OpenFormat", "*.*",
+        settings->opensave_open_format);
     settings->opensave_open_thumbnail = toml_readbool(opensave, "OpenThumbnail", false);
-    settings->opensave_save_format = toml_readstr(opensave, "SaveFormat", "*.*", result);
+    toml_readstr(opensave, "SaveFormat", "*.*",
+        settings->opensave_save_format);
     settings->opensave_save_thumbnail = toml_readbool(opensave, "SaveThumbnail", false);
     settings->opensave_recent_max_files = toml_readint(opensave, "RecentMax", 10);
     /* FIXME: 
     settings->opensave_recent_list_of_files = toml_readint(opensave, "RecentFiles");
     */
-    settings->opensave_recent_directory = toml_readstr(opensave, "RecentDirectory",
-        settings->opensave_recent_directory, result);
+    toml_readstr(opensave, "RecentDirectory", "",
+        settings->opensave_recent_directory);
     settings->opensave_trim_dst_num_jumps = toml_readint(opensave, "TrimDstNumJumps", 5);
 
     /* Printing */
     toml_table_t* printing = toml_table_in(table, "Printing");
-    settings->printing_default_device = toml_readstr(printing, "DefaultDevice", "", result);
+    toml_readstr(printing, "DefaultDevice", "",
+        settings->printing_default_device);
     settings->printing_use_last_device = toml_readbool(printing, "UseLastDevice", false);
     settings->printing_disable_bg = toml_readbool(printing, "DisableBG", true);
 
@@ -262,7 +269,7 @@ settings_load(Settings *settings, int *window_pos, int *window_size)
     settings->grid_color_match_crosshair = toml_readint(grid, "ColorMatchCrossHair", true);
     settings->grid_color = toml_readint(grid, "Color", rgb(  0,  0,  0));
     settings->grid_load_from_file = toml_readbool(grid, "LoadFromFile", true);
-    settings->grid_type = toml_readstr(grid, "Type", "Rectangular", result);
+    toml_readstr(grid, "Type", "Rectangular", settings->grid_type);
     settings->grid_center_on_origin = toml_readbool(grid, "CenterOnOrigin", true);
     settings->grid_center_x = toml_readreal(grid, "CenterX", 0.0);
     settings->grid_center_y = toml_readreal(grid, "CenterY", 0.0);
@@ -319,7 +326,7 @@ settings_load(Settings *settings, int *window_pos, int *window_size)
 
     /* Text */
     toml_table_t* text = toml_table_in(table, "Text");
-    settings->text_font = toml_readstr(text, "Font", "Arial", result);
+    toml_readstr(text, "Font", "Arial", settings->text_font);
     settings->text_size = toml_readint(text, "Size", 12);
     settings->text_angle = toml_readint(text, "Angle", 0);
     settings->text_style_bold = toml_readbool(text, "StyleBold", false);
@@ -341,14 +348,14 @@ section_header(FILE *fp, const char *label)
 
 /* Make sure that a string setting is styled correctly. */
 void
-write_str(FILE *fp, const char *key, sds value)
+write_str(FILE *fp, const char *key, String *value)
 {
-    fprintf(fp, "%s=%s\n", key, value);
+    fprintf(fp, "%s=%s\n", key, value->data);
 }
 
 /* Make sure that a string setting is styled correctly. */
 void
-write_strarray(FILE *fp, const char *key, sdsarray *value)
+write_strarray(FILE *fp, const char *key, StrArray *value)
 {
     fprintf(fp, "%s=", key);
     for (int i=0; i<value->count; i++) {
@@ -374,7 +381,7 @@ write_real(FILE *fp, const char *key, float value)
 int
 settings_save(Settings *settings, int window_pos[2], int window_size[2])
 {
-    FILE *fp = fopen(state.settings_path, "w");
+    FILE *fp = fopen(state.settings_path->data, "w");
 
     section_header(fp, "General");
     /* write_str(fp, "LayoutState", layoutState); */
@@ -526,7 +533,7 @@ settings_validate(Settings *settings)
 }
 
 /* Please keep this in the same order as the struct itself.
- * FIXME: check for using = with sds.
+ * FIXME: check strings are deep-copied.
  */
 void
 settings_copy(Settings *dest, Settings *src)
@@ -534,14 +541,14 @@ settings_copy(Settings *dest, Settings *src)
     /* We only want to copy valid settings, so validate them first. */
     settings_validate(src);
 
-    dest->general_language = sdscpy(dest->general_language, src->general_language);
-    dest->general_icon_theme = sdscpy(dest->general_icon_theme, src->general_icon_theme);
+    str_copy(dest->general_language, src->general_language);
+    str_copy(dest->general_icon_theme, src->general_icon_theme);
     dest->general_icon_size = src->general_icon_size;
     dest->general_mdi_bg_use_logo = src->general_mdi_bg_use_logo;
     dest->general_mdi_bg_use_texture = src->general_mdi_bg_use_texture;
     dest->general_mdi_bg_use_color = src->general_mdi_bg_use_color;
-    dest->general_mdi_bg_logo = src->general_mdi_bg_logo;
-    dest->general_mdi_bg_texture = src->general_mdi_bg_texture;
+    str_copy(dest->general_mdi_bg_logo, src->general_mdi_bg_logo);
+    str_copy(dest->general_mdi_bg_texture, src->general_mdi_bg_texture);
     dest->general_mdi_bg_color = src->general_mdi_bg_color;
     dest->general_tip_of_the_day = src->general_tip_of_the_day;
     dest->general_current_tip = src->general_current_tip;
@@ -565,23 +572,23 @@ settings_copy(Settings *dest, Settings *src)
     dest->display_zoomscale_in = src->display_zoomscale_in;
     dest->display_zoomscale_out = src->display_zoomscale_out;
     dest->display_crosshair_percent = src->display_crosshair_percent;
-    dest->display_units = sdscpy(dest->display_units, src->display_units);
+    str_copy(dest->display_units, src->display_units);
     dest->prompt_text_color = src->prompt_text_color;
     dest->prompt_bg_color = src->prompt_bg_color;
-    dest->prompt_font_family = sdscpy(dest->prompt_font_family, src->prompt_font_family);
-    dest->prompt_font_style = sdscpy(dest->prompt_font_style, src->prompt_font_style);
+    str_copy(dest->prompt_font_family, src->prompt_font_family);
+    str_copy(dest->prompt_font_style, src->prompt_font_style);
     dest->prompt_font_size = src->prompt_font_size;
     dest->prompt_save_history = src->prompt_save_history;
     dest->prompt_save_history_as_html = src->prompt_save_history_as_html;
-    dest->prompt_save_history_filename = sdscpy(dest->prompt_save_history_filename, src->prompt_save_history_filename);
+    str_copy(dest->prompt_save_history_filename, src->prompt_save_history_filename);
     dest->opensave_custom_filter = src->opensave_custom_filter;
-    dest->opensave_open_format = src->opensave_open_format;
+    str_copy(dest->opensave_open_format, src->opensave_open_format);
     dest->opensave_open_thumbnail = src->opensave_open_thumbnail;
-    dest->opensave_save_format = src->opensave_save_format;
+    str_copy(dest->opensave_save_format, src->opensave_save_format);
     dest->opensave_save_thumbnail = src->opensave_save_thumbnail;
     dest->opensave_recent_max_files = src->opensave_recent_max_files;
     dest->opensave_recent_list_of_files = src->opensave_recent_list_of_files;
-    dest->opensave_recent_directory = sdscpy(dest->opensave_recent_directory, src->opensave_recent_directory);
+    str_copy(dest->opensave_recent_directory, src->opensave_recent_directory);
     dest->opensave_trim_dst_num_jumps = src->opensave_trim_dst_num_jumps;
     dest->printing_default_device = src->printing_default_device;
     dest->printing_use_last_device = src->printing_use_last_device;
@@ -591,7 +598,7 @@ settings_copy(Settings *dest, Settings *src)
     dest->grid_color_match_crosshair = src->grid_color_match_crosshair;
     dest->grid_color = src->grid_color;
     dest->grid_load_from_file = src->grid_load_from_file;
-    dest->grid_type = src->grid_type;
+    str_copy(dest->grid_type, src->grid_type);
     dest->grid_center_on_origin = src->grid_center_on_origin;
     dest->grid_center_x = src->grid_center_x;
     dest->grid_center_y = src->grid_center_y;
@@ -647,21 +654,21 @@ settings_copy(Settings *dest, Settings *src)
 void
 settings_free(Settings *settings)
 {
-    sdsfree(settings->general_language);
-    sdsfree(settings->general_icon_theme);
-    sdsfree(settings->general_mdi_bg_logo);
-    sdsfree(settings->general_mdi_bg_texture);
-    sdsfree(settings->display_units);
-    sdsfree(settings->prompt_font_family);
-    sdsfree(settings->prompt_font_style);
-    sdsfree(settings->prompt_save_history_filename);
-    sdsfree(settings->opensave_custom_filter);
-    sdsfree(settings->opensave_open_format);
-    sdsfree(settings->opensave_save_format);
-    sdsarray_free(settings->opensave_recent_list_of_files);
-    sdsfree(settings->opensave_recent_directory);
-    sdsfree(settings->printing_default_device);
-    sdsfree(settings->grid_type);
-    sdsfree(settings->text_font);
+    str_free(settings->general_language);
+    str_free(settings->general_icon_theme);
+    str_free(settings->general_mdi_bg_logo);
+    str_free(settings->general_mdi_bg_texture);
+    str_free(settings->display_units);
+    str_free(settings->prompt_font_family);
+    str_free(settings->prompt_font_style);
+    str_free(settings->prompt_save_history_filename);
+    str_free(settings->opensave_custom_filter);
+    str_free(settings->opensave_open_format);
+    str_free(settings->opensave_save_format);
+    strarray_free(settings->opensave_recent_list_of_files);
+    str_free(settings->opensave_recent_directory);
+    str_free(settings->printing_default_device);
+    str_free(settings->grid_type);
+    str_free(settings->text_font);
 }
 

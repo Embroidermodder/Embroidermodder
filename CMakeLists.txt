@@ -6,15 +6,22 @@ find_package(OpenGL REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport Qml)
 find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
 
+# FIXME: AUTOMOC is a source of a strange bug on MacOS where "-std=c99" is added as a
+# flag for the c++ compiler despite it not being added by this file. This is
+# treated as a fatal error so the build-macos action fails.
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
+#set(CMAKE_AUTORCC ON)
+#set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_compile_options(
+	-pedantic-errors
+)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
@@ -45,7 +52,6 @@ set(DATA ${CMAKE_SOURCE_DIR}/data)
 
 add_subdirectory(src/libembroidery)
 add_subdirectory(extern/tomlc99)
-add_subdirectory(extern/sds)
 
 # The makers of CMake advise that you do not glob source files.
 #
@@ -56,8 +62,8 @@ qt_add_executable(embroidermodder2
 	${SRC}/core/load.c
 	${SRC}/core/object-data.c
 	${SRC}/core/object-data.h
-	${SRC}/core/sdsarray.c
 	${SRC}/core/settings.c
+	${SRC}/core/string-tools.c
 	${SRC}/core/state.c
 	${SRC}/core/core.h
 
@@ -733,6 +739,7 @@ qt_add_executable(embroidermodder2
 	${CMAKE_SOURCE_DIR}/LICENSE.md
 )
 
+if(0)
 qt_add_translations(embroidermodder2
 	TS_FILES
 	${DATA}/translations/afrikaans/commands_afrikaans.ts
@@ -779,6 +786,7 @@ qt_add_translations(embroidermodder2
 	${DATA}/translations/swedish/embroidermodder2_swedish.ts
 	${DATA}/translations/turkish/commands_turkish.ts
 	${DATA}/translations/turkish/embroidermodder2_turkish.ts)
+endif(0)
 
 # WARNING: This does NOT regenerate when the assets change, so you have to
 # rerun cmake to ensure that this retriggers.
@@ -800,7 +808,6 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src/gui
 	${CMAKE_SOURCE_DIR}/src/libembroidery
 	${CMAKE_SOURCE_DIR}/extern/tomlc99
-	${CMAKE_SOURCE_DIR}/extern/sds
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
@@ -810,7 +817,6 @@ target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Qml
 	embroidery_static
 	tomlc99
-	sds
 	${OPENGL_LIBRARIES}
 )
 
@@ -829,3 +835,33 @@ if(WIN32)
 else(WIN32)
 	target_link_libraries(embroidermodder2 PRIVATE m)
 endif()
+
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/commands"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/help"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/images"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/icons"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/samples"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/tables"
+    DESTINATION ".")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/translations"
+    DESTINATION ".")
+install(FILES
+        "${PROJECT_SOURCE_DIR}/data/manifest.toml"
+        "${PROJECT_SOURCE_DIR}/LICENSE.md"
+    DESTINATION ".")
+install(TARGETS embroidermodder2
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION .
+)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "embroidermodder2")
+set(CPACK_NSIS_PACKAGE_NAME "embroidermodder2")
+set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/data/icons/default/app.png")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.md")
+set(CPACK_CREATE_DESKTOP_LINKS embroidermodder2)
+include(CPack)
+

@@ -9,18 +9,19 @@
 #include "core.h"
 
 /* FIXME: need to deal with  */
-char *
-toml_readstr(toml_table_t *table, const char *key, const char *default_value, char *result)
+int
+toml_readstr(toml_table_t *table, const char *key, const char *default_value, String *result)
 {
     toml_datum_t str = toml_string_in(table, key);
     if (str.ok) {
-        strcpy(result, str.u.s);
+        str_const(result, str.u.s);
         free(str.u.s);
+        return 1;
     }
     else {
-        strcpy(result, default_value);
+        str_const(result, default_value);
     }
-    return result;
+    return 0;
 }
 
 int32_t

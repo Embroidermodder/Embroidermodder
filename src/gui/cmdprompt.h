@@ -178,7 +178,7 @@ protected:
 
 public slots:
     QString getHistory() { return promptHistory->toHtml(); }
-    void setCurrentText(const QString& txt) { promptInput->curText = state.prefix + txt; promptInput->setText(promptInput->curText); }
+    void setCurrentText(const QString& txt) { promptInput->curText = state.prefix->data + txt; promptInput->setText(promptInput->curText); }
     void setHistory(const QString& txt) { promptHistory->setHtml(txt); promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor); }
     void setPrefix(const QString& txt);
     void appendHistory(const QString& txt);

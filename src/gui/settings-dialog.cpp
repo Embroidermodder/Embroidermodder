@@ -85,7 +85,7 @@ QWidget* Settings_Dialog::createTabGeneral()
         dirName[0] = dirName[0].toUpper();
         comboBoxLanguage->addItem(dirName);
     }
-    QString current = state.dialog.general_language;
+    QString current = state.dialog.general_language->data;
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
     connect(comboBoxLanguage, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxLanguageCurrentIndexChanged(const QString&)));
@@ -98,7 +98,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     //Icons
     QGroupBox* groupBoxIcon = new QGroupBox(tr("Icons"), widget);
 
-    QString icon_theme = state.dialog.general_icon_theme;
+    QString icon_theme = state.dialog.general_icon_theme->data;
     QLabel* labelIconTheme = new QLabel(tr("Icon Theme"), groupBoxIcon);
     QComboBox* comboBoxIconTheme = new QComboBox(groupBoxIcon);
     QDir dir(qApp->applicationDirPath());
@@ -107,7 +107,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     {
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/" + "theme" + ".png"), dirName);
     }
-    comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(state.dialog.general_icon_theme));
+    comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(state.dialog.general_icon_theme->data));
     connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxIconThemeCurrentIndexChanged(const QString&)));
 
     QLabel* labelIconSize = new QLabel(tr("Icon Size"), groupBoxIcon);
@@ -430,13 +430,13 @@ QWidget* Settings_Dialog::createTabPrompt()
 
     QLabel* labelFontFamily = new QLabel(tr("Font Family"), groupBoxFont);
     QFontComboBox* comboBoxFontFamily = new QFontComboBox(groupBoxFont);
-    comboBoxFontFamily->setCurrentFont(QFont(state.preview.prompt_font_family));
+    comboBoxFontFamily->setCurrentFont(QFont(state.preview.prompt_font_family->data));
     connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(const QString&)));
     QLabel* labelFontStyle = new QLabel(tr("Font Style"), groupBoxFont);
     QComboBox* comboBoxFontStyle = new QComboBox(groupBoxFont);
     comboBoxFontStyle->addItem("Normal");
     comboBoxFontStyle->addItem("Italic");
-    comboBoxFontStyle->setEditText(state.preview.prompt_font_style);
+    comboBoxFontStyle->setEditText(state.preview.prompt_font_style->data);
     connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxPromptFontStyleCurrentIndexChanged(const QString&)));
     QLabel* labelFontSize = new QLabel(tr("Font Size"), groupBoxFont);
     QSpinBox* spinBoxFontSize = new QSpinBox(groupBoxFont);
@@ -489,7 +489,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QWidget* widget = new QWidget(this);
 
     //Custom Filter
-    QString filter = state.dialog.opensave_custom_filter;
+    QString filter = state.dialog.opensave_custom_filter->data;
     QGroupBox* groupBoxCustomFilter = new QGroupBox(tr("Custom Filter"), widget);
     groupBoxCustomFilter->setEnabled(false); //TODO: Fixup custom filter
 
@@ -973,7 +973,7 @@ QWidget* Settings_Dialog::createTabPrinting()
     QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
     foreach(QPrinterInfo info, listAvailPrinters)
     {
-        comboBoxDefaultDevice->addItem(QIcon("icons/" + QString(state.settings.general_icon_theme) + "/print.png"), info.printerName());
+        comboBoxDefaultDevice->addItem(QIcon("icons/" + QString(state.settings.general_icon_theme->data) + "/print.png"), info.printerName());
     }
 
     QVBoxLayout* vboxLayoutDefaultPrinter = new QVBoxLayout(groupBoxDefaultPrinter);
@@ -1077,7 +1077,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     comboBoxGridType->addItem("Rectangular");
     comboBoxGridType->addItem("Circular");
     comboBoxGridType->addItem("Isometric");
-    comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(state.dialog.grid_type));
+    comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(state.dialog.grid_type->data));
     connect(comboBoxGridType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(const QString&)));
 
     QCheckBox* checkBoxGridCenterOnOrigin = new QCheckBox(tr("Center the grid on the origin"), groupBoxGridGeom);
@@ -1189,7 +1189,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     spinBoxGridSpacingAngle->setEnabled(!state.dialog.grid_load_from_file);
 
     bool visibility = false;
-    if (!strcmp(state.dialog.grid_type, "Circular")) {
+    if (!str_compare(state.dialog.grid_type, "Circular")) {
         visibility = true;
     }
     labelGridSizeX->setVisible(!visibility);
@@ -1319,7 +1319,7 @@ QWidget* Settings_Dialog::createTabQuickSnap()
 {
     QWidget* widget = new QWidget(this);
 
-    QString iconTheme = state.settings.general_icon_theme;
+    QString iconTheme = state.settings.general_icon_theme->data;
 
     //QSnap Locators
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
@@ -1642,7 +1642,7 @@ QWidget* Settings_Dialog::createTabSelection()
 
 void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {
-    QString iconTheme = state.settings.general_icon_theme;
+    QString iconTheme = state.settings.general_icon_theme->data;
 
     comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorred" + ".png"),     tr("Red"),     qRgb(255,  0,  0));
     comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "coloryellow" + ".png"),  tr("Yellow"),  qRgb(255,255,  0));
@@ -1657,29 +1657,29 @@ void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 void
 Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
 {
-    state.dialog.general_language = sdscpy(state.dialog.general_language,
+    str_const(state.dialog.general_language,
         qPrintable(lang.toLower()));
 }
 
 void
 Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
 {
-    state.dialog.general_icon_theme = sdscpy(state.dialog.general_icon_theme,
+    str_const(state.dialog.general_icon_theme,
         qPrintable(theme));
 }
 
 void Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
-    if (comboBox)
-    {
+    if (comboBox) {
         bool ok = 0;
         state.dialog.general_icon_size = comboBox->itemData(index).toUInt(&ok);
         if (!ok)
             state.dialog.general_icon_size = 16;
     }
-    else
+    else {
         state.dialog.general_icon_size = 16;
+    }
 }
 
 void Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
@@ -1699,12 +1699,12 @@ void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
             tr("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
-            state.accept.general_mdi_bg_logo = sdscpy(state.accept.general_mdi_bg_logo,
+            str_const(state.accept.general_mdi_bg_logo,
                 qPrintable(selectedImage));
         }
 
-        //Update immediately so it can be previewed
-        mainWin->mdiArea->setBackgroundLogo(state.accept.general_mdi_bg_logo);
+        /* Update immediately so it can be previewed. */
+        mainWin->mdiArea->setBackgroundLogo(state.accept.general_mdi_bg_logo->data);
     }
 }
 
@@ -1725,12 +1725,12 @@ void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
                         tr("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
-            state.accept.general_mdi_bg_texture = sdscpy(state.accept.general_mdi_bg_texture,
+            str_const(state.accept.general_mdi_bg_texture,
                 qPrintable(selectedImage));
         }
 
-        //Update immediately so it can be previewed
-        mainWin->mdiArea->setBackgroundTexture(state.accept.general_mdi_bg_texture);
+        /* Update immediately so it can be previewed */
+        mainWin->mdiArea->setBackgroundTexture(state.accept.general_mdi_bg_texture->data);
     }
 }
 
@@ -2131,16 +2131,15 @@ void Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 
 void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
 {
-    state.preview.prompt_font_family = sdscpy(state.preview.prompt_font_family,
-        qPrintable(family));
-    mainWin->prompt->setPromptFontFamily(state.preview.prompt_font_family);
+    str_const(state.preview.prompt_font_family, qPrintable(family));
+    mainWin->prompt->setPromptFontFamily(state.preview.prompt_font_family->data);
 }
 
 void Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(const QString& style)
 {
-    state.preview.prompt_font_style = sdscpy(state.preview.prompt_font_style,
+    str_const(state.preview.prompt_font_style,
         qPrintable(style));
-    mainWin->prompt->setPromptFontStyle(state.preview.prompt_font_style);
+    mainWin->prompt->setPromptFontStyle(state.preview.prompt_font_style->data);
 }
 
 void Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
@@ -2166,14 +2165,14 @@ void Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
     {
         QString format = checkBox->text();
         qDebug("CustomFilter: %s %d", qPrintable(format), checked);
-        QString filter = state.dialog.opensave_custom_filter;
+        QString filter = state.dialog.opensave_custom_filter->data;
         if (checked) {
             filter.append(" *." + format.toLower());
         }
         else {
             filter.remove("*." + format, Qt::CaseInsensitive);
         }
-        state.dialog.opensave_custom_filter = sdscpy(state.dialog.opensave_custom_filter,
+        str_const(state.dialog.opensave_custom_filter,
             qPrintable(filter));
         //dialog.opensave_custom_filter = checked; //TODO
     }
@@ -2182,13 +2181,13 @@ void Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
 void Settings_Dialog::buttonCustomFilterSelectAllClicked()
 {
     emit buttonCustomFilterSelectAll(true);
-    state.dialog.opensave_custom_filter = sdscpy(state.dialog.opensave_custom_filter, "supported");
+    str_const(state.dialog.opensave_custom_filter, "supported");
 }
 
 void Settings_Dialog::buttonCustomFilterClearAllClicked()
 {
     emit buttonCustomFilterClearAll(false);
-    state.dialog.opensave_custom_filter = sdscpy(state.dialog.opensave_custom_filter, "");
+    str_const(state.dialog.opensave_custom_filter, "");
 }
 
 void Settings_Dialog::spinBoxRecentMaxFilesValueChanged(int value)
@@ -2319,14 +2318,12 @@ void Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 
 void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
 {
-    state.dialog.grid_type = sdscpy(state.dialog.grid_type, qPrintable(type));
+    str_const(state.dialog.grid_type, qPrintable(type));
 
     QObject* senderObj = sender();
-    if (senderObj)
-    {
+    if (senderObj) {
         QObject* parent = senderObj->parent();
-        if (parent)
-        {
+        if (parent) {
             bool visibility = false;
             if (type == "Circular") visibility = true;
 
@@ -2679,8 +2676,8 @@ show_settings(MainWindow *mainWin)
     mainWin->mdiArea->useBackgroundLogo(state.dialog.general_mdi_bg_use_logo);
     mainWin->mdiArea->useBackgroundTexture(state.dialog.general_mdi_bg_use_texture);
     mainWin->mdiArea->useBackgroundColor(state.dialog.general_mdi_bg_use_color);
-    mainWin->mdiArea->setBackgroundLogo(state.dialog.general_mdi_bg_logo);
-    mainWin->mdiArea->setBackgroundTexture(state.dialog.general_mdi_bg_texture);
+    mainWin->mdiArea->setBackgroundLogo(state.dialog.general_mdi_bg_logo->data);
+    mainWin->mdiArea->setBackgroundTexture(state.dialog.general_mdi_bg_texture->data);
     mainWin->mdiArea->setBackgroundColor(state.dialog.general_mdi_bg_color);
     mainWin->iconResize(state.dialog.general_icon_size);
     mainWin->updateAllViewScrollBars(state.dialog.display_show_scrollbars);
@@ -2693,8 +2690,8 @@ show_settings(MainWindow *mainWin)
                                           state.dialog.display_selectbox_alpha);
     mainWin->prompt->setPromptTextColor(QColor(state.dialog.prompt_text_color));
     mainWin->prompt->setPromptBackgroundColor(QColor(state.dialog.prompt_bg_color));
-    mainWin->prompt->setPromptFontFamily(state.dialog.prompt_font_family);
-    mainWin->prompt->setPromptFontStyle(state.dialog.prompt_font_style);
+    mainWin->prompt->setPromptFontFamily(state.dialog.prompt_font_family->data);
+    mainWin->prompt->setPromptFontStyle(state.dialog.prompt_font_style->data);
     mainWin->prompt->setPromptFontSize(state.dialog.prompt_font_size);
     mainWin->updateAllViewGridColors(state.dialog.grid_color);
     mainWin->updateAllViewRulerColors(state.dialog.ruler_color);
@@ -2723,8 +2720,8 @@ void Settings_Dialog::acceptChanges()
     state.dialog.display_selectbox_alpha = state.preview.display_selectbox_alpha;
     state.dialog.prompt_text_color = state.accept.prompt_text_color;
     state.dialog.prompt_bg_color = state.accept.prompt_bg_color;
-    state.dialog.prompt_font_family = state.preview.prompt_font_family;
-    state.dialog.prompt_font_style = state.preview.prompt_font_style;
+    str_copy(state.dialog.prompt_font_family, state.preview.prompt_font_family);
+    str_copy(state.dialog.prompt_font_style, state.preview.prompt_font_style);
     state.dialog.prompt_font_size = state.preview.prompt_font_size;
     if (state.dialog.grid_color_match_crosshair) {
         state.dialog.grid_color = state.accept.display_crosshair_color;

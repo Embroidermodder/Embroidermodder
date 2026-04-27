@@ -13,10 +13,10 @@ extern "C" {
 #include <stdbool.h>
 #include <inttypes.h>
 
-#include "sds.h"
 #include "toml.h"
 
-#define SDSARRAY_CHUNK                100
+#define STR_CHUNK                     100
+#define STRARRAY_CHUNK                100
 
 enum COMMAND_ACTIONS
 {
@@ -115,21 +115,28 @@ enum COMMAND_TYPE
     CMD_TYPE_TRIGGER
 };
 
-typedef struct SDSArray_ {
-    sds *data;
+/* Null-terminated string on heap memory. */
+typedef struct String_ {
+    char *data;
+    int memory;
+    int length;
+} String;
+
+typedef struct StrArray_ {
+    String **data;
     int count;
     int memory;
-} sdsarray;
+} StrArray;
 
 typedef struct Settings_ {
-    sds general_language;
-    sds general_icon_theme;
+    String *general_language;
+    String *general_icon_theme;
     int general_icon_size;
     bool general_mdi_bg_use_logo;
     bool general_mdi_bg_use_texture;
     bool general_mdi_bg_use_color;
-    sds general_mdi_bg_logo;
-    sds general_mdi_bg_texture;
+    String *general_mdi_bg_logo;
+    String *general_mdi_bg_texture;
     uint32_t general_mdi_bg_color;
     bool general_tip_of_the_day;
     uint16_t general_current_tip;
@@ -153,25 +160,25 @@ typedef struct Settings_ {
     double display_zoomscale_in;
     double display_zoomscale_out;
     uint8_t display_crosshair_percent;
-    sds display_units;
+    String *display_units;
     uint32_t prompt_text_color;
     uint32_t prompt_bg_color;
-    sds prompt_font_family;
-    sds prompt_font_style;
+    String *prompt_font_family;
+    String *prompt_font_style;
     uint8_t prompt_font_size;
     bool prompt_save_history;
     bool prompt_save_history_as_html;
-    sds prompt_save_history_filename;
-    sds opensave_custom_filter;
-    sds opensave_open_format;
+    String *prompt_save_history_filename;
+    String *opensave_custom_filter;
+    String *opensave_open_format;
     bool opensave_open_thumbnail;
-    sds opensave_save_format;
+    String *opensave_save_format;
     bool opensave_save_thumbnail;
     uint8_t opensave_recent_max_files;
-    sdsarray *opensave_recent_list_of_files;
-    sds opensave_recent_directory;
+    StrArray *opensave_recent_list_of_files;
+    String *opensave_recent_directory;
     uint8_t opensave_trim_dst_num_jumps;
-    sds printing_default_device;
+    String *printing_default_device;
     bool printing_use_last_device;
     bool printing_disable_bg;
     bool grid_show_on_load;
@@ -179,7 +186,7 @@ typedef struct Settings_ {
     bool grid_color_match_crosshair;
     uint32_t grid_color;
     bool grid_load_from_file;
-    sds grid_type;
+    String *grid_type;
     bool grid_center_on_origin;
     double grid_center_x;
     double grid_center_y;
@@ -221,7 +228,7 @@ typedef struct Settings_ {
     uint32_t selection_hotgrip_color;
     uint8_t selection_grip_size;
     uint8_t selection_pickbox_size;
-    sds text_font;
+    String *text_font;
     double text_size;
     double text_angle;
     bool text_style_bold;
@@ -242,9 +249,9 @@ typedef struct State_ {
     Settings dialog;
 
     /* Paths */
-    sds settings_dir;
-    sds settings_path;
-    sds app_dir;
+    String *settings_dir;
+    String *settings_path;
+    String *app_dir;
 
     /* Documents */
     int32_t num_docs;
@@ -257,37 +264,37 @@ typedef struct State_ {
     bool rapid_fire;
     bool is_blinking;
     bool blink_state;
-    sds command_line;
-    sds prefix;
-    sds current_command;
-    sds last_command;
-    sdsarray *arguments;
+    String *command_line;
+    String *prefix;
+    String *current_command;
+    String *last_command;
+    StrArray *arguments;
 
     /* Configuration tables */
-    sdsarray *manifest;
-    sdsarray *tips;
-    sdsarray *aliases;
+    StrArray *manifest;
+    StrArray *tips;
+    StrArray *aliases;
 
-    sdsarray *file_menu;
-    sdsarray *edit_menu;
-    sdsarray *view_menu;
-    sdsarray *window_menu;
-    sdsarray *help_menu;
-    sdsarray *recent_menu;
-    sdsarray *zoom_menu;
-    sdsarray *pan_menu;
+    StrArray *file_menu;
+    StrArray *edit_menu;
+    StrArray *view_menu;
+    StrArray *window_menu;
+    StrArray *help_menu;
+    StrArray *recent_menu;
+    StrArray *zoom_menu;
+    StrArray *pan_menu;
 
-    sdsarray *file_toolbar;
-    sdsarray *edit_toolbar;
-    sdsarray *view_toolbar;
-    sdsarray *zoom_toolbar;
-    sdsarray *pan_toolbar;
-    sdsarray *icon_toolbar;
-    sdsarray *help_toolbar;
-    sdsarray *layer_toolbar;
-    sdsarray *text_toolbar;
-    sdsarray *properties_toolbar;
-    sdsarray *prompt_toolbar;
+    StrArray *file_toolbar;
+    StrArray *edit_toolbar;
+    StrArray *view_toolbar;
+    StrArray *zoom_toolbar;
+    StrArray *pan_toolbar;
+    StrArray *icon_toolbar;
+    StrArray *help_toolbar;
+    StrArray *layer_toolbar;
+    StrArray *text_toolbar;
+    StrArray *properties_toolbar;
+    StrArray *prompt_toolbar;
 } State;
 
 typedef struct CommandData_ {
@@ -301,16 +308,25 @@ typedef struct CommandData_ {
     int (*command)(State *state);
 } CommandData;
 
-char *toml_readstr(toml_table_t *table, const char *key, const char *default_value, char *result);
+int toml_readstr(toml_table_t *table, const char *key, const char *default_value, String *result);
 int32_t toml_readint(toml_table_t *table, const char *key, int32_t default_value);
 float toml_readreal(toml_table_t *table, const char *key, float default_value);
 bool toml_readbool(toml_table_t *table, const char *key, bool default_value);
 
-sdsarray *sdsarray_create(void);
-void sdsarray_append(sdsarray *a, const char *s);
-void sdsarray_empty(sdsarray *arr);
-void sdsarray_copy(sdsarray *dest, sdsarray *src);
-void sdsarray_free(sdsarray *a);
+String *str_create(const char *value);
+void str_const(String *dest, const char *src);
+void str_copy(String *dest, String *src);
+void str_concat(String *dest, const char *src);
+int str_compare(String *dest, const char *src);
+int str_find(String *src, const char *key);
+void str_replace(String *src, String *from, String *to);
+void str_free(String *str);
+
+StrArray *strarray_create(void);
+void strarray_append(StrArray *a, const char *s);
+void strarray_empty(StrArray *arr);
+void strarray_copy(StrArray *dest, StrArray *src);
+void strarray_free(StrArray *a);
 
 void settings_create(Settings *settings); /* FIXME: convert to Settings *settings_create(void); */
 int settings_load(Settings *settings, int *window_pos, int *window_size);

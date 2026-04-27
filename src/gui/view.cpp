@@ -74,7 +74,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setGridColor(state.settings.grid_color);
 
     if (state.settings.grid_show_on_load) {
-        createGrid(state.settings.grid_type);
+        createGrid(state.settings.grid_type->data);
     }
     else {
         createGrid("");
@@ -501,8 +501,12 @@ void View::toggleGrid(bool on)
 {
     qDebug("View toggleGrid()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if (on) { createGrid(state.settings.grid_type); }
-    else   { createGrid(""); }
+    if (on) {
+        createGrid(state.settings.grid_type->data);
+    }
+    else {
+        createGrid("");
+    }
     QApplication::restoreOverrideCursor();
 }
 
@@ -1257,7 +1261,8 @@ void View::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         if (state.command_active) {
             QPointF cmdPoint = mapToScene(event->pos());
-            mainWin->runCommandClick(state.current_command, cmdPoint.x(), cmdPoint.y());
+            mainWin->runCommandClick(state.current_command->data,
+                cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
@@ -1476,7 +1481,8 @@ void View::mouseMoveEvent(QMouseEvent* event)
 
     if (state.command_active) {
         if (rapidMoveActive) {
-            mainWin->runCommandMove(state.current_command, sceneMovePoint.x(), sceneMovePoint.y());
+            mainWin->runCommandMove(state.current_command->data,
+                sceneMovePoint.x(), sceneMovePoint.y());
         }
     }
     if (previewActive) {
@@ -1692,7 +1698,7 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 
 void View::contextMenuEvent(QContextMenuEvent* event)
 {
-    QString iconTheme = state.settings.general_icon_theme;
+    QString iconTheme = state.settings.general_icon_theme->data;
 
     QMenu menu;
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
@@ -1711,7 +1717,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
         return;
     }
     if (!state.command_active) {
-        QString lastCmd = state.last_command;
+        QString lastCmd = state.last_command->data;
         QAction* repeatAction = new QAction(QIcon("icons/" + iconTheme + "/" + lastCmd + ".png"), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
@@ -2037,7 +2043,7 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
 void View::repeatAction()
 {
     mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText(state.last_command);
+    mainWin->prompt->setCurrentText(state.last_command->data);
     mainWin->prompt->processInput();
 }
 

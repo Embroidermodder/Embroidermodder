@@ -33,7 +33,7 @@ void StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
 {
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     QMenu menu(this);
-    QString icon_theme = state.settings.general_icon_theme;
+    QString icon_theme = state.settings.general_icon_theme->data;
     if (objectName() == "StatusBarButtonSNAP") {
         QAction* settingsSnapAction = new QAction(QIcon("icons/" + icon_theme + "/gridsnapsettings.png"), "&Settings...", &menu);
         connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
