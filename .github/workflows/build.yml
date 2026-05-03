@@ -3,6 +3,9 @@ name: Build
 on:
   schedule:
     - cron: '10 6 * * *'
+  push:
+    branches:
+      - 'current'
   pull_request:
   workflow_dispatch:
 

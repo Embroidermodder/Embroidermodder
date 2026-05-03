@@ -6,6 +6,9 @@ find_package(OpenGL REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport Qml)
 find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
 
+# FIXME: AUTOMOC is a source of a strange bug on MacOS where "-std=c99" is added as a
+# flag for the c++ compiler despite it not being added by this file. This is
+# treated as a fatal error so the build-macos action fails.
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
