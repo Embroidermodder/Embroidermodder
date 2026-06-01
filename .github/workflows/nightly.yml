@@ -1,16 +1,10 @@
-name: Build
+name: Nightly
 
 on:
-  schedule:
-    - cron: '10 6 * * *'
-  push:
-    branches:
-      - 'current'
-  pull_request:
   workflow_dispatch:
 
 jobs:
-  build-linux:
+  nightly-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -20,9 +14,16 @@ jobs:
         run: bash bin/build.sh "Ubuntu"
       - uses: actions/upload-artifact@v7
         with:
-          path: embroidermodder/build/embroidermodder*.zip.gz
+      - name: Update nightly release
+        uses: eine/tip@master
+        with:
+         tag: nightly
+         rm: true
+         token: ${{ secrets.GITHUB_TOKEN }}
+         files: embroidermodder/build/embroidermodder*.zip.gz
 
-  build-macos:
+  nightly-macos:
+    needs: nightly-linux
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v6
@@ -34,7 +35,8 @@ jobs:
         with:
           path: embroidermodder/build/embroidermodder*.app
 
-  build-windows:
+  nightly-windows:
+    needs: linux
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v6
