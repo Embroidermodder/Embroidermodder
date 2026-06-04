@@ -1,0 +1,17 @@
+Credits
+
+Developed by Micha Mettke and every direct or indirect github contributor.
+
+Embeds stb public domain libraries by Sean Barret...
+- stb_texedit: https://github.com/nothings/stb/blob/master/stb_textedit.h
+- stb_truetype: https://github.com/nothings/stb/blob/master/stb_truetype.h
+- stb_rectpack: https://github.com/nothings/stb/blob/master/stb_rect_pack.h
+
+Embeds ProggyClean.ttf font by Tristan Grimmer (MIT license)
+
+Big thank you to Omar Cornut (ocornut@github) for his imgui library (https://github.com/ocornut/imgui)
+and giving me the inspiration for this library, Casey Muratori for handmade
+hero and his original immediate mode graphical user interface idea and Sean
+Barret for his amazing single header libraries which restored my faith
+in libraries and brought me to create some of my own. Finally Apoorva Joshi
+for his single header file packer.

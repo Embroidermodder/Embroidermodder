@@ -1,0 +1,12 @@
+demo/*/*/demo
+demo/*/bin/*
+example/bin/*
+/doc
+*.tmp
+*.swo
+*.swp
+*.o
+*.obj
+*.exe
+*.dSYM
+/private/
