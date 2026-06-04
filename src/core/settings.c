@@ -161,7 +161,8 @@ int
 settings_load(Settings *settings, int *window_pos, int *window_size)
 {
     char errbuffer[200];
-    FILE *fp = fopen(state.settings_path->data, "r");
+    // HACK
+    FILE *fp = fopen("settings.ini", "r");
     if (!fp) {
         printf("ERROR: failed to open file \"%s\".", state.settings_path->data);
         return 0;
@@ -381,7 +382,13 @@ write_real(FILE *fp, const char *key, float value)
 int
 settings_save(Settings *settings, int window_pos[2], int window_size[2])
 {
-    FILE *fp = fopen(state.settings_path->data, "w");
+    printf("Saving settings to \"%s\"...", state.settings_path->data);
+    // HACK
+    FILE *fp = fopen("settings.ini", "w");
+    if (fp == NULL) {
+        printf("ERROR: failed to open settings file for writing.");
+        return 0;
+    }
 
     section_header(fp, "General");
     /* write_str(fp, "LayoutState", layoutState); */
@@ -426,30 +433,30 @@ settings_save(Settings *settings, int window_pos[2], int window_size[2])
     write_int(fp, "SizeY", window_size[1]);
 
     section_header(fp, "Prompt");
-    write_int(fp, "Prompt/TextColor", settings->prompt_text_color);
-    write_int(fp, "Prompt/BackgroundColor", settings->prompt_bg_color);
-    write_str(fp, "Prompt/FontFamily", settings->prompt_font_family);
-    write_str(fp, "Prompt/FontStyle", settings->prompt_font_style);
-    write_int(fp, "Prompt/FontSize", settings->prompt_font_size);
-    write_int(fp, "Prompt/SaveHistory", settings->prompt_save_history);
-    write_int(fp, "Prompt/SaveHistoryAsHtml", settings->prompt_save_history_as_html);
-    write_str(fp, "Prompt/SaveHistoryFilename", settings->prompt_save_history_filename);
+    write_int(fp, "TextColor", settings->prompt_text_color);
+    write_int(fp, "BackgroundColor", settings->prompt_bg_color);
+    write_str(fp, "FontFamily", settings->prompt_font_family);
+    write_str(fp, "FontStyle", settings->prompt_font_style);
+    write_int(fp, "FontSize", settings->prompt_font_size);
+    write_int(fp, "SaveHistory", settings->prompt_save_history);
+    write_int(fp, "SaveHistoryAsHtml", settings->prompt_save_history_as_html);
+    write_str(fp, "SaveHistoryFilename", settings->prompt_save_history_filename);
 
     section_header(fp, "OpenSave");
-    write_str(fp, "OpenSave/CustomFilter", settings->opensave_custom_filter);
-    write_str(fp, "OpenSave/OpenFormat", settings->opensave_open_format);
-    write_int(fp, "OpenSave/OpenThumbnail", settings->opensave_open_thumbnail);
-    write_str(fp, "OpenSave/SaveFormat", settings->opensave_save_format);
-    write_int(fp, "OpenSave/SaveThumbnail", settings->opensave_save_thumbnail);
-    write_int(fp, "OpenSave/RecentMax", settings->opensave_recent_max_files);
-    write_strarray(fp, "OpenSave/RecentFiles", settings->opensave_recent_list_of_files);
-    write_str(fp, "OpenSave/RecentDirectory", settings->opensave_recent_directory);
-    write_int(fp, "OpenSave/TrimDstNumJumps", settings->opensave_trim_dst_num_jumps);
+    write_str(fp, "CustomFilter", settings->opensave_custom_filter);
+    write_str(fp, "OpenFormat", settings->opensave_open_format);
+    write_int(fp, "OpenThumbnail", settings->opensave_open_thumbnail);
+    write_str(fp, "SaveFormat", settings->opensave_save_format);
+    write_int(fp, "SaveThumbnail", settings->opensave_save_thumbnail);
+    write_int(fp, "RecentMax", settings->opensave_recent_max_files);
+    write_strarray(fp, "RecentFiles", settings->opensave_recent_list_of_files);
+    write_str(fp, "RecentDirectory", settings->opensave_recent_directory);
+    write_int(fp, "TrimDstNumJumps", settings->opensave_trim_dst_num_jumps);
 
     section_header(fp, "Printing");
-    write_str(fp, "DefaultDevice=%s\n", settings->printing_default_device);
-    write_int(fp, "UseLastDevice=%d\n", settings->printing_use_last_device);
-    write_int(fp, "DisableBG=%d\n", settings->printing_disable_bg);
+    write_str(fp, "DefaultDevice", settings->printing_default_device);
+    write_int(fp, "UseLastDevice", settings->printing_use_last_device);
+    write_int(fp, "DisableBG", settings->printing_disable_bg);
 
     section_header(fp, "Grid");
     write_int(fp, "ShowOnLoad", settings->grid_show_on_load);
@@ -476,23 +483,23 @@ settings_save(Settings *settings, int window_pos[2], int window_size[2])
     write_int(fp, "PixelSize", settings->ruler_pixel_size);
 
     section_header(fp, "QuickSnap");
-    write_int(fp, "QuickSnap/Enabled", settings->qsnap_enabled);
-    write_int(fp, "QuickSnap/LocatorColor", settings->qsnap_locator_color);
-    write_int(fp, "QuickSnap/LocatorSize", settings->qsnap_locator_size);
-    write_int(fp, "QuickSnap/ApertureSize", settings->qsnap_aperture_size);
-    write_int(fp, "QuickSnap/EndPoint", settings->qsnap_endpoint);
-    write_int(fp, "QuickSnap/MidPoint", settings->qsnap_midpoint);
-    write_int(fp, "QuickSnap/Center", settings->qsnap_center);
-    write_int(fp, "QuickSnap/Node", settings->qsnap_node);
-    write_int(fp, "QuickSnap/Quadrant", settings->qsnap_quadrant);
-    write_int(fp, "QuickSnap/Intersection", settings->qsnap_intersection);
-    write_int(fp, "QuickSnap/Extension", settings->qsnap_extension);
-    write_int(fp, "QuickSnap/Insertion", settings->qsnap_insertion);
-    write_int(fp, "QuickSnap/Perpendicular", settings->qsnap_perpendicular);
-    write_int(fp, "QuickSnap/Tangent", settings->qsnap_tangent);
-    write_int(fp, "QuickSnap/Nearest", settings->qsnap_nearest);
-    write_int(fp, "QuickSnap/Apparent", settings->qsnap_apparent);
-    write_int(fp, "QuickSnap/Parallel", settings->qsnap_parallel);
+    write_int(fp, "Enabled", settings->qsnap_enabled);
+    write_int(fp, "LocatorColor", settings->qsnap_locator_color);
+    write_int(fp, "LocatorSize", settings->qsnap_locator_size);
+    write_int(fp, "ApertureSize", settings->qsnap_aperture_size);
+    write_int(fp, "EndPoint", settings->qsnap_endpoint);
+    write_int(fp, "MidPoint", settings->qsnap_midpoint);
+    write_int(fp, "Center", settings->qsnap_center);
+    write_int(fp, "Node", settings->qsnap_node);
+    write_int(fp, "Quadrant", settings->qsnap_quadrant);
+    write_int(fp, "Intersection", settings->qsnap_intersection);
+    write_int(fp, "Extension", settings->qsnap_extension);
+    write_int(fp, "Insertion", settings->qsnap_insertion);
+    write_int(fp, "Perpendicular", settings->qsnap_perpendicular);
+    write_int(fp, "Tangent", settings->qsnap_tangent);
+    write_int(fp, "Nearest", settings->qsnap_nearest);
+    write_int(fp, "Apparent", settings->qsnap_apparent);
+    write_int(fp, "Parallel", settings->qsnap_parallel);
 
     section_header(fp, "LineWeight");
     write_int(fp, "ShowLineWeight", settings->lwt_show_lwt);

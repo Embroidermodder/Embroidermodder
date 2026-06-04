@@ -82,6 +82,7 @@ void MainWindow::exit()
 {
     qDebug("exit()");
     if (state.settings.prompt_save_history) {
+        /* BUG: this isn't saved properly. */
         /* TODO: get filename from settings */
         prompt->saveHistory("prompt.log", state.settings.prompt_save_history_as_html);
     }

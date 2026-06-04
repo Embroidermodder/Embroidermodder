@@ -120,8 +120,9 @@ void CmdPrompt::saveHistory(const QString& fileName, bool html)
 {
     qDebug("CmdPrompt saveHistory");
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return;
+    }
 
     //TODO: save during input in case of crash
     QTextStream output(&file);
