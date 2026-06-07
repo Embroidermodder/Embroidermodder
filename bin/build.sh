@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 VERSION="embroidermodder2.0.0-alpha"
 
@@ -57,3 +57,4 @@ mv embroidermodder2.exe "${VERSION}"
 fi
 
 cd ..
+

@@ -74,15 +74,8 @@
 
 #define PI 3.1415926535
 
-#ifndef MINMAX
-#define MINMAX
-  #ifndef max
-    #define max(a,b) (((a) > (b)) ? (a) : (b))
-  #endif
-  #ifndef min
-    #define min(a,b) (((a) < (b)) ? (a) : (b))
-  #endif
-#endif
+#define EMB_MAX(a,b) (((a) > (b)) ? (a) : (b))
+#define EMB_MIN(a,b) (((a) < (b)) ? (a) : (b))
 
 #define EMBFORMAT_UNSUPPORTED 0
 #define EMBFORMAT_STITCHONLY  1
@@ -123,6 +116,7 @@ extern "C" {
 #endif
 
 #include <stdio.h>
+#include <stddef.h>
 #include <stdarg.h>
 
 #ifdef ARDUINO
@@ -489,8 +483,8 @@ typedef struct EmbRectObjectList_ {
          */
 typedef struct EmbVector_
 {
-    double X;
-    double Y;
+    double x;
+    double y;
 } EmbVector;
 
 typedef struct EmbVectorList_
@@ -1164,6 +1158,8 @@ extern EMB_PUBLIC int EMB_CALL embThreadList_empty(EmbThreadList* pointer);
 extern EMB_PUBLIC void EMB_CALL embThreadList_free(EmbThreadList* pointer);
 extern EMB_PUBLIC EmbThread EMB_CALL embThreadList_getAt(EmbThreadList* pointer, int num);
 
+extern EMB_PUBLIC double EMB_CALL embVector_distance(EmbVector a, EmbVector b);
+extern EMB_PUBLIC double EMB_CALL embVector_angle(EmbVector a, EmbVector b);
 extern EMB_PUBLIC void EMB_CALL embVector_normalize(EmbVector vector, EmbVector* result);
 extern EMB_PUBLIC void EMB_CALL embVector_multiply(EmbVector vector, double magnitude, EmbVector* result);
 extern EMB_PUBLIC void EMB_CALL embVector_add(EmbVector v1, EmbVector v2, EmbVector* result);

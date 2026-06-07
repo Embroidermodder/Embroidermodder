@@ -3,32 +3,48 @@
 #include <math.h>
 #include <stdlib.h>
 
+double embVector_distance(EmbVector a, EmbVector b)
+{
+    EmbVector c;
+    c.x = b.x - a.x;
+    c.y = b.y - a.y;
+    return sqrt(c.x * c.x + c.y * c.y);
+}
+
+double embVector_angle(EmbVector a, EmbVector b)
+{
+    EmbVector c;
+    c.x = b.x - a.x;
+    c.y = b.y - a.y;
+    return atan2(c.y, c.x);
+}
+
 void embVector_normalize(EmbVector vector, EmbVector* result)
 {
     double length = embVector_getLength(vector);
 
     if (!result) { embLog_error("emb-vector.c embVector_normalize(), result argument is null\n"); return; }
-    result->X = vector.X / length;
-    result->Y = vector.Y / length;
+    result->x = vector.x / length;
+    result->y = vector.y / length;
 }
 
 void embVector_multiply(EmbVector vector, double magnitude, EmbVector* result)
 {
     if (!result) { embLog_error("emb-vector.c embVector_multiply(), result argument is null\n"); return; }
-    result->X = vector.X * magnitude;
-    result->Y = vector.Y * magnitude;
+    result->x = vector.x * magnitude;
+    result->y = vector.y * magnitude;
 }
 
 void embVector_add(EmbVector v1, EmbVector v2, EmbVector* result)
 {
     if (!result) { embLog_error("emb-vector.c embVector_add(), result argument is null\n"); return; }
-    result->X = v1.X + v2.X;
-    result->Y = v1.Y + v2.Y;
+    result->x = v1.x + v2.x;
+    result->y = v1.y + v2.y;
 }
 
 double embVector_getLength(EmbVector vector)
 {
-    return sqrt(vector.X * vector.X + vector.Y * vector.Y);
+    return sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 
 EmbVectorList* embVectorList_create(EmbVector data)

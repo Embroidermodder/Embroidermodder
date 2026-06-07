@@ -5,7 +5,6 @@
 #include <QList>
 #include <QHash>
 #include <QDir>
-#include <QJSEngine>
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
@@ -39,12 +38,6 @@ public:
     MainWindow();
     ~MainWindow();
 
-    int loadData(void);
-
-    QJSEngine engine;
-    void javaInitNatives(void);
-    void javaLoadCommand(const QString& cmdName);
-
     QString promptHistory;
     QList<QString> promptInputList;
     int promptInputNum;
@@ -52,8 +45,6 @@ public:
     MdiArea* getMdiArea();
     MainWindow* getApplication();
     MdiWindow* activeMdiWindow();
-    View* activeView();
-    QGraphicsScene* activeScene();
     QUndoStack* activeUndoStack();
 
     void setUndoCleanIcon(bool opened);
@@ -70,8 +61,6 @@ public:
     QList<QGraphicsItem*> cutCopyObjectList;
 
     QHash<int, QAction*> actionHash;
-    QHash<QString, QToolBar*> toolbarHash;
-    QHash<QString, QMenu*> menuHash;
 
     QString formatFilterOpen;
     QString formatFilterSave;
@@ -133,19 +122,13 @@ private:
     QLabel* labelTipOfTheDay;
     QCheckBox* checkBoxTipOfTheDay;
 
+    void createAllCommands(void);
     void createAllActions();
-    QAction*                        createAction(CommandData command, bool scripted = false);
-    //====================================================
+    QAction* createAction(CommandData command);
+
     //Toolbars
-    //====================================================
+    void createToolbar(QToolBar *toolbar, const char *name, const char *data[]);
     void createAllToolbars();
-    void createFileToolbar();
-    void createEditToolbar();
-    void createViewToolbar();
-    void createZoomToolbar();
-    void createPanToolbar();
-    void createIconToolbar();
-    void createHelpToolbar();
     void createLayerToolbar();
     void createPropertiesToolbar();
     void createTextToolbar();
@@ -162,6 +145,10 @@ private:
     QToolBar* toolbarText;
     QToolBar* toolbarProperties;
     QToolBar* toolbarPrompt;
+    QToolBar* toolbarDraw;
+    QToolBar* toolbarDimension;
+    QToolBar* toolbarInquiry;
+    QToolBar* toolbarModify;
     //====================================================
     //Selectors
     //====================================================
@@ -171,24 +158,26 @@ private:
     QComboBox*     lineweightSelector;
     QFontComboBox* textFontSelector;
     QComboBox*     textSizeSelector;
-    //====================================================
-    //Menus
-    //====================================================
+
+    // Menus
+    // ====================================================
+    void createMenu(QMenu *menu, const char *name, const char *data[]);
     void createAllMenus();
     void createFileMenu();
-    void createEditMenu();
     void createViewMenu();
     void createWindowMenu();
-    void createHelpMenu();
 
     QMenu* fileMenu;
     QMenu* editMenu;
     QMenu* viewMenu;
     QMenu* windowMenu;
     QMenu* helpMenu;
-    //====================================================
-    //SubMenus
-    //====================================================
+    QMenu* dimensionMenu;
+    QMenu* drawMenu;
+    QMenu* toolsMenu;
+    QMenu* modifyMenu;
+    // SubMenus
+    // ====================================================
     QMenu* recentMenu;
     QMenu* zoomMenu;
     QMenu* panMenu;
@@ -201,7 +190,6 @@ public slots:
     int call(QString name);
     void debug(QString txt);
 
-    void stub_implement(QString txt);
     void stub_testing();
 
     void promptHistoryAppended(const QString& txt);
@@ -245,12 +233,6 @@ public slots:
 
     // Icons
     void iconResize(int iconSize);
-    void icon16();
-    void icon24();
-    void icon32();
-    void icon48();
-    void icon64();
-    void icon128();
 
     //Selectors
     void layerSelectorIndexChanged(int index);
@@ -297,37 +279,12 @@ public slots:
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
-    // Zoom Toolbar
-    void zoomRealtime();
-    void zoomPrevious();
-    void zoomWindow();
-    void zoomDynamic();
-    void zoomScale();
-    void zoomCenter();
-    void zoomIn();
-    void zoomOut();
-    void zoomSelected();
-    void zoomAll();
-    void zoomExtents();
-    // Pan SubMenu
-    void panrealtime();
-    void panpoint();
-    void panLeft();
-    void panRight();
-    void panUp();
-    void panDown();
-
-    void dayVision();
-    void nightVision();
 
     /* Prompt */
     void alert(const QString& txt);
     void blinkPrompt();
-    void setPromptPrefix(const QString& txt);
     void appendPromptHistory(const QString& txt);
 
-    void initCommand();
-    void endCommand();
     void messageBox(const QString& type, const QString& title, const QString& text);
 
     void printArea(qreal x, qreal y, qreal w, qreal h);
@@ -386,26 +343,24 @@ public slots:
     int numSelected();
     void selectAll();
     void addToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-    void clearSelection();
+
     void deleteSelected();
     void cutSelected(qreal x, qreal y);
     void copySelected(qreal x, qreal y);
     void pasteSelected(qreal x, qreal y);
     void moveSelected(qreal dx, qreal dy);
     void scaleSelected(qreal x, qreal y, qreal factor);
-    void rotateSelected(qreal x, qreal y, qreal rot);
-    void mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
-
-    qreal qSnapX();
-    qreal qSnapY();
-    qreal mouseX();
-    qreal mouseY();
 };
 
 /* Pointer access for Qt based types */
 typedef struct QtScriptEnv_ {
     MainWindow *mainWin;
 } QtScriptEnv;
+
+QIcon createIcon(const char *stub);
+View* activeView(void);
+QGraphicsScene* activeScene();
+void stub_implement(QString txt);
 
 extern QtScriptEnv script_env;
 

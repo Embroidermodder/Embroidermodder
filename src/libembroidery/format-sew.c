@@ -160,7 +160,7 @@ int writeSew(EmbPattern* pattern, const char* fileName)
     }
 
     colorlistSize = embThreadList_count(pattern->threadList);
-    minColors = max(colorlistSize, 6);
+    minColors = EMB_MAX(colorlistSize, 6);
     binaryWriteInt(file, 0x74 + (minColors * 4));
     binaryWriteInt(file, 0x0A);
 

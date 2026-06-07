@@ -1152,7 +1152,7 @@ void View::zoomWindow()
 {
     zoomWindowActive = true;
     selectingActive = false;
-    clearSelection();
+    clear_selection();
 }
 
 void View::zoomSelected()
@@ -1261,8 +1261,7 @@ void View::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         if (state.command_active) {
             QPointF cmdPoint = mapToScene(event->pos());
-            mainWin->runCommandClick(state.current_command->data,
-                cmdPoint.x(), cmdPoint.y());
+            mainWin->runCommandClick(state.current_command->data, cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
@@ -1340,14 +1339,14 @@ void View::mousePressEvent(QMouseEvent* event)
                     if (state.shift) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         if (!itemList.size())
-                            clearSelection();
+                            clear_selection();
                         else {
                             foreach(QGraphicsItem* item, itemList)
                                 item->setSelected(!item->isSelected()); //Toggle selected
                         }
                     }
                     else {
-                        clearSelection();
+                        clear_selection();
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
@@ -1371,14 +1370,14 @@ void View::mousePressEvent(QMouseEvent* event)
                     if (state.shift) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         if (!itemList.size())
-                            clearSelection();
+                            clear_selection();
                         else {
                             foreach(QGraphicsItem* item, itemList)
                                 item->setSelected(!item->isSelected()); //Toggle selected
                         }
                     }
                     else {
-                        clearSelection();
+                        clear_selection();
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
@@ -1410,7 +1409,7 @@ void View::mousePressEvent(QMouseEvent* event)
         }
         if (zoomWindowActive) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
-            clearSelection();
+            clear_selection();
         }
     }
     if (event->button() == Qt::MiddleButton) {
@@ -1481,8 +1480,7 @@ void View::mouseMoveEvent(QMouseEvent* event)
 
     if (state.command_active) {
         if (rapidMoveActive) {
-            mainWin->runCommandMove(state.current_command->data,
-                sceneMovePoint.x(), sceneMovePoint.y());
+            mainWin->runCommandMove(state.current_command->data, sceneMovePoint.x(), sceneMovePoint.y());
         }
     }
     if (previewActive) {
@@ -1698,16 +1696,12 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 
 void View::contextMenuEvent(QContextMenuEvent* event)
 {
-    QString iconTheme = state.settings.general_icon_theme->data;
-
     QMenu menu;
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     bool selectionEmpty = itemList.isEmpty();
 
-    for (int i = 0; i < itemList.size(); i++)
-    {
-        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
-        {
+    for (int i = 0; i < itemList.size(); i++) {
+        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             selectionEmpty = false;
             break;
         }
@@ -1718,7 +1712,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     }
     if (!state.command_active) {
         QString lastCmd = state.last_command->data;
-        QAction* repeatAction = new QAction(QIcon("icons/" + iconTheme + "/" + lastCmd + ".png"), "Repeat " + lastCmd, this);
+        QAction* repeatAction = new QAction(createIcon(qPrintable(lastCmd)), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
@@ -1737,22 +1731,22 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     menu.addSeparator();
 
     if (!selectionEmpty) {
-        QAction* deleteAction = new QAction(QIcon("icons/" + iconTheme + "/" + "erase" + ".png"), "D&elete", this);
+        QAction* deleteAction = new QAction(createIcon("erase"), "D&elete", this);
         deleteAction->setStatusTip("Removes objects from a drawing.");
         connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
         menu.addAction(deleteAction);
 
-        QAction* moveAction = new QAction(QIcon("icons/" + iconTheme + "/" + "move" + ".png"), "&Move", this);
+        QAction* moveAction = new QAction(createIcon("move"), "&Move", this);
         moveAction->setStatusTip("Displaces objects a specified distance in a specified direction.");
         connect(moveAction, SIGNAL(triggered()), this, SLOT(moveAction()));
         menu.addAction(moveAction);
 
-        QAction* scaleAction = new QAction(QIcon("icons/" + iconTheme + "/" + "scale" + ".png"), "Sca&le", this);
+        QAction* scaleAction = new QAction(createIcon("scale"), "Sca&le", this);
         scaleAction->setStatusTip("Enlarges or reduces objects proportionally in the X, Y, and Z directions.");
         connect(scaleAction, SIGNAL(triggered()), this, SLOT(scaleAction()));
         menu.addAction(scaleAction);
 
-        QAction* rotateAction = new QAction(QIcon("icons/" + iconTheme + "/" + "rotate" + ".png"), "R&otate", this);
+        QAction* rotateAction = new QAction(createIcon("rotate"), "R&otate", this);
         rotateAction->setStatusTip("Rotates objects about a base point.");
         connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotateAction()));
         menu.addAction(rotateAction);
@@ -1761,7 +1755,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
 
         QAction* clearAction = new QAction("Cle&ar Selection", this);
         clearAction->setStatusTip("Removes all objects from the selection set.");
-        connect(clearAction, SIGNAL(triggered()), this, SLOT(clearSelection()));
+        connect(clearAction, SIGNAL(triggered()), this, SLOT(clear_selection()));
         menu.addAction(clearAction);
     }
 
@@ -1796,7 +1790,7 @@ void View::escapePressed()
     selectingActive = false;
     selectBox->hide();
     if (grippingActive) stopGripping(false);
-    else clearSelection();
+    else clear_selection();
 }
 
 void View::startGripping(BaseObject* obj)
@@ -1827,7 +1821,7 @@ void View::stopGripping(bool accept)
     sceneGripPoint = sceneRect().topLeft();
 }
 
-void View::clearSelection()
+void View::clear_selection()
 {
     gscene->clearSelection();
 }
@@ -1878,7 +1872,7 @@ void View::copy()
     }
 
     copySelected();
-    clearSelection();
+    clear_selection();
 }
 
 void View::copySelected()
@@ -2042,14 +2036,14 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
 
 void View::repeatAction()
 {
-    mainWin->prompt->endCommand();
+    mainWin->prompt->end_command();
     mainWin->prompt->setCurrentText(state.last_command->data);
     mainWin->prompt->processInput();
 }
 
 void View::moveAction()
 {
-    mainWin->prompt->endCommand();
+    mainWin->prompt->end_command();
     mainWin->prompt->setCurrentText("move");
     mainWin->prompt->processInput();
 }
@@ -2076,7 +2070,7 @@ void View::moveSelected(qreal dx, qreal dy)
 
 void View::rotateAction()
 {
-    mainWin->prompt->endCommand();
+    mainWin->prompt->end_command();
     mainWin->prompt->setCurrentText("rotate");
     mainWin->prompt->processInput();
 }
@@ -2123,7 +2117,7 @@ void View::mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
 
 void View::scaleAction()
 {
-    mainWin->prompt->endCommand();
+    mainWin->prompt->end_command();
     mainWin->prompt->setCurrentText("scale");
     mainWin->prompt->processInput();
 }

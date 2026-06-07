@@ -14,6 +14,13 @@ extern "C" {
 #include <inttypes.h>
 
 #include "toml.h"
+#include "embroidery.h"
+
+#define CONTEXT_MAIN                    0
+#define CONTEXT_MENU                    1
+#define CONTEXT_PROMPT                  2
+#define CONTEXT_CLICK                   3
+#define CONTEXT_MOVE                    4
 
 #define STR_CHUNK                     100
 #define STRARRAY_CHUNK                100
@@ -21,6 +28,8 @@ extern "C" {
 enum COMMAND_ACTIONS
 {
     ACTION_donothing,
+
+    ACTION_test,
 
     ACTION_new,
     ACTION_open,
@@ -101,17 +110,40 @@ enum COMMAND_ACTIONS
     ACTION_day,
     ACTION_night,
 
+    ACTION_circle,
+    ACTION_distance,
+    ACTION_dolphin,
+    ACTION_ellipse,
+    ACTION_erase,
+    ACTION_heart,
+    ACTION_line,
+    ACTION_locatepoint,
+    ACTION_move,
+    ACTION_path,
+    ACTION_platform,
+    ACTION_point,
+    ACTION_polygon,
+    ACTION_polyline,
+    ACTION_quickleader,
+    ACTION_rectangle,
+    ACTION_rgb,
+    ACTION_rotate,
+    ACTION_scale,
+    ACTION_selectall,
+    ACTION_singlelinetext,
+    ACTION_snowflake,
+    ACTION_star,
+    ACTION_syswindows,
+
     //TODO: ACTION_spellcheck,
     //TODO: ACTION_quickselect,
-
-    ACTION_scripted,
 
     ACTION_null
 };
 
 enum COMMAND_TYPE
 {
-    CMD_TYPE_TOGGLE,
+    CMD_TYPE_TOGGLE, 
     CMD_TYPE_TRIGGER
 };
 
@@ -269,6 +301,9 @@ typedef struct State_ {
     String *current_command;
     String *last_command;
     StrArray *arguments;
+    EmbVector points[10];
+    int8_t points_set;
+    int8_t context;
 
     /* Configuration tables */
     StrArray *manifest;
@@ -305,8 +340,11 @@ typedef struct CommandData_ {
     char statustip[1000];
     char shortcut[50];
     char mac_shortcut[50];
+    char aliases[1000];
     int (*command)(State *state);
 } CommandData;
+
+int command_id(const char *cmd);
 
 int toml_readstr(toml_table_t *table, const char *key, const char *default_value, String *result);
 int32_t toml_readint(toml_table_t *table, const char *key, int32_t default_value);
@@ -338,95 +376,43 @@ void settings_free(Settings *settings);
 void state_create(char *settings_dir, char *app_dir);
 void state_free(void);
 
-/* COMMANDS */
-int do_nothing_cmd(State *state);
+int call(State *state, const char *cmd);
 
-int new_cmd(State *state);
-int open_cmd(State *state);
-int save_cmd(State *state);
-int save_as_cmd(State *state);
-int print_cmd(State *state);
-int design_details_cmd(State *state);
-int exit_cmd(State *state);
-int cut_cmd(State *state);
-int copy_cmd(State *state);
-int paste_cmd(State *state);
+/* Configuration: note that this is all constant. */
+extern const CommandData command_table[];
 
-int undo_cmd(State *state);
-int redo_cmd(State *state);
+extern const char *tips[];
 
-// Window Menu
-int window_close_cmd(State *state);
-int window_close_all_cmd(State *state);
-int window_cascade_cmd(State *state);
-int window_tile_cmd(State *state);
-int window_next_cmd(State *state);
-int window_previous_cmd(State *state);
+extern const char *file_menu_data[];
+extern const char *edit_menu_data[];
+extern const char *view_menu_data[];
+extern const char *window_menu_data[];
+extern const char *help_menu_data[];
+extern const char *recent_menu_data[];
+extern const char *zoom_menu_data[];
+extern const char *pan_menu_data[];
+extern const char *draw_menu_data[];
+extern const char *tools_menu_data[];
+extern const char *modify_menu_data[];
+extern const char *dimension_menu_data[];
 
-// Help Menu
-int help_cmd(State *state);
-int changelog_cmd(State *state);
-int tip_of_the_day_cmd(State *state);
-int about_cmd(State *state);
-int whats_this_cmd(State *state);
+extern const char *file_toolbar_data[];
+extern const char *edit_toolbar_data[];
+extern const char *view_toolbar_data[];
+extern const char *zoom_toolbar_data[];
+extern const char *pan_toolbar_data[];
+extern const char *icon_toolbar_data[];
+extern const char *help_toolbar_data[];
+extern const char *layer_toolbar_data[];
+extern const char *text_toolbar_data[];
+extern const char *properties_toolbar_data[];
+extern const char *prompt_toolbar_data[];
+extern const char *draw_toolbar_data[];
+extern const char *inquiry_toolbar_data[];
+extern const char *modify_toolbar_data[];
+extern const char *dimension_toolbar_data[];
 
-// Icons
-int icon16_cmd(State *state);
-int icon24_cmd(State *state);
-int icon32_cmd(State *state);
-int icon48_cmd(State *state);
-int icon64_cmd(State *state);
-int icon128_cmd(State *state);
-
-int settingsdialog_cmd(State *state);
-
-// Layer ToolBar
-int makelayercurrent_cmd(State *state);
-int layers_cmd(State *state);
-int layerselector_cmd(State *state);
-int layerprevious_cmd(State *state);
-int colorselector_cmd(State *state);
-int linetypeselector_cmd(State *state);
-int lineweightselector_cmd(State *state);
-int hidealllayers_cmd(State *state);
-int showalllayers_cmd(State *state);
-int freezealllayers_cmd(State *state);
-int thawalllayers_cmd(State *state);
-int lockalllayers_cmd(State *state);
-int unlockalllayers_cmd(State *state);
-
-//Text ToolBar
-int text_bold_cmd(State *state);
-int text_italic_cmd(State *state);
-int text_underline_cmd(State *state);
-int text_strikeout_cmd(State *state);
-int text_overline_cmd(State *state);
-
-// Zoom ToolBar
-int zoom_real_time_cmd(State *state);
-int zoom_previous_cmd(State *state);
-int zoom_window_cmd(State *state);
-int zoom_dynamic_cmd(State *state);
-int zoom_scale_cmd(State *state);
-int zoom_center_cmd(State *state);
-int zoom_in_cmd(State *state);
-int zoom_out_cmd(State *state);
-int zoom_selected_cmd(State *state);
-int zoom_all_cmd(State *state);
-int zoom_extents_cmd(State *state);
-
-// Pan SubMenu
-int pan_real_time_cmd(State *state);
-int pan_point_cmd(State *state);
-int pan_left_cmd(State *state);
-int pan_right_cmd(State *state);
-int pan_up_cmd(State *state);
-int pan_down_cmd(State *state);
-
-int day_cmd(State *state);
-int night_cmd(State *state);
-
-extern CommandData command_table[];
+/* Program state: contains all global variables. */
 extern State state;
 
 #ifdef __cplusplus

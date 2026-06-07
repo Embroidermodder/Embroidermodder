@@ -74,7 +74,7 @@ signals:
 
 public slots:
     void addCommand(const QString& alias, const QString& cmd);
-    void endCommand();
+    void end_command();
     void processInput(const QChar& rapidChar = QChar());
     void checkSelection();
     void updateCurrentText(const QString& txt);
@@ -186,7 +186,7 @@ public slots:
     void stopResizingTheHistory(int y) { promptHistory->stopResizeHistory(y); }
     void resizeTheHistory(int y) { promptHistory->resizeHistory(y); }
     void addCommand(const QString& alias, const QString& cmd) { promptInput->addCommand(alias, cmd); }
-    void endCommand() { promptInput->endCommand(); }
+    void end_command() { promptInput->end_command(); }
     void processInput() { promptInput->processInput(); }
 
     void alert(const QString& txt);
