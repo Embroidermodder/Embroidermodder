@@ -8,11 +8,16 @@
  *      "windowclose" QKeySequence::Close
  *      "windownext" QKeySequence::NextChild
  *      "windowprevious" QKeySequence::PreviousChild
+ *
+ * FIXME: Left/Right don't work for keyboard panning
  */
 
-#include "core.h"
+#include <string.h>
 
-CommandData command_table[] = {
+#include "core.h"
+#include "commands.h"
+
+const CommandData command_table[] = {
     {
         .id = ACTION_donothing,
         .type = CMD_TYPE_TRIGGER,
@@ -21,7 +26,19 @@ CommandData command_table[] = {
         .statustip = "Does Nothing",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "DONOTHING",
         .command = do_nothing_cmd
+    },
+    {
+        .id = ACTION_test,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "test",
+        .tooltip = "Run &tests on the program.",
+        .statustip = "Runs tests on the program.",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "TEST",
+        .command = test_cmd
     },
     {
         .id = ACTION_windowcascade,
@@ -31,6 +48,7 @@ CommandData command_table[] = {
         .statustip = "Cascade the windows.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "CASCADE, WINDOWCASCADE",
         .command = window_cascade_cmd
     },
     {
@@ -38,9 +56,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "windowtile",
         .tooltip = "&Tile",
-        .statustip = "Tile the windows.",
+        .statustip = "Tile the windows: TILE",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "TILE, WINDOWTILE",
         .command = window_tile_cmd
     },
     {
@@ -48,9 +67,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "windowclose",
         .tooltip = "Cl&ose",
-        .statustip = "Close the active window.",
+        .statustip = "Close the active window: CLOSE",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "CLOSE, WINDOWCLOSE",
         .command = window_close_cmd
     },
     {
@@ -58,9 +78,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "windowcloseall",
         .tooltip = "Close &All",
-        .statustip = "Close all the windows.",
+        .statustip = "Close all the windows: CLOSEALL",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "CLOSEALL, WINDOWCLOSEALL",
         .command = window_close_all_cmd
     },
     {
@@ -68,9 +89,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "windownext",
         .tooltip = "Ne&xt",
-        .statustip = "Move the focus to the next window.",
+        .statustip = "Move the focus to the next window: NEXT",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "NEXT, WINDOWNEXT",
         .command = window_next_cmd
     },
     {
@@ -78,9 +100,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "windowprevious",
         .tooltip = "Pre&vious",
-        .statustip = "Move the focus to the previous window.",
+        .statustip = "Move the focus to the previous window: PREVIOUS",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "PREV, PREVIOUS, WINDOWPREVIOUS",
         .command = window_previous_cmd
     },
     {
@@ -88,9 +111,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "new",
         .tooltip = "&New",
-        .statustip = "Create a new file.",
+        .statustip = "Create a new file: NEW",
         .shortcut = "Ctrl+N",
         .mac_shortcut = "",
+        .aliases = "NEW",
         .command = new_cmd
     },
     {
@@ -98,9 +122,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "open",
         .tooltip = "&Open",
-        .statustip = "Open an existing file.",
+        .statustip = "Open an existing file: OPEN",
         .shortcut = "Ctrl+O",
         .mac_shortcut = "",
+        .aliases = "OPEN",
         .command = open_cmd
     },
     {
@@ -111,6 +136,7 @@ CommandData command_table[] = {
         .statustip = "Save the design to disk.",
         .shortcut = "Ctrl+S",
         .mac_shortcut = "",
+        .aliases = "SAVE",
         .command = save_cmd
     },
     {
@@ -121,6 +147,7 @@ CommandData command_table[] = {
         .statustip = "Save the design under a new name.",
         .shortcut = "Ctrl+Shift+S",
         .mac_shortcut = "",
+        .aliases = "SAVEAS",
         .command = save_as_cmd
     },
     {
@@ -131,6 +158,7 @@ CommandData command_table[] = {
         .statustip = "Print the design.",
         .shortcut = "Ctrl+P",
         .mac_shortcut = "",
+        .aliases = "PRINT",
         .command = print_cmd
     },
     {
@@ -141,6 +169,7 @@ CommandData command_table[] = {
         .statustip = "Details of the current design.",
         .shortcut = "Ctrl+D",
         .mac_shortcut = "",
+        .aliases = "DETAILS",
         .command = design_details_cmd
     },
     {
@@ -148,9 +177,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "exit",
         .tooltip = "E&xit",
-        .statustip = "Exit the application.",
+        .statustip = "Exit the application: EXIT",
         .shortcut = "Ctrl+Q",
         .mac_shortcut = "",
+        .aliases = "EXIT, QUIT",
         .command = exit_cmd
     },
     {
@@ -161,6 +191,7 @@ CommandData command_table[] = {
         .statustip = "Cut the current selection's contents to the clipboard.",
         .shortcut = "Ctrl+X",
         .mac_shortcut = "",
+        .aliases = "CUT",
         .command = cut_cmd
     },
     {
@@ -171,6 +202,7 @@ CommandData command_table[] = {
         .statustip = "Copy the current selection's contents to the clipboard.",
         .shortcut = "Ctrl+C",
         .mac_shortcut = "",
+        .aliases = "COPY",
         .command = copy_cmd
     },
     {
@@ -181,6 +213,7 @@ CommandData command_table[] = {
         .statustip = "Paste the clipboard's contents into the current selection.",
         .shortcut = "Ctrl+V",
         .mac_shortcut = "",
+        .aliases = "PASTE",
         .command = paste_cmd
     },
     {
@@ -188,9 +221,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "help",
         .tooltip = "&Help",
-        .statustip = "Displays help.",
-        .shortcut = "",
+        .statustip = "Displays help: HELP",
+        .shortcut = "F1",
         .mac_shortcut = "",
+        .aliases = "HELP",
         .command = help_cmd
     },
     {
@@ -201,6 +235,7 @@ CommandData command_table[] = {
         .statustip = "Describes new features in this product.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "CHANGELOG",
         .command = changelog_cmd
     },
     {
@@ -208,9 +243,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "tipoftheday",
         .tooltip = "&Tip Of The Day",
-        .statustip = "Displays a dialog with useful tips",
+        .statustip = "Displays a dialog with useful tips: TIPS",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "TIPS, TIPOFTHEDAY",
         .command = tip_of_the_day_cmd
     },
     {
@@ -218,9 +254,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "about",
         .tooltip = "&About Embroidermodder 2",
-        .statustip = "Displays information about this product.",
+        .statustip = "Displays information about this product: ABOUT",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ABOUT",
         .command = about_cmd
     },
     {
@@ -231,6 +268,7 @@ CommandData command_table[] = {
         .statustip = "What's This? Context Help!",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "WHATSTHIS",
         .command = whats_this_cmd
     },
     {
@@ -238,9 +276,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "undo",
         .tooltip = "&Undo",
-        .statustip = "Reverses the most recent action.",
+        .statustip = "Reverses the most recent action: UNDO",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "U, UNDO",
         .command = undo_cmd
     },
     {
@@ -248,9 +287,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "redo",
         .tooltip = "&Redo",
-        .statustip = "Reverses the effects of the previous undo action.",
+        .statustip = "Reverses the effects of the previous undo action: REDO",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "REDO",
         .command = redo_cmd
     },
     {
@@ -258,9 +298,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "icon16",
         .tooltip = "Icon&16",
-        .statustip = "Sets the toolbar icon size to 16x16.",
+        .statustip = "Sets the toolbar icon size to 16x16: ICON16",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ICON16",
         .command = icon16_cmd
     },
     {
@@ -268,9 +309,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "icon24",
         .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24.",
+        .statustip = "Sets the toolbar icon size to 24x24: ICON24",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ICON24",
         .command = icon24_cmd
     },
     {
@@ -278,9 +320,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "icon32",
         .tooltip = "Icon&32",
-        .statustip = "Sets the toolbar icon size to 32x32.",
+        .statustip = "Sets the toolbar icon size to 32x32: ICON32",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ICON32",
         .command = icon32_cmd
     },
     {
@@ -288,9 +331,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "icon48",
         .tooltip = "Icon&48",
-        .statustip = "Sets the toolbar icon size to 48x48.",
+        .statustip = "Sets the toolbar icon size to 48x48: ICON48",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ICON48",
         .command = icon48_cmd
     },
     {
@@ -298,9 +342,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "icon64",
         .tooltip = "Icon&64",
-        .statustip = "Sets the toolbar icon size to 64x64.",
+        .statustip = "Sets the toolbar icon size to 64x64: ICON64",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ICON64",
         .command = icon64_cmd
     },
     {
@@ -308,9 +353,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "icon128",
         .tooltip = "Icon12&8",
-        .statustip = "Sets the toolbar icon size to 128x128.",
+        .statustip = "Sets the toolbar icon size to 128x128: ICON128",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ICON128",
         .command = icon128_cmd
     },
     {
@@ -321,6 +367,7 @@ CommandData command_table[] = {
         .statustip = "Configure settings specific to this product.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "SETTINGS",
         .command = settingsdialog_cmd
     },
     {
@@ -331,6 +378,7 @@ CommandData command_table[] = {
         .statustip = "Makes the layer of a selected object the active layer",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "MAKELAYERCURRENT",
         .command = makelayercurrent_cmd
     },
     {
@@ -338,9 +386,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "layers",
         .tooltip = "&Layers",
-        .statustip = "Manages layers and layer properties:  LAYER",
+        .statustip = "Manages layers and layer properties: LAYER",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "LAYERS",
         .command = layers_cmd
     },
     {
@@ -351,6 +400,7 @@ CommandData command_table[] = {
         .statustip = "Dropdown selector for changing the current layer",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "LAYERSELECTOR",
         .command = layerselector_cmd
     },
     {
@@ -358,9 +408,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "layerprevious",
         .tooltip = "&Layer Previous",
-        .statustip = "Restores the previous layer settings:  LAYERP",
+        .statustip = "Restores the previous layer settings: LAYERP",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "LAYERPREVIOUS",
         .command = layerprevious_cmd
     },
     {
@@ -371,6 +422,7 @@ CommandData command_table[] = {
         .statustip = "Dropdown selector for changing the current thread color",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "COLORSELECTOR",
         .command = colorselector_cmd
     },
     {
@@ -381,6 +433,7 @@ CommandData command_table[] = {
         .statustip = "Dropdown selector for changing the current stitch type",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "LINETYPESELECTOR",
         .command = linetypeselector_cmd
     },
     {
@@ -391,6 +444,7 @@ CommandData command_table[] = {
         .statustip = "Dropdown selector for changing the current thread weight",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "LINEWEIGHTSELECTOR",
         .command = lineweightselector_cmd
     },
     {
@@ -398,9 +452,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "hidealllayers",
         .tooltip = "&Hide All Layers",
-        .statustip = "Turns the visibility off for all layers in the current drawing:  HIDEALL",
+        .statustip = "Turns the visibility off for all layers in the current drawing: HIDEALL",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "HIDEALLLAYERS",
         .command = hidealllayers_cmd
     },
     {
@@ -408,9 +463,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "showalllayers",
         .tooltip = "&Show All Layers",
-        .statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL",
+        .statustip = "Turns the visibility on for all layers in the current drawing: SHOWALL",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "SHOWALLLAYERS",
         .command = showalllayers_cmd
     },
     {
@@ -418,9 +474,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "freezealllayers",
         .tooltip = "&Freeze All Layers",
-        .statustip = "Freezes all layers in the current drawing:  FREEZEALL",
+        .statustip = "Freezes all layers in the current drawing: FREEZEALL",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "FREEZEALLLAYERS",
         .command = freezealllayers_cmd
     },
     {
@@ -428,9 +485,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "thawalllayers",
         .tooltip = "&Thaw All Layers",
-        .statustip = "Thaws all layers in the current drawing:  THAWALL",
+        .statustip = "Thaws all layers in the current drawing: THAWALL",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "THAWALLLAYERS",
         .command = thawalllayers_cmd
     },
     {
@@ -438,9 +496,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "lockalllayers",
         .tooltip = "&Lock All Layers",
-        .statustip = "Locks all layers in the current drawing:  LOCKALL",
+        .statustip = "Locks all layers in the current drawing: LOCKALL",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "LOCKALLLAYERS",
         .command = lockalllayers_cmd
     },
     {
@@ -448,9 +507,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "unlockalllayers",
         .tooltip = "&Unlock All Layers",
-        .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
+        .statustip = "Unlocks all layers in the current drawing: UNLOCKALL",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "UNLOCKALLLAYERS",
         .command = unlockalllayers_cmd
     },
     {
@@ -461,6 +521,7 @@ CommandData command_table[] = {
         .statustip = "Sets text to be bold.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "TEXTBOLD",
         .command = text_bold_cmd
     },
     {
@@ -471,6 +532,7 @@ CommandData command_table[] = {
         .statustip = "Sets text to be italic.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "TEXTITALIC",
         .command = text_italic_cmd
     },
     {
@@ -481,6 +543,7 @@ CommandData command_table[] = {
         .statustip = "Sets text to be underlined.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "TEXTUNDERLINE",
         .command = text_underline_cmd
     },
     {
@@ -491,6 +554,7 @@ CommandData command_table[] = {
         .statustip = "Sets text to be striked out.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "TEXTSTRIKEOUT",
         .command = text_strikeout_cmd
     },
     {
@@ -501,6 +565,7 @@ CommandData command_table[] = {
         .statustip = "Sets text to be overlined.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "TEXTOVERLINE",
         .command = text_overline_cmd
     },
     {
@@ -511,6 +576,7 @@ CommandData command_table[] = {
         .statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMREALTIME",
         .command = zoom_real_time_cmd
     },
     {
@@ -521,6 +587,7 @@ CommandData command_table[] = {
         .statustip = "Zooms to display the previous view.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMPREVIOUS",
         .command = zoom_previous_cmd
     },
     {
@@ -531,6 +598,7 @@ CommandData command_table[] = {
         .statustip = "Zooms to display an area specified by a rectangular window.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMWINDOW",
         .command = zoom_window_cmd
     },
     {
@@ -541,6 +609,7 @@ CommandData command_table[] = {
         .statustip = "Zooms to display the generated portion of the drawing.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMDYNAMIC",
         .command = zoom_dynamic_cmd
     },
     {
@@ -551,6 +620,7 @@ CommandData command_table[] = {
         .statustip = "Zooms the display using a specified scale factor.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMSCALE",
         .command = zoom_scale_cmd
     },
     {
@@ -561,6 +631,7 @@ CommandData command_table[] = {
         .statustip = "Zooms to display a view specified by a center point and magnification or height.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMCENTER",
         .command = zoom_center_cmd
     },
     {
@@ -568,9 +639,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "zoomin",
         .tooltip = "Zoom &In",
-        .statustip = "Zooms to increase the apparent size of objects.",
-        .shortcut = "",
-        .mac_shortcut = "",
+        .statustip = "Zooms to increase the apparent size of objects: ZOOMIN",
+        .shortcut = "Plus",
+        .mac_shortcut = "Plus",
+        .aliases = "ZOOMIN",
         .command = zoom_in_cmd
     },
     {
@@ -578,9 +650,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "zoomout",
         .tooltip = "Zoom &Out",
-        .statustip = "Zooms to decrease the apparent size of objects.",
-        .shortcut = "",
-        .mac_shortcut = "",
+        .statustip = "Zooms to decrease the apparent size of objects: ZOOMOUT",
+        .shortcut = "Minus",
+        .mac_shortcut = "Minus",
+        .aliases = "ZOOMOUT",
         .command = zoom_out_cmd
     },
     {
@@ -591,6 +664,7 @@ CommandData command_table[] = {
         .statustip = "Zooms to display the selected objects.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMSELECTED",
         .command = zoom_selected_cmd
     },
     {
@@ -601,6 +675,7 @@ CommandData command_table[] = {
         .statustip = "Zooms to display the drawing extents or the grid limits.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMALL",
         .command = zoom_all_cmd
     },
     {
@@ -608,9 +683,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "zoomextents",
         .tooltip = "Zoom &Extents",
-        .statustip = "Zooms to display the drawing extents.",
+        .statustip = "Zooms to display the drawing extents: ZOOMEXTENTS",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "ZOOMEXTENTS",
         .command = zoom_extents_cmd
     },
     {
@@ -621,6 +697,7 @@ CommandData command_table[] = {
         .statustip = "Moves the view in the current viewport.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "PANREALTIME",
         .command = pan_real_time_cmd
     },
     {
@@ -631,6 +708,7 @@ CommandData command_table[] = {
         .statustip = "Moves the view by the specified distance.",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "PANPOINT",
         .command = pan_point_cmd
     },
     {
@@ -638,9 +716,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "panleft",
         .tooltip = "&Pan Left",
-        .statustip = "Moves the view to the left.",
-        .shortcut = "",
-        .mac_shortcut = "",
+        .statustip = "Moves the view to the left: PANLEFT",
+        .shortcut = "Left",
+        .mac_shortcut = "Left",
+        .aliases = "LEFT, PANLEFT",
         .command = pan_left_cmd
     },
     {
@@ -648,9 +727,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "panright",
         .tooltip = "&Pan Right",
-        .statustip = "Moves the view to the right.",
-        .shortcut = "",
-        .mac_shortcut = "",
+        .statustip = "Moves the view to the right: PANRIGHT",
+        .shortcut = "Right",
+        .mac_shortcut = "Right",
+        .aliases = "RIGHT, PANRIGHT",
         .command = pan_right_cmd
     },
     {
@@ -658,9 +738,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "panup",
         .tooltip = "&Pan Up",
-        .statustip = "Moves the view up.",
-        .shortcut = "",
-        .mac_shortcut = "",
+        .statustip = "Moves the view up: PANUP",
+        .shortcut = "Up",
+        .mac_shortcut = "Up",
+        .aliases = "UP, PANUP",
         .command = pan_up_cmd
     },
     {
@@ -668,9 +749,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "pandown",
         .tooltip = "&Pan Down",
-        .statustip = "Moves the view down.",
-        .shortcut = "",
-        .mac_shortcut = "",
+        .statustip = "Moves the view down: PANDOWN",
+        .shortcut = "Down",
+        .mac_shortcut = "Down",
+        .aliases = "DOWN, PANDOWN",
         .command = pan_down_cmd
     },
     {
@@ -678,9 +760,10 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "day",
         .tooltip = "&Day",
-        .statustip = "Updates the current view using day vision settings.",
+        .statustip = "Updates the current view using day vision settings: DAY",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "DAY",
         .command = day_cmd
     },
     {
@@ -688,20 +771,297 @@ CommandData command_table[] = {
         .type = CMD_TYPE_TRIGGER,
         .label = "night",
         .tooltip = "&Night",
-        .statustip = "Updates the current view using night vision settings.",
+        .statustip = "Updates the current view using night vision settings: NIGHT",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "NIGHT",
         .command = night_cmd
+    },
+    {
+        .id = ACTION_circle,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "circle",
+        .tooltip = "&Circle",
+        .statustip = "Creates a circle: CIRCLE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "C, CIRCLE",
+        .command = circle_cmd
+    },
+    {
+        .id = ACTION_distance,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "distance",
+        .tooltip = "&Distance",
+        .statustip = "Measures the distance and angle between two points: DIST",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "DI, DIST, DISTANCE",
+        .command = distance_cmd
+    },
+    {
+        .id = ACTION_dolphin,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "dolphin",
+        .tooltip = "&Dolphin",
+        .statustip = "Creates a dolphin: DOLPHIN",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "DOLPHIN",
+        .command = dolphin_cmd
+    },
+    {
+        .id = ACTION_ellipse,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "ellipse",
+        .tooltip = "Ellipse",
+        .statustip = "Creates a ellipse: ELLIPSE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "EL, ELLIPSE",
+        .command = ellipse_cmd
+    },
+    {
+        .id = ACTION_erase,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "erase",
+        .tooltip = "D&elete",
+        .statustip = "Removes objects from a drawing: DELETE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "E, ERASE, DEL, DELETE",
+        .command = erase_cmd
+    },
+    {
+        .id = ACTION_heart,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "heart",
+        .tooltip = "&Heart",
+        .statustip = "Creates a heart: HEART",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "HEART",
+        .command = heart_cmd
+    },
+    {
+        .id = ACTION_line,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "line",
+        .tooltip = "&Line",
+        .statustip = "Creates straight line segments: LINE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "L, LINE",
+        .command = line_cmd
+    },
+    {
+        .id = ACTION_locatepoint,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "locatepoint",
+        .tooltip = "&Locate Point",
+        .statustip = "Displays the coordinate values of a location: ID",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "ID, LOCATEPOINT",
+        .command = locate_point_cmd
+    },
+    {
+        .id = ACTION_move,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "move",
+        .tooltip = "&Move",
+        .statustip = "Displaces objects a specified distance in a specified direction: MOVE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "M, MOVE",
+        .command = move_cmd
+    },
+    {
+        .id = ACTION_path,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "path",
+        .tooltip = "&Path",
+        .statustip = "Creates a 2D path: PATH",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "PA, PATH",
+        .command = path_cmd
+    },
+    {
+        .id = ACTION_platform,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "platform",
+        .tooltip = "&Platform",
+        .statustip = "List which platform is in use: PLATFORM",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "PLATFORM",
+        .command = platform_cmd
+    },
+    {
+        .id = ACTION_point,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "point",
+        .tooltip = "&Point",
+        .statustip = "Creates multiple points: POINT",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "PO, POINT",
+        .command = point_cmd
+    },
+    {
+        .id = ACTION_polygon,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "polygon",
+        .tooltip = "Pol&ygon",
+        .statustip = "Creates a regular polygon: POLYGON",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "POL, POLYGON",
+        .command = polygon_cmd
+    },
+    {
+        .id = ACTION_polyline,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "polyline",
+        .tooltip = "&Polyline",
+        .statustip = "Creates a 2D polyline: PLINE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "PL, PLINE, POLYLINE",
+        .command = polyline_cmd
+    },
+    {
+        .id = ACTION_quickleader,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "quickleader",
+        .tooltip = "&QuickLeader",
+        .statustip = "Creates a leader and annotation: QUICKLEADER",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "LE, LEADER, QLEADER, QUICKLEADER",
+        .command = quickleader_cmd
+    },
+    {
+        .id = ACTION_rectangle,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "rectangle",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline: RECTANGLE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "REC, RECT, RECTANG, RECTANGLE",
+        .command = rectangle_cmd
+    },
+    {
+        .id = ACTION_rgb,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "rgb",
+        .tooltip = "&RGB",
+        .statustip = "Updates the current view colors: RGB",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "RGB",
+        .command = rgb_cmd
+    },
+    {
+        .id = ACTION_rotate,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "rotate",
+        .tooltip = "&Rotate",
+        .statustip = "Rotates objects about a base point: ROTATE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "RO, ROTATE",
+        .command = rotate_cmd
+    },
+    {
+        .id = ACTION_scale,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "scale",
+        .tooltip = "Sca&le",
+        .statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions: SCALE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "SC, SCALE",
+        .command = scale_cmd
+    },
+    {
+        .id = ACTION_selectall,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "selectall",
+        .tooltip = "&Select All",
+        .statustip = "Selects all objects: SELECTALL",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "SELALL, SELECTALL",
+        .command = select_all_cmd
+    },
+    {
+        .id = ACTION_singlelinetext,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "singlelinetext",
+        .tooltip = "&Single Line Text",
+        .statustip = "Creates single-line text objects: TEXT",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "DT, DTEXT, TEXT, SINGLELINETEXT",
+        .command = single_line_text_cmd
+    },
+    {
+        .id = ACTION_snowflake,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "snowflake",
+        .tooltip = "&Snowflake",
+        .statustip = "Creates a snowflake: SNOWFLAKE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "SNOWFLAKE",
+        .command = snowflake_cmd
+    },
+    {
+        .id = ACTION_star,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "star",
+        .tooltip = "&Star",
+        .statustip = "Creates a star: STAR",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "STAR",
+        .command = star_cmd
+    },
+    {
+        .id = ACTION_syswindows,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "syswindows",
+        .tooltip = "&SysWindows",
+        .statustip = "Arrange the windows: SYSWINDOWS",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "WINDOWS, SYSWINDOWS",
+        .command = syswindows_cmd
     },
     {
         .id = ACTION_null,
         .type = CMD_TYPE_TRIGGER,
-        .label = "END",
-        .tooltip = "END",
-        .statustip = "END",
+        .label = "^END^",
+        .tooltip = "^END^",
+        .statustip = "^END^",
         .shortcut = "",
         .mac_shortcut = "",
+        .aliases = "NULL",
         .command = do_nothing_cmd
     }
 };
+
+int command_id(const char *key)
+{
+    int i;
+    for (i=0; command_table[i].id != ACTION_null; i++) {
+        if (!strcmp(command_table[i].label, key)) {
+            return command_table[i].id;
+        }
+    }
+    return ACTION_null;
+}
 

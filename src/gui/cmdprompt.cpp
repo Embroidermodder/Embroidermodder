@@ -120,9 +120,8 @@ void CmdPrompt::saveHistory(const QString& fileName, bool html)
 {
     qDebug("CmdPrompt saveHistory");
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         return;
-    }
 
     //TODO: save during input in case of crash
     QTextStream output(&file);
@@ -210,8 +209,7 @@ void CmdPrompt::updateStyle()
 void CmdPrompt::appendHistory(const QString& txt)
 {
     if (txt.isNull()) {
-        emit appendTheHistory(promptInput->curText,
-            state.prefix->length);
+        emit appendTheHistory(promptInput->curText, state.prefix->length);
         return;
     }
     qDebug("CmdPrompt - appendHistory()");
@@ -426,9 +424,9 @@ void CmdPromptInput::addCommand(const QString& alias, const QString& cmd)
     qDebug("Command Added: %s, %s", qPrintable(alias), qPrintable(cmd));
 }
 
-void CmdPromptInput::endCommand()
+void CmdPromptInput::end_command()
 {
-    qDebug("CmdPromptInput endCommand");
+    qDebug("CmdPromptInput end_command");
     str_copy(state.last_command, state.current_command);
     state.command_active = false;
     state.rapid_fire = false;

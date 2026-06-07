@@ -78,15 +78,15 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
             EmbVector p3 = result->side2[j];
             EmbVector p4 = result->side2[j + 1];
 
-            double topXDiff = p2.X - p1.X;
-            double topYDiff = p2.Y - p1.Y;
-            double bottomXDiff = p4.X - p3.X;
-            double bottomYDiff = p4.Y - p3.Y;
+            double topXDiff = p2.x - p1.x;
+            double topYDiff = p2.y - p1.y;
+            double bottomXDiff = p4.x - p3.x;
+            double bottomYDiff = p4.y - p3.y;
 
-            double midLeftX = (p1.X + p3.X) / 2;
-            double midLeftY = (p1.Y + p3.Y) / 2;
-            double midRightX = (p2.X + p4.X) / 2;
-            double midRightY = (p2.Y + p4.Y) / 2;
+            double midLeftX = (p1.x + p3.x) / 2;
+            double midLeftY = (p1.y + p3.y) / 2;
+            double midRightX = (p2.x + p4.x) / 2;
+            double midRightY = (p2.y + p4.y) / 2;
 
             double midXDiff = midLeftX - midRightX;
             double midYDiff = midLeftY - midRightY;
@@ -97,16 +97,16 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
             double topStepY = topYDiff / numberOfSteps;
             double bottomStepX = bottomXDiff / numberOfSteps;
             double bottomStepY = bottomYDiff / numberOfSteps;
-            currTopX = p1.X;
-            currTopY = p1.Y;
-            currBottomX = p3.X;
-            currBottomY = p3.Y;
+            currTopX = p1.x;
+            currTopY = p1.y;
+            currBottomX = p3.x;
+            currBottomY = p3.y;
 
             for (i = 0; i < numberOfSteps; i++)
             {
                 EmbVector temp2;
-                temp.X= currTopX;
-                temp.Y = currTopY;
+                temp.x= currTopX;
+                temp.y = currTopY;
                 if (stitches)
                 {
                     currentStitch = embVectorList_add(currentStitch, temp);
@@ -115,8 +115,8 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
                 {
                     stitches = currentStitch = embVectorList_create(temp);
                 }
-                temp2.X = currBottomX;
-                temp2.Y = currBottomY;
+                temp2.x = currBottomX;
+                temp2.y = currBottomY;
                 currentStitch = embVectorList_add(currentStitch, temp2);
                 currTopX += topStepX;
                 currTopY += topStepY;
@@ -124,11 +124,11 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
                 currBottomY += bottomStepY;
             }
         }
-        temp.X = currTopX;
-        temp.Y = currTopY;
+        temp.x = currTopX;
+        temp.y = currTopY;
         currentStitch = embVectorList_add(currentStitch, temp);
-        temp.X = currBottomX;
-        temp.Y = currBottomY;
+        temp.x = currBottomX;
+        temp.y = currBottomY;
         currentStitch = embVectorList_add(currentStitch, temp);
     }
     return stitches;

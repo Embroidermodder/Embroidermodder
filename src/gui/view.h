@@ -49,7 +49,7 @@ public slots:
     void panDown();
     void selectAll();
     void selectionChanged();
-    void clearSelection();
+    void clear_selection();
     void deleteSelected();
     void moveSelected(qreal dx, qreal dy);
     void cut();

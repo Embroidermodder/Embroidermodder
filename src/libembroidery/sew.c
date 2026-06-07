@@ -4,17 +4,15 @@
 
 #include "embroidery.h"
 
-/* FIXME: These aren't ISO compliant:
-#define RED_TERM_COLOR "\e[0;31m"
-#define GREEN_TERM_COLOR "\e[0;32m"
-#define YELLOW_TERM_COLOR "\e[1;33m"
-#define RESET_TERM_COLOR "\033[0m"
-*/
-
 #define RED_TERM_COLOR ""
 #define GREEN_TERM_COLOR ""
 #define YELLOW_TERM_COLOR ""
 #define RESET_TERM_COLOR ""
+/* FIXME: These were causing a bug on Windows */
+/* "\e[0;31m" */
+/* "\e[0;32m" */
+/* "\e[1;33m" */
+/* "\033[0m" */
 
 int testing(void);
 

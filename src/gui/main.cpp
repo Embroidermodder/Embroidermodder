@@ -46,13 +46,11 @@ int main(int argc, char* argv[])
 
     QStringList filesToOpen;
 
-    for (int i = 1; i < argc; i++)
-    {
-        if     (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {  }
+    for (int i = 1; i < argc; i++) {
+        if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {  }
         else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) { usage(); }
         else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) { version(); }
-        else if (QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i]))
-        {
+        else if (QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i])) {
             filesToOpen << argv[i];
         }
         else
@@ -61,8 +59,9 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (exitApp)
+    if (exitApp) {
         return 1;
+    }
 
     MainWindow* mainWin = new MainWindow();
 #if defined(Q_OS_MAC)
@@ -81,4 +80,3 @@ int main(int argc, char* argv[])
     return app.exec();
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

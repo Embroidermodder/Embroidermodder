@@ -18,19 +18,19 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, const QString& showTab, QWidget
     tabWidget = new QTabWidget(this);
 
     //TODO: Add icons to tabs
-    tabWidget->addTab(createTabGeneral(),    tr("General"));
+    tabWidget->addTab(createTabGeneral(), tr("General"));
     tabWidget->addTab(createTabFilesPaths(), tr("Files/Paths"));
-    tabWidget->addTab(createTabDisplay(),    tr("Display"));
-    tabWidget->addTab(createTabPrompt(),     tr("Prompt"));
-    tabWidget->addTab(createTabOpenSave(),   tr("Open/Save"));
-    tabWidget->addTab(createTabPrinting(),   tr("Printing"));
-    tabWidget->addTab(createTabSnap(),       tr("Snap"));
-    tabWidget->addTab(createTabGridRuler(),  tr("Grid/Ruler"));
+    tabWidget->addTab(createTabDisplay(), tr("Display"));
+    tabWidget->addTab(createTabPrompt(), tr("Prompt"));
+    tabWidget->addTab(createTabOpenSave(), tr("Open/Save"));
+    tabWidget->addTab(createTabPrinting(), tr("Printing"));
+    tabWidget->addTab(createTabSnap(), tr("Snap"));
+    tabWidget->addTab(createTabGridRuler(), tr("Grid/Ruler"));
     tabWidget->addTab(createTabOrthoPolar(), tr("Ortho/Polar"));
-    tabWidget->addTab(createTabQuickSnap(),  tr("QuickSnap"));
+    tabWidget->addTab(createTabQuickSnap(), tr("QuickSnap"));
     tabWidget->addTab(createTabQuickTrack(), tr("QuickTrack"));
     tabWidget->addTab(createTabLineWeight(), tr("LineWeight"));
-    tabWidget->addTab(createTabSelection(),  tr("Selection"));
+    tabWidget->addTab(createTabSelection(), tr("Selection"));
 
     if     (showTab == "General")     tabWidget->setCurrentIndex( 0);
     else if (showTab == "Files/Path")  tabWidget->setCurrentIndex( 1);
@@ -79,7 +79,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     comboBoxLanguage->addItem("System");
     comboBoxLanguage->insertSeparator(2);
     QDir trDir(qApp->applicationDirPath());
-    trDir.cd("translations");
+ trDir.cd("translations");
     foreach(QString dirName, trDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
         dirName[0] = dirName[0].toUpper();
@@ -973,7 +973,7 @@ QWidget* Settings_Dialog::createTabPrinting()
     QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
     foreach(QPrinterInfo info, listAvailPrinters)
     {
-        comboBoxDefaultDevice->addItem(QIcon("icons/" + QString(state.settings.general_icon_theme->data) + "/print.png"), info.printerName());
+        comboBoxDefaultDevice->addItem(createIcon("print"), info.printerName());
     }
 
     QVBoxLayout* vboxLayoutDefaultPrinter = new QVBoxLayout(groupBoxDefaultPrinter);
@@ -1242,7 +1242,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QLabel* labelRulerMetric = new QLabel(tr("Ruler Units"), groupBoxRulerMisc);
     QComboBox* comboBoxRulerMetric = new QComboBox(groupBoxRulerMisc);
     comboBoxRulerMetric->addItem("Imperial", false);
-    comboBoxRulerMetric->addItem("Metric",   true);
+    comboBoxRulerMetric->addItem("Metric", true);
     comboBoxRulerMetric->setCurrentIndex(comboBoxRulerMetric->findData(state.dialog.ruler_metric));
     connect(comboBoxRulerMetric, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxRulerMetricCurrentIndexChanged(int)));
 
@@ -1319,74 +1319,72 @@ QWidget* Settings_Dialog::createTabQuickSnap()
 {
     QWidget* widget = new QWidget(this);
 
-    QString iconTheme = state.settings.general_icon_theme->data;
-
     //QSnap Locators
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
 
     QCheckBox* checkBoxQSnapEndPoint = new QCheckBox(tr("Endpoint"), groupBoxQSnapLoc);
     checkBoxQSnapEndPoint->setChecked(state.dialog.qsnap_endpoint);
-    checkBoxQSnapEndPoint->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoendpoint" + ".png"));
+    checkBoxQSnapEndPoint->setIcon(createIcon("locator-snaptoendpoint"));
     connect(checkBoxQSnapEndPoint, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapEndPointStateChanged(int)));
 
     QCheckBox* checkBoxQSnapMidPoint = new QCheckBox(tr("Midpoint"), groupBoxQSnapLoc);
     checkBoxQSnapMidPoint->setChecked(state.dialog.qsnap_midpoint);
-    checkBoxQSnapMidPoint->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptomidpoint" + ".png"));
+    checkBoxQSnapMidPoint->setIcon(createIcon("locator-snaptomidpoint"));
     connect(checkBoxQSnapMidPoint, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapMidPointStateChanged(int)));
 
     QCheckBox* checkBoxQSnapCenter = new QCheckBox(tr("Center"), groupBoxQSnapLoc);
     checkBoxQSnapCenter->setChecked(state.dialog.qsnap_center);
-    checkBoxQSnapCenter->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptocenter" + ".png"));
+    checkBoxQSnapCenter->setIcon(createIcon("locator-snaptocenter"));
     connect(checkBoxQSnapCenter, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapCenterStateChanged(int)));
 
     QCheckBox* checkBoxQSnapNode = new QCheckBox(tr("Node"), groupBoxQSnapLoc);
     checkBoxQSnapNode->setChecked(state.dialog.qsnap_node);
-    checkBoxQSnapNode->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptonode" + ".png"));
+    checkBoxQSnapNode->setIcon(createIcon("locator-snaptonode"));
     connect(checkBoxQSnapNode, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapNodeStateChanged(int)));
 
     QCheckBox* checkBoxQSnapQuadrant = new QCheckBox(tr("Quadrant"), groupBoxQSnapLoc);
     checkBoxQSnapQuadrant->setChecked(state.dialog.qsnap_quadrant);
-    checkBoxQSnapQuadrant->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoquadrant" + ".png"));
+    checkBoxQSnapQuadrant->setIcon(createIcon("locator-snaptoquadrant"));
     connect(checkBoxQSnapQuadrant, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapQuadrantStateChanged(int)));
 
     QCheckBox* checkBoxQSnapIntersection = new QCheckBox(tr("Intersection"), groupBoxQSnapLoc);
     checkBoxQSnapIntersection->setChecked(state.dialog.qsnap_intersection);
-    checkBoxQSnapIntersection->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptointersection" + ".png"));
+    checkBoxQSnapIntersection->setIcon(createIcon("locator-snaptointersection"));
     connect(checkBoxQSnapIntersection, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapIntersectionStateChanged(int)));
 
     QCheckBox* checkBoxQSnapExtension = new QCheckBox(tr("Extension"), groupBoxQSnapLoc);
     checkBoxQSnapExtension->setChecked(state.dialog.qsnap_extension);
-    checkBoxQSnapExtension->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoextension" + ".png"));
+    checkBoxQSnapExtension->setIcon(createIcon("locator-snaptoextension"));
     connect(checkBoxQSnapExtension, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapExtensionStateChanged(int)));
 
     QCheckBox* checkBoxQSnapInsertion = new QCheckBox(tr("Insertion"), groupBoxQSnapLoc);
     checkBoxQSnapInsertion->setChecked(state.dialog.qsnap_insertion);
-    checkBoxQSnapInsertion->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoinsert" + ".png"));
+    checkBoxQSnapInsertion->setIcon(createIcon("locator-snaptoinsert"));
     connect(checkBoxQSnapInsertion, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapInsertionStateChanged(int)));
 
     QCheckBox* checkBoxQSnapPerpendicular = new QCheckBox(tr("Perpendicular"), groupBoxQSnapLoc);
     checkBoxQSnapPerpendicular->setChecked(state.dialog.qsnap_perpendicular);
-    checkBoxQSnapPerpendicular->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoperpendicular" + ".png"));
+    checkBoxQSnapPerpendicular->setIcon(createIcon("locator-snaptoperpendicular"));
     connect(checkBoxQSnapPerpendicular, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapPerpendicularStateChanged(int)));
 
     QCheckBox* checkBoxQSnapTangent = new QCheckBox(tr("Tangent"), groupBoxQSnapLoc);
     checkBoxQSnapTangent->setChecked(state.dialog.qsnap_tangent);
-    checkBoxQSnapTangent->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptotangent" + ".png"));
+    checkBoxQSnapTangent->setIcon(createIcon("locator-snaptotangent"));
     connect(checkBoxQSnapTangent, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapTangentStateChanged(int)));
 
     QCheckBox* checkBoxQSnapNearest = new QCheckBox(tr("Nearest"), groupBoxQSnapLoc);
     checkBoxQSnapNearest->setChecked(state.dialog.qsnap_nearest);
-    checkBoxQSnapNearest->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptonearest" + ".png"));
+    checkBoxQSnapNearest->setIcon(createIcon("locator-snaptonearest"));
     connect(checkBoxQSnapNearest, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapNearestStateChanged(int)));
 
     QCheckBox* checkBoxQSnapApparent = new QCheckBox(tr("Apparent Intersection"), groupBoxQSnapLoc);
     checkBoxQSnapApparent->setChecked(state.dialog.qsnap_apparent);
-    checkBoxQSnapApparent->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoapparentintersection" + ".png"));
+    checkBoxQSnapApparent->setIcon(createIcon("locator-snaptoapparentintersection"));
     connect(checkBoxQSnapApparent, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapApparentStateChanged(int)));
 
     QCheckBox* checkBoxQSnapParallel = new QCheckBox(tr("Parallel"), groupBoxQSnapLoc);
     checkBoxQSnapParallel->setChecked(state.dialog.qsnap_parallel);
-    checkBoxQSnapParallel->setIcon(QIcon("icons/" + iconTheme + "/" + "locator-snaptoparallel" + ".png"));
+    checkBoxQSnapParallel->setIcon(createIcon("locator-snaptoparallel"));
     connect(checkBoxQSnapParallel, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapParallelStateChanged(int)));
 
     QPushButton* buttonQSnapSelectAll = new QPushButton(tr("Select All"), groupBoxQSnapLoc);
@@ -1511,7 +1509,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
     //Misc
     QGroupBox* groupBoxLwtMisc = new QGroupBox(tr("LineWeight Misc"), widget);
 
-    QGraphicsScene* s = mainWin->activeScene();
+    QGraphicsScene* s = activeScene();
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
     if (s) { state.dialog.lwt_show_lwt = s->property(ENABLE_LWT).toBool(); }
@@ -1642,15 +1640,13 @@ QWidget* Settings_Dialog::createTabSelection()
 
 void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {
-    QString iconTheme = state.settings.general_icon_theme->data;
-
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorred" + ".png"),     tr("Red"),     qRgb(255,  0,  0));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "coloryellow" + ".png"),  tr("Yellow"),  qRgb(255,255,  0));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorgreen" + ".png"),   tr("Green"),   qRgb(  0,255,  0));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorcyan" + ".png"),    tr("Cyan"),    qRgb(  0,255,255));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorblue" + ".png"),    tr("Blue"),    qRgb(  0,  0,255));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colormagenta" + ".png"), tr("Magenta"), qRgb(255,  0,255));
-    comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorwhite" + ".png"),   tr("White"),   qRgb(255,255,255));
+    comboBox->addItem(createIcon("colorred"), tr("Red"),     qRgb(255,  0,  0));
+    comboBox->addItem(createIcon("coloryellow"), tr("Yellow"),  qRgb(255,255,  0));
+    comboBox->addItem(createIcon("colorgreen"), tr("Green"),   qRgb(  0,255,  0));
+    comboBox->addItem(createIcon("colorcyan"), tr("Cyan"),    qRgb(  0,255,255));
+    comboBox->addItem(createIcon("colorblue"), tr("Blue"),    qRgb(  0,  0,255));
+    comboBox->addItem(createIcon("colormagenta"), tr("Magenta"), qRgb(255,  0,255));
+    comboBox->addItem(createIcon("colorwhite"), tr("White"),   qRgb(255,255,255));
     //TODO: Add Other... so the user can select custom colors
 }
 
@@ -1696,14 +1692,14 @@ void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
         QString selectedImage;
         selectedImage = QFileDialog::getOpenFileName(this, tr("Open File"),
             QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
-            tr("Images (*.bmp *.png *.jpg)"));
+ tr("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
             str_const(state.accept.general_mdi_bg_logo,
                 qPrintable(selectedImage));
         }
 
-        /* Update immediately so it can be previewed. */
+        //Update immediately so it can be previewed
         mainWin->mdiArea->setBackgroundLogo(state.accept.general_mdi_bg_logo->data);
     }
 }
@@ -1722,14 +1718,14 @@ void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
         QString selectedImage;
         selectedImage = QFileDialog::getOpenFileName(this, tr("Open File"),
                         QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
-                        tr("Images (*.bmp *.png *.jpg)"));
+ tr("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
             str_const(state.accept.general_mdi_bg_texture,
                 qPrintable(selectedImage));
         }
 
-        /* Update immediately so it can be previewed */
+        //Update immediately so it can be previewed
         mainWin->mdiArea->setBackgroundTexture(state.accept.general_mdi_bg_texture->data);
     }
 }
@@ -2078,16 +2074,14 @@ void Settings_Dialog::choosePromptTextColor()
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentPromptTextColorChanged(const QColor&)));
         colorDialog->exec();
 
-        if (colorDialog->result() == QDialog::Accepted)
-        {
+        if (colorDialog->result() == QDialog::Accepted) {
             state.accept.prompt_text_color = colorDialog->selectedColor().rgb();
             QPixmap pix(16,16);
             pix.fill(QColor(state.accept.prompt_text_color));
             button->setIcon(QIcon(pix));
             mainWin->prompt->setPromptTextColor(QColor(state.accept.prompt_text_color));
         }
-        else
-        {
+        else {
             mainWin->prompt->setPromptTextColor(QColor(state.dialog.prompt_text_color));
         }
     }
@@ -2131,7 +2125,8 @@ void Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 
 void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
 {
-    str_const(state.preview.prompt_font_family, qPrintable(family));
+    str_const(state.preview.prompt_font_family,
+        qPrintable(family));
     mainWin->prompt->setPromptFontFamily(state.preview.prompt_font_family->data);
 }
 
@@ -2707,8 +2702,8 @@ void Settings_Dialog::acceptChanges()
     state.dialog.general_mdi_bg_use_logo = state.preview.general_mdi_bg_use_logo;
     state.dialog.general_mdi_bg_use_texture = state.preview.general_mdi_bg_use_texture;
     state.dialog.general_mdi_bg_use_color = state.preview.general_mdi_bg_use_color;
-    state.dialog.general_mdi_bg_logo = state.accept.general_mdi_bg_logo;
-    state.dialog.general_mdi_bg_texture = state.accept.general_mdi_bg_texture;
+    str_copy(state.dialog.general_mdi_bg_logo, state.accept.general_mdi_bg_logo);
+    str_copy(state.dialog.general_mdi_bg_texture, state.accept.general_mdi_bg_texture);
     state.dialog.general_mdi_bg_color = state.accept.general_mdi_bg_color;
     state.dialog.display_show_scrollbars = state.preview.display_show_scrollbars;
     state.dialog.display_crosshair_color = state.accept.display_crosshair_color;
