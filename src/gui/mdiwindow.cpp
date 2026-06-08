@@ -143,24 +143,20 @@ bool MdiWindow::loadFile(const QString &fileName)
         int stitchCount = embStitchList_count(p->stitchList);
         QPainterPath path;
 
-        if (p->circleObjList)
-        {
+        if (p->circleObjList) {
             EmbCircleObjectList* curCircleObj = p->circleObjList;
-            while(curCircleObj)
-            {
+            while (curCircleObj) {
                 EmbCircle c = curCircleObj->circleObj.circle;
                 EmbColor thisColor = curCircleObj->circleObj.color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->addCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
+                mainWin->addCircle(c.center.x, c.center.y, c.radius, false, OBJ_RUBBER_OFF); //TODO: fill
                 curCircleObj = curCircleObj->next;
             }
         }
-        if (p->ellipseObjList)
-        {
+        if (p->ellipseObjList) {
             EmbEllipseObjectList* curEllipseObj = p->ellipseObjList;
-            while(curEllipseObj)
-            {
+            while(curEllipseObj) {
                 EmbEllipse e = curEllipseObj->ellipseObj.ellipse;
                 EmbColor thisColor = curEllipseObj->ellipseObj.color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
@@ -169,11 +165,9 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curEllipseObj = curEllipseObj->next;
             }
         }
-        if (p->lineObjList)
-        {
+        if (p->lineObjList) {
             EmbLineObjectList* curLineObj = p->lineObjList;
-            while(curLineObj)
-            {
+            while (curLineObj) {
                 EmbLine li = curLineObj->lineObj.line;
                 EmbColor thisColor = curLineObj->lineObj.color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
@@ -182,17 +176,14 @@ bool MdiWindow::loadFile(const QString &fileName)
                 curLineObj = curLineObj->next;
             }
         }
-        if (p->pathObjList)
-        {
+        if (p->pathObjList) {
             //TODO: This is unfinished. It needs more work
             EmbPathObjectList* curPathObjList = p->pathObjList;
-            while(curPathObjList)
-            {
+            while (curPathObjList) {
                 QPainterPath pathPath;
                 EmbPointList* curPointList = curPathObjList->pathObj->pointList;
                 EmbColor thisColor = curPathObjList->pathObj->color;
-                if (curPointList)
-                {
+                if (curPointList) {
                     EmbPoint pp = curPointList->point;
                     pathPath.moveTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
                     curPointList = curPointList->next;

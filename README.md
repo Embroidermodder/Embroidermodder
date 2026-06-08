@@ -34,16 +34,16 @@ appropriate argument like this:
 
 ```bash
 # Choose your system out of:
-bash bin/build.sh Ubuntu
-bash bin/build.sh MacOS
-bash bin/build.sh Windows
+bash build.sh -d Ubuntu
+bash build.sh -d MacOS
+bash build.sh -d Windows
 ```
 
 Which will fetch the necessary dependencies. In later builds, calling without an argument is
 sufficient:
 
 ```bash
-bash bin/build.sh
+bash build.sh -b
 ```
 
 For details on how this works on your system keep on reading.
@@ -114,7 +114,7 @@ for testing without human interaction. Call it with:
 
 ```bash
 # This has only been designed to run on a linux-based system.
-bash bin/coverage.sh
+bash build.sh -b
 ```
 
 This automated testing is ran by `test.yml` so we can assure that basic usage doesn't

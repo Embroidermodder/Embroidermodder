@@ -83,4 +83,3 @@ void bcf_file_difat_free(bcf_file_difat* difat)
     difat = 0;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

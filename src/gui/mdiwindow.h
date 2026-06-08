@@ -27,6 +27,28 @@ public:
     MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
     ~MdiWindow();
 
+    MainWindow* mainWin;
+    QMdiArea* mdiArea;
+    QGraphicsScene* gscene;
+    View* gview;
+
+    bool fileWasLoaded;
+
+    QPrinter printer;
+
+    QString curFile;
+    void setCurrentFile(const QString& fileName);
+    QString fileExtension(const QString& fileName);
+
+    int myIndex;
+
+    QString curLayer;
+    QRgb curColor;
+    QString curLineType;
+    QString curLineWeight;
+
+    void promptInputPrevNext(bool prev);
+
     virtual QSize              sizeHint() const;
     QString                    getCurrentFile()   { return curFile; }
     QString                    getShortCurrentFile();
@@ -73,29 +95,6 @@ public slots:
     void logPromptInput(const QString& txt);
     void promptInputPrevious();
     void promptInputNext();
-
-private:
-    MainWindow* mainWin;
-    QMdiArea* mdiArea;
-    QGraphicsScene* gscene;
-    View* gview;
-
-    bool fileWasLoaded;
-
-    QPrinter printer;
-
-    QString curFile;
-    void setCurrentFile(const QString& fileName);
-    QString fileExtension(const QString& fileName);
-
-    int myIndex;
-
-    QString curLayer;
-    QRgb curColor;
-    QString curLineType;
-    QString curLineWeight;
-
-    void promptInputPrevNext(bool prev);
 };
 
 #endif

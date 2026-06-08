@@ -141,4 +141,3 @@ int embFile_printf(EmbFile* stream, const char* format, ...)
 #endif /* ARDUINO */
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

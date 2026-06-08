@@ -200,4 +200,3 @@ void binaryWriteFloat(EmbFile* file, float data)
     embFile_putc((float_int_u.u32 >> 24) & 0xFF, file);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

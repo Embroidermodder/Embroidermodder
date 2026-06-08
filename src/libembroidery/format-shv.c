@@ -226,4 +226,3 @@ int writeShv(EmbPattern* pattern, const char* fileName)
     return 0; /*TODO: finish writeShv */
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

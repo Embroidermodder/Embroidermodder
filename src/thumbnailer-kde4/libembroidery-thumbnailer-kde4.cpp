@@ -110,4 +110,3 @@ bool EmbroideryThumbnailer::create(const QString& path, int /*w*/, int /*h*/, QI
     return true;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

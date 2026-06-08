@@ -1246,4 +1246,3 @@ void husCompress_232(int _226)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

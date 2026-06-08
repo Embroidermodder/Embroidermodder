@@ -40,4 +40,3 @@ void ImageWidget::paintEvent(QPaintEvent*)
     painter.drawImage(0, 0, img);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

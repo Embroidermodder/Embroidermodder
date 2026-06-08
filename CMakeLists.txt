@@ -52,12 +52,10 @@ add_subdirectory(extern/tomlc99)
 #
 # https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
 #
-qt_add_executable(embroidermodder2
+add_executable(embroidermodder2
     ${SRC}/core/command-table.c
-    ${SRC}/core/menu-data.c
-    ${SRC}/core/toolbar-data.c
-    ${SRC}/core/tips.c
     ${SRC}/core/load.c
+    ${SRC}/core/tree.c
     ${SRC}/core/object-data.c
     ${SRC}/core/object-data.h
     ${SRC}/core/settings.c
@@ -686,6 +684,7 @@ endif(0)
 # rerun cmake to ensure that this retriggers.
 #
 file(COPY
+    "${DATA}/config.xml"
     "${DATA}/images"
     "${DATA}/icons"
     "${DATA}/samples"
@@ -710,8 +709,6 @@ target_link_libraries(embroidermodder2 PRIVATE
     tomlc99
     ${OPENGL_LIBRARIES}
 )
-
-set_property(TARGET embroidermodder2 PROPERTY AUTOMOC_MOC_OPTIONS "")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 target_link_libraries(embroidermodder2 PRIVATE

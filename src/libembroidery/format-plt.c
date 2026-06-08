@@ -109,5 +109,4 @@ int writePlt(EmbPattern* pattern, const char* fileName)
     return 1; /*TODO: finish WritePlt */
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
 

@@ -127,7 +127,7 @@ private:
     QAction* createAction(CommandData command);
 
     //Toolbars
-    void createToolbar(QToolBar *toolbar, const char *name, const char *data[]);
+    void createToolbar(QToolBar *toolbar, const char *name, StrArray *data);
     void createAllToolbars();
     void createLayerToolbar();
     void createPropertiesToolbar();
@@ -162,6 +162,7 @@ private:
     // Menus
     // ====================================================
     void createMenu(QMenu *menu, const char *name, const char *data[]);
+    void createMenu(QMenu *menu, const char *name, StrArray *data);
     void createAllMenus();
     void createFileMenu();
     void createViewMenu();
@@ -332,24 +333,13 @@ public slots:
     void addDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
 
     void setCursorShape(const QString& str);
-    qreal calculateAngle(qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal calculateDistance(qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal perpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
 
     /* Selection Management */
     void cut();
     void copy();
     void paste();
-    int numSelected();
     void selectAll();
     void addToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-
-    void deleteSelected();
-    void cutSelected(qreal x, qreal y);
-    void copySelected(qreal x, qreal y);
-    void pasteSelected(qreal x, qreal y);
-    void moveSelected(qreal dx, qreal dy);
-    void scaleSelected(qreal x, qreal y, qreal factor);
 };
 
 /* Pointer access for Qt based types */

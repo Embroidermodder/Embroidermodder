@@ -160,18 +160,19 @@ settings_create(Settings *settings)
 int
 settings_load(Settings *settings, int *window_pos, int *window_size)
 {
+    printf("Loading settings...\n");
     char errbuffer[200];
     // HACK
     FILE *fp = fopen("settings.ini", "r");
     if (!fp) {
-        printf("ERROR: failed to open file \"%s\".", state.settings_path->data);
+        printf("ERROR: failed to open file \"%s\".\n", state.settings_path->data);
         return 0;
     }
 
     toml_table_t* table = toml_parse_file(fp, errbuffer, sizeof(errbuffer));
     if (!table) {
-        printf("ERROR: failed to parse file \"%s\".", state.settings_path->data);
-        printf("ERROR: %s", errbuffer);
+        printf("ERROR: failed to parse file \"%s\".\n", state.settings_path->data);
+        printf("ERROR: %s\n", errbuffer);
         return 0;
     }
 
@@ -337,6 +338,7 @@ settings_load(Settings *settings, int *window_pos, int *window_size)
     settings->text_style_overline = toml_readbool(text, "StyleOverline", false);
 
     fclose(fp);
+    printf("Settings loaded.\n");
     return 1;
 }
 
@@ -351,18 +353,18 @@ section_header(FILE *fp, const char *label)
 void
 write_str(FILE *fp, const char *key, String *value)
 {
-    fprintf(fp, "%s=%s\n", key, value->data);
+    fprintf(fp, "%s=\"%s\"\n", key, value->data);
 }
 
 /* Make sure that a string setting is styled correctly. */
 void
 write_strarray(FILE *fp, const char *key, StrArray *value)
 {
-    fprintf(fp, "%s=", key);
+    fprintf(fp, "%s=\"", key);
     for (int i=0; i<value->count; i++) {
         fprintf(fp, "%s ", key);
     }
-    fprintf(fp, "\n");
+    fprintf(fp, "\"\n");
 }
 
 /* Make sure that an integer setting is styled correctly. */
@@ -382,7 +384,7 @@ write_real(FILE *fp, const char *key, float value)
 int
 settings_save(Settings *settings, int window_pos[2], int window_size[2])
 {
-    printf("Saving settings to \"%s\"...", state.settings_path->data);
+    printf("Saving settings to \"%s\"...\n", state.settings_path->data);
     // HACK
     FILE *fp = fopen("settings.ini", "w");
     if (fp == NULL) {
@@ -526,6 +528,8 @@ settings_save(Settings *settings, int window_pos[2], int window_size[2])
     write_int(fp, "StyleOverline", settings->text_style_overline);
 
     fclose(fp);
+
+    printf("Settings saved.\n");
     return 1;
 }
 

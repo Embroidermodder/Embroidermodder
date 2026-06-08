@@ -428,7 +428,7 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     if (embStitchList_empty(p->stitchList) &&
     embArcObjectList_empty(p->arcObjList) &&
     embCircleObjectList_empty(p->circleObjList) &&
-    embEllipseObjectList_empty(p->ellipseObjList) &&
+    emb_ellipse_object_list_empty(p->ellipseObjList) &&
     embLineObjectList_empty(p->lineObjList) &&
     embPointObjectList_empty(p->pointObjList) &&
     embPolygonObjectList_empty(p->polygonObjList) &&
@@ -476,10 +476,10 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     while(cObjList)
     {
         circle = cObjList->circleObj.circle;
-        boundingRect.left = (double)EMB_MIN(boundingRect.left, circle.centerX - circle.radius);
-        boundingRect.top = (double)EMB_MIN(boundingRect.top, circle.centerY - circle.radius);
-        boundingRect.right = (double)EMB_MAX(boundingRect.right, circle.centerX + circle.radius);
-        boundingRect.bottom = (double)EMB_MAX(boundingRect.bottom, circle.centerY + circle.radius);
+        boundingRect.left = (double)EMB_MIN(boundingRect.left, circle.center.x - circle.radius);
+        boundingRect.top = (double)EMB_MIN(boundingRect.top, circle.center.y - circle.radius);
+        boundingRect.right = (double)EMB_MAX(boundingRect.right, circle.center.x + circle.radius);
+        boundingRect.bottom = (double)EMB_MAX(boundingRect.bottom, circle.center.y + circle.radius);
 
         cObjList = cObjList->next;
     }
@@ -613,8 +613,12 @@ void embPattern_flip(EmbPattern* p, int horz, int vert)
     cObjList = p->circleObjList;
     while(cObjList)
     {
-        if (horz) { cObjList->circleObj.circle.centerX = -cObjList->circleObj.circle.centerX; }
-        if (vert) { cObjList->circleObj.circle.centerY = -cObjList->circleObj.circle.centerY; }
+        if (horz) {
+            cObjList->circleObj.circle.center.x = -cObjList->circleObj.circle.center.x;
+        }
+        if (vert) {
+            cObjList->circleObj.circle.center.y = -cObjList->circleObj.circle.center.y;
+        }
         cObjList = cObjList->next;
     }
 
@@ -920,7 +924,7 @@ void embPattern_free(EmbPattern* p)
 
     embArcObjectList_free(p->arcObjList);           p->arcObjList = 0;      p->lastArcObj = 0;
     embCircleObjectList_free(p->circleObjList);     p->circleObjList = 0;   p->lastCircleObj = 0;
-    embEllipseObjectList_free(p->ellipseObjList);   p->ellipseObjList = 0;  p->lastEllipseObj = 0;
+    emb_ellipse_object_list_free(p->ellipseObjList);   p->ellipseObjList = 0;  p->lastEllipseObj = 0;
     embLineObjectList_free(p->lineObjList);         p->lineObjList = 0;     p->lastLineObj = 0;
     embPathObjectList_free(p->pathObjList);         p->pathObjList = 0;     p->lastPathObj = 0;
     embPointObjectList_free(p->pointObjList);       p->pointObjList = 0;    p->lastPointObj = 0;
@@ -952,16 +956,16 @@ void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r
 /*! Adds an ellipse object to pattern (\a p) with its center at the absolute position (\a cx,\a cy) with radii of (\a rx,\a ry). Positive y is up. Units are in millimeters. */
 void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry)
 {
-    EmbEllipseObject ellipseObj = embEllipseObject_make(cx, cy, rx, ry);
+    EmbEllipseObject ellipseObj = emb_ellipse_object_make(cx, cy, rx, ry);
 
     if (!p) { embLog_error("emb-pattern.c embPattern_addEllipseObjectAbs(), p argument is null\n"); return; }
-    if (embEllipseObjectList_empty(p->ellipseObjList))
+    if (emb_ellipse_object_list_empty(p->ellipseObjList))
     {
-        p->ellipseObjList = p->lastEllipseObj = embEllipseObjectList_create(ellipseObj);
+        p->ellipseObjList = p->lastEllipseObj = emb_ellipse_object_list_create(ellipseObj);
     }
     else
     {
-        p->lastEllipseObj = embEllipseObjectList_add(p->lastEllipseObj, ellipseObj);
+        p->lastEllipseObj = emb_ellipse_object_list_add(p->lastEllipseObj, ellipseObj);
     }
 }
 
@@ -1061,4 +1065,3 @@ void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, do
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

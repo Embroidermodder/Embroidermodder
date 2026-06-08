@@ -135,4 +135,3 @@ void bcf_file_free(bcf_file* bcfFile)
     bcfFile = 0;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

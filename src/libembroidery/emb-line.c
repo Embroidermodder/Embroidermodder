@@ -159,4 +159,3 @@ void embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVect
     result->y = (A1 * C2 - A2 * C1) / det;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -677,7 +677,8 @@ void svgAddToPattern(EmbPattern* p)
 int
 str_in_array(char *table[], const char* buff)
 {
-    for (int i=0; table[i][0] != '_'; i++) {
+    int i;
+    for (i=0; table[i][0] != '_'; i++) {
         if (!strcmp(buff, table[i])) {
             return 1;
         }
@@ -1538,7 +1539,7 @@ int readSvg(EmbPattern* pattern, const char* fileName)
     while(cList)
     {
         EmbCircle c = cList->circleObj.circle;
-        printf("circle %f %f %f\n", c.centerX, c.centerY, c.radius);
+        printf("circle %f %f %f\n", c.center.x, c.center.y, c.radius);
         cList = cList->next;
     }
     eList = pattern->ellipseObjList;
@@ -1668,16 +1669,15 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
                         color.r,
                         color.g,
                         color.b,
-                        circle.centerX,
-                        circle.centerY,
+                        circle.center.x,
+                        circle.center.y,
                         circle.radius);
         cObjList = cObjList->next;
     }
 
     /* write ellipses */
     eObjList = pattern->ellipseObjList;
-    while(eObjList)
-    {
+    while (eObjList) {
         ellipse = eObjList->ellipseObj.ellipse;
         color = eObjList->ellipseObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */

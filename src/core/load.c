@@ -49,7 +49,10 @@ toml_readbool(toml_table_t *table, const char *key, bool default_value)
 {
     toml_datum_t i = toml_int_in(table, key);
     if (i.ok) {
-        return i.u.i;
+        if (i.u.i == 0) {
+            return false;
+        }
+        return true;
     }
     return default_value;
 }

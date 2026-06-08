@@ -1,3 +1,4 @@
 [submodule "extern/libembroidery"]
 	path = extern/libembroidery
 	url = https://github.com/embroidermodder/libembroidery
+	branch = main

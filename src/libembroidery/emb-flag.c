@@ -59,4 +59,3 @@ void embFlagList_free(EmbFlagList* pointer)
     pointer = 0;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

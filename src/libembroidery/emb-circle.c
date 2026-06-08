@@ -3,25 +3,6 @@
 #include <stdlib.h>
 
 /**************************************************/
-/* EmbCircle                                      */
-/**************************************************/
-
-double embCircle_centerX(EmbCircle circle)
-{
-    return circle.centerX;
-}
-
-double embCircle_centerY(EmbCircle circle)
-{
-    return circle.centerY;
-}
-
-double embCircle_radius(EmbCircle circle)
-{
-    return circle.radius;
-}
-
-/**************************************************/
 /* EmbCircleObject                                */
 /**************************************************/
 
@@ -29,8 +10,8 @@ double embCircle_radius(EmbCircle circle)
 EmbCircleObject embCircleObject_make(double cx, double cy, double r)
 {
     EmbCircleObject stackCircleObj;
-    stackCircleObj.circle.centerX = cx;
-    stackCircleObj.circle.centerY = cy;
+    stackCircleObj.circle.center.x = cx;
+    stackCircleObj.circle.center.y = cy;
     stackCircleObj.circle.radius  = r;
     return stackCircleObj;
 }
@@ -39,9 +20,12 @@ EmbCircleObject embCircleObject_make(double cx, double cy, double r)
 EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 {
     EmbCircleObject* heapCircleObj = (EmbCircleObject*)malloc(sizeof(EmbCircleObject));
-    if (!heapCircleObj) { embLog_error("emb-circle.c embCircleObject_create(), cannot allocate memory for heapCircleObj\n"); return 0; }
-    heapCircleObj->circle.centerX = cx;
-    heapCircleObj->circle.centerY = cy;
+    if (!heapCircleObj) {
+        embLog_error("emb-circle.c embCircleObject_create(), cannot allocate memory for heapCircleObj\n");
+        return 0;
+    }
+    heapCircleObj->circle.center.x = cx;
+    heapCircleObj->circle.center.y = cy;
     heapCircleObj->circle.radius  = r;
     return heapCircleObj;
 }
@@ -103,4 +87,3 @@ void embCircleObjectList_free(EmbCircleObjectList* pointer)
     pointer = 0;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

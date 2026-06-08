@@ -387,4 +387,3 @@ void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QP
     embPattern_addPolylineObjectAbs(pattern, polyObject);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

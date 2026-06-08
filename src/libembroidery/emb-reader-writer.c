@@ -577,4 +577,3 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
     return rw;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

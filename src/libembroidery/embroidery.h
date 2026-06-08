@@ -124,6 +124,12 @@ extern "C" {
 #include "utility/ino-logging.h"
 #endif
 
+typedef struct EmbVector_
+{
+    double x;
+    double y;
+} EmbVector;
+
 typedef enum
 {
     CSV_EXPECT_NULL,
@@ -318,8 +324,7 @@ typedef struct EmbArcObjectList_ {
 } EmbArcObjectList;
 
 typedef struct EmbCircle_ {
-    double centerX;
-    double centerY;
+    EmbVector center;
     double radius;
 } EmbCircle;
 
@@ -477,15 +482,6 @@ typedef struct EmbRectObjectList_ {
     EmbRectObject rectObj;
     struct EmbRectObjectList_* next;
 } EmbRectObjectList;
-
-/* TODO: EmbVector should just be a typedef of EmbPoint since internally, they are the same.
-         In cases where it represents vector data, then the name can be used to avoid confusion.
-         */
-typedef struct EmbVector_
-{
-    double x;
-    double y;
-} EmbVector;
 
 typedef struct EmbVectorList_
 {
@@ -689,14 +685,14 @@ extern EMB_PUBLIC double EMB_CALL embEllipse_diameterY(EmbEllipse ellipse);
 extern EMB_PUBLIC double EMB_CALL embEllipse_width(EmbEllipse ellipse);
 extern EMB_PUBLIC double EMB_CALL embEllipse_height(EmbEllipse ellipse);
 
-extern EMB_PUBLIC EmbEllipseObject EMB_CALL embEllipseObject_make(double cx, double cy, double rx, double ry);
-extern EMB_PUBLIC EmbEllipseObject* EMB_CALL embEllipseObject_create(double cx, double cy, double rx, double ry);
+extern EMB_PUBLIC EmbEllipseObject EMB_CALL emb_ellipse_object_make(double cx, double cy, double rx, double ry);
+extern EMB_PUBLIC EmbEllipseObject* EMB_CALL emb_ellipse_object_create(double cx, double cy, double rx, double ry);
 
-extern EMB_PUBLIC EmbEllipseObjectList* EMB_CALL embEllipseObjectList_create(EmbEllipseObject data);
-extern EMB_PUBLIC EmbEllipseObjectList* EMB_CALL embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
-extern EMB_PUBLIC int EMB_CALL embEllipseObjectList_count(EmbEllipseObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embEllipseObjectList_empty(EmbEllipseObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embEllipseObjectList_free(EmbEllipseObjectList* pointer);
+extern EMB_PUBLIC EmbEllipseObjectList* EMB_CALL emb_ellipse_object_list_create(EmbEllipseObject data);
+extern EMB_PUBLIC EmbEllipseObjectList* EMB_CALL emb_ellipse_object_list_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
+extern EMB_PUBLIC int EMB_CALL emb_ellipse_object_list_count(EmbEllipseObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL emb_ellipse_object_list_empty(EmbEllipseObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL emb_ellipse_object_list_free(EmbEllipseObjectList* pointer);
 
 extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create();
 extern EMB_PRIVATE EmbFormatList* EMB_CALL embFormatList_add(EmbFormatList* pointer, char* extension, char* description, char reader, char writer, int type);

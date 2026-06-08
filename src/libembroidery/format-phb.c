@@ -89,4 +89,3 @@ int writePhb(EmbPattern* pattern, const char* fileName)
     return 0; /*TODO: finish writePhb */
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

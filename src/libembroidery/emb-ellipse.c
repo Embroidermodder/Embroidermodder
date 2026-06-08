@@ -51,7 +51,7 @@ double embEllipse_height(EmbEllipse ellipse)
 /**************************************************/
 
 /* Returns an EmbEllipseObject. It is created on the stack. */
-EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double ry)
+EmbEllipseObject emb_ellipse_object_make(double cx, double cy, double rx, double ry)
 {
     EmbEllipseObject stackEllipseObj;
     stackEllipseObj.ellipse.centerX = cx;
@@ -62,10 +62,13 @@ EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double r
 }
 
 /* Returns a pointer to an EmbEllipseObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
-EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, double ry)
+EmbEllipseObject* emb_ellipse_object_create(double cx, double cy, double rx, double ry)
 {
     EmbEllipseObject* heapEllipseObj = (EmbEllipseObject*)malloc(sizeof(EmbEllipseObject));
-    if (!heapEllipseObj) { embLog_error("emb-ellipse.c embEllipseObject_create(), cannot allocate memory for heapEllipseObj\n"); return 0; }
+    if (!heapEllipseObj) {
+        embLog_error("emb-ellipse.c embEllipseObject_create(), cannot allocate memory for heapEllipseObj\n");
+        return 0;
+    }
     heapEllipseObj->ellipse.centerX = cx;
     heapEllipseObj->ellipse.centerY = cy;
     heapEllipseObj->ellipse.radiusX = rx;
@@ -77,52 +80,65 @@ EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, doubl
 /* EmbEllipseObjectList                           */
 /**************************************************/
 
-EmbEllipseObjectList* embEllipseObjectList_create(EmbEllipseObject data)
+EmbEllipseObjectList* emb_ellipse_object_list_create(EmbEllipseObject data)
 {
     EmbEllipseObjectList* heapEllipseObjList = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
-    if (!heapEllipseObjList) { embLog_error("emb-ellipse.c embEllipseObjectList_create(), cannot allocate memory for heapEllipseObjList\n"); return 0; }
+    if (!heapEllipseObjList) {
+        embLog_error("emb-ellipse.c embEllipseObjectList_create(), cannot allocate memory for heapEllipseObjList\n");
+        return 0;
+    }
     heapEllipseObjList->ellipseObj = data;
     heapEllipseObjList->next = 0;
     return heapEllipseObjList;
 }
 
-EmbEllipseObjectList* embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data)
+EmbEllipseObjectList* emb_ellipse_object_list_add(EmbEllipseObjectList* pointer, EmbEllipseObject data)
 {
-    if (!pointer) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), pointer argument is null\n"); return 0; }
-    if (pointer->next) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), pointer->next should be null\n"); return 0; }
+    if (!pointer) {
+        embLog_error("emb-ellipse.c embEllipseObjectList_add(), pointer argument is null\n");
+        return 0;
+    }
+    if (pointer->next) {
+        embLog_error("emb-ellipse.c embEllipseObjectList_add(), pointer->next should be null\n");
+        return 0;
+    }
     pointer->next = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
-    if (!pointer->next) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if (!pointer->next) {
+        embLog_error("emb-ellipse.c embEllipseObjectList_add(), cannot allocate memory for pointer->next\n");
+        return 0;
+    }
     pointer = pointer->next;
     pointer->ellipseObj = data;
     pointer->next = 0;
     return pointer;
 }
 
-int embEllipseObjectList_count(EmbEllipseObjectList* pointer)
+int emb_ellipse_object_list_count(EmbEllipseObjectList* pointer)
 {
     int i = 1;
-    if (!pointer) return 0;
-    while(pointer->next)
-    {
+    if (!pointer) {
+        return 0;
+    }
+    while (pointer->next) {
         pointer = pointer->next;
         i++;
     }
     return i;
 }
 
-int embEllipseObjectList_empty(EmbEllipseObjectList* pointer)
+int emb_ellipse_object_list_empty(EmbEllipseObjectList* pointer)
 {
-    if (!pointer)
+    if (!pointer) {
         return 1;
+    }
     return 0;
 }
 
-void embEllipseObjectList_free(EmbEllipseObjectList* pointer)
+void emb_ellipse_object_list_free(EmbEllipseObjectList* pointer)
 {
     EmbEllipseObjectList* tempPointer = pointer;
     EmbEllipseObjectList* nextPointer = 0;
-    while(tempPointer)
-    {
+    while(tempPointer) {
         nextPointer = tempPointer->next;
         free(tempPointer);
         tempPointer = nextPointer;
@@ -130,4 +146,3 @@ void embEllipseObjectList_free(EmbEllipseObjectList* pointer)
     pointer = 0;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -379,4 +379,3 @@ int embFormat_typeFromName(const char* fileName)
     return type;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

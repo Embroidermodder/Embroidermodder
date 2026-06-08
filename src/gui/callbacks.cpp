@@ -144,11 +144,6 @@ void select_all(void)
     script_env.mainWin->selectAll();
 }
 
-void delete_selected(void)
-{
-    script_env.mainWin->deleteSelected();
-}
-
 /*
  * This action intentionally does nothing: it is present as a dummy function
  * or the "null" action.
@@ -1015,16 +1010,6 @@ int mirrorSelected(float x1, float y1, float x2, float y2)
 }
 #endif
 
-void move_selected(float dx, float dy)
-{
-    script_env.mainWin->moveSelected(dx, dy);
-}
-
-void scale_selected(float x, float y, float factor)
-{
-    script_env.mainWin->scaleSelected(x, y, factor);
-}
-
 /* Call a command from the command table using the name of the command. */
 int
 MainWindow::call(QString name)
@@ -1262,13 +1247,10 @@ void MainWindow::tipOfTheDay()
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    /* FIXME */
-    int n_tips;
-    for (n_tips=0; tips[n_tips][0] != '^'; n_tips++) {}
-    if (state.settings.general_current_tip >= n_tips) {
+    if (state.settings.general_current_tip >= state.tips->count) {
         state.settings.general_current_tip = 0;
     }
-    labelTipOfTheDay = new QLabel(tips[state.settings.general_current_tip], wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(state.tips->data[state.settings.general_current_tip]->data, wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
@@ -1313,24 +1295,21 @@ void MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 void MainWindow::buttonTipOfTheDayClicked(int button)
 {
     qDebug("buttonTipOfTheDayClicked(%d)", button);
-    /* FIXME */
-    int n_tips;
-    for (n_tips=0; tips[n_tips][0] != '^'; n_tips++) {}
     if (button == QWizard::CustomButton1) {
         if (state.settings.general_current_tip > 0) {
             state.settings.general_current_tip--;
         }
         else {
-            state.settings.general_current_tip = n_tips - 1;
+            state.settings.general_current_tip = state.tips->count - 1;
         }
-        labelTipOfTheDay->setText(tips[state.settings.general_current_tip]);
+        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]->data);
     }
     else if (button == QWizard::CustomButton2) {
         state.settings.general_current_tip++;
-        if (state.settings.general_current_tip >= n_tips) {
+        if (state.settings.general_current_tip >= state.tips->count) {
             state.settings.general_current_tip = 0;
         }
-        labelTipOfTheDay->setText(tips[state.settings.general_current_tip]);
+        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]->data);
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
@@ -2098,6 +2077,11 @@ end_command(void)
     script_env.mainWin->prompt->end_command();
 }
 
+void messagebox(const char *type, const char *title, const char *text)
+{
+     script_env.mainWin->messageBox(type, title, text);
+}
+
 void MainWindow::messageBox(const QString& type, const QString& title, const QString& text)
 {
     QString msgType = type.toLower();
@@ -2517,32 +2501,12 @@ void MainWindow::setCursorShape(const QString& str)
     }
 }
 
-qreal MainWindow::calculateAngle(qreal x1, qreal y1, qreal x2, qreal y2)
-{
-    return QLineF(x1, -y1, x2, -y2).angle();
-}
-
-qreal MainWindow::calculateDistance(qreal x1, qreal y1, qreal x2, qreal y2)
-{
-    return QLineF(x1, y1, x2, y2).length();
-}
-
-qreal MainWindow::perpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2)
-{
-    QLineF line(x1, y1, x2, y2);
-    QLineF norm = line.normalVector();
-    qreal dx = px-x1;
-    qreal dy = py-y1;
-    norm.translate(dx, dy);
-    QPointF iPoint;
-    norm.intersects(line, &iPoint);
-    return QLineF(px, py, iPoint.x(), iPoint.y()).length();
-}
-
-int MainWindow::numSelected()
+int num_selected(void)
 {
     View* gview = activeView();
-    if (gview) { return gview->numSelected(); }
+    if (gview) {
+        return gview->numSelected();
+    }
     return 0;
 }
 
@@ -2559,36 +2523,40 @@ clear_selection(void)
     }
 }
 
-void MainWindow::deleteSelected()
+void delete_selected(void)
 {
     View* gview = activeView();
-    if (gview) { gview->deleteSelected(); }
+    if (gview) {
+        gview->deleteSelected();
+    }
 }
 
-void MainWindow::cutSelected(qreal x, qreal y)
+void cut_selected(float x, float y)
 {
 }
 
-void MainWindow::copySelected(qreal x, qreal y)
+void copy_selected(float x, float y)
 {
 }
 
-void MainWindow::pasteSelected(qreal x, qreal y)
+void paste_selected(float x, float y)
 {
 }
 
-void MainWindow::moveSelected(qreal dx, qreal dy)
+void move_selected(float dx, float dy)
 {
     View* gview = activeView();
-    if (gview) { gview->moveSelected(dx, -dy); }
+    if (gview) {
+        gview->moveSelected(dx, -dy);
+    }
 }
 
-void MainWindow::scaleSelected(qreal x, qreal y, qreal factor)
+void scale_selected(float x, float y, float factor)
 {
     if (factor <= 0.0) {
-        QMessageBox::critical(this, tr("ScaleFactor Error"),
-            tr("Hi there. If you are not a developer, report this as a bug. "
-            "If you are a developer, your code needs examined, and possibly your head too."));
+        messagebox("critical", "ScaleFactor Error",
+            "Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too.");
     }
 
     View* gview = activeView();

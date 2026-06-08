@@ -272,4 +272,3 @@ void UndoableMirrorCommand::mirror()
     //TODO: finish undoable mirror
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

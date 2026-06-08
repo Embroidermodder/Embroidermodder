@@ -353,4 +353,3 @@ QList<QPainterPath> TextSingleObject::subPathList() const
     return pathList;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
