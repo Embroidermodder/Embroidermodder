@@ -144,11 +144,6 @@ void select_all(void)
     script_env.mainWin->selectAll();
 }
 
-void delete_selected(void)
-{
-    script_env.mainWin->deleteSelected();
-}
-
 /*
  * This action intentionally does nothing: it is present as a dummy function
  * or the "null" action.
@@ -1014,16 +1009,6 @@ int mirrorSelected(float x1, float y1, float x2, float y2)
     return 0;
 }
 #endif
-
-void move_selected(float dx, float dy)
-{
-    script_env.mainWin->moveSelected(dx, dy);
-}
-
-void scale_selected(float x, float y, float factor)
-{
-    script_env.mainWin->scaleSelected(x, y, factor);
-}
 
 /* Call a command from the command table using the name of the command. */
 int
@@ -2098,6 +2083,11 @@ end_command(void)
     script_env.mainWin->prompt->end_command();
 }
 
+void messagebox(const char *type, const char *title, const char *text)
+{
+     script_env.mainWin->messageBox(type, title, text);
+}
+
 void MainWindow::messageBox(const QString& type, const QString& title, const QString& text)
 {
     QString msgType = type.toLower();
@@ -2517,32 +2507,12 @@ void MainWindow::setCursorShape(const QString& str)
     }
 }
 
-qreal MainWindow::calculateAngle(qreal x1, qreal y1, qreal x2, qreal y2)
-{
-    return QLineF(x1, -y1, x2, -y2).angle();
-}
-
-qreal MainWindow::calculateDistance(qreal x1, qreal y1, qreal x2, qreal y2)
-{
-    return QLineF(x1, y1, x2, y2).length();
-}
-
-qreal MainWindow::perpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2)
-{
-    QLineF line(x1, y1, x2, y2);
-    QLineF norm = line.normalVector();
-    qreal dx = px-x1;
-    qreal dy = py-y1;
-    norm.translate(dx, dy);
-    QPointF iPoint;
-    norm.intersects(line, &iPoint);
-    return QLineF(px, py, iPoint.x(), iPoint.y()).length();
-}
-
-int MainWindow::numSelected()
+int num_selected(void)
 {
     View* gview = activeView();
-    if (gview) { return gview->numSelected(); }
+    if (gview) {
+        return gview->numSelected();
+    }
     return 0;
 }
 
@@ -2559,36 +2529,40 @@ clear_selection(void)
     }
 }
 
-void MainWindow::deleteSelected()
+void delete_selected(void)
 {
     View* gview = activeView();
-    if (gview) { gview->deleteSelected(); }
+    if (gview) {
+        gview->deleteSelected();
+    }
 }
 
-void MainWindow::cutSelected(qreal x, qreal y)
+void cut_selected(float x, float y)
 {
 }
 
-void MainWindow::copySelected(qreal x, qreal y)
+void copy_selected(float x, float y)
 {
 }
 
-void MainWindow::pasteSelected(qreal x, qreal y)
+void paste_selected(float x, float y)
 {
 }
 
-void MainWindow::moveSelected(qreal dx, qreal dy)
+void move_selected(float dx, float dy)
 {
     View* gview = activeView();
-    if (gview) { gview->moveSelected(dx, -dy); }
+    if (gview) {
+        gview->moveSelected(dx, -dy);
+    }
 }
 
-void MainWindow::scaleSelected(qreal x, qreal y, qreal factor)
+void scale_selected(float x, float y, float factor)
 {
     if (factor <= 0.0) {
-        QMessageBox::critical(this, tr("ScaleFactor Error"),
-            tr("Hi there. If you are not a developer, report this as a bug. "
-            "If you are a developer, your code needs examined, and possibly your head too."));
+        messagebox("critical", "ScaleFactor Error",
+            "Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too.");
     }
 
     View* gview = activeView();

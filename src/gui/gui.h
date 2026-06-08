@@ -18,6 +18,8 @@ void append_prompt_history(const char *str);
 const char *translate_str(char *str);
 void repaint(void);
 
+void messagebox(const char *type, const char *title, const char *text);
+
 void new_file(void);
 void open_file(void);
 void exit_program(void);
@@ -64,11 +66,11 @@ void pan_down(void);
 void day_vision(void);
 void night_vision(void);
 
-/*
-int cutSelected(float x, float y);
-int copySelected(float x, float y);
-int pasteSelected(float x, float y);
-*/
+int num_selected(void);
+void delete_selected(void);
+void cut_selected(float x, float y);
+void copy_selected(float x, float y);
+void paste_selected(float x, float y);
 void move_selected(float dx, float dy);
 void scale_selected(float x, float y, float factor);
 void rotate_selected(float x, float y, float rot);
@@ -158,10 +160,8 @@ int addVerticalDimension(void);
 int addImage(void);
 int addDimLeader(float x1, float y1, float x2, float y2, float rot);
 void setCursorShape(QString shape) { mainwin->setCursorShape(shape); }
-int numSelected(void) { return mainwin->numSelected(); }
 void selectAll(void) { mainwin->selectAll(); }
 int addToSelection(void);
-void deleteSelected(void) { mainwin->deleteSelected(); }
 int includeScript(QString filename);
 
 #endif
