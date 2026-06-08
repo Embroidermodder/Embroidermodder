@@ -1,6 +1,10 @@
 #include "application.h"
 #include "mainwindow.h"
 
+extern "C" {
+    int nuklear_frontend(int argc, char *argv[]);
+}
+
 const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
@@ -47,14 +51,22 @@ int main(int argc, char* argv[])
     QStringList filesToOpen;
 
     for (int i = 1; i < argc; i++) {
-        if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {  }
-        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) { usage(); }
-        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) { version(); }
+        if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")) {
+        }
+        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
+            usage();
+        }
+        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
+            version();
+        }
+        else if (!strcmp(argv[i], "-n") || !strcmp(argv[i], "--nuklear")) {
+            nuklear_frontend(argc, argv);
+            exitApp = true;
+        }
         else if (QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i])) {
             filesToOpen << argv[i];
         }
-        else
-        {
+        else {
             usage();
         }
     }
@@ -74,8 +86,9 @@ int main(int argc, char* argv[])
     mainWin->show();
 
     //NOTE: If openFilesSelected() is called from within the mainWin constructor, slot commands wont work and the window menu will be screwed
-    if (!filesToOpen.isEmpty())
+    if (!filesToOpen.isEmpty()) {
         mainWin->openFilesSelected(filesToOpen);
+    }
 
     return app.exec();
 }

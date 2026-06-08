@@ -20,7 +20,7 @@ jobs:
         run: bash bin/build.sh "Ubuntu"
       - uses: actions/upload-artifact@v7
         with:
-          path: embroidermodder/build/embroidermodder*.zip.gz
+          path: build
 
   build-macos:
     runs-on: macos-latest
@@ -32,7 +32,7 @@ jobs:
         run: bash bin/build.sh "MacOS"
       - uses: actions/upload-artifact@v7
         with:
-          path: embroidermodder/build/embroidermodder*.app
+          path: build
 
   build-windows:
     runs-on: windows-latest
@@ -44,4 +44,4 @@ jobs:
         run: bash bin/build.sh "Windows"
       - uses: actions/upload-artifact@v7
         with:
-          path: embroidermodder/build/embroidermodder*.exe
+          path: build

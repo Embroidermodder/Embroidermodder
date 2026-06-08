@@ -12,17 +12,16 @@ if [ "$1" = "Ubuntu" ]; then
     sudo apt-get update
     sudo apt-get install git build-essential cmake qt6-base-dev qml-qt6 libqt6widgets6 \
         qt6-declarative-dev qt6-scxml-dev linguist-qt6 qt6-tools-dev qt6-tools-dev-tools \
-        libqt6printsupport6 libqt6core6 libgl-dev libgl1-mesa-dev libglx-dev
+        libqt6printsupport6 libqt6core6 libwayland-dev libxkbcommon-dev libxrandr-dev \
+        libxinerama-dev libxcursor-dev libxi-dev libglew-dev libglfw3-dev libgl-dev libgl1-mesa-dev libglx-dev
 
     cmake -DCMAKE_BUILD_TYPE=Release -G"Unix Makefiles" ..
 
 elif [ "$1" = "MacOS" ]; then
 
-    brew install qt6 qwt
+    brew install qt6 qwt glew
 
-    cmake -DCMAKE_BUILD_TYPE=Release -G"Unix Makefiles" \
-        -DCMAKE_C_COMPILER=/usr/bin/gcc-11 \
-        -DCMAKE_CXX_COMPILER=/usr/bin/g++-11 ..
+    cmake -DCMAKE_BUILD_TYPE=Release -G"Unix Makefiles" ..
 
 elif [ "$1" = "Windows" ]; then
 
@@ -36,11 +35,21 @@ elif [ "$1" = "Windows" ]; then
     export PATH="${QT_DIR}/bin:${PATH}"
     export CMAKE_PREFIX_PATH="${QT_PATH}"
 
+    vcpkg install glew glfw3
+    # qtbase
+
+    export GLEW_INCLUDE_DIRS="C:/vcpkg/packages/glew_x64-windows/include"
+    export GLEW_LIBRARIES="C:/vcpkg/packages/glew_x64-windows/lib"
+
     cmake -DCMAKE_BUILD_TYPE=Release -G"Unix Makefiles" ..
 
 fi
 
 cmake --build .
+rm -fr CMakeFiles* embroidermodder2_autogen extern *.cmake Makefile
+cd ..
+
+exit 0
 
 mkdir "${VERSION}"
 mv LICENSE.md help icons images samples translations "${VERSION}"

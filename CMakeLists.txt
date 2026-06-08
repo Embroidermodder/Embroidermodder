@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
+#find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport LinguistTools)
 
@@ -48,6 +49,15 @@ set(DATA ${CMAKE_SOURCE_DIR}/data)
 add_subdirectory(src/libembroidery)
 add_subdirectory(extern/tomlc99)
 
+find_library(
+    FOUND_GLFW
+    NAMES glfw3 libglfw3
+)
+
+if (NOT FOUND_GLFW)
+add_subdirectory(extern/glfw)
+endif ()
+
 # The makers of CMake advise that you do not glob source files.
 #
 # https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
@@ -65,6 +75,7 @@ qt_add_executable(embroidermodder2
     ${SRC}/core/string-tools.c
     ${SRC}/core/core.h
 
+    ${SRC}/gui/nuklear-frontend.c
     ${SRC}/gui/gui.h
     ${SRC}/gui/application.cpp
     ${SRC}/gui/application.h
@@ -700,9 +711,12 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/libembroidery
     ${CMAKE_SOURCE_DIR}/src/commands
     ${CMAKE_SOURCE_DIR}/extern/tomlc99
+    ${CMAKE_SOURCE_DIR}/extern/Nuklear
 )
 
+# GLEW::GLEW
 target_link_libraries(embroidermodder2 PRIVATE
+    glfw
     Qt6::Core
     Qt6::Widgets
     Qt6::PrintSupport
