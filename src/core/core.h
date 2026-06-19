@@ -160,6 +160,36 @@ typedef struct StrArray_ {
     int memory;
 } StrArray;
 
+/* ROOT and DICTIONARY nodes are assumed to contain no data.
+ * The ROOT is a DICTIONARY node that has no parent.
+ */
+#define NODE_ROOT               0
+#define NODE_DICTIONARY         1
+#define NODE_STR                2
+#define NODE_STRARRAY           3
+#define NODE_INT                4
+#define NODE_UINT               5
+#define NODE_REAL               6
+#define NODE_UNKNOWN            7
+
+typedef struct Node_ Node;
+
+struct Node_ {
+    char label[50];
+
+    /* Data */
+    String *s;
+    StrArray *l;
+    int32_t i;
+    uint32_t u;
+    double r;
+    int type;
+
+    /* Leaves */
+    Node *leaves;
+    int n_leaves;
+};
+
 typedef struct Settings_ {
     String *general_language;
     String *general_icon_theme;
@@ -318,6 +348,10 @@ typedef struct State_ {
     StrArray *recent_menu;
     StrArray *zoom_menu;
     StrArray *pan_menu;
+    StrArray *draw_menu;
+    StrArray *tools_menu;
+    StrArray *dimension_menu;
+    StrArray *modify_menu;
 
     StrArray *file_toolbar;
     StrArray *edit_toolbar;
@@ -330,6 +364,10 @@ typedef struct State_ {
     StrArray *text_toolbar;
     StrArray *properties_toolbar;
     StrArray *prompt_toolbar;
+    StrArray *draw_toolbar;
+    StrArray *dimension_toolbar;
+    StrArray *inquiry_toolbar;
+    StrArray *modify_toolbar;
 } State;
 
 typedef struct CommandData_ {
@@ -362,9 +400,32 @@ void str_free(String *str);
 
 StrArray *strarray_create(void);
 void strarray_append(StrArray *a, const char *s);
+void strarray_insert(StrArray *a, int positon, String *s);
 void strarray_empty(StrArray *arr);
 void strarray_copy(StrArray *dest, StrArray *src);
 void strarray_free(StrArray *a);
+int strarray_from_tree(Node *tree, const char *key, StrArray *a);
+void print_strarray(StrArray *a);
+
+Node *root_node(void);
+Node *create_leaf(Node *trunk);
+void add_str_leaf(Node *trunk, const char *label, const char *str);
+/* NOTE: When creating a StrArray leaf node it begins empty. */
+void add_strarray_leaf(Node *trunk, const char *label);
+void add_int_leaf(Node *trunk, const char *label, int32_t i);
+void add_uint_leaf(Node *trunk, const char *label, uint32_t u);
+void add_real_leaf(Node *trunk, const char *label, double r);
+/* Find an exact match to the key as the label of a node on this level. */
+Node *find_leaf(Node *trunk, const char *key);
+/* Find an exact match to the key as the label of a node on any lower level. */
+Node *recursive_find_leaf(Node *root, const char *key);
+/* Find leaf given the full path in "dot.notation" from the root. */
+Node *get_leaf(Node *root, const char *key);
+Node *pop_leaf(Node *trunk);
+void free_leaf(Node *trunk);
+Node *load_xml(const char *fname);
+void print_tree(Node *trunk, int indent);
+int tree_test(void);
 
 void settings_create(Settings *settings); /* FIXME: convert to Settings *settings_create(void); */
 int settings_load(Settings *settings, int *window_pos, int *window_size);
@@ -374,43 +435,13 @@ void settings_copy(Settings *dest, Settings *src);
 void settings_free(Settings *settings);
 
 void state_create(char *settings_dir, char *app_dir);
+int state_load(void);
 void state_free(void);
 
 int call(State *state, const char *cmd);
 
 /* Configuration: note that this is all constant. */
 extern const CommandData command_table[];
-
-extern const char *tips[];
-
-extern const char *file_menu_data[];
-extern const char *edit_menu_data[];
-extern const char *view_menu_data[];
-extern const char *window_menu_data[];
-extern const char *help_menu_data[];
-extern const char *recent_menu_data[];
-extern const char *zoom_menu_data[];
-extern const char *pan_menu_data[];
-extern const char *draw_menu_data[];
-extern const char *tools_menu_data[];
-extern const char *modify_menu_data[];
-extern const char *dimension_menu_data[];
-
-extern const char *file_toolbar_data[];
-extern const char *edit_toolbar_data[];
-extern const char *view_toolbar_data[];
-extern const char *zoom_toolbar_data[];
-extern const char *pan_toolbar_data[];
-extern const char *icon_toolbar_data[];
-extern const char *help_toolbar_data[];
-extern const char *layer_toolbar_data[];
-extern const char *text_toolbar_data[];
-extern const char *properties_toolbar_data[];
-extern const char *prompt_toolbar_data[];
-extern const char *draw_toolbar_data[];
-extern const char *inquiry_toolbar_data[];
-extern const char *modify_toolbar_data[];
-extern const char *dimension_toolbar_data[];
 
 /* Program state: contains all global variables. */
 extern State state;

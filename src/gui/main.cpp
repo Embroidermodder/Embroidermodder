@@ -53,6 +53,10 @@ int main(int argc, char* argv[])
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")) {
         }
+        else if (!strcmp(argv[i], "--core-test")) {
+            tree_test();
+            exitApp = true;
+        }
         else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
             usage();
         }

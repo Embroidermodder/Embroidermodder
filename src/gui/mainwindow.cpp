@@ -53,8 +53,6 @@
 
 #include "toml.h"
 
-State state;
-
 MainWindow::MainWindow() : QMainWindow(0)
 {
     char settings_dir[2000];
@@ -69,6 +67,9 @@ MainWindow::MainWindow() : QMainWindow(0)
 #endif
     QString appDir = qApp->applicationDirPath();
     state_create(settings_dir, (char*)qPrintable(appDir));
+    if (!state_load()) {
+        printf("ERROR: failed to load configuration.\n");
+    }
 
     readSettings();
 
@@ -980,7 +981,7 @@ void MainWindow::createFileMenu()
     //Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain.
     recentMenu->setTearOffEnabled(false);
 
-    createMenu(fileMenu, "fileMenu", file_menu_data);
+    createMenu(fileMenu, "fileMenu", state.file_menu);
 }
 
 void MainWindow::createViewMenu()
@@ -994,11 +995,11 @@ void MainWindow::createViewMenu()
     viewMenu->addSeparator();
     viewMenu->addMenu(zoomMenu);
     zoomMenu->setIcon(createIcon("zoom"));
-    createMenu(zoomMenu, "zoomMenu", zoom_menu_data);
+    createMenu(zoomMenu, "zoomMenu", state.zoom_menu);
     viewMenu->addMenu(panMenu);
     panMenu->setIcon(createIcon("pan"));
-    createMenu(panMenu, "panMenu", pan_menu_data);
-    createMenu(viewMenu, "viewMenu", view_menu_data);
+    createMenu(panMenu, "panMenu", state.pan_menu);
+    createMenu(viewMenu, "viewMenu", state.view_menu);
 }
 
 void MainWindow::createWindowMenu()
@@ -1009,6 +1010,21 @@ void MainWindow::createWindowMenu()
     //Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
     windowMenu->setTearOffEnabled(false);
 
+}
+
+void MainWindow::createMenu(QMenu *menu, const char *name, StrArray *list)
+{
+    qDebug("MainWindow createMenu(%s)", name);
+    menu->setObjectName(name);
+    for (int i=0; i<list->count; i++) {
+        if (QString(list->data[i]->data) == "---") {
+            menu->addSeparator();
+        } else {
+            int id = command_id(list->data[i]->data);
+            menu->addAction(actionHash.value(id));
+        }
+    }
+    menu->setTearOffEnabled(false);
 }
 
 void MainWindow::createMenu(QMenu *menu, const char *name, const char *data[])
@@ -1029,12 +1045,12 @@ void MainWindow::createMenu(QMenu *menu, const char *name, const char *data[])
 void MainWindow::createAllMenus()
 {
     qDebug("MainWindow createAllMenus()");
-    createMenu(editMenu, "editMenu", edit_menu_data);
-    createMenu(helpMenu, "helpMenu", help_menu_data);
-    createMenu(drawMenu, "drawMenu", draw_menu_data);
-    createMenu(dimensionMenu, "dimensionMenu", dimension_menu_data);
-    createMenu(toolsMenu, "toolsMenu", tools_menu_data);
-    createMenu(modifyMenu, "modifyMenu", modify_menu_data);
+    createMenu(editMenu, "editMenu", state.edit_menu);
+    createMenu(helpMenu, "helpMenu", state.help_menu);
+    createMenu(drawMenu, "drawMenu", state.draw_menu);
+    createMenu(dimensionMenu, "dimensionMenu", state.dimension_menu);
+    createMenu(toolsMenu, "toolsMenu", state.tools_menu);
+    createMenu(modifyMenu, "modifyMenu", state.modify_menu);
 
     createFileMenu();
     menuBar()->addMenu(editMenu);
@@ -1048,15 +1064,15 @@ void MainWindow::createAllMenus()
 
 }
 
-void MainWindow::createToolbar(QToolBar *toolbar, const char *name, const char *data[])
+void MainWindow::createToolbar(QToolBar *toolbar, const char *name, StrArray *list)
 {
     qDebug("MainWindow createToolbar(%s)", name);
     toolbar->setObjectName(name);
-    for (int i=0; data[i][0] != '^'; i++) {
-        if (QString(data[i]) == "---") {
+    for (int i=0; i<list->count; i++) {
+        if (QString(list->data[i]->data) == "---") {
             toolbar->addSeparator();
         } else {
-            int id = command_id(data[i]);
+            int id = command_id(list->data[i]->data);
             toolbar->addAction(actionHash.value(id));
         }
     }
@@ -1227,21 +1243,21 @@ void MainWindow::createAllToolbars()
 {
     qDebug("MainWindow createAllToolbars()");
 
-    createToolbar(toolbarFile, "toolbarFile", file_toolbar_data);
-    createToolbar(toolbarEdit, "toolbarEdit", edit_toolbar_data);
-    createToolbar(toolbarView, "toolbarview", view_toolbar_data);
-    createToolbar(toolbarZoom, "toolbarZoom", zoom_toolbar_data);
-    createToolbar(toolbarPan, "toolbarPan", pan_toolbar_data);
-    createToolbar(toolbarIcon, "toolbarIcon", icon_toolbar_data);
-    createToolbar(toolbarHelp, "toolbarHelp", help_toolbar_data);
+    createToolbar(toolbarFile, "toolbarFile", state.file_toolbar);
+    createToolbar(toolbarEdit, "toolbarEdit", state.edit_toolbar);
+    createToolbar(toolbarView, "toolbarview", state.view_toolbar);
+    createToolbar(toolbarZoom, "toolbarZoom", state.zoom_toolbar);
+    createToolbar(toolbarPan, "toolbarPan", state.pan_toolbar);
+    createToolbar(toolbarIcon, "toolbarIcon", state.icon_toolbar);
+    createToolbar(toolbarHelp, "toolbarHelp", state.help_toolbar);
     createLayerToolbar();
     createPropertiesToolbar();
     createTextToolbar();
     createPromptToolbar();
-    createToolbar(toolbarDraw, "toolbarDraw", draw_toolbar_data);
-    createToolbar(toolbarDimension, "toolbarDimension", dimension_toolbar_data);
-    createToolbar(toolbarInquiry, "toolbarInquiry", inquiry_toolbar_data);
-    createToolbar(toolbarModify, "toolbarModify", modify_toolbar_data);
+    createToolbar(toolbarDraw, "toolbarDraw", state.draw_toolbar);
+    createToolbar(toolbarDimension, "toolbarDimension", state.dimension_toolbar);
+    createToolbar(toolbarInquiry, "toolbarInquiry", state.inquiry_toolbar);
+    createToolbar(toolbarModify, "toolbarModify", state.modify_toolbar);
 
     /* Horizontal */
     toolbarView->setOrientation(Qt::Horizontal);

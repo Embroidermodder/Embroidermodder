@@ -1247,13 +1247,10 @@ void MainWindow::tipOfTheDay()
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    /* FIXME */
-    int n_tips;
-    for (n_tips=0; tips[n_tips][0] != '^'; n_tips++) {}
-    if (state.settings.general_current_tip >= n_tips) {
+    if (state.settings.general_current_tip >= state.tips->count) {
         state.settings.general_current_tip = 0;
     }
-    labelTipOfTheDay = new QLabel(tips[state.settings.general_current_tip], wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(state.tips->data[state.settings.general_current_tip]->data, wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
@@ -1298,24 +1295,21 @@ void MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 void MainWindow::buttonTipOfTheDayClicked(int button)
 {
     qDebug("buttonTipOfTheDayClicked(%d)", button);
-    /* FIXME */
-    int n_tips;
-    for (n_tips=0; tips[n_tips][0] != '^'; n_tips++) {}
     if (button == QWizard::CustomButton1) {
         if (state.settings.general_current_tip > 0) {
             state.settings.general_current_tip--;
         }
         else {
-            state.settings.general_current_tip = n_tips - 1;
+            state.settings.general_current_tip = state.tips->count - 1;
         }
-        labelTipOfTheDay->setText(tips[state.settings.general_current_tip]);
+        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]->data);
     }
     else if (button == QWizard::CustomButton2) {
         state.settings.general_current_tip++;
-        if (state.settings.general_current_tip >= n_tips) {
+        if (state.settings.general_current_tip >= state.tips->count) {
             state.settings.general_current_tip = 0;
         }
-        labelTipOfTheDay->setText(tips[state.settings.general_current_tip]);
+        labelTipOfTheDay->setText(state.tips->data[state.settings.general_current_tip]->data);
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();

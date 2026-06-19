@@ -127,7 +127,7 @@ private:
     QAction* createAction(CommandData command);
 
     //Toolbars
-    void createToolbar(QToolBar *toolbar, const char *name, const char *data[]);
+    void createToolbar(QToolBar *toolbar, const char *name, StrArray *data);
     void createAllToolbars();
     void createLayerToolbar();
     void createPropertiesToolbar();
@@ -162,6 +162,7 @@ private:
     // Menus
     // ====================================================
     void createMenu(QMenu *menu, const char *name, const char *data[]);
+    void createMenu(QMenu *menu, const char *name, StrArray *data);
     void createAllMenus();
     void createFileMenu();
     void createViewMenu();

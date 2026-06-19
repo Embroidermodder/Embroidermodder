@@ -64,10 +64,8 @@ endif ()
 #
 qt_add_executable(embroidermodder2
     ${SRC}/core/command-table.c
-    ${SRC}/core/menu-data.c
-    ${SRC}/core/toolbar-data.c
-    ${SRC}/core/tips.c
     ${SRC}/core/load.c
+    ${SRC}/core/tree.c
     ${SRC}/core/object-data.c
     ${SRC}/core/object-data.h
     ${SRC}/core/settings.c
@@ -697,6 +695,7 @@ endif(0)
 # rerun cmake to ensure that this retriggers.
 #
 file(COPY
+    "${DATA}/config.xml"
     "${DATA}/images"
     "${DATA}/icons"
     "${DATA}/samples"
@@ -712,9 +711,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/commands
     ${CMAKE_SOURCE_DIR}/extern/tomlc99
     ${CMAKE_SOURCE_DIR}/extern/Nuklear
+    ${CMAKE_SOURCE_DIR}/extern/xml.c
 )
 
-# GLEW::GLEW
 target_link_libraries(embroidermodder2 PRIVATE
     glfw
     Qt6::Core
@@ -724,8 +723,6 @@ target_link_libraries(embroidermodder2 PRIVATE
     tomlc99
     ${OPENGL_LIBRARIES}
 )
-
-set_property(TARGET embroidermodder2 PROPERTY AUTOMOC_MOC_OPTIONS "")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 target_link_libraries(embroidermodder2 PRIVATE

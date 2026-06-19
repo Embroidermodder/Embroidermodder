@@ -16,7 +16,7 @@
 String *str_create(const char *value)
 {
     String *s = malloc(sizeof(String));
-    s->data = malloc(STR_CHUNK);
+    s->data = calloc(STR_CHUNK, sizeof(unsigned char));
     s->memory = STR_CHUNK;
     s->length = 0;
     str_const(s, value);
@@ -117,18 +117,17 @@ StrArray *
 strarray_create(void)
 {
     int i;
-    StrArray *arr = malloc(sizeof(StrArray));
+    StrArray *arr = calloc(sizeof(StrArray), sizeof(unsigned char));
     arr->count = 0;
     arr->memory = STRARRAY_CHUNK;
-    arr->data = malloc(sizeof(String*) * arr->memory);
+    arr->data = calloc(sizeof(String*) * arr->memory, sizeof(unsigned char));
     for (i=0; i<arr->memory; i++) {
         arr->data[i] = str_create("");
     }
     return arr;
 }
 
-void
-strarray_append(StrArray *arr, const char *s)
+void strarray_append(StrArray *arr, const char *s)
 {
     if (arr->memory < arr->count + 2) {
         int i;
@@ -139,6 +138,20 @@ strarray_append(StrArray *arr, const char *s)
         arr->memory += STRARRAY_CHUNK;
     }
     str_const(arr->data[arr->count], s);
+    arr->count++;
+}
+
+void strarray_insert(StrArray *arr, int position, String *s)
+{
+    if (arr->memory < position) {
+        int i;
+        arr->data = realloc(arr->data, sizeof(String*) * (arr->count  + STRARRAY_CHUNK));
+        for (i=0; i<STRARRAY_CHUNK; i++) {
+            arr->data[arr->memory + i] = str_create("");
+        }
+        arr->memory += STRARRAY_CHUNK;
+    }
+    str_const(arr->data[position], s->data);
     arr->count++;
 }
 
@@ -155,6 +168,14 @@ strarray_copy(StrArray *dest, StrArray *src)
     strarray_empty(dest);
     for (i=0; i<src->count; i++) {
         strarray_append(dest, src->data[i]->data);
+    }
+}
+
+void print_strarray(StrArray *arr)
+{
+    int i;
+    for (i=0; i<arr->count; i++) {
+        printf("%d: %s\n", i, arr->data[i]->data);
     }
 }
 

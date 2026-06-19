@@ -5,8 +5,9 @@
 
 #include "core.h"
 
-void
-state_create(char *settings_dir, char *app_dir)
+State state;
+
+void state_create(char *settings_dir, char *app_dir)
 {
     state.settings_dir = str_create(settings_dir);
     state.settings_path = str_create(settings_dir);
@@ -40,6 +41,10 @@ state_create(char *settings_dir, char *app_dir)
     state.recent_menu = strarray_create();
     state.zoom_menu = strarray_create();
     state.pan_menu = strarray_create();
+    state.draw_menu = strarray_create();
+    state.tools_menu = strarray_create();
+    state.dimension_menu = strarray_create();
+    state.modify_menu = strarray_create();
 
     state.file_toolbar = strarray_create();
     state.edit_toolbar = strarray_create();
@@ -52,6 +57,10 @@ state_create(char *settings_dir, char *app_dir)
     state.text_toolbar = strarray_create();
     state.properties_toolbar = strarray_create();
     state.prompt_toolbar = strarray_create();
+    state.draw_toolbar = strarray_create();
+    state.dimension_toolbar = strarray_create();
+    state.inquiry_toolbar = strarray_create();
+    state.modify_toolbar = strarray_create();
 
     /* Note that these are created after state.settings_dir so the defaults are corrent. */
     settings_create(&state.settings);
@@ -60,8 +69,99 @@ state_create(char *settings_dir, char *app_dir)
     settings_create(&state.dialog);
 }
 
-void
-state_free(void)
+int load_menu(Node *config, const char *key, StrArray *array)
+{
+    if (!strarray_from_tree(config, key, array)) {
+        printf("ERROR: failed to load %s.", key);
+        return 0;
+    }
+    return 1;
+}
+
+/* The main loader for all of the configuration.
+ */
+int state_load(void)
+{
+    Node *config = load_xml("config.xml");
+    if (config == NULL) {
+        printf("ERROR: failed to load XML.\n");
+        return 0;
+    }
+    print_tree(config, 0);
+    if (!strarray_from_tree(config, "config.tips", state.tips)) {
+        printf("ERROR: failed to parse strarray from tree.\n");
+        return 0;
+    }
+    if (!load_menu(config, "config.filemenu", state.file_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.editmenu", state.edit_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.viewmenu", state.view_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.helpmenu", state.help_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.zoommenu", state.zoom_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.panmenu", state.pan_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.drawmenu", state.draw_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.toolsmenu", state.tools_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.dimensionmenu", state.dimension_menu)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.modifymenu", state.modify_menu)) {
+        return 0;
+    }
+    
+    if (!load_menu(config, "config.filetoolbar", state.file_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.edittoolbar", state.edit_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.viewtoolbar", state.view_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.zoomtoolbar", state.zoom_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.pantoolbar", state.pan_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.icontoolbar", state.icon_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.helptoolbar", state.help_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.drawtoolbar", state.draw_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.dimensiontoolbar", state.dimension_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.inquirytoolbar", state.inquiry_toolbar)) {
+        return 0;
+    }
+    if (!load_menu(config, "config.modifytoolbar", state.modify_toolbar)) {
+        return 0;
+    }
+
+    print_strarray(state.tips);
+    return 1;
+}
+
+void state_free(void)
 {
     settings_free(&state.settings);
     settings_free(&state.accept);
@@ -90,6 +190,10 @@ state_free(void)
     strarray_free(state.recent_menu);
     strarray_free(state.zoom_menu);
     strarray_free(state.pan_menu);
+    strarray_free(state.draw_menu);
+    strarray_free(state.tools_menu);
+    strarray_free(state.dimension_menu);
+    strarray_free(state.modify_menu);
 
     strarray_free(state.file_toolbar);
     strarray_free(state.edit_toolbar);
@@ -102,5 +206,9 @@ state_free(void)
     strarray_free(state.text_toolbar);
     strarray_free(state.properties_toolbar);
     strarray_free(state.prompt_toolbar);
+    strarray_free(state.draw_toolbar);
+    strarray_free(state.dimension_toolbar);
+    strarray_free(state.inquiry_toolbar);
+    strarray_free(state.modify_toolbar);
 }
 
