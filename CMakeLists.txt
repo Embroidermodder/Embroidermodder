@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.16)
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
 #find_package(GLEW REQUIRED)
+find_package(Python COMPONENTS Interpreter Development REQUIRED)
+find_package(PythonLibs 3 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport LinguistTools)
 
@@ -68,6 +70,7 @@ qt_add_executable(embroidermodder2
     ${SRC}/core/tree.c
     ${SRC}/core/object-data.c
     ${SRC}/core/object-data.h
+    ${SRC}/core/script.c
     ${SRC}/core/settings.c
     ${SRC}/core/state.c
     ${SRC}/core/string-tools.c
@@ -701,6 +704,7 @@ file(COPY
     "${DATA}/samples"
     "${DATA}/translations"
     "${DATA}/help"
+    "${CMAKE_SOURCE_DIR}/script"
     "${CMAKE_SOURCE_DIR}/LICENSE.md"
     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -711,7 +715,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/commands
     ${CMAKE_SOURCE_DIR}/extern/tomlc99
     ${CMAKE_SOURCE_DIR}/extern/Nuklear
-    ${CMAKE_SOURCE_DIR}/extern/xml.c
+    ${Python_INCLUDE_DIRS}
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
@@ -719,6 +723,7 @@ target_link_libraries(embroidermodder2 PRIVATE
     Qt6::Core
     Qt6::Widgets
     Qt6::PrintSupport
+    ${Python_LIBRARIES}
     embroidery_static
     tomlc99
     ${OPENGL_LIBRARIES}

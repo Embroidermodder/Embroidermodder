@@ -55,6 +55,7 @@ To build Embroidermodder 2 from source you will need at least:
 - [This source code](https://github.com/Embroidermodder/Embroidermodder)
 - [Qt](http://www.qt-project.org) (version >= 6.0).
 - [CMake](https://cmake.org)
+- Python3 development libraries
 
 Optionally, you may want to add:
 
@@ -67,7 +68,8 @@ The Qt, KDE and Valgrind build dependencies can be installed easily by opening a
 
 ```bash
 sudo apt-get install git build-essential cmake qt6-base-dev libqt6widgets6 \
-    libqt6printsupport6 libqt6core6 libgl-dev libgl1-mesa-dev libglx-dev
+    libqt6printsupport6 libqt6core6 libgl-dev libgl1-mesa-dev libglx-dev \
+    libpython3-dev
 ```
 
 #### Fedora repository packages (UNTESTED)

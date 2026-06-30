@@ -36,6 +36,7 @@ const char *test_script[] = {
 
 int test_cmd(State *state)
 {
+/*
     int wait = 200;
     int i;
     for (i=0; test_script[i][0] != '^'; i++) {
@@ -47,6 +48,8 @@ int test_cmd(State *state)
         usleep(wait*1000);
 #endif
     }
+*/
+    script_env_call("script/test.py");
     return 0;
 }
 

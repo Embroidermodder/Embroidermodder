@@ -373,7 +373,7 @@
       <data>day</data>
     </item>
     <item>
-      <position></position>
+      <position>1</position>
       <data>night</data>
     </item>
   </viewtoolbar>

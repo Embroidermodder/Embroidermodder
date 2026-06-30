@@ -382,6 +382,10 @@ typedef struct CommandData_ {
     int (*command)(State *state);
 } CommandData;
 
+int script_env_init(void);
+int script_env_call(const char *script);
+int script_env_free(void);
+
 int command_id(const char *cmd);
 
 int toml_readstr(toml_table_t *table, const char *key, const char *default_value, String *result);
@@ -423,6 +427,7 @@ Node *recursive_find_leaf(Node *root, const char *key);
 Node *get_leaf(Node *root, const char *key);
 Node *pop_leaf(Node *trunk);
 void free_leaf(Node *trunk);
+uint8_t *load_file(const char *fname, size_t *length);
 Node *load_xml(const char *fname);
 void print_tree(Node *trunk, int indent);
 int tree_test(void);

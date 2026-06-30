@@ -1074,21 +1074,27 @@ void MainWindow::copy()
 {
     qDebug("copy()");
     View* gview = activeView();
-    if (gview) { gview->copy(); }
+    if (gview) {
+        gview->copy();
+    }
 }
 
 void MainWindow::paste()
 {
     qDebug("paste()");
     View* gview = activeView();
-    if (gview) { gview->paste(); }
+    if (gview) {
+        gview->paste();
+    }
 }
 
 void MainWindow::selectAll()
 {
     qDebug("selectAll()");
     View* gview = activeView();
-    if (gview) { gview->selectAll(); }
+    if (gview) {
+        gview->selectAll();
+    }
 }
 
 QString MainWindow::platformString()

@@ -70,6 +70,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     if (!state_load()) {
         printf("ERROR: failed to load configuration.\n");
     }
+    script_env_init();
 
     readSettings();
 
@@ -271,6 +272,7 @@ MainWindow::~MainWindow()
     qDebug("MainWindow::Destructor()");
 
     state_free();
+    script_env_free();
 
     //Prevent memory leaks by deleting any unpasted objects
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
