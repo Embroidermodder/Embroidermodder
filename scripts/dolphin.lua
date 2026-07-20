@@ -1,11 +1,8 @@
-//Command: Dolphin
+-- Command: Dolphin
 
-#include "commands.h"
-
-int dolphin_cmd(State *state)
-{
-    return 0;
-}
+function dolphin()
+  return 0
+end
 
 // FIXME: translate this to C++
 #if 0

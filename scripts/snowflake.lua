@@ -1,11 +1,8 @@
-//Command: Snowflake
+-- Command: Snowflake
 
-#include "commands.h"
-
-int snowflake_cmd(State *state)
-{
-    return 0;
-}
+function snowflake()
+  return 0
+end
 
 #if 0
 var global = {}; //Required

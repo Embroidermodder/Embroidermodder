@@ -438,6 +438,10 @@ void state_create(char *settings_dir, char *app_dir);
 int state_load(void);
 void state_free(void);
 
+int script_env_init(void);
+void script_env_run(const char *line);
+void script_env_free(void);
+
 int call(State *state, const char *cmd);
 
 /* Configuration: note that this is all constant. */

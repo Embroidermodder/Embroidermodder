@@ -106,17 +106,13 @@ int night_cmd(State *state);
 /* Draw */
 int circle_cmd(State *state);
 int distance_cmd(State *state);
-int dolphin_cmd(State *state);
 int ellipse_cmd(State *state);
-int heart_cmd(State *state);
 int line_cmd(State *state);
 int path_cmd(State *state);
 int point_cmd(State *state);
 int polygon_cmd(State *state);
 int polyline_cmd(State *state);
 int rectangle_cmd(State *state);
-int snowflake_cmd(State *state);
-int star_cmd(State *state);
 
 int quickleader_cmd(State *state);
 

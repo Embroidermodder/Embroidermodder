@@ -43,6 +43,7 @@ endif()
 endif()
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
+set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(DATA ${CMAKE_SOURCE_DIR}/data)
 
 add_subdirectory(src/libembroidery)
@@ -58,6 +59,7 @@ add_executable(embroidermodder2
     ${SRC}/core/tree.c
     ${SRC}/core/object-data.c
     ${SRC}/core/object-data.h
+    ${SRC}/core/script.c
     ${SRC}/core/settings.c
     ${SRC}/core/state.c
     ${SRC}/core/string-tools.c
@@ -134,11 +136,9 @@ add_executable(embroidermodder2
     ${SRC}/commands/circle.c
     ${SRC}/commands/day.c
     ${SRC}/commands/distance.c
-    ${SRC}/commands/dolphin.c
     ${SRC}/commands/ellipse.c
     ${SRC}/commands/erase.c
     ${SRC}/commands/exit.c
-    ${SRC}/commands/heart.c
     ${SRC}/commands/help.c
     ${SRC}/commands/icon128.c
     ${SRC}/commands/icon16.c
@@ -168,12 +168,9 @@ add_executable(embroidermodder2
     ${SRC}/commands/redo.c
     ${SRC}/commands/rgb.c
     ${SRC}/commands/rotate.c
-    ${SRC}/commands/sandbox.c
     ${SRC}/commands/scale.c
     ${SRC}/commands/selectall.c
     ${SRC}/commands/singlelinetext.c
-    ${SRC}/commands/snowflake.c
-    ${SRC}/commands/star.c
     ${SRC}/commands/syswindows.c
     ${SRC}/commands/test.c
     ${SRC}/commands/tipoftheday.c
@@ -191,6 +188,66 @@ add_executable(embroidermodder2
     ${SRC}/commands/zoomrealtime.c
     ${SRC}/commands/zoomselected.c
     ${SRC}/commands/zoomwindow.c
+
+    ${EXTERN}/lua/src/lapi.c
+    ${EXTERN}/lua/src/lapi.h
+    ${EXTERN}/lua/src/lauxlib.c
+    ${EXTERN}/lua/src/lauxlib.h
+    ${EXTERN}/lua/src/lbaselib.c
+    ${EXTERN}/lua/src/lcode.c
+    ${EXTERN}/lua/src/lcode.h
+    ${EXTERN}/lua/src/lcorolib.c
+    ${EXTERN}/lua/src/lctype.c
+    ${EXTERN}/lua/src/lctype.h
+    ${EXTERN}/lua/src/ldblib.c
+    ${EXTERN}/lua/src/ldebug.c
+    ${EXTERN}/lua/src/ldebug.h
+    ${EXTERN}/lua/src/ldo.c
+    ${EXTERN}/lua/src/ldo.h
+    ${EXTERN}/lua/src/ldump.c
+    ${EXTERN}/lua/src/lfunc.c
+    ${EXTERN}/lua/src/lfunc.h
+    ${EXTERN}/lua/src/lgc.c
+    ${EXTERN}/lua/src/lgc.h
+    ${EXTERN}/lua/src/linit.c
+    ${EXTERN}/lua/src/liolib.c
+    ${EXTERN}/lua/src/ljumptab.h
+    ${EXTERN}/lua/src/llex.c
+    ${EXTERN}/lua/src/llex.h
+    ${EXTERN}/lua/src/llimits.h
+    ${EXTERN}/lua/src/lmathlib.c
+    ${EXTERN}/lua/src/lmem.c
+    ${EXTERN}/lua/src/lmem.h
+    ${EXTERN}/lua/src/loadlib.c
+    ${EXTERN}/lua/src/lobject.c
+    ${EXTERN}/lua/src/lobject.h
+    ${EXTERN}/lua/src/lopcodes.c
+    ${EXTERN}/lua/src/lopcodes.h
+    ${EXTERN}/lua/src/lopnames.h
+    ${EXTERN}/lua/src/loslib.c
+    ${EXTERN}/lua/src/lparser.c
+    ${EXTERN}/lua/src/lparser.h
+    ${EXTERN}/lua/src/lprefix.h
+    ${EXTERN}/lua/src/lstate.c
+    ${EXTERN}/lua/src/lstate.h
+    ${EXTERN}/lua/src/lstring.c
+    ${EXTERN}/lua/src/lstring.h
+    ${EXTERN}/lua/src/lstrlib.c
+    ${EXTERN}/lua/src/ltable.c
+    ${EXTERN}/lua/src/ltable.h
+    ${EXTERN}/lua/src/ltablib.c
+    ${EXTERN}/lua/src/ltm.c
+    ${EXTERN}/lua/src/ltm.h
+    ${EXTERN}/lua/src/luaconf.h
+    ${EXTERN}/lua/src/lua.h
+    ${EXTERN}/lua/src/lualib.h
+    ${EXTERN}/lua/src/lundump.c
+    ${EXTERN}/lua/src/lundump.h
+    ${EXTERN}/lua/src/lutf8lib.c
+    ${EXTERN}/lua/src/lvm.c
+    ${EXTERN}/lua/src/lvm.h
+    ${EXTERN}/lua/src/lzio.c
+    ${EXTERN}/lua/src/lzio.h
 
     ${DATA}/help/index.html
 
@@ -690,10 +747,12 @@ file(COPY
     "${DATA}/samples"
     "${DATA}/translations"
     "${DATA}/help"
+    "${CMAKE_SOURCE_DIR}/scripts"
     "${CMAKE_SOURCE_DIR}/LICENSE.md"
     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 include_directories(
+    ${CMAKE_SOURCE_DIR}/extern/lua/src
     ${CMAKE_SOURCE_DIR}/src/core
     ${CMAKE_SOURCE_DIR}/src/gui
     ${CMAKE_SOURCE_DIR}/src/libembroidery
@@ -726,6 +785,8 @@ else(WIN32)
     target_link_libraries(embroidermodder2 PRIVATE m)
 endif()
 
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/scripts"
+    DESTINATION ".")
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/help"
     DESTINATION ".")
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/data/images"

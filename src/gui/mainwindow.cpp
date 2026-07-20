@@ -261,6 +261,10 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     showNormal();
 
+    if (!script_env_init()) {
+        printf("ERROR: failed to initialize lua script environment.\n");
+    }
+
     if (state.settings.general_tip_of_the_day) {
         tipOfTheDay();
     }
@@ -269,6 +273,8 @@ MainWindow::MainWindow() : QMainWindow(0)
 MainWindow::~MainWindow()
 {
     qDebug("MainWindow::Destructor()");
+
+    script_env_free();
 
     state_free();
 

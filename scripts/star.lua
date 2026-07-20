@@ -1,11 +1,8 @@
-//Command: Star
+-- Command: Star
 
-#include "commands.h"
-
-int star_cmd(State *state)
-{
-    return 0;
-}
+function star()
+  return 0
+end
 
 // FIXME: translate this to C++
 #if 0

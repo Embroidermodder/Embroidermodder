@@ -800,17 +800,6 @@ const CommandData command_table[] = {
         .command = distance_cmd
     },
     {
-        .id = ACTION_dolphin,
-        .type = CMD_TYPE_TRIGGER,
-        .label = "dolphin",
-        .tooltip = "&Dolphin",
-        .statustip = "Creates a dolphin: DOLPHIN",
-        .shortcut = "",
-        .mac_shortcut = "",
-        .aliases = "DOLPHIN",
-        .command = dolphin_cmd
-    },
-    {
         .id = ACTION_ellipse,
         .type = CMD_TYPE_TRIGGER,
         .label = "ellipse",
@@ -831,17 +820,6 @@ const CommandData command_table[] = {
         .mac_shortcut = "",
         .aliases = "E, ERASE, DEL, DELETE",
         .command = erase_cmd
-    },
-    {
-        .id = ACTION_heart,
-        .type = CMD_TYPE_TRIGGER,
-        .label = "heart",
-        .tooltip = "&Heart",
-        .statustip = "Creates a heart: HEART",
-        .shortcut = "",
-        .mac_shortcut = "",
-        .aliases = "HEART",
-        .command = heart_cmd
     },
     {
         .id = ACTION_line,
@@ -1009,28 +987,6 @@ const CommandData command_table[] = {
         .command = single_line_text_cmd
     },
     {
-        .id = ACTION_snowflake,
-        .type = CMD_TYPE_TRIGGER,
-        .label = "snowflake",
-        .tooltip = "&Snowflake",
-        .statustip = "Creates a snowflake: SNOWFLAKE",
-        .shortcut = "",
-        .mac_shortcut = "",
-        .aliases = "SNOWFLAKE",
-        .command = snowflake_cmd
-    },
-    {
-        .id = ACTION_star,
-        .type = CMD_TYPE_TRIGGER,
-        .label = "star",
-        .tooltip = "&Star",
-        .statustip = "Creates a star: STAR",
-        .shortcut = "",
-        .mac_shortcut = "",
-        .aliases = "STAR",
-        .command = star_cmd
-    },
-    {
         .id = ACTION_syswindows,
         .type = CMD_TYPE_TRIGGER,
         .label = "syswindows",
@@ -1053,6 +1009,54 @@ const CommandData command_table[] = {
         .command = do_nothing_cmd
     }
 };
+
+/* FIXME: scripted commands
+    
+    {
+        .id = ACTION_dolphin,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "dolphin",
+        .tooltip = "&Dolphin",
+        .statustip = "Creates a dolphin: DOLPHIN",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "DOLPHIN",
+        .command = dolphin_cmd
+    },
+    {
+        .id = ACTION_heart,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "heart",
+        .tooltip = "&Heart",
+        .statustip = "Creates a heart: HEART",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "HEART",
+        .command = heart_cmd
+    },
+    {
+        .id = ACTION_snowflake,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "snowflake",
+        .tooltip = "&Snowflake",
+        .statustip = "Creates a snowflake: SNOWFLAKE",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "SNOWFLAKE",
+        .command = snowflake_cmd
+    },
+    {
+        .id = ACTION_star,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "star",
+        .tooltip = "&Star",
+        .statustip = "Creates a star: STAR",
+        .shortcut = "",
+        .mac_shortcut = "",
+        .aliases = "STAR",
+        .command = star_cmd
+    },
+*/
 
 int command_id(const char *key)
 {

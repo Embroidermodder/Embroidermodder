@@ -28,6 +28,13 @@
 ** ===================================================================
 */
 
+#if _WIN32 || _WIN64 || __CYGWIN__
+#define LUA_USE_WINDOWS
+#elif __APPLE__ || __MACH__
+#define LUA_USE_MACOSX
+#else /* assume LINUX */
+#define LUA_USE_LINUX
+#endif
 
 /*
 ** {====================================================================

@@ -1,3 +1,5 @@
+TODO - Convert all configuration into Lua.
+
 //====================
 //Stuff for 2.0 alpha1:
 //====================
