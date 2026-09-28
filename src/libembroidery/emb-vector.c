@@ -3,38 +3,64 @@
 #include <math.h>
 #include <stdlib.h>
 
-void embVector_normalize(EmbVector vector, EmbVector* result)
+EmbVector embVector(double x, double y)
+{
+    EmbVector v;
+    v.x = x;
+    v.y = y;
+    return v;
+}
+
+/**
+ * This is used to test the correctness of other code in this file, so
+ * we avoid calling other functions here.
+ */
+int embVector_approxEqual(EmbVector a, EmbVector b, double tolerance)
+{
+    double cx, cy;
+    cx = b.x - a.x;
+    cy = b.y - a.y;
+    return sqrt(cx * cx + cy * cy) < tolerance;
+}
+
+EmbVector embVector_normalize(EmbVector vector)
 {
     double length = embVector_getLength(vector);
-
-    if (!result) { embLog_error("emb-vector.c embVector_normalize(), result argument is null\n"); return; }
-    result->X = vector.X / length;
-    result->Y = vector.Y / length;
+    return embVector_scale(vector, 1.0 / length);
 }
 
-void embVector_multiply(EmbVector vector, double magnitude, EmbVector* result)
+EmbVector embVector_scale(EmbVector vector, double magnitude)
 {
-    if (!result) { embLog_error("emb-vector.c embVector_multiply(), result argument is null\n"); return; }
-    result->X = vector.X * magnitude;
-    result->Y = vector.Y * magnitude;
+    return embVector(vector.x * magnitude, vector.y * magnitude);
 }
 
-void embVector_add(EmbVector v1, EmbVector v2, EmbVector* result)
+EmbVector embVector_add(EmbVector a, EmbVector b)
 {
-    if (!result) { embLog_error("emb-vector.c embVector_add(), result argument is null\n"); return; }
-    result->X = v1.X + v2.X;
-    result->Y = v1.Y + v2.Y;
+    return embVector(a.x + b.x, a.y + b.y);
+}
+
+EmbVector embVector_subtract(EmbVector a, EmbVector b)
+{
+    return embVector(a.x - b.x, a.y - b.y);
+}
+
+EmbVector embVector_average(EmbVector a, EmbVector b)
+{
+    return embVector((a.x + b.x) / 2.0, (a.y + b.y) / 2.0);
 }
 
 double embVector_getLength(EmbVector vector)
 {
-    return sqrt(vector.X * vector.X + vector.Y * vector.Y);
+    return sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 
 EmbVectorList* embVectorList_create(EmbVector data)
 {
     EmbVectorList* pointer = (EmbVectorList*)malloc(sizeof(EmbVectorList));
-    if (!pointer) { embLog_error("emb-vector.c embVectorList_create(), cannot allocate memory for pointer\n"); return 0; }
+    if (!pointer) {
+        embLog_error("emb-vector.c embVectorList_create(), cannot allocate memory for pointer\n");
+        return 0;
+    }
     pointer->vector = data;
     pointer->next = 0;
     return pointer;

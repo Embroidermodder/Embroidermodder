@@ -113,21 +113,20 @@ void embLineObjectList_free(EmbLineObjectList* pointer)
 /* TODO: API Cleanup: This function should use an embLine parameter, not vector1/vector2, and look like this:
                       embLine_normalVector(EmbLine line, EmbVector* result, int clockwise) */
 /*! Finds the normalized vector perpendicular (clockwise) to the line given by v1->v2 (normal to the line) */
-void embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* result, int clockwise)
+EmbVector embLine_normalVector(EmbVector vector1, EmbVector vector2, int clockwise)
 {
+    EmbVector result;
     double temp;
-    if (!result) { embLog_error("emb-line.c embLine_normalVector(), result argument is null\n"); return; }
-    result->X = vector2.X - vector1.X;
-    result->Y = vector2.Y - vector1.Y;
-    embVector_normalize(*result, result);
-    temp = result->X;
-    result->X = result->Y;
-    result->Y = -temp;
-    if (!clockwise)
-    {
-        result->X = -result->X;
-        result->Y = -result->Y;
+    result = embVector_subtract(vector2, vector1);
+    result = embVector_normalize(result);
+    temp = result.x;
+    result.x = result.y;
+    result.y = -temp;
+    if (!clockwise) {
+        result.x = -result.x;
+        result.y = -result.y;
     }
+    return result;
 }
 
 /* TODO: API Cleanup: This is similar to the code we already have in geom-line.c, but may work well here.
@@ -138,13 +137,13 @@ void embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* resul
 /*! Finds the intersection of two lines given by v1->v2 and v3->v4 and sets the value in the result variable */
 void embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result)
 {
-    double A2 = v2.Y - v1.Y;
-    double B2 = v1.X - v2.X;
-    double C2 = A2 * v1.X + B2 * v1.Y;
+    double A2 = v2.y - v1.y;
+    double B2 = v1.x - v2.x;
+    double C2 = A2 * v1.x + B2 * v1.y;
 
-    double A1 = v4.Y - v3.Y;
-    double B1 = v3.X - v4.X;
-    double C1 = A1 * v3.X + B1 * v3.Y;
+    double A1 = v4.y - v3.y;
+    double B1 = v3.x - v4.x;
+    double C1 = A1 * v3.x + B1 * v3.y;
 
     double det = A1 * B2 - A2 * B1;
 
@@ -152,11 +151,11 @@ void embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVect
     /*TODO: The code below needs revised since division by zero can still occur */
     if (det < 1e-10 && det > -1e-10)
     {
-        result->X = -10000; /* TODO: What is significant about these numbers? Leave the point, undefined */
-        result->Y = -10000; /* TODO: A better solution would be to return an unsigned char(0 parallel, 1 intersecting, 2 not-intersecting) */
+        result->x = -10000; /* TODO: What is significant about these numbers? Leave the point, undefined */
+        result->y = -10000; /* TODO: A better solution would be to return an unsigned char(0 parallel, 1 intersecting, 2 not-intersecting) */
     }
-    result->X = (B2 * C1 - B1 * C2) / det;
-    result->Y = (A1 * C2 - A2 * C1) / det;
+    result->x = (B2 * C1 - B1 * C2) / det;
+    result->y = (A1 * C2 - A2 * C1) / det;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

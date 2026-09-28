@@ -489,8 +489,8 @@ typedef struct EmbRectObjectList_ {
          */
 typedef struct EmbVector_
 {
-    double X;
-    double Y;
+    double x;
+    double y;
 } EmbVector;
 
 typedef struct EmbVectorList_
@@ -736,7 +736,7 @@ extern EMB_PUBLIC int EMB_CALL embLineObjectList_count(EmbLineObjectList* pointe
 extern EMB_PUBLIC int EMB_CALL embLineObjectList_empty(EmbLineObjectList* pointer);
 extern EMB_PUBLIC void EMB_CALL embLineObjectList_free(EmbLineObjectList* pointer);
 
-extern EMB_PUBLIC void EMB_CALL embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* result, int clockwise);
+extern EMB_PUBLIC EmbVector EMB_CALL embLine_normal(EmbVector vector1, EmbVector vector2, int clockwise);
 extern EMB_PUBLIC void EMB_CALL embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result);
 
 extern EMB_PUBLIC EmbPathObject* EMB_CALL embPathObject_create(EmbPointList* pointList, EmbFlagList* flagList, EmbColor color, int lineType);
@@ -1135,7 +1135,7 @@ public:
 #endif
 */
 
-extern EMB_PUBLIC void EMB_CALL embSatinOutline_generateSatinOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result);
+extern EMB_PUBLIC void EMB_CALL embSatinOutline_generate(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result);
 extern EMB_PUBLIC EmbVectorList* EMB_CALL embSatinOutline_renderStitches(EmbSatinOutline* result, double density);
 
 extern EMB_PUBLIC EmbSettings EMB_CALL embSettings_init(void);
@@ -1164,9 +1164,13 @@ extern EMB_PUBLIC int EMB_CALL embThreadList_empty(EmbThreadList* pointer);
 extern EMB_PUBLIC void EMB_CALL embThreadList_free(EmbThreadList* pointer);
 extern EMB_PUBLIC EmbThread EMB_CALL embThreadList_getAt(EmbThreadList* pointer, int num);
 
-extern EMB_PUBLIC void EMB_CALL embVector_normalize(EmbVector vector, EmbVector* result);
-extern EMB_PUBLIC void EMB_CALL embVector_multiply(EmbVector vector, double magnitude, EmbVector* result);
-extern EMB_PUBLIC void EMB_CALL embVector_add(EmbVector v1, EmbVector v2, EmbVector* result);
+extern EMB_PUBLIC EmbVector EMB_CALL embVector(double x, double y);
+extern EMB_PUBLIC int EMB_CALL embVector_approxEqual(EmbVector a, EmbVector b, double tolerance);
+extern EMB_PUBLIC EmbVector EMB_CALL embVector_normalize(EmbVector vector);
+extern EMB_PUBLIC EmbVector EMB_CALL embVector_scale(EmbVector vector, double magnitude);
+extern EMB_PUBLIC EmbVector EMB_CALL embVector_add(EmbVector a, EmbVector b);
+extern EMB_PUBLIC EmbVector EMB_CALL embVector_subtract(EmbVector a, EmbVector b);
+extern EMB_PUBLIC EmbVector EMB_CALL embVector_average(EmbVector a, EmbVector b);
 extern EMB_PUBLIC double EMB_CALL embVector_getLength(EmbVector vector);
 
 extern EMB_PUBLIC EmbVectorList* EMB_CALL embVectorList_create(EmbVector data);
