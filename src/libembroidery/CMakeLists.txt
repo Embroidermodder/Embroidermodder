@@ -5,21 +5,43 @@ project(libembroidery VERSION 1.0.0 LANGUAGES C)
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+add_compile_options(
+	-g
+	-pg
+	-O2
+	-fPIC
+	-Wall
+	-Wextra
+	--coverage
+)
+
+add_link_options(
+	-pg
+	--coverage
+)
+
+else()
+
 if (WIN32)
 #add_compile_options(
-#    -O2
+#	-O2
 #)
 else (WIN32)
 add_compile_options(
-    -g
-    -O2
-    -fPIC
-    -std=c99
-    -Wall
-    -Wextra
-#    -Werror
+	-g
+	-O2
+	-fPIC
+	-std=c99
+	-Wall
+	-Wextra
+#	-Werror
 )
 endif (WIN32)
+
+endif()
+
 
 set(LIBRARY_SRC
 	compound-file.c
@@ -51,6 +73,7 @@ set(LIBRARY_SRC
 	emb-settings.c
 	emb-spline.c
 	emb-stitch.c
+	emb-test.c
 	emb-thread.c
 	emb-time.c
 	emb-vector.c
@@ -123,10 +146,15 @@ set(LIBRARY_SRC
 	helpers-misc.c
 	thread-color.c
 
-    embroidery.h
+	embroidery.h
 )
 
 add_library(embroidery_static STATIC ${LIBRARY_SRC})
 
 add_executable(sew sew.c)
 target_link_libraries(sew PRIVATE embroidery_static)
+
+if (WIN32)
+else (WIN32)
+	target_link_libraries(sew PRIVATE m)
+endif()

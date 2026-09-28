@@ -677,7 +677,8 @@ void svgAddToPattern(EmbPattern* p)
 int
 str_in_array(char *table[], const char* buff)
 {
-    for (int i=0; table[i][0] != '_'; i++) {
+    int i;
+    for (i=0; table[i][0] != '_'; i++) {
         if (!strcmp(buff, table[i])) {
             return 1;
         }

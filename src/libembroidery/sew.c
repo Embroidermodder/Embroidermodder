@@ -4,12 +4,7 @@
 
 #include "embroidery.h"
 
-#define RED_TERM_COLOR "\e[0;31m"
-#define GREEN_TERM_COLOR "\e[0;32m"
-#define YELLOW_TERM_COLOR "\e[1;33m"
-#define RESET_TERM_COLOR "\033[0m"
-
-int testing(void);
+int emb_test_suite(int level);
 
 void usage(void)
 {
@@ -100,35 +95,42 @@ int main(int argc, const char* argv[])
     EmbPattern* p = 0;
     int successful = 0, i = 0;
     int formatType;
+
+    /* Testing */
+    if (!strcmp(argv[1], "--test")) {
+        return emb_test_suite(0);
+    }
+
 #ifdef SHORT_WAY
-    if (argc < 3)
-    {
+    if (argc < 3) {
         usage();
-        exit(0);
+        return 0;
     }
 
     p = embPattern_create();
-    if (!p) { embLog_error("libembroidery-convert-main.c main(), cannot allocate memory for p\n"); exit(1); }
+    if (!p) {
+        embLog_error("libembroidery-convert-main.c main(), cannot allocate memory for p\n");
+        return 1;
+    }
 
     successful = embPattern_read(p, argv[1]);
-    if (!successful)
-    {
+    if (!successful) {
         embLog_error("libembroidery-convert-main.c main(), reading file %s was unsuccessful\n", argv[1]);
         embPattern_free(p);
-        exit(1);
+        return 1;
     }
 
     formatType = embFormat_typeFromName(argv[1]);
-    if (formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
-    {
+    if (formatType == EMBFORMAT_OBJECTONLY && argc == 3) {
+        /* TODO: fix this to work when writing multiple files */
         formatType = embFormat_typeFromName(argv[2]);
-        if (formatType == EMBFORMAT_STITCHONLY)
+        if (formatType == EMBFORMAT_STITCHONLY) {
             embPattern_movePolylinesToStitchList(p);
+        }
     }
 
     i = 2;
-    for (i = 2; i < argc; i++)
-    {
+    for (i = 2; i < argc; i++) {
         successful = embPattern_write(p, argv[i]);
         if (!successful)
             embLog_error("libembroidery-convert-main.c main(), writing file %s was unsuccessful\n", argv[i]);
@@ -199,80 +201,3 @@ int main(int argc, const char* argv[])
 
 }
 
-void todo(void)
-{
-    printf(YELLOW_TERM_COLOR "[TODO]\n" RESET_TERM_COLOR);
-}
-
-void pass(void)
-{
-    printf(GREEN_TERM_COLOR "[PASS]\n" RESET_TERM_COLOR);
-}
-
-int fail(int code)
-{
-    printf(RED_TERM_COLOR "[FAIL] [CODE=%d]\n" RESET_TERM_COLOR, code);
-    return code;
-}
-
-void testRead(void)
-{
-    printf("Read Test...                      ");
-    todo(); /* TODO: finish testRead() */
-}
-
-void testWrite(void)
-{
-    printf("Write Test...                     ");
-    todo(); /* TODO: finish testWrite() */
-}
-
-void testHash(void)
-{
-    printf("Hash Test...                      ");
-    #if 0
-    /* FIXME */
-    EmbHash* hash = 0;
-    hash = embHash_create();
-    if (!hash) fail(1);
-    if (!embHash_empty(hash)) fail(2);
-    if (embHash_count(hash) != 0) fail(3);
-
-    /* insert */
-    if (embHash_insert(hash, "four", (void*)4)) fail(4);
-    if (embHash_insert(hash, "five", (void*)5)) fail(5);
-    if (embHash_insert(hash, "six",  (void*)6)) fail(6);
-    if (embHash_count(hash) != 3) fail(7);
-
-    /* replace */
-    if (embHash_insert(hash, "four",  (void*)8)) fail(8);
-    if (embHash_insert(hash, "five", (void*)10)) fail(10);
-    if (embHash_insert(hash, "six",  (void*)12)) fail(12);
-    if (embHash_count(hash) != 3) fail(13);
-
-    /* contains */
-    if (!embHash_contains(hash, "four")) fail(14);
-    if (embHash_contains(hash, "empty")) fail(15);
-
-    /* remove */
-    embHash_remove(hash, "four");
-    if (embHash_count(hash) != 2) fail(16);
-    embHash_clear(hash);
-    if (embHash_count(hash) != 0) fail(17);
-
-    embHash_free(hash);
-    pass();
-    #endif
-}
-
-int
-testing(void)
-{
-    /*TODO: Add tests here */
-
-    testRead();
-    testWrite();
-    testHash();
-
-    return 0;
-}
