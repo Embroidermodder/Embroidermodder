@@ -293,8 +293,10 @@ char* readLine(FILE* file)
     return lTrim(str, ' ');
 }
 
-/*! Reads a file with the given \a fileName and loads the data into \a pattern.
- *  Returns \c true if successful, otherwise returns \c false. */
+/**
+ * Reads a file with the given \a fileName and loads the data into \a pattern.
+ * Returns \c true if successful, otherwise returns \c false.
+ */
 int readDxf(EmbPattern* pattern, const char* fileName)
 {
 
@@ -310,14 +312,23 @@ int readDxf(EmbPattern* pattern, const char* fileName)
 
     int eof = 0; /* End Of File */
 
-    double bulge = 0.0, firstX = 0.0, firstY = 0.0, x = 0.0, y, prevX = 0.0, prevY = 0.0;
+    EmbVector first = embVector(0.0, 0.0);
+    EmbVector pos = embVector(0.0, 0.0);
+    EmbVector prev = embVector(0.0, 0.0);
+    double bulge = 0.0;
     char firstStitch = 1;
     char bulgeFlag = 0;
     int fileLength = 0;
     unsigned char colorNum = 0;
 
-    if (!pattern) { embLog_error("format-dxf.c readDxf(), pattern argument is null\n"); return 0; }
-    if (!fileName) { embLog_error("format-dxf.c readDxf(), fileName argument is null\n"); return 0; }
+    if (!pattern) {
+        embLog_error("format-dxf.c readDxf(), pattern argument is null\n");
+        return 0;
+    }
+    if (!fileName) {
+        embLog_error("format-dxf.c readDxf(), fileName argument is null\n");
+        return 0;
+    }
 
     /* FIXME
     layerColorHash = embHash_create();
@@ -470,98 +481,88 @@ int readDxf(EmbPattern* pattern, const char* fileName)
                 continue;
             }
 
-            if (!strcmp(entityType,"LWPOLYLINE"))
-            {
+            if (!strcmp(entityType,"LWPOLYLINE")) {
                 double* arcMidX = 0;
                 double* arcMidY = 0;
                 /* The not so important group codes */
-                if (!strcmp(buff, "90")) /* Vertices */
-                {
+                if (!strcmp(buff, "90")) { /* Vertices */
                     buff = readLine(file);
                     continue;
                 }
-                else if (!strcmp(buff,"70")) /* Polyline Flag */
-                {
+                else if (!strcmp(buff,"70")) { /* Polyline Flag */
                     buff = readLine(file);
                     continue;
                 }
                 /* TODO: Try to use the widths at some point */
-                else if (!strcmp(buff,"40")) /* Starting Width */
-                {
+                else if (!strcmp(buff,"40")) { /* Starting Width */
                     buff = readLine(file);
                     continue;
                 }
-                else if (!strcmp(buff,"41")) /* Ending Width */
-                {
+                else if (!strcmp(buff,"41")) { /* Ending Width */
                     buff = readLine(file);
                     continue;
                 }
-                else if (!strcmp(buff,"43")) /* Constant Width */
-                {
+                else if (!strcmp(buff,"43")) { /* Constant Width */
                     buff = readLine(file);
                     continue;
                 }
                 /* The meaty stuff */
-                else if (!strcmp(buff,"42")) /* Bulge */
-                {
+                else if (!strcmp(buff,"42")) { /* Bulge */
                     buff = readLine(file);
                     bulge = atof(buff);
                     bulgeFlag = 1;
                 }
-                else if (!strcmp(buff,"10")) /* X */
-                {
+                else if (!strcmp(buff,"10")) { /* X */
                     buff = readLine(file);
-                    x = atof(buff);
+                    pos.x = atof(buff);
                 }
-                else if (!strcmp(buff,"20")) /* Y */
-                {
+                else if (!strcmp(buff,"20")) { /* Y */
                     buff = readLine(file);
-                    y = atof(buff);
+                    pos.y = atof(buff);
 
-                    if (bulgeFlag)
-                    {
+                    if (bulgeFlag) {
                         bulgeFlag = 0;
-                        if (!getArcDataFromBulge(bulge, prevX, prevY, x, y, arcMidX, arcMidY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-                        {
-                            /*TODO: error */
+                        /*
+                        if (!getArcDataFromBulge(bulge, prev, pos, arcMid, embVector(0, 0), 0, 0, 0, embVector(0, 0), 0, 0, 0, 0)) {
+                            TODO: error
                             return 0;
                         }
-                        if (firstStitch)
-                        {
+                        */
+                        if (firstStitch) {
                             /* embPattern_addStitchAbs(pattern, x, y, TRIM, 1); TODO: Add moveTo point to embPath pointList */
                         }
                         /* embPattern_addStitchAbs(pattern, x, y, ARC, 1); TODO: Add arcTo point to embPath pointList */
                     }
-                    else
-                    {
-                        /*if (firstStitch) embPattern_addStitchAbs(pattern, x, y, TRIM, 1); TODO: Add moveTo point to embPath pointList */
-                        /*else            embPattern_addStitchAbs(pattern, x, y, NORMAL, 1); TODO: Add lineTo point to embPath pointList */
+                    else {
+                        if (firstStitch) {
+                            /* embPattern_addStitchAbs(pattern, x, y, TRIM, 1); */
+                            /* TODO: Add moveTo point to embPath pointList */
+                        }
+                        else {
+                            /* embPattern_addStitchAbs(pattern, x, y, NORMAL, 1); */
+                            /* TODO: Add lineTo point to embPath pointList */
+                        }
                     }
-                    prevX = x;
-                    prevY = y;
-                    if (firstStitch)
-                    {
-                        firstX = x;
-                        firstY = y;
+                    prev = pos;
+                    if (firstStitch) {
+                        first = pos;
                         firstStitch = 0;
                     }
                 }
-                else if (!strcmp(buff,"0"))
-                {
+                else if (!strcmp(buff,"0")) {
                     entityType = NULL;
                     firstStitch = 1;
-                    if (bulgeFlag)
-                    {
+                    if (bulgeFlag) {
                         bulgeFlag = 0;
-                        if (!getArcDataFromBulge(bulge, prevX, prevY, firstX, firstY, arcMidX, arcMidY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-                        {
-                            /*TODO: error */
+                        /*
+                        if (!getArcDataFromBulge(bulge, prev, first, arcMid,  embVector(0, 0), 0, 0, 0, embVector(0, 0), 0, 0, 0, 0)) {
+                            TODO: error
                             return 0;
                         }
+                        */
                         /* embPattern_addStitchAbs(pattern, prevX, prevY, ARC, 1); TODO: Add arcTo point to embPath pointList */
                     }
-                    else
-                    {
+                    else {
                         /* embPattern_addStitchAbs(pattern, firstX, firstY, NORMAL, 1); TODO: Add lineTo point to embPath pointList */
                     }
                 }
@@ -578,8 +579,7 @@ int readDxf(EmbPattern* pattern, const char* fileName)
     else printf("LAYERCOLOR: %d,%d,%d\n", testColor->r, testColor->g, testColor->b);
     */
 
-    if (!eof)
-    {
+    if (!eof) {
         /* NOTE: The EOF item must be present at the end of file to be considered a valid DXF file. */
         embLog_error("format-dxf.c readDxf(), missing EOF at end of DXF file\n");
     }

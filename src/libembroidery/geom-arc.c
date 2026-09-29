@@ -9,8 +9,15 @@
 
 #include "embroidery.h"
 
-double radians(double degree) { return (double)(degree*M_PI/180.0); }
-double degrees(double radian) { return (double)(radian*180.0/M_PI); }
+double radians(double degree)
+{
+    return (double)(degree*M_PI/180.0);
+}
+
+double degrees(double radian)
+{
+    return (double)(radian*180.0/M_PI);
+}
 
 /* Calculus based approach at determining whether a polygon is clockwise or counterclockwise.
  * Returns true if arc is clockwise. */
@@ -25,39 +32,27 @@ char isArcClockwise(double startx, double starty, double midx, double midy, doub
 }
 
 /* Calculates the CenterPoint of the Arc */
-void getArcCenter(double  arcStartX,  double  arcStartY,
-                  double  arcMidX,    double  arcMidY,
-                  double  arcEndX,    double  arcEndY,
-                  /* returned data */
-                  double* arcCenterX, double* arcCenterY)
+EmbVector getArcCenter(EmbVector arcStart,
+                       EmbVector arcMid,
+                       EmbVector arcEnd)
 {
-    double ax = arcMidX - arcStartX;
-    double ay = arcMidY - arcStartY;
-    double aAngleInRadians = atan2(ay, ax);
-    double aMidX = (arcMidX + arcStartX)/2.0;
-    double aMidY = (arcMidY + arcStartY)/2.0;
+    EmbVector a = embVector_subtract(arcMid, arcStart);
+    double aAngleInRadians = atan2(a.y, a.x);
+    EmbVector aMid = embVector_average(arcMid, arcStart);
 
     double paAngleInRadians = aAngleInRadians + radians(90.0);
-    double pax = cos(paAngleInRadians);
-    double pay = sin(paAngleInRadians);
-    double aPerpX = aMidX + pax;
-    double aPerpY = aMidY + pay;
+    EmbVector pa = embVector(cos(paAngleInRadians), sin(paAngleInRadians));
+    EmbVector aPerp = embVector_add(aMid, pa);
 
-    double bx = arcEndX - arcMidX;
-    double by = arcEndY - arcMidY;
-    double bAngleInRadians = atan2(by, bx);
-    double bMidX = (arcEndX + arcMidX)/2.0;
-    double bMidY = (arcEndY + arcMidY)/2.0;
+    EmbVector b = embVector_subtract(arcEnd, arcMid);
+    double bAngleInRadians = atan2(b.y, b.x);
+    EmbVector bMid = embVector_average(arcEnd, arcMid);
 
     double pbAngleInRadians = bAngleInRadians + radians(90.0);
-    double pbx = cos(pbAngleInRadians);
-    double pby = sin(pbAngleInRadians);
-    double bPerpX = bMidX + pbx;
-    double bPerpY = bMidY + pby;
+    EmbVector pb = embVector(cos(pbAngleInRadians), sin(pbAngleInRadians));
+    EmbVector bPerp = embVector_add(bMid, pb);
 
-    getLineIntersection(aMidX, aMidY, aPerpX, aPerpY,
-                        bMidX, bMidY, bPerpX, bPerpY,
-                        arcCenterX, arcCenterY);
+    return getLineIntersection(aMid, aPerp, bMid, bPerp);
 }
 
 /* Calculates Arc Geometry from Bulge Data.
@@ -67,7 +62,7 @@ char getArcDataFromBulge(double bulge,
                          double arcEndX,            double arcEndY,
                          /* returned data */
                          double* arcMidX,           double* arcMidY,
-                         double* arcCenterX,        double* arcCenterY,
+                         EmbVector *arcCenter,
                          double* radius,            double* diameter,
                          double* chord,
                          double* chordMidX,         double* chordMidY,
@@ -124,7 +119,7 @@ char getArcDataFromBulge(double bulge,
     *arcMidY = *chordMidY + fy;
 
     /* Calculate the Arc CenterPoint */
-    getArcCenter(arcStartX, arcStartY, *arcMidX, *arcMidY, arcEndX, arcEndY, arcCenterX, arcCenterY);
+    *arcCenter = getArcCenter(embVector(arcStartX, arcStartY), embVector(*arcMidX, *arcMidY), embVector(arcEndX, arcEndY));
 
     /* Convert the Included Angle from Radians to Degrees */
     *incAngleInDegrees = degrees(incAngleInRadians);
@@ -139,141 +134,3 @@ char getArcDataFromBulge(double bulge,
     return 1;
 }
 
-/* NOTE: Uncomment the #define below to compile test
- * gcc -std=c89 -o geom-arc geom-arc.c geom-line.c -lm
-*/
-
-/* #define TEST_GEOM_ARC */
-
-#ifdef TEST_GEOM_ARC
-
-#include <stdio.h>
-
-void printArcResults(double bulge,
-                     double startX,    double startY,
-                     double endX,      double endY,
-                     double midX,      double midY,
-                     double centerX,   double centerY,
-                     double radius,    double diameter,
-                     double chord,
-                     double chordMidX, double chordMidY,
-                     double sagitta,   double apothem,
-                     double incAngle,  char   clockwise)
-{
-    fprintf(stdout, "bulge     = %f\n"
-                    "startX    = %f\n"
-                    "startY    = %f\n"
-                    "endX      = %f\n"
-                    "endY      = %f\n"
-                    "midX      = %f\n"
-                    "midY      = %f\n"
-                    "centerX   = %f\n"
-                    "centerY   = %f\n"
-                    "radius    = %f\n"
-                    "diameter  = %f\n"
-                    "chord     = %f\n"
-                    "chordMidX = %f\n"
-                    "chordMidY = %f\n"
-                    "sagitta   = %f\n"
-                    "apothem   = %f\n"
-                    "incAngle  = %f\n"
-                    "clockwise = %d\n"
-                    "\n",
-                    bulge,
-                    startX,
-                    startY,
-                    endX,
-                    endY,
-                    midX,
-                    midY,
-                    centerX,
-                    centerY,
-                    radius,
-                    diameter,
-                    chord,
-                    chordMidX,
-                    chordMidY,
-                    sagitta,
-                    apothem,
-                    incAngle,
-                    clockwise);
-}
-
-int main(void)
-{
-    double bulge;
-    double startX;    double startY;
-    double endX;      double endY;
-    /* returned data */
-    double midX;      double midY;
-    double centerX;   double centerY;
-    double radius;    double diameter;
-    double chord;
-    double chordMidX; double chordMidY;
-    double sagitta;   double apothem;
-    double incAngle;  char   clockwise;
-
-    fprintf(stdout, "Clockwise Test:\n");
-    bulge = -0.414213562373095;
-    startX = 1.0;
-    startY = 0.0;
-    endX   = 2.0;
-    endY   = 1.0;
-    if (getArcDataFromBulge(bulge,
-                           startX,     startY,
-                           endX,       endY,
-                           /* returned data */
-                           &midX,      &midY,
-                           &centerX,   &centerY,
-                           &radius,    &diameter,
-                           &chord,
-                           &chordMidX, &chordMidY,
-                           &sagitta,   &apothem,
-                           &incAngle,  &clockwise))
-    {
-        printArcResults(bulge,
-                        startX,    startY,
-                        endX,      endY,
-                        midX,      midY,
-                        centerX,   centerY,
-                        radius,    diameter,
-                        chord,
-                        chordMidX, chordMidY,
-                        sagitta,   apothem,
-                        incAngle,  clockwise);
-    }
-
-    fprintf(stdout, "Counter-Clockwise Test:\n");
-    bulge  = 2.414213562373095;
-    startX = 4.0;
-    startY = 0.0;
-    endX   = 5.0;
-    endY   = 1.0;
-    if (getArcDataFromBulge(bulge,
-                           startX,     startY,
-                           endX,       endY,
-                           /* returned data */
-                           &midX,      &midY,
-                           &centerX,   &centerY,
-                           &radius,    &diameter,
-                           &chord,
-                           &chordMidX, &chordMidY,
-                           &sagitta,   &apothem,
-                           &incAngle,  &clockwise))
-    {
-        printArcResults(bulge,
-                        startX,    startY,
-                        endX,      endY,
-                        midX,      midY,
-                        centerX,   centerY,
-                        radius,    diameter,
-                        chord,
-                        chordMidX, chordMidY,
-                        sagitta,   apothem,
-                        incAngle,  clockwise);
-    }
-
-    return 0;
-}
-
-#endif

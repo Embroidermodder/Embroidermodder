@@ -73,7 +73,6 @@ set(LIBRARY_SRC
 	emb-settings.c
 	emb-spline.c
 	emb-stitch.c
-	emb-test.c
 	emb-thread.c
 	emb-time.c
 	emb-vector.c
@@ -151,10 +150,24 @@ set(LIBRARY_SRC
 
 add_library(embroidery_static STATIC ${LIBRARY_SRC})
 
-add_executable(sew sew.c)
+add_executable(sew
+	sew.c
+)
 target_link_libraries(sew PRIVATE embroidery_static)
+
+add_executable(test_libembroidery
+	tests/arc.c
+	tests/formats.c
+	tests/main.c
+	tests/vector.c
+
+	tests/tests.h
+)
+target_link_libraries(test_libembroidery PRIVATE embroidery_static)
 
 if (WIN32)
 else (WIN32)
 	target_link_libraries(sew PRIVATE m)
+	target_link_libraries(test_libembroidery PRIVATE m)
 endif()
+

@@ -8,7 +8,7 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE="Debug" ..
 make -j4
-./sew --test
+./test_libembroidery
 mkdir lcov
 lcov --capture --directory . --output-file lcov/coverage.info &> cov.txt
 genhtml lcov/coverage.info --output-directory lcov

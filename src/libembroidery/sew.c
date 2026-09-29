@@ -4,8 +4,6 @@
 
 #include "embroidery.h"
 
-int emb_test_suite(int level);
-
 void usage(void)
 {
     EmbFormatList* formatList = 0;
@@ -95,11 +93,6 @@ int main(int argc, const char* argv[])
     EmbPattern* p = 0;
     int successful = 0, i = 0;
     int formatType;
-
-    /* Testing */
-    if (!strcmp(argv[1], "--test")) {
-        return emb_test_suite(0);
-    }
 
 #ifdef SHORT_WAY
     if (argc < 3) {

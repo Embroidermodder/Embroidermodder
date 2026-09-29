@@ -49,6 +49,11 @@ EmbVector embVector_average(EmbVector a, EmbVector b)
     return embVector((a.x + b.x) / 2.0, (a.y + b.y) / 2.0);
 }
 
+double embVector_dot(EmbVector a, EmbVector b)
+{
+    return a.x * b.x + a.y * b.y;
+}
+
 double embVector_getLength(EmbVector vector)
 {
     return sqrt(vector.x * vector.x + vector.y * vector.y);

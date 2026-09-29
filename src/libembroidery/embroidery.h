@@ -866,18 +866,14 @@ char isArcClockwise(double startx, double starty,
                     double midx,   double midy,
                     double endx,   double endy);
 
-void getArcCenter(double  arcStartX,  double  arcStartY,
-                  double  arcMidX,    double  arcMidY,
-                  double  arcEndX,    double  arcEndY,
-                  /* returned data */
-                  double *arcCenterX, double *arcCenterY);
+EmbVector getArcCenter(EmbVector arcStart, EmbVector arcMid, EmbVector arcEnd);
 
 char getArcDataFromBulge(double bulge,
                          double arcStartX,          double arcStartY,
                          double arcEndX,            double arcEndY,
                          /* returned data */
                          double* arcMidX,           double* arcMidY,
-                         double* arcCenterX,        double* arcCenterY,
+                         EmbVector *arcCenter,
                          double* radius,            double* diameter,
                          double* chord,
                          double* chordMidX,         double* chordMidY,
@@ -906,11 +902,10 @@ int getCircleTangentPoints(/* Circle Radius and Center */
                            /* Tangent Point 1 */
                            double* tx1, double* ty1);
 
-void getLineIntersection(double  lineAx1,    double  lineAy1,
-                         double  lineAx2,    double  lineAy2,
-                         double  lineBx1,    double  lineBy1,
-                         double  lineBx2,    double  lineBy2,
-                         double *intersectX, double *intersectY);
+EmbVector getLineIntersection(EmbVector lineAstart,
+                              EmbVector lineAend,
+                              EmbVector lineBstart,
+                              EmbVector lineBend);
 
 /* NOTE:
  * colors must be passed in #AARRGGBB format with
@@ -1171,6 +1166,7 @@ extern EMB_PUBLIC EmbVector EMB_CALL embVector_scale(EmbVector vector, double ma
 extern EMB_PUBLIC EmbVector EMB_CALL embVector_add(EmbVector a, EmbVector b);
 extern EMB_PUBLIC EmbVector EMB_CALL embVector_subtract(EmbVector a, EmbVector b);
 extern EMB_PUBLIC EmbVector EMB_CALL embVector_average(EmbVector a, EmbVector b);
+extern EMB_PUBLIC double EMB_CALL embVector_dot(EmbVector a, EmbVector b);
 extern EMB_PUBLIC double EMB_CALL embVector_getLength(EmbVector vector);
 
 extern EMB_PUBLIC EmbVectorList* EMB_CALL embVectorList_create(EmbVector data);
