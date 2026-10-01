@@ -23,13 +23,17 @@ int testTangentPoints(EmbCircle c, EmbVector p)
 
 int geom_circle_test(void)
 {
-    if (!testTangentPoints(3.0, 0.0, 0.0, 4.0, 0.0)) {
+    EmbCircle c0 = embCircle(embVector(0.0, 0.0), 3.0);
+    EmbVector p0 = embVector(4.0, 0.0);
+    EmbCircle c1 = embCircle(embVector(20.1762, 10.7170), 6.8221);
+    EmbVector p1 = embVector(24.3411, 18.2980);
+    if (!testTangentPoints(c0, p0)) {
         /* Solution: tx0 = 2.2500, ty0 = 1.9843  */
         /* Solution: tx1 = 2.2500, ty1 = -1.9843 */
         return 0;
     }
 
-    if (!testTangentPoints(6.8221, 20.1762, 10.7170, 24.3411, 18.2980)) {
+    if (!testTangentPoints(c1, p1)) {
         /* Solution: tx0 = 19.0911, ty0 = 17.4522 */
         /* Solution: tx1 = 26.4428, ty1 = 13.4133 */
         return 0;

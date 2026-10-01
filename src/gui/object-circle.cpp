@@ -14,8 +14,7 @@ CircleObject::CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb,
 CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("CircleObject Constructor()");
-    if (obj)
-    {
+    if (obj) {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
@@ -162,29 +161,23 @@ void CircleObject::updateRubber(QPainter* painter)
         setObjectDiameter(diameter);
         updatePath();
     }
-    else if (rubberMode == OBJ_RUBBER_CIRCLE_3P)
-    {
+    else if (rubberMode == OBJ_RUBBER_CIRCLE_3P) {
         QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
         QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
         QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
 
-        double sceneCenterX;
-        double sceneCenterY;
-        getArcCenter(sceneTan1Point.x(), sceneTan1Point.y(),
-                     sceneTan2Point.x(), sceneTan2Point.y(),
-                     sceneTan3Point.x(), sceneTan3Point.y(),
-                     &sceneCenterX, &sceneCenterY);
-        QPointF sceneCenterPoint(sceneCenterX, sceneCenterY);
+        EmbVector sceneCenter = getArcCenter(embVector(sceneTan1Point.x(), sceneTan1Point.y()),
+            embVector(sceneTan2Point.x(), sceneTan2Point.y()),
+            embVector(sceneTan3Point.x(), sceneTan3Point.y()));
+        QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
         QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
         setObjectCenter(sceneCenterPoint);
         qreal radius = sceneLine.length();
         setObjectRadius(radius);
         updatePath();
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if (painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripPoint == objectCenter())
             {

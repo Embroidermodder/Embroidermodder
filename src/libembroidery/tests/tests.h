@@ -1,7 +1,41 @@
 #ifndef __LIBEMBROIDERY_TESTS__
 #define __LIBEMBROIDERY_TESTS__
 
+#include <stdint.h>
+
 #include "../embroidery.h"
+
+int32_t btoi16(char *b);
+int32_t btoi16be(char *b);
+int32_t btoi32(char *b);
+int32_t btoi32be(char *b);
+
+int read_byte_test(void);
+int read_bytes_test(void);
+int read_int16_test(void);
+int read_int32_test(void);
+int read_uint8_test(void);
+int read_uint16_test(void);
+int read_uint32_test(void);
+int read_int16be_test(void);
+int read_uint16be_test(void);
+int read_int32be_test(void);
+int read_uint32be_test(void);
+int read_string_test(void);
+int read_ustring_test(void);
+int read_float_test(void);
+
+int write_byte_test(void);
+int write_bytes_test(void);
+int write_int16_test(void);
+int write_int16be_test(void);
+int write_uint16_test(void);
+int write_uint16be_test(void);
+int write_int32_test(void);
+int write_int32be_test(void);
+int write_uint32_test(void);
+int write_uint32be_test(void);
+int write_float_test(void);
 
 int vector_approx_equal_test(void);
 int vector_normalize_test(void);
@@ -14,15 +48,6 @@ int vector_length_test(void);
 
 int geom_arc_test(void);
 int geom_circle_test(void);
-
-EmbPattern *createTestFile1(void);
-int basic_write_test(
-    int (func(EmbPattern *pattern, const char *fname)),
-    const char *fname);
-int basic_read_test(
-    int (readFunc(EmbPattern *pattern, const char *fname)),
-    int (writeFunc(EmbPattern *pattern, const char *fname)),
-    const char *fname);
 
 int read100_test(void);
 int write100_test(void);

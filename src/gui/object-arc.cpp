@@ -46,20 +46,17 @@ void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal e
 
 void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY)
 {
-    double centerX;
-    double centerY;
-    getArcCenter(startX,  startY,
-                 midX,    midY,
-                 endX,    endY,
-                 &centerX, &centerY);
+    EmbVector center = getArcCenter(embVector(startX, startY),
+        embVector(midX, midY),
+        embVector(endX, endY));
 
-    arcStartPoint = QPointF(startX - centerX, startY - centerY);
-    arcMidPoint   = QPointF(midX   - centerX, midY   - centerY);
-    arcEndPoint   = QPointF(endX   - centerX, endY   - centerY);
+    arcStartPoint = QPointF(startX - center.x, startY - center.y);
+    arcMidPoint   = QPointF(midX   - center.x, midY   - center.y);
+    arcEndPoint   = QPointF(endX   - center.x, endY   - center.y);
 
-    setPos(centerX, centerY);
+    setPos(center.x, center.y);
 
-    qreal radius = QLineF(centerX, centerY, midX, midY).length();
+    double radius = QLineF(center.x, center.y, midX, midY).length();
     updateArcRect(radius);
     updatePath();
     setRotation(0);

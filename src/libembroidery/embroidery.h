@@ -147,6 +147,11 @@ typedef enum
     CSV_MODE_STITCH
 } CSV_MODE;
 
+typedef struct EmbVector_ {
+    double x;
+    double y;
+} EmbVector;
+
 typedef struct SvgAttribute_     SvgAttribute;
 typedef struct SvgAttributeList_ SvgAttributeList;
 typedef struct SvgElement_       SvgElement;
@@ -324,8 +329,7 @@ typedef struct EmbArcObjectList_ {
 } EmbArcObjectList;
 
 typedef struct EmbCircle_ {
-    double centerX;
-    double centerY;
+    EmbVector center;
     double radius;
 } EmbCircle;
 
@@ -483,15 +487,6 @@ typedef struct EmbRectObjectList_ {
     EmbRectObject rectObj;
     struct EmbRectObjectList_* next;
 } EmbRectObjectList;
-
-/* TODO: EmbVector should just be a typedef of EmbPoint since internally, they are the same.
-         In cases where it represents vector data, then the name can be used to avoid confusion.
-         */
-typedef struct EmbVector_
-{
-    double x;
-    double y;
-} EmbVector;
 
 typedef struct EmbVectorList_
 {
@@ -673,6 +668,7 @@ extern EMB_PUBLIC int EMB_CALL embArcObjectList_count(EmbArcObjectList* pointer)
 extern EMB_PUBLIC int EMB_CALL embArcObjectList_empty(EmbArcObjectList* pointer);
 extern EMB_PUBLIC void EMB_CALL embArcObjectList_free(EmbArcObjectList* pointer);
 
+extern EMB_PUBLIC EmbCircle EMB_CALL embCircle(EmbVector center, double r);
 extern EMB_PUBLIC double EMB_CALL embCircle_centerX(EmbCircle circle);
 extern EMB_PUBLIC double EMB_CALL embCircle_centerY(EmbCircle circle);
 extern EMB_PUBLIC double EMB_CALL embCircle_radius(EmbCircle circle);
@@ -880,27 +876,15 @@ char getArcDataFromBulge(double bulge,
                          double* sagitta,           double* apothem,
                          double* incAngleInDegrees, char*   clockwise);
 
-int getCircleCircleIntersections(/* Circle 0 Radius */
-                                 double   r0,
-                                 /* Circle 0 Center */
-                                 double  px0, double  py0,
-                                 /* Circle 1 Radius */
-                                 double   r1,
-                                 /* Circle 1 Center */
-                                 double  px1, double  py1,
-                                 /* Intersection Point */
-                                 double* px3, double* py3,
-                                 /* Intersection Point */
-                                 double* px4, double* py4);
+int getCircleCircleIntersections(EmbCircle circle0,
+                                 EmbCircle circle1,
+                                 EmbVector *point0,
+                                 EmbVector *point1);
 
-int getCircleTangentPoints(/* Circle Radius and Center */
-                           double  cr, double  cx,  double  cy,
-                           /* Point to determine tangency */
-                           double  px,  double  py,
-                           /* Tangent Point 0 */
-                           double* tx0, double* ty0,
-                           /* Tangent Point 1 */
-                           double* tx1, double* ty1);
+int getCircleTangentPoints(EmbCircle circle,
+                           EmbVector point,
+                           EmbVector *t0,
+                           EmbVector *t1);
 
 EmbVector getLineIntersection(EmbVector lineAstart,
                               EmbVector lineAend,

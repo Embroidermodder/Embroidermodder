@@ -157,8 +157,32 @@ target_link_libraries(sew PRIVATE embroidery_static)
 
 add_executable(test_libembroidery
 	tests/arc.c
+	tests/binary.c
+	tests/circle.c
+	tests/color.c
+	tests/compound.c
+	tests/compress.c
+	tests/ellipse.c
+	tests/flag.c
 	tests/formats.c
+	tests/hoop.c
+	tests/layer.c
+	tests/line.c
+	tests/logging.c
 	tests/main.c
+	tests/outline.c
+	tests/path.c
+	tests/pattern.c
+	tests/point.c
+	tests/polygon.c
+	tests/polyline.c
+	tests/rect.c
+	tests/satin-line.c
+	tests/spline.c
+	tests/stitch.c
+	tests/tests.h
+	tests/thread.c
+	tests/time.c
 	tests/vector.c
 
 	tests/tests.h

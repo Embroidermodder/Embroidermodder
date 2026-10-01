@@ -1539,7 +1539,7 @@ int readSvg(EmbPattern* pattern, const char* fileName)
     while(cList)
     {
         EmbCircle c = cList->circleObj.circle;
-        printf("circle %f %f %f\n", c.centerX, c.centerY, c.radius);
+        printf("circle %f %f %f\n", c.center.x, c.center.y, c.radius);
         cList = cList->next;
     }
     eList = pattern->ellipseObjList;
@@ -1669,8 +1669,8 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
                         color.r,
                         color.g,
                         color.b,
-                        circle.centerX,
-                        circle.centerY,
+                        circle.center.x,
+                        circle.center.y,
                         circle.radius);
         cObjList = cObjList->next;
     }

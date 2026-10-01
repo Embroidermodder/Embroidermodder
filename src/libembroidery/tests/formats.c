@@ -1,4 +1,15 @@
+#include <math.h>
+
 #include "tests.h"
+
+EmbPattern *createTestFile1(void);
+int basic_write_test(
+    int (func(EmbPattern *pattern, const char *fname)),
+    const char *fname);
+int basic_read_test(
+    int (readFunc(EmbPattern *pattern, const char *fname)),
+    int (writeFunc(EmbPattern *pattern, const char *fname)),
+    const char *fname);
 
 EmbPattern *
 createTestFile1(void)

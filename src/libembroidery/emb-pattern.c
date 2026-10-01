@@ -476,10 +476,10 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     while(cObjList)
     {
         circle = cObjList->circleObj.circle;
-        boundingRect.left = (double)min(boundingRect.left, circle.centerX - circle.radius);
-        boundingRect.top = (double)min(boundingRect.top, circle.centerY - circle.radius);
-        boundingRect.right = (double)max(boundingRect.right, circle.centerX + circle.radius);
-        boundingRect.bottom = (double)max(boundingRect.bottom, circle.centerY + circle.radius);
+        boundingRect.left = (double)min(boundingRect.left, circle.center.x - circle.radius);
+        boundingRect.top = (double)min(boundingRect.top, circle.center.y - circle.radius);
+        boundingRect.right = (double)max(boundingRect.right, circle.center.x + circle.radius);
+        boundingRect.bottom = (double)max(boundingRect.bottom, circle.center.y + circle.radius);
 
         cObjList = cObjList->next;
     }
@@ -611,18 +611,24 @@ void embPattern_flip(EmbPattern* p, int horz, int vert)
     }
 
     cObjList = p->circleObjList;
-    while(cObjList)
-    {
-        if (horz) { cObjList->circleObj.circle.centerX = -cObjList->circleObj.circle.centerX; }
-        if (vert) { cObjList->circleObj.circle.centerY = -cObjList->circleObj.circle.centerY; }
+    while (cObjList) {
+        if (horz) {
+            cObjList->circleObj.circle.center.x = -cObjList->circleObj.circle.center.x;
+        }
+        if (vert) {
+            cObjList->circleObj.circle.center.y = -cObjList->circleObj.circle.center.y;
+        }
         cObjList = cObjList->next;
     }
 
     eObjList = p->ellipseObjList;
-    while(eObjList)
-    {
-        if (horz) { eObjList->ellipseObj.ellipse.centerX = -eObjList->ellipseObj.ellipse.centerX; }
-        if (vert) { eObjList->ellipseObj.ellipse.centerY = -eObjList->ellipseObj.ellipse.centerY; }
+    while (eObjList) {
+        if (horz) {
+            eObjList->ellipseObj.ellipse.centerX = -eObjList->ellipseObj.ellipse.centerX;
+        }
+        if (vert) {
+            eObjList->ellipseObj.ellipse.centerY = -eObjList->ellipseObj.ellipse.centerY;
+        }
         eObjList = eObjList->next;
     }
 

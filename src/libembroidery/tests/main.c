@@ -90,6 +90,32 @@ static EmbTest test_list[] = {
         .label = #A, \
         .function = A##_test \
     },
+    BASIC_TEST_DATA(read_byte)
+    BASIC_TEST_DATA(read_bytes)
+    BASIC_TEST_DATA(read_int16)
+    BASIC_TEST_DATA(read_int32)
+    BASIC_TEST_DATA(read_uint8)
+    BASIC_TEST_DATA(read_uint16)
+    BASIC_TEST_DATA(read_uint32)
+    BASIC_TEST_DATA(read_int16be)
+    BASIC_TEST_DATA(read_uint16be)
+    BASIC_TEST_DATA(read_int32be)
+    BASIC_TEST_DATA(read_uint32be)
+    BASIC_TEST_DATA(read_string)
+    BASIC_TEST_DATA(read_ustring)
+    BASIC_TEST_DATA(read_float)
+
+    BASIC_TEST_DATA(write_byte)
+    BASIC_TEST_DATA(write_bytes)
+    BASIC_TEST_DATA(write_int16)
+    BASIC_TEST_DATA(write_int16be)
+    BASIC_TEST_DATA(write_uint16)
+    BASIC_TEST_DATA(write_uint16be)
+    BASIC_TEST_DATA(write_int32)
+    BASIC_TEST_DATA(write_int32be)
+    BASIC_TEST_DATA(write_uint32)
+    BASIC_TEST_DATA(write_uint32be)
+    BASIC_TEST_DATA(write_float)
 
     BASIC_TEST_DATA(vector_approx_equal)
     BASIC_TEST_DATA(vector_normalize)
