@@ -35,6 +35,7 @@ settings_create(Settings *settings)
     settings->general_tip_of_the_day = true;
     settings->general_current_tip = 0;
     settings->general_system_help_browser = true;
+    settings->general_testing = false;
 
     /* Display */
     settings->display_use_opengl = false;

@@ -33,6 +33,8 @@ enum COMMAND_ACTIONS
     ACTION_copy,
     ACTION_paste,
 
+    ACTION_basictests,
+
     ACTION_undo,
     ACTION_redo,
     // Window Menu
@@ -133,6 +135,7 @@ typedef struct Settings_ {
     uint32_t general_mdi_bg_color;
     bool general_tip_of_the_day;
     uint16_t general_current_tip;
+    bool general_testing;
     bool general_system_help_browser;
     bool general_check_for_updates;
     bool display_use_opengl;
@@ -335,6 +338,8 @@ int exit_cmd(State *state);
 int cut_cmd(State *state);
 int copy_cmd(State *state);
 int paste_cmd(State *state);
+
+int basic_tests_cmd(State *state);
 
 int undo_cmd(State *state);
 int redo_cmd(State *state);

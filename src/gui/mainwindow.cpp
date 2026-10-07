@@ -53,6 +53,8 @@
 
 #include "toml.h"
 
+extern bool testing;
+
 State state;
 
 MainWindow::MainWindow() : QMainWindow(0)
@@ -267,8 +269,15 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     showNormal();
 
-    if (state.settings.general_tip_of_the_day) {
-        tipOfTheDay();
+    state.settings.general_testing = testing;
+
+    if (state.settings.general_testing) {
+        basicTests();
+    }
+    else {
+        if (state.settings.general_tip_of_the_day) {
+            tipOfTheDay();
+        }
     }
 }
 
@@ -283,8 +292,7 @@ MainWindow::~MainWindow()
     cutCopyObjectList.clear();
 }
 
-void
-MainWindow::createAllActions()
+void MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");
     for (int i=0; command_table[i].id != ACTION_null; i++) {
@@ -297,8 +305,7 @@ MainWindow::createAllActions()
     actionHash.value(ACTION_designdetails)->setEnabled(state.num_docs > 0);
 }
 
-QAction *
-MainWindow::createAction(CommandData command, bool scripted)
+QAction *MainWindow::createAction(CommandData command, bool scripted)
 {
     QString appDir = qApp->applicationDirPath();
 

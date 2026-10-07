@@ -144,6 +144,16 @@ CommandData command_table[] = {
         .command = design_details_cmd
     },
     {
+        .id = ACTION_basictests,
+        .type = CMD_TYPE_TRIGGER,
+        .label = "basictests",
+        .tooltip = "&Basic Tests",
+        .statustip = "Run libembroidery testing.",
+        .shortcut = "Ctrl+Shift+B", /* FIXME: this shortcut isn't calling. */
+        .mac_shortcut = "",
+        .command = basic_tests_cmd
+    },
+    {
         .id = ACTION_exit,
         .type = CMD_TYPE_TRIGGER,
         .label = "exit",

@@ -224,6 +224,7 @@ public slots:
     void saveasfile();
     void print();
     void designDetails();
+    void basicTests();
     void exit();
     void quit();
     void checkForUpdates();

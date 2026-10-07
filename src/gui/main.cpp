@@ -4,6 +4,7 @@
 const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
+bool testing = false;
 
 static void usage(void)
 {
@@ -46,11 +47,13 @@ int main(int argc, char* argv[])
 
     QStringList filesToOpen;
 
-    for (int i = 1; i < argc; i++)
-    {
+    for (int i = 1; i < argc; i++) {
         if     (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {  }
         else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) { usage(); }
         else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) { version(); }
+        else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--test")) {
+            testing = true;
+        }
         else if (QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i]))
         {
             filesToOpen << argv[i];
@@ -80,5 +83,3 @@ int main(int argc, char* argv[])
 
     return app.exec();
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

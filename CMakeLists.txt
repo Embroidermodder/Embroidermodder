@@ -61,6 +61,35 @@ qt_add_executable(embroidermodder2
 	${SRC}/core/state.c
 	${SRC}/core/core.h
 
+	${SRC}/libembroidery/tests/arc.c
+	${SRC}/libembroidery/tests/binary.c
+	${SRC}/libembroidery/tests/circle.c
+	${SRC}/libembroidery/tests/color.c
+	${SRC}/libembroidery/tests/compound.c
+	${SRC}/libembroidery/tests/compress.c
+	${SRC}/libembroidery/tests/ellipse.c
+	${SRC}/libembroidery/tests/flag.c
+	${SRC}/libembroidery/tests/formats.c
+	${SRC}/libembroidery/tests/hoop.c
+	${SRC}/libembroidery/tests/layer.c
+	${SRC}/libembroidery/tests/line.c
+	${SRC}/libembroidery/tests/logging.c
+	${SRC}/libembroidery/tests/outline.c
+	${SRC}/libembroidery/tests/path.c
+	${SRC}/libembroidery/tests/pattern.c
+	${SRC}/libembroidery/tests/point.c
+	${SRC}/libembroidery/tests/polygon.c
+	${SRC}/libembroidery/tests/polyline.c
+	${SRC}/libembroidery/tests/rect.c
+	${SRC}/libembroidery/tests/satin-line.c
+	${SRC}/libembroidery/tests/spline.c
+	${SRC}/libembroidery/tests/stitch.c
+	${SRC}/libembroidery/tests/tests.c
+	${SRC}/libembroidery/tests/tests.h
+	${SRC}/libembroidery/tests/thread.c
+	${SRC}/libembroidery/tests/time.c
+	${SRC}/libembroidery/tests/vector.c
+
 	${SRC}/gui/application.cpp
 	${SRC}/gui/application.h
 	${SRC}/gui/cmdprompt.cpp
@@ -122,6 +151,8 @@ qt_add_executable(embroidermodder2
 	${SRC}/gui/statusbar-button.h
 	${SRC}/gui/statusbar.cpp
 	${SRC}/gui/statusbar.h
+	${SRC}/gui/test-dialog.cpp
+	${SRC}/gui/test-dialog.h
 	${SRC}/gui/undo-commands.cpp
 	${SRC}/gui/undo-commands.h
 	${SRC}/gui/undo-editor.cpp
@@ -829,3 +860,4 @@ if(WIN32)
 else(WIN32)
 	target_link_libraries(embroidermodder2 PRIVATE m)
 endif()
+

@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <inttypes.h>
+#include <math.h>
 
 #include "tests.h"
 
@@ -22,24 +23,24 @@ int createBinaryTestFile1(void)
 
 /* Similar to the supplied htobe16, etc. in "endian.h" */
 
-int32_t btoi16(char *b)
+int16_t btoi16(char *b)
 {
-    return 0x10 * b[1] + b[0];
+    return b[0] + 0x100 * b[1];
 }
 
-int32_t btoi16be(char *b)
+int16_t btoi16be(char *b)
 {
-    return 0x10 * b[0] + b[1];
+    return 0x100 * b[0] + b[1];
 }
 
 int32_t btoi32(char *b)
 {
-    return 0x1000000 * b[3] + 0x10000 * b[2] + 0x10 * b[1] + b[0];
+    return 0x1000000 * b[3] + 0x10000 * b[2] + 0x100 * b[1] + b[0];
 }
 
 int32_t btoi32be(char *b)
 {
-    return 0x1000000 * b[0] + 0x10000 * b[1] + 0x10 * b[2] + b[3];
+    return 0x1000000 * b[0] + 0x10000 * b[1] + 0x100 * b[2] + b[3];
 }
 
 int read_byte_test(void)

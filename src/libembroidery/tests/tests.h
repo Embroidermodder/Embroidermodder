@@ -5,8 +5,29 @@
 
 #include "../embroidery.h"
 
-int32_t btoi16(char *b);
-int32_t btoi16be(char *b);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define TEST_BASIC                    0
+#define TEST_SLOW                     1
+#define TEST_COMPLEX                  2
+#define TEST_END                     -1
+
+#define RESULT_FAIL                   0
+#define RESULT_PASS                   1
+#define RESULT_VOID                  -1
+
+typedef struct EmbTest_ {
+    int level;
+    char category[100];
+    char label[100];
+    int (*function)(void);
+    int result;
+} EmbTest;
+
+int16_t btoi16(char *b);
+int16_t btoi16be(char *b);
 int32_t btoi32(char *b);
 int32_t btoi32be(char *b);
 
@@ -171,6 +192,16 @@ int readXxx_test(void);
 int writeXxx_test(void);
 int readZsk_test(void);
 int writeZsk_test(void);
+
+int number_of_tests(void);
+int emb_test(int test_number);
+int run_all_tests(void);
+
+extern EmbTest test_list[];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

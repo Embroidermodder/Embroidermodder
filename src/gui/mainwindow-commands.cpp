@@ -40,13 +40,14 @@
 #include "undo-editor.h"
 #include "undo-commands.h"
 #include "embdetails-dialog.h"
+#include "test-dialog.h"
 
 /* Call a command from the command table using the name of the command. */
 int
 MainWindow::call(QString name)
 {
     int index = -1;
-    for (int i=0; command_table[i].id >= 0; i++) {
+    for (int i=0; command_table[i].id != ACTION_null; i++) {
         if (QString(command_table[i].label) == name) {
             index = i;
             break;
@@ -201,11 +202,17 @@ QString MainWindow::platformString()
 void MainWindow::designDetails()
 {
     QGraphicsScene* scene = activeScene();
-    if (scene)
-    {
+    if (scene) {
         EmbDetailsDialog dialog(scene, this);
         dialog.exec();
     }
+}
+
+void MainWindow::basicTests()
+{
+    qDebug("basicTests()");
+    TestDialog dialog(this);
+    dialog.exec();
 }
 
 void MainWindow::about()

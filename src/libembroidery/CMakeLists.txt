@@ -180,7 +180,7 @@ add_executable(test_libembroidery
 	tests/satin-line.c
 	tests/spline.c
 	tests/stitch.c
-	tests/tests.h
+	tests/tests.c
 	tests/thread.c
 	tests/time.c
 	tests/vector.c
